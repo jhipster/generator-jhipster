@@ -4068,7 +4068,7 @@ spec:
             claimName: msmariadb-mariadb-pvc
       containers:
         - name: mariadb
-          image: mariadb:10.7.3
+          image: mariadb:10.8.3
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -10259,7 +10259,7 @@ spec:
             claimName: msmariadb-mariadb-pvc
       containers:
         - name: mariadb
-          image: mariadb:10.7.3
+          image: mariadb:10.8.3
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:

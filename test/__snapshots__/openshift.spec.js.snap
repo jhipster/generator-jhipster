@@ -1825,7 +1825,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mariadb:10.7.3
+              image: mariadb:10.8.3
               env:
                 #            - name: MYSQL_USER
                 #              value: root
