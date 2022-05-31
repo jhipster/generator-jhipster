@@ -4428,7 +4428,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.13
+          image: mongo:4.4.14
           command:
             - /work-dir/peer-finder
           args:
@@ -4458,7 +4458,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.13
+          image: mongo:4.4.14
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -10619,7 +10619,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.13
+          image: mongo:4.4.14
           command:
             - /work-dir/peer-finder
           args:
@@ -10649,7 +10649,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.13
+          image: mongo:4.4.14
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE

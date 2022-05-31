@@ -2160,7 +2160,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mongo:4.4.13
+              image: mongo:4.4.14
               env:
                 - name: MONGODB_DATABASE
                   value: \${DATABASE_NAME}
