@@ -1621,10 +1621,30 @@ const baseServerFiles = {
       ],
     },
     {
+      condition: generator =>
+        generator.databaseTypeSql ||
+        generator.messageBrokerKafka ||
+        generator.cacheProviderRedis ||
+        generator.databaseTypeMongodb ||
+        generator.databaseTypeCassandra ||
+        generator.searchEngineElasticsearch ||
+        generator.databaseTypeCouchbase ||
+        generator.searchEngineCouchbase ||
+        generator.databaseTypeNeo4j,
       path: SERVER_TEST_RES_DIR,
       templates: ['testcontainers.properties', 'META-INF/spring.factories'],
     },
     {
+      condition: generator =>
+        generator.databaseTypeSql ||
+        generator.messageBrokerKafka ||
+        generator.cacheProviderRedis ||
+        generator.databaseTypeMongodb ||
+        generator.databaseTypeCassandra ||
+        generator.searchEngineElasticsearch ||
+        generator.databaseTypeCouchbase ||
+        generator.searchEngineCouchbase ||
+        generator.databaseTypeNeo4j,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {

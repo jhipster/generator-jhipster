@@ -1128,6 +1128,7 @@ Object {
       ],
     },
     Object {
+      "condition": [Function],
       "path": "src/test/resources/",
       "templates": Array [
         "testcontainers.properties",
@@ -1135,6 +1136,7 @@ Object {
       ],
     },
     Object {
+      "condition": [Function],
       "path": "src/test/java/",
       "templates": Array [
         Object {
