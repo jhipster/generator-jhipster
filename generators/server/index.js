@@ -435,7 +435,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       },
       packageJsonDockerScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const databaseType = this.jhipsterConfig.databaseType;
+        const { databaseType, prodDatabaseType } = this.jhipsterConfig;
         const dockerAwaitScripts = [];
         if (databaseType === SQL) {
           const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
@@ -459,7 +459,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               'docker:db:await': `echo "Waiting for Couchbase to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"`,
             });
           }
-          if (databaseType === MYSQL) {
+          if (prodDatabaseType === MYSQL) {
             scriptsStorage.set({
               'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && echo "MySQL started"`,
             });
