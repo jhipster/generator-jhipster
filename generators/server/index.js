@@ -436,7 +436,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       packageJsonDockerScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const { databaseType, prodDatabaseType } = this.jhipsterConfig;
-        const { databaseTypeSql, prodDatabaseTypeMysql } = this;
+        const { databaseTypeSql, prodDatabaseTypeMysql, authenticationTypeOauth2 } = this;
         const dockerAwaitScripts = [];
         if (databaseTypeSql) {
           if (prodDatabaseTypeMysql) {
@@ -495,13 +495,20 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
               dockerBuild.push(`npm run docker:${dockerConfig}:build`);
             } else if (dockerConfig === 'jhipster-registry') {
-              dockerAwaitScripts.push(
+              if (authenticationTypeOauth2) {
+                dockerOthersUp.push('npm run docker:keycloak:await');
+              }
+              scriptsStorage.set(
+                `docker:jhipster-registry:await`,
                 `echo "Waiting for jhipster-registry to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8761/management/health && echo "jhipster-registry started"`
               );
+              dockerAwaitScripts.push('npm run docker:jhipster-registry:await');
             } else if (dockerConfig === 'keycloak') {
-              dockerAwaitScripts.push(
+              scriptsStorage.set(
+                'docker:keycloak:await',
                 `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
               );
+              dockerAwaitScripts.push('npm run docker:keycloak:await');
             }
 
             scriptsStorage.set(`docker:${dockerConfig}:up`, `docker-compose -f ${dockerFile} up -d`);
