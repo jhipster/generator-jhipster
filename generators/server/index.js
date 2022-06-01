@@ -30,7 +30,7 @@ const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 
-const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, COUCHBASE, ORACLE, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
@@ -435,10 +435,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       },
       packageJsonDockerScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const databaseType = this.jhipsterConfig.databaseType;
+        const { databaseType, prodDatabaseType } = this.jhipsterConfig;
+        const { databaseTypeSql, prodDatabaseTypeMysql, authenticationTypeOauth2, applicationTypeMicroservice } = this;
         const dockerAwaitScripts = [];
-        if (databaseType === SQL) {
-          const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
+        if (databaseTypeSql) {
+          if (prodDatabaseTypeMysql) {
+            scriptsStorage.set({
+              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && sleep 20 && echo "MySQL started"`,
+            });
+          }
           if (prodDatabaseType === NO_DATABASE || prodDatabaseType === ORACLE) {
             scriptsStorage.set('docker:db:up', `echo "Docker for db ${prodDatabaseType} not configured for application ${this.baseName}"`);
           } else {
@@ -490,13 +495,20 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
               dockerBuild.push(`npm run docker:${dockerConfig}:build`);
             } else if (dockerConfig === 'jhipster-registry') {
-              dockerAwaitScripts.push(
+              if (authenticationTypeOauth2 && !applicationTypeMicroservice) {
+                dockerOthersUp.push('npm run docker:keycloak:await');
+              }
+              scriptsStorage.set(
+                'docker:jhipster-registry:await',
                 `echo "Waiting for jhipster-registry to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8761/management/health && echo "jhipster-registry started"`
               );
+              dockerAwaitScripts.push('npm run docker:jhipster-registry:await');
             } else if (dockerConfig === 'keycloak') {
-              dockerAwaitScripts.push(
+              scriptsStorage.set(
+                'docker:keycloak:await',
                 `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
               );
+              dockerAwaitScripts.push('npm run docker:keycloak:await');
             }
 
             scriptsStorage.set(`docker:${dockerConfig}:up`, `docker-compose -f ${dockerFile} up -d`);
