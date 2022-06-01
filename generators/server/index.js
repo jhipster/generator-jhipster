@@ -30,7 +30,7 @@ const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 
-const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, COUCHBASE, ORACLE, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
