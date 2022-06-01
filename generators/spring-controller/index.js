@@ -21,7 +21,7 @@ const _ = require('lodash');
 const chalk = require('chalk');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } =
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, LOADING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } =
   require('../../lib/constants/priorities.cjs').compat;
 
 const constants = require('../generator-constants');
@@ -114,6 +114,20 @@ module.exports = class extends BaseBlueprintGenerator {
   get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadDerivedServerConfig();
+      },
+    };
+  }
+
+  get [LOADING_PRIORITY]() {
+    if (this.delegateToBlueprint) return {};
+    return this._loading();
   }
 
   // Public API method used by the getter and also by Blueprints

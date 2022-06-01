@@ -47,4 +47,28 @@ describe('JHipster generator spring-controller', () => {
       assert.file([`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`]);
     });
   });
+
+  describe('creates spring controller without packageFolde & non-default packageName in yo-rc.json', () => {
+    before(done => {
+      helpers
+        .run(require.resolve('../generators/spring-controller'))
+        .inTmpDir(dir => {
+          const defaultYo = fse.readJSONSync(path.join(__dirname, '../test/templates/default/.yo-rc.json'));
+          delete defaultYo['generator-jhipster'].packageFolder;
+          defaultYo['generator-jhipster'].packageName = 'com.test';
+          fse.writeJsonSync(path.join(dir, '.yo-rc.json'), defaultYo);
+        })
+        .withArguments(['fooBar'])
+        .withPrompts({
+          actionAdd: false,
+        })
+        .on('end', done);
+    });
+
+    it('creates fooBar controller files', () => {
+      assert.file([`${SERVER_MAIN_SRC_DIR}com/test/web/rest/FooBarResource.java`]);
+
+      assert.file([`${SERVER_TEST_SRC_DIR}com/test/web/rest/FooBarResourceIT.java`]);
+    });
+  });
 });
