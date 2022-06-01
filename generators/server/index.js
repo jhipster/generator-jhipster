@@ -30,7 +30,7 @@ const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 
-const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J, MYSQL } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
@@ -436,9 +436,14 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       packageJsonDockerScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const { databaseType, prodDatabaseType } = this.jhipsterConfig;
+        const { databaseTypeSql, prodDatabaseTypeMysql } = this;
         const dockerAwaitScripts = [];
-        if (databaseType === SQL) {
-          const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
+        if (databaseTypeSql) {
+          if (prodDatabaseTypeMysql) {
+            scriptsStorage.set({
+              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && echo "MySQL started"`,
+            });
+          }
           if (prodDatabaseType === NO_DATABASE || prodDatabaseType === ORACLE) {
             scriptsStorage.set('docker:db:up', `echo "Docker for db ${prodDatabaseType} not configured for application ${this.baseName}"`);
           } else {
@@ -457,11 +462,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           if (databaseType === COUCHBASE) {
             scriptsStorage.set({
               'docker:db:await': `echo "Waiting for Couchbase to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"`,
-            });
-          }
-          if (prodDatabaseType === MYSQL) {
-            scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && echo "MySQL started"`,
             });
           }
           if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
