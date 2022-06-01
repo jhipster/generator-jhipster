@@ -49,6 +49,10 @@ import org.testcontainers.containers.KafkaContainer;
 public class TestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
 
     private Logger log = LoggerFactory.getLogger(TestContainersSpringContextCustomizerFactory.class);
+
+<%_ if (cacheProviderRedis) { _%>
+    private static RedisTestContainer redisBean;
+<%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
     private static KafkaTestContainer kafkaBean;
 <%_ } _%>
@@ -98,17 +102,30 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
             }
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-            EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
-            if (null != mongoAnnotation) {
-                log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
-                log.info("Warming up the mongo database");
-                if (null == mongoDbBean) {
-                    mongoDbBean = beanFactory.createBean(MongoDbTestContainer.class);
-                    beanFactory.registerSingleton(MongoDbTestContainer.class.getName(), mongoDbBean);
-                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName(), mongoDbBean);
+                EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
+                if (null != mongoAnnotation) {
+                    log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
+                    log.info("Warming up the mongo database");
+                    if (null == mongoDbBean) {
+                        mongoDbBean = beanFactory.createBean(MongoDbTestContainer.class);
+                        beanFactory.registerSingleton(MongoDbTestContainer.class.getName(), mongoDbBean);
+                        // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName(), mongoDbBean);
+                    }
+                    testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
                 }
-                testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
-            }
+<%_ } _%>
+<%_ if (cacheProviderRedis) { _%>
+                EmbeddedRedis redisAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedRedis.class);
+                if (null != redisAnnotation) {
+                    log.debug("detected the EmbeddedRedis annotation on class {}", testClass.getName());
+                    log.info("Warming up the redis database");
+                    if (null == redisBean) {
+                        redisBean = beanFactory.createBean(RedisTestContainer.class);
+                        beanFactory.registerSingleton(RedisTestContainer.class.getName(), redisBean);
+                        // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(RedisTestContainer.class.getName(), redisBean);
+                    }
+                    testValues = testValues.and("jhipster.cache.redis.server=redis://" + redisBean.getRedisContainer().getContainerIpAddress() + ":" + redisBean.getRedisContainer().getMappedPort(6379));
+                }
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
             EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);

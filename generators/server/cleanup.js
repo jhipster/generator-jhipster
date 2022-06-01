@@ -20,7 +20,7 @@ const cleanupCassandra = require('./cleanup-cassandra');
 const cleanupMongodb = require('./cleanup-mongodb');
 const cleanupSql = require('./cleanup-sql');
 const cleanupElasticsearch = require('./cleanup-elasticsearch');
-const cleanupHazelcast = require('./cleanup-hazelcast');
+const cleanupCacheProvider = require('./cleanup-cache-provider');
 const cleanupAngular = require('./cleanup-angular');
 const cleanupGradle = require('./cleanup-gradle');
 const cleanupOauth2 = require('./cleanup-oauth2');
@@ -50,9 +50,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   if (generator.databaseTypeMongodb) {
     cleanupMongodb.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
-  if (generator.cacheProviderHazelcast) {
-    cleanupHazelcast.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
-  }
+  cleanupCacheProvider.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   if (generator.clientFrameworkAngular) {
     cleanupAngular.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }

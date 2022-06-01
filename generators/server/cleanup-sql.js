@@ -37,6 +37,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   }
   if (generator.isJhipsterVersionLessThan('7.8.2')) {
     generator.removeFile(`${testResourceDir}config/application-testcontainers.yml`);
+    if (generator.reactive) {
+      generator.removeFile(`${testDir}ReactiveSqlTestContainerExtension.java`);
+    }
   }
 }
 
