@@ -436,7 +436,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       packageJsonDockerScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const { databaseType, prodDatabaseType } = this.jhipsterConfig;
-        const { databaseTypeSql, prodDatabaseTypeMysql, authenticationTypeOauth2 } = this;
+        const { databaseTypeSql, prodDatabaseTypeMysql, authenticationTypeOauth2, applicationTypeMicroservice } = this;
         const dockerAwaitScripts = [];
         if (databaseTypeSql) {
           if (prodDatabaseTypeMysql) {
@@ -495,11 +495,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
               dockerBuild.push(`npm run docker:${dockerConfig}:build`);
             } else if (dockerConfig === 'jhipster-registry') {
-              if (authenticationTypeOauth2) {
+              if (authenticationTypeOauth2 && !applicationTypeMicroservice) {
                 dockerOthersUp.push('npm run docker:keycloak:await');
               }
               scriptsStorage.set(
-                `docker:jhipster-registry:await`,
+                'docker:jhipster-registry:await',
                 `echo "Waiting for jhipster-registry to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8761/management/health && echo "jhipster-registry started"`
               );
               dockerAwaitScripts.push('npm run docker:jhipster-registry:await');
