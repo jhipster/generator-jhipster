@@ -1,11 +1,7 @@
 const { expect } = require('expect');
 const path = require('path');
-const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
-const getFilesForOptions = require('./utils/utils').getFilesForOptions;
-const expectedFiles = require('./utils/expected-files');
-const angularfiles = require('../generators/client/files-angular').files;
 const { JWT, OAUTH2 } = require('../jdl/jhipster/authentication-types');
 const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
 const { CAFFEINE, EHCACHE } = require('../jdl/jhipster/cache-types');

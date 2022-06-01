@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
-const { expect: jestExpect } = require('expect');
 const sinon = require('sinon');
 const path = require('path');
 const assert = require('yeoman-assert');
@@ -11,7 +10,6 @@ const Base = require('../generators/generator-base');
 const { testInTempDir, revertTempDir } = require('./utils/utils');
 const { parseLiquibaseChangelogDate } = require('../utils/liquibase');
 const { H2_MEMORY, H2_DISK, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = require('../jdl/jhipster/database-types');
-const { JWT } = require('../jdl/jhipster/authentication-types');
 const { GENERATOR_COMMON } = require('../generators/generator-list');
 
 const BaseGenerator = Base.prototype;
