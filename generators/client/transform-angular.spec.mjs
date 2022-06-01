@@ -133,6 +133,19 @@ describe('Angular transform', () => {
 "
 `);
         });
+
+        it('should replace title attribute value with translated value', () => {
+          const body = `
+<input title="{{ 'global.form.currentpassword.title1' | translate }}"/>
+<input title="{{ 'global.form.currentpassword.title2' | translate }}"/>
+`;
+          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+"
+<input title=\\"translated-value-global.form.currentpassword.title1-0\\"/>
+<input title=\\"translated-value-global.form.currentpassword.title2-1\\"/>
+"
+`);
+        });
       });
 
       describe('.route.ts files', () => {
