@@ -441,7 +441,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         if (databaseTypeSql) {
           if (prodDatabaseTypeMysql) {
             scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && sleep 30 && echo "MySQL started"`,
+              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && sleep 20 && echo "MySQL started"`,
             });
           }
           if (prodDatabaseType === NO_DATABASE || prodDatabaseType === ORACLE) {
