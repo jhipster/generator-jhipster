@@ -272,33 +272,6 @@ describe('Generator Base', () => {
     });
   });
   describe('writeFilesToDisk', () => {
-    describe('when called with default angular client options', () => {
-      it('should produce correct files', () => {
-        const files = require('../generators/client/files-angular').files; // eslint-disable-line global-require
-        const generator = {
-          enableTranslation: true,
-          serviceDiscoveryType: false,
-          authenticationType: JWT,
-          testFrameworks: [],
-        };
-        const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
-        jestExpect(out).toMatchSnapshot();
-      });
-    });
-    describe('when called with default angular client options skipping user-management', () => {
-      it('should produce correct files', () => {
-        const files = require('../generators/client/files-angular').files; // eslint-disable-line global-require
-        const generator = {
-          enableTranslation: true,
-          serviceDiscoveryType: false,
-          authenticationType: JWT,
-          skipUserManagement: true,
-          testFrameworks: [],
-        };
-        const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
-        jestExpect(out).toMatchSnapshot();
-      });
-    });
     describe('when called without jhipsterTemplatesFolders and without rootTemplatesPath', () => {
       const files = { files: [{ templates: ['foo'] }] };
       const generator = fakeGenerator();
