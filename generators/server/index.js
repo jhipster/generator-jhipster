@@ -30,7 +30,7 @@ const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 
-const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J, MYSQL } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
@@ -457,6 +457,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           if (databaseType === COUCHBASE) {
             scriptsStorage.set({
               'docker:db:await': `echo "Waiting for Couchbase to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"`,
+            });
+          }
+          if (databaseType === MYSQL) {
+            scriptsStorage.set({
+              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && echo "MySQL started"`,
             });
           }
           if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
