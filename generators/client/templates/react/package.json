@@ -42,7 +42,7 @@
     "autoprefixer": "10.4.7",
     "browser-sync": "2.27.10",
     "browser-sync-webpack-plugin": "2.3.0",
-    "copy-webpack-plugin": "10.2.4",
+    "copy-webpack-plugin": "11.0.0",
     "core-js": "3.22.7",
     "cross-env": "7.0.3",
     "css-loader": "6.7.1",
