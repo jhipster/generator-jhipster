@@ -31,7 +31,7 @@
     "axios-mock-adapter": "1.20.0",
     "autoprefixer": "10.4.7",
     "browser-sync-webpack-plugin": "2.3.0",
-    "copy-webpack-plugin": "10.2.4",
+    "copy-webpack-plugin": "11.0.0",
     "css-loader": "6.7.1",
     "css-minimizer-webpack-plugin": "4.0.0",
     "folder-hash": "4.0.2",
