@@ -217,7 +217,7 @@ eureka:
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mscassandra-cassandra-node:
-    image: cassandra:4.0.4
+    image: cassandra:3.11.13
     environment:
       - CASSANDRA_SEEDS=mscassandra-cassandra
   mscassandra-cassandra-migration:
@@ -231,7 +231,7 @@ eureka:
     volumes:
       - 05-cassandra/src/main/resources/config/cql:/cql:ro
   mscassandra-cassandra:
-    image: cassandra:4.0.4
+    image: cassandra:3.11.13
 
   jhipster-registry:
     image: jhipster/jhipster-registry:v7.3.0
