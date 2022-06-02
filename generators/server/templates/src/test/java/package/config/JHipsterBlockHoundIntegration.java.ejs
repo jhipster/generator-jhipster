@@ -35,10 +35,7 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$query$2");
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$importFtsIndex$1");
 <%_} _%>
-<%_ if (devDatabaseTypeMysql || prodDatabaseTypeMysql) { _%>
-        builder.allowBlockingCallsInside("dev.miku.r2dbc.mysql.client.SslBridgeHandler", "buildProvider");
-<%_} _%>
-<%_ if (devDatabaseTypeMariadb || prodDatabaseTypeMariadb) { _%>
+<%_ if (devDatabaseTypeMysql || prodDatabaseTypeMysql || devDatabaseTypeMariadb || prodDatabaseTypeMariadb) { _%>
         builder.allowBlockingCallsInside("org.mariadb.r2dbc.message.client.HandshakeResponse", "writeConnectAttributes");
 <%_} _%>
 <%_ if (searchEngineElasticsearch) { _%>
