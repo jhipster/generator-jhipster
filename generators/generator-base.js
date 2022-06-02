@@ -1348,6 +1348,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @deprecated
    * Copy html templates after stripping translation keys when translation is disabled.
    *
    * @param {string} source - path of the source file to copy from
@@ -1361,6 +1362,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @deprecated
    * Copy Js templates after stripping translation keys when translation is disabled.
    *
    * @param {string} source - path of the source file to copy from
@@ -2386,7 +2388,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     assert(paramCount > 0, 'One of sections, blocks or files is required');
     assert(paramCount === 1, 'Only one of sections, blocks or files must be provided');
 
-    const { sections, blocks, templates, rootTemplatesPath, context = this } = options;
+    const { sections, blocks, templates, rootTemplatesPath, context = this, transform: methodTransform = [] } = options;
+    const { _: commonSpec = {} } = sections;
+    const { transform: sectionTransform = [] } = commonSpec;
     const startTime = new Date();
 
     /* Build lookup order first has preference.
@@ -2427,15 +2431,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       throw new Error(`Type not supported ${val}`);
     };
 
-    const renderTemplate = async ({ sourceFile, destinationFile, options, transform = true }) => {
+    const renderTemplate = async ({ sourceFile, destinationFile, options, noEjs, transform, binary }) => {
       const extension = path.extname(sourceFile);
-      const appendEjs = transform && !['.ejs', '.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
+      binary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
+      const appendEjs = noEjs === undefined ? !binary && extension !== '.ejs' : !noEjs;
       const ejsFile = appendEjs || extension === '.ejs';
 
-      if (typeof transform !== 'boolean') {
-        throw new Error(`Transform ${transform} value is not supported`);
-      }
-      destinationFile = transform ? normalizeEjs(destinationFile) : destinationFile;
+      destinationFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
 
       let sourceFileFrom;
       if (Array.isArray(rootTemplatesAbsolutePath)) {
@@ -2470,11 +2472,33 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       if (!ejsFile) {
         await this.copyTemplateAsync(sourceFileFrom, destinationFile);
       } else {
-        await this.renderTemplateAsync(sourceFileFrom, destinationFile, context, {
+        let useAsync = true;
+        if (context.entityClass) {
+          const basename = path.basename(sourceFileFrom);
+          if (context.configOptions && context.configOptions.sharedEntities) {
+            Object.values(context.configOptions.sharedEntities).forEach(entity => {
+              entity.resetFakerSeed(`${context.entityClass}-${basename}`);
+            });
+          } else if (context.resetFakerSeed) {
+            context.resetFakerSeed(basename);
+          }
+          // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
+          useAsync = false;
+        }
+
+        const renderOptions = {
           ...options,
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
-        });
+        };
+        if (useAsync) {
+          await this.renderTemplateAsync(sourceFileFrom, destinationFile, context, renderOptions);
+        } else {
+          this.renderTemplate(sourceFileFrom, destinationFile, context, renderOptions);
+        }
+      }
+      if (!binary && transform && transform.length) {
+        this.editFile(destinationFile, ...transform);
       }
       return destinationFile;
     };
@@ -2482,10 +2506,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     let parsedBlocks = blocks;
     if (sections) {
       assert(typeof sections === 'object', 'sections must be an object');
-      const parsedSections = Object.entries(sections).map(([sectionName, sectionBlocks]) => {
-        assert(Array.isArray(sectionBlocks), `Section must be an array for ${sectionName}`);
-        return { sectionName, sectionBlocks };
-      });
+      const parsedSections = Object.entries(sections)
+        .map(([sectionName, sectionBlocks]) => {
+          if (sectionName.startsWith('_')) return undefined;
+          assert(Array.isArray(sectionBlocks), `Section must be an array for ${sectionName}`);
+          return { sectionName, sectionBlocks };
+        })
+        .filter(Boolean);
 
       parsedBlocks = parsedSections
         .map(({ sectionName, sectionBlocks }) => {
@@ -2508,7 +2535,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             from: blockFromCallback,
             to: blockToCallback,
             condition: blockConditionCallback,
-            transform: blockTransform,
+            transform: blockTransform = [],
           } = block;
           assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
           assert(Array.isArray(block.templates), `Block templates must be an array for ${blockSpecPath}`);
@@ -2521,13 +2548,31 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           return block.templates.map((fileSpec, fileIdx) => {
             const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
             assert(typeof fileSpec === 'object' || typeof fileSpec === 'string', `File must be an object or a string for ${fileSpecPath}`);
+            let { noEjs } = fileSpec;
+            let derivedTransform;
+            if (typeof blockTransform === 'boolean') {
+              noEjs = !blockTransform;
+              derivedTransform = [...methodTransform, ...sectionTransform];
+            } else {
+              derivedTransform = [...methodTransform, ...sectionTransform, ...blockTransform];
+            }
             if (typeof fileSpec === 'string') {
               const sourceFile = path.join(blockPath, fileSpec);
               const destinationFile = this.destinationPath(blockTo, fileSpec);
-              return { sourceFile, destinationFile, transform: blockTransform };
+              return { sourceFile, destinationFile, noEjs, transform: derivedTransform };
             }
+
+            const { options, file, renameTo, transform: fileTransform = [], binary } = fileSpec;
             let { sourceFile, destinationFile } = fileSpec;
-            const { options, file, renameTo } = fileSpec;
+
+            if (typeof fileTransform === 'boolean') {
+              noEjs = !fileTransform;
+            } else if (Array.isArray(fileTransform)) {
+              derivedTransform = [...derivedTransform, ...fileTransform];
+            } else if (fileTransform !== undefined) {
+              throw new Error(`Transform ${fileTransform} value is not supported`);
+            }
+
             const normalizedFile = resolveCallback(sourceFile || file);
             sourceFile = path.join(blockPath, normalizedFile);
             destinationFile = this.destinationPath(blockTo, path.join(resolveCallback(destinationFile || renameTo, normalizedFile)));
@@ -2537,16 +2582,23 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               this.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
-            let { transform } = fileSpec;
-            if (transform === undefined) {
-              // TODO remove for jhipster 8
-              const { noEjs, method } = fileSpec;
-              transform = noEjs || method === 'copy' ? false : undefined;
+
+            // TODO remove for jhipster 8
+            if (noEjs === undefined) {
+              const { method } = fileSpec;
+              if (method === 'copy') {
+                noEjs = true;
+              }
             }
-            if (transform === undefined) {
-              transform = blockTransform;
-            }
-            return { sourceFile, destinationFile, options, transform };
+
+            return {
+              sourceFile,
+              destinationFile,
+              options,
+              transform: derivedTransform,
+              noEjs,
+              binary,
+            };
           });
         })
         .flat()

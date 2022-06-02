@@ -498,7 +498,14 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
    * @param [data] {object} - template data in case translated value is a template
    */
   _getClientTranslation(translationKey, data) {
-    const translatedValue = _.get(this.clientTranslations, translationKey, `Translation missing for ${translationKey}`);
+    let translatedValue = _.get(this.clientTranslations, translationKey);
+    if (translatedValue === undefined) {
+      const [last, second, ...others] = translationKey.split('.').reverse();
+      translatedValue = _.get(this.clientTranslations, `${others.reverse().join('.')}['${second}.${last}']`);
+    }
+    if (translatedValue === undefined) {
+      return `Translation missing for ${translationKey}`;
+    }
     if (!data) {
       return translatedValue;
     }
