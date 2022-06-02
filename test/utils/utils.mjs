@@ -24,7 +24,6 @@ export const {
   skipPrettierHelpers,
   dryRunHelpers,
   createTestHelpers,
-  getFilesForOptions,
   shouldBeV3DockerfileCompatible,
   getJHipsterCli,
   prepareTempDir,
