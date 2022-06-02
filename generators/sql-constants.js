@@ -45,6 +45,9 @@ const databaseData = {
     port: ':3306/',
     extraOptions:
       '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true',
+    r2dbc: {
+      protocolSuffix: 'mariadb://',
+    },
   },
   [ORACLE]: {
     name: 'Oracle',

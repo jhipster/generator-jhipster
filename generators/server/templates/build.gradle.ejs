@@ -411,8 +411,8 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.testcontainers:r2dbc"
   <%_ } else { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    testImplementation "org.testcontainers:jdbc"
   <%_ } _%>
+    testImplementation "org.testcontainers:jdbc"
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
     testImplementation "org.apache.commons:commons-collections4"
