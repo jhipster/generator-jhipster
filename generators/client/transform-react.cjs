@@ -28,6 +28,9 @@ const COMPONENT_ATTRIBUTE = 'component="(?<component>[^"]+)"\\s*';
 const TRANSLATE_TAG = `<Translate\\s*(?:(?:${COMPONENT_ATTRIBUTE}|${INTERPOLATE_ATTRIBUTE}|${CONTENT_TYPE_ATTRIBUTE})+)>(?<translation>[\\s\\S]*?)<\\/Translate>`;
 
 function getTranslationValue(generator, key, data) {
+  if (generator._getEntityClientTranslation) {
+    return generator._getEntityClientTranslation(key, data);
+  }
   return (generator._getClientTranslation && generator._getClientTranslation(key, data)) || undefined;
 }
 

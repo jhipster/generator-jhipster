@@ -237,7 +237,7 @@ module.exports = class extends BaseBlueprintGenerator {
    * @param [data] {object} - template data in case translated value is a template
    */
   _getEntityClientTranslation(translationKey, data) {
-    if (translationKey.startsWith('global.')) {
+    if (translationKey.startsWith('global.') || translationKey.startsWith('entity.')) {
       return this._getClientTranslation(translationKey, data);
     }
     const translatedValue = _.get(this.entitiesClientTranslations, translationKey);
