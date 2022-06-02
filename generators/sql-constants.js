@@ -25,7 +25,7 @@ const databaseData = {
     protocolSuffix: 'sqlserver://',
     port: ':1433;database=',
     r2dbc: {
-      protocolSuffix: 'mssql://',
+      protocolSuffix: 'mariadb://',
       port: ':1433/',
     },
   },
