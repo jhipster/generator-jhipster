@@ -73,7 +73,7 @@
     "source-map-loader": "3.0.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "style-loader": "3.3.1",
-    "terser-webpack-plugin": "5.3.1",
+    "terser-webpack-plugin": "5.3.3",
     "thread-loader": "3.0.4",
     "ts-jest": "27.1.4",
     "ts-loader": "9.3.0",
