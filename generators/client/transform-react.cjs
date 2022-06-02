@@ -34,7 +34,7 @@ function getTranslationValue(generator, key, data) {
   return (generator._getClientTranslation && generator._getClientTranslation(key, data)) || undefined;
 }
 
-const replaceTranslationKeysWithText = (generator, body, regexp, { keyPattern, interpolatePattern, wrapTranslation } = {}) => {
+const replaceTranslationKeysWithText = (generator, body, regexp, { keyPattern, interpolatePattern, wrapTranslation, escapeHtml } = {}) => {
   const matches = body.matchAll(new RegExp(regexp, 'g'));
   if (typeof wrapTranslation === 'string') {
     wrapTranslation = [wrapTranslation, wrapTranslation];
@@ -84,6 +84,9 @@ const replaceTranslationKeysWithText = (generator, body, regexp, { keyPattern, i
       replacement = wrapTranslation ? `${wrapTranslation[0]}${wrapTranslation[1]}` : '';
     } else if (wrapTranslation) {
       replacement = `${wrapTranslation[0]}${translation}${wrapTranslation[1]}`;
+    } else if (escapeHtml) {
+      // Escape specific chars
+      replacement = replacement.replaceAll("'", '&apos;').replaceAll("'", '&quot;');
     }
     body = body.replace(target, replacement);
   }
@@ -107,6 +110,7 @@ function replaceReactTranslations(body, filePath) {
     body = replaceTranslationKeysWithText(this, body, TRANSLATE_TAG, {
       keyPattern: CONTENT_TYPE_ATTRIBUTE,
       interpolatePattern: INTERPOLATE_ATTRIBUTE,
+      escapeHtml: true,
     });
   }
   return body;
