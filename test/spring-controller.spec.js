@@ -49,26 +49,27 @@ describe('JHipster generator spring-controller', () => {
   });
 
   describe('creates spring controller without packageFolde & non-default packageName in yo-rc.json', () => {
-    before(done => {
-      helpers
+    let runResult;
+    before(async () => {
+      runResult = await helpers
         .run(require.resolve('../generators/spring-controller'))
         .inTmpDir(dir => {
-          const defaultYo = fse.readJSONSync(path.join(__dirname, '../test/templates/default/.yo-rc.json'));
-          delete defaultYo['generator-jhipster'].packageFolder;
-          defaultYo['generator-jhipster'].packageName = 'com.test';
-          fse.writeJsonSync(path.join(dir, '.yo-rc.json'), defaultYo);
+          const config = {
+            ...fse.readJSONSync(path.join(__dirname, '../test/templates/default/.yo-rc.json'))[constants.GENERATOR_JHIPSTER],
+            packageFolder: undefined,
+            packageName: 'com.test',
+          };
+          fse.writeJsonSync(path.join(dir, '.yo-rc.json'), { [constants.GENERATOR_JHIPSTER]: config });
         })
         .withArguments(['fooBar'])
         .withPrompts({
           actionAdd: false,
-        })
-        .on('end', done);
+        });
     });
 
     it('creates fooBar controller files', () => {
-      assert.file([`${SERVER_MAIN_SRC_DIR}com/test/web/rest/FooBarResource.java`]);
-
-      assert.file([`${SERVER_TEST_SRC_DIR}com/test/web/rest/FooBarResourceIT.java`]);
+      runResult.assertFile([`${SERVER_MAIN_SRC_DIR}com/test/web/rest/FooBarResource.java`]);
+      runResult.assertFile([`${SERVER_TEST_SRC_DIR}com/test/web/rest/FooBarResourceIT.java`]);
     });
   });
 });

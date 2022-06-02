@@ -120,6 +120,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _loading() {
     return {
       loadSharedConfig() {
+        this.loadServerConfig();
         this.loadDerivedServerConfig();
       },
     };
