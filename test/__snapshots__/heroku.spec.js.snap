@@ -574,8 +574,7 @@ spring:
     hikari:
       maximumPoolSize: 8
   elasticsearch:
-    rest:
-      uris: \${BONSAI_URL}
+    uris: \${BONSAI_URL}
 server:
   port: \${PORT:8080}
 ",
