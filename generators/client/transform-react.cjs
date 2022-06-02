@@ -86,7 +86,7 @@ const replaceTranslationKeysWithText = (generator, body, regexp, { keyPattern, i
       replacement = `${wrapTranslation[0]}${translation}${wrapTranslation[1]}`;
     } else if (escapeHtml) {
       // Escape specific chars
-      replacement = replacement.replaceAll("'", '&apos;').replaceAll("'", '&quot;');
+      replacement = replacement.replace(/'/g, '&apos;').replace(/"/g, '&quot;');
     }
     body = body.replace(target, replacement);
   }

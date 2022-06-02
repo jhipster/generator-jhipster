@@ -79,7 +79,7 @@ Active sessions for [<strong>{account.login}</strong>]
 `;
           expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
 "
-sessions.title-{\\"username\\":\\"{account.login}\\"}-translated-value-0
+sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-value-0
 "
 `);
         });
@@ -92,7 +92,7 @@ Active sessions for [<strong>{account.login}</strong>]
 `;
           expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
 "
-sessions.title-{\\"username\\":\\"{account.login}\\"}-translated-value-0
+sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-value-0
 "
 `);
         });
@@ -248,7 +248,7 @@ export const Home = () => {
           (account?.login) ? (
             <div>
               <Alert color=\\"success\\">
-                home.logged.message-{\\"username\\":\\"{account.login}\\"}-translated-value-2
+                home.logged.message-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-value-2
               </Alert>
             </div>
           ) : (
