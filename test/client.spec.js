@@ -1,12 +1,10 @@
 const { expect } = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
-const { JWT } = require('../jdl/jhipster/authentication-types');
 const { CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { ANGULAR_X, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
-const { skipPrettierHelpers: helpers, getFilesForOptions } = require('./utils/utils');
+const { skipPrettierHelpers: helpers } = require('./utils/utils');
 const expectedFiles = require('./utils/expected-files');
-const reactFiles = require('../generators/client/files-react').files;
 const constants = require('../generators/generator-constants');
 const { appDefaultConfig } = require('../generators/generator-defaults');
 
@@ -14,8 +12,9 @@ const { CLIENT_TEST_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
 
 describe('JHipster client generator', () => {
   describe('generate client with React', () => {
+    let runResult;
     before(async () => {
-      await helpers
+      runResult = await helpers
         .run(path.join(__dirname, '../generators/client'))
         .withOptions({ skipInstall: true, auth: 'jwt', experimental: true })
         .withPrompts({
@@ -28,16 +27,7 @@ describe('JHipster client generator', () => {
         });
     });
     it('creates expected files for react configuration for client generator', () => {
-      assert.noFile(expectedFiles.maven);
-      assert.file(expectedFiles.clientCommon);
-      assert.file(
-        getFilesForOptions(reactFiles, {
-          enableTranslation: true,
-          serviceDiscoveryType: false,
-          authenticationType: JWT,
-          testFrameworks: [],
-        })
-      );
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
     it('contains clientFramework with react value', () => {
       assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);

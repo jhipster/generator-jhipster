@@ -2,9 +2,6 @@ const { expect } = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const getFilesForOptions = require('./utils/utils').getFilesForOptions;
-const expectedFiles = require('./utils/expected-files');
-const reactFiles = require('../generators/client/files-react').files;
 const { SQL, H2_MEMORY, POSTGRESQL } = require('../jdl/jhipster/database-types');
 const { ANGULAR_X, REACT } = require('../jdl/jhipster/client-framework-types');
 const { JWT } = require('../jdl/jhipster/authentication-types');
@@ -81,8 +78,9 @@ describe('JHipster generator custom path', () => {
     });
 
     describe('React', () => {
-      before(done => {
-        helpers
+      let runResult;
+      before(async () => {
+        runResult = await helpers
           .run(path.join(__dirname, '../generators/app'))
           .withEnvironment(env => {
             env.sharedOptions.outputPathCustomizer = [outputPathCustomizer, clientTestPathCustomizer];
@@ -115,28 +113,11 @@ describe('JHipster generator custom path', () => {
             skipClient: false,
             skipUserManagement: false,
             serverSideOptions: [],
-          })
-          .on('end', done);
+          });
       });
 
       it('creates expected default files for react', () => {
-        assert.file(expectedFiles.common.map(applyCustomizers));
-        assert.file(expectedFiles.server.map(applyCustomizers));
-        assert.file(expectedFiles.userManagementServer.map(applyCustomizers));
-        assert.file(expectedFiles.jwtServer.map(applyCustomizers));
-        assert.file(expectedFiles.maven.map(applyCustomizers));
-        assert.file(expectedFiles.dockerServices.map(applyCustomizers));
-        assert.file(expectedFiles.postgresql.map(applyCustomizers));
-        assert.file(expectedFiles.hibernateTimeZoneConfig.map(applyCustomizers));
-        assert.file(
-          getFilesForOptions(reactFiles, {
-            outputPathCustomizer: applyCustomizers,
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: JWT,
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it('contains clientFramework with react value', () => {
         assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
