@@ -1765,7 +1765,7 @@
                                     <artifactId>validation-api</artifactId>
                                     <version>${validation-api.version}</version>
                                 </dependency>
-  <%_ if (devDatabaseTypePostgres) { _%>
+  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres) { _%>
                                 <dependency>
                                     <groupId>tech.jhipster</groupId>
                                     <artifactId>jhipster-framework</artifactId>
@@ -1951,7 +1951,7 @@
                                     <artifactId>validation-api</artifactId>
                                     <version>${validation-api.version}</version>
                                 </dependency>
-  <%_ if (prodDatabaseTypePostgres) { _%>
+  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || prodDatabaseTypePostgres) { _%>
                                 <dependency>
                                     <groupId>tech.jhipster</groupId>
                                     <artifactId>jhipster-framework</artifactId>
