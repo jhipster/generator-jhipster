@@ -116,13 +116,16 @@ const AppRoutes = () => {
 <%_ } _%>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
-          <Route path="<%= remote.lowercaseBaseName %>/">
-            <Suspense fallback={loading}>
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
-                <<%= remote.capitalizedBaseName %>Routes />
-              </PrivateRoute>
-            </Suspense>
-          </Route>
+          <Route
+            path="<%= remote.lowercaseBaseName %>/*"
+            element={
+              <Suspense fallback={loading}>
+                <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+                  <<%= remote.capitalizedBaseName %>Routes />
+                </PrivateRoute>
+              </Suspense>
+            }
+          />
   <%_ } _%>
 <%_ } _%>
           <Route
