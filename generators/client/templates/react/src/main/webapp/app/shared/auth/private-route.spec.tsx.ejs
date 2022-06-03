@@ -60,7 +60,7 @@ describe('private-route component', () => {
       }
     );
     expect(container.innerHTML).toMatch(
-      /<div class="insufficient-authority"><div class="alert alert-danger">.*</div></div>/
+      /<div class="insufficient-authority"><div class="alert alert-danger">.*<\/div><\/div>/
     );
   });
 
