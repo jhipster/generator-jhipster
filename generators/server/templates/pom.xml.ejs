@@ -1794,10 +1794,13 @@
             <id>prod</id>
 <%_ if (databaseTypeSql) { _%>
             <dependencies>
+                <%_ if (prodDatabaseTypeMysql && reactive) { _%>
+                <!-- R2DBC for MySQL requires Maria testcontainers and JDBC driver for tests -->
+                <%_ } _%>
                 <dependency>
                     <groupId>org.testcontainers</groupId>
   <%_ if (prodDatabaseTypeMysql) { _%>
-                    <artifactId>mysql</artifactId>
+                    <artifactId><% if (reactive) { %>mariadb<% } else { %>mysql<% } %></artifactId>
   <%_ } else if (prodDatabaseTypeMariadb) { _%>
                     <artifactId>mariadb</artifactId>
   <%_ } else if (prodDatabaseTypePostgres) { _%>
@@ -1814,17 +1817,14 @@
                     <groupId>mysql</groupId>
                     <artifactId>mysql-connector-java</artifactId>
                 </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>org.mariadb</groupId>
-                    <artifactId>r2dbc-mariadb</artifactId>
-                </dependency>
-    <%_ } _%>
   <%_ } _%>
-  <%_ if (prodDatabaseTypeMariadb) { _%>
+  <%_ if (prodDatabaseTypeMariadb || prodDatabaseTypeMysql && reactive) { _%>
                 <dependency>
                     <groupId>org.mariadb.jdbc</groupId>
                     <artifactId>mariadb-java-client</artifactId>
+                <%_ if (prodDatabaseTypeMysql && reactive) { _%>
+                    <scope>test</scope>
+                <%_ } _%>
                 </dependency>
     <%_ if (reactive) { _%>
                 <dependency>
