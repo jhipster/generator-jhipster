@@ -1677,7 +1677,7 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
                             <testExcludes>
-                                <testExclude><%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java</testExclude>
+                                <testExclude><%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb || prodDatabaseTypeMysql && reactive) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java</testExclude>
                             </testExcludes>
                         </configuration>
                     </plugin>
