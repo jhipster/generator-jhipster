@@ -99,9 +99,9 @@
         <hibernate.version><%= HIBERNATE_VERSION %></hibernate.version>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
+        <liquibase.version><%= devDatabaseTypeH2Any ? LIQUIBASE_VERSION : '4.6.1' %></liquibase.version>
   <%_ if (!reactive) { _%>
-        <liquibase-hibernate5.version><%= LIQUIBASE_VERSION %></liquibase-hibernate5.version>
+        <liquibase-hibernate5.version><%= devDatabaseTypeH2Any ? LIQUIBASE_VERSION : '4.6.1' %></liquibase-hibernate5.version>
   <%_ } _%>
   <%_ if (devDatabaseTypeH2Any) { _%>
         <h2.version>2.1.212</h2.version>
