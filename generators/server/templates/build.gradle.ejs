@@ -280,7 +280,7 @@ dependencies {
 
     // Use ", version: jhipsterDependenciesVersion, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
-    implementation group: "tech.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
+    implementation group: "tech.jhipster", name: "jhipster-framework", version: jhipsterDependenciesVersion, changing: true<% if (reactive) { %>, {
         exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
     implementation "javax.annotation:javax.annotation-api"
