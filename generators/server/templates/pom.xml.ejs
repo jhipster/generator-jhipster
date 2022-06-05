@@ -104,7 +104,8 @@
         <liquibase-hibernate5.version><%= devDatabaseTypeH2Any && !prodDatabaseTypeMariadb && !prodDatabaseTypeMysql ? LIQUIBASE_VERSION : '4.6.1' %></liquibase-hibernate5.version>
   <%_ } _%>
   <%_ if (devDatabaseTypeH2Any) { _%>
-        <h2.version>2.1.212</h2.version>
+        <!-- TODO upgrade to h2 v2 once liquibase issues has been addressed -->
+        <h2.version>1.4.200</h2.version>
   <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
   <%_ if (reactive) { _%>
@@ -1677,7 +1678,7 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
                             <testExcludes>
-                                <testExclude><%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb || prodDatabaseTypeMysql && reactive) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java</testExclude>
+                                <testExclude><%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java</testExclude>
                             </testExcludes>
                         </configuration>
                     </plugin>
@@ -1794,13 +1795,10 @@
             <id>prod</id>
 <%_ if (databaseTypeSql) { _%>
             <dependencies>
-                <%_ if (prodDatabaseTypeMysql && reactive) { _%>
-                <!-- R2DBC for MySQL requires Maria testcontainers and JDBC driver for tests -->
-                <%_ } _%>
                 <dependency>
                     <groupId>org.testcontainers</groupId>
   <%_ if (prodDatabaseTypeMysql) { _%>
-                    <artifactId><% if (reactive) { %>mariadb<% } else { %>mysql<% } %></artifactId>
+                    <artifactId>mysql</artifactId>
   <%_ } else if (prodDatabaseTypeMariadb) { _%>
                     <artifactId>mariadb</artifactId>
   <%_ } else if (prodDatabaseTypePostgres) { _%>
@@ -1818,11 +1816,11 @@
                     <artifactId>mysql-connector-java</artifactId>
                 </dependency>
   <%_ } _%>
-  <%_ if (prodDatabaseTypeMariadb || prodDatabaseTypeMysql && reactive) { _%>
+  <%_ if (prodDatabaseTypeMariadb) { _%>
                 <dependency>
                     <groupId>org.mariadb.jdbc</groupId>
                     <artifactId>mariadb-java-client</artifactId>
-                <%_ if (prodDatabaseTypeMysql && reactive) { _%>
+                <%_ if (reactive) { _%>
                     <scope>test</scope>
                 <%_ } _%>
                 </dependency>
