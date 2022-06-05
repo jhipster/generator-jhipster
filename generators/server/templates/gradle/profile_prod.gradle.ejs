@@ -47,7 +47,7 @@ dependencies {
     <%_ if (reactive) { _%>
     implementation "org.mariadb:r2dbc-mariadb"
     <%_ } _%>
-    <% if (reactive) { %>testImplementation<% } else { %>implementation<% } %> "org.mariadb.jdbc:mariadb-java-client"
+    implementation "org.mariadb.jdbc:mariadb-java-client"
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
     testImplementation "org.testcontainers:mariadb"
   <%_ } _%>
