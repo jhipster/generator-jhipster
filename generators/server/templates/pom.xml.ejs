@@ -1815,14 +1815,18 @@
                     <groupId>mysql</groupId>
                     <artifactId>mysql-connector-java</artifactId>
                 </dependency>
+    <%_ if (reactive) { _%>
+                <dependency>
+                    <groupId>org.mariadb</groupId>
+                    <artifactId>r2dbc-mariadb</artifactId>
+                </dependency>
+    <%_ } _%>
   <%_ } _%>
   <%_ if (prodDatabaseTypeMariadb) { _%>
                 <dependency>
                     <groupId>org.mariadb.jdbc</groupId>
                     <artifactId>mariadb-java-client</artifactId>
-                <%_ if (reactive) { _%>
                     <scope>test</scope>
-                <%_ } _%>
                 </dependency>
     <%_ if (reactive) { _%>
                 <dependency>
@@ -2216,6 +2220,23 @@
                 </pluginManagement>
             </build>
         </profile>
+<%_ } _%>
+<%_ if (reactive && prodDatabaseTypeMysql) { _%>
+        <profile>
+            <activation>
+                <os>
+                    <family>mac</family>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-resolver-dns-native-macos</artifactId>
+                    <classifier>osx-aarch_64</classifier>
+                </dependency>
+            </dependencies>
+       </profile>
 <%_ } _%>
         <!-- jhipster-needle-maven-add-profile -->
     </profiles>
