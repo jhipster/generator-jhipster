@@ -41,6 +41,8 @@ const SPRING_BOOT_VERSION = '2.7.0';
 const LIQUIBASE_VERSION = '4.11.0';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.6.9.Final';
+// TODO upgrade to h2 v2 once liquibase issues has been addressed
+const H2_VERSION = '1.4.200';
 
 const JACOCO_VERSION = '0.8.8';
 const KAFKA_VERSION = '7.1.1';
@@ -435,6 +437,7 @@ const constants = {
   LIQUIBASE_VERSION,
   LIQUIBASE_DTD_VERSION,
   HIBERNATE_VERSION,
+  H2_VERSION,
   JACOCO_VERSION,
   JACKSON_DATABIND_NULLABLE_VERSION,
 
