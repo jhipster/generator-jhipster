@@ -73,8 +73,6 @@ spring:
   jpa:
   <%_ if (devDatabaseTypePostgres) { _%>
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-  <%_ } else if (devDatabaseTypeH2Any) { _%>
-    database-platform: tech.jhipster.domain.util.FixedH2Dialect
   <%_ } _%>
     open-in-view: false
     hibernate:
