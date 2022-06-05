@@ -80,7 +80,7 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
     }
 
     List<<%= persistClass %>> fetch<%= relationship.relationshipNameCapitalizedPlural %>(List<<%= persistClass %>> <%= entityInstancePlural %>) {
-        HashMap<Object, Integer> order = new HashMap<Object, Integer>();
+        HashMap<Object, Integer> order = new HashMap<>();
         IntStream.range(0, <%= entityInstancePlural %>.size())
             .forEach(index -> order.put(<%= entityInstancePlural %>.get(index).get<%= primaryKey.nameCapitalized %>(), index));
         List<<%= persistClass %>> result = entityManager
