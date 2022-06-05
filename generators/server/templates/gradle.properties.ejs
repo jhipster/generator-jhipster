@@ -27,13 +27,13 @@ springBootVersion=<%= SPRING_BOOT_VERSION %>
 # The hibernate version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
-mapstructVersion=1.4.2.Final
+mapstructVersion=1.5.1.Final
 archunitJunit5Version=0.22.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
-caffeineVersion=3.0.6
+caffeineVersion=3.1.1
 typesafeConfigVersion=1.4.2
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
@@ -63,21 +63,21 @@ cassandraDriverVersion=4.13.0
 jibPluginVersion=<%= JIB_VERSION %>
 gitPropertiesPluginVersion=2.4.1
 <%_ if (!skipClient) { _%>
-gradleNodePluginVersion=3.2.1
+gradleNodePluginVersion=3.3.0
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 liquibasePluginVersion=2.1.1
 <%_ } _%>
 sonarqubePluginVersion=3.3
 <%_ if (enableSwaggerCodegen) { _%>
-openapiPluginVersion=5.4.0
+openapiPluginVersion=6.0.0
 <%_ } _%>
 noHttpCheckstyleVersion=0.0.10
-checkstyleVersion=10.1
+checkstyleVersion=10.3
 modernizerPluginVersion=1.6.2
 <%_ if (enableGradleEnterprise) { _%>
-gradleEnterprisePluginVersion=3.10
-gradleCommonCustomUserDataPluginVersion=1.6.5
+gradleEnterprisePluginVersion=3.10.1
+gradleCommonCustomUserDataPluginVersion=1.7.2
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 awaitilityVersion=4.2.0
