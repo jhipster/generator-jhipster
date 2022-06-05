@@ -33,7 +33,7 @@ dependencies {
     <%_ } _%>
     implementation "mysql:mysql-connector-java"
     liquibaseRuntime "mysql:mysql-connector-java"
-    testImplementation "org.testcontainers:<% if (reactive) { %>mariadb<% } else { %>mysql<% } %>"
+    testImplementation "org.testcontainers:mysql"
   <%_ } _%>
   <%_ if (prodDatabaseTypePostgres) { _%>
     <%_ if (reactive) { _%>
@@ -43,11 +43,11 @@ dependencies {
     liquibaseRuntime "org.postgresql:postgresql"
     testImplementation "org.testcontainers:postgresql"
   <%_ } _%>
-  <%_ if (prodDatabaseTypeMariadb || prodDatabaseTypeMysql && reactive) { _%>
+  <%_ if (prodDatabaseTypeMariadb) { _%>
     <%_ if (reactive) { _%>
     implementation "org.mariadb:r2dbc-mariadb"
     <%_ } _%>
-    <% if (prodDatabaseTypeMysql && reactive) { %>testImplementation<% } else { %>implementation<% } %> "org.mariadb.jdbc:mariadb-java-client"
+    <% if (reactive) { %>testImplementation<% } else { %>implementation<% } %> "org.mariadb.jdbc:mariadb-java-client"
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
     testImplementation "org.testcontainers:mariadb"
   <%_ } _%>

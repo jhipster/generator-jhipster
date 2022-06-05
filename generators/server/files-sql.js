@@ -147,9 +147,7 @@ const h2Files = {
 
 const mysqlFiles = {
   serverTestSources: [
-    // this first set of files is for non-reactive apps
     {
-      condition: generator => !generator.reactive,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -159,35 +157,12 @@ const mysqlFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive,
       path: SERVER_TEST_RES_DIR,
       templates: [{ file: 'testcontainers/mysql/my.cnf', method: 'copy', noEjs: true }],
     },
     {
-      condition: generator => !generator.reactive,
       path: DOCKER_DIR,
       templates: [{ file: 'config/mysql/my.cnf', method: 'copy', noEjs: true }],
-    },
-    // this set of files is needed reactive apps b/c the DB driver is mariadb
-    {
-      condition: generator => generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/MariadbTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/MariadbTestContainer.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.reactive,
-      path: SERVER_TEST_RES_DIR,
-      templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
-    },
-    {
-      condition: generator => generator.reactive,
-      path: DOCKER_DIR,
-      templates: [{ file: 'config/mariadb/my.cnf', method: 'copy', noEjs: true }],
     },
   ],
 };

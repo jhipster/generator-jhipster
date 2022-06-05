@@ -20,7 +20,7 @@
 sourceSets {
     test {
         java {
-            exclude '<%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb || prodDatabaseTypeMysql && reactive) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java'
+            exclude '<%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java'
         }
     }
 }
