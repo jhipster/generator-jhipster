@@ -88,7 +88,7 @@ describe('private-route component', () => {
     expect(container.innerHTML).toEqual('<div>Test</div>');
   });
 
-  it('Should redirect to login when not authenticated', () => {
+  it('Should redirect when not authenticated', () => {
     const { container } = wrapper(
       <Routes>
         <Route
@@ -99,7 +99,7 @@ describe('private-route component', () => {
             </PrivateRoute>
           }
         />
-        <Route path="login" element={<div>Login</div>} />
+        <Route path="<% if(authenticationTypeOauth2) { %>/oauth2/authorization/oidc<% } else { %>/login<% } %>" element={<div>Login</div>} />
       </Routes>,
       {
         isAuthenticated: false,
