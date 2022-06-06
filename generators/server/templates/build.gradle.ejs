@@ -534,6 +534,17 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (databaseTypeCassandra) { _%>
     annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandraDriverVersion}"
 <%_ } _%>
+<%_ if (reactive) { _%>
+    OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
+    Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
+    if (os.isMacOsX() && !arch.isAmd64()) {
+        implementation("io.netty:netty-resolver-dns-native-macos") {
+            artifact {
+                classifier = "osx-aarch_64"
+            }
+        }
+    }
+<%_ } _%>
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
