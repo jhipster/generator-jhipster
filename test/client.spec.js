@@ -301,9 +301,9 @@ describe('JHipster client generator', () => {
     });
 
     const REACT_ADMIN_ROUTES = `<Route path="health" element={<Health />} />
-        <Route path="metrics" element={<Metrics />} />
-        <Route path="configuration" element={<Configuration />} />
-        <Route path="logs" element={<Logs />} />`;
+      <Route path="metrics" element={<Metrics />} />
+      <Route path="configuration" element={<Configuration />} />
+      <Route path="logs" element={<Logs />} />`;
 
     describe('selected and React', () => {
       let runResult;

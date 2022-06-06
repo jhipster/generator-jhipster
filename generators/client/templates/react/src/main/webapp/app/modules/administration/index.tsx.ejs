@@ -19,7 +19,7 @@
 import React from 'react';
 
 import { Outlet, Route, Routes } from 'react-router-dom';
-import ErrorBoundary from 'app/shared/error/error-boundary';
+import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 <%_ if (!skipUserManagement) { _%>
 import UserManagement from './user-management';
 <%_ } _%>
@@ -39,32 +39,24 @@ import Tracker from './tracker/tracker';
 
 const AdministrationRoutes = () => (
   <div>
-    <Routes>
-      <Route
-        element={
-          <ErrorBoundary>
-            <Outlet />
-          </ErrorBoundary>
-        }
-      >
+    <ErrorBoundaryRoutes>
 <%_ if (!skipUserManagement) { _%>
-        <Route path="user-management/*" element={<UserManagement />} />
+      <Route path="user-management/*" element={<UserManagement />} />
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-        <Route path="tracker" element={<Tracker />} />
+      <Route path="tracker" element={<Tracker />} />
 <%_ } _%>
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-        <Route path="gateway" element={<Gateway />} />
+      <Route path="gateway" element={<Gateway />} />
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-        <Route path="health" element={<Health />} />
-        <Route path="metrics" element={<Metrics />} />
-        <Route path="configuration" element={<Configuration />} />
-        <Route path="logs" element={<Logs />} />
+      <Route path="health" element={<Health />} />
+      <Route path="metrics" element={<Metrics />} />
+      <Route path="configuration" element={<Configuration />} />
+      <Route path="logs" element={<Logs />} />
   <%_ } _%>
-        <Route path="docs" element={<Docs />} />
-      </Route>
-    </Routes>
+      <Route path="docs" element={<Docs />} />
+    </ErrorBoundaryRoutes>
   </div>
 );
 

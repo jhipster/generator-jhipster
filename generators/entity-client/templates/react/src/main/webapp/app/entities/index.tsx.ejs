@@ -19,7 +19,7 @@
 import React from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 
-import ErrorBoundary from 'app/shared/error/error-boundary';
+import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
 import <%= entityReactName %> from './<%= entityFileName %>';
 import <%= entityReactName %>Detail from './<%= entityFileName %>-detail';
@@ -29,27 +29,19 @@ import <%= entityReactName %>DeleteDialog from './<%= entityFileName %>-delete-d
 <%_ } _%>
 
 const <%= entityReactName %>Routes = () => (
-  <Routes>
-    <Route
-      element={
-        <ErrorBoundary>
-          <Outlet />
-        </ErrorBoundary>
-      }
-    >
-      <Route index element={<<%= entityReactName %> />} />
+  <ErrorBoundaryRoutes>
+    <Route index element={<<%= entityReactName %> />} />
 <%_ if (!readOnly) { _%>
-      <Route path="new" element={<<%= entityReactName %>Update />} />
+    <Route path="new" element={<<%= entityReactName %>Update />} />
 <%_ } _%>
-      <Route path=":id">
-        <Route index element={<<%= entityReactName %>Detail />} />
+    <Route path=":id">
+      <Route index element={<<%= entityReactName %>Detail />} />
 <%_ if (!readOnly) { _%>
-        <Route path="edit" element={<<%= entityReactName %>Update />} />
-        <Route path="delete" element={<<%= entityReactName %>DeleteDialog />} />
+      <Route path="edit" element={<<%= entityReactName %>Update />} />
+      <Route path="delete" element={<<%= entityReactName %>DeleteDialog />} />
 <%_ } _%>
-      </Route>
     </Route>
-  </Routes>
+  </ErrorBoundaryRoutes>
 );
 
 export default <%= entityReactName %>Routes;

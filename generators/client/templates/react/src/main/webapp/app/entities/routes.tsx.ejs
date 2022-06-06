@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
-import ErrorBoundary from 'app/shared/error/error-boundary';
+import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
 <%_ if (microfrontend || applicationTypeGateway) { _%>
 import { ReducersMapObject, combineReducers } from '@reduxjs/toolkit';
@@ -40,18 +40,10 @@ export default () => {
 <%_ } _%>
   return (
     <div>
-      <Routes>
-        <Route
-          element={
-            <ErrorBoundary>
-              <Outlet />
-            </ErrorBoundary>
-          }
-        >
-          {/* prettier-ignore */}
-          {/* jhipster-needle-add-route-path - JHipster will add routes here */}
-        </Route>
-      </Routes>
+      <ErrorBoundaryRoutes>
+        {/* prettier-ignore */}
+        {/* jhipster-needle-add-route-path - JHipster will add routes here */}
+      </ErrorBoundaryRoutes>
     </div>
   );
 };
