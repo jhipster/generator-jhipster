@@ -414,7 +414,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (databaseTypeSql) { _%>
   <%_ if (reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
-    testImplementation "org.testcontainers:r2dbc"
   <%_ } else { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
   <%_ } _%>
