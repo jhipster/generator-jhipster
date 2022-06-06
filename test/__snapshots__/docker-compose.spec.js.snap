@@ -72,7 +72,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.29
+    image: mysql:8.0.29-oracle
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -202,7 +202,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.29
+    image: mysql:8.0.29-oracle
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -217,7 +217,7 @@ eureka:
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mscassandra-cassandra-node:
-    image: cassandra:3.11.11
+    image: cassandra:3.11.13
     environment:
       - CASSANDRA_SEEDS=mscassandra-cassandra
   mscassandra-cassandra-migration:
@@ -375,7 +375,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:14.2
+    image: postgres:14.3
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -391,7 +391,7 @@ eureka:
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmongodb-mongodb:
-    image: mongo:4.4.13
+    image: mongo:4.4.14
 
   msmariadb:
     image: msmariadb
@@ -401,7 +401,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmariadb-mariadb:
-    image: mariadb:10.7.3
+    image: mariadb:10.8.3
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -540,7 +540,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:14.2
+    image: postgres:14.3
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -561,10 +561,10 @@ eureka:
       dockerfile: mongodb/MongoDB.Dockerfile
     command: mongod --shardsvr --replSet rs1
   msmongodb-mongodb-config:
-    image: mongo:4.4.13
+    image: mongo:4.4.14
     command: mongod --configsvr --dbpath /data/db --replSet csvr
   msmongodb-mongodb:
-    image: mongo:4.4.13
+    image: mongo:4.4.14
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
 
   jhipster-registry:
@@ -709,7 +709,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:14.2
+    image: postgres:14.3
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -739,7 +739,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmariadb-mariadb:
-    image: mariadb:10.7.3
+    image: mariadb:10.8.3
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -1151,7 +1151,7 @@ eureka:
       - 8761:8761
 
   prometheus:
-    image: prom/prometheus:v2.35.0
+    image: prom/prometheus:v2.36.0
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -1170,7 +1170,7 @@ eureka:
       - \\"--storage.path=/alertmanager\\"
 
   grafana:
-    image: grafana/grafana:8.5.0
+    image: grafana/grafana:8.5.4
     ports:
       - 3000:3000
     volumes:
