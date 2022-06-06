@@ -1704,10 +1704,12 @@ class JHipsterBaseGenerator extends PrivateBase {
     }
     dir.closeSync();
 
-    return [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
+    const entities = [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
       .map(entityName => ({ name: entityName, definition: this.readEntityJson(entityName) }))
-      .filter(entity => entity && !this.isBuiltInUser(entity.name) && !this.isBuiltInAuthority(entity.name))
+      .filter(entity => entity && !this.isBuiltInUser(entity.name) && !this.isBuiltInAuthority(entity.name) && entity.definition)
       .sort(isBefore);
+    this.jhipsterConfig.entities = entities.map(({ name }) => name);
+    return entities;
   }
 
   /**
