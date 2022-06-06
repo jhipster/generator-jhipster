@@ -1581,11 +1581,13 @@
                 <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
+                    <version>${h2.version}</version>
                 </dependency>
   <%_ if (reactive) { _%>
                 <dependency>
                     <groupId>io.r2dbc</groupId>
                     <artifactId>r2dbc-h2</artifactId>
+                    <version>${h2-r2dbc.version}</version>
                 </dependency>
   <%_ } _%>
 <%_ } _%>
@@ -1776,13 +1778,6 @@
                                     <artifactId>h2</artifactId>
                                     <version>${h2.version}</version>
                                 </dependency>
-    <%_ if (reactive) { _%>
-                                <dependency>
-                                    <groupId>io.r2dbc</groupId>
-                                    <artifactId>r2dbc-h2</artifactId>
-                                    <version>${h2-r2dbc.version}</version>
-                                </dependency>
-    <%_ } _%>
   <%_ } _%>
                             </dependencies>
                         </plugin>
