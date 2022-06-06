@@ -19,7 +19,7 @@ describe('error-boundary-routes component', () => {
     jest.spyOn((window as any).console, 'error').mockImplementation(() => false);
   });
 
-  it('Should render fallback component when an uncaught error is thrown from component', () => {
+  it('Should render fallback component when an uncaught error is thrown in route', () => {
     const { container } = render(
       <MemoryRouter>
         <ErrorBoundaryRoutes>
@@ -30,7 +30,7 @@ describe('error-boundary-routes component', () => {
     expect(container.innerHTML).toEqual('<div><h2 class="error">An unexpected error has occurred.</h2></div>');
   });
 
-  it('Should only render fallback component when route with error is matched', () => {
+  it('Should not render fallback component when route with uncaught error is not matched', () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/path']}>
         <ErrorBoundaryRoutes>
@@ -42,7 +42,7 @@ describe('error-boundary-routes component', () => {
     expect(container.innerHTML).toEqual('<div>No error</div>');
   });
 
-  it('Should render if no uncaught error is thrown in route', () => {
+  it('Should not render fallback component when no uncaught error is thrown', () => {
     const { container } = render(
       <MemoryRouter>
         <ErrorBoundaryRoutes>
