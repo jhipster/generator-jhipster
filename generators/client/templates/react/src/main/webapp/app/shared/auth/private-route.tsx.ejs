@@ -10,7 +10,7 @@ interface IOwnProps extends RouteProps {
   children: React.ReactNode;
 }
 
-export const PrivateRouteComponent = ({ children, hasAnyAuthorities = [], ...rest }: IOwnProps) => {
+export const PrivateRoute = ({ children, hasAnyAuthorities = [], ...rest }: IOwnProps) => {
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const sessionHasBeenFetched = useAppSelector(state => state.authentication.sessionHasBeenFetched);
   const account = useAppSelector(state => state.authentication.account);
@@ -21,23 +21,22 @@ export const PrivateRouteComponent = ({ children, hasAnyAuthorities = [], ...res
     throw new Error(`A component needs to be specified for private route for path ${(rest as any).path}`);
   }
 
-  const checkAuthorities = () =>
-    isAuthorized ? (
-      <ErrorBoundary>{children}</ErrorBoundary>
-    ) : (
+  if (!sessionHasBeenFetched) {
+    return <div></div>;
+  }
+
+  if (isAuthenticated) {
+    if (isAuthorized) {
+      return <ErrorBoundary>{children}</ErrorBoundary>;
+    }
+
+    return (
       <div className="insufficient-authority">
         <div className="alert alert-danger">
           <Translate contentKey="error.http.403">You are not authorized to access this page.</Translate>
         </div>
       </div>
     );
-
-  if (!sessionHasBeenFetched) {
-    return <div></div>;
-  }
-
-  if (isAuthenticated) {
-    return checkAuthorities();
   }
 
   return (
@@ -63,8 +62,9 @@ export const hasAnyAuthority = (authorities: string[], hasAnyAuthorities: string
 };
 
 /**
- * A route wrapped in an authentication check so that routing happens only when you are authenticated.
- * Accepts same props as React router Route.
- * The route also checks for authorization if hasAnyAuthorities is specified.
+ * Checks authentication before showing the children and redirects to the
+ * login page if the user is not authenticated.
+ * If hasAnyAuthorities is provided the authorization status is also
+ * checked and an error message is shown if the user is not authorized.
  */
-export default PrivateRouteComponent;
+export default PrivateRoute;

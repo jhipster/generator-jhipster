@@ -88,7 +88,7 @@ describe('private-route component', () => {
     expect(container.innerHTML).toEqual('<div>Test</div>');
   });
 
-  it('Should render a redirect to login when not authenticated', () => {
+  it('Should redirect to login when not authenticated', () => {
     const { container } = wrapper(
       <Routes>
         <Route
