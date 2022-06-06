@@ -10859,6 +10859,12 @@ Object {
   "src/main/webapp/app/shared/auth/private-route.tsx": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/error/error-boundary.spec.tsx": Object {
     "stateCleared": "modified",
   },
