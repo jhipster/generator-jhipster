@@ -43,6 +43,8 @@ const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('
 const HIBERNATE_VERSION = '5.6.9.Final';
 // TODO upgrade to h2 v2 once liquibase issues has been addressed
 const H2_VERSION = '1.4.200';
+// Version 0.9.x is not compatible with h2 v1
+const H2_R2DBC_VERSION = '0.8.5.RELEASE';
 
 const JACOCO_VERSION = '0.8.8';
 const KAFKA_VERSION = '7.1.1';
@@ -438,6 +440,7 @@ const constants = {
   LIQUIBASE_DTD_VERSION,
   HIBERNATE_VERSION,
   H2_VERSION,
+  H2_R2DBC_VERSION,
   JACOCO_VERSION,
   JACKSON_DATABIND_NULLABLE_VERSION,
 

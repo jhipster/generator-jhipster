@@ -105,6 +105,9 @@
   <%_ } _%>
   <%_ if (devDatabaseTypeH2Any) { _%>
         <h2.version><%= H2_VERSION %></h2.version>
+    <%_ if (reactive) { _%>
+        <h2-r2dbc.version><%= H2_R2DBC_VERSION %></h2-r2dbc.version>
+    <%_ } _%>
   <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
   <%_ if (reactive) { _%>
@@ -1778,6 +1781,13 @@
                                     <artifactId>h2</artifactId>
                                     <version>${h2.version}</version>
                                 </dependency>
+    <%_ if (reactive) { _%>
+                                <dependency>
+                                    <groupId>io.r2dbc</groupId>
+                                    <artifactId>r2dbc-h2</artifactId>
+                                    <version>${h2-r2dbc.version}</version>
+                                </dependency>
+    <%_ } _%>
   <%_ } _%>
                             </dependencies>
                         </plugin>
@@ -2234,7 +2244,7 @@
                     <classifier>osx-aarch_64</classifier>
                 </dependency>
             </dependencies>
-       </profile>
+        </profile>
 <%_ } _%>
         <!-- jhipster-needle-maven-add-profile -->
     </profiles>
