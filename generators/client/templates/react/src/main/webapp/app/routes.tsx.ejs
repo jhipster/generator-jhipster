@@ -122,7 +122,7 @@ const AppRoutes = () => {
   <%_ } _%>
 <%_ } _%>
         <Route
-          path="<%= microfrontend && applicationTypeMicroservice ? lowercaseBaseName + '/*' : '*' %>"
+          path="<%= microfrontend && applicationTypeMicroservice ? lowercaseBaseName + '/' : '' %>*"
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
               <EntitiesRoutes />
