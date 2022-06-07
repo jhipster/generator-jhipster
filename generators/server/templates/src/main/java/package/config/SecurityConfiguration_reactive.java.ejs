@@ -134,6 +134,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 <%_ if (applicationTypeGateway) { _%>
 import java.util.function.Consumer;
 <%_ } _%>
@@ -163,6 +164,12 @@ public class SecurityConfiguration {
 
     private final ReactiveClientRegistrationRepository clientRegistrationRepository;
   <%_ } _%>
+
+    // Warning from Rob Winch: caching in a hashmap could be bad since there is no expiry.
+    // Changing attributes will never get updated, and it can grow indefinitely (run out of memory).
+    // Ideally, we could use @Cacheable(cacheNames="users", key="#token") on the `enrich()` method,
+    // but @Cacheable doesn't work on reactive types. See github.com/spring-projects/spring-framework/issues/17920
+    private final Map<String, Mono<Jwt>> users = new ConcurrentHashMap<>();
 <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
@@ -389,46 +396,43 @@ public class SecurityConfiguration {
                     .flatMap(jwt -> enrich(token, jwt));
             }
 
-            // @Cacheable(cacheNames="users", key="#token")
-            // Ideally, we cache the user's info so it's only looked up once per access token.
-            // Unfortunately, @Cacheable doesn't work on reactive types.
             private Mono<Jwt> enrich(String token, Jwt jwt) {
-                // Return without enriching if JWT already contains a `given_name` claim
-                if (jwt.getClaims().containsKey("given_name")) {
-                    return Mono.just(jwt);
-                }
-                WebClient webClient = WebClient.create();
+                // Retrieve user info from OAuth provider if not already loaded
+                return users.computeIfAbsent(jwt.getSubject(), s -> {
+                    WebClient webClient = WebClient.create();
 
-                return webClient.get()
-                    .uri(userInfoUri)
-                    .headers(headers -> headers.setBearerAuth(token))
-                    .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
-                    .map(userInfo ->
-                        Jwt.withTokenValue(jwt.getTokenValue())
-                            .subject(jwt.getSubject())
-                            .audience(jwt.getAudience())
-                            .headers(headers -> headers.putAll(jwt.getHeaders()))
-                            .claims(claims -> {
-                                String username = userInfo.get("preferred_username").toString();
-                                // special handling for Auth0
-                                if (userInfo.get("sub").toString().contains("|") && username.contains("@")) {
-                                    userInfo.put("email", username);
-                                }
-                                // Allow full name in a name claim - happens with Auth0
-                                if (userInfo.get("name") != null) {
-                                    String[] name = userInfo.get("name").toString().split("\\s+");
-                                    if (name.length > 0) {
-                                        userInfo.put("given_name", name[0]);
-                                        userInfo.put("family_name",
-                                            String.join(" ", Arrays.copyOfRange(name, 1, name.length)));
+                    return webClient
+                        .get()
+                        .uri(userInfoUri)
+                        .headers(headers -> headers.setBearerAuth(token))
+                        .retrieve()
+                        .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                        .map(userInfo ->
+                            Jwt
+                                .withTokenValue(jwt.getTokenValue())
+                                .subject(jwt.getSubject())
+                                .audience(jwt.getAudience())
+                                .headers(headers -> headers.putAll(jwt.getHeaders()))
+                                .claims(claims -> {
+                                    String username = userInfo.get("preferred_username").toString();
+                                    // special handling for Auth0
+                                    if (userInfo.get("sub").toString().contains("|") && username.contains("@")) {
+                                        userInfo.put("email", username);
                                     }
-                                }
-                                claims.putAll(userInfo);
-                            })
-                            .claims(claims -> claims.putAll(jwt.getClaims()))
-                            .build()
-                    );
+                                    // Allow full name in a name claim - happens with Auth0
+                                    if (userInfo.get("name") != null) {
+                                        String[] name = userInfo.get("name").toString().split("\\s+");
+                                        if (name.length > 0) {
+                                            userInfo.put("given_name", name[0]);
+                                            userInfo.put("family_name", String.join(" ", Arrays.copyOfRange(name, 1, name.length)));
+                                        }
+                                    }
+                                    claims.putAll(userInfo);
+                                })
+                                .claims(claims -> claims.putAll(jwt.getClaims()))
+                                .build()
+                        );
+                });
             }
         };
     }

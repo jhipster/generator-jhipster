@@ -69,7 +69,7 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", buildBearer(token));
 
-            // Retrieve user infos from OAuth provider if not already loaded
+            // Retrieve user info from OAuth provider if not already loaded
             ObjectNode user = users.computeIfAbsent(claims.get("sub").toString(), s -> {
                 ResponseEntity<ObjectNode> userInfo = restTemplate.exchange(registration.getProviderDetails().getUserInfoEndpoint().getUri(), HttpMethod.GET, new HttpEntity<String>(headers), ObjectNode.class);
                 return userInfo.getBody();
