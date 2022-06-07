@@ -35,7 +35,6 @@ import tech.jhipster.web.filter.reactive.CookieCsrfFilter;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
 <%_ if (skipUserManagement && !authenticationTypeOauth2) { _%>
@@ -58,7 +57,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 <%_ } _%>
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -392,8 +390,10 @@ public class SecurityConfiguration {
                     .flatMap(jwt -> enrich(token, jwt));
             }
 
-            @Cacheable(key="#token")
-            public Mono<Jwt> enrich(String token, Jwt jwt) {
+            // @Cacheable(cacheNames="users", key="#token")
+            // Ideally, we cache the user's info so it's only looked up once per access token.
+            // Unfortunately, @Cacheable doesn't work on reactive types.
+            private Mono<Jwt> enrich(String token, Jwt jwt) {
                 WebClient webClient = WebClient.create();
 
                 return webClient.get()
