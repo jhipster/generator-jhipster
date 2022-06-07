@@ -1665,9 +1665,15 @@ const baseServerFiles = {
           file: 'package/config/ElasticsearchTestContainer.java',
           renameTo: generator => `${generator.testDir}config/ElasticsearchTestContainer.java`,
         },
+      ],
+    },
+    {
+      condition: ({ searchEngineElasticsearch, reactive }) => searchEngineElasticsearch && reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
         {
-          file: 'package/config/ElasticsearchTestConfiguration.java',
-          renameTo: generator => `${generator.testDir}config/ElasticsearchTestConfiguration.java`,
+          file: 'package/config/ElasticsearchReactiveTestConfiguration.java',
+          renameTo: generator => `${generator.testDir}config/ElasticsearchReactiveTestConfiguration.java`,
         },
       ],
     },
