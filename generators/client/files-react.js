@@ -372,6 +372,10 @@ function cleanup() {
   if (this.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`);
   }
+  if (this.isJhipsterVersionLessThan('7.8.2')) {
+    this.removeFile(`${CLIENT_MAIN_SRC_DIR}shared/error/error-boundary-route.tsx`);
+    this.removeFile(`${CLIENT_MAIN_SRC_DIR}shared/error/error-boundary-route.spec.tsx`);
+  }
 }
 
 function writeFiles() {
