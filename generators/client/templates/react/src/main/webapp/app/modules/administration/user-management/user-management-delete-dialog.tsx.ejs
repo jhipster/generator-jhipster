@@ -29,7 +29,7 @@ export const UserManagementDeleteDialog = () => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
-  const {login} = useParams<"login">();
+  const { login } = useParams<'login'>();
 
   useEffect(() => {
     dispatch(getUser(login));
