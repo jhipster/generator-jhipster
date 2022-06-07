@@ -34,7 +34,7 @@ const cypressFiles = {
   common: [
     {
       condition: generator => generator.cypressTests,
-      templates: ['cypress.json', 'cypress-audits.json'],
+      templates: ['cypress.config.ts', 'cypress-audits.config.ts'],
     },
   ],
   clientTestFw: [

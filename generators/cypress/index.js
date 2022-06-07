@@ -142,9 +142,14 @@ module.exports = class extends BaseBlueprintGenerator {
   _writing() {
     return {
       cleanup() {
-        if (this.isJhipsterVersionLessThan('7.0.0-beta.1') && this.jhipsterConfig.cypressTests) {
+        if (!this.jhipsterConfig.cypressTests) return;
+        if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
           this.removeFile(`${this.TEST_SRC_DIR}/cypress/support/keycloak-oauth2.ts`);
           this.removeFile(`${this.TEST_SRC_DIR}/cypress/fixtures/users/user.json`);
+        }
+        if (this.isJhipsterVersionLessThan('7.8.2')) {
+          this.removeFile('cypress.json');
+          this.removeFile('cypress-audits.json');
         }
       },
       ...writeFiles(),
@@ -182,10 +187,11 @@ module.exports = class extends BaseBlueprintGenerator {
             'cypress-audit': this.dependabotPackageJson.devDependencies['cypress-audit'],
           },
           scripts: {
-            'cypress:audits': 'cypress open --config-file cypress-audits.json',
-            'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.json',
-            // eslint-disable-next-line no-template-curly-in-string
-            'e2e:cypress:audits': 'cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false} --config-file cypress-audits.json',
+            'cypress:audits': 'cypress open --e2e --config-file cypress-audits.config.js',
+            'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.config.js',
+            'e2e:cypress:audits':
+              // eslint-disable-next-line no-template-curly-in-string
+              'cypress run --e2e --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false} --config-file cypress-audits.config.js',
           },
         });
       },

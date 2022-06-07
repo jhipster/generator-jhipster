@@ -882,7 +882,7 @@ const expectedFiles = {
   consul: [`${DOCKER_DIR}central-server-config/application.yml`, `${DOCKER_DIR}consul.yml`, `${DOCKER_DIR}config/git2consul.json`],
 
   cypress: [
-    'cypress.json',
+    'cypress.config.ts',
     `${CLIENT_TEST_SRC_DIR}cypress/plugins/index.ts`,
     `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
     `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
