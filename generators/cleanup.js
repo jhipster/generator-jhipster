@@ -343,6 +343,13 @@ function cleanupOldFiles(generator) {
       generator.removeFile('.npmrc');
     }
   }
+
+  if (generator.isJhipsterVersionLessThan('7.8.2') && generator.jhipsterConfig) {
+    if (generator.jhipsterConfig.clientFramework === REACT) {
+      generator.removeFile(`${REACT_DIR}shared/error/error-boundary-route.tsx`);
+      generator.removeFile(`${REACT_DIR}shared/error/error-boundary-route.spec.tsx`);
+    }
+  }
 }
 
 /**
