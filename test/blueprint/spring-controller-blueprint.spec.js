@@ -33,6 +33,10 @@ const mockBlueprintSubGen = class extends SpringControllerGenerator {
     return super._default();
   }
 
+  get loading() {
+    return super._loading();
+  }
+
   get writing() {
     const phaseFromJHipster = super._writing();
     const customPhaseSteps = {

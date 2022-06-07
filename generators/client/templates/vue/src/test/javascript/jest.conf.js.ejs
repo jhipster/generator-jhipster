@@ -15,6 +15,7 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest',
   },
   moduleNameMapper: {
+    rxjs: '<rootDir>/node_modules/rxjs/dist/bundles/rxjs.umd.js',
     '^@/(.*)$': '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/$1',
     ...pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),
 <%_ if (applicationTypeGateway && microfrontend) { _%>

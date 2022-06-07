@@ -27,6 +27,7 @@ export interface IMenuItem {
   to: string;
   id?: string;
   "data-cy"?: string;
+  children?: React.ReactNode
 }
 
 export default class MenuItem extends React.Component<IMenuItem> {

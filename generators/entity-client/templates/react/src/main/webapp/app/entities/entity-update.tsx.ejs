@@ -25,7 +25,7 @@ for (const field of fields.filter(field => !field.id)) {
 }
 _%>
 import React, { useState, useEffect } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   Button,
   Row,
@@ -108,10 +108,14 @@ import {
   reset
 } from './<%= entityFileName %>.reducer';
 
-export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: string}>) => {
+export const <%= entityReactName %>Update = () => {
   const dispatch = useAppDispatch();
 
-  const [isNew] = useState(!props.match.params || !props.match.params.id);
+  const navigate = useNavigate();
+
+  const { id } = useParams<'id'>();
+  const isNew = id === undefined;
+
 
   <%_ otherEntityActions.forEach(val => { _%>
   const <%= val.instance %> = useAppSelector(state => state.<%= val.reducer %>);
@@ -123,20 +127,21 @@ export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: str
   <%_ enumImports.forEach( (importedPath, importedType) => { _%>
   const <%- _.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
   <%_ }); _%>
+
   const handleClose = () => {
-    props.history.push('/<%= entityPage %>'<%_ if (paginationPagination) { _%> + props.location.search<%_ } _%>);
+    navigate('/<%= entityPage %>'<%_ if (paginationPagination) { _%> + location.search<%_ } _%>);
   }
 
   useEffect(() => {
 <%_ if (paginationInfiniteScroll) { _%>
     if (!isNew) {
-      dispatch(getEntity(props.match.params.id));
+      dispatch(getEntity(id));
     }
 <%_ } else { _%>
     if (isNew) {
       dispatch(reset());
     } else {
-      dispatch(getEntity(props.match.params.id));
+      dispatch(getEntity(id));
     }
 <%_ } _%>
 
