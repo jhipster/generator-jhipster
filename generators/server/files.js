@@ -1665,6 +1665,10 @@ const baseServerFiles = {
           file: 'package/config/ElasticsearchTestContainer.java',
           renameTo: generator => `${generator.testDir}config/ElasticsearchTestContainer.java`,
         },
+        {
+          file: 'package/config/ElasticsearchTestConfiguration.java',
+          renameTo: generator => `${generator.testDir}config/ElasticsearchTestConfiguration.java`,
+        },
       ],
     },
     {
