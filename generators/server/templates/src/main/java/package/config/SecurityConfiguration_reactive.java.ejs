@@ -170,6 +170,7 @@ public class SecurityConfiguration {
     // Ideally, we could use @Cacheable(cacheNames="users", key="#token") on the `enrich()` method,
     // but @Cacheable doesn't work on reactive types. See github.com/spring-projects/spring-framework/issues/17920
     private final Map<String, Mono<Jwt>> users = new ConcurrentHashMap<>();
+
 <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
