@@ -141,7 +141,6 @@ import java.util.function.Consumer;
 
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
 
-@EnableCaching
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 @Import(SecurityProblemSupport.class)
@@ -394,6 +393,10 @@ public class SecurityConfiguration {
             // Ideally, we cache the user's info so it's only looked up once per access token.
             // Unfortunately, @Cacheable doesn't work on reactive types.
             private Mono<Jwt> enrich(String token, Jwt jwt) {
+                // Return without enriching if JWT already contains a `given_name` claim
+                if (jwt.getClaims().containsKey("given_name")) {
+                    return Mono.just(jwt);
+                }
                 WebClient webClient = WebClient.create();
 
                 return webClient.get()
