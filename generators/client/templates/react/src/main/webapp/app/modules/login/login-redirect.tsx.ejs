@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
 import { REDIRECT_URL } from 'app/shared/util/url-utils';
+import { useLocation } from 'react-router';
 
-export const LoginRedirect = (props) => {
+export const LoginRedirect = () => {
+  const location = useLocation();
+
   useEffect(() => {
-    localStorage.setItem(REDIRECT_URL, props.location.state.from.pathname);
+    localStorage.setItem(REDIRECT_URL, (location.state as any).from.pathname);
     window.location.reload();
   });
 

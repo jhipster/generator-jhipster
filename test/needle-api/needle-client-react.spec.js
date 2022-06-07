@@ -100,7 +100,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
     const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
 
     assert.fileContent(indexModulePath, "import entityName from './entityFolderName';");
-    assert.fileContent(indexModulePath, '<ErrorBoundaryRoute path={`${match.url}entityFileName`} component={entityName} />'); // eslint-disable-line
+    assert.fileContent(indexModulePath, '<Route path="entityFileName/*" element={<entityName />} />');
 
     assert.fileContent(indexReducerPath, "import entityInstance from 'app/entities/entityFolderName/entityFileName.reducer';");
     assert.fileContent(indexReducerPath, 'entityInstance,');

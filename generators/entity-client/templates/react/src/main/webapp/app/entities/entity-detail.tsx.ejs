@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React, { useEffect } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Button, <% if (haveFieldWithJavadoc) { %>UncontrolledTooltip, <% } %>Row, Col } from 'reactstrap';
 import {
   Translate,
@@ -41,11 +41,13 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './<%= entityFileName %>.reducer';
 
-export const <%= entityReactName %>Detail = (props: RouteComponentProps<{id: string}>) => {
+export const <%= entityReactName %>Detail = () => {
   const dispatch = useAppDispatch();
 
+  const { id } = useParams<'id'>();
+
   useEffect(() => {
-    dispatch(getEntity(props.match.params.id));
+    dispatch(getEntity(id));
   }, []);
 
   const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityReactState %>.entity);
