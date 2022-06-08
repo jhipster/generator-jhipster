@@ -7,7 +7,6 @@ const fs = require('fs');
 const { createHelpers } = require('yeoman-test');
 
 const EnvironmentBuilder = require('../../cli/environment-builder');
-const Generator = require('../../generators/generator-base');
 const constants = require('../../generators/generator-constants');
 
 const DOCKER_DIR = constants.DOCKER_DIR;
@@ -26,7 +25,6 @@ module.exports = {
     environmentOptions: { dryRun: true },
   }),
   createTestHelpers,
-  getFilesForOptions,
   shouldBeV3DockerfileCompatible,
   getJHipsterCli,
   prepareTempDir,
@@ -51,18 +49,6 @@ function createTestHelpers(options = {}) {
     createEnv: (...args) => EnvironmentBuilder.createEnv(...args),
   };
   return createHelpers(newOptions);
-}
-
-function getFilesForOptions(files, options, prefix, excludeFiles) {
-  const generator = options;
-  generator.debug = () => {};
-  const outputPathCustomizer = generator.outputPathCustomizer || (file => file);
-
-  const destFiles = Generator.prototype.writeFilesToDisk.call(generator, files, undefined, true, prefix).map(outputPathCustomizer);
-  if (excludeFiles === undefined) {
-    return destFiles;
-  }
-  return destFiles.filter(file => !excludeFiles.includes(file));
 }
 
 function shouldBeV3DockerfileCompatible(databaseType) {

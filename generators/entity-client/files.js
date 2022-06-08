@@ -20,6 +20,7 @@ const _ = require('lodash');
 const utils = require('../utils');
 const constants = require('../generator-constants');
 const { angularFiles } = require('./files-angular.cjs');
+const { reactFiles } = require('./files-react.cjs');
 
 /* Constants use throughout */
 const { CLIENT_TEST_SRC_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
@@ -34,97 +35,6 @@ const CLIENT_VUE_TEMPLATES_DIR = 'vue';
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
-
-const reactFiles = {
-  client: [
-    {
-      condition: generator => !generator.embedded,
-      path: REACT_DIR,
-      templates: [
-        {
-          file: 'entities/entity-detail.tsx',
-          method: 'processJsx',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.tsx`,
-        },
-        {
-          file: 'entities/entity.tsx',
-          method: 'processJsx',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`,
-        },
-        {
-          file: 'entities/entity.reducer.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`,
-        },
-        {
-          file: 'entities/index.tsx',
-          method: 'processJsx',
-          renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`,
-        },
-      ],
-    },
-    {
-      path: REACT_DIR,
-      templates: [
-        {
-          file: 'entities/entity.model.ts',
-          renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.readOnly && !generator.embedded,
-      path: REACT_DIR,
-      templates: [
-        {
-          file: 'entities/entity-delete-dialog.tsx',
-          method: 'processJsx',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.tsx`,
-        },
-        {
-          file: 'entities/entity-update.tsx',
-          method: 'processJsx',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.tsx`,
-        },
-      ],
-    },
-  ],
-  test: [
-    {
-      condition: generator => !generator.embedded,
-      path: REACT_DIR,
-      templates: [
-        {
-          file: 'entities/entity-reducer.spec.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-reducer.spec.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.protractorTests && !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'e2e/entities/entity-page-object.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`,
-        },
-        {
-          file: 'e2e/entities/entity.spec.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.protractorTests && !generator.readOnly && !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'e2e/entities/entity-update-page-object.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-update.page-object.ts`,
-        },
-      ],
-    },
-  ],
-};
 
 const vueFiles = {
   client: [
@@ -329,7 +239,7 @@ function writeFiles() {
       addEnumerationFiles(this, clientMainSrcDir);
       if (!files) return undefined;
 
-      if (this.clientFramework === ANGULAR) {
+      if (this.clientFramework !== VUE) {
         return this.writeFiles({ sections: files, rootTemplatesPath: templatesDir });
       }
       return this.writeFilesToDisk(files, templatesDir);

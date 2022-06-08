@@ -61,15 +61,9 @@ describe('private-route component', () => {
         },
       }
     );
-<%_ if (enableTranslation) { _%>
-    expect(container.innerHTML).toEqual(
-      '<div class="insufficient-authority"><div class="alert alert-danger"><span>You are not authorized to access this page.</span></div></div>'
+    expect(container.innerHTML).toMatch(
+      /<div class="insufficient-authority"><div class="alert alert-danger">.*<\/div><\/div>/
     );
-<%_ } else { _%>
-    expect(container.innerHTML).toEqual(
-      '<div class="insufficient-authority"><div class="alert alert-danger">You are not authorized to access this page.</div></div>'
-    );
-<%_ } _%>
   });
 
   it('Should render a route for the component provided when authenticated', () => {

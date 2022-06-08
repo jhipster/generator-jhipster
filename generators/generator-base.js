@@ -1379,6 +1379,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @deprecated
    * Copy JSX templates after stripping translation keys when translation is disabled.
    *
    * @param {string} source - path of the source file to copy from
