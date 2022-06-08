@@ -25,7 +25,6 @@ application {
     buildTool maven
     clientFramework vue
     creationTimestamp 1617901618886
-    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.gateway
     prodDatabaseType mysql
     serviceDiscoveryType consul
@@ -45,7 +44,6 @@ application {
     cacheProvider memcached
     clientFramework vue
     creationTimestamp 1617901618887
-    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.blog
     prodDatabaseType mysql
     serverPort 8081
@@ -60,13 +58,12 @@ application {
   config {
     applicationType microservice
     authenticationType oauth2
-    baseName store,
+    baseName store
     buildTool gradle
     cacheProvider memcached
     creationTimestamp 1617901618888
     dtoSuffix Rest
     entitySuffix Entity
-    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.store
     prodDatabaseType mysql
     serverPort 8082
@@ -81,13 +78,12 @@ application {
   config {
     applicationType microservice
     authenticationType oauth2
-    baseName notification,
+    baseName notification
     buildTool gradle
     clientFramework vue
     creationTimestamp 1617901618889
     dtoSuffix Rest
     entitySuffix Entity
-    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.notification
     prodDatabaseType mysql
     reactive true
