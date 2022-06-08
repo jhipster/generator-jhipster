@@ -47,7 +47,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
+  <%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.core.ParameterizedTypeReference;
+  <%_ } _%>
 <%_ } _%>
 import org.springframework.http.HttpMethod;
 <%_ if (authenticationTypeSession) { _%>
@@ -69,16 +71,17 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcReactiveOAuth2UserService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
+<%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+<%_ } _%>
 import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;
-<%_ if (applicationTypeGateway) { _%>
+<%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
 <%_ } _%>
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
-<%_ if (applicationTypeGateway) { _%>
+<%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 <%_ } _%>
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -126,16 +129,18 @@ import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.web.reactive.function.client.WebClient;
+  <%_ } _%>
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+  <%_ if (!applicationTypeMicroservice) { _%>
 import java.util.concurrent.ConcurrentHashMap;
-<%_ if (applicationTypeGateway) { _%>
 import java.util.function.Consumer;
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
@@ -158,10 +163,9 @@ public class SecurityConfiguration {
 <%_ if (authenticationTypeOauth2) { _%>
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
-  <%_ if (applicationTypeGateway) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
 
     private final ReactiveClientRegistrationRepository clientRegistrationRepository;
-  <%_ } _%>
 
     // Warning from Rob Winch: caching in a hashmap could be bad since there is no expiry.
     // Changing attributes will never get updated, and it can grow indefinitely (run out of memory).
@@ -169,11 +173,12 @@ public class SecurityConfiguration {
     // but @Cacheable doesn't work on reactive types. See github.com/spring-projects/spring-framework/issues/17920
     private final Map<String, Mono<Jwt>> users = new ConcurrentHashMap<>();
 
+  <%_ } _%>
 <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && applicationTypeGateway) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
-<%_ if (authenticationTypeOauth2 && applicationTypeGateway) { _%>
+    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && !applicationTypeMicroservice) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
+<%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
         this.clientRegistrationRepository = clientRegistrationRepository;
 <%_ } _%>
 <%_ if (!skipUserManagement && !authenticationTypeOauth2) { _%>
@@ -285,16 +290,20 @@ public class SecurityConfiguration {
             .pathMatchers("/api/account/reset-password/init").permitAll()
             .pathMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
             .pathMatchers("/api/auth-info").permitAll()
+<%_ } _%>
             .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .pathMatchers("/api/**").authenticated()
 <%_ if (applicationTypeGateway) { _%>
+  <%_ if (microfrontend) { _%>
             // microfrontend resources are loaded by webpack without authentication, they need to be public
             .pathMatchers("/services/*/*.js").permitAll()
             .pathMatchers("/services/*/*.js.map").permitAll()
+  <%_ } _%>
             .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
 <%_ } _%>
-<%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
+<%_ if (!applicationTypeMicroservice) { _%>
             .pathMatchers("/services/**").authenticated()
 <%_ } _%>
             .pathMatchers("/management/health").permitAll()
@@ -304,8 +313,7 @@ public class SecurityConfiguration {
             .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
 <%_ if (authenticationTypeOauth2) { _%>
 
-        http<%_ if (applicationTypeGateway || applicationTypeMonolith) { _%><%_ if (applicationTypeGateway) { _%>.oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))<%_ } else { _%>.oauth2Login()
-            .and()<%_ } _%>
+        http<%_ if (!applicationTypeMicroservice) { _%>.oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))
             <% } %>
             .oauth2ResourceServer()
                 .jwt()
@@ -317,7 +325,7 @@ public class SecurityConfiguration {
     }
 <%_ if (authenticationTypeOauth2) { _%>
 
-  <%_ if (applicationTypeGateway) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
     private ServerOAuth2AuthorizationRequestResolver authorizationRequestResolver(
         ReactiveClientRegistrationRepository clientRegistrationRepository) {
         DefaultServerOAuth2AuthorizationRequestResolver authorizationRequestResolver =
@@ -369,7 +377,20 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    ReactiveJwtDecoder jwtDecoder(ReactiveClientRegistrationRepository registrations) {
+    ReactiveJwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ReactiveClientRegistrationRepository registrations<%_ } _%>) {
+    <%_ if (applicationTypeMicroservice) { _%>
+        NimbusReactiveJwtDecoder jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromOidcIssuerLocation(issuerUri);
+
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+
+        jwtDecoder.setJwtValidator(withAudience);
+
+        return jwtDecoder;
+    }
+    <%_ } else { _%>
+
         Mono<ClientRegistration> clientRegistration = registrations.findByRegistrationId("oidc");
 
         return clientRegistration.map(oidc -> createJwtDecoder(
@@ -439,7 +460,7 @@ public class SecurityConfiguration {
             }
         };
     }
-
+    <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
 

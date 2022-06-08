@@ -62,6 +62,10 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
     }
 
     public Map<String, Object> convert(Map<String, Object> claims) {
+        // Only look up user information if identity claims are missing
+        if (claims.containsKey("given_name") && claims.containsKey("family_name")) {
+            return claims;
+        }
         Map<String, Object> convertedClaims = this.delegate.convert(claims);
         if (RequestContextHolder.getRequestAttributes() != null && ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()) != null) {
             // Retrieve and set the token
