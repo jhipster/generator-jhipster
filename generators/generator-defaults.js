@@ -115,6 +115,7 @@ const defaultConfigMicroservice = {
   ...appDefaultConfig,
   ...serverDefaultConfig,
   ...translationDefaultConfig,
+  microfrontend: false,
 };
 
 const entityDefaultConfig = {

@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
-const { appDefaultConfig } = require('../generator-defaults');
+const { appDefaultConfig, defaultConfigMicroservice } = require('../generator-defaults');
 const { GATEWAY, MONOLITH, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 
@@ -44,8 +44,18 @@ async function askForInsightOptIn() {
   }
 }
 
+const microfrontendsToPromptValue = answer => (Array.isArray(answer) ? answer.map(({ baseName }) => baseName).join(',') : answer);
+const promptValueToMicrofrontends = answer =>
+  answer
+    ? answer
+        .split(',')
+        .map(baseName => baseName.trim())
+        .filter(Boolean)
+        .map(baseName => ({ baseName }))
+    : [];
+
 async function askForApplicationType() {
-  if (this.existingProject) return;
+  if (this.existingProject && this.options.askAnswered !== true) return;
 
   const applicationTypeChoices = [
     {
@@ -62,16 +72,53 @@ async function askForApplicationType() {
     },
   ];
 
-  const answers = await this.prompt([
-    {
-      type: 'list',
-      name: 'applicationType',
-      message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
-      choices: applicationTypeChoices,
-      default: appDefaultConfig.applicationType,
-    },
-  ]);
-  this.applicationType = this.jhipsterConfig.applicationType = answers.applicationType;
+  await this.prompt(
+    [
+      {
+        type: 'list',
+        name: 'applicationType',
+        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
+        choices: applicationTypeChoices,
+        default: appDefaultConfig.applicationType,
+      },
+      {
+        when: answers => {
+          const { applicationType } = answers;
+          const askForMicrofrontend = [GATEWAY, MICROSERVICE].includes(applicationType);
+          if (!askForMicrofrontend) {
+            answers.microfrontend = false;
+          }
+          return askForMicrofrontend;
+        },
+        type: 'confirm',
+        name: 'microfrontend',
+        message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
+        default: defaultConfigMicroservice.microfrontend,
+      },
+      {
+        when: answers => {
+          const { applicationType, microfrontend, microfrontends } = answers;
+          const askForMicrofrontends = applicationType === GATEWAY && microfrontend;
+          if (askForMicrofrontends) {
+            answers.microfrontends = microfrontendsToPromptValue(microfrontends);
+          } else {
+            answers.microfrontends = [];
+          }
+          return askForMicrofrontends;
+        },
+        type: 'input',
+        name: 'microfrontends',
+        message: `Comma separated ${chalk.yellow('*microfrontend*')} app names.`,
+        filter: promptValueToMicrofrontends,
+        transformer: microfrontendsToPromptValue,
+      },
+    ],
+    this.config
+  );
+
+  const { applicationType } = this.jhipsterConfig;
+  // TODO drop for v8, setting the generator with config is deprecated
+  this.applicationType = applicationType;
 }
 
 function askForModuleName() {
