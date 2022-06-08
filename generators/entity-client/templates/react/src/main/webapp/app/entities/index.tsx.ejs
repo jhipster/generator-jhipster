@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
-import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
+import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
 import <%= entityReactName %> from './<%= entityFileName %>';
 import <%= entityReactName %>Detail from './<%= entityFileName %>-detail';
@@ -28,20 +28,20 @@ import <%= entityReactName %>Update from './<%= entityFileName %>-update';
 import <%= entityReactName %>DeleteDialog from './<%= entityFileName %>-delete-dialog';
 <%_ } _%>
 
-const Routes = ({ match }) => (
-  <>
-    <Switch>
+const <%= entityReactName %>Routes = () => (
+  <ErrorBoundaryRoutes>
+    <Route index element={<<%= entityReactName %> />} />
 <%_ if (!readOnly) { _%>
-      <ErrorBoundaryRoute exact path={`${match.url}/new`} component={<%= entityReactName %>Update} />
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={<%= entityReactName %>Update} />
+    <Route path="new" element={<<%= entityReactName %>Update />} />
 <%_ } _%>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={<%= entityReactName %>Detail}  />
-      <ErrorBoundaryRoute path={match.url} component={<%= entityReactName %>} />
-    </Switch>
+    <Route path=":id">
+      <Route index element={<<%= entityReactName %>Detail />} />
 <%_ if (!readOnly) { _%>
-    <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} />
+      <Route path="edit" element={<<%= entityReactName %>Update />} />
+      <Route path="delete" element={<<%= entityReactName %>DeleteDialog />} />
 <%_ } _%>
-  </>
+    </Route>
+  </ErrorBoundaryRoutes>
 );
 
-export default Routes;
+export default <%= entityReactName %>Routes;

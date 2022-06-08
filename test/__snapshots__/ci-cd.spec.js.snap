@@ -1873,7 +1873,6 @@ maven-compile:
     expire_in: 1 day
 
 maven-test:
-  # DinD service is required for Testcontainers
   services:
     - docker:dind
 
@@ -1885,7 +1884,7 @@ maven-test:
 
   stage: test
   script:
-    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME -Dspring.profiles.active=testcontainers
+    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
   artifacts:
     reports:
       junit:
@@ -2317,7 +2316,6 @@ maven-compile:
     expire_in: 1 day
 
 maven-test:
-  # DinD service is required for Testcontainers
   services:
     - docker:dind
 
@@ -2329,7 +2327,7 @@ maven-test:
 
   stage: test
   script:
-    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME -Dspring.profiles.active=testcontainers
+    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
   artifacts:
     reports:
       junit:
@@ -2432,7 +2430,6 @@ maven-compile:
     expire_in: 1 day
 
 maven-test:
-  # DinD service is required for Testcontainers
   services:
     - docker:dind
 
@@ -2444,7 +2441,7 @@ maven-test:
 
   stage: test
   script:
-    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME -Dspring.profiles.active=testcontainers
+    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
   artifacts:
     reports:
       junit:

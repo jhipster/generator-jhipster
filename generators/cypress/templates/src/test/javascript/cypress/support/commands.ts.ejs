@@ -173,10 +173,8 @@ Cypress.Commands.add('login', (username: string, password: string) => {
 declare global {
   namespace Cypress {
     interface Chainable {
-<%_ if (!authenticationTypeOauth2) { _%>
-      login(username: string, password: string): Cypress.Chainable;
-<%_ } _%>
       authenticatedRequest(data: any): Cypress.Chainable;
+      login(username: string, password: string): Cypress.Chainable;
     }
   }
 }

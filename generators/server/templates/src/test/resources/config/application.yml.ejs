@@ -60,11 +60,6 @@ mongock:
 
 <%_ } _%>
 spring:
-<%_ if (databaseTypeSql && devDatabaseTypeH2Any) { _%>
-  profiles:
-    # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
-    #active: testcontainers
-<%_ } _%>
   application:
     name: <%= baseName %>
 <%_ if (applicationTypeGateway && reactive) { _%>
@@ -104,52 +99,18 @@ spring:
             content-type: text/plain
             group: <%= dasherizedBaseName %>
 <%_ } _%>
-
-<%_ if (databaseTypeSql && !reactive) { _%>
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
-    name:
-    username:
-    password:
-    hikari:
-      auto-commit: false
+<%_ if (databaseTypeSql) { _%>
+  # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
+  liquibase:
+    contexts: test
 <%_ } _%>
   jackson:
     serialization:
       write-durations-as-timestamps: false
-<%_ if (databaseTypeSql && !reactive) { _%>
-  jpa:
-    database-platform: tech.jhipster.domain.util.FixedH2Dialect
-    open-in-view: false
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-    properties:
-      hibernate.id.new_generator_mappings: true
-      hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: false
-      hibernate.cache.use_query_cache: false
-      hibernate.generate_statistics: false
-      hibernate.hbm2ddl.auto: validate
-      hibernate.jdbc.time_zone: UTC
-      hibernate.query.fail_on_pagination_over_collection_fetch: true
-<%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCassandra) { _%>
-  data:
-<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
+  data:
     cassandra:
       compression: NONE
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-  liquibase:
-    contexts: test
-  <%_ if (reactive) { _%>
-    url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
-  <%_ } _%>
 <%_ } _%>
   mail:
     host: localhost
@@ -162,12 +123,6 @@ spring:
 <%_ } _%>
   messages:
     basename: i18n/messages
-<%_ if (databaseTypeSql && reactive) { _%>
-  r2dbc:
-    url: <%- getR2DBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
-    username: r2dbc
-    password:
-<%_ } _%>
 <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && authenticationTypeJwt) { _%>
   security:
     user:
@@ -194,7 +149,7 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster
+            issuer-uri: http://DO_NOT_CALL:9080/realms/jhipster
 <%_ } _%>
 
 server:
@@ -209,6 +164,9 @@ server:
 jhipster:
   clientApp:
     name: "<%= frontendAppName %>"
+  mail:
+    from: <%= baseName %>@localhost.com
+    base-url: http://127.0.0.1:8080
   logging:
     # To test json console appender
     use-json-format: false
@@ -217,11 +175,6 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
-<%_ if (!skipUserManagement || authenticationTypeOauth2) { _%>
-  mail:
-    from: test@localhost
-    base-url: http://127.0.0.1:8080
-<%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
   security:
     authentication:
@@ -248,3 +201,7 @@ jhipster:
 # ===================================================================
 
 # application:
+management:
+  health:
+    mail:
+      enabled: false

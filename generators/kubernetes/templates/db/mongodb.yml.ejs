@@ -339,13 +339,12 @@ spec:
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   name: <%= app.baseName.toLowerCase() %>-mongodb
   namespace: <%= kubernetesNamespace %>
 spec:
   type: ClusterIP
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - name: peer
       port: 27017

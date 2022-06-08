@@ -236,7 +236,7 @@ const files = {
         // components
         { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
         { file: 'shared/error/error-boundary.tsx', method: 'processJsx' },
-        { file: 'shared/error/error-boundary-route.tsx', method: 'processJsx' },
+        { file: 'shared/error/error-boundary-routes.tsx', method: 'processJsx' },
         { file: 'shared/error/page-not-found.tsx', method: 'processJsx' },
         { file: 'shared/DurationFormat.tsx', method: 'processJsx' },
         // model
@@ -294,7 +294,7 @@ const files = {
         'shared/util/entity-utils.spec.ts',
         'shared/auth/private-route.spec.tsx',
         'shared/error/error-boundary.spec.tsx',
-        'shared/error/error-boundary-route.spec.tsx',
+        'shared/error/error-boundary-routes.spec.tsx',
         'shared/layout/header/header.spec.tsx',
         'shared/layout/menus/account.spec.tsx',
         'modules/administration/administration.reducer.spec.ts',
@@ -371,6 +371,10 @@ function cleanup() {
   }
   if (this.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`);
+  }
+  if (this.isJhipsterVersionLessThan('7.8.2')) {
+    this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/error/error-boundary-route.tsx`);
+    this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/error/error-boundary-route.spec.tsx`);
   }
 }
 

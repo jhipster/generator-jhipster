@@ -6,8 +6,7 @@
       "entity": "sqllight",
       "environment": "prod",
       "war": 0,
-      "e2e": 1,
-      "testcontainers": 0
+      "e2e": 1
     }
   ]
 }

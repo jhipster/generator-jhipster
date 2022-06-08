@@ -22,7 +22,23 @@ heroku {
     appName = "<%= herokuAppName %>"
     buildpacks = ["heroku/jvm"]
 }
+
+// force dependency version as used bonsai add-on as of now only supports 7.10.x
+// https://github.com/jhipster/generator-jhipster/issues/18650
+def bonsaiElasticSearchVersion = "7.10.2"
 <%_ if (herokuDeployType === 'git') { _%>
+if (System.getenv("DYNO") != null) {
+    configurations {
+        all {
+            resolutionStrategy {
+                force "org.elasticsearch.client:elasticsearch-rest-client:${bonsaiElasticSearchVersion}"
+                force "org.elasticsearch.client:elasticsearch-rest-high-level-client:${bonsaiElasticSearchVersion}"
+                force "org.elasticsearch:elasticsearch:${bonsaiElasticSearchVersion}"
+                force "org.elasticsearch.plugin:transport-netty4-client:${bonsaiElasticSearchVersion}"
+            }
+        }
+    }
+}
 
 // Task stage is used by Heroku, see also
 // https://devcenter.heroku.com/articles/deploying-gradle-apps-on-heroku
@@ -38,4 +54,15 @@ gradle.taskGraph.whenReady {taskGraph ->
         }
     }
 }
-<%_ } _%>
+<%_ } else { _%>
+configurations {
+    all {
+        resolutionStrategy {
+            force "org.elasticsearch.client:elasticsearch-rest-client:${bonsaiElasticSearchVersion}"
+            force "org.elasticsearch.client:elasticsearch-rest-high-level-client:${bonsaiElasticSearchVersion}"
+            force "org.elasticsearch:elasticsearch:${bonsaiElasticSearchVersion}"
+            force "org.elasticsearch.plugin:transport-netty4-client:${bonsaiElasticSearchVersion}"
+        }
+    }
+}
+<%_ }  _%>

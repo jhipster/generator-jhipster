@@ -28,16 +28,19 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler$BoundedState", "dispose");
         builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler", "schedule");
         builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
+        builder.allowBlockingCallsInside("<%= packageName %>.service.MailService", "sendEmailFromTemplate");
+        builder.allowBlockingCallsInside("<%= packageName %>.security.DomainUserDetailsService", "createSpringSecurityUser");
 <%_ if (databaseTypeCouchbase) { _%>
         builder.allowBlockingCallsInside("org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter", "read");
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$query$2");
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$importFtsIndex$1");
 <%_} _%>
+<%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+        builder.allowBlockingCallsInside("org.mariadb.r2dbc.message.client.HandshakeResponse", "writeConnectAttributes");
+        builder.allowBlockingCallsInside("org.mariadb.r2dbc.client.MariadbPacketDecoder", "decode");
+<%_} _%>
 <%_ if (searchEngineElasticsearch) { _%>
-        //Disabling real blocking check because elasticreactive is executing a blocking call within it's constructor org.springframework.data.elasticsearch.repository.support, see https://github.com/reactor/BlockHound/issues/174
-        builder.blockingMethodCallback(it ->
-            new Error(it.toString()).printStackTrace()
-        );
+        builder.allowBlockingCallsInside("org.elasticsearch.client.indices.CreateIndexRequest", "settings");
 <%_} _%>
     }
 

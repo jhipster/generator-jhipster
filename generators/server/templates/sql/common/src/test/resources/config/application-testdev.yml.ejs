@@ -1,0 +1,93 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration is used for unit/integration tests with testcontainers database containers.
+#
+# To activate this configuration launch integration tests with the 'testcontainers' profile
+#
+# More information on database containers: https://www.testcontainers.org/modules/databases/
+<%_ if (devDatabaseTypeMssql) { _%>
+#
+# You are required to accept EULA license for SQL server containers.
+# Follow the instructions at https://www.testcontainers.org/modules/databases/mssqlserver/
+<%_ } _%>
+<%_ if (devDatabaseTypeOracle) { _%>
+#
+# You have to specify an Oracle image name in a classpath file named testcontainers.properties.
+# Follow the instructions at https://www.testcontainers.org/modules/databases/oraclexe/
+<%_ } _%>
+# ===================================================================
+
+spring:
+<%_ if (reactive) { _%>
+  <%_ if (devDatabaseTypeH2Any) { _%>
+  r2dbc:
+    <%_ if (devDatabaseTypeH2Memory) { _%>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true }) %>
+    <%_ } else { _%>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `././${BUILD_DIR}h2db/testdb` }) %>
+    <%_ } _%>
+    username: <%= lowercaseBaseName %>
+    password:
+  liquibase:
+    <%_ if (devDatabaseTypeH2Memory) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true }) %>
+    <%_ } else { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/testdb` }) %>
+    <%_ } _%>
+  <%_ } _%>
+<%_ } else { _%>
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      auto-commit: false
+  <%_ if (!devDatabaseTypeH2Any) { _%>
+      poolName: Hikari
+      maximum-pool-size: 1
+    <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql) { _%>
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+    <%_ } _%>
+  <%_ } _%>
+  jpa:
+  <%_ if (devDatabaseTypePostgres) { _%>
+    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+  <%_ } _%>
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.hbm2ddl.auto: validate
+      hibernate.jdbc.time_zone: UTC
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+<%_ } _%>
+

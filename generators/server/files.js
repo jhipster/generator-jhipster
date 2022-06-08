@@ -34,16 +34,6 @@ const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 const shouldSkipUserManagement = generator =>
   generator.skipUserManagement && (!generator.applicationTypeMonolith || !generator.authenticationTypeOauth2);
 
-const h2Files = {
-  serverResource: [
-    {
-      condition: generator => generator.devDatabaseTypeH2Any,
-      path: SERVER_MAIN_RES_DIR,
-      templates: [{ file: 'h2.server.properties', renameTo: () => '.h2.server.properties' }],
-    },
-  ],
-};
-
 const liquibaseFiles = {
   serverResource: [
     {
@@ -102,21 +92,6 @@ const mongoDbFiles = {
           file: 'package/config/EmbeddedMongo.java',
           renameTo: generator => `${generator.testDir}config/EmbeddedMongo.java`,
         },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-        {
-          file: 'testcontainers.properties',
-        },
       ],
     },
   ],
@@ -161,21 +136,6 @@ const neo4jFiles = {
         {
           file: 'package/config/EmbeddedNeo4j.java',
           renameTo: generator => `${generator.testDir}config/EmbeddedNeo4j.java`,
-        },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-        {
-          file: 'testcontainers.properties',
         },
       ],
     },
@@ -238,21 +198,6 @@ const cassandraFiles = {
           file: 'package/config/EmbeddedCassandra.java',
           renameTo: generator => `${generator.testDir}config/EmbeddedCassandra.java`,
         },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-        {
-          file: 'testcontainers.properties',
-        },
       ],
     },
   ],
@@ -288,11 +233,6 @@ const baseServerFiles = {
         'grafana/provisioning/dashboards/JVM.json',
         'grafana/provisioning/datasources/datasource.yml',
       ],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && !generator.prodDatabaseTypeOracle,
-      path: DOCKER_DIR,
-      templates: [{ file: generator => `${generator.prodDatabaseType}.yml` }],
     },
     {
       condition: generator => generator.cacheProviderHazelcast,
@@ -356,11 +296,7 @@ const baseServerFiles = {
     {
       condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
       path: DOCKER_DIR,
-      templates: [
-        'keycloak.yml',
-        { file: 'config/realm-config/jhipster-realm.json', renameTo: () => 'realm-config/jhipster-realm.json' },
-        { file: 'config/realm-config/jhipster-users-0.json', method: 'copy', renameTo: () => 'realm-config/jhipster-users-0.json' },
-      ],
+      templates: ['keycloak.yml', { file: 'config/realm-config/jhipster-realm.json', renameTo: () => 'realm-config/jhipster-realm.json' }],
     },
     {
       condition: generator => generator.serviceDiscoveryType || generator.applicationTypeGateway || generator.applicationTypeMicroservice,
@@ -865,6 +801,10 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
+          file: 'package/config/AsyncSyncConfiguration.java',
+          renameTo: generator => `${generator.testDir}config/AsyncSyncConfiguration.java`,
+        },
+        {
           file: 'package/IntegrationTest.java',
           renameTo: generator => `${generator.testDir}/IntegrationTest.java`,
         },
@@ -996,8 +936,12 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/RedisTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}RedisTestContainerExtension.java`,
+          file: 'package/config/EmbeddedRedis.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedRedis.java`,
+        },
+        {
+          file: 'package/config/RedisTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/RedisTestContainer.java`,
         },
       ],
     },
@@ -1008,41 +952,6 @@ const baseServerFiles = {
         {
           file: generator => `package/config/DatabaseConfiguration_${generator.databaseType}.java`,
           renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseTypeSql,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/LiquibaseConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/LiquibaseConfiguration.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/rowmapper/ColumnConverter.java',
-          renameTo: generator => `${generator.javaDir}repository/rowmapper/ColumnConverter.java`,
-        },
-        {
-          file: 'package/repository/EntityManager.java',
-          renameTo: generator => `${generator.javaDir}repository/EntityManager.java`,
-        },
-      ],
-    },
-    {
-      condition: generator =>
-        generator.databaseTypeSql && generator.reactive && (!generator.skipUserManagement || generator.authenticationTypeOauth2),
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/rowmapper/UserRowMapper.java',
-          renameTo: generator => `${generator.javaDir}repository/rowmapper/UserRowMapper.java`,
         },
       ],
     },
@@ -1358,46 +1267,8 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.databaseTypeSql && !generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/timezone/HibernateTimeZoneIT.java',
-          renameTo: generator => `${generator.testDir}config/timezone/HibernateTimeZoneIT.java`,
-        },
-        {
-          file: 'package/repository/timezone/DateTimeWrapper.java',
-          renameTo: generator => `${generator.testDir}repository/timezone/DateTimeWrapper.java`,
-        },
-        {
-          file: 'package/repository/timezone/DateTimeWrapperRepository.java',
-          renameTo: generator => `${generator.testDir}repository/timezone/DateTimeWrapperRepository.java`,
-        },
-      ],
-    },
-    {
       path: SERVER_TEST_RES_DIR,
       templates: ['config/application.yml', 'logback.xml', 'junit-platform.properties'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive,
-      path: SERVER_TEST_RES_DIR,
-      templates: ['config/application-testcontainers.yml'],
-    },
-    {
-      condition: generator => generator.prodDatabaseTypeMariadb && !generator.reactive,
-      path: SERVER_TEST_RES_DIR,
-      templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
-    },
-    {
-      condition: generator => generator.reactiveSqlTestContainers,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/ReactiveSqlTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}ReactiveSqlTestContainerExtension.java`,
-        },
-      ],
     },
     {
       // TODO : add these tests to reactive
@@ -1493,10 +1364,6 @@ const baseServerFiles = {
           file: 'package/config/EmbeddedKafka.java',
           renameTo: generator => `${generator.testDir}config/EmbeddedKafka.java`,
         },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
       ],
     },
     {
@@ -1516,18 +1383,6 @@ const baseServerFiles = {
         {
           file: 'package/web/rest/KafkaResourceIT_reactive.java',
           renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka,
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-        {
-          file: 'testcontainers.properties',
         },
       ],
     },
@@ -1695,6 +1550,11 @@ const baseServerFiles = {
     },
     {
       condition: generator => !generator.skipUserManagement,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
+    },
+    {
+      condition: generator => !generator.skipUserManagement,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1761,24 +1621,35 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.databaseTypeCouchbase,
+      condition: generator =>
+        generator.databaseTypeSql ||
+        generator.messageBrokerKafka ||
+        generator.cacheProviderRedis ||
+        generator.databaseTypeMongodb ||
+        generator.databaseTypeCassandra ||
+        generator.searchEngineElasticsearch ||
+        generator.databaseTypeCouchbase ||
+        generator.searchEngineCouchbase ||
+        generator.databaseTypeNeo4j,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['testcontainers.properties', 'META-INF/spring.factories'],
+    },
+    {
+      condition: generator =>
+        generator.databaseTypeSql ||
+        generator.messageBrokerKafka ||
+        generator.cacheProviderRedis ||
+        generator.databaseTypeMongodb ||
+        generator.databaseTypeCassandra ||
+        generator.searchEngineElasticsearch ||
+        generator.databaseTypeCouchbase ||
+        generator.searchEngineCouchbase ||
+        generator.databaseTypeNeo4j,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
           file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
           renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseTypeCouchbase,
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-        {
-          file: 'testcontainers.properties',
         },
       ],
     },
@@ -1794,18 +1665,15 @@ const baseServerFiles = {
           file: 'package/config/ElasticsearchTestContainer.java',
           renameTo: generator => `${generator.testDir}config/ElasticsearchTestContainer.java`,
         },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
       ],
     },
     {
-      condition: generator => generator.searchEngineElasticsearch,
-      path: SERVER_TEST_RES_DIR,
+      condition: ({ searchEngineElasticsearch, reactive }) => searchEngineElasticsearch && reactive,
+      path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'META-INF/spring.factories',
+          file: 'package/config/ElasticsearchReactiveTestConfiguration.java',
+          renameTo: generator => `${generator.testDir}config/ElasticsearchReactiveTestConfiguration.java`,
         },
       ],
     },
@@ -1893,10 +1761,6 @@ const baseServerFiles = {
           renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`,
         },
         {
-          file: 'package/config/NoOpMailConfiguration.java',
-          renameTo: generator => `${generator.testDir}config/NoOpMailConfiguration.java`,
-        },
-        {
           file: 'package/web/rest/PublicUserResourceIT.java',
           renameTo: generator => `${generator.testDir}web/rest/PublicUserResourceIT.java`,
         },
@@ -1940,7 +1804,6 @@ const baseServerFiles = {
 
 const serverFiles = mergeSections(
   baseServerFiles,
-  addSectionsCondition(h2Files, context => context.devDatabaseTypeH2Any),
   addSectionsCondition(liquibaseFiles, context => context.databaseTypeSql),
   addSectionsCondition(mongoDbFiles, context => context.databaseTypeMongodb),
   addSectionsCondition(neo4jFiles, context => context.databaseTypeNeo4j),

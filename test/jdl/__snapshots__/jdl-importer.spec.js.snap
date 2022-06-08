@@ -1,5 +1,855 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`JDLImporter import when not parsing applications should export entity Country 1`] = `
+Object {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "country",
+  "fields": Array [
+    Object {
+      "fieldName": "name",
+      "fieldType": "String",
+    },
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "mymicroservice",
+  "name": "Country",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [
+    Object {
+      "otherEntityField": "region",
+      "otherEntityName": "region",
+      "otherEntityRelationshipName": "country",
+      "relationshipName": "area",
+      "relationshipType": "one-to-many",
+    },
+    Object {
+      "otherEntityName": "location",
+      "otherEntityRelationshipName": "country",
+      "relationshipName": "location",
+      "relationshipType": "many-to-one",
+    },
+  ],
+  "service": "no",
+  "skipServer": true,
+}
+`;
+
+exports[`JDLImporter import when not parsing applications should export entity Department 1`] = `
+Object {
+  "applications": "*",
+  "dto": "no",
+  "embedded": true,
+  "entityTableName": "department",
+  "fields": Array [
+    Object {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": Array [
+        "required",
+      ],
+    },
+    Object {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text",
+    },
+    Object {
+      "fieldName": "advertisement",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
+    },
+    Object {
+      "fieldName": "logo",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image",
+    },
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "mymicroservice",
+  "name": "Department",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [
+    Object {
+      "options": Object {
+        "id": "42",
+      },
+      "otherEntityName": "location",
+      "ownerSide": true,
+      "relationshipName": "location",
+      "relationshipType": "one-to-one",
+    },
+    Object {
+      "javadoc": "A relationship",
+      "otherEntityName": "employee",
+      "otherEntityRelationshipName": "department",
+      "relationshipName": "employee",
+      "relationshipType": "one-to-many",
+    },
+    Object {
+      "otherEntityName": "jobHistory",
+      "otherEntityRelationshipName": "department",
+      "ownerSide": false,
+      "relationshipName": "jobHistory",
+      "relationshipType": "many-to-many",
+    },
+  ],
+  "service": "no",
+}
+`;
+
+exports[`JDLImporter import when not parsing applications should export entity Employee 1`] = `
+Object {
+  "applications": "*",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "employee",
+  "fields": Array [
+    Object {
+      "fieldName": "firstName",
+      "fieldType": "String",
+      "javadoc": "The firstname attribute.",
+    },
+    Object {
+      "fieldName": "lastName",
+      "fieldType": "String",
+    },
+    Object {
+      "fieldName": "email",
+      "fieldType": "String",
+    },
+    Object {
+      "fieldName": "phoneNumber",
+      "fieldType": "String",
+    },
+    Object {
+      "fieldName": "hireDate",
+      "fieldType": "ZonedDateTime",
+    },
+    Object {
+      "fieldName": "salary",
+      "fieldType": "Long",
+    },
+    Object {
+      "fieldName": "commissionPct",
+      "fieldType": "Long",
+    },
+  ],
+  "fluentMethods": true,
+  "javadoc": "The Employee entity.\\\\nSecond line in javadoc.",
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "mymicroservice",
+  "name": "Employee",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": Array [
+    Object {
+      "otherEntityName": "job",
+      "otherEntityRelationshipName": "emp",
+      "relationshipName": "job",
+      "relationshipType": "one-to-many",
+    },
+    Object {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "relationshipType": "many-to-one",
+    },
+    Object {
+      "otherEntityField": "lastName",
+      "otherEntityName": "employee",
+      "relationshipName": "manager",
+      "relationshipType": "many-to-one",
+    },
+    Object {
+      "javadoc": "Another side of the same relationship,",
+      "otherEntityName": "department",
+      "otherEntityRelationshipName": "employee",
+      "relationshipName": "department",
+      "relationshipType": "many-to-one",
+    },
+    Object {
+      "otherEntityName": "jobHistory",
+      "otherEntityRelationshipName": "emp",
+      "ownerSide": false,
+      "relationshipName": "jobHistory",
+      "relationshipType": "many-to-many",
+    },
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceClass",
+}
+`;
+
+exports[`JDLImporter import when not parsing applications should export entity Job 1`] = `
+Object {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "job",
+  "fields": Array [
+    Object {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": Array [
+        "minlength",
+        "maxlength",
+      ],
+      "fieldValidateRulesMaxlength": "25",
+      "fieldValidateRulesMinlength": "5",
+    },
+    Object {
+      "fieldName": "type",
+      "fieldType": "JobType",
+      "fieldValues": "BOSS,SLAVE",
+    },
+    Object {
+      "fieldName": "minSalary",
+      "fieldType": "Long",
+    },
+    Object {
+      "fieldName": "maxSalary",
+      "fieldType": "Long",
+    },
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "mymicroservice",
+  "name": "Job",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": Array [
+    Object {
+      "otherEntityField": "title",
+      "otherEntityName": "task",
+      "otherEntityRelationshipName": "linkedJob",
+      "ownerSide": true,
+      "relationshipName": "chore",
+      "relationshipType": "many-to-many",
+    },
+    Object {
+      "otherEntityField": "employee",
+      "otherEntityName": "employee",
+      "otherEntityRelationshipName": "job",
+      "relationshipName": "emp",
+      "relationshipType": "many-to-one",
+    },
+    Object {
+      "otherEntityName": "jobHistory",
+      "otherEntityRelationshipName": "job",
+      "ownerSide": false,
+      "relationshipName": "history",
+      "relationshipType": "many-to-many",
+    },
+  ],
+  "service": "no",
+}
+`;
+
+exports[`JDLImporter import when not parsing applications should export entity JobHistory 1`] = `
+Object {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "job_history",
+  "fields": Array [
+    Object {
+      "fieldName": "startDate",
+      "fieldType": "ZonedDateTime",
+    },
+    Object {
+      "fieldName": "endDate",
+      "fieldType": "ZonedDateTime",
+    },
+    Object {
+      "fieldName": "language",
+      "fieldType": "Language",
+      "fieldValues": "FRENCH,ENGLISH,SPANISH",
+    },
+    Object {
+      "fieldName": "positionDuration",
+      "fieldType": "Duration",
+    },
+  ],
+  "fluentMethods": true,
+  "javadoc": "JobHistory comment.",
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "mymicroservice",
+  "name": "JobHistory",
+  "pagination": "infinite-scroll",
+  "readOnly": true,
+  "relationships": Array [
+    Object {
+      "otherEntityName": "department",
+      "otherEntityRelationshipName": "jobHistory",
+      "ownerSide": true,
+      "relationshipName": "department",
+      "relationshipType": "many-to-many",
+    },
+    Object {
+      "otherEntityName": "job",
+      "otherEntityRelationshipName": "history",
+      "ownerSide": true,
+      "relationshipName": "job",
+      "relationshipType": "many-to-many",
+    },
+    Object {
+      "otherEntityField": "employee",
+      "otherEntityName": "employee",
+      "otherEntityRelationshipName": "jobHistory",
+      "ownerSide": true,
+      "relationshipName": "emp",
+      "relationshipType": "many-to-many",
+    },
+  ],
+  "service": "no",
+}
+`;
+
+exports[`JDLImporter import when not parsing applications should export entity Location 1`] = `
+Object {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "location",
+  "fields": Array [
+    Object {
+      "fieldName": "streetAddress",
+      "fieldType": "String",
+    },
+    Object {
+      "fieldName": "postalCode",
+      "fieldType": "String",
+    },
+    Object {
+      "fieldName": "city",
+      "fieldType": "String",
+    },
+    Object {
+      "fieldName": "stateProvince",
+      "fieldType": "String",
+    },
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "mymicroservice",
+  "name": "Location",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [
+    Object {
+      "otherEntityName": "country",
+      "otherEntityRelationshipName": "location",
+      "relationshipName": "country",
+      "relationshipType": "one-to-many",
+    },
+    Object {
+      "options": Object {
+        "id": true,
+      },
+      "otherEntityName": "department",
+      "otherEntityRelationshipName": "location",
+      "ownerSide": false,
+      "relationshipName": "department",
+      "relationshipType": "one-to-one",
+    },
+  ],
+  "service": "no",
+}
+`;
+
+exports[`JDLImporter import when not parsing applications should export entity Region 1`] = `
+Object {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "region",
+  "fields": Array [
+    Object {
+      "fieldName": "name",
+      "fieldType": "String",
+    },
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "mymicroservice",
+  "name": "Region",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [
+    Object {
+      "otherEntityName": "country",
+      "otherEntityRelationshipName": "area",
+      "relationshipName": "country",
+      "relationshipType": "many-to-one",
+    },
+  ],
+  "service": "no",
+}
+`;
+
+exports[`JDLImporter import when not parsing applications should export entity Task 1`] = `
+Object {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "task",
+  "fields": Array [
+    Object {
+      "fieldName": "title",
+      "fieldType": "String",
+    },
+    Object {
+      "fieldName": "description",
+      "fieldType": "String",
+    },
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "mymicroservice",
+  "name": "Task",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [
+    Object {
+      "otherEntityField": "jobTitle",
+      "otherEntityName": "job",
+      "otherEntityRelationshipName": "chore",
+      "ownerSide": false,
+      "relationshipName": "linkedJob",
+      "relationshipType": "many-to-many",
+    },
+  ],
+  "service": "no",
+}
+`;
+
+exports[`JDLImporter import when not parsing applications should return the final state 1`] = `
+Object {
+  "exportedApplications": Array [],
+  "exportedApplicationsWithEntities": Object {},
+  "exportedDeployments": Array [],
+  "exportedEntities": Array [
+    JSONEntity {
+      "applications": "*",
+      "dto": "no",
+      "embedded": false,
+      "entityTableName": "country",
+      "fields": Array [
+        Object {
+          "fieldName": "name",
+          "fieldType": "String",
+        },
+      ],
+      "fluentMethods": true,
+      "javadoc": "",
+      "jpaMetamodelFiltering": false,
+      "microserviceName": "mymicroservice",
+      "name": "Country",
+      "pagination": "no",
+      "readOnly": false,
+      "relationships": Array [
+        Object {
+          "otherEntityField": "region",
+          "otherEntityName": "region",
+          "otherEntityRelationshipName": "country",
+          "relationshipName": "area",
+          "relationshipType": "one-to-many",
+        },
+        Object {
+          "otherEntityName": "location",
+          "otherEntityRelationshipName": "country",
+          "relationshipName": "location",
+          "relationshipType": "many-to-one",
+        },
+      ],
+      "service": "no",
+      "skipServer": true,
+    },
+    JSONEntity {
+      "applications": "*",
+      "dto": "no",
+      "embedded": true,
+      "entityTableName": "department",
+      "fields": Array [
+        Object {
+          "fieldName": "name",
+          "fieldType": "String",
+          "fieldValidateRules": Array [
+            "required",
+          ],
+        },
+        Object {
+          "fieldName": "description",
+          "fieldType": "byte[]",
+          "fieldTypeBlobContent": "text",
+        },
+        Object {
+          "fieldName": "advertisement",
+          "fieldType": "byte[]",
+          "fieldTypeBlobContent": "any",
+        },
+        Object {
+          "fieldName": "logo",
+          "fieldType": "byte[]",
+          "fieldTypeBlobContent": "image",
+        },
+      ],
+      "fluentMethods": true,
+      "javadoc": "",
+      "jpaMetamodelFiltering": false,
+      "microserviceName": "mymicroservice",
+      "name": "Department",
+      "pagination": "no",
+      "readOnly": false,
+      "relationships": Array [
+        Object {
+          "options": Object {
+            "id": "42",
+          },
+          "otherEntityName": "location",
+          "ownerSide": true,
+          "relationshipName": "location",
+          "relationshipType": "one-to-one",
+        },
+        Object {
+          "javadoc": "A relationship",
+          "otherEntityName": "employee",
+          "otherEntityRelationshipName": "department",
+          "relationshipName": "employee",
+          "relationshipType": "one-to-many",
+        },
+        Object {
+          "otherEntityName": "jobHistory",
+          "otherEntityRelationshipName": "department",
+          "ownerSide": false,
+          "relationshipName": "jobHistory",
+          "relationshipType": "many-to-many",
+        },
+      ],
+      "service": "no",
+    },
+    JSONEntity {
+      "applications": "*",
+      "dto": "mapstruct",
+      "embedded": false,
+      "entityTableName": "employee",
+      "fields": Array [
+        Object {
+          "fieldName": "firstName",
+          "fieldType": "String",
+          "javadoc": "The firstname attribute.",
+        },
+        Object {
+          "fieldName": "lastName",
+          "fieldType": "String",
+        },
+        Object {
+          "fieldName": "email",
+          "fieldType": "String",
+        },
+        Object {
+          "fieldName": "phoneNumber",
+          "fieldType": "String",
+        },
+        Object {
+          "fieldName": "hireDate",
+          "fieldType": "ZonedDateTime",
+        },
+        Object {
+          "fieldName": "salary",
+          "fieldType": "Long",
+        },
+        Object {
+          "fieldName": "commissionPct",
+          "fieldType": "Long",
+        },
+      ],
+      "fluentMethods": true,
+      "javadoc": "The Employee entity.\\\\nSecond line in javadoc.",
+      "jpaMetamodelFiltering": false,
+      "microserviceName": "mymicroservice",
+      "name": "Employee",
+      "pagination": "infinite-scroll",
+      "readOnly": false,
+      "relationships": Array [
+        Object {
+          "otherEntityName": "job",
+          "otherEntityRelationshipName": "emp",
+          "relationshipName": "job",
+          "relationshipType": "one-to-many",
+        },
+        Object {
+          "otherEntityField": "login",
+          "otherEntityName": "user",
+          "relationshipName": "user",
+          "relationshipType": "many-to-one",
+        },
+        Object {
+          "otherEntityField": "lastName",
+          "otherEntityName": "employee",
+          "relationshipName": "manager",
+          "relationshipType": "many-to-one",
+        },
+        Object {
+          "javadoc": "Another side of the same relationship,",
+          "otherEntityName": "department",
+          "otherEntityRelationshipName": "employee",
+          "relationshipName": "department",
+          "relationshipType": "many-to-one",
+        },
+        Object {
+          "otherEntityName": "jobHistory",
+          "otherEntityRelationshipName": "emp",
+          "ownerSide": false,
+          "relationshipName": "jobHistory",
+          "relationshipType": "many-to-many",
+        },
+      ],
+      "searchEngine": "elasticsearch",
+      "service": "serviceClass",
+    },
+    JSONEntity {
+      "applications": "*",
+      "dto": "no",
+      "embedded": false,
+      "entityTableName": "job",
+      "fields": Array [
+        Object {
+          "fieldName": "title",
+          "fieldType": "String",
+          "fieldValidateRules": Array [
+            "minlength",
+            "maxlength",
+          ],
+          "fieldValidateRulesMaxlength": "25",
+          "fieldValidateRulesMinlength": "5",
+        },
+        Object {
+          "fieldName": "type",
+          "fieldType": "JobType",
+          "fieldValues": "BOSS,SLAVE",
+        },
+        Object {
+          "fieldName": "minSalary",
+          "fieldType": "Long",
+        },
+        Object {
+          "fieldName": "maxSalary",
+          "fieldType": "Long",
+        },
+      ],
+      "fluentMethods": true,
+      "javadoc": "",
+      "jpaMetamodelFiltering": false,
+      "microserviceName": "mymicroservice",
+      "name": "Job",
+      "pagination": "pagination",
+      "readOnly": false,
+      "relationships": Array [
+        Object {
+          "otherEntityField": "title",
+          "otherEntityName": "task",
+          "otherEntityRelationshipName": "linkedJob",
+          "ownerSide": true,
+          "relationshipName": "chore",
+          "relationshipType": "many-to-many",
+        },
+        Object {
+          "otherEntityField": "employee",
+          "otherEntityName": "employee",
+          "otherEntityRelationshipName": "job",
+          "relationshipName": "emp",
+          "relationshipType": "many-to-one",
+        },
+        Object {
+          "otherEntityName": "jobHistory",
+          "otherEntityRelationshipName": "job",
+          "ownerSide": false,
+          "relationshipName": "history",
+          "relationshipType": "many-to-many",
+        },
+      ],
+      "service": "no",
+    },
+    JSONEntity {
+      "applications": "*",
+      "dto": "no",
+      "embedded": false,
+      "entityTableName": "job_history",
+      "fields": Array [
+        Object {
+          "fieldName": "startDate",
+          "fieldType": "ZonedDateTime",
+        },
+        Object {
+          "fieldName": "endDate",
+          "fieldType": "ZonedDateTime",
+        },
+        Object {
+          "fieldName": "language",
+          "fieldType": "Language",
+          "fieldValues": "FRENCH,ENGLISH,SPANISH",
+        },
+        Object {
+          "fieldName": "positionDuration",
+          "fieldType": "Duration",
+        },
+      ],
+      "fluentMethods": true,
+      "javadoc": "JobHistory comment.",
+      "jpaMetamodelFiltering": false,
+      "microserviceName": "mymicroservice",
+      "name": "JobHistory",
+      "pagination": "infinite-scroll",
+      "readOnly": true,
+      "relationships": Array [
+        Object {
+          "otherEntityName": "department",
+          "otherEntityRelationshipName": "jobHistory",
+          "ownerSide": true,
+          "relationshipName": "department",
+          "relationshipType": "many-to-many",
+        },
+        Object {
+          "otherEntityName": "job",
+          "otherEntityRelationshipName": "history",
+          "ownerSide": true,
+          "relationshipName": "job",
+          "relationshipType": "many-to-many",
+        },
+        Object {
+          "otherEntityField": "employee",
+          "otherEntityName": "employee",
+          "otherEntityRelationshipName": "jobHistory",
+          "ownerSide": true,
+          "relationshipName": "emp",
+          "relationshipType": "many-to-many",
+        },
+      ],
+      "service": "no",
+    },
+    JSONEntity {
+      "applications": "*",
+      "dto": "no",
+      "embedded": false,
+      "entityTableName": "location",
+      "fields": Array [
+        Object {
+          "fieldName": "streetAddress",
+          "fieldType": "String",
+        },
+        Object {
+          "fieldName": "postalCode",
+          "fieldType": "String",
+        },
+        Object {
+          "fieldName": "city",
+          "fieldType": "String",
+        },
+        Object {
+          "fieldName": "stateProvince",
+          "fieldType": "String",
+        },
+      ],
+      "fluentMethods": true,
+      "javadoc": "",
+      "jpaMetamodelFiltering": false,
+      "microserviceName": "mymicroservice",
+      "name": "Location",
+      "pagination": "no",
+      "readOnly": false,
+      "relationships": Array [
+        Object {
+          "otherEntityName": "country",
+          "otherEntityRelationshipName": "location",
+          "relationshipName": "country",
+          "relationshipType": "one-to-many",
+        },
+        Object {
+          "options": Object {
+            "id": true,
+          },
+          "otherEntityName": "department",
+          "otherEntityRelationshipName": "location",
+          "ownerSide": false,
+          "relationshipName": "department",
+          "relationshipType": "one-to-one",
+        },
+      ],
+      "service": "no",
+    },
+    JSONEntity {
+      "applications": "*",
+      "dto": "no",
+      "embedded": false,
+      "entityTableName": "region",
+      "fields": Array [
+        Object {
+          "fieldName": "name",
+          "fieldType": "String",
+        },
+      ],
+      "fluentMethods": true,
+      "javadoc": "",
+      "jpaMetamodelFiltering": false,
+      "microserviceName": "mymicroservice",
+      "name": "Region",
+      "pagination": "no",
+      "readOnly": false,
+      "relationships": Array [
+        Object {
+          "otherEntityName": "country",
+          "otherEntityRelationshipName": "area",
+          "relationshipName": "country",
+          "relationshipType": "many-to-one",
+        },
+      ],
+      "service": "no",
+    },
+    JSONEntity {
+      "applications": "*",
+      "dto": "no",
+      "embedded": false,
+      "entityTableName": "task",
+      "fields": Array [
+        Object {
+          "fieldName": "title",
+          "fieldType": "String",
+        },
+        Object {
+          "fieldName": "description",
+          "fieldType": "String",
+        },
+      ],
+      "fluentMethods": true,
+      "javadoc": "",
+      "jpaMetamodelFiltering": false,
+      "microserviceName": "mymicroservice",
+      "name": "Task",
+      "pagination": "no",
+      "readOnly": false,
+      "relationships": Array [
+        Object {
+          "otherEntityField": "jobTitle",
+          "otherEntityName": "job",
+          "otherEntityRelationshipName": "chore",
+          "ownerSide": false,
+          "relationshipName": "linkedJob",
+          "relationshipType": "many-to-many",
+        },
+      ],
+      "service": "no",
+    },
+  ],
+}
+`;
+
 exports[`JDLImporter import when parsing JDL applications and deployment config with a realistic sample should export the application & deployment contents 1`] = `
 Array [
   Object {
@@ -200,6 +1050,156 @@ Array [
       "kubernetesUseDynamicStorage": false,
       "monitoring": "no",
       "serviceDiscoveryType": false,
+    },
+  },
+]
+`;
+
+exports[`JDLImporter import when parsing JDL applications and exporting them should export the application contents 1`] = `
+Array [
+  Object {
+    "entities": Array [],
+    "generator-jhipster": Object {
+      "applicationType": "monolith",
+      "authenticationType": "jwt",
+      "baseName": "tata",
+      "buildTool": "maven",
+      "cacheProvider": "ehcache",
+      "clientFramework": "angularX",
+      "clientPackageManager": "npm",
+      "clientTheme": "none",
+      "clientThemeVariant": "",
+      "databaseType": "sql",
+      "devDatabaseType": "h2Disk",
+      "dtoSuffix": "DTO",
+      "enableGradleEnterprise": false,
+      "enableHibernateCache": true,
+      "enableSwaggerCodegen": false,
+      "enableTranslation": true,
+      "entitySuffix": "",
+      "gradleEnterpriseHost": "",
+      "jhiPrefix": "jhi",
+      "languages": Array [],
+      "messageBroker": false,
+      "packageFolder": "com/mathieu/tata",
+      "packageName": "com.mathieu.tata",
+      "prodDatabaseType": "postgresql",
+      "reactive": false,
+      "searchEngine": false,
+      "serverPort": "8080",
+      "serviceDiscoveryType": false,
+      "skipUserManagement": false,
+      "testFrameworks": Array [],
+      "websocket": false,
+      "withAdminUi": true,
+    },
+  },
+  Object {
+    "entities": Array [],
+    "generator-jhipster": Object {
+      "applicationType": "gateway",
+      "authenticationType": "jwt",
+      "baseName": "titi",
+      "buildTool": "maven",
+      "cacheProvider": "no",
+      "clientFramework": "angularX",
+      "clientPackageManager": "npm",
+      "clientTheme": "none",
+      "clientThemeVariant": "",
+      "databaseType": "sql",
+      "devDatabaseType": "h2Disk",
+      "dtoSuffix": "DTO",
+      "enableGradleEnterprise": false,
+      "enableHibernateCache": false,
+      "enableSwaggerCodegen": false,
+      "enableTranslation": true,
+      "entitySuffix": "",
+      "gradleEnterpriseHost": "",
+      "jhiPrefix": "jhi",
+      "languages": Array [],
+      "messageBroker": false,
+      "packageFolder": "com/mathieu/titi",
+      "packageName": "com.mathieu.titi",
+      "prodDatabaseType": "postgresql",
+      "reactive": true,
+      "searchEngine": false,
+      "serverPort": "8080",
+      "serviceDiscoveryType": "eureka",
+      "skipUserManagement": false,
+      "testFrameworks": Array [],
+      "websocket": false,
+      "withAdminUi": true,
+    },
+  },
+  Object {
+    "entities": Array [],
+    "generator-jhipster": Object {
+      "applicationType": "microservice",
+      "authenticationType": "jwt",
+      "baseName": "toto",
+      "buildTool": "maven",
+      "cacheProvider": "ehcache",
+      "clientPackageManager": "npm",
+      "databaseType": "sql",
+      "devDatabaseType": "h2Disk",
+      "dtoSuffix": "DTO",
+      "enableGradleEnterprise": false,
+      "enableHibernateCache": true,
+      "enableSwaggerCodegen": false,
+      "enableTranslation": true,
+      "entitySuffix": "",
+      "gradleEnterpriseHost": "",
+      "jhiPrefix": "jhi",
+      "languages": Array [],
+      "messageBroker": false,
+      "packageFolder": "com/mathieu/toto",
+      "packageName": "com.mathieu.toto",
+      "prodDatabaseType": "postgresql",
+      "reactive": false,
+      "searchEngine": false,
+      "serverPort": "8081",
+      "serviceDiscoveryType": "eureka",
+      "skipClient": true,
+      "skipUserManagement": true,
+      "testFrameworks": Array [],
+      "websocket": false,
+    },
+  },
+  Object {
+    "entities": Array [],
+    "generator-jhipster": Object {
+      "applicationType": "monolith",
+      "authenticationType": "jwt",
+      "baseName": "tutu",
+      "buildTool": "maven",
+      "cacheProvider": "ehcache",
+      "clientFramework": "angularX",
+      "clientPackageManager": "npm",
+      "clientTheme": "none",
+      "clientThemeVariant": "",
+      "databaseType": "sql",
+      "devDatabaseType": "h2Disk",
+      "dtoSuffix": "DTO",
+      "enableGradleEnterprise": false,
+      "enableHibernateCache": true,
+      "enableSwaggerCodegen": false,
+      "enableTranslation": true,
+      "entitySuffix": "",
+      "gradleEnterpriseHost": "",
+      "jhiPrefix": "jhi",
+      "languages": Array [],
+      "messageBroker": false,
+      "packageFolder": "com/mathieu/tutu",
+      "packageName": "com.mathieu.tutu",
+      "prodDatabaseType": "postgresql",
+      "reactive": false,
+      "searchEngine": false,
+      "serverPort": "8080",
+      "serviceDiscoveryType": false,
+      "skipUserManagement": false,
+      "testFrameworks": Array [],
+      "websocket": false,
+      "withAdminUi": true,
     },
   },
 ]
@@ -505,4 +1505,127 @@ Object {
   "relationships": Array [],
   "service": "no",
 }
+`;
+
+exports[`JDLImporter import when passing the unidirectionalRelationships option when parsing one JDL application and entities should return the corresponding exportedApplicationsWithEntities 1`] = `
+Array [
+  JSONEntity {
+    "applications": Array [
+      "jhipster",
+    ],
+    "dto": "no",
+    "embedded": false,
+    "entityTableName": "a",
+    "fields": Array [],
+    "fluentMethods": true,
+    "javadoc": undefined,
+    "jpaMetamodelFiltering": false,
+    "name": "A",
+    "pagination": "no",
+    "readOnly": false,
+    "relationships": Array [
+      Object {
+        "otherEntityName": "b",
+        "ownerSide": true,
+        "relationshipName": "oneToOneB",
+        "relationshipType": "one-to-one",
+        "unidirectional": true,
+      },
+      Object {
+        "otherEntityName": "b",
+        "otherEntityRelationshipName": "biOneToOneA",
+        "ownerSide": true,
+        "relationshipName": "biOneToOneB",
+        "relationshipType": "one-to-one",
+        "unidirectional": false,
+      },
+      Object {
+        "otherEntityName": "b",
+        "relationshipName": "oneToManyB",
+        "relationshipType": "one-to-many",
+        "unidirectional": true,
+      },
+      Object {
+        "otherEntityName": "b",
+        "otherEntityRelationshipName": "biOneToManyA",
+        "relationshipName": "biOneToManyB",
+        "relationshipType": "one-to-many",
+        "unidirectional": false,
+      },
+      Object {
+        "otherEntityName": "b",
+        "relationshipName": "manyToOneB",
+        "relationshipType": "many-to-one",
+        "unidirectional": true,
+      },
+      Object {
+        "otherEntityName": "b",
+        "otherEntityRelationshipName": "biManyToOneA",
+        "relationshipName": "biManyToOneB",
+        "relationshipType": "many-to-one",
+        "unidirectional": false,
+      },
+      Object {
+        "otherEntityName": "b",
+        "ownerSide": true,
+        "relationshipName": "manyToManyB",
+        "relationshipType": "many-to-many",
+        "unidirectional": true,
+      },
+      Object {
+        "otherEntityName": "b",
+        "otherEntityRelationshipName": "biManyToManyA",
+        "ownerSide": true,
+        "relationshipName": "biManyToManyB",
+        "relationshipType": "many-to-many",
+        "unidirectional": false,
+      },
+    ],
+    "service": "no",
+  },
+  JSONEntity {
+    "applications": Array [
+      "jhipster",
+    ],
+    "dto": "no",
+    "embedded": false,
+    "entityTableName": "b",
+    "fields": Array [],
+    "fluentMethods": true,
+    "javadoc": undefined,
+    "jpaMetamodelFiltering": false,
+    "name": "B",
+    "pagination": "no",
+    "readOnly": false,
+    "relationships": Array [
+      Object {
+        "otherEntityName": "a",
+        "otherEntityRelationshipName": "biOneToOneB",
+        "ownerSide": false,
+        "relationshipName": "biOneToOneA",
+        "relationshipType": "one-to-one",
+      },
+      Object {
+        "otherEntityName": "a",
+        "otherEntityRelationshipName": "biOneToManyB",
+        "relationshipName": "biOneToManyA",
+        "relationshipType": "many-to-one",
+      },
+      Object {
+        "otherEntityName": "a",
+        "otherEntityRelationshipName": "biManyToOneB",
+        "relationshipName": "biManyToOneA",
+        "relationshipType": "one-to-many",
+      },
+      Object {
+        "otherEntityName": "a",
+        "otherEntityRelationshipName": "biManyToManyB",
+        "ownerSide": false,
+        "relationshipName": "biManyToManyA",
+        "relationshipType": "many-to-many",
+      },
+    ],
+    "service": "no",
+  },
+]
 `;

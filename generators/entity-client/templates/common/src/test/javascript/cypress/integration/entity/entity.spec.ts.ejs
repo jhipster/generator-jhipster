@@ -32,7 +32,7 @@ const skipCreateTest =
 
 const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
 
-if (workaroundRelationshipReactivePostgress && sampleFields.length === 0) {
+if (workaroundEntityCannotBeEmpty && sampleFields.length === 0) {
   const sample = fields.find(f => !f.autoGenerate);
   if (sample) {
     sampleFields.push(sample);

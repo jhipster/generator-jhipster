@@ -368,10 +368,22 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -440,7 +452,13 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -458,7 +476,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
 }
@@ -811,10 +841,22 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -883,7 +925,13 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -901,7 +949,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
 }
@@ -1587,6 +1647,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -1929,6 +2001,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/config/mariadb/my.cnf": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -2840,6 +2915,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -3077,13 +3164,25 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/MariadbTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -3155,7 +3254,13 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -3173,7 +3278,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers/mariadb/my.cnf": Object {
@@ -4192,6 +4309,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -4429,13 +4558,13 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/EmbeddedMongo.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/MongoDbTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
@@ -4523,6 +4652,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/templates/mail/testEmail.html": Object {
@@ -5556,6 +5694,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -5793,13 +5943,25 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -5856,7 +6018,13 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -5874,7 +6042,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
   "tsconfig.app.json": Object {
@@ -6899,6 +7079,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -7136,13 +7328,25 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -7214,7 +7418,13 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -7232,7 +7442,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
   "tsconfig.app.json": Object {
@@ -8257,6 +8479,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -8494,13 +8728,25 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -8572,7 +8818,13 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -8590,7 +8842,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
   "tsconfig.app.json": Object {
@@ -9636,6 +9900,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -9873,13 +10149,25 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -9951,7 +10239,13 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -9969,7 +10263,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
   "tsconfig.app.json": Object {
@@ -10553,10 +10859,10 @@ Object {
   "src/main/webapp/app/shared/auth/private-route.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/error/error-boundary-route.spec.tsx": Object {
+  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/error/error-boundary-route.tsx": Object {
+  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/error/error-boundary.spec.tsx": Object {
@@ -10838,13 +11144,25 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -10916,7 +11234,13 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -10934,7 +11258,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
   "tsconfig.json": Object {
@@ -11962,6 +12298,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -12199,13 +12547,25 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -12277,7 +12637,13 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -12295,7 +12661,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
   "tsconfig.app.json": Object {
@@ -13317,6 +13695,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -13509,13 +13899,25 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -13599,13 +14001,19 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/com/mycompany/myapp/cucumber/gitkeep": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/com/mycompany/myapp/cucumber/user.feature": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -13620,7 +14028,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
   "tsconfig.app.json": Object {
@@ -14642,6 +15062,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -14834,13 +15266,25 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -14924,7 +15368,13 @@ Object {
   "src/test/javascript/protractor.conf.js": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -14939,7 +15389,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
   "tsconfig.app.json": Object {
@@ -15967,6 +16429,18 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },
@@ -16204,13 +16678,25 @@ Object {
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
@@ -16282,7 +16768,13 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -16300,7 +16792,19 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
   "tsconfig.app.json": Object {

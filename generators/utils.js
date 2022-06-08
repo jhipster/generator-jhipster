@@ -78,11 +78,12 @@ const SQL = databaseTypes.SQL;
  * @param {object} generator reference to the generator
  */
 function rewriteFile(args, generator) {
+  const { path: rewritePath, file } = args;
   let fullPath;
-  if (args.path) {
-    fullPath = generator.destinationPath(path.join(args.path, args.file));
+  if (rewritePath) {
+    fullPath = generator.destinationPath(path.join(rewritePath, file));
   } else {
-    fullPath = generator.destinationPath(args.file);
+    fullPath = generator.destinationPath(file);
   }
   if (!generator.env.sharedFs.existsInMemory(fullPath) && generator.env.sharedFs.existsInMemory(`${fullPath}.jhi`)) {
     fullPath = `${fullPath}.jhi`;
@@ -152,8 +153,11 @@ function convertToPrettierExpressions(str) {
  * @param {object} args arguments object (containing splicable, haystack, needle properties) to be used
  * @param {string[]} args.splicable       - content to be added.
  * @param {boolean} [args.prettierAware]  - apply prettier aware expressions before looking for applied needles.
- * @param {string|RegExp} [args.regexp]    - use another content for looking for applied needles.
- * @returns {*} re-written file
+ * @param {string|RegExp} [args.regexp]   - use another content to looking for applied needles.
+ * @param {string} [args.haystack]        - file content
+ * @param {string} [args.needle]          - needle to be looked for
+ * @param {string} [args.file]            - file path for logging purposes
+ * @returns {string} re-written content
  */
 function rewrite(args) {
   // check if splicable is already in the body text
@@ -259,6 +263,7 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
       switch (type) {
         case 'html':
           body = replacePlaceholders(body, generator);
+          body = replaceTitleAttributes(body, generator);
           break;
         case 'js':
           body = replaceTitle(body, generator);
@@ -368,7 +373,28 @@ function replaceTranslationKeysWithText(body, generator, regex) {
  * @returns string with placeholders replaced
  */
 function replacePlaceholders(body, generator) {
-  const re = /placeholder=['|"]([{]{2}\s*['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)\s*[}]{2})['|"]/g;
+  return replaceAttributeWithTranslation('placeholder', body, generator);
+}
+
+/**
+ *
+ * @param {string} body html body
+ * @param {object} generator reference to the generator
+ * @returns string with titles replaced
+ */
+function replaceTitleAttributes(body, generator) {
+  return replaceAttributeWithTranslation('title', body, generator);
+}
+
+/**
+ *
+ * @param {string} attributeName
+ * @param {string} body html body
+ * @param {object} generator reference to the generator
+ * @returns string with attributeName replaced
+ */
+function replaceAttributeWithTranslation(attributeName, body, generator) {
+  const re = new RegExp(`${attributeName}=['|"]([{]{2}\\s*['|"]([a-zA-Z0-9.\\-_]+)['|"][\\s][|][\\s](translate)\\s*[}]{2})['|"]`, 'g');
   let match;
 
   // eslint-disable-next-line no-cond-assign

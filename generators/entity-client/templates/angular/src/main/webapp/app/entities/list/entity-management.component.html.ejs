@@ -70,6 +70,10 @@ _%>
     </form>
 <%_ } _%>
 
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+    <<%= jhiPrefixDashed %>-filter [filters]="filters" (filterChange)="<%= refreshMethod %>"></<%= jhiPrefixDashed %>-filter>
+<%_ } _%>
+
     <div class="alert alert-warning" id="no-result" *ngIf="<%= entityInstancePlural %>?.length === 0">
         <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.notFound') %></span>
     </div>
@@ -149,11 +153,11 @@ _%>
         <%_ } else { _%>
             <%_ if (relationship.relationshipManyToMany) { _%>
                         <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                            <a class="form-control-static" [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+                            <a class="form-control-static" [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                         </span>
             <%_ } else { _%>
                         <div *ngIf="<%= entityInstance + "." + relationshipFieldName %>">
-                            <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance %>.<%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
+                            <a [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= entityInstance %>.<%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
                         </div>
             <%_ } _%>
         <%_ } _%>
@@ -162,6 +166,20 @@ _%>
 <%_ } _%>
                     <td class="text-end">
                         <div class="btn-group">
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
+    <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && (relationship.relationshipOneToMany || relationship.relationshipManyToMany) && !relationship.ownerSide) { 
+        const otherEntityTranslationKey = i18nKeyPrefix + '.' + relationship.relationshipName;
+    _%>
+                            <button type="submit"
+                                    [routerLink]="['/<%= relationship.otherEntity.entityPage %>']"
+                                    [queryParams]="{ 'filter[<%= relationship.otherEntityRelationshipName %>Id.in]': <%= entityInstance %>.<%= primaryKey.name %> }"
+                                    class="btn btn-info btn-sm"
+                                    data-cy="filterOtherEntityButton">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.show"  [translateValues]="{ otherEntity: ('<%= otherEntityTranslationKey %>' | translate) }"><%- this._getClientTranslation('entity.action.show', {'otherEntity' : 'Other entity' }) %></span>
+                            </button>
+    <%_ } _%>
+<%_ } _%>
                             <button type="submit"
                                     [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'view']"
                                     class="btn btn-info btn-sm"

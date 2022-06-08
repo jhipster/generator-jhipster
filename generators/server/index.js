@@ -29,18 +29,8 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
-const {
-  CASSANDRA,
-  COUCHBASE,
-  MARIADB,
-  MSSQL,
-  MYSQL,
-  ORACLE,
-  POSTGRESQL,
-  SQL,
-  MONGODB,
-  NEO4J,
-} = require('../../jdl/jhipster/database-types');
+
+const { CASSANDRA, COUCHBASE, ORACLE, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
@@ -182,6 +172,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
         this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
         this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
+        this.DOCKER_KEYCLOAK_VERSION = constants.DOCKER_KEYCLOAK_VERSION;
         this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
         this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
         this.DOCKER_SONAR = constants.DOCKER_SONAR;
@@ -207,6 +198,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
         this.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
         this.JACOCO_VERSION = constants.JACOCO_VERSION;
+        this.H2_VERSION = constants.H2_VERSION;
+        this.H2_R2DBC_VERSION = constants.H2_R2DBC_VERSION;
 
         this.KAFKA_VERSION = constants.KAFKA_VERSION;
 
@@ -332,6 +325,13 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.loadPlatformConfig();
         this.loadTranslationConfig();
       },
+      loadConstants() {
+        if (this.prodDatabaseTypeMariadb || this.prodDatabaseTypeMysql) {
+          // TODO Remove as soon as liquibase problems with mysql/mariadb are fixed
+          this.LIQUIBASE_VERSION = '4.6.1';
+          this.LIQUIBASE_DTD_VERSION = '4.6';
+        }
+      },
     };
   }
 
@@ -360,33 +360,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.testResourceDir = SERVER_TEST_RES_DIR;
         this.srcMainDir = MAIN_DIR;
         this.srcTestDir = TEST_DIR;
-
-        if (this.jhipsterConfig.databaseType === SQL) {
-          // sql
-          let dbContainer;
-          switch (this.jhipsterConfig.prodDatabaseType) {
-            case MYSQL:
-              dbContainer = this.DOCKER_MYSQL;
-              break;
-            case MARIADB:
-              dbContainer = this.DOCKER_MARIADB;
-              break;
-            case POSTGRESQL:
-              dbContainer = this.DOCKER_POSTGRESQL;
-              break;
-            case MSSQL:
-              dbContainer = this.DOCKER_MSSQL;
-              break;
-            case ORACLE:
-            default:
-              dbContainer = null;
-          }
-          if (dbContainer != null && dbContainer.includes(':')) {
-            this.containerVersion = dbContainer.split(':')[1];
-          } else {
-            this.containerVersion = 'latest';
-          }
-        }
       },
     };
   }
@@ -471,10 +444,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       },
       packageJsonDockerScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const databaseType = this.jhipsterConfig.databaseType;
+        const { databaseType, prodDatabaseType } = this.jhipsterConfig;
+        const { databaseTypeSql, prodDatabaseTypeMysql, authenticationTypeOauth2, applicationTypeMicroservice } = this;
         const dockerAwaitScripts = [];
-        if (databaseType === SQL) {
-          const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
+        if (databaseTypeSql) {
+          if (prodDatabaseTypeMysql) {
+            scriptsStorage.set({
+              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && sleep 20 && echo "MySQL started"`,
+            });
+          }
           if (prodDatabaseType === NO_DATABASE || prodDatabaseType === ORACLE) {
             scriptsStorage.set('docker:db:up', `echo "Docker for db ${prodDatabaseType} not configured for application ${this.baseName}"`);
           } else {
@@ -526,13 +504,20 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
               dockerBuild.push(`npm run docker:${dockerConfig}:build`);
             } else if (dockerConfig === 'jhipster-registry') {
-              dockerAwaitScripts.push(
+              if (authenticationTypeOauth2 && !applicationTypeMicroservice) {
+                dockerOthersUp.push('npm run docker:keycloak:await');
+              }
+              scriptsStorage.set(
+                'docker:jhipster-registry:await',
                 `echo "Waiting for jhipster-registry to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8761/management/health && echo "jhipster-registry started"`
               );
+              dockerAwaitScripts.push('npm run docker:jhipster-registry:await');
             } else if (dockerConfig === 'keycloak') {
-              dockerAwaitScripts.push(
-                `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/auth/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
+              scriptsStorage.set(
+                'docker:keycloak:await',
+                `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
               );
+              dockerAwaitScripts.push('npm run docker:keycloak:await');
             }
 
             scriptsStorage.set(`docker:${dockerConfig}:up`, `docker-compose -f ${dockerFile} up -d`);

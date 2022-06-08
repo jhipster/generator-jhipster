@@ -46,13 +46,12 @@ metadata:
   namespace: <%= kubernetesNamespace %>
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
 spec:
   ports:
   - port: 8761
     name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---

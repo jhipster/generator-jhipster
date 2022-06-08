@@ -23,6 +23,10 @@ import java.util.List;
 <%_ if (databaseTypeCassandra) { _%>
 import org.cassandraunit.CQLDataLoader;
 <%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+import java.util.Arrays;
+import tech.jhipster.config.JHipsterConstants;
+<%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +37,7 @@ import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.test.context.ContextConfigurationAttributes;
 import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.util.TestPropertyValues;
 <%_ if (databaseTypeCassandra) { _%>
 import org.testcontainers.containers.CassandraContainer;
@@ -41,10 +46,13 @@ import org.testcontainers.containers.CassandraContainer;
 import org.testcontainers.containers.KafkaContainer;
 <%_ } _%>
 
-
 public class TestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
 
     private Logger log = LoggerFactory.getLogger(TestContainersSpringContextCustomizerFactory.class);
+
+<%_ if (cacheProviderRedis) { _%>
+    private static RedisTestContainer redisBean;
+<%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
     private static KafkaTestContainer kafkaBean;
 <%_ } _%>
@@ -63,6 +71,12 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
 <%_ if (databaseTypeNeo4j) { _%>
     private static Neo4jTestContainer neo4jBean;
 <%_ } _%>
+<%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypePostgres) { _%>
+    private static SqlTestContainer devTestContainer;
+<%_ } _%>
+<%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgres) { _%>
+    private static SqlTestContainer prodTestContainer;
+<%_ } _%>
 
     @Override
     public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
@@ -77,6 +91,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the Couchbase database");
                 if (null == couchbaseBean) {
                     couchbaseBean = beanFactory.createBean(CouchbaseTestContainer.class);
+                    beanFactory.registerSingleton(CouchbaseTestContainer.class.getName(), couchbaseBean);
+                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(CouchbaseTestContainer.class.getName(), couchbaseBean);
                 }
                 testValues = testValues.and("spring.couchbase.connection-string=" + couchbaseBean.getCouchbaseContainer().getConnectionString());
                 testValues = testValues.and("spring.couchbase.username=" + couchbaseBean.getCouchbaseContainer().getUsername());
@@ -86,14 +102,84 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
             }
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-            EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
-            if (null != mongoAnnotation) {
-                log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
-                log.info("Warming up the mongo database");
-                if (null == mongoDbBean) {
-                    mongoDbBean = beanFactory.createBean(MongoDbTestContainer.class);
+                EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
+                if (null != mongoAnnotation) {
+                    log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
+                    log.info("Warming up the mongo database");
+                    if (null == mongoDbBean) {
+                        mongoDbBean = beanFactory.createBean(MongoDbTestContainer.class);
+                        beanFactory.registerSingleton(MongoDbTestContainer.class.getName(), mongoDbBean);
+                        // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName(), mongoDbBean);
+                    }
+                    testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
                 }
-                testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
+<%_ } _%>
+<%_ if (cacheProviderRedis) { _%>
+                EmbeddedRedis redisAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedRedis.class);
+                if (null != redisAnnotation) {
+                    log.debug("detected the EmbeddedRedis annotation on class {}", testClass.getName());
+                    log.info("Warming up the redis database");
+                    if (null == redisBean) {
+                        redisBean = beanFactory.createBean(RedisTestContainer.class);
+                        beanFactory.registerSingleton(RedisTestContainer.class.getName(), redisBean);
+                        // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(RedisTestContainer.class.getName(), redisBean);
+                    }
+                    testValues = testValues.and("jhipster.cache.redis.server=redis://" + redisBean.getRedisContainer().getContainerIpAddress() + ":" + redisBean.getRedisContainer().getMappedPort(6379));
+                }
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+            EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);
+            if (null != sqlAnnotation) {
+                log.debug("detected the EmbeddedSQL annotation on class {}", testClass.getName());
+                log.info("Warming up the sql database");
+  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypePostgres) { _%>
+                if (Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
+                    if (null == devTestContainer) {
+                        try {
+                            Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (devDatabaseTypeMysql) { %>Mysql<% } else if (devDatabaseTypeMariadb) { %>Mariadb<% } else if (devDatabaseTypeMssql) { %>MsSql<% } else if (devDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer");
+                            devTestContainer = beanFactory.createBean(containerClass);
+                            beanFactory.registerSingleton(containerClass.getName(), devTestContainer);
+                            // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(containerClass.getName(), devTestContainer);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+    <%_ if (reactive) { _%>
+                    testValues = testValues.and("spring.r2dbc.url=" + devTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (devDatabaseTypeMysql) { %>.replace("mysql", "mariadb")<% } %> + "<%- getDBCExtraOption(devDatabaseType) %>");
+                    testValues = testValues.and("spring.r2dbc.username=" + devTestContainer.getTestContainer().getUsername());
+                    testValues = testValues.and("spring.r2dbc.password=" + devTestContainer.getTestContainer().getPassword());
+                    testValues = testValues.and("spring.liquibase.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- getDBCExtraOption(devDatabaseType) %>" );
+    <%_ } else { _%>
+                    testValues = testValues.and("spring.datasource.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- getDBCExtraOption(devDatabaseType) %>");
+                    testValues = testValues.and("spring.datasource.username=" + devTestContainer.getTestContainer().getUsername());
+                    testValues = testValues.and("spring.datasource.password=" + devTestContainer.getTestContainer().getPassword());
+    <%_ } _%>
+                }
+  <%_ } _%>
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgres) { _%>
+                if (Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+                    if (null == prodTestContainer) {
+                        try {
+                            Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer");
+                            prodTestContainer = beanFactory.createBean(containerClass);
+                            beanFactory.registerSingleton(containerClass.getName(), prodTestContainer);
+                            // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(containerClass.getName(), prodTestContainer);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+    <%_ if (reactive) { _%>
+                    testValues = testValues.and("spring.r2dbc.url=" + prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMysql) { %>.replace("mysql", "mariadb")<% } %> + "<%- getDBCExtraOption(prodDatabaseType) %>");
+                    testValues = testValues.and("spring.r2dbc.username=" + prodTestContainer.getTestContainer().getUsername());
+                    testValues = testValues.and("spring.r2dbc.password=" + prodTestContainer.getTestContainer().getPassword());
+                    testValues = testValues.and("spring.liquibase.url=" + prodTestContainer.getTestContainer().getJdbcUrl()  + "<%- getDBCExtraOption(prodDatabaseType) %>");
+    <%_ } else { _%>
+                    testValues = testValues.and("spring.datasource.url=" + prodTestContainer.getTestContainer().getJdbcUrl() + "<%- getDBCExtraOption(prodDatabaseType) %>");
+                    testValues = testValues.and("spring.datasource.username=" + prodTestContainer.getTestContainer().getUsername());
+                    testValues = testValues.and("spring.datasource.password=" + prodTestContainer.getTestContainer().getPassword());
+    <%_ } _%>
+                }
+  <%_ } _%>
             }
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
@@ -103,6 +189,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the cassandra database");
                 if (null == cassandraBean) {
                     cassandraBean = beanFactory.createBean(CassandraTestContainer.class);
+                    beanFactory.registerSingleton(CassandraTestContainer.class.getName(), cassandraBean);
+                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(CassandraTestContainer.class.getName(), cassandraBean);
                 }
                 testValues = testValues.and("spring.data.cassandra.port=" +  cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
                     .and("spring.data.cassandra.contact-points=" +  cassandraBean.getCassandraContainer().getHost())
@@ -118,6 +206,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the neo4j database");
                 if (null == neo4jBean) {
                     neo4jBean = beanFactory.createBean(Neo4jTestContainer.class);
+                    beanFactory.registerSingleton(Neo4jTestContainer.class.getName(), neo4jBean);
+                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(Neo4jTestContainer.class.getName(), neo4jBean);
                 }
                 testValues =
                     testValues.and(
@@ -132,6 +222,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the kafka broker");
                 if (null == kafkaBean) {
                     kafkaBean = beanFactory.createBean(KafkaTestContainer.class);
+                    beanFactory.registerSingleton(KafkaTestContainer.class.getName(), kafkaBean);
+                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(KafkaTestContainer.class.getName(), kafkaBean);
                 }
                 testValues = testValues.and("spring.cloud.stream.kafka.binder.brokers=" + kafkaBean.getKafkaContainer().getHost() + ':' + kafkaBean.getKafkaContainer().getMappedPort(KafkaContainer.KAFKA_PORT));
             }
@@ -143,6 +235,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the elastic database");
                 if (null == elasticsearchBean) {
                     elasticsearchBean = beanFactory.createBean(ElasticsearchTestContainer.class);
+                    beanFactory.registerSingleton(ElasticsearchTestContainer.class.getName(), elasticsearchBean);
+                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(ElasticsearchTestContainer.class.getName(), elasticsearchBean);
                 }
                 testValues =
                     testValues.and(

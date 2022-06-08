@@ -32,7 +32,7 @@ const {
   SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
-const { POSTGRESQL, MARIADB } = require('../../jdl/jhipster/database-types');
+const { POSTGRESQL, MARIADB, MYSQL } = require('../../jdl/jhipster/database-types');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -100,8 +100,8 @@ module.exports = class extends BaseBlueprintGenerator {
         this.cypressBootstrapEntities = true;
 
         const entity = this.entity;
-        // Reactive with PostgreSQL doesn't allow insertion without data.
-        this.workaroundRelationshipReactivePostgress = entity.reactive && entity.prodDatabaseType === POSTGRESQL;
+        // Reactive with some r2dbc databases doesn't allow insertion without data.
+        this.workaroundEntityCannotBeEmpty = entity.reactive && [POSTGRESQL, MYSQL, MARIADB].includes(entity.prodDatabaseType);
         // Reactive with MariaDB doesn't allow null value at Instant fields.
         this.workaroundInstantReactiveMariaDB = entity.reactive && entity.prodDatabaseType === MARIADB;
       },
@@ -306,7 +306,11 @@ module.exports = class extends BaseBlueprintGenerator {
    * @param [data] {object} - template data in case translated value is a template
    */
   _getClientTranslation(translationKey, data) {
-    const translatedValue = _.get(this.clientTranslations, translationKey);
+    let translatedValue = _.get(this.clientTranslations, translationKey);
+    if (translatedValue === undefined) {
+      const [last, second, ...others] = translationKey.split('.').reverse();
+      translatedValue = _.get(this.clientTranslations, `${others.reverse().join('.')}['${second}.${last}']`);
+    }
     if (translatedValue === undefined) {
       const errorMessage = `Translation missing for ${translationKey}`;
       this.warning(`${errorMessage} at ${JSON.stringify(this.clientTranslations)}`);

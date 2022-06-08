@@ -78,7 +78,7 @@
         </div>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-4">Start time</div>
-          <div class="col-md-8 text-right">{{ metrics.processMetrics['process.start.time'] | formatMillis }}</div>
+          <div class="col-md-8 text-right">{{ metrics.processMetrics['process.start.time'] | formatDate }}</div>
         </div>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-9">Process CPU usage</div>

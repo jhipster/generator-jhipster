@@ -57,12 +57,14 @@
         this.isLoading = true;
 <%_ if (searchEngine) { _%>
         if (this.currentSearch) {
-            this.<%= entityInstance %>Service.search({
+            const queryObject<%_ if (jpaMetamodelFiltering) { _%>: any<%_ } _%> = {
                 query: this.currentSearch,
                 page: this.page,
                 size: this.itemsPerPage,
                 sort: this.sort()
-            }).subscribe({
+            };
+
+            this.<%= entityInstance %>Service.search(queryObject).subscribe({
                 next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                     this.isLoading = false;
                     this.paginate<%= entityClassPlural %>(res.body, res.headers);
@@ -75,11 +77,13 @@
         }
 <%_ } _%>
 
-        this.<%= entityInstance %>Service.query({
+        const queryObject = {
             page: this.page,
             size: this.itemsPerPage,
             sort: this.sort()
-        }).subscribe({
+        };
+
+        this.<%= entityInstance %>Service.query(queryObject).subscribe({
             next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                 this.isLoading = false;
                 this.paginate<%= entityClassPlural %>(res.body, res.headers);

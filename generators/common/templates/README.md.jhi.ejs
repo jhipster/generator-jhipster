@@ -109,13 +109,21 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: http://localhost:9080/auth/realms/jhipster
+            issuer-uri: http://localhost:9080/realms/jhipster
         registration:
           oidc:
             client-id: web_app
             client-secret: web_app
             scope: openid,profile,email
 ```
+
+Some of Keycloak configuration is now done in build time and the other part before running the app, here is the [list](https://www.keycloak.org/server/all-config) of all build and configuration options.
+
+Before moving to production, please make sure to follow this [guide](https://www.keycloak.org/server/configuration) for better security and performance.
+
+Also, you should never use `start-dev` nor `KC_DB=dev-file` in production.
+
+When using Kubernetes, importing should be done using init-containers (with a volume when using `db=dev-file`).
 
 ### Okta
 

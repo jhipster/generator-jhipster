@@ -213,8 +213,6 @@ objects:
       name: ${APPLICATION_NAME}
       labels:
         app: ${APPLICATION_NAME}
-      annotations:
-        service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
     spec:
       ports:
       - name: http
@@ -238,6 +236,7 @@ objects:
       - name: consuldns
         port: 8600
       clusterIP: None
+      publishNotReadyAddresses: true
       selector:
         app: ${APPLICATION_NAME}
   -

@@ -564,13 +564,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -1079,7 +1078,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
           env:
             - name: discovery.type
               value: single-node
@@ -1324,13 +1323,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -1838,13 +1836,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -2566,13 +2563,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -3276,13 +3272,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -4375,7 +4370,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
           env:
             - name: discovery.type
               value: single-node
@@ -4741,7 +4736,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
           env:
             - name: discovery.type
               value: single-node
@@ -5040,13 +5035,12 @@ metadata:
   namespace: mynamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -7839,13 +7833,12 @@ metadata:
   namespace: mynamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -8341,13 +8334,12 @@ metadata:
   namespace: jhipsternamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---

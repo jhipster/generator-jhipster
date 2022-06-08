@@ -19,6 +19,9 @@
 package <%= packageName %>.security;
 
 import <%= packageName %>.domain.<%= asEntity('User') %>;
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+import <%= packageName %>.domain.Authority;
+<%_ } _%>
 import <%= packageName %>.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
@@ -60,7 +63,7 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
 
     @Override
 <%_ if (databaseTypeSql) { _%>
-    @Transactional
+    @Transactional(readOnly = true)
 <%_ } _%>
     public <% if (reactive) { %>Mono<UserDetails> findByUsername<% } else { %>UserDetails loadUserByUsername<% } %>(final String login) {
         log.debug("Authenticating {}", login);
@@ -89,8 +92,8 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>
-            .map(authority -> new SimpleGrantedAuthority(authority.getName()))<% } %><% if (databaseTypeCassandra || databaseTypeCouchbase) { %>
-            .map(SimpleGrantedAuthority::new)<% } %>
+            .map(Authority::getName)<% } %>
+            .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(user.getLogin(),
             user.getPassword(),

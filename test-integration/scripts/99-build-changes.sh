@@ -112,6 +112,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/gradle' \
   'generators/languages' \
   'generators/maven' \
+  'jdl' \
   'lib' \
   'test-integration' \
   'utils' \

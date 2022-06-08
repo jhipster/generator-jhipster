@@ -43,7 +43,7 @@ const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { databaseData } = require('./sql-constants');
-const { ANGULAR_X: ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
+const { ANGULAR_X: ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
 const {
   PRIORITY_NAMES: {
     LOADING,
@@ -68,6 +68,7 @@ const {
     END,
   },
 } = require('../lib/constants/priorities.cjs');
+const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -102,14 +103,26 @@ const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
 const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
 const NO_WEBSOCKET = websocketTypes.FALSE;
 
+const isWin32 = os.platform() === 'win32';
+
+/**
+ * @callback EditFileCallback
+ * @param {JHipsterBaseGenerator} this
+ * @param {string} content
+ * @param {string} filePath
+ * @returns {string} new content
+ */
+
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
  * The public API methods can be directly utilized as well using commonJS require.
  *
  * The method signatures in public API should not be changed without a major version change
+ *
+ * @extends {import('yeoman-generator')}
  */
-module.exports = class JHipsterBaseGenerator extends PrivateBase {
+class JHipsterBaseGenerator extends PrivateBase {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -335,6 +348,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
       if (this.jhipsterConfig.clientFramework === VUE) {
         prettierExtensions = `${prettierExtensions},vue`;
+      }
+      if (this.jhipsterConfig.clientFramework === SVELTE) {
+        prettierExtensions = `${prettierExtensions},svelte`;
       }
     }
     if (!this.skipServer && !this.jhipsterConfig.skipServer) {
@@ -1224,6 +1240,15 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * Insert content into ApplicationProperties class
+   * @param {import("./server/needles.cjs").ApplicationPropertiesNeedles} needlesContent
+   * @returns {string} ApplicationProperties contents
+   */
+  insertContentIntoApplicationProperties(needlesContent) {
+    return insertContentIntoApplicationProperties(this, needlesContent);
+  }
+
+  /**
    * Generate a date to be used by Liquibase changelogs.
    *
    * @param {Boolean} [reproducible=true] - Set true if the changelog date can be reproducible.
@@ -1287,7 +1312,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         regex = new RegExp(
           [
             /([\s\n\r]+[a-z][a-zA-Z]*Translate="[a-zA-Z0-9 +{}'_!?.]+")/, // jhiTranslate
-            /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
+            /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|\(|\)|\||-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
             /([\s\n\r]+translate-compile)/, // translate-compile
             /([\s\n\r]+translate-value-max="[0-9{}()|]*")/, // translate-value-max
           ]
@@ -1326,6 +1351,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @deprecated
    * Copy html templates after stripping translation keys when translation is disabled.
    *
    * @param {string} source - path of the source file to copy from
@@ -1339,6 +1365,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @deprecated
    * Copy Js templates after stripping translation keys when translation is disabled.
    *
    * @param {string} source - path of the source file to copy from
@@ -1677,10 +1704,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
     dir.closeSync();
 
-    return [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
+    const entities = [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
       .map(entityName => ({ name: entityName, definition: this.readEntityJson(entityName) }))
-      .filter(entity => entity && !this.isBuiltInUser(entity.name) && !this.isBuiltInAuthority(entity.name))
+      .filter(entity => entity && !this.isBuiltInUser(entity.name) && !this.isBuiltInAuthority(entity.name) && entity.definition)
       .sort(isBefore);
+    this.jhipsterConfig.entities = entities.map(({ name }) => name);
+    return entities;
   }
 
   /**
@@ -2015,7 +2044,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * Return the user home
    */
   getUserHome() {
-    return process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
+    return process.env[isWin32 ? 'USERPROFILE' : 'HOME'];
   }
 
   /**
@@ -2151,7 +2180,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       buildCmd += ' -Pwar';
     }
 
-    if (os.platform() !== 'win32') {
+    if (!isWin32) {
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
@@ -2177,7 +2206,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       buildCmd = `gradlew -x ${command}`;
     }
 
-    if (os.platform() !== 'win32') {
+    if (!isWin32) {
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
@@ -2364,7 +2393,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     assert(paramCount > 0, 'One of sections, blocks or files is required');
     assert(paramCount === 1, 'Only one of sections, blocks or files must be provided');
 
-    const { sections, blocks, templates, rootTemplatesPath, context = this } = options;
+    const { sections, blocks, templates, rootTemplatesPath, context = this, transform: methodTransform = [] } = options;
+    const { _: commonSpec = {} } = sections;
+    const { transform: sectionTransform = [] } = commonSpec;
     const startTime = new Date();
 
     /* Build lookup order first has preference.
@@ -2405,15 +2436,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       throw new Error(`Type not supported ${val}`);
     };
 
-    const renderTemplate = async ({ sourceFile, destinationFile, options, transform = true }) => {
+    const renderTemplate = async ({ sourceFile, destinationFile, options, noEjs, transform, binary }) => {
       const extension = path.extname(sourceFile);
-      const appendEjs = transform && !['.ejs', '.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
+      binary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
+      const appendEjs = noEjs === undefined ? !binary && extension !== '.ejs' : !noEjs;
       const ejsFile = appendEjs || extension === '.ejs';
 
-      if (typeof transform !== 'boolean') {
-        throw new Error(`Transform ${transform} value is not supported`);
-      }
-      destinationFile = transform ? normalizeEjs(destinationFile) : destinationFile;
+      destinationFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
 
       let sourceFileFrom;
       if (Array.isArray(rootTemplatesAbsolutePath)) {
@@ -2448,11 +2477,33 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       if (!ejsFile) {
         await this.copyTemplateAsync(sourceFileFrom, destinationFile);
       } else {
-        await this.renderTemplateAsync(sourceFileFrom, destinationFile, context, {
+        let useAsync = true;
+        if (context.entityClass) {
+          const basename = path.basename(sourceFileFrom);
+          if (context.configOptions && context.configOptions.sharedEntities) {
+            Object.values(context.configOptions.sharedEntities).forEach(entity => {
+              entity.resetFakerSeed(`${context.entityClass}-${basename}`);
+            });
+          } else if (context.resetFakerSeed) {
+            context.resetFakerSeed(basename);
+          }
+          // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
+          useAsync = false;
+        }
+
+        const renderOptions = {
           ...options,
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
-        });
+        };
+        if (useAsync) {
+          await this.renderTemplateAsync(sourceFileFrom, destinationFile, context, renderOptions);
+        } else {
+          this.renderTemplate(sourceFileFrom, destinationFile, context, renderOptions);
+        }
+      }
+      if (!binary && transform && transform.length) {
+        this.editFile(destinationFile, ...transform);
       }
       return destinationFile;
     };
@@ -2460,10 +2511,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     let parsedBlocks = blocks;
     if (sections) {
       assert(typeof sections === 'object', 'sections must be an object');
-      const parsedSections = Object.entries(sections).map(([sectionName, sectionBlocks]) => {
-        assert(Array.isArray(sectionBlocks), `Section must be an array for ${sectionName}`);
-        return { sectionName, sectionBlocks };
-      });
+      const parsedSections = Object.entries(sections)
+        .map(([sectionName, sectionBlocks]) => {
+          if (sectionName.startsWith('_')) return undefined;
+          assert(Array.isArray(sectionBlocks), `Section must be an array for ${sectionName}`);
+          return { sectionName, sectionBlocks };
+        })
+        .filter(Boolean);
 
       parsedBlocks = parsedSections
         .map(({ sectionName, sectionBlocks }) => {
@@ -2486,7 +2540,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             from: blockFromCallback,
             to: blockToCallback,
             condition: blockConditionCallback,
-            transform: blockTransform,
+            transform: blockTransform = [],
           } = block;
           assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
           assert(Array.isArray(block.templates), `Block templates must be an array for ${blockSpecPath}`);
@@ -2499,13 +2553,31 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           return block.templates.map((fileSpec, fileIdx) => {
             const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
             assert(typeof fileSpec === 'object' || typeof fileSpec === 'string', `File must be an object or a string for ${fileSpecPath}`);
+            let { noEjs } = fileSpec;
+            let derivedTransform;
+            if (typeof blockTransform === 'boolean') {
+              noEjs = !blockTransform;
+              derivedTransform = [...methodTransform, ...sectionTransform];
+            } else {
+              derivedTransform = [...methodTransform, ...sectionTransform, ...blockTransform];
+            }
             if (typeof fileSpec === 'string') {
               const sourceFile = path.join(blockPath, fileSpec);
               const destinationFile = this.destinationPath(blockTo, fileSpec);
-              return { sourceFile, destinationFile, transform: blockTransform };
+              return { sourceFile, destinationFile, noEjs, transform: derivedTransform };
             }
+
+            const { options, file, renameTo, transform: fileTransform = [], binary } = fileSpec;
             let { sourceFile, destinationFile } = fileSpec;
-            const { options, file, renameTo } = fileSpec;
+
+            if (typeof fileTransform === 'boolean') {
+              noEjs = !fileTransform;
+            } else if (Array.isArray(fileTransform)) {
+              derivedTransform = [...derivedTransform, ...fileTransform];
+            } else if (fileTransform !== undefined) {
+              throw new Error(`Transform ${fileTransform} value is not supported`);
+            }
+
             const normalizedFile = resolveCallback(sourceFile || file);
             sourceFile = path.join(blockPath, normalizedFile);
             destinationFile = this.destinationPath(blockTo, path.join(resolveCallback(destinationFile || renameTo, normalizedFile)));
@@ -2515,16 +2587,23 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               this.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
-            let { transform } = fileSpec;
-            if (transform === undefined) {
-              // TODO remove for jhipster 8
-              const { noEjs, method } = fileSpec;
-              transform = noEjs || method === 'copy' ? false : undefined;
+
+            // TODO remove for jhipster 8
+            if (noEjs === undefined) {
+              const { method } = fileSpec;
+              if (method === 'copy') {
+                noEjs = true;
+              }
             }
-            if (transform === undefined) {
-              transform = blockTransform;
-            }
-            return { sourceFile, destinationFile, options, transform };
+
+            return {
+              sourceFile,
+              destinationFile,
+              options,
+              transform: derivedTransform,
+              noEjs,
+              binary,
+            };
           });
         })
         .flat()
@@ -3068,11 +3147,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
-
-    dest.reactiveSqlTestContainers =
-      dest.reactive &&
-      ([MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(dest.prodDatabaseType) ||
-        [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(dest.devDatabaseType));
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
@@ -3359,4 +3433,33 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       LANG: 'en',
     });
   }
-};
+
+  /**
+   * Edit file content
+   * @param {string} file
+   * @param {...EditFileCallback} transformCallbacks
+   */
+  editFile(file, ...transformCallbacks) {
+    let filePath = this.destinationPath(file);
+    if (!this.env.sharedFs.existsInMemory(filePath) && this.env.sharedFs.existsInMemory(`${filePath}.jhi`)) {
+      filePath = `${filePath}.jhi`;
+    }
+    let content = this.readDestination(filePath);
+    if (isWin32 && content.match(/\r\n/)) {
+      transformCallbacks = [content => content.replace(/\r\n/g, '\n')].concat(transformCallbacks, content =>
+        content.replace(/\n/g, '\r\n')
+      );
+    }
+    try {
+      for (const cb of transformCallbacks) {
+        content = cb.call(this, content, filePath);
+      }
+    } catch (error) {
+      throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
+    }
+    this.writeDestination(filePath, content);
+    return content;
+  }
+}
+
+module.exports = JHipsterBaseGenerator;

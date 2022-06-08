@@ -425,13 +425,15 @@ class JDLProcessor {
       })
     );
 
-    applicationsWithEntities.forEach((applicationWithEntities, idx) => {
+    applicationsWithEntities.forEach(applicationWithEntities => {
+      const microfrontends = applicationWithEntities.config.microfrontends || [];
+
       const relatedApplications = Object.entries(allApplications).filter(
         ([baseName]) =>
           applicationWithEntities.config.baseName !== baseName &&
-          applicationWithEntities.entities.find(entity => entity.microserviceName === baseName)
+          (applicationWithEntities.entities.find(entity => entity.microserviceName === baseName) || microfrontends.includes(baseName))
       );
-      const { serverPort: gatewayServerPort } = applicationWithEntities.config;
+      const { serverPort: gatewayServerPort, clientFramework: gatewayClientFramework } = applicationWithEntities.config;
       if (relatedApplications.length > 0) {
         applicationWithEntities.config.applications = Object.fromEntries(
           relatedApplications.map(([baseName, config]) => {
@@ -440,6 +442,18 @@ class JDLProcessor {
             return [baseName, { clientFramework, serverPort, applicationIndex, devServerPort }];
           })
         );
+
+        const differentClientFrameworks = relatedApplications.filter(
+          ([_baseName, { clientFramework }]) => clientFramework && clientFramework !== 'no' && clientFramework !== gatewayClientFramework
+        );
+
+        if (differentClientFrameworks.length > 0) {
+          throw Error(
+            `Using different client frameworks in microfrontends is not supported. Tried to use: ${gatewayClientFramework} with ${differentClientFrameworks
+              .map(([baseName, { clientFramework }]) => `${clientFramework} (${baseName})`)
+              .join(', ')}`
+          );
+        }
       }
     });
 

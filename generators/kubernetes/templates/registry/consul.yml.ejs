@@ -49,8 +49,6 @@ metadata:
   namespace: <%= kubernetesNamespace %>
   labels:
     app: consul
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
 spec:
   ports:
   - name: http
@@ -74,6 +72,7 @@ spec:
   - name: consuldns
     port: 8600
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: consul
 ---

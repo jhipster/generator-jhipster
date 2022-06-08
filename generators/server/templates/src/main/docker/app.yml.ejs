@@ -64,7 +64,7 @@ _%>
       # - JHIPSTER_CACHE_REDIS_CLUSTER=true
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
   <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
@@ -102,6 +102,8 @@ _%>
     image: <%= DOCKER_MYSQL %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
+    volumes:
+      - ./config/mysql:/etc/mysql/conf.d
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
@@ -116,6 +118,8 @@ _%>
     image: <%= DOCKER_MARIADB %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
+    volumes:
+      - ./config/mariadb:/etc/mysql/conf.d
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
@@ -254,7 +258,7 @@ _%>
       - 127.0.0.1:9200:9200
       - 127.0.0.1:9300:9300
     environment:
-      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
       - "discovery.type=single-node"
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
@@ -300,7 +304,7 @@ _%>
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
   <%_ if (authenticationTypeOauth2) { _%>
       # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
   <%_ } _%>
@@ -336,17 +340,19 @@ _%>
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
   keycloak:
     image: <%= DOCKER_KEYCLOAK %>
-    command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.socket.binding.port-offset=1000", "-Dkeycloak.profile.feature.upload_scripts=enabled"]
+    command: ['start-dev --import-realm']
     volumes:
-      - ./realm-config:/opt/jboss/keycloak/realm-config
+      - ./realm-config:/opt/keycloak/data/import
     environment:
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=admin
-      - DB_VENDOR=h2
+      - KC_DB=dev-file
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_FEATURES=scripts
+      - KC_HTTP_PORT=9080
+      - KC_HTTPS_PORT=9443
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:9080:9080
       - 127.0.0.1:9443:9443
-      - 127.0.0.1:10990:10990
 <%_ } _%>

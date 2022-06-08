@@ -209,13 +209,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -769,7 +768,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
           env:
             - name: discovery.type
               value: single-node
@@ -1149,13 +1148,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -1846,13 +1844,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -2755,13 +2752,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -3464,13 +3460,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -4734,7 +4729,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
           env:
             - name: discovery.type
               value: single-node
@@ -5210,13 +5205,12 @@ metadata:
   namespace: mynamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -8162,13 +8156,12 @@ metadata:
   namespace: mynamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -8813,13 +8806,12 @@ metadata:
   namespace: jhipsternamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -9582,7 +9574,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.28
+          image: mysql:8.0.29
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9791,7 +9783,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
           env:
             - name: discovery.type
               value: single-node
@@ -9865,7 +9857,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:14.2
+          image: postgres:14.3
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -10085,13 +10077,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -10470,7 +10461,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.28
+          image: mysql:8.0.29
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -10709,13 +10700,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -11096,7 +11086,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.28
+          image: mysql:8.0.29
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11322,7 +11312,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.28
+          image: mysql:8.0.29
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11534,13 +11524,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -11919,7 +11908,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.28
+          image: mysql:8.0.29
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -12158,13 +12147,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -12560,7 +12548,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.28
+          image: mysql:8.0.29
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -12813,7 +12801,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mariadb
-          image: mariadb:10.7.3
+          image: mariadb:10.8.3
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -13199,7 +13187,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.13
+          image: mongo:4.4.14
           command:
             - /work-dir/peer-finder
           args:
@@ -13229,7 +13217,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.13
+          image: mongo:4.4.14
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -13309,13 +13297,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
   name: msmongodb-mongodb
   namespace: default
 spec:
   type: ClusterIP
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - name: peer
       port: 27017
@@ -13494,7 +13481,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU15-ubuntu-20.04
+          image: mcr.microsoft.com/mssql/server:2019-CU16-ubuntu-20.04
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
@@ -13698,7 +13685,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.28
+          image: mysql:8.0.29
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -13907,7 +13894,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
           env:
             - name: discovery.type
               value: single-node
@@ -13981,7 +13968,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:14.2
+          image: postgres:14.3
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -14201,13 +14188,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -16941,7 +16927,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:8.5.0
+          image: grafana/grafana:8.5.4
           ports:
             - containerPort: 3000
               name: http
@@ -17232,7 +17218,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.28
+          image: mysql:8.0.29
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -17472,13 +17458,12 @@ metadata:
   namespace: mynamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -17831,7 +17816,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.28
+          image: mysql:8.0.29
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -18051,13 +18036,12 @@ metadata:
   namespace: mynamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -18436,7 +18420,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.28
+          image: mysql:8.0.29
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -18684,13 +18668,12 @@ metadata:
   namespace: jhipsternamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---

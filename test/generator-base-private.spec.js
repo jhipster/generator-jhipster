@@ -1,13 +1,14 @@
 const path = require('path');
 const expect = require('chai').expect;
 // using base generator which extends the private base
-const BaseGenerator = require('../generators/generator-base').prototype;
+const BaseGeneratorPrivate = require('../generators/generator-base-private').prototype;
+const BaseGenerator = require('../generators/generator-base').prototype; // TODO remove in favor of a cleaner architecture
 const { CASSANDRA, MONGODB, MYSQL, SQL } = require('../jdl/jhipster/database-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
 
 const NO_DTO = MapperTypes.NO;
 
-BaseGenerator.log = msg => {
+BaseGeneratorPrivate.log = msg => {
   // eslint-disable-next-line no-console
   console.log(msg);
 };
@@ -27,7 +28,7 @@ export * from './entityFolderName/entityFileName-delete-dialog.component';
 export * from './entityFolderName/entityFileName-detail.component';
 export * from './entityFolderName/entityFileName.component';
 export * from './entityFolderName/entityFileName.state';`;
-      expect(BaseGenerator.stripMargin(content)).to.equal(out);
+      expect(BaseGeneratorPrivate.stripMargin(content)).to.equal(out);
     });
     it('should produce correct indented output without margin', () => {
       const routerName = 'routerName';
@@ -42,24 +43,24 @@ export * from './entityFolderName/entityFileName.state';`;
         <span data-translate="global.menu.routerName">routerName</span>
     </a>
 </li>`;
-      expect(BaseGenerator.stripMargin(content)).to.equal(out);
+      expect(BaseGeneratorPrivate.stripMargin(content)).to.equal(out);
     });
   });
 
   describe('getDBTypeFromDBValue', () => {
     describe('when called with sql DB name', () => {
       it('return SQL', () => {
-        expect(BaseGenerator.getDBTypeFromDBValue(MYSQL)).to.equal(SQL);
+        expect(BaseGeneratorPrivate.getDBTypeFromDBValue(MYSQL)).to.equal(SQL);
       });
     });
     describe('when called with mongo DB', () => {
       it('return mongodb', () => {
-        expect(BaseGenerator.getDBTypeFromDBValue(MONGODB)).to.equal(MONGODB);
+        expect(BaseGeneratorPrivate.getDBTypeFromDBValue(MONGODB)).to.equal(MONGODB);
       });
     });
     describe('when called with cassandra', () => {
       it('return cassandra', () => {
-        expect(BaseGenerator.getDBTypeFromDBValue(CASSANDRA)).to.equal(CASSANDRA);
+        expect(BaseGeneratorPrivate.getDBTypeFromDBValue(CASSANDRA)).to.equal(CASSANDRA);
       });
     });
   });
@@ -131,17 +132,17 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('generateTestEntityId', () => {
     describe('when called with int', () => {
       it('return 123', () => {
-        expect(BaseGenerator.generateTestEntityId('int')).to.equal(123);
+        expect(BaseGeneratorPrivate.generateTestEntityId('int')).to.equal(123);
       });
     });
     describe('when called with String', () => {
       it("return 'ABC'", () => {
-        expect(BaseGenerator.generateTestEntityId('String')).to.equal("'ABC'");
+        expect(BaseGeneratorPrivate.generateTestEntityId('String')).to.equal("'ABC'");
       });
     });
     describe('when called with UUID', () => {
       it("return '9fec3727-3421-4967-b213-ba36557ca194'", () => {
-        expect(BaseGenerator.generateTestEntityId('UUID')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
+        expect(BaseGeneratorPrivate.generateTestEntityId('UUID')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
       });
     });
   });
@@ -149,35 +150,35 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('formatAsApiDescription', () => {
     describe('when formatting a nil text', () => {
       it('returns it', () => {
-        expect(BaseGenerator.formatAsApiDescription()).to.equal(undefined);
+        expect(BaseGeneratorPrivate.formatAsApiDescription()).to.equal(undefined);
       });
     });
     describe('when formatting an empty text', () => {
       it('returns it', () => {
-        expect(BaseGenerator.formatAsApiDescription('')).to.equal('');
+        expect(BaseGeneratorPrivate.formatAsApiDescription('')).to.equal('');
       });
     });
     describe('when formatting normal texts', () => {
       describe('when having empty lines', () => {
         it('discards them', () => {
-          expect(BaseGenerator.formatAsApiDescription('First line\n \nSecond line\n\nThird line')).to.equal(
+          expect(BaseGeneratorPrivate.formatAsApiDescription('First line\n \nSecond line\n\nThird line')).to.equal(
             'First line Second line Third line'
           );
         });
       });
       describe('when having HTML tags', () => {
         it('keeps them', () => {
-          expect(BaseGenerator.formatAsApiDescription('Not boldy\n<b>boldy</b>')).to.equal('Not boldy<b>boldy</b>');
+          expect(BaseGeneratorPrivate.formatAsApiDescription('Not boldy\n<b>boldy</b>')).to.equal('Not boldy<b>boldy</b>');
         });
       });
       describe('when having a plain text', () => {
         it('puts a space before each line', () => {
-          expect(BaseGenerator.formatAsApiDescription('JHipster is\na great generator')).to.equal('JHipster is a great generator');
+          expect(BaseGeneratorPrivate.formatAsApiDescription('JHipster is\na great generator')).to.equal('JHipster is a great generator');
         });
       });
       describe('when having quotes', () => {
         it('formats the text to make the string valid', () => {
-          expect(BaseGenerator.formatAsApiDescription('JHipster is "the" best')).to.equal('JHipster is \\"the\\" best');
+          expect(BaseGeneratorPrivate.formatAsApiDescription('JHipster is "the" best')).to.equal('JHipster is \\"the\\" best');
         });
       });
     });
@@ -186,47 +187,47 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('formatAsLiquibaseRemarks', () => {
     describe('when formatting a nil text', () => {
       it('returns it', () => {
-        expect(BaseGenerator.formatAsLiquibaseRemarks()).to.equal(undefined);
+        expect(BaseGeneratorPrivate.formatAsLiquibaseRemarks()).to.equal(undefined);
       });
     });
     describe('when formatting an empty text', () => {
       it('returns it', () => {
-        expect(BaseGenerator.formatAsLiquibaseRemarks('')).to.equal('');
+        expect(BaseGeneratorPrivate.formatAsLiquibaseRemarks('')).to.equal('');
       });
     });
     describe('when formatting normal texts', () => {
       describe('when having empty lines', () => {
         it('discards them', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks('First line\n \nSecond line\n\nThird line')).to.equal(
+          expect(BaseGeneratorPrivate.formatAsLiquibaseRemarks('First line\n \nSecond line\n\nThird line')).to.equal(
             'First line Second line Third line'
           );
         });
       });
       describe('when having a plain text', () => {
         it('puts a space before each line', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is\na great generator')).to.equal('JHipster is a great generator');
+          expect(BaseGeneratorPrivate.formatAsLiquibaseRemarks('JHipster is\na great generator')).to.equal('JHipster is a great generator');
         });
       });
       describe('when having ampersand', () => {
         it('formats the text to escape it', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster uses Spring & Hibernate')).to.equal(
+          expect(BaseGeneratorPrivate.formatAsLiquibaseRemarks('JHipster uses Spring & Hibernate')).to.equal(
             'JHipster uses Spring &amp; Hibernate'
           );
         });
       });
       describe('when having quotes', () => {
         it('formats the text to escape it', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is "the" best')).to.equal('JHipster is &quot;the&quot; best');
+          expect(BaseGeneratorPrivate.formatAsLiquibaseRemarks('JHipster is "the" best')).to.equal('JHipster is &quot;the&quot; best');
         });
       });
       describe('when having apostrophe', () => {
         it('formats the text to escape it', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal('JHipster is &apos;the&apos; best');
+          expect(BaseGeneratorPrivate.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal('JHipster is &apos;the&apos; best');
         });
       });
       describe('when having HTML tags < and >', () => {
         it('formats the text to escape it', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks('Not boldy\n<b>boldy</b>')).to.equal('Not boldy&lt;b&gt;boldy&lt;/b&gt;');
+          expect(BaseGeneratorPrivate.formatAsLiquibaseRemarks('Not boldy\n<b>boldy</b>')).to.equal('Not boldy&lt;b&gt;boldy&lt;/b&gt;');
         });
       });
     });
@@ -235,52 +236,52 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('getEntityParentPathAddition', () => {
     describe('when passing /', () => {
       it('returns an empty string', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('/')).to.equal('');
+        expect(BaseGeneratorPrivate.getEntityParentPathAddition('/')).to.equal('');
       });
     });
     describe('when passing /foo/', () => {
       it('returns ../', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('/foo/')).to.equal('../');
+        expect(BaseGeneratorPrivate.getEntityParentPathAddition('/foo/')).to.equal('../');
       });
     });
     describe('when passing undefined', () => {
       it('returns an empty string', () => {
-        expect(BaseGenerator.getEntityParentPathAddition()).to.equal('');
+        expect(BaseGeneratorPrivate.getEntityParentPathAddition()).to.equal('');
       });
     });
     describe('when passing empty', () => {
       it('returns an empty string', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('')).to.equal('');
+        expect(BaseGeneratorPrivate.getEntityParentPathAddition('')).to.equal('');
       });
     });
     describe('when passing foo', () => {
       it('returns ../', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('foo')).to.equal('../');
+        expect(BaseGeneratorPrivate.getEntityParentPathAddition('foo')).to.equal('../');
       });
     });
     describe('when passing foo/bar', () => {
       it('returns ../../', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('foo/bar')).to.equal(`..${path.sep}../`);
+        expect(BaseGeneratorPrivate.getEntityParentPathAddition('foo/bar')).to.equal(`..${path.sep}../`);
       });
     });
     describe('when passing ../foo', () => {
       it('returns an empty string', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('../foo')).to.equal('');
+        expect(BaseGeneratorPrivate.getEntityParentPathAddition('../foo')).to.equal('');
       });
     });
     describe('when passing ../foo/bar', () => {
       it('returns ../', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('../foo/bar')).to.equal('../');
+        expect(BaseGeneratorPrivate.getEntityParentPathAddition('../foo/bar')).to.equal('../');
       });
     });
     describe('when passing ../foo/bar/foo2', () => {
       it('returns ../../', () => {
-        expect(BaseGenerator.getEntityParentPathAddition('../foo/bar/foo2')).to.equal(`..${path.sep}../`);
+        expect(BaseGeneratorPrivate.getEntityParentPathAddition('../foo/bar/foo2')).to.equal(`..${path.sep}../`);
       });
     });
     describe('when passing ../../foo', () => {
       it('throw an error', () => {
-        expect(() => BaseGenerator.getEntityParentPathAddition('../../foo')).to.throw();
+        expect(() => BaseGeneratorPrivate.getEntityParentPathAddition('../../foo')).to.throw();
       });
     });
   });

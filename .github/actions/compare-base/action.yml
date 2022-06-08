@@ -71,6 +71,7 @@ runs:
         echo "::set-output name=application-path::${{inputs.application-path}}"
       env:
         JHI_FOLDER_APP: ${{ inputs.application-path }}
+        JHI_JDL_SAMPLES: "${{ github.workspace }}/base/${{ env.JHI_CLI_PACKAGE || 'generator-jhipster' }}/test-integration/jdl-samples"
       shell: bash
     - name: 'MERGE: merge base git'
       run: |

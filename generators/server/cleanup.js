@@ -18,10 +18,9 @@
  */
 const cleanupCassandra = require('./cleanup-cassandra');
 const cleanupMongodb = require('./cleanup-mongodb');
-const cleanupH2 = require('./cleanup-h2');
-const cleanupPostgresql = require('./cleanup-postgresql');
+const cleanupSql = require('./cleanup-sql');
 const cleanupElasticsearch = require('./cleanup-elasticsearch');
-const cleanupHazelcast = require('./cleanup-hazelcast');
+const cleanupCacheProvider = require('./cleanup-cache-provider');
 const cleanupAngular = require('./cleanup-angular');
 const cleanupGradle = require('./cleanup-gradle');
 const cleanupOauth2 = require('./cleanup-oauth2');
@@ -29,6 +28,7 @@ const cleanupKafka = require('./cleanup-kafka');
 const cleanupReactive = require('./cleanup-reactive');
 const cleanupCucumber = require('./cleanup-cucumber');
 const cleanupMaven = require('./cleanup-maven');
+const constants = require('../generator-constants');
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
@@ -41,21 +41,16 @@ const cleanupMaven = require('./cleanup-maven');
  * @param {string} testResourceDir - Test resources directory
  */
 function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
+  if (generator.databaseTypeSql) {
+    cleanupSql.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
+  }
   if (generator.databaseTypeCassandra) {
     cleanupCassandra.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
   if (generator.databaseTypeMongodb) {
     cleanupMongodb.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
-  if (generator.cacheProviderHazelcast) {
-    cleanupHazelcast.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
-  }
-  if (generator.devDatabaseTypeH2Any) {
-    cleanupH2.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
-  }
-  if (generator.devDatabaseTypePostgres || generator.prodDatabaseTypePostgres) {
-    cleanupPostgresql.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
-  }
+  cleanupCacheProvider.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   if (generator.clientFrameworkAngular) {
     cleanupAngular.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
@@ -194,6 +189,10 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     if (generator.databaseTypeNeo4j) {
       generator.removeFile(`${testDir}AbstractNeo4jIT.java`);
     }
+  }
+  if (generator.isJhipsterVersionLessThan('7.8.2')) {
+    generator.removeFile(`${constants.DOCKER_DIR}realm-config/jhipster-users-0.json`);
+    generator.removeFile(`${testDir}NoOpMailConfiguration.java`);
   }
 }
 
