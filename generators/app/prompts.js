@@ -92,7 +92,7 @@ async function askForApplicationType() {
         },
         type: 'confirm',
         name: 'microfrontend',
-        message: `Do you want to enable ${chalk.yellow('microfrontends')}?`,
+        message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
         default: defaultConfigMicroservice.microfrontend,
       },
       {
@@ -108,7 +108,7 @@ async function askForApplicationType() {
         },
         type: 'input',
         name: 'microfrontends',
-        message: `Comma separated ${chalk.yellow('microfrontends')} base names.`,
+        message: `Comma separated ${chalk.yellow('*microfrontend*')} app names.`,
         filter: promptValueToMicrofrontends,
         transformer: microfrontendsToPromptValue,
       },
