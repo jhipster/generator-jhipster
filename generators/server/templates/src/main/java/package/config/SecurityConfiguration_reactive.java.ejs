@@ -399,7 +399,8 @@ public class SecurityConfiguration {
                 // Retrieve user info from OAuth provider if not already loaded
                 return users.computeIfAbsent(jwt.getSubject(), s -> {
                     WebClient webClient = WebClient.create();
-
+                    System.out.println("sub: " + jwt.getSubject());
+                    System.out.println("token: " + token);
                     return webClient
                         .get()
                         .uri(userInfoUri)
