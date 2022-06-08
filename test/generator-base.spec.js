@@ -645,16 +645,16 @@ describe('Generator Base', () => {
 
   describe('getR2DBCUrl', () => {
     describe('when called for mysql', () => {
-      it('return r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
+      it('return r2dbc:mariadb://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
         expect(BaseGenerator.getR2DBCUrl(MYSQL, { databaseName: 'test', hostname: 'localhost' })).to.equal(
-          'r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true'
+          'r2dbc:mariadb://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true'
         );
       });
     });
     describe('when called for mysql with skipExtraOptions enabled', () => {
-      it('return r2dbc:mysql://localhost:3306/test', () => {
+      it('return r2dbc:mariadb://localhost:3306/test', () => {
         expect(BaseGenerator.getR2DBCUrl(MYSQL, { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })).to.equal(
-          'r2dbc:mysql://localhost:3306/test'
+          'r2dbc:mariadb://localhost:3306/test'
         );
       });
     });

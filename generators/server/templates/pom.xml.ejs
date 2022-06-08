@@ -104,7 +104,10 @@
         <liquibase-hibernate5.version><%= LIQUIBASE_VERSION %></liquibase-hibernate5.version>
   <%_ } _%>
   <%_ if (devDatabaseTypeH2Any) { _%>
-        <h2.version>1.4.200</h2.version>
+        <h2.version><%= H2_VERSION %></h2.version>
+    <%_ if (reactive) { _%>
+        <h2-r2dbc.version><%= H2_R2DBC_VERSION %></h2-r2dbc.version>
+    <%_ } _%>
   <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
   <%_ if (reactive) { _%>
@@ -120,7 +123,7 @@
 <%_ if (databaseTypeCassandra) { _%>
         <!-- The cassandra driver version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <cassandra-driver.version>4.13.0</cassandra-driver.version>
+        <cassandra-driver.version>4.14.1</cassandra-driver.version>
 <%_ } _%>
         <archunit-junit5.version>0.22.0</archunit-junit5.version>
         <mapstruct.version>1.5.1.Final</mapstruct.version>
@@ -519,22 +522,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>r2dbc</artifactId>
-            <scope>test</scope>
-        </dependency>
   <%_ } else { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+  <%_ } _%>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>jdbc</artifactId>
             <scope>test</scope>
         </dependency>
-  <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
         <dependency>
@@ -1583,11 +1581,13 @@
                 <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
+                    <version>${h2.version}</version>
                 </dependency>
   <%_ if (reactive) { _%>
                 <dependency>
                     <groupId>io.r2dbc</groupId>
                     <artifactId>r2dbc-h2</artifactId>
+                    <version>${h2-r2dbc.version}</version>
                 </dependency>
   <%_ } _%>
 <%_ } _%>
@@ -1598,22 +1598,8 @@
                 </dependency>
   <%_ if (reactive) { _%>
                 <dependency>
-                    <groupId>dev.miku</groupId>
-                    <artifactId>r2dbc-mysql</artifactId>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>io.projectreactor</groupId>
-                            <artifactId>reactor-core</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>io.projectreactor.addons</groupId>
-                            <artifactId>reactor-extra</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>io.projectreactor.netty</groupId>
-                            <artifactId>reactor-netty</artifactId>
-                        </exclusion>
-                    </exclusions>
+                    <groupId>org.mariadb</groupId>
+                    <artifactId>r2dbc-mariadb</artifactId>
                 </dependency>
   <%_ } _%>
 <%_ } _%>
@@ -1659,7 +1645,7 @@
                 </dependency>
   <%_ if (reactive) { _%>
                 <dependency>
-                    <groupId>io.r2dbc</groupId>
+                    <groupId>org.postgresql</groupId>
                     <artifactId>r2dbc-postgresql</artifactId>
                 </dependency>
   <%_ } _%>
@@ -1830,22 +1816,8 @@
                 </dependency>
     <%_ if (reactive) { _%>
                 <dependency>
-                    <groupId>dev.miku</groupId>
-                    <artifactId>r2dbc-mysql</artifactId>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>io.projectreactor</groupId>
-                            <artifactId>reactor-core</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>io.projectreactor.addons</groupId>
-                            <artifactId>reactor-extra</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>io.projectreactor.netty</groupId>
-                            <artifactId>reactor-netty</artifactId>
-                        </exclusion>
-                    </exclusions>
+                    <groupId>org.mariadb</groupId>
+                    <artifactId>r2dbc-mariadb</artifactId>
                 </dependency>
     <%_ } _%>
   <%_ } _%>
@@ -1891,7 +1863,7 @@
                 </dependency>
     <%_ if (reactive) { _%>
                 <dependency>
-                    <groupId>io.r2dbc</groupId>
+                    <groupId>org.postgresql</groupId>
                     <artifactId>r2dbc-postgresql</artifactId>
                 </dependency>
     <%_ } _%>
@@ -2245,6 +2217,23 @@
                     </plugins>
                 </pluginManagement>
             </build>
+        </profile>
+<%_ } _%>
+<%_ if (reactive) { _%>
+        <profile>
+            <activation>
+                <os>
+                    <family>mac</family>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-resolver-dns-native-macos</artifactId>
+                    <classifier>osx-aarch_64</classifier>
+                </dependency>
+            </dependencies>
         </profile>
 <%_ } _%>
         <!-- jhipster-needle-maven-add-profile -->

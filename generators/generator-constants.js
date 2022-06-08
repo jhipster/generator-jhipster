@@ -37,15 +37,19 @@ const JIB_VERSION = '3.2.1';
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.8.2-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.6.7';
-const LIQUIBASE_VERSION = '4.6.1';
+const SPRING_BOOT_VERSION = '2.7.0';
+const LIQUIBASE_VERSION = '4.11.0';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
-const HIBERNATE_VERSION = '5.6.8.Final';
+const HIBERNATE_VERSION = '5.6.9.Final';
+// TODO upgrade to h2 v2 once liquibase issues has been addressed
+const H2_VERSION = '1.4.200';
+// Version 0.9.x is not compatible with h2 v1
+const H2_R2DBC_VERSION = '0.8.5.RELEASE';
 
 const JACOCO_VERSION = '0.8.8';
 const KAFKA_VERSION = '7.1.1';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
-const ELASTICSEARCH_VERSION = '7.15.2'; // The version should be coherent with the one from spring-data-elasticsearch project
+const ELASTICSEARCH_VERSION = '7.17.3'; // The version should be coherent with the one from spring-data-elasticsearch project
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 // const DOCKER_JHIPSTER_REGISTRY = 'ghcr.io/jhipster/jhipster-registry:main';
@@ -435,6 +439,8 @@ const constants = {
   LIQUIBASE_VERSION,
   LIQUIBASE_DTD_VERSION,
   HIBERNATE_VERSION,
+  H2_VERSION,
+  H2_R2DBC_VERSION,
   JACOCO_VERSION,
   JACKSON_DATABIND_NULLABLE_VERSION,
 

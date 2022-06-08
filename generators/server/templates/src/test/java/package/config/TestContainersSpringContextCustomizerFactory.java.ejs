@@ -145,7 +145,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                         }
                     }
     <%_ if (reactive) { _%>
-                    testValues = testValues.and("spring.r2dbc.url=" + devTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc") + "<%- getDBCExtraOption(devDatabaseType) %>");
+                    testValues = testValues.and("spring.r2dbc.url=" + devTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (devDatabaseTypeMysql) { %>.replace("mysql", "mariadb")<% } %> + "<%- getDBCExtraOption(devDatabaseType) %>");
                     testValues = testValues.and("spring.r2dbc.username=" + devTestContainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.r2dbc.password=" + devTestContainer.getTestContainer().getPassword());
                     testValues = testValues.and("spring.liquibase.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- getDBCExtraOption(devDatabaseType) %>" );
@@ -169,7 +169,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                         }
                     }
     <%_ if (reactive) { _%>
-                    testValues = testValues.and("spring.r2dbc.url=" + prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc") + "<%- getDBCExtraOption(prodDatabaseType) %>");
+                    testValues = testValues.and("spring.r2dbc.url=" + prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMysql) { %>.replace("mysql", "mariadb")<% } %> + "<%- getDBCExtraOption(prodDatabaseType) %>");
                     testValues = testValues.and("spring.r2dbc.username=" + prodTestContainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.r2dbc.password=" + prodTestContainer.getTestContainer().getPassword());
                     testValues = testValues.and("spring.liquibase.url=" + prodTestContainer.getTestContainer().getJdbcUrl()  + "<%- getDBCExtraOption(prodDatabaseType) %>");

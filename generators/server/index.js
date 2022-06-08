@@ -198,6 +198,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
         this.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
         this.JACOCO_VERSION = constants.JACOCO_VERSION;
+        this.H2_VERSION = constants.H2_VERSION;
+        this.H2_R2DBC_VERSION = constants.H2_R2DBC_VERSION;
 
         this.KAFKA_VERSION = constants.KAFKA_VERSION;
 
@@ -322,6 +324,13 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.loadServerConfig();
         this.loadPlatformConfig();
         this.loadTranslationConfig();
+      },
+      loadConstants() {
+        if (this.prodDatabaseTypeMariadb || this.prodDatabaseTypeMysql) {
+          // TODO Remove as soon as liquibase problems with mysql/mariadb are fixed
+          this.LIQUIBASE_VERSION = '4.6.1';
+          this.LIQUIBASE_DTD_VERSION = '4.6';
+        }
       },
     };
   }

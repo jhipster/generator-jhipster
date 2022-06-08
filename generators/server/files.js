@@ -1668,6 +1668,16 @@ const baseServerFiles = {
       ],
     },
     {
+      condition: ({ searchEngineElasticsearch, reactive }) => searchEngineElasticsearch && reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/ElasticsearchReactiveTestConfiguration.java',
+          renameTo: generator => `${generator.testDir}config/ElasticsearchReactiveTestConfiguration.java`,
+        },
+      ],
+    },
+    {
       condition: generator => generator.authenticationTypeJwt,
       path: SERVER_TEST_SRC_DIR,
       templates: [
