@@ -397,7 +397,7 @@ public class SecurityConfiguration {
 
             private Mono<Jwt> enrich(String token, Jwt jwt) {
                 // Only look up user information if identity claims are missing
-                if (jwt.getClaims().containsKey("given_name") && jwt.getClaims().containsKey("family_name")) {
+                if (jwt.hasClaim("given_name") && jwt.hasClaim("family_name")) {
                     return Mono.just(jwt);
                 }
                 // Retrieve user info from OAuth provider if not already loaded
