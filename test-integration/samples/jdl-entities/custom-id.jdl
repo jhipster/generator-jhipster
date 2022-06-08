@@ -169,3 +169,38 @@ relationship ManyToMany {
 
 filter UuidIdFiltering, UuidIdFilteringMapsId, UuidIdFilteringRelationship
 service UuidIdFiltering, UuidIdFilteringMapsId, UuidIdFilteringRelationship with serviceClass
+
+/*
+ * Custom named id with required relationships, mapstruct dtos and search
+ */
+@ChangelogDate(20200804035700)
+entity EntityCustomIdRequiredDTO {
+  @Id customId Long
+}
+
+@ChangelogDate(20200804035701)
+entity EntityCustomIdRequiredDTOMapsId {
+}
+
+@ChangelogDate(20200804035702)
+entity EntityCustomIdRequiredDTORel {
+  @Id relatedId Long
+}
+
+relationship OneToOne {
+  EntityCustomIdRequiredDTOMapsId to @Id EntityCustomIdRequiredDTO
+  EntityCustomIdRequiredDTORel{oneToOne required} to EntityCustomIdRequiredDTO{oneToOneBack}
+  EntityCustomIdRequiredDTORel{oneToOneMapsId required} to EntityCustomIdRequiredDTOMapsId{oneToOneMapsIdBack}
+}
+
+relationship ManyToOne {
+  EntityCustomIdRequiredDTORel{manyToOne required} to EntityCustomIdRequiredDTO{manyToOneBack}
+  EntityCustomIdRequiredDTORel{manyToOneMapsId required} to EntityCustomIdRequiredDTOMapsId{manyToOneMapsIdBack}
+}
+
+relationship ManyToMany {
+  EntityCustomIdRequiredDTORel{manyToMany required} to EntityCustomIdRequiredDTO{manyToManyBack}
+  EntityCustomIdRequiredDTORel{manyToManyMapsId required} to EntityCustomIdRequiredDTOMapsId{manyToManyMapsIdBack}
+}
+
+dto EntityCustomIdRequiredDTO, EntityCustomIdRequiredDTOMapsId, EntityCustomIdRequiredDTORel with mapstruct
