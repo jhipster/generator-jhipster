@@ -180,7 +180,7 @@ public class SecurityConfiguration {
     private final SecurityProblemSupport problemSupport;
     private final CorsWebFilter corsWebFilter;
 
-    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && !applicationTypeMicroservice) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && !applicationTypeMicroservice) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport, CorsWebFilter corsWebFilter) {
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
         this.clientRegistrationRepository = clientRegistrationRepository;
 <%_ } _%>
