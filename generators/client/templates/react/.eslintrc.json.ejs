@@ -34,7 +34,16 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "project": "./<% if (protractorTests) { %>tsconfig.e2e.json<% } else { %>tsconfig.test.json<% } %>"
+    "project": [
+      "./tsconfig.json",
+<%_ if (cypressTests) { _%>
+      "./<%= CLIENT_TEST_SRC_DIR %>cypress/tsconfig.json",
+<%_ } _%>
+<%_ if (protractorTests) { _%>
+      "./tsconfig.e2e.json",
+<%_ } _%>
+      "./tsconfig.test.json"
+    ]
   },
   "settings": {
     "react": {

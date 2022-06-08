@@ -36,5 +36,7 @@ module.exports = {
   reporters: ['default', ['jest-junit', { outputDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }]],
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: ['<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/**/@(*.)@(spec.ts)'],
-  testURL: 'http://localhost/',
+  testEnvironmentOptions: {
+    url: 'http://localhost/',
+  },
 };

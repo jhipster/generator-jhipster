@@ -19,6 +19,7 @@
 {
   "extends": "./tsconfig",
   "include": ["<%= MAIN_SRC_DIR %>app", "<%= MAIN_SRC_DIR %>microfrontend"],
+  "exclude": [],
   "compilerOptions": {
     "paths": {
 <%_ if (microfrontend && applicationTypeGateway) { _%>

@@ -101,7 +101,7 @@ return merge(
       /*
        ,
        Disabled due to https://github.com/jhipster/generator-jhipster/issues/16116
-       Can be enabled with @reduxjs/toolkit@>1.6.1 
+       Can be enabled with @reduxjs/toolkit@>1.6.1
       {
         enforce: 'pre',
         test: /\.jsx?$/,
@@ -127,7 +127,11 @@ return merge(
       SERVER_API_URL: JSON.stringify(environment.SERVER_API_URL),
     }),
     new ESLintPlugin({
-      extensions: ['js', 'ts', 'jsx', 'tsx']
+      baseConfig: {
+        parserOptions: {
+          project: ['../tsconfig.json'],
+        },
+      },
     }),
     new ForkTsCheckerWebpackPlugin(),
     new CopyWebpackPlugin({
@@ -141,7 +145,7 @@ return merge(
           globOptions: { ignore: ['**/index.html'] },
         },
         {
-          from: require.resolve('axios/dist/axios.min.js'), 
+          from: require.resolve('axios/dist/axios.min.js'),
           to: 'swagger-ui/',
         },
         { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
