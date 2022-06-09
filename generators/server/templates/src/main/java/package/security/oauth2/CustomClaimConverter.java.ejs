@@ -54,6 +54,7 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
 
     private final ClientRegistration registration;
 
+    // todo: optimize for scale https://github.com/jhipster/generator-jhipster/issues/18868
     private final Map<String, ObjectNode> users = new ConcurrentHashMap<>();
 
     public CustomClaimConverter(ClientRegistration registration, RestTemplate restTemplate) {

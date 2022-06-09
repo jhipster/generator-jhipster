@@ -170,10 +170,7 @@ public class SecurityConfiguration {
 
     private final ReactiveClientRegistrationRepository clientRegistrationRepository;
 
-    // Warning from Rob Winch: caching in a hashmap could be bad since there is no expiry.
-    // Changing attributes will never get updated, and it can grow indefinitely (run out of memory).
-    // Ideally, we could use @Cacheable(cacheNames="users", key="#token") on the `enrich()` method,
-    // but @Cacheable doesn't work on reactive types. See github.com/spring-projects/spring-framework/issues/17920
+    // todo: optimize for scale https://github.com/jhipster/generator-jhipster/issues/18868
     private final Map<String, Mono<Jwt>> users = new ConcurrentHashMap<>();
 
   <%_ } _%>
