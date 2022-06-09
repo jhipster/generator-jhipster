@@ -391,13 +391,10 @@ class JDLProcessor {
     statistics.sendSubGenEvent('generator', 'import-jdl');
   }
 
-  generateWorkspaces(options) {
-    if (!options.workspaces || !multiplesApplications(this)) {
-      return Promise.resolve();
-    }
+  generateWorkspaces(options, generateJdl) {
     return EnvironmentBuilder.createDefaultBuilder()
       .getEnvironment()
-      .run('jhipster:workspaces', { workspaces: false, ...options, importState: this.importState, skipInstall: true });
+      .run('jhipster:workspaces', { workspaces: false, ...options, importState: this.importState, generateJdl });
   }
 
   generateApplications() {
@@ -532,18 +529,25 @@ module.exports = (jdlFiles, options = {}, env) => {
     jdlImporter.sendInsight();
     jdlImporter.config();
 
-    return jdlImporter
-      .generateWorkspaces(options)
-      .then(() => jdlImporter.generateApplications())
-      .then(() => jdlImporter.generateEntities(env))
-      .then(() => jdlImporter.generateDeployments())
-      .then(() => {
-        if (options.workspaces) {
-          logger.log(`${chalk.green.bold("'npm install'")} was skipped due to workspaces. Run it by yourself.`);
-        }
-        printSuccess();
-        return jdlFiles;
-      });
+    const generateJdl = () =>
+      jdlImporter
+        .generateApplications()
+        .then(() => jdlImporter.generateEntities(env))
+        .then(() => jdlImporter.generateDeployments());
+
+    let generation;
+    if (!options.workspaces || !multiplesApplications(jdlImporter)) {
+      generation = generateJdl();
+    } else {
+      // Wrap generation inside workspaces root generation.
+      // generate applications after git initialization and before root npm install
+      generation = jdlImporter.generateWorkspaces(options, generateJdl);
+    }
+
+    return generation.then(() => {
+      printSuccess();
+      return jdlFiles;
+    });
   } catch (e) {
     logger.error(`Error during import-jdl: ${e}`, e);
     return Promise.reject(new Error(`Error during import-jdl: ${e.message}`));

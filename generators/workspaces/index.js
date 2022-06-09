@@ -20,7 +20,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { CONFIGURING_PRIORITY, LOADING_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY, INSTALL_PRIORITY } =
+const { INITIALIZING_PRIORITY, CONFIGURING_PRIORITY, LOADING_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
   require('../../lib/constants/priorities.cjs').compat;
 
 const { GENERATOR_JHIPSTER } = require('../generator-constants');
@@ -58,6 +58,26 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     this.loadRuntimeOptions();
+  }
+
+  _initializing() {
+    return {
+      initializeGit() {
+        if (!this.options.monorepository) return;
+        this.checkGit();
+        this.initializeGitRepository();
+      },
+
+      generateJdl() {
+        const { generateJdl } = this.options;
+        return generateJdl();
+      },
+    };
+  }
+
+  get [INITIALIZING_PRIORITY]() {
+    if (this.delegateToBlueprint) return {};
+    return this._initializing();
   }
 
   _configuring() {
@@ -126,6 +146,11 @@ module.exports = class extends BaseBlueprintGenerator {
         this.packages = this.workspacesConfig.packages;
         this.env.options.nodePackageManager = this.workspacesConfig.clientPackageManager;
       },
+      loadDependabotPackageJson() {
+        if (!this.generateWorkspaces) return;
+
+        this._.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
+      },
     };
   }
 
@@ -161,11 +186,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _postWriting() {
     return {
-      loadDependabotPackageJson() {
-        if (!this.generateWorkspaces) return;
-
-        this._.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
-      },
       generatePackageJson() {
         if (!this.generateWorkspaces) return;
 
@@ -192,27 +212,6 @@ module.exports = class extends BaseBlueprintGenerator {
   get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._postWriting();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _install() {
-    return {
-      validateGit() {
-        if (!this.options.monorepository) return;
-        this.checkGit();
-      },
-
-      /** Initialize git repository before package manager install for commit hooks */
-      initGitRepo() {
-        if (!this.options.monorepository) return;
-        this.initializeGitRepository();
-      },
-    };
-  }
-
-  get [INSTALL_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._install();
   }
 
   _detectNodePackageManager() {
