@@ -1,0 +1,90 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.security.oauth2;
+
+import <%= packageName %>.IntegrationTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static <%= packageName %>.test.util.OAuth2TestUtil.authenticationToken;
+import static <%= packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockAuthentication;
+
+/**
+ * This test ensures that a JWT passed in without identity claims
+ * will be populated with them from the /userinfo endpoint
+ */
+@IntegrationTest
+class ResourceServerClaimsIT {
+
+    private Map<String, Object> claims;
+    private static final String USERNAME = "admin";
+    private static final String NAME = "John";
+    private static final String FAMILY_NAME = "Doe";
+    private static final String FULL_NAME = NAME + " " + FAMILY_NAME;
+    private static final String NAME_SUFFIX = "Sr.";
+    private static final String EMAIL = "john.doe@gmail.com";
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    @Autowired
+    private ReactiveOAuth2AuthorizedClientService authorizedClientService;
+
+    @Autowired
+    private ClientRegistration clientRegistration;
+
+    @BeforeEach
+    public void setup() {
+        claims = new HashMap<>();
+        claims.put("sub", USERNAME);
+        claims.put("email", EMAIL);
+    }
+
+    @Test
+    void testConvert() {
+        webTestClient
+            .mutateWith(
+                mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims)))
+            )
+            .mutateWith(csrf())
+            .get()
+            .uri("/api/account")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .expectBody()
+            .jsonPath("$.login").isEqualTo("jane")
+            .jsonPath("$.email").isEqualTo(EMAIL)
+            .jsonPath("$.firstName").isEqualTo(NAME)
+            .jsonPath("$.lastName").isEqualTo(FAMILY_NAME);
+    }
+}
