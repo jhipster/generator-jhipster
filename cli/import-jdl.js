@@ -144,6 +144,7 @@ function writeApplicationConfig(applicationWithEntities, basePath) {
  * @param {Promise}
  */
 function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
+  const { workspaces } = generatorOptions;
   generatorOptions = {
     ...generatorOptions,
     // Remove jdl command exclusive options
@@ -161,6 +162,9 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     commandName: undefined,
     fromJdl: true,
   };
+  if (workspaces) {
+    generatorOptions.skipInstall = true;
+  }
   if (!generatorOptions.blueprints) {
     delete generatorOptions.blueprints;
   }
@@ -393,7 +397,7 @@ class JDLProcessor {
     }
     return EnvironmentBuilder.createDefaultBuilder()
       .getEnvironment()
-      .run('jhipster:workspaces', { workspaces: false, ...options, importState: this.importState });
+      .run('jhipster:workspaces', { workspaces: false, ...options, importState: this.importState, skipInstall: true });
   }
 
   generateApplications() {
@@ -534,6 +538,9 @@ module.exports = (jdlFiles, options = {}, env) => {
       .then(() => jdlImporter.generateEntities(env))
       .then(() => jdlImporter.generateDeployments())
       .then(() => {
+        if (options.workspaces) {
+          logger.log(`${chalk.green.bold("'npm install'")} was skipped due to workspaces. Run it by yourself.`);
+        }
         printSuccess();
         return jdlFiles;
       });
