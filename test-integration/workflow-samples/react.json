@@ -13,7 +13,7 @@
     {
       "name": "react-gradle-mysql-es-noi18n-mapsid",
       "app-sample": "react-gradle-mysql-es-noi18n-mapsid",
-      "entity": "sqlfull",
+      "entity": "sql",
       "gradle": 1
     },
     {
