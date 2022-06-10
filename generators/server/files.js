@@ -640,16 +640,6 @@ const baseServerFiles = {
         },
       ],
     },
-    {
-      condition: generator => generator.reactive && generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/oauth2/ResourceServerClaimsIT.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/ResourceServerClaimsIT.java`,
-        },
-      ],
-    },
   ],
   serverJavaGateway: [
     {
