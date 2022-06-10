@@ -568,6 +568,16 @@ Object {
         },
       ],
     },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/oauth2/ResourceServerClaimsIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
   ],
   "serverJavaConfig": Array [
     Object {
