@@ -21,6 +21,7 @@ name: <%= baseName.toLowerCase() %>
 services:
   cassandra:
     image: <%= DOCKER_CASSANDRA %>
+    container_name: <%= baseName.toLowerCase() %>-cassandra
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
     # If you want to expose these ports outside your dev PC,

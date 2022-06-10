@@ -1,6 +1,6 @@
-version: '2'
+name: 'samplemysql'
 services:
-    samplemysql-elasticsearch:
+    elasticsearch:
         image: elasticsearch:2.4.6
         # volumes:
         #     - ~/volumes/jhipster/sampleMysql/elasticsearch/:/usr/share/elasticsearch/data/

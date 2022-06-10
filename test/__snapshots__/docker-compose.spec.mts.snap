@@ -225,6 +225,7 @@ eureka:
       - 05-cassandra/src/main/resources/config/cql:/cql:ro
   mscassandra-cassandra:
     image: cassandra:3.11.13
+    container-name: mscassandra-cassandra
 
   jhipster-registry:
     image: jhipster/jhipster-registry:v7.4.0

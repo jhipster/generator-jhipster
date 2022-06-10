@@ -142,7 +142,7 @@ module.exports = class extends BaseDockerGenerator {
           const path = this.destinationPath(this.directoryPath + appConfig.appFolder);
           // Add application configuration
           const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
-          const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
+          const yamlConfig = yaml.services.app;
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
             this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {
@@ -168,7 +168,7 @@ module.exports = class extends BaseDockerGenerator {
             yamlConfig.environment.push('SERVER_PORT=80'); // to simplify service resolution in docker/k8s
           }
 
-          parentConfiguration[`${lowercaseBaseName}`] = yamlConfig;
+          parentConfiguration[lowercaseBaseName] = yamlConfig;
 
           // Add database configuration
           const database = appConfig.databaseTypeSql ? appConfig.prodDatabaseType : appConfig.databaseType;
@@ -176,19 +176,14 @@ module.exports = class extends BaseDockerGenerator {
             const relativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`));
             const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
-            let databaseYamlConfig = databaseYaml.services[databaseServiceName];
+            let databaseYamlConfig = databaseYaml.services[database];
             // Don't export database ports
             delete databaseYamlConfig.ports;
 
             if (database === CASSANDRA) {
               // migration service config
-              const cassandraMigrationConfig = databaseYaml.services[`${databaseServiceName}-migration`];
-
-              // replace script with prod
-              cassandraMigrationConfig.environment = [
-                ...cassandraMigrationConfig.environment.filter(envVariable => !envVariable.includes('CREATE_KEYSPACE_SCRIPT=')),
-                'CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql',
-              ];
+              const cassandraMigrationYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/cassandra-migration.yml`));
+              const cassandraMigrationConfig = cassandraMigrationYaml.services[`${database}-migration`];
               cassandraMigrationConfig.build.context = relativePath;
               const cqlFilesRelativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/resources/config/cql`));
               cassandraMigrationConfig.volumes[0] = `${cqlFilesRelativePath}:/cql:ro`;
@@ -202,16 +197,16 @@ module.exports = class extends BaseDockerGenerator {
 
             if (appConfig.clusteredDb) {
               const clusterDbYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`));
-              const dbNodeConfig = clusterDbYaml.services[`${databaseServiceName}-node`];
+              const dbNodeConfig = clusterDbYaml.services[`${database}-node`];
               dbNodeConfig.build.context = relativePath;
-              databaseYamlConfig = clusterDbYaml.services[databaseServiceName];
+              databaseYamlConfig = clusterDbYaml.services[database];
               delete databaseYamlConfig.ports;
               if (database === COUCHBASE) {
                 databaseYamlConfig.build.context = relativePath;
               }
               parentConfiguration[`${databaseServiceName}-node`] = dbNodeConfig;
               if (database === MONGODB) {
-                parentConfiguration[`${databaseServiceName}-config`] = clusterDbYaml.services[`${databaseServiceName}-config`];
+                parentConfiguration[`${databaseServiceName}-config`] = clusterDbYaml.services[`${database}-config`];
               }
             }
 
@@ -221,7 +216,7 @@ module.exports = class extends BaseDockerGenerator {
           const searchEngine = appConfig.searchEngine;
           if (searchEngine === ELASTICSEARCH) {
             const searchEngineYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${searchEngine}.yml`));
-            const searchEngineConfig = searchEngineYaml.services[`${lowercaseBaseName}-${searchEngine}`];
+            const searchEngineConfig = searchEngineYaml.services[searchEngine];
             delete searchEngineConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-${searchEngine}`] = searchEngineConfig;
           }
@@ -230,7 +225,7 @@ module.exports = class extends BaseDockerGenerator {
           if (cacheProvider === MEMCACHED) {
             this.useMemcached = true;
             const memcachedYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/memcached.yml`));
-            const memcachedConfig = memcachedYaml.services[`${lowercaseBaseName}-memcached`];
+            const memcachedConfig = memcachedYaml.services.memcached;
             delete memcachedConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
           }
@@ -239,7 +234,7 @@ module.exports = class extends BaseDockerGenerator {
           if (cacheProvider === REDIS) {
             this.useRedis = true;
             const redisYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/redis.yml`));
-            const redisConfig = redisYaml.services[`${lowercaseBaseName}-redis`];
+            const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
           }

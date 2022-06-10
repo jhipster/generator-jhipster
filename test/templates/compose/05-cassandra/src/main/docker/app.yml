@@ -1,18 +1,18 @@
-version: '2'
+name: 'mscassandra'
 services:
-    mscassandra-app:
+    app:
         image: mscassandra
         environment:
             - SPRING_PROFILES_ACTIVE=prod
             - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
             - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
-    mscassandra-cassandra:
+    cassandra:
         build:
             context: .
             dockerfile: cassandra/Cassandra-Cluster.Dockerfile
         environment:
-            - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
+            - CASSANDRA_CONTACT_POINT=cassandra
         # volumes:
         #     - ~/volumes/jhipster/mscassandra/cassandra/:/var/lib/cassandra/data
         ports:
@@ -21,13 +21,13 @@ services:
             - 7199:7199
             - 9042:9042
             - 9160:9160
-    mscassandra-cassandra-node:
+    cassandra-node:
         image: <%= DOCKER_CASSANDRA %>
         environment:
             - CASSANDRA_SEEDS=mscassandra-cassandra
-    mscassandra-cassandra-migration:
+    cassandra-migration:
         environment:
-            - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
+            - CASSANDRA_CONTACT_POINT=cassandra
             - USER=docker-cassandra-migration
             # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
             - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql

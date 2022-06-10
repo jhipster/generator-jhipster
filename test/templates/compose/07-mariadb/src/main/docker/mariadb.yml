@@ -1,6 +1,6 @@
-version: '2'
+name: 'msmariadb'
 services:
-    msmariadb-mariadb:
+    mariadb:
         image: mariadb:10.8.3
         # volumes:
         #     - ~/volumes/jhipster/msmysql/mysql/:/var/lib/mysql/

@@ -20,6 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   cassandra:
+    container_name: <%= baseName.toLowerCase() %>-cassandra
     image: <%= DOCKER_CASSANDRA %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
