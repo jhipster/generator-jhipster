@@ -134,7 +134,7 @@ jobs:
         run: npm run ci:frontend:test
       - name: 'TESTS: packaging'
         run: npm run ci:e2e:package
-      - name: 'TESTS: Start docker-compose containers'
+      - name: 'TESTS: Start docker compose containers'
         run: npm run ci:e2e:prepare
       - name: 'E2E: Run'
         id: e2e

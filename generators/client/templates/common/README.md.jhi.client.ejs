@@ -52,7 +52,7 @@ If you are using <%= cacheProvider %> as a cache, you will have to launch a cach
 To start your cache server, run:
 
 ```
-docker-compose -f src/main/docker/<%= cacheProviderHazelcast?'hazelcast-management-center':cacheProvider %>.yml up -d
+docker compose -f src/main/docker/<%= cacheProviderHazelcast?'hazelcast-management-center':cacheProvider %>.yml up -d
 ```
 
     <%_ if (cacheProviderRedis) { _%>
@@ -203,7 +203,7 @@ and can be run by starting Spring Boot in one terminal (`<% if (buildToolMaven) 
 
 #### Lighthouse audits
 
-You can execute automated [lighthouse audits][https://developers.google.com/web/tools/lighthouse/] with [cypress audits][https://github.com/mfrachet/cypress-audit] by running `<%= clientPackageManager %> run e2e:cypress:audits`. 
+You can execute automated [lighthouse audits][https://developers.google.com/web/tools/lighthouse/] with [cypress audits][https://github.com/mfrachet/cypress-audit] by running `<%= clientPackageManager %> run e2e:cypress:audits`.
 You should only run the audits when your application is packaged with the production profile.
 The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/lhreport.html`<% } else { %>`build/cypress/lhreport.html`<% } %>
   <%_ } _%>

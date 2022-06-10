@@ -135,7 +135,7 @@ module.exports = class extends BaseGenerator {
 
       checkDockerCompose() {
         const done = this.async();
-        shelljs.exec('docker-compose -v', { silent: true }, (err, stdout, stderr) => {
+        shelljs.exec('docker compose version', { silent: true }, (err, stdout, stderr) => {
           if (!err) {
             console.log(stdout);
           }

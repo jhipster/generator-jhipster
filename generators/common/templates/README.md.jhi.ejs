@@ -85,7 +85,7 @@ For further instructions on how to develop with JHipster, have a look at [Using 
 JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
 
 ```
-docker-compose -f src/main/docker/jhipster-control-center.yml up
+docker compose -f src/main/docker/jhipster-control-center.yml up
 ```
 
 <%_ if (authenticationTypeOauth2) { -%>
@@ -96,7 +96,7 @@ Congratulations! You've selected an excellent way to secure your JHipster applic
 To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up and running. The JHipster Team has created a Docker container for you that has the default users and roles. Start Keycloak using the following command.
 
 ```
-docker-compose -f src/main/docker/keycloak.yml up
+docker compose -f src/main/docker/keycloak.yml up
 ```
 
 The security settings in `src/main/resources/config/application.yml` are configured for this image.
@@ -256,7 +256,7 @@ See Cypress' documentation for setting OS [environment variables](https://docs.c
     <%_ } _%>
 Then implements the generated delegate classes with `@Service` classes.
 
-To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
+To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
 
 Refer to [Doing API-First development][] for more details.
 <%_ } _%>
@@ -358,7 +358,7 @@ The coverage report is generated under `./coverage/lcov-report/`
 Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
 
 ```
-docker-compose -f src/main/docker/sonar.yml up -d
+docker compose -f src/main/docker/sonar.yml up -d
 ```
 
 Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
@@ -393,13 +393,13 @@ You can use Docker to improve your JHipster development experience. A number of 
 For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
 ```
-docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
+docker compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
 ```
 
 To stop it and remove the container, run:
 
 ```
-docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
+docker compose -f src/main/docker/<%= prodDatabaseType %>.yml down
 ```
 <%_ } _%>
 
@@ -419,7 +419,7 @@ npm run java:docker:arm64
 Then run:
 
 ```
-docker-compose -f src/main/docker/app.yml up -d
+docker compose -f src/main/docker/app.yml up -d
 ```
 
 When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental `Use the new Virtualization framework` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).

@@ -22,7 +22,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -150,7 +150,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -280,7 +280,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -445,7 +445,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -609,7 +609,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -778,7 +778,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -895,7 +895,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -1012,7 +1012,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -1245,7 +1245,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -1362,7 +1362,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -1422,7 +1422,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -1521,7 +1521,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -1622,7 +1622,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
@@ -1721,7 +1721,7 @@ Object {
 
 ## Usage
 
-Launch all your infrastructure by running: \`docker-compose up -d\`.
+Launch all your infrastructure by running: \`docker compose up -d\`.
 
 ## Configured Docker services
 
