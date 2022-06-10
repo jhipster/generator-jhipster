@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+name: <%= baseName.toLowerCase() %>
 services:
-  <%= baseName.toLowerCase() %>-app:
+  app:
     image: <%= baseName.toLowerCase() %>
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
@@ -112,7 +112,7 @@ _%>
       - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
 <%_ } _%>
 <%_ if (prodDatabaseTypeMysql) { _%>
-  <%= baseName.toLowerCase() %>-mysql:
+  mysql:
     image: <%= DOCKER_MYSQL %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
@@ -128,7 +128,7 @@ _%>
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 <%_ } _%>
 <%_ if (prodDatabaseTypeMariadb) { _%>
-  <%= baseName.toLowerCase() %>-mariadb:
+  mariadb:
     image: <%= DOCKER_MARIADB %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
@@ -144,7 +144,7 @@ _%>
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 <%_ } _%>
 <%_ if (prodDatabaseTypePostgres) { _%>
-  <%= baseName.toLowerCase() %>-postgresql:
+  postgresql:
     image: <%= DOCKER_POSTGRESQL %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/postgresql/:/var/lib/postgresql/data/
@@ -158,7 +158,7 @@ _%>
       - 127.0.0.1:5432:5432
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-  <%= baseName.toLowerCase() %>-mongodb:
+  mongodb:
     image: <%= DOCKER_MONGODB %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
@@ -168,7 +168,7 @@ _%>
     #   - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
-  <%= baseName.toLowerCase() %>-couchbase:
+  couchbase:
     build:
       context: .
       dockerfile: couchbase/Couchbase.Dockerfile
@@ -186,7 +186,7 @@ _%>
     #   - ~/volumes/jhipster/<%= baseName.toLowerCase() %>/couchbase/:/opt/couchbase/var
 <%_ } _%>
 <%_ if (prodDatabaseTypeMssql) { _%>
-  <%= baseName.toLowerCase() %>-mssql:
+  mssql:
     image: <%= DOCKER_MSSQL %>
     # volumes are not supported on macOS
     # volumes:
@@ -204,7 +204,7 @@ _%>
     command: /bin/bash -c '/opt/mssql/bin/sqlservr & echo "wait $$MSSQL_SLEEP sec for DB to start "; sleep $$MSSQL_SLEEP; /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -d tempdb -q "EXIT(CREATE DATABASE $$MSSQL_DATABASE)"; wait;'
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
-  <%= baseName.toLowerCase() %>-neo4j:
+  neo4j:
     image: <%= DOCKER_NEO4J %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/neo4j/:/data
@@ -217,7 +217,7 @@ _%>
       - "127.0.0.1:7687:7687"
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-  <%= baseName.toLowerCase() %>-cassandra:
+  cassandra:
     image: <%= DOCKER_CASSANDRA %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
@@ -229,7 +229,7 @@ _%>
       - 127.0.0.1:7199:7199
       - 127.0.0.1:9042:9042
       - 127.0.0.1:9160:9160
-  <%= baseName.toLowerCase() %>-cassandra-migration:
+  cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
       - USER=docker-cassandra-migration
@@ -242,7 +242,7 @@ _%>
       - ../resources/config/cql:/cql:ro
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
-  <%= baseName.toLowerCase() %>-memcached:
+  memcached:
     image: <%= DOCKER_MEMCACHED %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
@@ -250,7 +250,7 @@ _%>
       - 127.0.0.1:11211:11211
 <%_ } _%>
 <%_ if (cacheProviderRedis) { _%>
-  <%= baseName.toLowerCase() %>-redis:
+  redis:
     image: <%= DOCKER_REDIS %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
@@ -258,7 +258,7 @@ _%>
       - 127.0.0.1:6379:6379
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-  <%= baseName.toLowerCase() %>-elasticsearch:
+  elasticsearch:
     image: <%= DOCKER_ELASTICSEARCH %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
