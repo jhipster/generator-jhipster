@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster server needles generated project should match state snapshot 1`] = `
+exports[`JHipster spring-boot-cassandra needles generated project should match state snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -71,6 +71,24 @@ Object {
   "src/main/docker/app.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/cassandra-cluster.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra-migration.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra/Cassandra-Migration.Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra/scripts/autoMigrate.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/cassandra/scripts/execute-cql.sh": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -87,9 +105,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
@@ -137,9 +152,6 @@ Object {
   "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -161,12 +173,6 @@ Object {
   "src/main/java/com/mycompany/myapp/config/package-info.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/Authority.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/domain/User.java": Object {
     "stateCleared": "modified",
   },
@@ -174,9 +180,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/repository/UserRepository.java": Object {
@@ -192,9 +195,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/SecurityUtils.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/security/SpringSecurityAuditorAware.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/UserNotActivatedException.java": Object {
@@ -302,9 +302,6 @@ Object {
   "src/main/java/com/mycompany/myapp/web/rest/vm/package-info.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/.h2.server.properties": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/banner.txt": Object {
     "stateCleared": "modified",
   },
@@ -320,19 +317,22 @@ Object {
   "src/main/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
+  "src/main/resources/config/cql/changelog/00000000000000_create-tables.cql": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
+  "src/main/resources/config/cql/changelog/00000000000001_insert_default_users.cql": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
+  "src/main/resources/config/cql/changelog/README.md": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
+  "src/main/resources/config/cql/create-keyspace-prod.cql": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/master.xml": Object {
+  "src/main/resources/config/cql/create-keyspace.cql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/cql/drop-keyspace.cql": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -404,6 +404,9 @@ Object {
   "src/main/webapp/i18n/en/user-management.json": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/CassandraKeyspaceIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
@@ -413,16 +416,13 @@ Object {
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": Object {
+  "src/test/java/com/mycompany/myapp/config/CassandraTestContainer.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": Object {
+  "src/test/java/com/mycompany/myapp/config/EmbeddedCassandra.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
@@ -437,16 +437,7 @@ Object {
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/repository/timezone/DateTimeWrapper.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/security/DomainUserDetailsServiceIT.java": Object {
@@ -501,12 +492,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/spring.factories": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/config/application-testdev.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/config/application-testprod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {

@@ -16,10 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { parse: parseYaml, stringify: stringifyYaml } = require('yaml');
+const _ = require('lodash');
+
 const JHipsterBaseBlueprintGenerator = require('./generator-base-blueprint.cjs');
 
 const { PRIORITY_NAMES, PRIORITY_PREFIX } = require('./priorities.cjs');
 
+const { merge } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
   PRIORITY_NAMES;
 
@@ -60,6 +64,36 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   constructor(args, options, features) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
+  }
+
+  /**
+   * Convert value to a yaml and write to destination
+   * @param {string} filepath
+   * @param {Record<string | number, any>} value
+   */
+  writeDestinationYaml(filepath, value) {
+    this.writeDestination(filepath, stringifyYaml(value));
+  }
+
+  /**
+   * Merge value to an existing yaml and write to destination
+   * Removes every comment (due to parsing/merging process) except the at the top of the file.
+   * @param {string} filepath
+   * @param {Record<string | number, any>} value
+   */
+  mergeDestinationYaml(filepath, value) {
+    this.editFile(filepath, content => {
+      const lines = content.split('\n');
+      const headerComments = [];
+      lines.find(line => {
+        if (line.startsWith('#')) {
+          headerComments.push(line);
+          return false;
+        }
+        return true;
+      });
+      return headerComments.join('\n').concat('\n', stringifyYaml(merge(parseYaml(content), value)));
+    });
   }
 
   /**

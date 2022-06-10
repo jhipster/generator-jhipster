@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const BaseGenerator = require('../base/index.cjs');
+const BaseGenerator = require('../base-application/index.cjs');
 
 const cleanup = require('../cleanup.cjs');
 const prompts = require('./prompts.cjs');

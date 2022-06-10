@@ -16,9 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const _ = require('lodash');
+
 const BaseGenerator = require('../base/index.cjs');
 const { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } = require('./priorities.cjs');
 const SharedData = require('../../lib/support/shared-data.cjs');
+const { JHIPSTER_CONFIG_DIR } = require('../generator-constants.cjs');
 
 const {
   LOADING,
@@ -93,6 +96,24 @@ class BaseApplicationGenerator extends BaseGenerator {
       this.debug('Queueing entity tasks');
       this.queueEntityTasks();
     });
+
+    if (this.options.applicationWithEntities) {
+      // Write new definitions to memfs
+      this.config.set({
+        ...this.config.getAll(),
+        ...this.options.applicationWithEntities.config,
+      });
+      if (this.options.applicationWithEntities.entities) {
+        const entities = this.options.applicationWithEntities.entities.map(entity => {
+          const entityName = _.upperFirst(entity.name);
+          const file = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
+          this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
+          return entityName;
+        });
+        this.jhipsterConfig.entities = [...new Set((this.jhipsterConfig.entities || []).concat(entities))];
+      }
+      delete this.options.applicationWithEntities;
+    }
   }
 
   /**

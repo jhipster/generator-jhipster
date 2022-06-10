@@ -1,10 +1,12 @@
 import assert from 'yeoman-assert';
-import helpers from 'yeoman-test';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { join } from 'path';
+
 import monitoringTypes from '../jdl/jhipster/monitoring-types';
 import applicationTypes from '../jdl/jhipster/application-types';
 import createMockedConfig from './support/mock-config.cjs';
 import { getGenerator } from './support/index.mjs';
+import { skipPrettierHelpers as helpers } from './utils/utils.mjs';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE, MONOLITH } = applicationTypes;
@@ -22,10 +24,39 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(env => {
+          env.fs.write(
+            join(env.cwd, '01-gateway', '.yo-resolve'),
+            `.yo-rc.json=force
+!src/main/docker/**=skip
+`
+          );
         })
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          importState: {
+            exportedApplicationsWithEntities: {
+              '01-gateway': {
+                config: {
+                  applicationType: 'gateway',
+                  baseName: 'jhgate',
+                  databaseType: 'sql',
+                  prodDatabaseType: 'mysql',
+                  serviceDiscoveryType: 'eureka',
+                  serverPort: 8080,
+                },
+              },
+            },
+          },
+        })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,

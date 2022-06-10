@@ -113,6 +113,9 @@ Object {
   "src/main/docker/prometheus/prometheus.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -1526,6 +1529,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {

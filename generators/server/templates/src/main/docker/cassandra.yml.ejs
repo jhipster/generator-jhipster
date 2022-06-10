@@ -37,7 +37,7 @@ services:
       - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
       - USER=docker-cassandra-migration
       # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
-      - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql
+      - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
     build:
       context: .
       dockerfile: cassandra/Cassandra-Migration.Dockerfile

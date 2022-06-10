@@ -40,7 +40,7 @@ describe(`JHipster ${generator} needles`, () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
 
-    describe('using insertContentIntoApplicationProperties needle', () => {
+    describe('insertContentIntoApplicationProperties needle', () => {
       it('with a non existing needle', () => {
         const application = runResult.generator.sharedData.getApplication();
         expect(() => insertContentIntoApplicationProperties(runResult.generator, application, { foo: 'foo' })).toThrow(

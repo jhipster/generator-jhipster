@@ -20,6 +20,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const { GENERATOR_APP } = require('../generator-list.cjs');
+
 const { GENERATOR_JHIPSTER } = require('../generator-constants.cjs');
 const {
   DeploymentTypes: { DOCKERCOMPOSE },
@@ -71,9 +73,11 @@ module.exports = class extends BaseGenerator {
         this.initializeGitRepository();
       },
 
-      generateJdl() {
+      async generateJdl() {
         const { generateJdl } = this.options;
-        return generateJdl();
+        if (generateJdl) {
+          await generateJdl();
+        }
       },
     };
   }
@@ -83,22 +87,29 @@ module.exports = class extends BaseGenerator {
     return this.initializing;
   }
 
-  get configuring() {
+  get default() {
     return {
       async configureUsingImportState() {
         const importState = this.options.importState;
         if (!importState || !this.generateWorkspaces) return;
 
-        const applications = importState.exportedApplicationsWithEntities;
-        const packages = Object.keys(applications);
-        const clientPackageManager = applications[packages[0]].config.clientPackageManager;
-        const dockerCompose = importState.exportedDeployments.some(
+        const applications = Object.entries(importState.exportedApplicationsWithEntities ?? {});
+        let clientPackageManager;
+        if (applications.length > 0) {
+          clientPackageManager = applications[0][1].config.clientPackageManager;
+          if (this.options.generateApplications) {
+            for (const [appName, applicationWithEntities] of applications) {
+              await this.composeWithJHipster(GENERATOR_APP, { destinationRoot: this.destinationPath(appName), applicationWithEntities });
+            }
+          }
+        }
+        this.workspacesConfig.clientPackageManager = clientPackageManager || 'npm';
+        const dockerCompose = importState.exportedDeployments?.some(
           deployment => deployment[GENERATOR_JHIPSTER].deploymentType === DOCKERCOMPOSE
         );
 
         this.workspacesConfig.dockerCompose = dockerCompose;
-        this.workspacesConfig.packages = packages;
-        this.workspacesConfig.clientPackageManager = clientPackageManager;
+        this.workspacesConfig.packages = applications.map(([appName]) => appName);
       },
 
       async configureUsingFiles() {
@@ -132,16 +143,7 @@ module.exports = class extends BaseGenerator {
 
         this.workspacesConfig.clientPackageManager = this._detectNodePackageManager();
       },
-    };
-  }
 
-  get [BaseGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
-  }
-
-  get loading() {
-    return {
       async loadConfig() {
         if (!this.generateWorkspaces) return;
 
@@ -157,9 +159,9 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.LOADING]() {
+  get [BaseBlueprintGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.default;
   }
 
   get writing() {

@@ -24,7 +24,7 @@ import fieldUtils from '../../utils/field.cjs';
 import relationshipUtils from '../../utils/relationship.cjs';
 import utils from '../../utils/index.cjs';
 import userUtils from '../../utils/user.cjs';
-import constants from '../generator-constants.cjs';
+import { DOCKER_DIR, NODE_VERSION } from '../generator-constants.mjs';
 import type { CommonClientServerApplication } from './types.js';
 
 const { prepareEntityForTemplates } = entityUtils;
@@ -33,7 +33,6 @@ const { prepareRelationshipForTemplates } = relationshipUtils;
 const { stringify } = utils;
 const { createUserEntity } = userUtils;
 const { upperFirst } = _;
-const { NODE_VERSION } = constants;
 
 /**
  * @class
@@ -82,6 +81,7 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
 
         application.nodePackageManager = 'npm';
         application.nodeDestinationVersion = NODE_VERSION;
+        application.dockerServicesDir = DOCKER_DIR;
 
         // TODO v8 drop the following variables
         const anyApplication = application as any;

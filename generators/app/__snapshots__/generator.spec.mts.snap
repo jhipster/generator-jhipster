@@ -144,6 +144,7 @@ Object {
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgres": false,
   "devServerPort": 4200,
+  "dockerServicesDir": "src/main/docker/",
   "domains": Array [
     "com.mycompany.myapp",
   ],
@@ -393,6 +394,7 @@ Object {
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgres": false,
   "devServerPort": 4200,
+  "dockerServicesDir": "src/main/docker/",
   "domains": Array [
     "com.mycompany.myapp",
   ],
@@ -641,6 +643,7 @@ Object {
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgres": false,
   "devServerPort": undefined,
+  "dockerServicesDir": "src/main/docker/",
   "domains": Array [
     "com.mycompany.myapp",
   ],
