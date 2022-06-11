@@ -31,6 +31,7 @@ import org.springframework.data.domain.PageImpl;
   <%_ } _%>
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.elasticsearch.search.sort.SortBuilder;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
@@ -147,11 +148,9 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
 
     @Override
     public Page<<%= persistClass %>> search(Query query) {
-        List<<%= persistClass %>> hits = elasticsearchTemplate.search(query, <%= persistClass %>.class).map(SearchHit::getContent)
-            .stream()
-            .collect(Collectors.toList());
-
-        return new PageImpl<>(hits, query.getPageable(), hits.size());
+        SearchHits<<%= persistClass %>> searchHits = elasticsearchTemplate.search(query, <%= persistClass %>.class);
+        List<<%= persistClass %>> hits = searchHits.map(SearchHit::getContent).stream().collect(Collectors.toList());
+        return new PageImpl<>(hits, query.getPageable(), searchHits.getTotalHits());
     }
   <%_ } _%>
 
