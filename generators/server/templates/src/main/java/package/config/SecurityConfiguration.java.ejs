@@ -327,7 +327,7 @@ public class SecurityConfiguration {
   <%_ } _%>
 
     @Bean
-    JwtDecoder jwtDecoder(<%_ if (authenticationTypeOauth2 && applicationTypeMonolith) { _%>ClientRegistrationRepository clientRegistrationRepository, RestTemplateBuilder restTemplateBuilder<%_ } _%>) {
+    JwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ClientRegistrationRepository clientRegistrationRepository, RestTemplateBuilder restTemplateBuilder<%_ } _%>) {
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
@@ -335,7 +335,7 @@ public class SecurityConfiguration {
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 
         jwtDecoder.setJwtValidator(withAudience);
-  <%_ if (authenticationTypeOauth2 && applicationTypeMonolith) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
         jwtDecoder.setClaimSetConverter(new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplateBuilder.build()));
   <%_ } _%>
 
