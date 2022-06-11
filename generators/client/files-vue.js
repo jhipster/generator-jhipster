@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { replaceVueTranslations } = require('./transform-vue.cjs');
 const constants = require('../generator-constants');
-const utils = require('../utils');
 const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
 const { GATEWAY } = require('../../jdl/jhipster/application-types');
@@ -25,6 +25,9 @@ const { GATEWAY } = require('../../jdl/jhipster/application-types');
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, VUE_DIR } = constants;
 
 const vueFiles = {
+  _: {
+    transform: [replaceVueTranslations],
+  },
   common: [
     {
       templates: [
@@ -369,63 +372,14 @@ function cleanup() {
 }
 
 function writeFiles() {
-  // write Vue files
-  return this.writeFilesToDisk(vueFiles, 'vue');
-}
-
-function customizeFiles() {
-  if (!this.enableTranslation) {
-    utils.vueReplaceTranslation(this, [
-      'app/app.vue',
-      'app/core/home/home.vue',
-      'app/core/error/error.vue',
-      'app/core/jhi-footer/jhi-footer.vue',
-      'app/core/jhi-navbar/jhi-navbar.vue',
-      'app/core/ribbon/ribbon.vue',
-      'app/shared/jhi-item-count.vue',
-      'app/entities/entities-menu.vue',
-    ]);
-    if (this.withAdminUi) {
-      utils.vueReplaceTranslation(this, [
-        'app/admin/configuration/configuration.vue',
-        'app/admin/health/health.vue',
-        'app/admin/health/health-modal.vue',
-        'app/admin/logs/logs.vue',
-        'app/admin/metrics/metrics.vue',
-        'app/admin/metrics/metrics-modal.vue',
-      ]);
-    }
-    if (this.authenticationType !== OAUTH2) {
-      utils.vueReplaceTranslation(this, ['app/account/login-form/login-form.vue']);
-    }
-    if (!this.skipUserManagement) {
-      utils.vueReplaceTranslation(this, [
-        'app/account/change-password/change-password.vue',
-        'app/account/activate/activate.vue',
-        'app/account/register/register.vue',
-        'app/account/reset-password/init/reset-password-init.vue',
-        'app/account/reset-password/finish/reset-password-finish.vue',
-        'app/account/settings/settings.vue',
-        'app/admin/user-management/user-management.vue',
-        'app/admin/user-management/user-management-view.vue',
-        'app/admin/user-management/user-management-edit.vue',
-      ]);
-    }
-    if (this.authenticationType === SESSION && !this.skipUserManagement) {
-      utils.vueReplaceTranslation(this, ['app/account/sessions/sessions.vue']);
-    }
-    if (this.applicationType === GATEWAY && this.serviceDiscoveryType) {
-      utils.vueReplaceTranslation(this, ['app/admin/gateway/gateway.vue']);
-    }
-    if (this.websocket === SPRING_WEBSOCKET) {
-      utils.vueReplaceTranslation(this, ['app/admin/tracker/tracker.vue']);
-    }
-  }
+  return this.writeFiles({
+    sections: vueFiles,
+    rootTemplatesPath: 'vue',
+  });
 }
 
 module.exports = {
   files: vueFiles,
   cleanup,
   writeFiles,
-  customizeFiles,
 };

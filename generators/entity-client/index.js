@@ -23,7 +23,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
   require('../../lib/constants/priorities.cjs').compat;
 
-const { writeFiles, addToMenu, replaceTranslations } = require('./files');
+const { writeFiles, addToMenu } = require('./files');
 const { entityClientI18nFiles } = require('../entity-i18n/files');
 const { clientI18nFiles } = require('../languages/files');
 
@@ -178,11 +178,6 @@ module.exports = class extends BaseBlueprintGenerator {
       addToMenu() {
         if (this.skipClient) return undefined;
         return addToMenu.call(this);
-      },
-
-      replaceTranslations() {
-        if (this.skipClient) return undefined;
-        return replaceTranslations.call(this);
       },
     };
   }
