@@ -16,22 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-  let refreshMethod;
-  if (paginationPagination) {
-    refreshMethod = 'loadPage()';
-  } else if (paginationInfiniteScroll) {
-    refreshMethod = 'reset()';
-  } else if (paginationNo) {
-    refreshMethod = 'loadAll()';
-  }
-_%>
 <div>
     <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
         <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.title') %></span>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-info me-2" (click)="<%= refreshMethod %>" [disabled]="isLoading">
+            <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
                 <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.refreshListLabel') %></span>
             </button>
@@ -39,7 +29,7 @@ _%>
 
             <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityPage %>/new']">
                 <fa-icon icon="plus"></fa-icon>
-                <span <% if (searchEngine !== false) { %>class="hidden-sm-down" <% } %> <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createLabel">
+                <span <% if (searchEngine) { %>class="hidden-sm-down" <% } %> <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createLabel">
                 <%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.createLabel') %>
                 </span>
             </button>
@@ -70,8 +60,8 @@ _%>
     </form>
 <%_ } _%>
 
-<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-    <<%= jhiPrefixDashed %>-filter [filters]="filters" (filterChange)="<%= refreshMethod %>"></<%= jhiPrefixDashed %>-filter>
+<%_ if (jpaMetamodelFiltering || paginationNo) { _%>
+    <<%= jhiPrefixDashed %>-filter [filters]="filters" (filterChange)="load()"></<%= jhiPrefixDashed %>-filter>
 <%_ } _%>
 
     <div class="alert alert-warning" id="no-result" *ngIf="<%= entityInstancePlural %>?.length === 0">
@@ -81,18 +71,18 @@ _%>
     <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr<% if (!paginationNo) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="<%= !paginationInfiniteScroll ? 'loadPage()' : 'reset()'%>"<% } %>>
+                <tr <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
-                    <th scope="col"<% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%- this._getEntityClientTranslation(field.fieldTranslationKey) %></span><% if (!paginationNo) { %> <fa-icon <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon><% } %></th>
+                    <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>"><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%- this._getEntityClientTranslation(field.fieldTranslationKey) %></span><% if (!paginationNo) { %> <fa-icon <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon><% } %></th>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
-    <%_ if (relationship.relationshipManyToOne
-            || (relationship.relationshipOneToOne && relationship.ownerSide)
-            || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
-        const fieldName = "." + relationship.otherEntityField;
-    _%>
-                    <th scope="col" <% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"<% } %>><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.' + relationship.relationshipName) %></span><% if (!paginationNo) { %> <fa-icon icon="sort"></fa-icon><% } %></th>
-    <%_ } _%>
+  <%_ if (relationship.relationshipManyToOne
+    || (relationship.relationshipOneToOne && relationship.ownerSide)
+    || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
+    const fieldName = "." + relationship.otherEntityField;
+  _%>
+                    <th scope="col" <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.' + relationship.relationshipName) %></span> <fa-icon icon="sort"></fa-icon></th>
+  <%_ } _%>
 <%_ } _%>
                     <th scope="col"></th>
                 </tr>
@@ -167,7 +157,7 @@ _%>
                     <td class="text-end">
                         <div class="btn-group">
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
-    <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && (relationship.relationshipOneToMany || relationship.relationshipManyToMany) && !relationship.ownerSide) { 
+    <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && (relationship.relationshipOneToMany || relationship.relationshipManyToMany) && !relationship.ownerSide) {
         const otherEntityTranslationKey = i18nKeyPrefix + '.' + relationship.relationshipName;
     _%>
                             <button type="submit"
@@ -218,7 +208,7 @@ _%>
         </div>
 
         <div class="d-flex justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+            <ngb-pagination [collectionSize]="totalItems" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="navigateToPage($event)"></ngb-pagination>
         </div>
     </div>
 <%_ } _%>

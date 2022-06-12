@@ -303,6 +303,7 @@ const files = {
         'config/font-awesome-icons.ts',
         'config/error.constants.ts',
         'config/input.constants.ts',
+        'config/navigation.constants.ts',
         'config/pagination.constants.ts',
         'config/authority.constants.ts',
 
