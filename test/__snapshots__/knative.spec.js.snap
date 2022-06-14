@@ -16927,7 +16927,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:8.5.4
+          image: grafana/grafana:8.5.6
           ports:
             - containerPort: 3000
               name: http
