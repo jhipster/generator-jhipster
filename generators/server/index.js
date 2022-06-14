@@ -170,11 +170,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
         this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
         this.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
-        this.DOCKER_ELASTICSEARCH_VERSION = constants.DOCKER_ELASTICSEARCH_VERSION;
+        this.ELASTICSEARCH_VERSION = constants.ELASTICSEARCH_VERSION;
         this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
         this.DOCKER_KEYCLOAK_VERSION = constants.DOCKER_KEYCLOAK_VERSION;
         this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-        this.DOCKER_KAFKA_VERSION = constants.DOCKER_KAFKA_VERSION;
+        this.KAFKA_VERSION = constants.KAFKA_VERSION;
         this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
         this.DOCKER_SONAR = constants.DOCKER_SONAR;
         this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
@@ -187,10 +187,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
         this.JAVA_VERSION = constants.JAVA_VERSION;
         this.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
+        this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
         this.NODE_VERSION = constants.NODE_VERSION;
         this.NPM_VERSION = constants.NPM_VERSION;
-        this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
         this.JHIPSTER_DEPENDENCIES_VERSION = this.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
