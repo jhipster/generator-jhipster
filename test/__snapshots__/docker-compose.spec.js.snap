@@ -1151,7 +1151,7 @@ eureka:
       - 8761:8761
 
   prometheus:
-    image: prom/prometheus:v2.36.0
+    image: prom/prometheus:v2.36.1
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
