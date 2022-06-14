@@ -168,12 +168,13 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
         this.DOCKER_REDIS = constants.DOCKER_REDIS;
         this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-        this.ELASTICSEARCH_VERSION = constants.ELASTICSEARCH_VERSION;
-        this.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
         this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
+        this.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
+        this.DOCKER_ELASTICSEARCH_VERSION = constants.DOCKER_ELASTICSEARCH_VERSION;
         this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
         this.DOCKER_KEYCLOAK_VERSION = constants.DOCKER_KEYCLOAK_VERSION;
         this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
+        this.DOCKER_KAFKA_VERSION = constants.DOCKER_KAFKA_VERSION;
         this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
         this.DOCKER_SONAR = constants.DOCKER_SONAR;
         this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
@@ -191,19 +192,16 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.NPM_VERSION = constants.NPM_VERSION;
         this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
-        this.JIB_VERSION = constants.JIB_VERSION;
         this.JHIPSTER_DEPENDENCIES_VERSION = this.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
         this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
         this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
         this.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
+        this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
         this.JACOCO_VERSION = constants.JACOCO_VERSION;
+        this.JIB_VERSION = constants.JIB_VERSION;
         this.H2_VERSION = constants.H2_VERSION;
         this.H2_R2DBC_VERSION = constants.H2_R2DBC_VERSION;
-
-        this.KAFKA_VERSION = constants.KAFKA_VERSION;
-
-        this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
 
         this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
         this.VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
