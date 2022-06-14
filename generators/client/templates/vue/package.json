@@ -54,7 +54,7 @@
     "sass-loader": "13.0.0",
     "sinon": "14.0.0",
     "terser-webpack-plugin": "5.3.3",
-    "ts-jest": "28.0.4",
+    "ts-jest": "28.0.5",
     "ts-loader": "9.3.0",
     "eslint": "8.17.0",
     "eslint-plugin-prettier": "4.0.0",
