@@ -45,9 +45,7 @@ application {
     buildTool gradle
     cacheProvider redis
     creationTimestamp 1617901618887
-    // TODO switch to cassandra
-    // databaseType cassandra
-    prodDatabaseType postgresql
+    databaseType cassandra
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.blog
     serverPort 8081
@@ -86,14 +84,13 @@ application {
     baseName notification,
     buildTool maven
     creationTimestamp 1617901618889
-    // TODO switch to cassandra
-    // databaseType cassandra
-    prodDatabaseType postgresql
-    // dtoSuffix Rest
-    // entitySuffix Entity
+    databaseType cassandra
+    dtoSuffix Rest
+    entitySuffix Entity
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.notification
-    reactive true
+    // TODO switch to reactive
+    // reactive true
     serverPort 8083
     serviceDiscoveryType consul
     testFrameworks [cucumber, gatling]
@@ -101,10 +98,12 @@ application {
   entities Notification
 }
 
+/* TODO enable when gateway+cassandra is fixed
 @ChangelogDate(20210408164809)
 entity UserData {
   address String
 }
+*/
 
 @ChangelogDate(20210408164810)
 entity Blog {

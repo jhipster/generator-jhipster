@@ -216,10 +216,6 @@ eureka:
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
-  mscassandra-cassandra-node:
-    image: cassandra:3.11.13
-    environment:
-      - CASSANDRA_SEEDS=mscassandra-cassandra
   mscassandra-cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=mscassandra-cassandra

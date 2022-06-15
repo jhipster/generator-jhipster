@@ -13,9 +13,10 @@ services:
     mscassandra-cassandra-migration:
         environment:
             - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
+            - USER=docker-cassandra-migration
             - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql
         build:
             context: .
-            dockerfile: cassandra/Cassandra.Dockerfile
+            dockerfile: cassandra/Cassandra-Migration.Dockerfile
         volumes:
             - ../resources/config/cql:/cql:ro
