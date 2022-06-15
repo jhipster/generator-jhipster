@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "concurrently": "7.2.1",
+    "concurrently": "7.2.2",
     "husky": "7.0.4",
     "lint-staged": "13.0.1",
     "npm": "8.12.1",
