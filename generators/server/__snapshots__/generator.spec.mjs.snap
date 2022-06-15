@@ -1036,16 +1036,6 @@ Object {
     },
     Object {
       "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/search/UserSearchRepository.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
       "path": "src/main/resources/",
       "templates": Array [
         "templates/mail/activationEmail.html",

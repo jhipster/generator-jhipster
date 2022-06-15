@@ -341,15 +341,6 @@ Object {
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/user/user.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/home/home.component.html": Object {
     "stateCleared": "modified",
   },

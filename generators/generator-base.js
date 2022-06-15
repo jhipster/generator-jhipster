@@ -271,9 +271,14 @@ class JHipsterBaseGenerator extends PrivateBase {
    */
   isUsingBuiltInUser() {
     return (
+      // there is no config  -  we are running for the first time
       !this.jhipsterConfig ||
+      // user management was not switched off explicitly and there is database
       (!this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.databaseType !== NO_DATABASE) ||
-      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
+      // we use oauth 2, there is database and user management is explicitly allowed. serrver.js @664 disallows it explicitely!
+      (this.jhipsterConfig.authenticationType === OAUTH2 &&
+        this.jhipsterConfig.databaseType !== NO_DATABASE &&
+        !this.jhipsterConfig.skipUserManagement)
     );
   }
 
@@ -298,12 +303,15 @@ class JHipsterBaseGenerator extends PrivateBase {
   /**
    * Verify if the application is using built-in Authority.
    * @return {boolean} true if the Authority is built-in.
+   * TODO:  logic is identical with is using  builtin user!!!!
    */
   isUsingBuiltInAuthority() {
     return (
       !this.jhipsterConfig ||
-      (!this.jhipsterConfig.skipUserManagement && [SQL, MONGODB, COUCHBASE, NEO4J].includes(this.jhipsterConfig.databaseType)) ||
-      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
+      (!this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.databaseType !== NO_DATABASE) ||
+      (this.jhipsterConfig.authenticationType === OAUTH2 &&
+        this.jhipsterConfig.databaseType !== NO_DATABASE &&
+        !this.jhipsterConfig.skipUserManagement)
     );
   }
 
@@ -2740,6 +2748,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.skipFakeData = true;
     }
     if (options.skipUserManagement) {
+      console.log(`*** setting skip user managemenr from option ${options.skipUserManagement}`);
       this.jhipsterConfig.skipUserManagement = true;
     }
     if (options.skipCheckLengthOfIdentifier) {

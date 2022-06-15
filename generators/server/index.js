@@ -667,10 +667,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       config.rememberMeKey = getRandomHex();
     }
 
-    if (config.authenticationType === OAUTH2) {
-      config.skipUserManagement = true;
-    }
-
     if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
       this.info(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
       config.enableHibernateCache = false;
