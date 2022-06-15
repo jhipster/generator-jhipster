@@ -184,11 +184,6 @@ module.exports = class extends BaseDockerGenerator {
             delete databaseYamlConfig.ports;
 
             if (database === CASSANDRA) {
-              // node config
-              // const cassandraClusterYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/cassandra-cluster.yml`));
-              // const cassandraNodeConfig = cassandraClusterYaml.services[`${databaseServiceName}-node`];
-              // parentConfiguration[`${databaseServiceName}-node`] = cassandraNodeConfig;
-
               // migration service config
               const cassandraMigrationConfig = databaseYaml.services[`${databaseServiceName}-migration`];
 
