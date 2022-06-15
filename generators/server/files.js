@@ -1410,21 +1410,17 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator =>
-        (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice) ||
-        (!generator.skipUserManagement && generator.databaseTypeSql),
+      condition: generator => generator.isUsingBuiltInUser() && generator.databaseTypeSql,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/data/user.csv'],
     },
     {
-      condition: generator =>
-        (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice && generator.databaseTypeSql) ||
-        (!generator.skipUserManagement && generator.databaseTypeSql),
+      condition: generator => generator.isUsingBuiltInAuthority() && generator.databaseTypeSql,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/data/authority.csv', 'config/liquibase/data/user_authority.csv'],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2,
+      condition: generator => generator.isUsingBuiltInUser(),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         { file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` },
@@ -1444,7 +1440,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2 && !generator.databaseTypeNo,
+      condition: generator => generator.isUsingBuiltInUser(),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1480,7 +1476,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2,
+      condition: generator => generator.isUsingBuiltInUser(),
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1490,7 +1486,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2 && !generator.databaseTypeNo,
+      condition: generator => generator.isUsingBuiltInUser(),
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1533,16 +1529,7 @@ const baseServerFiles = {
         },
       ],
     },
-    {
-      condition: generator => generator.authenticationTypeOauth2 && generator.searchEngineElasticsearch,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/search/UserSearchRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/search/UserSearchRepository.java`,
-        },
-      ],
-    },
+    //  this one has to be removed   as it forces user search repo in oauth2
     {
       condition: generator => !generator.skipUserManagement,
       path: SERVER_MAIN_RES_DIR,

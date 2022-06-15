@@ -312,7 +312,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       this.setConfigDefaults(this.getDefaultConfigForApplicationType());
     }
 
-    this.existingProject = this.jhipsterConfig.baseName !== undefined && this.jhipsterConfig.applicationType !== undefined;
+    // this.existingProject = this.jhipsterConfig.baseName !== undefined && this.jhipsterConfig.applicationType !== undefined;
     // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
@@ -364,6 +364,12 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         if (this.skipServer && this.skipClient) {
           this.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
         }
+      },
+      /**
+       * this has to be done here, in the initialising phase, as  jhipsterConfig is not yet loaded in the constructor
+       */
+      verifyExistingProjekt() {
+        this.existingProject = this.jhipsterConfig.baseName !== undefined && this.jhipsterConfig.applicationType !== undefined;
       },
     };
   }

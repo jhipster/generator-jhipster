@@ -216,10 +216,8 @@ module.exports = class extends BaseGenerator {
   _createUserManagementEntities() {
     this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
 
-    if (
-      this.configOptions.sharedEntities.User ||
-      (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== OAUTH2)
-    ) {
+    // honor explicit skipUserManagement setting
+    if (this.configOptions.sharedEntities.User || this.jhipsterConfig.skipUserManagement) {
       return;
     }
 

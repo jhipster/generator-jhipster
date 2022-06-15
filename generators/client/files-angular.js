@@ -323,7 +323,7 @@ const files = {
       templates: ['core/interceptor/auth.interceptor.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
+      condition: generator => !generator.skipUserManagement,
       path: ANGULAR_DIR,
       templates: ['entities/user/user.service.ts', 'entities/user/user.service.spec.ts', 'entities/user/user.model.ts'],
     },

@@ -19,7 +19,7 @@ const { SESSION } = require('../jdl/jhipster/authentication-types');
 const { EHCACHE, HAZELCAST } = require('../jdl/jhipster/cache-types');
 const cacheProviders = require('../jdl/jhipster/cache-types');
 const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
-const { JWT } = require('../jdl/jhipster/authentication-types');
+const { JWT, OAUTH2 } = require('../jdl/jhipster/authentication-types');
 const { CUCUMBER, PROTRACTOR } = require('../jdl/jhipster/test-framework-types');
 const { ANGULAR_X, REACT } = require('../jdl/jhipster/client-framework-types');
 const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -584,7 +584,7 @@ describe('JHipster generator', () => {
       });
     });
 
-    describe('oauth2 + elasticsearch', () => {
+    describe('user management + elasticsearch', () => {
       before(async () => {
         await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
           baseName: 'jhipster',
@@ -604,6 +604,7 @@ describe('JHipster generator', () => {
           buildTool: MAVEN,
           rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
           serverSideOptions: ['searchEngine:elasticsearch'],
+          skipUserManagement: false,
         });
       });
 
@@ -1390,6 +1391,69 @@ describe('JHipster generator', () => {
     });
   });
 
+  context('app with skip user management', () => {
+    describe('monilith without params from command line', () => {
+      before(async () => {
+        await helpers
+          .create(path.join(__dirname, '../generators/app'))
+          .withLocalConfig({
+            baseName: 'jhipster',
+            applicationType: MONOLITH,
+            packageName: 'com.mycompany.myapp',
+            packageFolder: 'com/mycompany/myapp',
+            serviceDiscoveryType: false,
+            authenticationType: JWT,
+            cacheProvider: EHCACHE,
+            enableHibernateCache: true,
+            databaseType: SQL,
+            devDatabaseType: H2_MEMORY,
+            prodDatabaseType: POSTGRESQL,
+            buildTool: MAVEN,
+            enableTranslation: true,
+            nativeLanguage: 'en',
+            languages: ['fr', 'en'],
+            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+            serverSideOptions: [],
+            skipUserManagement: true,
+          })
+          .run();
+      });
+      it('should not generate any user management files', () => {
+        assert.file(expectedFiles.server);
+        assert.noFile(expectedFiles.userManagementServer);
+      });
+    });
+    describe('microservice OAUTH without params from command line', () => {
+      before(async () => {
+        await helpers
+          .create(path.join(__dirname, '../generators/app'))
+          .withLocalConfig({
+            applicationType: MICROSERVICE,
+            authenticationType: OAUTH2,
+            baseName: 'jhipster',
+            buildTool: 'gradle',
+            cacheProvider: 'ehcache',
+            databaseType: SQL,
+            devDatabaseType: H2_MEMORY,
+            prodDatabaseType: POSTGRESQL,
+            enableTranslation: true,
+            languages: ['en'],
+            nativeLanguage: 'en',
+            packageName: 'com.mycompany.myapp',
+            packageFolder: 'com/mycompany/myapp',
+            reactive: false,
+            searchEngine: 'elasticsearch',
+            skipUserManagement: true,
+            websocket: false,
+          })
+          .run();
+      });
+      it('should not generate any user management files', () => {
+        assert.file(expectedFiles.microserviceServer);
+        assert.noFile(expectedFiles.userManagementServer);
+      });
+    });
+  });
   context('Eureka', () => {
     describe('gateway with eureka', () => {
       before(async () => {
