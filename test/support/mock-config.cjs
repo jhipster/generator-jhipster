@@ -121,10 +121,11 @@ const createMockedConfig = (appDir, testDir) => {
 
   mkdirSync(`${appDir}/target/jib-cache`, { recursive: true });
 
-  const appConfig = applications[appDir];
+  let appConfig = applications[appDir];
   if (!appConfig) {
     throw new Error(`Sample ${appDir} not found`);
   }
+  appConfig = { packageName: 'com.mycompany.myapp', ...appConfig };
   generator.editFile(`${appDir}/.yo-rc.json`, () => JSON.stringify({ 'generator-jhipster': { ...appConfig, mockAppConfig: undefined } }));
   Object.assign(generator, appConfig);
   loadDerivedAppConfig.call(GeneratorBase.prototype, generator);
