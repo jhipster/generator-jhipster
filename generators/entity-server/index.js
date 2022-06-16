@@ -47,21 +47,6 @@ module.exports = class extends BaseBlueprintGenerator {
     }
   }
 
-  // Public API method used by the getter and also by Blueprints
-  _initializing() {
-    return {
-      setupConstants() {
-        // Make constants available in templates
-        this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
-      },
-    };
-  }
-
-  get [INITIALIZING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._initializing();
-  }
-
   _preparing() {
     return {
       validateDatabaseSafety() {
