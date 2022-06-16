@@ -183,7 +183,7 @@ async function askForClustersMode() {
 
   const clusteredDbApps = [];
   this.appConfigs.forEach((appConfig, index) => {
-    if (appConfig.prodDatabaseType === MONGODB || appConfig.prodDatabaseType === COUCHBASE) {
+    if (appConfig.databaseTypeMongodb || appConfig.databaseTypeCouchbase) {
       clusteredDbApps.push(this.appsFolders[index]);
     }
   });

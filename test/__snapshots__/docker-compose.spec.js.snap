@@ -34,7 +34,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - mscouchbase (microservice application)
 - mscouchbase's couchbase database
 
@@ -129,7 +128,7 @@ eureka:
 }
 `;
 
-exports[`JHipster Docker Compose Sub Generator gateway and 1 microservice, with Cassandra cluster should match files snapshot 1`] = `
+exports[`JHipster Docker Compose Sub Generator gateway and 1 microservice, with Cassandra should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -163,10 +162,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - mscassandra (microservice application)
 - mscassandra's cassandra database
-- mscassandra's no search engine
 
 ### Additional Services:
 ",
@@ -295,10 +292,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 - mspsql (microservice application)
 - mspsql's postgresql database
 - mspsql's elasticsearch search engine
@@ -306,7 +301,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 - msmongodb's mongodb database
 - msmariadb (microservice application)
 - msmariadb's mariadb database
-- msmariadb's no search engine
 
 ### Additional Services:
 ",
@@ -463,10 +457,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 - mspsql (microservice application)
 - mspsql's postgresql database
 - mspsql's elasticsearch search engine
@@ -629,10 +621,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 - mspsql (microservice application)
 - mspsql's postgresql database
 - mspsql's elasticsearch search engine
@@ -640,7 +630,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 - mscouchbase's couchbase database
 - msmariadb (microservice application)
 - msmariadb's mariadb database
-- msmariadb's no search engine
 
 ### Additional Services:
 ",
@@ -801,10 +790,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 ",
@@ -920,10 +907,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 ",
@@ -1039,10 +1024,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 
@@ -1274,10 +1257,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 ",
@@ -1453,7 +1434,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 ",
@@ -1553,7 +1533,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 
 ### Additional Services:
 ",
@@ -1655,7 +1634,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 ",
@@ -1751,7 +1729,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - oracle-mono (monolith application)
 - oracle-mono's oracle database
-- oracle-mono's no search engine
 
 ### Additional Services:
 ",
@@ -1767,7 +1744,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
       - JHIPSTER_SLEEP=30
-      - SERVER_PORT=80
     ports:
       - \\"8080:8080\\"
 ",

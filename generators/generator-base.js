@@ -3081,7 +3081,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   loadDerivedServerConfig(dest = this) {
-    if (!dest.packageFolder) {
+    if (!dest.packageFolder && dest.packageName) {
       dest.packageFolder = dest.packageName.replace(/\./g, '/');
     }
 

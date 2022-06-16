@@ -106,14 +106,17 @@ function loadConfigs() {
 
   // Loading configs
   this.debug(`Apps folders: ${this.appsFolders}`);
-  this.appsFolders.forEach(appFolder => {
+  this.appsFolders.forEach((appFolder, index) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
       const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
-      _.defaults(config, defaultConfig);
+      config.composePort = 8080 + index;
+      _.defaults(config, this.getDefaultConfigForApplicationType(config.applicationType));
+      this.loadAppConfig(config, config);
       this.loadServerConfig(config, config);
       this.loadDerivedPlatformConfig(config);
       this.loadDerivedAppConfig(config);
+      this.loadDerivedServerConfig(config);
 
       if (config.applicationType === MONOLITH) {
         this.monolithicNb++;
