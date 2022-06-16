@@ -1,8 +1,8 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const fse = require('fs-extra');
 const { expect } = require('expect');
+
+const { createMockedConfig } = require('./support/docker-compose.cjs');
 
 const expectedFiles = {
   sccconfig: ['./ocp/registry/scc-config.yml'],
@@ -28,7 +28,7 @@ describe('JHipster OpenShift Sub Generator', () => {
       runResult = await helpers
         .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          createMockedConfig('01-gateway', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -65,8 +65,8 @@ describe('JHipster OpenShift Sub Generator', () => {
       runResult = await helpers
         .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
-          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
+          createMockedConfig('01-gateway', dir);
+          createMockedConfig('02-mysql', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -103,8 +103,8 @@ describe('JHipster OpenShift Sub Generator', () => {
       runResult = await helpers
         .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
-          fse.copySync(path.join(__dirname, './templates/compose/03-psql'), path.join(dir, './03-psql'));
+          createMockedConfig('02-mysql', dir);
+          createMockedConfig('03-psql', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -144,12 +144,12 @@ describe('JHipster OpenShift Sub Generator', () => {
       runResult = await helpers
         .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
-          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
-          fse.copySync(path.join(__dirname, './templates/compose/03-psql'), path.join(dir, './03-psql'));
-          fse.copySync(path.join(__dirname, './templates/compose/04-mongo'), path.join(dir, './04-mongo'));
-          fse.copySync(path.join(__dirname, './templates/compose/05-cassandra'), path.join(dir, './05-cassandra'));
-          fse.copySync(path.join(__dirname, './templates/compose/07-mariadb'), path.join(dir, './07-mariadb'));
+          createMockedConfig('01-gateway', dir);
+          createMockedConfig('02-mysql', dir);
+          createMockedConfig('03-psql', dir);
+          createMockedConfig('04-mongo', dir);
+          createMockedConfig('05-cassandra', dir);
+          createMockedConfig('07-mariadb', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -197,7 +197,7 @@ describe('JHipster OpenShift Sub Generator', () => {
       runResult = await helpers
         .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/08-monolith'), path.join(dir, './08-monolith'));
+          createMockedConfig('08-monolith', dir);
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
