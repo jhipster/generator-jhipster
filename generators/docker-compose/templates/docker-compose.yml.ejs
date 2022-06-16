@@ -49,7 +49,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
   <%_ if (usesOauth2) { _%>
-      - JHIPSTER_SLEEP=20
+      - JHIPSTER_SLEEP=25
   <%_ } _%>
       - SPRING_PROFILES_ACTIVE=dev<% if (usesOauth2) { %>,oauth2<% } %>
       - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
