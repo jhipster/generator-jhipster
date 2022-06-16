@@ -3,6 +3,7 @@ const fse = require('fs-extra');
 const helpers = require('yeoman-test');
 
 const { SERVER_MAIN_RES_DIR } = require('../../generators/generator-constants');
+const { createMockedConfig } = require('../support/mock-config.cjs');
 
 describe('jhipster:entity database changelogs', () => {
   context('when regenerating the entity', () => {
@@ -12,7 +13,7 @@ describe('jhipster:entity database changelogs', () => {
         helpers
           .create(require.resolve('../../generators/entity'))
           .doInDir(dir => {
-            fse.copySync(path.join(__dirname, '../templates/compose/05-cassandra'), dir);
+            createMockedConfig('05-cassandra', dir);
             fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
           })
           .withArguments(['Foo'])
@@ -35,7 +36,7 @@ describe('jhipster:entity database changelogs', () => {
         helpers
           .create(require.resolve('../../generators/entity'))
           .doInDir(dir => {
-            fse.copySync(path.join(__dirname, '../templates/compose/01-gateway'), dir);
+            createMockedConfig('01-gateway', dir);
             const jsonFile = path.join(dir, '.jhipster/Foo.json');
             fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), jsonFile);
             fse.writeJsonSync(jsonFile, {

@@ -2,7 +2,7 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const { expect } = require('expect');
 
-const { createMockedConfig } = require('./support/docker-compose.cjs');
+const { createMockedConfig } = require('./support/mock-config.cjs');
 
 const expectedFiles = {
   eurekaregistry: ['./registry-k8s/jhipster-registry.yml', './registry-k8s/application-configmap.yml'],

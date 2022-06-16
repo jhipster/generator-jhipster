@@ -2,7 +2,7 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const { expect } = require('expect');
 
-const { createMockedConfig } = require('./support/docker-compose.cjs');
+const { createMockedConfig } = require('./support/mock-config.cjs');
 
 const expectedFiles = {
   csvcfiles: ['./csvc-helm/Chart.yaml', './csvc-helm/requirements.yaml', './csvc-helm/values.yaml', './csvc-helm/templates/_helpers.tpl'],

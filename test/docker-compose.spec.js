@@ -4,7 +4,7 @@ const { expect } = require('expect');
 const monitoringTypes = require('../jdl/jhipster/monitoring-types');
 const { MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
-const { createMockedConfig } = require('./support/docker-compose.cjs');
+const { createMockedConfig } = require('./support/mock-config.cjs');
 
 const NO_MONITORING = monitoringTypes.NO;
 
