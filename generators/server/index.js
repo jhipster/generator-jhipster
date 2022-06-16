@@ -323,13 +323,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.loadPlatformConfig();
         this.loadTranslationConfig();
       },
-      loadConstants() {
-        if (this.prodDatabaseTypeMariadb || this.prodDatabaseTypeMysql) {
-          // TODO Remove as soon as liquibase problems with mysql/mariadb are fixed
-          this.LIQUIBASE_VERSION = '4.6.1';
-          this.LIQUIBASE_DTD_VERSION = '4.6';
-        }
-      },
     };
   }
 
