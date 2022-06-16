@@ -107,6 +107,7 @@ const applications = {
     databaseType: 'sql',
     prodDatabaseType: 'oracle',
     serverPort: 8080,
+    skipClient: true,
   },
 };
 
