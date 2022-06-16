@@ -128,6 +128,7 @@ module.exports = class extends BaseDockerGenerator {
       loadConfig() {
         this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
         this.useKafka = this.appConfigs.some(appConfig => appConfig.messageBroker === KAFKA);
+        this.entryPort = 8080;
       },
 
       setAppsYaml() {

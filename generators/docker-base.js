@@ -20,7 +20,6 @@ const shelljs = require('shelljs');
 const chalk = require('chalk');
 const _ = require('lodash');
 
-const { defaultConfig } = require('./generator-defaults');
 const dockerUtils = require('./docker-utils');
 const { getBase64Secret } = require('./utils');
 const { MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -103,6 +102,7 @@ function loadConfigs() {
   this.gatewayNb = 0;
   this.monolithicNb = 0;
   this.microserviceNb = 0;
+  const serverPort = 8080;
 
   // Loading configs
   this.debug(`Apps folders: ${this.appsFolders}`);
@@ -110,7 +110,7 @@ function loadConfigs() {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
       const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
-      config.composePort = 8080 + index;
+      config.composePort = serverPort + index;
       _.defaults(config, this.getDefaultConfigForApplicationType(config.applicationType));
       this.loadAppConfig(config, config);
       this.loadServerConfig(config, config);
