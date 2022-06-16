@@ -10,7 +10,7 @@
     "lodash": "4.17.21",
     "path-browserify": "1.0.1",
     "react": "18.2.0",
-    "react-dom": "18.1.0",
+    "react-dom": "18.2.0",
     "react-hook-form": "7.32.1",
     "react-jhipster": "jhipster/react-jhipster",
     "react-loadable": "5.5.0",
