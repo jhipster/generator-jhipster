@@ -17,15 +17,11 @@
  limitations under the License.
 -%>
 {
+  "extends": "../../../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./../../../../<%= BUILD_DIR %>/out-tsc/cypress",
+    "outDir": "../../../../<%= BUILD_DIR %>out-tsc/cypress",
     "types": ["cypress", "node"]
   },
-  "include": ["./../../../../cypress*.config.ts", "./**/*.ts"],
-  "references": [
-    {
-      "path": "./../../../../tsconfig.json"
-    }
-  ]
+  "include": ["./../../../../cypress*.config.ts", "./**/*.ts"]
 }
