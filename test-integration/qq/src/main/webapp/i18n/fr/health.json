@@ -1,0 +1,35 @@
+{
+  "health": {
+    "title": "Diagnostics",
+    "refresh.button": "Rafraîchir",
+    "stacktrace": "Stacktrace",
+    "details": {
+      "details": "Détails",
+      "properties": "Propriétés",
+      "name": "Nom",
+      "value": "Valeur",
+      "error": "Erreur"
+    },
+    "indicator": {
+      "discoveryComposite": "Discovery Composite",
+      "refreshScope": "Microservice Refresh Scope",
+      "clientConfigServer": "Microservice Config Server",
+      "hystrix": "Hystrix",
+      "diskSpace": "Espace disque",
+      "mail": "Email",
+      "livenessState": "Liveness state",
+      "readinessState": "Readiness state",
+      "ping": "Application",
+      "r2dbc": "Base de données"
+    },
+    "table": {
+      "service": "Nom du service",
+      "status": "État"
+    },
+    "status": {
+      "UNKNOWN": "INCONNU",
+      "UP": "DISPONIBLE",
+      "DOWN": "HORS SERVICE"
+    }
+  }
+}

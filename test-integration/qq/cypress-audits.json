@@ -1,0 +1,14 @@
+{
+  "baseUrl": "http://localhost:8080/",
+  "testFiles": "**/*.audits.ts",
+  "supportFile": "src/test/javascript/cypress/support/index.ts",
+  "video": false,
+  "integrationFolder": "src/test/javascript/cypress/integration",
+  "fixturesFolder": "src/test/javascript/cypress/fixtures",
+  "pluginsFile": "src/test/javascript/cypress/plugins/index.ts",
+  "screenshotsFolder": "target/cypress/screenshots",
+  "chromeWebSecurity": false,
+  "viewportWidth": 1200,
+  "viewportHeight": 720,
+  "retries": 2
+}

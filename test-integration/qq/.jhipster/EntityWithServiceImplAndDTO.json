@@ -1,0 +1,10 @@
+{
+  "changelogDate": "20160806123742",
+  "dto": "mapstruct",
+  "entityTableName": "entity_with_service_impl_and_dto",
+  "fields": [{ "fieldName": "louis", "fieldType": "String" }],
+  "fluentMethods": true,
+  "pagination": "no",
+  "relationships": [],
+  "service": "serviceImpl"
+}

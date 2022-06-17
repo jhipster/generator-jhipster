@@ -1,0 +1,30 @@
+{
+  "changelogDate": "20150805125055",
+  "clientRootFolder": "test-root",
+  "dto": "no",
+  "fields": [
+    { "fieldName": "date", "fieldType": "Instant", "fieldValidateRules": ["required"] },
+    { "fieldName": "description", "fieldType": "String" },
+    { "fieldName": "amount", "fieldType": "BigDecimal", "fieldValidateRules": ["required"] }
+  ],
+  "fluentMethods": true,
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "bankAccount",
+      "otherEntityRelationshipName": "operation",
+      "relationshipName": "bankAccount",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "labelName",
+      "otherEntityName": "label",
+      "otherEntityRelationshipName": "operation",
+      "ownerSide": true,
+      "relationshipName": "label",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "no"
+}

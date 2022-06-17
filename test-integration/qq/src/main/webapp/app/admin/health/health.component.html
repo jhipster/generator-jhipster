@@ -1,0 +1,48 @@
+<div>
+  <h2>
+    <span id="health-page-heading" jhiTranslate="health.title" data-cy="healthPageHeading">Health Checks</span>
+
+    <button class="btn btn-primary float-end" (click)="refresh()">
+      <fa-icon icon="sync"></fa-icon> <span jhiTranslate="health.refresh.button">Refresh</span>
+    </button>
+  </h2>
+
+  <div class="table-responsive">
+    <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
+      <thead>
+        <tr>
+          <th scope="col" jhiTranslate="health.table.service">Service name</th>
+          <th scope="col" class="text-center" jhiTranslate="health.table.status">Status</th>
+          <th scope="col" class="text-center" jhiTranslate="health.details.details">Details</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="health">
+        <tr *ngFor="let componentHealth of health.components | keyvalue">
+          <td>
+            {{ 'health.indicator.' + componentHealth.key | translate }}
+          </td>
+          <td class="text-center">
+            <span
+              class="badge"
+              [ngClass]="getBadgeClass(componentHealth.value!.status)"
+              jhiTranslate="{{ 'health.status.' + componentHealth.value!.status }}"
+            >
+              {{
+                { UNKNOWN: 'UNKNOWN', UP: 'UP', OUT_OF_SERVICE: 'OUT_OF_SERVICE', DOWN: 'DOWN' }[componentHealth.value!.status || 'UNKNOWN']
+              }}
+            </span>
+          </td>
+          <td class="text-center">
+            <a
+              class="hand"
+              (click)="showHealth({ key: componentHealth.key, value: componentHealth.value! })"
+              *ngIf="componentHealth.value!.details"
+            >
+              <fa-icon icon="eye"></fa-icon>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

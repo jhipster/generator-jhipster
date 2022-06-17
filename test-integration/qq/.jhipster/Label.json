@@ -1,0 +1,21 @@
+{
+  "changelogDate": "20200804163353",
+  "clientRootFolder": "test-root",
+  "dto": "no",
+  "fields": [
+    { "fieldName": "labelName", "fieldType": "String", "fieldValidateRules": ["required", "minlength"], "fieldValidateRulesMinlength": "3" }
+  ],
+  "fluentMethods": true,
+  "pagination": "pagination",
+  "readOnly": true,
+  "relationships": [
+    {
+      "otherEntityName": "operation",
+      "otherEntityRelationshipName": "label",
+      "ownerSide": false,
+      "relationshipName": "operation",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

@@ -1,0 +1,24 @@
+{
+  "changelogDate": "20190117080030",
+  "clientRootFolder": "",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "maps_id_user_profile_with_dto",
+  "fields": [{ "fieldName": "dateOfBirth", "fieldType": "Instant" }],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "pagination": "no",
+  "relationships": [
+    {
+      "id": true,
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "mapsIdUserProfileWithDTO",
+      "ownerSide": true,
+      "relationshipName": "user",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "searchEngine": false,
+  "service": "serviceImpl"
+}

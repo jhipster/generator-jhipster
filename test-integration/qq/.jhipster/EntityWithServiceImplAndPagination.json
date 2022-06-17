@@ -1,0 +1,10 @@
+{
+  "changelogDate": "20160806123740",
+  "dto": "no",
+  "entityTableName": "entity_with_service_impl_and_pagination",
+  "fields": [{ "fieldName": "hugo", "fieldType": "String" }],
+  "fluentMethods": true,
+  "pagination": "pagination",
+  "relationships": [],
+  "service": "serviceImpl"
+}

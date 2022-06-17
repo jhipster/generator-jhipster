@@ -1,0 +1,10 @@
+{
+  "changelogDate": "20160806123743",
+  "dto": "mapstruct",
+  "entityTableName": "entity_with_pagination_and_dto",
+  "fields": [{ "fieldName": "lea", "fieldType": "String" }],
+  "fluentMethods": true,
+  "pagination": "pagination",
+  "relationships": [],
+  "service": "no"
+}

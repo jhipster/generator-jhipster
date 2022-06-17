@@ -1,0 +1,35 @@
+{
+  "angularJSSuffix": "mySuffix",
+  "changelogDate": "20200804163352",
+  "clientRootFolder": "test-root",
+  "dto": "no",
+  "fields": [
+    { "fieldName": "name", "fieldType": "String", "fieldValidateRules": ["required"] },
+    { "fieldName": "guid", "fieldType": "UUID" },
+    { "fieldName": "bankNumber", "fieldType": "Integer" },
+    { "fieldName": "agencyNumber", "fieldType": "Long" },
+    { "fieldName": "lastOperationDuration", "fieldType": "Float" },
+    { "fieldName": "meanOperationDuration", "fieldType": "Double" },
+    { "fieldName": "meanQueueDuration", "fieldType": "Duration" },
+    { "fieldName": "balance", "fieldType": "BigDecimal", "fieldValidateRules": ["required"] },
+    { "fieldName": "openingDay", "fieldType": "LocalDate" },
+    { "fieldName": "lastOperationDate", "fieldType": "Instant" },
+    { "fieldName": "active", "fieldType": "Boolean" },
+    { "fieldName": "accountType", "fieldType": "BankAccountType", "fieldValues": "CHECKING,SAVINGS,LOAN" },
+    { "fieldName": "attachment", "fieldType": "byte[]", "fieldTypeBlobContent": "any" },
+    { "fieldName": "description", "fieldType": "byte[]", "fieldTypeBlobContent": "text" }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "pagination": "no",
+  "relationships": [
+    { "otherEntityField": "login", "otherEntityName": "user", "relationshipName": "user", "relationshipType": "many-to-one" },
+    {
+      "otherEntityName": "operation",
+      "otherEntityRelationshipName": "bankAccount",
+      "relationshipName": "operation",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

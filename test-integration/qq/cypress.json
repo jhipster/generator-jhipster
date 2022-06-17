@@ -1,0 +1,17 @@
+{
+  "baseUrl": "http://localhost:8080/",
+  "testFiles": "**/*.spec.ts",
+  "supportFile": "src/test/javascript/cypress/support/index.ts",
+  "video": false,
+  "integrationFolder": "src/test/javascript/cypress/integration",
+  "fixturesFolder": "src/test/javascript/cypress/fixtures",
+  "pluginsFile": "src/test/javascript/cypress/plugins/index.ts",
+  "screenshotsFolder": "target/cypress/screenshots",
+  "downloadsFolder": "target/cypress/downloads",
+  "videosFolder": "target/cypress/videos",
+  "chromeWebSecurity": false,
+  "viewportWidth": 1200,
+  "viewportHeight": 720,
+  "retries": 2,
+  "experimentalSessionAndOrigin": true
+}

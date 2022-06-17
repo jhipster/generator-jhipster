@@ -1,0 +1,7 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+version: '3.8'
+services:
+  zipkin:
+    image: openzipkin/zipkin:2.23
+    ports:
+      - 127.0.0.1:9411:9411

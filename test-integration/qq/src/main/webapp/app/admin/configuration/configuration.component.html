@@ -1,0 +1,57 @@
+<div *ngIf="allBeans">
+  <h2 id="configuration-page-heading" jhiTranslate="configuration.title" data-cy="configurationPageHeading">Configuration</h2>
+
+  <span jhiTranslate="configuration.filter">Filter (by prefix)</span>
+  <input type="text" [(ngModel)]="beansFilter" (ngModelChange)="filterAndSortBeans()" class="form-control" />
+
+  <h3 id="spring-configuration">Spring configuration</h3>
+
+  <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="spring-configuration">
+    <thead>
+      <tr jhiSort predicate="prefix" [(ascending)]="beansAscending" (sortChange)="filterAndSortBeans()">
+        <th jhiSortBy="prefix" scope="col" class="w-40">
+          <span jhiTranslate="configuration.table.prefix">Prefix</span> <fa-icon icon="sort"></fa-icon>
+        </th>
+        <th scope="col" class="w-60"><span jhiTranslate="configuration.table.properties">Properties</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bean of beans">
+        <td>
+          <span>{{ bean.prefix }}</span>
+        </td>
+        <td>
+          <div class="row" *ngFor="let property of bean.properties | keyvalue">
+            <div class="col-md-4">{{ property.key }}</div>
+            <div class="col-md-8">
+              <span class="float-end bg-secondary break">{{ property.value | json }}</span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngFor="let propertySource of propertySources; let i = index">
+    <h4 [id]="'property-source-' + i">
+      <span>{{ propertySource.name }}</span>
+    </h4>
+
+    <table class="table table-sm table-striped table-bordered table-responsive d-table" [attr.aria-describedby]="'property-source-' + i">
+      <thead>
+        <tr>
+          <th scope="col" class="w-40">Property</th>
+          <th scope="col" class="w-60">Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let property of propertySource.properties | keyvalue">
+          <td class="break">{{ property.key }}</td>
+          <td class="break">
+            <span class="float-end bg-secondary break">{{ property.value.value }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
