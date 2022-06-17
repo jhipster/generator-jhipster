@@ -55,8 +55,7 @@ module.exports = async (on<% if (cypressCoverage) { %>, config<% } %>) => {
     pa11y: pa11y(),
   });
 <%_ if (cypressCoverage) { _%>
-  const coverageTask = await import('@cypress/code-coverage/task.js');
-  coverageTask(on, config);
-  return config;
+  (await import('@cypress/code-coverage/task')).default(on, config);
 <%_ } _%>
+  return config;
 }

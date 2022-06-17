@@ -80,6 +80,13 @@ const cypressFiles = {
       templates: ['support/oauth2.ts'],
     },
   ],
+  coverage: [
+    {
+      condition: generator => generator.cypressCoverage,
+      path: `${TEST_SRC_DIR}/cypress/`,
+      templates: ['plugins/global.d.ts'],
+    },
+  ],
 };
 module.exports = {
   writeFiles,
