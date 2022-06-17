@@ -111,22 +111,25 @@ const applications = {
   },
 };
 
-const createMockedConfig = (appDir, testDir) => {
+const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config }) => {
   const generator = {
     testDir,
     editFile(filePath, ...callbacks) {
       return writeCallbacks(filePath, ...callbacks);
     },
   };
-
-  mkdirSync(`${appDir}/target/jib-cache`, { recursive: true });
-
-  let appConfig = applications[appDir];
-  if (!appConfig) {
-    throw new Error(`Sample ${appDir} not found`);
+  if (appDir) {
+    appDir = `${appDir}/`;
   }
-  appConfig = { packageName: 'com.mycompany.myapp', ...appConfig };
-  generator.editFile(`${appDir}/.yo-rc.json`, () => JSON.stringify({ 'generator-jhipster': { ...appConfig, mockAppConfig: undefined } }));
+
+  mkdirSync(`${appDir}target/jib-cache`, { recursive: true });
+
+  let appConfig = applications[sampleDir];
+  if (!appConfig) {
+    throw new Error(`Sample ${sampleDir} not found`);
+  }
+  appConfig = { packageName: 'com.mycompany.myapp', ...appConfig, ...config };
+  generator.editFile(`${appDir}.yo-rc.json`, () => JSON.stringify({ 'generator-jhipster': { ...appConfig, mockAppConfig: undefined } }));
   Object.assign(generator, appConfig);
   loadDerivedAppConfig.call(GeneratorBase.prototype, generator);
   loadDerivedServerConfig.call(GeneratorBase.prototype, generator);
@@ -134,7 +137,7 @@ const createMockedConfig = (appDir, testDir) => {
   if (appConfig.mockAppConfig) {
     appConfig.mockAppConfig(generator, appDir, testDir);
   } else {
-    fse.copySync(path.join(__dirname, `../templates/compose/${appDir}`), path.join(testDir, appDir));
+    fse.copySync(path.join(__dirname, `../templates/compose/${sampleDir}`), path.join(testDir, appDir));
   }
 
   return generator;

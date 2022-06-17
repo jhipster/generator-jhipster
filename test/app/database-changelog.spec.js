@@ -13,7 +13,7 @@ describe('jhipster:app database changelogs', () => {
         helpers
           .create(require.resolve('../../generators/app'))
           .doInDir(dir => {
-            createMockedConfig('05-cassandra', dir);
+            createMockedConfig('05-cassandra', dir, { appDir: '' });
             fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
           })
           .withOptions({ withEntities: true, force: true, skipClient: true })

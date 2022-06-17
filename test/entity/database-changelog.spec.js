@@ -13,7 +13,7 @@ describe('jhipster:entity database changelogs', () => {
         helpers
           .create(require.resolve('../../generators/entity'))
           .doInDir(dir => {
-            createMockedConfig('05-cassandra', dir);
+            createMockedConfig('05-cassandra', dir, { appDir: '' });
             fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
           })
           .withArguments(['Foo'])
@@ -36,7 +36,7 @@ describe('jhipster:entity database changelogs', () => {
         helpers
           .create(require.resolve('../../generators/entity'))
           .doInDir(dir => {
-            createMockedConfig('01-gateway', dir);
+            createMockedConfig('01-gateway', dir, { appDir: '' });
             const jsonFile = path.join(dir, '.jhipster/Foo.json');
             fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), jsonFile);
             fse.writeJsonSync(jsonFile, {
