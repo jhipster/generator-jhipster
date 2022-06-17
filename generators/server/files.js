@@ -1425,7 +1425,8 @@ const baseServerFiles = {
       templates: ['config/liquibase/data/authority.csv', 'config/liquibase/data/user_authority.csv'],
     },
     {
-      condition: generator => generator.isUsingBuiltInUser(),
+      //  gateway needs user service to provide user details back to frontends, even it there is no user management at all
+      condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         { file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` },
