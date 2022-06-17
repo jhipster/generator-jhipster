@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { INITIALIZING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, PREPARING_FIELDS_PRIORITY, POST_WRITING_PRIORITY } =
+const { PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, PREPARING_FIELDS_PRIORITY, POST_WRITING_PRIORITY } =
   require('../../lib/constants/priorities.cjs').compat;
 
 const constants = require('../generator-constants');
