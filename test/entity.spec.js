@@ -7,6 +7,7 @@ const { skipPrettierHelpers: helpers } = require('./utils/utils');
 const constants = require('../generators/generator-constants');
 const expectedFiles = require('./utils/expected-files').entity;
 const { MapperTypes, ServiceTypes, PaginationTypes } = require('../jdl/jhipster/entity-options');
+const { createMockedConfig } = require('./support/mock-config.cjs');
 
 const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
 const { MAPSTRUCT } = MapperTypes;
@@ -845,7 +846,7 @@ describe('JHipster generator for entity', () => {
           await helpers
             .run(require.resolve('../generators/entity'))
             .doInDir(dir => {
-              fse.copySync(path.join(__dirname, '../test/templates/compose/05-cassandra'), dir);
+              createMockedConfig('05-cassandra', dir, { appDir: '', config: { testFrameworks: ['gatling'] } });
               fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
             })
             .withArguments(['Foo'])
