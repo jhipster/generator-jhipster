@@ -219,7 +219,14 @@ jobs:
         if: always()
         uses: jwalton/gh-docker-logs@v2
       - name: 'ANALYSIS: Sonar analysis'
-        if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse != 'false' && matrix.workspaces != 'true'
+        if: >-
+          steps.compare.outputs.equals != 'true' &&
+          matrix.sonar-analyse != 'false' &&
+          matrix.workspaces != 'true' &&
+          matrix.skip-frontend-tests != 1 &&
+          needs.build-matrix.outputs.client != 'false' &&
+          matrix.skip-backend-tests != 1 &&
+          needs.build-matrix.outputs.server != 'false'
         run: $JHI_SCRIPTS/25-sonar-analyze.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
