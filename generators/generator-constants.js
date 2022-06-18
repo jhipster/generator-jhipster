@@ -43,9 +43,9 @@ const JACOCO_VERSION = '0.8.8';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
 const JIB_VERSION = '3.2.1';
 // TODO upgrade to h2 v2 once liquibase issues has been addressed
-const H2_VERSION = '1.4.200';
+const H2_VERSION = '2.1.214';
 // Version 0.9.x is not compatible with h2 v1
-const H2_R2DBC_VERSION = '0.8.5.RELEASE';
+const H2_R2DBC_VERSION = '0.9.1.RELEASE';
 
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
