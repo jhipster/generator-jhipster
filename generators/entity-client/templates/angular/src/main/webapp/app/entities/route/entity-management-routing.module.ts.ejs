@@ -32,11 +32,9 @@ const <%= entityInstance %>Route: Routes = [
     {
         path: '',
         component: <%= entityAngularName %>Component,
-<%_ if (paginationPagination) { _%>
         data: {
             defaultSort: '<%- primaryKey.name %>,' + ASC,
         },
-<%_ } _%>
         canActivate: [UserRouteAccessService]
     },
     {

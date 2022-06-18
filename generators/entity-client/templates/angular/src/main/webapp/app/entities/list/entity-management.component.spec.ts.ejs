@@ -144,7 +144,7 @@ describe('<%= entityAngularName %> Management Component', () => {
     });
   <%_ } _%>
 
-  <%_ if (jpaMetamodelFiltering) { _%>
+  <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
     it('should calculate the filter attribute', () => {
         // WHEN
         comp.ngOnInit();
