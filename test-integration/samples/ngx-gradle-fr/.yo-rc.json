@@ -11,7 +11,7 @@
     "clientTheme": "none",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",
-    "devDatabaseType": "h2disk",
+    "devDatabaseType": "h2Disk",
     "dtoSuffix": "DTO",
     "embeddableLaunchScript": false,
     "enableHibernateCache": true,
