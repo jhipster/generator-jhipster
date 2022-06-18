@@ -250,6 +250,10 @@ configurations {
             // Inherited version from Spring Boot can't be used because of regressions:
             // To be removed as soon as spring-boot use the same version
             force 'org.liquibase:liquibase-core:<%= LIQUIBASE_VERSION %>'
+<%_ if (devDatabaseTypeH2Any && reactive) { _%>
+            force 'com.h2database:h2:<%= H2_VERSION %>'
+            force 'io.r2dbc:r2dbc-h2:<%= H2_R2DBC_VERSION %>'
+<%_ } _%>
         }
     }
 }

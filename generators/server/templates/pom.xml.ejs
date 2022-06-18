@@ -103,6 +103,10 @@
   <%_ if (!reactive) { _%>
         <liquibase-hibernate5.version><%= LIQUIBASE_VERSION %></liquibase-hibernate5.version>
   <%_ } _%>
+  <%_ if (devDatabaseTypeH2Any && reactive) { _%>
+        <h2.version><%= H2_VERSION %></h2.version>
+        <h2-r2dbc.version><%= H2_R2DBC_VERSION %></h2-r2dbc.version>
+  <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
   <%_ if (reactive) { _%>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
