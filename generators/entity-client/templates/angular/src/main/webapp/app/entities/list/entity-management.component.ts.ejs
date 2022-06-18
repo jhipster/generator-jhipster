@@ -78,7 +78,7 @@ export class <%= entityAngularName %>Component implements OnInit {
     predicate = '<%- primaryKey.name %>';
     ascending = true;
 <%_ if (searchEngine) { _%>
-    currentSearch: string | undefined;
+    currentSearch = '';
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
     filters: IFilterOptions = new FilterOptions();
@@ -214,7 +214,7 @@ export class <%= entityAngularName %>Component implements OnInit {
       this.filters.initializeFromParams(params);
 <%_ } _%>
 <%_ if (searchEngine) { _%>
-      if (params.has('search')) {
+      if (params.has('search') && params.get('search') !== '') {
         this.currentSearch = params.get('search') as string;
       }
 <%_ } _%>
@@ -301,7 +301,7 @@ export class <%= entityAngularName %>Component implements OnInit {
       }
 <%_ } _%>
 <%_ if (searchEngine) { _%>
-      if (this.currentSearch) {
+      if (this.currentSearch && this.currentSearch !== '') {
         return this.<%= entityInstance %>Service.search(queryObject)
           .pipe(
             tap(() => this.isLoading = false)
