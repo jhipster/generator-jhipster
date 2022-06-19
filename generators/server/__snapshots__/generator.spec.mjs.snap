@@ -157,6 +157,13 @@ Object {
       ],
     },
   ],
+  "node": Array [
+    Object {
+      "templates": Array [
+        ".npmrc",
+      ],
+    },
+  ],
   "packageJson": Array [
     Object {
       "condition": [Function],

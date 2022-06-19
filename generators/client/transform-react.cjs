@@ -69,8 +69,13 @@ const replaceTranslationKeysWithText = (generator, body, regexp, { keyPattern, i
         }
         value = value.trim();
         if (/^\d+$/.test(value)) {
+          // convert integer
           value = parseInt(value, 10);
+        } else if (/^'.*'$/.test(value) || /^".*"$/.test(value)) {
+          // extract string value
+          value = value.substring(1, value.length - 2);
         } else {
+          // wrap expression
           value = `{${value}}`;
         }
         data[field] = value;

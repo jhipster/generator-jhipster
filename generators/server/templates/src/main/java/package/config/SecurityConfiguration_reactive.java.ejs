@@ -47,6 +47,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
+  <%_ if (!applicationTypeMicroservice) { _%>
+import org.springframework.core.ParameterizedTypeReference;
+  <%_ } _%>
 <%_ } _%>
 import org.springframework.http.HttpMethod;
 <%_ if (authenticationTypeSession) { _%>
@@ -68,17 +71,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcReactiveOAuth2UserService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-<%_ if (applicationTypeGateway) { _%>
+<%_ if (!applicationTypeMicroservice) { _%>
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 <%_ } _%>
 import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;
-<%_ if (applicationTypeGateway) { _%>
+<%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
 <%_ } _%>
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
-<%_ if (applicationTypeGateway) { _%>
+<%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 <%_ } _%>
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -87,7 +91,6 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
-import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
   <%_ if (skipUserManagement) { _%>
@@ -128,12 +131,19 @@ import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.Arrays;
+import java.util.Map;
+  <%_ } _%>
 
 import java.util.HashSet;
 import java.util.Set;
-<%_ if (applicationType === 'gateway') { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
@@ -156,16 +166,20 @@ public class SecurityConfiguration {
 <%_ if (authenticationTypeOauth2) { _%>
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
-  <%_ if (applicationTypeGateway) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
 
     private final ReactiveClientRegistrationRepository clientRegistrationRepository;
+
+    // todo: optimize for scale https://github.com/jhipster/generator-jhipster/issues/18868
+    private final Map<String, Mono<Jwt>> users = new ConcurrentHashMap<>();
+
   <%_ } _%>
 <%_ } _%>
     private final SecurityProblemSupport problemSupport;
     private final CorsWebFilter corsWebFilter;
 
-    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && applicationTypeGateway) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport, CorsWebFilter corsWebFilter) {
-<%_ if (authenticationTypeOauth2 && applicationTypeGateway) { _%>
+    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && !applicationTypeMicroservice) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport, CorsWebFilter corsWebFilter) {
+<%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
         this.clientRegistrationRepository = clientRegistrationRepository;
 <%_ } _%>
 <%_ if (!skipUserManagement && !authenticationTypeOauth2) { _%>
@@ -292,7 +306,7 @@ public class SecurityConfiguration {
   <%_ } _%>
             .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
 <%_ } _%>
-<%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
+<%_ if (!applicationTypeMicroservice) { _%>
             .pathMatchers("/services/**").authenticated()
 <%_ } _%>
             .pathMatchers("/management/health").permitAll()
@@ -302,8 +316,7 @@ public class SecurityConfiguration {
             .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
 <%_ if (authenticationTypeOauth2) { _%>
 
-        http<%_ if (applicationTypeGateway || applicationTypeMonolith) { _%><%_ if (applicationTypeGateway) { _%>.oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))<%_ } else { _%>.oauth2Login()
-            .and()<%_ } _%>
+        http<%_ if (!applicationTypeMicroservice) { _%>.oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))
             <% } %>
             .oauth2ResourceServer()
                 .jwt()
@@ -315,7 +328,7 @@ public class SecurityConfiguration {
     }
 <%_ if (authenticationTypeOauth2) { _%>
 
-  <%_ if (applicationTypeGateway) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
     private ServerOAuth2AuthorizationRequestResolver authorizationRequestResolver(
         ReactiveClientRegistrationRepository clientRegistrationRepository) {
         DefaultServerOAuth2AuthorizationRequestResolver authorizationRequestResolver =
@@ -367,7 +380,8 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    ReactiveJwtDecoder jwtDecoder() {
+    ReactiveJwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ReactiveClientRegistrationRepository registrations<%_ } _%>) {
+    <%_ if (applicationTypeMicroservice) { _%>
         NimbusReactiveJwtDecoder jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromOidcIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
@@ -378,7 +392,78 @@ public class SecurityConfiguration {
 
         return jwtDecoder;
     }
+    <%_ } else { _%>
 
+        Mono<ClientRegistration> clientRegistration = registrations.findByRegistrationId("oidc");
+
+        return clientRegistration.map(oidc -> createJwtDecoder(
+            oidc.getProviderDetails().getIssuerUri(),
+            oidc.getProviderDetails().getJwkSetUri(),
+            oidc.getProviderDetails().getUserInfoEndpoint().getUri()
+        )).block();
+    }
+
+    private ReactiveJwtDecoder createJwtDecoder(String issuerUri, String jwkSetUri, String userInfoUri) {
+        NimbusReactiveJwtDecoder jwtDecoder = new NimbusReactiveJwtDecoder(jwkSetUri);
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(
+            jHipsterProperties.getSecurity().getOauth2().getAudience());
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+
+        jwtDecoder.setJwtValidator(withAudience);
+
+        return new ReactiveJwtDecoder() {
+            @Override
+            public Mono<Jwt> decode(String token) throws JwtException {
+                return jwtDecoder.decode(token)
+                    .flatMap(jwt -> enrich(token, jwt));
+            }
+
+            private Mono<Jwt> enrich(String token, Jwt jwt) {
+                // Only look up user information if identity claims are missing
+                if (jwt.hasClaim("given_name") && jwt.hasClaim("family_name")) {
+                    return Mono.just(jwt);
+                }
+                // Retrieve user info from OAuth provider if not already loaded
+                return users.computeIfAbsent(jwt.getSubject(), s -> {
+                    WebClient webClient = WebClient.create();
+
+                    return webClient
+                        .get()
+                        .uri(userInfoUri)
+                        .headers(headers -> headers.setBearerAuth(token))
+                        .retrieve()
+                        .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                        .map(userInfo ->
+                            Jwt
+                                .withTokenValue(jwt.getTokenValue())
+                                .subject(jwt.getSubject())
+                                .audience(jwt.getAudience())
+                                .headers(headers -> headers.putAll(jwt.getHeaders()))
+                                .claims(claims -> {
+                                    String username = userInfo.get("preferred_username").toString();
+                                    // special handling for Auth0
+                                    if (userInfo.get("sub").toString().contains("|") && username.contains("@")) {
+                                        userInfo.put("email", username);
+                                    }
+                                    // Allow full name in a name claim - happens with Auth0
+                                    if (userInfo.get("name") != null) {
+                                        String[] name = userInfo.get("name").toString().split("\\s+");
+                                        if (name.length > 0) {
+                                            userInfo.put("given_name", name[0]);
+                                            userInfo.put("family_name", String.join(" ", Arrays.copyOfRange(name, 1, name.length)));
+                                        }
+                                    }
+                                    claims.putAll(userInfo);
+                                })
+                                .claims(claims -> claims.putAll(jwt.getClaims()))
+                                .build()
+                        );
+                });
+            }
+        };
+    }
+    <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
 

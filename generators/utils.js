@@ -56,7 +56,6 @@ module.exports = {
   stringHashCode,
   gitExec,
   isGitInstalled,
-  vueReplaceTranslation,
   vueAddPageToRouterImport,
   vueAddPageToRouter,
   vueAddPageServiceToMainImport,
@@ -807,29 +806,6 @@ function isGitInstalled(callback) {
   const code = gitExec('--version', { trace: false }).code;
   if (callback) callback(code);
   return code === 0;
-}
-
-/**
- * Replace translation for Vue application
- * @param {*} generator
- * @param {*} files
- */
-function vueReplaceTranslation(generator, files) {
-  for (let i = 0; i < files.length; i++) {
-    const filePath = `${generator.CLIENT_MAIN_SRC_DIR}${files[i]}`;
-    // Match the below attributes and the $t() method
-    const regexp = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
-      .map(s => `${s}="\\$t\\(.*?\\)"`)
-      .join(')|(');
-    replaceContent(
-      {
-        file: filePath,
-        pattern: new RegExp(` ?(${regexp})`, 'g'),
-        content: '',
-      },
-      generator
-    );
-  }
 }
 
 function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {

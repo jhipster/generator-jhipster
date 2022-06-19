@@ -21,6 +21,7 @@ const utils = require('../utils');
 const constants = require('../generator-constants');
 const { angularFiles } = require('./files-angular.cjs');
 const { reactFiles } = require('./files-react.cjs');
+const { vueFiles } = require('./files-vue.cjs');
 
 /* Constants use throughout */
 const { CLIENT_TEST_SRC_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
@@ -30,124 +31,6 @@ const CLIENT_COMMON_TEMPLATES_DIR = 'common';
 const CLIENT_NG2_TEMPLATES_DIR = 'angular';
 const CLIENT_REACT_TEMPLATES_DIR = 'react';
 const CLIENT_VUE_TEMPLATES_DIR = 'vue';
-
-/**
- * The default is to use a file path string. It implies use of the template method.
- * For any other config an object { file:.., method:.., template:.. } can be used
- */
-
-const vueFiles = {
-  client: [
-    {
-      path: VUE_DIR,
-      templates: [
-        {
-          file: 'entities/entity.model.ts',
-          // using entityModelFileName so that there is no conflict when generating microservice entities
-          renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.embedded,
-      path: VUE_DIR,
-      templates: [
-        {
-          file: 'entities/entity-details.vue',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-details.vue`,
-        },
-        {
-          file: 'entities/entity-details.component.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.ts`,
-        },
-        {
-          file: 'entities/entity.vue',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.vue`,
-        },
-        {
-          file: 'entities/entity.component.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`,
-        },
-        {
-          file: 'entities/entity.service.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.readOnly && !generator.embedded,
-      path: VUE_DIR,
-      templates: [
-        {
-          file: 'entities/entity-update.vue',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.vue`,
-        },
-        {
-          file: 'entities/entity-update.component.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.ts`,
-        },
-      ],
-    },
-  ],
-  test: [
-    {
-      condition: generator => !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'spec/app/entities/entity.component.spec.ts',
-          renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`,
-        },
-        {
-          file: 'spec/app/entities/entity-details.component.spec.ts',
-          renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.spec.ts`,
-        },
-        {
-          file: 'spec/app/entities/entity.service.spec.ts',
-          renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.readOnly && !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'spec/app/entities/entity-update.component.spec.ts',
-          renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.protractorTests && !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'e2e/entities/entity-page-object.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`,
-        },
-        {
-          file: 'e2e/entities/entity.spec.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`,
-        },
-        {
-          file: 'e2e/entities/entity-details-page-object.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-details.page-object.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.protractorTests && !generator.readOnly && !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'e2e/entities/entity-update-page-object.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-update.page-object.ts`,
-        },
-      ],
-    },
-  ],
-};
 
 const commonFiles = {
   testsCypress: [
@@ -167,7 +50,6 @@ const commonFiles = {
 module.exports = {
   writeFiles,
   addToMenu,
-  replaceTranslations,
   angularFiles,
   reactFiles,
   vueFiles,
@@ -239,15 +121,12 @@ function writeFiles() {
       addEnumerationFiles(this, clientMainSrcDir);
       if (!files) return undefined;
 
-      if (this.clientFramework !== VUE) {
-        return this.writeFiles({ sections: files, rootTemplatesPath: templatesDir });
-      }
-      return this.writeFilesToDisk(files, templatesDir);
+      return this.writeFiles({ sections: files, rootTemplatesPath: templatesDir });
     },
 
     writeTestFiles() {
       if (this.skipClient) return undefined;
-      return this.writeFilesToDisk(commonFiles, 'common');
+      return this.writeFiles({ sections: commonFiles, rootTemplatesPath: 'common' });
     },
   };
 }
@@ -264,17 +143,5 @@ function addToMenu() {
       this.entityTranslationKeyMenu,
       this.entityClassHumanized
     );
-  }
-}
-
-function replaceTranslations() {
-  if (this.clientFramework === VUE && !this.enableTranslation) {
-    utils.vueReplaceTranslation(this, [
-      `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
-      `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`,
-    ]);
-    if (!this.readOnly) {
-      utils.vueReplaceTranslation(this, [`app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`]);
-    }
   }
 }

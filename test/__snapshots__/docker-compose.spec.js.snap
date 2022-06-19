@@ -34,7 +34,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - mscouchbase (microservice application)
 - mscouchbase's couchbase database
 
@@ -129,7 +128,7 @@ eureka:
 }
 `;
 
-exports[`JHipster Docker Compose Sub Generator gateway and 1 microservice, with Cassandra cluster should match files snapshot 1`] = `
+exports[`JHipster Docker Compose Sub Generator gateway and 1 microservice, with Cassandra should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -163,10 +162,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - mscassandra (microservice application)
 - mscassandra's cassandra database
-- mscassandra's no search engine
 
 ### Additional Services:
 ",
@@ -216,10 +213,6 @@ eureka:
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
-  mscassandra-cassandra-node:
-    image: cassandra:3.11.13
-    environment:
-      - CASSANDRA_SEEDS=mscassandra-cassandra
   mscassandra-cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
@@ -299,10 +292,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 - mspsql (microservice application)
 - mspsql's postgresql database
 - mspsql's elasticsearch search engine
@@ -310,7 +301,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 - msmongodb's mongodb database
 - msmariadb (microservice application)
 - msmariadb's mariadb database
-- msmariadb's no search engine
 
 ### Additional Services:
 ",
@@ -467,10 +457,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 - mspsql (microservice application)
 - mspsql's postgresql database
 - mspsql's elasticsearch search engine
@@ -633,10 +621,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 - mspsql (microservice application)
 - mspsql's postgresql database
 - mspsql's elasticsearch search engine
@@ -644,7 +630,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 - mscouchbase's couchbase database
 - msmariadb (microservice application)
 - msmariadb's mariadb database
-- msmariadb's no search engine
 
 ### Additional Services:
 ",
@@ -805,10 +790,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 ",
@@ -924,10 +907,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 ",
@@ -1043,10 +1024,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 
@@ -1151,7 +1130,7 @@ eureka:
       - 8761:8761
 
   prometheus:
-    image: prom/prometheus:v2.36.0
+    image: prom/prometheus:v2.36.1
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -1170,7 +1149,7 @@ eureka:
       - \\"--storage.path=/alertmanager\\"
 
   grafana:
-    image: grafana/grafana:8.5.4
+    image: grafana/grafana:9.0.0
     ports:
       - 3000:3000
     volumes:
@@ -1278,10 +1257,8 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 ",
@@ -1457,7 +1434,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 ",
@@ -1557,7 +1533,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - jhgate (gateway application)
 - jhgate's mysql database
-- jhgate's no search engine
 
 ### Additional Services:
 ",
@@ -1659,7 +1634,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - msmysql (microservice application)
 - msmysql's mysql database
-- msmysql's no search engine
 
 ### Additional Services:
 ",
@@ -1755,7 +1729,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
 
 - oracle-mono (monolith application)
 - oracle-mono's oracle database
-- oracle-mono's no search engine
 
 ### Additional Services:
 ",

@@ -110,22 +110,28 @@ translate('global')
 
         it('should replace translate function with interpolation', () => {
           const body = `
-translate('global', { min:20, max: 50 })
+translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
+  anotherPattern: "^[a-zA-Z0-9]*$",
+  dynamic: exec(),
+})
 `;
           expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
 "
-\\"global-{\\"min\\":20,\\"max\\":50}-translated-value-0\\"
+\\"global-{\\"min\\":20,\\"max\\":50,\\"pattern\\":\\"^[a-zA-Z0-9]*\\",\\"anotherPattern\\":\\"^[a-zA-Z0-9]*\\",\\"dynamic\\":\\"{exec()}\\"}-translated-value-0\\"
 "
 `);
         });
 
         it('should replace wrapped translate function with interpolation', () => {
           const body = `
-{translate('global', { min:20, max: 50 })}
+{translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
+  anotherPattern: "^[a-zA-Z0-9]*$",
+  dynamic: exec(),
+})}
 `;
           expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
 "
-\\"global-{\\"min\\":20,\\"max\\":50}-translated-value-0\\"
+\\"global-{\\"min\\":20,\\"max\\":50,\\"pattern\\":\\"^[a-zA-Z0-9]*\\",\\"anotherPattern\\":\\"^[a-zA-Z0-9]*\\",\\"dynamic\\":\\"{exec()}\\"}-translated-value-0\\"
 "
 `);
         });

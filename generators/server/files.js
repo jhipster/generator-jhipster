@@ -214,6 +214,11 @@ const baseServerFiles = {
       templates: ['entrypoint.sh'],
     },
   ],
+  node: [
+    {
+      templates: ['.npmrc'],
+    },
+  ],
   packageJson: [
     {
       condition: generator => generator.skipClient,
@@ -621,7 +626,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && generator.applicationTypeMonolith,
+      condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -631,7 +636,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && generator.applicationTypeMonolith,
+      condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
