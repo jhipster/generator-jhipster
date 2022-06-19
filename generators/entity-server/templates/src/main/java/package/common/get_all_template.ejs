@@ -61,8 +61,14 @@ _%>
       <%_ } else { _%>
         return <%= entityListToDtoListReference %>(<%= entityInstancePlural %>);
       <%_ } _%>
+    <%_ } else if (implementsEagerLoadApis) { _%>
+        if (eagerload) {
+            return <%= entityInstance %>Repository.findAllWithEagerRelationships()<% if (reactive) { %>.collectList()<% } %>;
+        } else {
+            return <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList()<% } %>;
+        }
     <%_ } else { _%>
-        return <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList()<% } %>;
+            return <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList()<% } %>;
     <%_ } _%>
   <%_ } else { _%>
     public <% if (reactive) { %>Mono<ResponseEntity<List<<%= instanceType %>>>><% } else { %>ResponseEntity<List<<%= instanceType %>>><% } %> getAll<%= entityClassPlural %>(@org.springdoc.api.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %><% if (implementsEagerLoadApis) { %>, @RequestParam(required = false, defaultValue = "false") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>

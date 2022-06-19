@@ -23,22 +23,33 @@
       .join(', ');
 _%>
 import { Component, OnInit } from '@angular/core';
-import { <%_ if (!paginationNo) { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
-<%_ if (paginationPagination) { _%>
-import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
-<%_ } else if (searchEngine) { _%>
-import { ActivatedRoute } from '@angular/router';
+<%_ if (!paginationNo) { _%>
+import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
+import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
+import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (!paginationNo) { %>
-import { ASC, DESC, ITEMS_PER_PAGE<%_ if (paginationPagination) { _%>, SORT<%_ } _%> } from 'app/config/pagination.constants';
+import {
+  ITEMS_PER_PAGE,
+  PAGE_HEADER,
+<%_ if (paginationPagination) { _%>
+  TOTAL_COUNT_RESPONSE_HEADER,
 <%_ } _%>
-import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+} from 'app/config/pagination.constants';
+<%_ } _%>
+import {
+  ASC,
+  DESC,
+  SORT,
+  ITEM_DELETED_EVENT,
+  DEFAULT_SORT_DATA
+} from 'app/config/navigation.constants';
+import { EntityArrayResponseType, <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>DeleteDialogComponent } from '../delete/<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
@@ -51,140 +62,288 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
 import { FilterOptions, IFilterOptions } from 'app/shared/filter/filter.model';
 <%_ } _%>
+<%_ if (paginationNo) { _%>
+import { SortService } from 'app/shared/sort/sort.service';
+<%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html'
 })
 export class <%= entityAngularName %>Component implements OnInit {
+
+    <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
+    isLoading = false;
+
+    predicate = '<%- primaryKey.name %>';
+    ascending = true;
+<%_ if (searchEngine) { _%>
+    currentSearch = '';
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+    filters: IFilterOptions = new FilterOptions();
+<%_ } _%>
+
 <%_ if (paginationPagination) { _%>
 <%- include('pagination-template', { notSortableFieldsAfterSearch: notSortableFieldsAfterSearch }); -%>
 <%_ } else if (paginationInfiniteScroll) { _%>
 <%- include('infinite-scroll-template', { notSortableFieldsAfterSearch: notSortableFieldsAfterSearch }); -%>
-<%_ } else if (paginationNo) { _%>
-<%- include('no-pagination-template'); -%>
 <%_ } _%>
 
-<%_ if (primaryKey) { _%>
-    track<%= primaryKey.nameCapitalized %>(_index: number, item: I<%= entityAngularName %>): <%= primaryKey.tsType %> {
-        return item.<%= primaryKey.name %>!;
+    constructor(
+      protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
+      protected activatedRoute: ActivatedRoute,
+      public router: Router,
+<%_ if (paginationNo) { _%>
+      protected sortService: SortService,
+<%_ } else if (paginationInfiniteScroll) { _%>
+      protected parseLinks: ParseLinks,
+<%_ } _%>
+<%_ if (fieldsContainBlob) { _%>
+      protected dataUtils: DataUtils,
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+      protected modalService: NgbModal
+<%_ } _%>
+    ) {}
+
+<%_ if (paginationInfiniteScroll) { _%>
+    reset(): void {
+      this.page = 1;
+      this.<%= entityInstancePlural %> = [];
+      this.load();
+    }
+
+    loadPage(page: number): void {
+      this.page = page;
+      this.load();
     }
 
 <%_ } _%>
+<%_ if (primaryKey) { _%>
+    track<%= primaryKey.nameCapitalized %>(_index: number, item: I<%= entityAngularName %>): <%= primaryKey.tsType %> {
+      return item.<%= primaryKey.name %>!;
+    }
+<%_ } _%>
+
+<%_ if (searchEngine) { _%>
+    search(query: string): void {
+  <%_ if (notSortableFieldsAfterSearch) { _%>
+      if (query && [<%- notSortableFieldsAfterSearch %>].includes(this.predicate)) {
+        this.predicate = '<%- primaryKey.name %>';
+        this.ascending = true;
+      }
+  <%_ } _%>
+  <%_ if (!paginationNo) { _%>
+      this.page = 1;
+  <%_ } _%>
+      this.currentSearch = query;
+      this.navigateToWithComponentValues();
+    }
+<%_ } _%>
+
+    ngOnInit(): void {
+      this.load();
+    }
+
 <%_ if (fieldsContainBlob) { _%>
     byteSize(base64String: string): string {
-        return this.dataUtils.byteSize(base64String);
+      return this.dataUtils.byteSize(base64String);
     }
 
     openFile(base64String: string, contentType: string | null | undefined): void {
-        return this.dataUtils.openFile(base64String, contentType);
+      return this.dataUtils.openFile(base64String, contentType);
     }
 <%_ } _%>
-
-<%_
-let eventCallBack = 'this.loadAll()';
-if (paginationPagination) {
-    eventCallBack = 'this.loadPage()';
-} else if (paginationInfiniteScroll) {
-    eventCallBack = 'this.reset()';
-}
-_%>
 
 <%_ if (!readOnly) { _%>
     delete(<%= entityInstance %>: I<%= entityAngularName %>): void {
-        const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-        modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
-        // unsubscribe not needed because closed completes on modal close
-        modalRef.closed.subscribe(reason => {
-            if (reason === 'deleted') {
-                <%= eventCallBack %>;
-            }
+      const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+      modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
+      // unsubscribe not needed because closed completes on modal close
+      modalRef.closed
+        .pipe(
+          filter(reason => reason === ITEM_DELETED_EVENT),
+          switchMap(() => this.loadFromBackendWithRouteInformations())
+        ).subscribe(
+          {
+            next: (res: EntityArrayResponseType) => {
+            this.onResponseSuccess(res);
+          }
         });
     }
 <%_ } _%>
+
+    load(): void {
+      this.loadFromBackendWithRouteInformations().subscribe({
+        next: (res: EntityArrayResponseType) => {
+          this.onResponseSuccess(res);
+        }
+      });
+    }
+
+    navigateToWithComponentValues(): void {
+      this.handleNavigation(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>);
+    }
 
 <%_ if (!paginationNo) { _%>
-    protected sort(): string[] {
-        const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
-        if (this.predicate !== '<%- primaryKey.name %>') {
-            result.push('<%- primaryKey.name %>');
-        }
-        return result;
+    navigateToPage(page = this.page): void {
+      this.handleNavigation(page, this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>);
     }
-
-    <%_ if (paginationPagination) { _%>
-    protected handleNavigation(): void {
-        combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
-            const page = params.get('page');
-            const pageNumber = +(page ?? 1);
-            const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
-            const predicate = sort[0];
-            const ascending = sort[1] === ASC;
-        <%_ if (jpaMetamodelFiltering) { _%>
-            const updatedFilters = this.filters.initializeFromParams(params);
-        <%_ } _%>
-
-            if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending<%_ if (jpaMetamodelFiltering) { _%> || updatedFilters<%_ } _%>) {
-                this.predicate = predicate;
-                this.ascending = ascending;
-                this.loadPage(pageNumber, true);
-            }
-        });
-    }
-
-    protected onSuccess(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
-        this.totalItems = Number(headers.get('X-Total-Count'));
-        this.page = page;
-        <%_ if (searchEngine) { _%>
-        this.ngbPaginationPage = this.page;
-        <%_ } _%>
-        if (navigate) {
-
-            const queryParamsObj<%_ if (jpaMetamodelFiltering) { _%>: any<%_ } _%> = {
-                page: this.page,
-                size: this.itemsPerPage,
-        <%_ if (searchEngine) { _%>
-                search: this.currentSearch,
-        <%_ } _%>
-                sort: this.predicate + ',' + (this.ascending ? ASC : DESC)
-            };
-
-        <%_ if (jpaMetamodelFiltering) { _%>
-            if (this.filters.hasAnyFilterSet()) {
-                this.filters.filterOptions.forEach(filterOption => {
-                    queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.value;
-                });
-            }
-        <%_ } _%>
-            this.router.navigate(['/<%= entityPage %>'], {
-                queryParams: queryParamsObj
-            });
-        }
-        this.<%= entityInstancePlural %> = data ?? [];
-        this.ngbPaginationPage = this.page;
-    }
-
-    protected onError(): void {
-        this.ngbPaginationPage = this.page ?? 1;
-    }
-
-    <%_ } else if (paginationInfiniteScroll) { _%>
-    protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders): void {
-        const linkHeader = headers.get('link');
-        if (linkHeader) {
-            this.links = this.parseLinks.parse(linkHeader);
-        } else {
-            this.links = {
-                last: 0,
-            };
-        }
-        if (data) {
-            for (const d of data) {
-                this.<%= entityInstancePlural %>.push(d);
-            }
-        }
-    }
-
-    <%_ } _%>
 <%_ } _%>
+
+    protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
+      return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
+        .pipe(
+          tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+          switchMap(() =>
+            this.queryBackend(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>)
+          )
+        );
+    }
+
+    protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+<%_ if (!paginationNo) { _%>
+      const page = params.get(PAGE_HEADER);
+      this.page = +(page ?? 1);
+<%_ } _%>
+      const sort = (params.get(SORT) ?? data[ DEFAULT_SORT_DATA ]).split(',');
+      this.predicate = sort[ 0 ];
+      this.ascending = sort[ 1 ] === ASC;
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      this.filters.initializeFromParams(params);
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+      if (params.has('search') && params.get('search') !== '') {
+        this.currentSearch = params.get('search') as string;
+      }
+<%_ } _%>
+    }
+
+    protected onResponseSuccess(response: EntityArrayResponseType): void {
+<%_ if (!paginationNo) { _%>
+      this.fillComponentAttributesFromResponseHeader(response.headers);
+<%_ } _%>
+      const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+<%_ if (paginationNo) { _%>
+      this.<%= entityInstancePlural %> =  this.refineData(dataFromBody);
+<%_ } else { _%>
+      this.<%= entityInstancePlural %> =  dataFromBody;
+<%_ } _%>
+    }
+
+<%_ if (paginationNo) { _%>
+    protected refineData(data: I<%= entityAngularName %>[]): I<%= entityAngularName %>[] {
+      return data.sort(this.sortService.startSort(this.predicate, this.ascending ? 1 : -1))
+    }
+<%_ } _%>
+
+    protected fillComponentAttributesFromResponseBody(data: I<%= entityAngularName %>[] | null): I<%= entityAngularName %>[] {
+<%_ if (paginationInfiniteScroll) { _%>
+      const <%= entityInstancePlural %>New = this.<%= entityInstancePlural %> ?? [];
+      if (data) {
+        for (const d of data) {
+  <%_ if (primaryKey) { _%>
+          if (<%= entityInstancePlural %>New.map(op => op.<%= primaryKey.name %>).indexOf(d.<%= primaryKey.name %>) === -1) {
+  <%_ } _%>
+            <%= entityInstancePlural %>New.push(d);
+  <%_ if (primaryKey) { _%>
+          }
+  <%_ } _%>
+        }
+      }
+      return <%= entityInstancePlural %>New;
+<%_ } else { _%>
+        return data ?? [];
+<%_ } _%>
+    }
+
+<%_ if (!paginationNo) { _%>
+    protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
+  <%_ if (paginationPagination) { _%>
+      this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
+  <%_ } else if (paginationInfiniteScroll) { _%>
+      const linkHeader = headers.get('link');
+      if (linkHeader) {
+        this.links = this.parseLinks.parse(linkHeader);
+      } else {
+        this.links = {
+          last: 0,
+        };
+      }
+    <%_ } _%>
+    }
+<%_ } _%>
+
+    protected queryBackend(<% if (!paginationNo) { %>page?: number, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filters?: IFilterOptions<% } %><% if (searchEngine) { %>, currentSearch?: string<% } %>): Observable<EntityArrayResponseType> {
+      this.isLoading = true;
+<%_ if (!paginationNo) { _%>
+      const pageToLoad: number = page ?? 1;
+<%_ } _%>
+      const queryObject<% if ((jpaMetamodelFiltering && paginationPagination) || searchEngine) { %>: any <% } %> = {
+<%_ if (!paginationNo) { _%>
+        page: pageToLoad - 1,
+        size: this.itemsPerPage,
+<%_ } _%>
+<%_ if(implementsEagerLoadApis || containsBagRelationships) { _%>
+        eagerload: true,
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+        query: currentSearch,
+<%_ } _%>
+        sort: this.getSortQueryParam(predicate, ascending),
+      };
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      if (filters?.hasAnyFilterSet()) {
+        filters.filterOptions.forEach(filterOption => {
+          queryObject[filterOption.name] = filterOption.value;
+        });
+      }
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+      if (this.currentSearch && this.currentSearch !== '') {
+        return this.<%= entityInstance %>Service.search(queryObject)
+          .pipe(
+            tap(() => this.isLoading = false)
+          );
+      } else {
+<%_ } _%>
+        return this.<%= entityInstance %>Service.query(queryObject)
+          .pipe(
+            tap(() => this.isLoading = false)
+          );
+<%_ if (searchEngine) { _%>
+      }
+<%_ } _%>
+    }
+
+    protected handleNavigation(<% if (!paginationNo) { %>page = this.page, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filters?: IFilterOptions<% } %><% if (searchEngine) { %>, currentSearch?: string<% } %>): void {
+      const queryParamsObj<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>: any<%_ } _%> = {
+<%_ if (searchEngine) { _%>
+        search: currentSearch,
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+        page,
+        size: this.itemsPerPage,
+<%_ } _%>
+        sort: this.getSortQueryParam(predicate, ascending),
+      };
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      if (filters?.hasAnyFilterSet()) {
+        filters.filterOptions.forEach(filterOption => {
+          queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.value;
+        });
+      }
+<%_ } _%>
+
+      this.router.navigate([ './' ], {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParamsObj,
+      });
+    }
+
+    protected getSortQueryParam(predicate = this.predicate, ascending = this.ascending): string[] {
+      const ascendingQueryParam = ascending ? ASC : DESC;
+      return [predicate + ',' + ascendingQueryParam];
+    }
 }

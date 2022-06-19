@@ -21,6 +21,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
     templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
@@ -36,7 +37,7 @@ export class <%= entityAngularName %>DeleteDialogComponent {
 
     confirmDelete(id: <%= tsKeyType %>): void {
         this.<%= entityInstance %>Service.delete(id).subscribe(() => {
-            this.activeModal.close('deleted');
+            this.activeModal.close(ITEM_DELETED_EVENT);
         });
     }
 }

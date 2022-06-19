@@ -303,6 +303,7 @@ const files = {
         'config/font-awesome-icons.ts',
         'config/error.constants.ts',
         'config/input.constants.ts',
+        'config/navigation.constants.ts',
         'config/pagination.constants.ts',
         'config/authority.constants.ts',
 
@@ -343,6 +344,7 @@ const files = {
         'shared/date/format-medium-date.pipe.ts',
         'shared/date/format-medium-datetime.pipe.ts',
         'shared/sort/sort.directive.ts',
+        'shared/sort/sort.service.ts',
         'shared/sort/sort-by.directive.ts',
         'shared/pagination/item-count.component.ts',
         // alert service code
