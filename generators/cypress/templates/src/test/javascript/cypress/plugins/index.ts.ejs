@@ -28,17 +28,11 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-import fs = require('fs');
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { lighthouse, pa11y, prepareAudit } from 'cypress-audit';
-import ReportGenerator = require('lighthouse/report/generator/report-generator');
-/**
- * @type {Cypress.PluginConfig}
- */
-module.exports = async (on<% if (cypressCoverage) { %>, config<% } %>) => {
-  // `on` is used to hook into various events Cypress emits
-<%_ if (cypressCoverage) { _%>
-  // `config` is the resolved Cypress config
-<%_ } _%>
+import ReportGenerator from 'lighthouse/report/generator/report-generator';
+
+export default async (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) => {
   on('before:browser:launch', (browser, launchOptions) => {
     prepareAudit(launchOptions);
     if (browser.name === 'chrome' && browser.isHeadless) {
@@ -49,8 +43,8 @@ module.exports = async (on<% if (cypressCoverage) { %>, config<% } %>) => {
 
   on('task', {
     lighthouse: lighthouse((lighthouseReport) => {
-      !fs.existsSync('<%= BUILD_DIR %>cypress') && fs.mkdirSync('<%= BUILD_DIR %>cypress', { recursive: true });
-      fs.writeFileSync('<%= BUILD_DIR %>cypress/lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html'));
+      !existsSync('<%= BUILD_DIR %>cypress') && mkdirSync('<%= BUILD_DIR %>cypress', { recursive: true });
+      writeFileSync('<%= BUILD_DIR %>cypress/lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html'));
     }),
     pa11y: pa11y(),
   });
