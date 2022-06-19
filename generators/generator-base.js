@@ -69,6 +69,7 @@ const {
   },
 } = require('../lib/constants/priorities.cjs');
 const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
+const { joinCallbacks } = require('../lib/support/base.cjs');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -110,9 +111,14 @@ const isWin32 = os.platform() === 'win32';
  * @param {JHipsterBaseGenerator} this
  * @param {string} content
  * @param {string} filePath
- * @returns {string} new content
+ * @returns {CascatedEditFileCallback} callback for cascated edit
  */
 
+/**
+ * @callback CascatedEditFileCallback
+ * @param {...EditFileCallback} callbacks
+ * @returns {CascatedEditFileCallback} callback for cascated edit
+ */
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
@@ -3439,27 +3445,40 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Edit file content
    * @param {string} file
    * @param {...EditFileCallback} transformCallbacks
+   * @returns {CascatedEditFileCallback}
    */
   editFile(file, ...transformCallbacks) {
     let filePath = this.destinationPath(file);
     if (!this.env.sharedFs.existsInMemory(filePath) && this.env.sharedFs.existsInMemory(`${filePath}.jhi`)) {
       filePath = `${filePath}.jhi`;
     }
-    let content = this.readDestination(filePath);
-    if (isWin32 && content.match(/\r\n/)) {
-      transformCallbacks = [content => content.replace(/\r\n/g, '\n')].concat(transformCallbacks, content =>
-        content.replace(/\n/g, '\r\n')
-      );
-    }
+
+    let content;
+
     try {
-      for (const cb of transformCallbacks) {
-        content = cb.call(this, content, filePath);
+      content = this.readDestination(filePath);
+    } catch (_error) {
+      if (transformCallbacks.length === 0) {
+        throw new Error(`File ${filePath} doesn't exist`);
       }
-    } catch (error) {
-      throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
+      // allow to edit non existing files
+      content = '';
     }
-    this.writeDestination(filePath, content);
-    return content;
+
+    const writeCallback = (...callbacks) => {
+      if (callbacks.length === 0) {
+        return writeCallback;
+      }
+      try {
+        content = joinCallbacks(...callbacks).call(this, content, filePath);
+        this.writeDestination(filePath, content);
+      } catch (error) {
+        throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
+      }
+      return writeCallback;
+    };
+
+    return writeCallback(...transformCallbacks);
   }
 }
 

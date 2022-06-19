@@ -9,7 +9,7 @@
     "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",
-    "devDatabaseType": "mariadb",
+    "devDatabaseType": "h2Disk",
     "enableHibernateCache": true,
     "enableTranslation": false,
     "jhiPrefix": "myPrefix",

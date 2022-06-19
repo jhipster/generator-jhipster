@@ -30,14 +30,11 @@ const writeFiles = require('./files').writeFiles;
 const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
 const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const { CASSANDRA, COUCHBASE, MONGODB, ORACLE } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, COUCHBASE, MONGODB, ORACLE, NO: NO_DATABASE } = require('../../jdl/jhipster/database-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
-const databaseTypes = require('../../jdl/jhipster/database-types');
 const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list');
-
-const NO_DATABASE = databaseTypes.NO;
 
 /* eslint-disable consistent-return */
 module.exports = class extends BaseDockerGenerator {
@@ -131,13 +128,12 @@ module.exports = class extends BaseDockerGenerator {
       loadConfig() {
         this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
         this.useKafka = this.appConfigs.some(appConfig => appConfig.messageBroker === KAFKA);
+        this.entryPort = 8080;
       },
 
       setAppsYaml() {
         this.appsYaml = [];
         this.keycloakRedirectUris = '';
-        let portIndex = 8080;
-        this.serverPort = portIndex;
         this.appConfigs.forEach(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           const parentConfiguration = {};
@@ -146,15 +142,14 @@ module.exports = class extends BaseDockerGenerator {
           const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
           const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-            this.keycloakRedirectUris += `"http://localhost:${portIndex}/*", "https://localhost:${portIndex}/*", `;
+            this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {
               this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
             }
             // Split ports by ":" and take last 2 elements to skip the hostname/IP if present
             const ports = yamlConfig.ports[0].split(':').slice(-2);
-            ports[0] = portIndex;
+            ports[0] = appConfig.composePort;
             yamlConfig.ports[0] = ports.join(':');
-            portIndex++;
           }
 
           if (appConfig.applicationType === MONOLITH && this.monitoring === PROMETHEUS) {
@@ -174,7 +169,7 @@ module.exports = class extends BaseDockerGenerator {
           parentConfiguration[`${lowercaseBaseName}`] = yamlConfig;
 
           // Add database configuration
-          const database = appConfig.prodDatabaseType;
+          const database = appConfig.databaseTypeSql ? appConfig.prodDatabaseType : appConfig.databaseType;
           if (database !== NO_DATABASE && database !== ORACLE) {
             const relativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`));
             const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
@@ -304,11 +299,9 @@ module.exports = class extends BaseDockerGenerator {
     this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker-compose up -d')}`);
     if (this.gatewayNb + this.monolithicNb > 1) {
       this.log('\nYour applications will be accessible on these URLs:');
-      let portIndex = 8080;
       this.appConfigs.forEach(appConfig => {
         if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-          this.log(`\t- ${appConfig.baseName}: http://localhost:${portIndex}`);
-          portIndex++;
+          this.log(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
         }
       });
       this.log('\n');

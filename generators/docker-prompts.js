@@ -21,7 +21,6 @@ const shelljs = require('shelljs');
 const { loadConfigs, setClusteredApps } = require('./docker-base');
 const { getBase64Secret } = require('./utils');
 const { MICROSERVICE, MONOLITH, GATEWAY } = require('../jdl/jhipster/application-types');
-const { COUCHBASE, MONGODB } = require('../jdl/jhipster/database-types');
 const { PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
 const monitoring = require('../jdl/jhipster/monitoring-types');
 
@@ -183,7 +182,7 @@ async function askForClustersMode() {
 
   const clusteredDbApps = [];
   this.appConfigs.forEach((appConfig, index) => {
-    if (appConfig.prodDatabaseType === MONGODB || appConfig.prodDatabaseType === COUCHBASE) {
+    if (appConfig.databaseTypeMongodb || appConfig.databaseTypeCouchbase) {
       clusteredDbApps.push(this.appsFolders[index]);
     }
   });

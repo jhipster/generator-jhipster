@@ -56,7 +56,7 @@ const { createBaseNeedle } = require('../../lib/support/needles.cjs');
  * );
  * @param {import('../generator-base.js')} [generator]
  * @param {ApplicationPropertiesNeedles} needles
- * @returns {string | import('../../generators/generator-base.js').EditFileCallback}
+ * @returns {import('../../generators/generator-base.js').CascatedEditFileCallback | import('../../generators/generator-base.js').EditFileCallback}
  */
 const insertContentIntoApplicationProperties = (generator, needles) => {
   if (!needles) {

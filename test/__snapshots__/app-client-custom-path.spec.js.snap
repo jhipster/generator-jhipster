@@ -41,6 +41,9 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
+  ".npmrc": Object {
+    "stateCleared": "modified",
+  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -758,6 +761,9 @@ Object {
   "src/main/webapp2/app/config/language.constants.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/config/navigation.constants.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/config/pagination.constants.ts": Object {
     "stateCleared": "modified",
   },
@@ -1044,6 +1050,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/sort/sort.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/sort/sort.service.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/bootstrap.ts": Object {
@@ -1436,6 +1445,9 @@ Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/maven-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  ".npmrc": Object {
     "stateCleared": "modified",
   },
   ".prettierignore": Object {
