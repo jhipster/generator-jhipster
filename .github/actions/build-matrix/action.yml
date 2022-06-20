@@ -94,10 +94,7 @@ runs:
     - name: 'Check changes'
       id: build-changes
       run: |
-        SKIP_WORKFLOW=${{inputs.skip-workflow}}
-        SKIP_CHANGES_DETECTION=${{inputs.skip-changes-detection}}
-        cd ${{ inputs.generator-jhipster-directory }}
-        test-integration/scripts/99-build-changes.sh
+        SKIP_WORKFLOW=${{inputs.skip-workflow}} SKIP_CHANGES_DETECTION=${{inputs.skip-changes-detection}} ${{ inputs.generator-jhipster-directory }}/test-integration/scripts/99-build-changes.sh
       shell: bash
 
     - name: 'Build matrix'
