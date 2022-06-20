@@ -12,11 +12,15 @@
     <property name="clobType" value="varchar(1000000)" dbms="h2"/>
     <property name="blobType" value="varchar(1000000)" dbms="h2"/>
   <%_ } else { _%>
+    <%_ if (prodDatabaseTypePostgres) { _%>
     <property name="clobType" value="longvarchar" dbms="h2"/>
+    <%_ } else { _%>
+    <property name="clobType" value="clob" dbms="h2"/>
+    <%_ } _%>
     <property name="blobType" value="blob" dbms="h2"/>
   <%_ } _%>
 <%_ } _%>
-<%_ if (devDatabaseTypeMysql  || prodDatabaseTypeMysql) { _%>
+<%_ if (devDatabaseTypeMysql || prodDatabaseTypeMysql) { _%>
     <property name="now" value="now()" dbms="mysql"/>
     <property name="floatType" value="float" dbms="mysql"/>
     <property name="clobType" value="clob" dbms="mysql"/>
