@@ -49,9 +49,9 @@ spring:
     password:
   liquibase:
     <%_ if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true }) %>
+    url: <%- getJDBCUrl(devDatabaseType, { prodDatabaseType, databaseName: lowercaseBaseName, itests: true }) %>
     <%_ } else { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/testdb` }) %>
+    url: <%- getJDBCUrl(devDatabaseType, { prodDatabaseType, databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/testdb` }) %>
     <%_ } _%>
   <%_ } _%>
 <%_ } else { _%>
