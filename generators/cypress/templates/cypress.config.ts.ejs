@@ -45,7 +45,7 @@ export const defaultConfig = {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     async setupNodeEvents(on, config) {
-      return (await import('./src/test/javascript/cypress/plugins/index')).default(on, config);
+      return (await import('./<%= CLIENT_TEST_SRC_DIR %>cypress/plugins/index')).default(on, config);
     },
     baseUrl: 'http://localhost:<%= gatewayServerPort || serverPort %>/',
     specPattern: '<%= CLIENT_TEST_SRC_DIR %>cypress/integration/**/*.spec.ts',
