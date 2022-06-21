@@ -68,9 +68,10 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
             return claims;
         }
         Map<String, Object> convertedClaims = this.delegate.convert(claims);
-        if (RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes) {
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        if (attributes instanceof ServletRequestAttributes) {
             // Retrieve and set the token
-            String token = bearerTokenResolver.resolve(((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
+            String token = bearerTokenResolver.resolve(((ServletRequestAttributes) attributes).getRequest());
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", buildBearer(token));
 
