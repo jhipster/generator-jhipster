@@ -18,7 +18,7 @@
 -%>
 import { defineConfig } from 'cypress';
 
-export default defineConfig({
+export const defaultConfig = {
   video: false,
   fixturesFolder: '<%= CLIENT_TEST_SRC_DIR %>cypress/fixtures',
   screenshotsFolder: '<%= BUILD_DIR %>cypress/screenshots',
@@ -28,6 +28,9 @@ export default defineConfig({
   viewportWidth: 1200,
   viewportHeight: 720,
   retries: 2,
+<%_ if (clientFrameworkReact) { _%>
+  scrollBehavior: 'center',
+<%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
   env: {
     authenticationUrl: '/api/authenticate',
@@ -49,4 +52,6 @@ export default defineConfig({
     supportFile: '<%= CLIENT_TEST_SRC_DIR %>cypress/support/index.ts',
     experimentalSessionAndOrigin: true,
   },
-});
+};
+
+export default defineConfig(defaultConfig);
