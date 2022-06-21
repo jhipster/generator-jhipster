@@ -16,24 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HttpParams } from '@angular/common/http';
-
-export const createRequestOption = (req?: any): HttpParams => {
-  let options: HttpParams = new HttpParams();
-
-  if (req) {
-    Object.keys(req).forEach(key => {
-      if (key !== 'sort' && req[key] && req[key] !== '') {
-        options = options.set(key, req[key]);
-      }
-    });
-
-    if (req.sort) {
-      req.sort.forEach((val: string) => {
-        options = options.append('sort', val);
-      });
-    }
-  }
-
-  return options;
-};
+export const ASC = 'asc';
+export const DESC = 'desc';
+export const SORT = 'sort';
+export const ITEM_DELETED_EVENT = 'deleted'
+export const DEFAULT_SORT_DATA = 'defaultSort'

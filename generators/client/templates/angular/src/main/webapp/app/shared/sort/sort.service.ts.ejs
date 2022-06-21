@@ -16,24 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-export const createRequestOption = (req?: any): HttpParams => {
-  let options: HttpParams = new HttpParams();
+@Injectable({ providedIn: 'root' })
+export class SortService {
+  private collator = new Intl.Collator(undefined, {
+    numeric: true,
+    sensitivity: 'base',
+  });
 
-  if (req) {
-    Object.keys(req).forEach(key => {
-      if (key !== 'sort' && req[key] && req[key] !== '') {
-        options = options.set(key, req[key]);
-      }
-    });
-
-    if (req.sort) {
-      req.sort.forEach((val: string) => {
-        options = options.append('sort', val);
-      });
-    }
+  public startSort(property: string, order: number): (a: any, b: any) => number {
+    return (a: any, b: any) => this.collator.compare(a[property], b[property]) * order;
   }
-
-  return options;
-};
+}

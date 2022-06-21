@@ -19,9 +19,9 @@
 <%_
 const tsKeyId = generateTestEntityId(primaryKey.type);
 const allRelationshipsByEntityNeedingOptions = Object
-    .values(differentRelationships)
-    .map(relationships => relationships.filter(rel => rel.ownerSide))
-    .filter(relationships => relationships.length > 0);
+  .values(differentRelationships)
+  .map(relationships => relationships.filter(rel => rel.ownerSide))
+  .filter(relationships => relationships.length > 0);
 const testEntityPrimaryKey0 = generateTestEntityPrimaryKey(primaryKey, 0);
 const testEntityPrimaryKey1 = generateTestEntityPrimaryKey(primaryKey, 1);
 _%>
@@ -36,15 +36,15 @@ import { of, Subject, from } from 'rxjs';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions.filter(relationships => relationships[0].otherEntity.entityAngularName !== entityAngularName)) { _%>
-    <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity; _%>
-    <%_ if (isBuiltInUser(otherEntity.entityAngularName)) { _%>
+  <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity; _%>
+  <%_ if (isBuiltInUser(otherEntity.entityAngularName)) { _%>
 
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
-    <%_ } else { _%>
+  <%_ } else { _%>
 import { I<%= otherEntity.entityAngularName %> } from 'app/entities/<%= otherEntity.entityFolderName %>/<%= otherEntity.entityFileName %>.model';
 import { <%= otherEntity.entityAngularName %>Service } from 'app/entities/<%= otherEntity.entityFolderName %>/service/<%= otherEntity.entityFileName %>.service';
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
@@ -97,7 +97,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
                 const <%= entityInstance %> : I<%= entityAngularName %> = <%- testEntityPrimaryKey1 %>;
     <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
       <%_ const reference = relationship.reference _%>
-       <%_ if (relationship.collection) { _%>
+      <%_ if (relationship.collection) { _%>
                 const <%= reference.name %> : I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
       <%_ } else { _%>
                 const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
@@ -109,7 +109,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
                 jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= otherEntity.entityInstance %>Collection })));
                 const additional<%= otherEntity.entityAngularNamePlural %> = [
     <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
-        <%_ const reference = relationship.reference _%>
+      <%_ const reference = relationship.reference _%>
                     <% if (relationship.collection) { %>...<% } %><%= reference.name %>,
     <%_ } _%>
                 ];
@@ -236,7 +236,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
         });
     });
 <%_ const trackedEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
-    if (trackedEntities.length > 0) {
+if (trackedEntities.length > 0) {
 _%>
 
     describe('Tracking relationships identifiers', () => {
@@ -255,7 +255,7 @@ _%>
     });
 <%_ } _%>
 <%_ const selectableEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipManyToMany && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
-  if (selectableEntities.length > 0) {
+if (selectableEntities.length > 0) {
 _%>
 
     describe('Getting selected relationships', () => {

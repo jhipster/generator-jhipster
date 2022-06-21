@@ -126,7 +126,7 @@
         <cassandra-driver.version>4.14.1</cassandra-driver.version>
 <%_ } _%>
         <archunit-junit5.version>0.22.0</archunit-junit5.version>
-        <mapstruct.version>1.5.1.Final</mapstruct.version>
+        <mapstruct.version>1.5.2.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
@@ -1328,7 +1328,7 @@
                         </excludes>
 <%_ if (reactive) { _%>
                         <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                        <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+                        <argLine>@{argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
 <%_ } _%>
                     </configuration>
                 </plugin>
@@ -1703,9 +1703,9 @@
                                 </includes>
   <%_ if (reactive) { _%>
                                 <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                                <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=testdev</argLine>
+                                <argLine>@{argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=testdev</argLine>
   <%_ } else { _%>
-                                <argLine>${argLine} -Dspring.profiles.active=testdev</argLine>
+                                <argLine>@{argLine} -Dspring.profiles.active=testdev</argLine>
   <%_ } _%>
                             </configuration>
                             <executions>
@@ -1889,9 +1889,9 @@
                                 </includes>
 <%_ if (reactive) { _%>
                                 <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                                <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=testprod</argLine>
+                                <argLine>@{argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=testprod</argLine>
 <%_ } else { _%>
-                                <argLine>${argLine} -Dspring.profiles.active=testprod</argLine>
+                                <argLine>@{argLine} -Dspring.profiles.active=testprod</argLine>
 <%_ } _%>
                             </configuration>
                             <executions>

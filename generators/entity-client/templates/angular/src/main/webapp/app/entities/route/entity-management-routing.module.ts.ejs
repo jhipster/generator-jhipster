@@ -26,16 +26,15 @@ import { <%= entityAngularName %>DetailComponent } from '../detail/<%= entityFil
 import { <%= entityAngularName %>UpdateComponent } from '../update/<%= entityFileName %>-update.component';
 <%_ } _%>
 import { <%= entityAngularName %>RoutingResolveService } from './<%= entityFileName %>-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const <%= entityInstance %>Route: Routes = [
     {
         path: '',
         component: <%= entityAngularName %>Component,
-<%_ if (paginationPagination) { _%>
         data: {
-            defaultSort: '<%- primaryKey.name %>,asc',
+            defaultSort: '<%- primaryKey.name %>,' + ASC,
         },
-<%_ } _%>
         canActivate: [UserRouteAccessService]
     },
     {

@@ -48,20 +48,20 @@
     "bootswatch": "<%= dependabotPackageJson.dependencies.bootswatch %>",
     <%_ } _%>
     "dayjs": "<%= dependabotPackageJson.dependencies['dayjs'] %>",
-    <%_ if (authenticationTypeSession && websocket === 'spring-websocket') { _%>
+    <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
     "ngx-cookie-service": "<%= dependabotPackageJson.dependencies['ngx-cookie-service'] %>",
     <%_ } _%>
     "ngx-infinite-scroll": "<%= dependabotPackageJson.dependencies['ngx-infinite-scroll'] %>",
     "ngx-webstorage": "<%= dependabotPackageJson.dependencies['ngx-webstorage'] %>",
     "@popperjs/core": "<%= dependabotPackageJson.dependencies['@popperjs/core'] %>",
     "rxjs": "<%= dependabotPackageJson.dependencies['rxjs'] %>",
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     "sockjs-client": "1.5.0",
     "webstomp-client": "1.2.6",
-    <%_ } _%>
-    <%_ if (skipServer) { _%>
+<%_ } _%>
+<%_ if (skipServer) { _%>
     "sonar-scanner": "3.1.0",
-    <%_ } _%>
+<%_ } _%>
     "tslib": "<%= dependabotPackageJson.dependencies['tslib'] %>",
     "zone.js": "<%= dependabotPackageJson.dependencies['zone.js'] %>"
   },
@@ -79,7 +79,7 @@
     "ts-node": "9.1.1",
     "webdriver-manager": "12.1.8",
 <%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     "@types/sockjs-client": "1.5.0",
 <%_ } _%>
 <%_ if (cypressTests) { _%>
@@ -111,10 +111,10 @@
     "eslint-webpack-plugin": "<%= dependabotPackageJson.devDependencies['eslint-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
-    <%_ otherModules.forEach(module => { _%>
+  <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
-    <%_ });
-} _%>
+  <%_ }); _%>
+<%_ } _%>
     "jest": "<%= dependabotPackageJson.devDependencies['jest'] %>",
     "jest-preset-angular": "<%= dependabotPackageJson.devDependencies['jest-preset-angular'] %>",
     "jest-date-mock": "<%= dependabotPackageJson.devDependencies['jest-date-mock'] %>",
@@ -149,32 +149,32 @@
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
-    <%_ if (protractorTests && !cypressTests) { _%>
+<%_ if (protractorTests && !cypressTests) { _%>
     "e2e": "<%= clientPackageManager %> run e2e:protractor --",
     "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless --",
-    <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
+<%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
     "e2e": "<%= clientPackageManager %> run e2e:cypress:headed --",
     "e2e:headless": "<%= clientPackageManager %> run e2e:cypress --",
-    <%_ } _%>
-    <%_ if (protractorTests) { _%>
+<%_ } _%>
+<%_ if (protractorTests) { _%>
     "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor --",
     "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    <%_ } _%>
-    <%_ if (cypressTests) { _%>
+<%_ } _%>
+<%_ if (cypressTests) { _%>
     "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
     "e2e:cypress": "cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
     "cypress": "cypress open",
-    <%_ } _%>
-    <%_ if (protractorTests) { _%>
+<%_ } _%>
+<%_ if (protractorTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
-    <%_ } _%>
+<%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",
     "start-tls": "<%= clientPackageManager %> run webapp:dev-ssl",
-    <%_ if (skipServer) { _%>
+<%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
-    <%_ } _%>
+<%_ } _%>
     "serve": "<%= clientPackageManager %> run start --",
     "build": "<%= clientPackageManager %> run webapp:prod --",
     "pretest": "<%= clientPackageManager %> run lint",
