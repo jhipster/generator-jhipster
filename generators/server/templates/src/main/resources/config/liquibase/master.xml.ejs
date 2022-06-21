@@ -6,7 +6,11 @@
 <%_ if (devDatabaseTypeH2Any) { _%>
     <property name="now" value="now()" dbms="h2"/>
     <property name="floatType" value="float4" dbms="h2"/>
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+    <property name="uuidType" value="varchar(36)" dbms="h2"/>
+  <%_ } else { _%>
     <property name="uuidType" value="uuid" dbms="h2"/>
+  <%_ } _%>
     <property name="datetimeType" value="datetime" dbms="h2"/>
   <%_ if (reactive) { _%>
     <property name="clobType" value="varchar(1000000)" dbms="h2"/>
