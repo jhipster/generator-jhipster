@@ -22,9 +22,10 @@ const constants = require('../generator-constants');
 const { angularFiles } = require('./files-angular.cjs');
 const { reactFiles } = require('./files-react.cjs');
 const { vueFiles } = require('./files-vue.cjs');
+const { cleanupCypressEntityFiles, writeCypressEntityFiles } = require('./files-cypress.cjs');
 
 /* Constants use throughout */
-const { CLIENT_TEST_SRC_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
+const { ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
 const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 const CLIENT_COMMON_TEMPLATES_DIR = 'common';
@@ -32,28 +33,12 @@ const CLIENT_NG2_TEMPLATES_DIR = 'angular';
 const CLIENT_REACT_TEMPLATES_DIR = 'react';
 const CLIENT_VUE_TEMPLATES_DIR = 'vue';
 
-const commonFiles = {
-  testsCypress: [
-    {
-      condition: generator => generator.cypressTests && !generator.embedded,
-      path: `${CLIENT_TEST_SRC_DIR}cypress/`,
-      templates: [
-        {
-          file: 'integration/entity/entity.spec.ts',
-          renameTo: generator => `integration/entity/${generator.entityFileName}.spec.ts`,
-        },
-      ],
-    },
-  ],
-};
-
 module.exports = {
   writeFiles,
   addToMenu,
   angularFiles,
   reactFiles,
   vueFiles,
-  commonFiles,
 };
 
 function addEnumerationFiles(generator, clientFolder) {
@@ -124,10 +109,8 @@ function writeFiles() {
       return this.writeFiles({ sections: files, rootTemplatesPath: templatesDir });
     },
 
-    writeTestFiles() {
-      if (this.skipClient) return undefined;
-      return this.writeFiles({ sections: commonFiles, rootTemplatesPath: 'common' });
-    },
+    cleanupCypressEntityFiles,
+    writeCypressEntityFiles,
   };
 }
 
