@@ -143,7 +143,7 @@ describe('JHipster client generator', () => {
 
       it('should contains admin ui cypress tests', () => {
         assert.fileContent(
-          `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+          `${CLIENT_TEST_SRC_DIR}cypress/e2e/administration/administration.cy.ts`,
           '  metricsPageHeadingSelector,\n' +
             '  healthPageHeadingSelector,\n' +
             '  logsPageHeadingSelector,\n' +
@@ -151,7 +151,7 @@ describe('JHipster client generator', () => {
         );
 
         assert.fileContent(
-          `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+          `${CLIENT_TEST_SRC_DIR}cypress/e2e/administration/administration.cy.ts`,
           "  describe('/metrics', () => {\n" +
             "    it('should load the page', () => {\n" +
             "      cy.clickOnAdminMenuItem('metrics');\n" +
@@ -242,7 +242,7 @@ describe('JHipster client generator', () => {
 
       it('should not contains admin ui cypress tests', () => {
         assert.noFileContent(
-          `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+          `${CLIENT_TEST_SRC_DIR}cypress/e2e/administration/administration.cy.ts`,
           '  metricsPageHeadingSelector,\n' +
             '  healthPageHeadingSelector,\n' +
             '  logsPageHeadingSelector,\n' +
@@ -250,7 +250,7 @@ describe('JHipster client generator', () => {
         );
 
         assert.noFileContent(
-          `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+          `${CLIENT_TEST_SRC_DIR}cypress/e2e/administration/administration.cy.ts`,
           "  describe('/metrics', () => {\n" +
             "    it('should load the page', () => {\n" +
             "      cy.clickOnAdminMenuItem('metrics');\n" +

@@ -1,4 +1,3 @@
-import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -53,9 +52,9 @@ describe('<%= entityClass %> e2e test', () => {
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
   const <%= entityInstance %>Sample = <%- JSON.stringify(generateTestEntity(sampleFields.map(field => field.reference))) %>;
 
-  let <%= entityInstance %>: any;
+  let <%= entityInstance %>;
 <%_ for (otherEntity of requiredOtherEntities) { _%>
-  <%_ if (skipCreateTest) { _%>// <%_ } _%>let <%= otherEntity.entityInstance %>: any;
+  <%_ if (skipCreateTest) { _%>// <%_ } _%>let <%= otherEntity.entityInstance %>;
 <%_ } _%>
 
   beforeEach(() => {
@@ -145,7 +144,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('<%= entityPage %>');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response!.body.length === 0) {
+      if (response.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -170,7 +169,7 @@ describe('<%= entityClass %> e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(200);
+          expect(response.statusCode).to.equal(200);
         });
         cy.url().should('match', <%= entityInstance %>PageUrlPattern);
       });
@@ -231,7 +230,7 @@ describe('<%= entityClass %> e2e test', () => {
         cy.visit(<%= entityInstance %>PageUrl);
 
         cy.wait('@entitiesRequest').then(({ response }) => {
-          if (response!.body.length === 0) {
+          if (response.body.length === 0) {
             this.skip();
           }
         });
@@ -243,7 +242,7 @@ describe('<%= entityClass %> e2e test', () => {
         cy.getEntityDetailsHeading('<%= entityInstance %>');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(200);
+          expect(response.statusCode).to.equal(200);
         });
         cy.url().should('match', <%= entityInstance %>PageUrlPattern);
       });
@@ -255,7 +254,7 @@ describe('<%= entityClass %> e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(200);
+          expect(response.statusCode).to.equal(200);
         });
         cy.url().should('match', <%= entityInstance %>PageUrlPattern);
       });
@@ -271,10 +270,10 @@ describe('<%= entityClass %> e2e test', () => {
         cy.getEntityDeleteDialogHeading('<%= entityInstance %>').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(204);
+          expect(response.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(200);
+          expect(response.statusCode).to.equal(200);
         });
         cy.url().should('match', <%= entityInstance %>PageUrlPattern);
   <% if (cypressBootstrapEntities) { %>
@@ -336,11 +335,11 @@ describe('<%= entityClass %> e2e test', () => {
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response!.statusCode).to.equal(201);
-        <%= entityInstance %> = response!.body;
+        expect(response.statusCode).to.equal(201);
+        <%= entityInstance %> = response.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response!.statusCode).to.equal(200);
+        expect(response.statusCode).to.equal(200);
       });
       cy.url().should('match', <%= entityInstance %>PageUrlPattern);
     });

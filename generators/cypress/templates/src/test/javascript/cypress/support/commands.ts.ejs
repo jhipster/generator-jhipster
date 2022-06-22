@@ -104,7 +104,7 @@ export const classValid = <%_ if (clientFrameworkAngular) { _%>'ng-valid';
 <%_ } else if (clientFrameworkReact) { _%>'is-valid';
 <%_ } else { _%>'valid';<%_ } _%>
 
-Cypress.Commands.add('authenticatedRequest', (data: any) => {
+Cypress.Commands.add('authenticatedRequest', (data) => {
 <%_ if (authenticationTypeJwt) { _%>
   <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
   const bearerToken = JSON.parse(sessionStorage.getItem(Cypress.env('jwtStorageName')));
@@ -173,7 +173,7 @@ Cypress.Commands.add('login', (username: string, password: string) => {
 declare global {
   namespace Cypress {
     interface Chainable {
-      authenticatedRequest(data: any): Cypress.Chainable;
+      authenticatedRequest(data): Cypress.Chainable;
       login(username: string, password: string): Cypress.Chainable;
     }
   }

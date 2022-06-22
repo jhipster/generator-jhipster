@@ -30,7 +30,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "<%= DIST_DIR %>app",
     "lib": ["dom", "es2015", "es2016", "es2017", "es2019", "es2020"],
-    "types": ["jest", "webpack-env"],
+    "types": ["webpack-env"],
     "allowJs": true,
     "checkJs": false,
     "baseUrl": "./",
@@ -42,7 +42,5 @@
     "allowSyntheticDefaultImports": true
   },
   "include": ["<%= MAIN_SRC_DIR %>app"],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"]
 }

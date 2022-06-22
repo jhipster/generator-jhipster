@@ -48,7 +48,11 @@ module.exports = async (config, options, targetOptions) => {
   if (config.mode === 'development') {
     config.plugins.push(
       new ESLintPlugin({
-        extensions: ['js', 'ts'],
+        baseConfig: {
+          parserOptions: {
+            project: ['../tsconfig.app.json'],
+          },
+        },
       }),
       new WebpackNotifierPlugin({
         title: '<%= humanizedBaseName %>',
@@ -118,7 +122,7 @@ module.exports = async (config, options, targetOptions) => {
       globOptions: { ignore: ['**/index.html'] },
     },
     {
-      from: require.resolve('axios/dist/axios.min.js'), 
+      from: require.resolve('axios/dist/axios.min.js'),
       to: 'swagger-ui/',
     },
     { from: './<%= CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },

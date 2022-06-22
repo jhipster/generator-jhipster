@@ -1,0 +1,57 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { defineConfig } from 'cypress';
+
+export const defaultConfig = {
+  video: false,
+  fixturesFolder: '<%= cypressFolder %>fixtures',
+  screenshotsFolder: '<%= BUILD_DIR %>cypress/screenshots',
+  downloadsFolder: '<%= BUILD_DIR %>cypress/downloads',
+  videosFolder: '<%= BUILD_DIR %>cypress/videos',
+  chromeWebSecurity: true,
+  viewportWidth: 1200,
+  viewportHeight: 720,
+  retries: 2,
+<%_ if (clientFrameworkReact) { _%>
+  scrollBehavior: 'center',
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+  env: {
+    authenticationUrl: '/api/authenticate',
+    jwtStorageName: '<%= jhiPrefixDashed %>-authenticationToken',
+  },
+<%_ } else if (authenticationTypeSession) { _%>
+  env: {
+    authenticationUrl: '/api/authentication',
+  },
+<%_ } _%>
+  e2e: {
+    // We've imported your old cypress plugins here.
+    // You may want to clean this up later by importing these.
+    async setupNodeEvents(on, config) {
+      return (await import('./<%= cypressFolder %>plugins/index')).default(on, config);
+    },
+    baseUrl: 'http://localhost:<%= gatewayServerPort || serverPort %>/',
+    specPattern: '<%= cypressFolder %>e2e/**/*.cy.ts',
+    supportFile: '<%= cypressFolder %>support/index.ts',
+    experimentalSessionAndOrigin: true,
+  },
+};
+
+export default defineConfig(defaultConfig);

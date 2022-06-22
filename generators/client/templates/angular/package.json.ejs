@@ -162,8 +162,8 @@
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
-    "e2e:cypress": "cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
-    "cypress": "cypress open",
+    "e2e:cypress": "cypress run --e2e --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
+    "cypress": "cypress open --e2e",
 <%_ } _%>
 <%_ if (protractorTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",

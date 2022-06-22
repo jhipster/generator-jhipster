@@ -16,12 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-{
-  "extends": "../../../../tsconfig.json",
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "../../../../<%= BUILD_DIR %>out-tsc/cypress",
-    "types": ["cypress", "node"]
-  },
-  "include": ["./../../../../cypress*.config.ts", "./**/*.ts"]
+// workaround missing typings https://github.com/cypress-io/code-coverage/issues/257
+declare module '@cypress/code-coverage/task' {
+  export default function codecov(
+    on: Cypress.PluginEvents,
+    config: Cypress.PluginConfigOptions
+  ): void;
 }
