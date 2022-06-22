@@ -119,6 +119,7 @@ module.exports = class extends BaseBlueprintGenerator {
       prepareForTemplates() {
         this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
         this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
+        this.cypressFolder = `${this.CLIENT_TEST_SRC_DIR}cypress/`;
       },
     };
   }
@@ -142,7 +143,6 @@ module.exports = class extends BaseBlueprintGenerator {
   _writing() {
     return {
       cleanup() {
-        if (!this.jhipsterConfig.cypressTests) return;
         if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
           this.removeFile(`${this.TEST_SRC_DIR}/cypress/support/keycloak-oauth2.ts`);
           this.removeFile(`${this.TEST_SRC_DIR}/cypress/fixtures/users/user.json`);
@@ -150,6 +150,18 @@ module.exports = class extends BaseBlueprintGenerator {
         if (this.isJhipsterVersionLessThan('7.8.2')) {
           this.removeFile('cypress.json');
           this.removeFile('cypress-audits.json');
+
+          this.removeFile(`${this.cypressFolder}integration/administration/administration.spec.ts`);
+          this.removeFile(`${this.cypressFolder}integration/lighthouse.audits.ts`);
+          if (!this.authenticationTypeOauth2) {
+            this.removeFile(`${this.cypressFolder}integration/account/login-page.spec.ts`);
+          }
+          if (!this.authenticationTypeOauth2 && !this.databaseTypeNo && !this.applicationTypeMicroservice) {
+            this.removeFile(`${this.cypressFolder}integration/account/register-page.spec.ts`);
+            this.removeFile(`${this.cypressFolder}integration/account/settings-page.spec.ts`);
+            this.removeFile(`${this.cypressFolder}integration/account/password-page.spec.ts`);
+            this.removeFile(`${this.cypressFolder}integration/account/reset-password-page.spec.ts`);
+          }
         }
       },
       ...writeFiles(),

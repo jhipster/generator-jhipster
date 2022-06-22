@@ -24,29 +24,23 @@
 
 const faker = require('@faker-js/faker');
 
-const constants = require('../generator-constants');
-
 const { stringHashCode } = require('../utils');
-
-const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
 const cypressFiles = {
   common: [
     {
-      condition: generator => generator.cypressTests,
       templates: ['cypress.config.ts', 'cypress-audits.config.ts'],
     },
   ],
   clientTestFw: [
     {
-      condition: generator => generator.cypressTests,
-      path: `${TEST_SRC_DIR}/cypress/`,
+      path: generator => generator.cypressFolder,
       templates: [
         '.eslintrc.json',
         'fixtures/integration-test.png',
         'plugins/index.ts',
-        'integration/administration/administration.spec.ts',
-        'integration/lighthouse.audits.ts',
+        'e2e/administration/administration.cy.ts',
+        'e2e/lighthouse.audits.ts',
         'support/commands.ts',
         'support/navbar.ts',
         'support/index.ts',
@@ -56,38 +50,35 @@ const cypressFiles = {
       ],
     },
     {
-      condition: generator => generator.cypressTests && !generator.authenticationTypeOauth2,
-      path: `${TEST_SRC_DIR}/cypress/`,
-      templates: ['integration/account/login-page.spec.ts'],
+      condition: generator => !generator.authenticationTypeOauth2,
+      path: generator => generator.cypressFolder,
+      templates: ['e2e/account/login-page.cy.ts'],
     },
     {
-      condition: generator =>
-        generator.cypressTests &&
-        !generator.authenticationTypeOauth2 &&
-        !generator.databaseTypeNo &&
-        !generator.applicationTypeMicroservice,
-      path: `${TEST_SRC_DIR}/cypress/`,
+      condition: generator => !generator.authenticationTypeOauth2 && !generator.databaseTypeNo && !generator.applicationTypeMicroservice,
+      path: generator => generator.cypressFolder,
       templates: [
-        'integration/account/register-page.spec.ts',
-        'integration/account/settings-page.spec.ts',
-        'integration/account/password-page.spec.ts',
-        'integration/account/reset-password-page.spec.ts',
+        'e2e/account/register-page.cy.ts',
+        'e2e/account/settings-page.cy.ts',
+        'e2e/account/password-page.cy.ts',
+        'e2e/account/reset-password-page.cy.ts',
       ],
     },
     {
-      condition: generator => generator.cypressTests && generator.authenticationTypeOauth2,
-      path: `${TEST_SRC_DIR}/cypress/`,
+      condition: generator => generator.authenticationTypeOauth2,
+      path: generator => generator.cypressFolder,
       templates: ['support/oauth2.ts'],
     },
   ],
   coverage: [
     {
       condition: generator => generator.cypressCoverage,
-      path: `${TEST_SRC_DIR}/cypress/`,
+      path: generator => generator.cypressFolder,
       templates: ['plugins/global.d.ts'],
     },
   ],
 };
+
 module.exports = {
   writeFiles,
   files: cypressFiles,
@@ -98,7 +89,7 @@ function writeFiles() {
     writeFiles() {
       faker.seed(stringHashCode(this.jhipsterConfig.baseName || 'jhipsterSample'));
       this.faker = faker;
-      return this.writeFilesToDisk(cypressFiles);
+      return this.writeFiles({ sections: cypressFiles });
     },
   };
 }

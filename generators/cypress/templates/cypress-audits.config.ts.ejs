@@ -23,6 +23,6 @@ export default defineConfig({
   ...defaultConfig,
   e2e: {
     ...defaultConfig.e2e,
-    specPattern: '<%= CLIENT_TEST_SRC_DIR %>cypress/integration/**/*.audits.ts',
+    specPattern: '<%= cypressFolder %>e2e/**/*.audits.ts',
   },
 });

@@ -20,7 +20,7 @@ import { defineConfig } from 'cypress';
 
 export const defaultConfig = {
   video: false,
-  fixturesFolder: '<%= CLIENT_TEST_SRC_DIR %>cypress/fixtures',
+  fixturesFolder: '<%= cypressFolder %>fixtures',
   screenshotsFolder: '<%= BUILD_DIR %>cypress/screenshots',
   downloadsFolder: '<%= BUILD_DIR %>cypress/downloads',
   videosFolder: '<%= BUILD_DIR %>cypress/videos',
@@ -45,11 +45,11 @@ export const defaultConfig = {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     async setupNodeEvents(on, config) {
-      return (await import('./<%= CLIENT_TEST_SRC_DIR %>cypress/plugins/index')).default(on, config);
+      return (await import('./<%= cypressFolder %>plugins/index')).default(on, config);
     },
     baseUrl: 'http://localhost:<%= gatewayServerPort || serverPort %>/',
-    specPattern: '<%= CLIENT_TEST_SRC_DIR %>cypress/integration/**/*.spec.ts',
-    supportFile: '<%= CLIENT_TEST_SRC_DIR %>cypress/support/index.ts',
+    specPattern: '<%= cypressFolder %>e2e/**/*.cy.ts',
+    supportFile: '<%= cypressFolder %>support/index.ts',
     experimentalSessionAndOrigin: true,
   },
 };
