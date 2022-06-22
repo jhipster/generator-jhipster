@@ -22,7 +22,7 @@ const constants = require('../generator-constants');
 const { angularFiles } = require('./files-angular.cjs');
 const { reactFiles } = require('./files-react.cjs');
 const { vueFiles } = require('./files-vue.cjs');
-const { cleanupCypressEntityFiles, writeCypressEntityFiles } = require('./files-cypress.cjs');
+const { cleanupCypressEntityFiles, writeCypressEntityFiles, cypressEntityFiles: commonFiles } = require('./files-cypress.cjs');
 
 /* Constants use throughout */
 const { ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
@@ -39,6 +39,7 @@ module.exports = {
   angularFiles,
   reactFiles,
   vueFiles,
+  commonFiles,
 };
 
 function addEnumerationFiles(generator, clientFolder) {
