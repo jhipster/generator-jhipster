@@ -16,10 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const constants = require('../generator-constants');
-
-const { CLIENT_TEST_SRC_DIR } = constants;
-
 const cypressEntityFiles = {
   testsCypress: [
     {
