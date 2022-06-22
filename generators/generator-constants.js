@@ -82,7 +82,7 @@ const DOCKER_KEYCLOAK_VERSION = '18.0.0';
 const DOCKER_KEYCLOAK = `quay.io/keycloak/keycloak:${DOCKER_KEYCLOAK_VERSION}`;
 const DOCKER_ELASTICSEARCH_CONTAINER = 'docker.elastic.co/elasticsearch/elasticsearch';
 // TODO V8 Rename ELASTICSEARCH_VERSION to DOCKER_ELASTICSEARCH_VERSION
-const ELASTICSEARCH_VERSION = '7.17.3'; // The version should be coherent with the one from spring-data-elasticsearch project
+const ELASTICSEARCH_VERSION = '7.17.4'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_ELASTICSEARCH = `${DOCKER_ELASTICSEARCH_CONTAINER}:${ELASTICSEARCH_VERSION}`;
 // TODO V8 Rename KAFKA_VERSION to DOCKER_KAFKA_VERSION
 const KAFKA_VERSION = '7.1.1';
