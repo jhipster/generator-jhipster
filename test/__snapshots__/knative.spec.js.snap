@@ -768,7 +768,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
           env:
             - name: discovery.type
               value: single-node
@@ -4729,7 +4729,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
           env:
             - name: discovery.type
               value: single-node
@@ -9783,7 +9783,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
           env:
             - name: discovery.type
               value: single-node
@@ -9857,7 +9857,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:14.3
+          image: postgres:14.4
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -13894,7 +13894,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
           env:
             - name: discovery.type
               value: single-node
@@ -13968,7 +13968,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:14.3
+          image: postgres:14.4
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -16927,7 +16927,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:9.0.0
+          image: grafana/grafana:9.0.1
           ports:
             - containerPort: 3000
               name: http

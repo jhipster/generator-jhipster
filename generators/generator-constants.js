@@ -35,7 +35,7 @@ const OPENAPI_GENERATOR_CLI_VERSION = '2.4.26';
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.8.2-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.7.0';
+const SPRING_BOOT_VERSION = '2.7.1';
 const LIQUIBASE_VERSION = '4.11.0';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.6.9.Final';
@@ -60,7 +60,7 @@ const DOCKER_MYSQL_VERSION = '8.0.29';
 const DOCKER_MYSQL = `mysql:${DOCKER_MYSQL_VERSION}`;
 const DOCKER_MARIADB_VERSION = '10.8.3';
 const DOCKER_MARIADB = `mariadb:${DOCKER_MARIADB_VERSION}`;
-const DOCKER_POSTGRESQL_VERSION = '14.3';
+const DOCKER_POSTGRESQL_VERSION = '14.4';
 const DOCKER_POSTGRESQL = `postgres:${DOCKER_POSTGRESQL_VERSION}`;
 const DOCKER_MONGODB_VERSION = '4.4.14';
 const DOCKER_MONGODB = `mongo:${DOCKER_MONGODB_VERSION}`;
@@ -82,7 +82,7 @@ const DOCKER_KEYCLOAK_VERSION = '18.0.0';
 const DOCKER_KEYCLOAK = `quay.io/keycloak/keycloak:${DOCKER_KEYCLOAK_VERSION}`;
 const DOCKER_ELASTICSEARCH_CONTAINER = 'docker.elastic.co/elasticsearch/elasticsearch';
 // TODO V8 Rename ELASTICSEARCH_VERSION to DOCKER_ELASTICSEARCH_VERSION
-const ELASTICSEARCH_VERSION = '7.17.3'; // The version should be coherent with the one from spring-data-elasticsearch project
+const ELASTICSEARCH_VERSION = '7.17.4'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_ELASTICSEARCH = `${DOCKER_ELASTICSEARCH_CONTAINER}:${ELASTICSEARCH_VERSION}`;
 // TODO V8 Rename KAFKA_VERSION to DOCKER_KAFKA_VERSION
 const KAFKA_VERSION = '7.1.1';
@@ -94,11 +94,11 @@ const DOCKER_CONSUL_VERSION = '1.12.2';
 const DOCKER_CONSUL = `consul:${DOCKER_CONSUL_VERSION}`;
 const DOCKER_CONSUL_CONFIG_LOADER_VERSION = 'v0.4.1';
 const DOCKER_CONSUL_CONFIG_LOADER = `jhipster/consul-config-loader:${DOCKER_CONSUL_CONFIG_LOADER_VERSION}`;
-const DOCKER_PROMETHEUS_VERSION = 'v2.36.1';
+const DOCKER_PROMETHEUS_VERSION = 'v2.36.2';
 const DOCKER_PROMETHEUS = `prom/prometheus:${DOCKER_PROMETHEUS_VERSION}`;
 const DOCKER_PROMETHEUS_ALERTMANAGER_VERSION = 'v0.24.0';
 const DOCKER_PROMETHEUS_ALERTMANAGER = `prom/alertmanager:${DOCKER_PROMETHEUS_ALERTMANAGER_VERSION}`;
-const DOCKER_GRAFANA_VERSION = '9.0.0';
+const DOCKER_GRAFANA_VERSION = '9.0.1';
 const DOCKER_GRAFANA = `grafana/grafana:${DOCKER_GRAFANA_VERSION}`;
 const DOCKER_JENKINS_VERSION = 'lts-jdk11';
 const DOCKER_JENKINS = `jenkins/jenkins:${DOCKER_JENKINS_VERSION}`;
