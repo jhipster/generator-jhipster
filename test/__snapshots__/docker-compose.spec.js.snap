@@ -1149,7 +1149,7 @@ eureka:
       - \\"--storage.path=/alertmanager\\"
 
   grafana:
-    image: grafana/grafana:9.0.0
+    image: grafana/grafana:9.0.1
     ports:
       - 3000:3000
     volumes:
