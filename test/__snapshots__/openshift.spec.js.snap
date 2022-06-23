@@ -2896,7 +2896,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:14.3
+              image: postgres:14.4
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
@@ -5086,7 +5086,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:14.3
+              image: postgres:14.4
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
