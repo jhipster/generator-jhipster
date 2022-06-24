@@ -30,7 +30,7 @@ const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
 // Version of Node, NPM
 const NODE_VERSION = '16.15.1';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
-const OPENAPI_GENERATOR_CLI_VERSION = '2.4.26';
+const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.8.2-SNAPSHOT';
