@@ -31,9 +31,6 @@ updates:
       - 'theme: angular'
       - 'theme: dependencies'
     ignore:
-      # https://github.com/ng-bootstrap/ng-bootstrap/issues/3899
-      - dependency-name: 'bootstrap'
-        versions: ['>=5']
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=17']
