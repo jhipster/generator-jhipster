@@ -138,11 +138,11 @@ spring:
     username: SA
     password: yourStrong(!)Password
   <%_ } else if (devDatabaseTypeH2Disk) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { prodDatabaseType, databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
     username: <%= baseName %>
     password:
   <%_ } else if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { prodDatabaseType, databaseName: lowercaseBaseName }) %>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
     username: <%= baseName %>
     password:
   <%_ } _%>
@@ -207,9 +207,9 @@ spring:
   <%_ } else if (devDatabaseTypeOracle) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
   <%_ } else if (devDatabaseTypeH2Disk) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { prodDatabaseType, databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
   <%_ } else if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { prodDatabaseType, databaseName: lowercaseBaseName }) %>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>
