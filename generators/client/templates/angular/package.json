@@ -30,7 +30,7 @@
     "copy-webpack-plugin": "11.0.0",
     "eslint": "8.18.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-webpack-plugin": "3.1.1",
+    "eslint-webpack-plugin": "3.2.0",
     "folder-hash": "4.0.2",
     "jest": "27.5.1",
     "jest-preset-angular": "11.1.2",
