@@ -3,7 +3,7 @@
     "concurrently": "7.2.2",
     "husky": "7.0.4",
     "lint-staged": "13.0.2",
-    "npm": "8.13.0",
+    "npm": "8.13.1",
     "wait-on": "6.0.1"
   }
 }
