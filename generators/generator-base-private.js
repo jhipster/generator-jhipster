@@ -1199,7 +1199,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (!protocol) {
       throw new Error('protocol is required');
     }
-    const { databaseName, prodDatabaseType } = options;
+    const { databaseName } = options;
     if (!databaseName) {
       throw new Error("option 'databaseName' is required");
     }
@@ -1215,17 +1215,14 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         ...databaseDataForType[protocol],
       };
     }
-    const { protocolSuffix = '', useDirectory = false } = databaseDataForType;
-    let { extraOptions = '', port = '' } = databaseDataForType;
+    const { protocolSuffix = '', extraOptions = '', useDirectory = false } = databaseDataForType;
+    let { port = '' } = databaseDataForType;
     if (useDirectory && !options.localDirectory) {
       throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
     }
     const databaseHasHost = options.hostname;
     if (options.itests && H2_MEMORY === databaseType) {
       port = ':12344';
-    }
-    if (prodDatabaseType && (H2_MEMORY === databaseType || H2_DISK === databaseType) && prodDatabaseType === MARIADB) {
-      extraOptions = `${extraOptions};MODE=legacy`;
     }
     let url = `${protocol}:${protocolSuffix}`;
     if (options.localDirectory) {
