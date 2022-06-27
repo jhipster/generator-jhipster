@@ -252,7 +252,9 @@ configurations {
             force 'org.liquibase:liquibase-core:<%= LIQUIBASE_VERSION %>'
 <%_ if (devDatabaseTypeH2Any && prodDatabaseTypeMysql) { _%>
             force 'com.h2database:h2:<%= H2_VERSION %>'
+  <%_ if (reactive) { _%>
             force 'io.r2dbc:r2dbc-h2:<%= H2_R2DBC_VERSION %>'
+  <%_ } _%>
 <%_ } _%>
         }
     }
