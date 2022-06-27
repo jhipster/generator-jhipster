@@ -29,14 +29,14 @@ for (field of fieldsToGenerate) {
   }
 }
 for (relationship of relationships) {
-  const relationshipType = relationship.relationshipType
+  const { relationshipType, joinColumnNames } = relationship;
   if (
     (relationshipType === "many-to-one"
       || (relationshipType === "one-to-one" && relationship.ownerSide === true
          && (relationship.id == null || relationship.id === false))
     ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
   ) {
-    header.push(getColumnName(relationship.relationshipName) + "_id");
+    header.push(joinColumnNames[0]);
   }
 }
 table.push(header);

@@ -22,18 +22,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 
 @Injectable({ providedIn: 'root' })
-export class <%= entityAngularName %>RoutingResolveService implements Resolve<I<%= entityAngularName %>> {
+export class <%= entityAngularName %>RoutingResolveService implements Resolve<I<%= entityAngularName %> | null> {
     constructor(protected service: <%= entityAngularName %>Service, protected router: Router) {}
 
-    resolve(route: ActivatedRouteSnapshot): Observable<I<%= entityAngularName %>> | Observable<never> {
+    resolve(route: ActivatedRouteSnapshot): Observable<I<%= entityAngularName %> | null | never> {
         const id = route.params['<%= primaryKey.name %>'];
         if (id) {
             return this.service.find(id).pipe(
-                mergeMap((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => {
+                mergeMap((<%= entityInstance %>: HttpResponse<I<%= entityAngularName %>>) => {
                     if (<%= entityInstance %>.body) {
                         return of(<%= entityInstance %>.body);
                     } else {
@@ -43,6 +43,6 @@ export class <%= entityAngularName %>RoutingResolveService implements Resolve<I<
                 })
             );
         }
-        return of(new <%= entityAngularName %>());
+        return of(null);
     }
 }
