@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { INITIALIZING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, PREPARING_FIELDS_PRIORITY, POST_WRITING_PRIORITY } =
+const { PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, PREPARING_FIELDS_PRIORITY, POST_WRITING_PRIORITY } =
   require('../../lib/constants/priorities.cjs').compat;
 
 const constants = require('../generator-constants');
@@ -45,21 +45,6 @@ module.exports = class extends BaseBlueprintGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ENTITY_SERVER, { context: this.options.context });
     }
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _initializing() {
-    return {
-      setupConstants() {
-        // Make constants available in templates
-        this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
-      },
-    };
-  }
-
-  get [INITIALIZING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._initializing();
   }
 
   _preparing() {

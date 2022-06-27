@@ -1199,7 +1199,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (!protocol) {
       throw new Error('protocol is required');
     }
-    if (!options.databaseName) {
+    const { databaseName } = options;
+    if (!databaseName) {
       throw new Error("option 'databaseName' is required");
     }
     if ([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL].includes(databaseType) && !options.hostname) {
@@ -1227,11 +1228,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (options.localDirectory) {
       url += `${options.localDirectory}/`;
     } else {
-      url += databaseHasHost ? options.hostname : options.databaseName;
+      url += databaseHasHost ? options.hostname : databaseName;
       url += port;
     }
     if (databaseHasHost || options.localDirectory) {
-      url += options.databaseName;
+      url += databaseName;
     }
     return `${url}${options.skipExtraOptions ? '' : extraOptions}`;
   }
