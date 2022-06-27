@@ -103,7 +103,7 @@
   <%_ if (!reactive) { _%>
         <liquibase-hibernate5.version><%= LIQUIBASE_VERSION %></liquibase-hibernate5.version>
   <%_ } _%>
-  <%_ if (devDatabaseTypeH2Any && reactive) { _%>
+  <%_ if (devDatabaseTypeH2Any && prodDatabaseTypeMysql) { _%>
         <h2.version><%= H2_VERSION %></h2.version>
         <h2-r2dbc.version><%= H2_R2DBC_VERSION %></h2-r2dbc.version>
   <%_ } _%>
@@ -1579,7 +1579,7 @@
                 <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
-<%_ if (reactive) { _%>
+<%_ if (prodDatabaseTypeMysql) { _%>
                     <version>${h2.version}</version>
 <%_ } _%>
                 </dependency>
@@ -1776,7 +1776,7 @@
                                 <dependency>
                                     <groupId>com.h2database</groupId>
                                     <artifactId>h2</artifactId>
-    <%_ if (reactive) { _%>
+    <%_ if (prodDatabaseTypeMysql) { _%>
                                     <version>${h2.version}</version>
     <%_ } _%>
                                 </dependency>
