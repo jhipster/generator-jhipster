@@ -245,7 +245,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     fieldNameUnderscored: _.snakeCase(field.fieldName),
     fieldNameHumanized: _.startCase(field.fieldName),
     fieldTranslationKey: `${entityWithConfig.i18nKeyPrefix}.${field.fieldName}`,
-    tsType: generator.getTypescriptKeyType(field.fieldType),
+    tsType: generator.getTypescriptType(field.fieldType),
     entity: entityWithConfig,
   });
   const fieldType = field.fieldType;
@@ -389,6 +389,10 @@ function fieldIsEnum(fieldType) {
     BOOLEAN,
     BYTES,
     BYTE_BUFFER,
+    ANY_BLOB,
+    BLOB,
+    IMAGE_BLOB,
+    TEXT_BLOB,
   ].includes(fieldType);
 }
 

@@ -34,6 +34,7 @@ const { languageToJavaLanguage } = require('./utils');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 const { stringify } = require('../utils');
+const { fieldIsEnum } = require('../utils/field');
 const { databaseData } = require('./sql-constants');
 
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
@@ -865,7 +866,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   /**
    * Find key type for Typescript
    *
-   * @param {string} primaryKey - primary key definition
+   * @param {string | object} primaryKey - primary key definition
    * @returns {string} primary key type in Typescript
    */
   getTypescriptKeyType(primaryKey) {
@@ -874,6 +875,28 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
     if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(primaryKey)) {
       return 'number';
+    }
+    return 'string';
+  }
+
+  /**
+   * Find type for Typescript
+   *
+   * @param {string} fieldType - field type
+   * @returns {string} field type in Typescript
+   */
+  getTypescriptType(fieldType) {
+    if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(fieldType)) {
+      return 'number';
+    }
+    if ([TYPE_LOCAL_DATE, TYPE_ZONED_DATE_TIME, TYPE_INSTANT].includes(fieldType)) {
+      return 'dayjs.Dayjs';
+    }
+    if ([TYPE_BOOLEAN].includes(fieldType)) {
+      return 'boolean';
+    }
+    if (fieldIsEnum(fieldType)) {
+      return fieldType;
     }
     return 'string';
   }
