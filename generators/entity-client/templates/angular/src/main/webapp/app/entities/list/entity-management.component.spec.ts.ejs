@@ -32,13 +32,17 @@ import { of } from 'rxjs';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
+<%_ if (!paginationNo) { _%>
 import SpyInstance = jest.SpyInstance;
+<%_ } _%>
 
 describe('<%= entityAngularName %> Management Component', () => {
     let comp: <%= entityAngularName %>Component;
     let fixture: ComponentFixture<<%= entityAngularName %>Component>;
     let service: <%= entityAngularName %>Service;
+<%_ if (!paginationNo) { _%>
     let routerNavigateSpy: SpyInstance<Promise<boolean>>;
+<%_ } _%>
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -59,9 +63,9 @@ describe('<%= entityAngularName %> Management Component', () => {
                                 page: '1',
                                 size: '1',
                                 sort: '<%- primaryKey.name %>,desc',
-  <%_ if (jpaMetamodelFiltering) { _%>
+<%_ if (jpaMetamodelFiltering) { _%>
                                 'filter[someId.in]': 'dc4279ea-cfb9-11ec-9d64-0242ac120002',
-  <%_ } _%>
+<%_ } _%>
                             })
                         ),
                         snapshot: { queryParams: {} },
@@ -75,7 +79,9 @@ describe('<%= entityAngularName %> Management Component', () => {
         fixture = TestBed.createComponent(<%= entityAngularName %>Component);
         comp = fixture.componentInstance;
         service = TestBed.inject(<%= entityAngularName %>Service);
+<%_ if (!paginationNo) { _%>
         routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
+<%_ } _%>
 
         const headers = new HttpHeaders();
         jest.spyOn(service, 'query').mockReturnValue(
