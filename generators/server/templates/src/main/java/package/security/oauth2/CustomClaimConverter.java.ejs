@@ -31,6 +31,7 @@ import org.springframework.security.oauth2.jwt.MappedJwtClaimSetConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -68,9 +69,10 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
             return claims;
         }
         Map<String, Object> convertedClaims = this.delegate.convert(claims);
-        if (RequestContextHolder.getRequestAttributes() != null && ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()) != null) {
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        if (attributes instanceof ServletRequestAttributes) {
             // Retrieve and set the token
-            String token = bearerTokenResolver.resolve(((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
+            String token = bearerTokenResolver.resolve(((ServletRequestAttributes) attributes).getRequest());
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", buildBearer(token));
 
