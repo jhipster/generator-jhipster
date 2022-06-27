@@ -34,7 +34,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
-import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions.filter(relationships => relationships[0].otherEntity.entityAngularName !== entityAngularName)) { _%>
   <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity; _%>
   <%_ if (isBuiltInUser(otherEntity.entityAngularName)) { _%>
@@ -175,7 +175,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
     describe('save', () => {
         it('Should call update service on save for existing entity', () => {
             // GIVEN
-            const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
+            const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
             const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
             jest.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
             jest.spyOn(comp, 'previousState');
@@ -196,7 +196,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
 
         it('Should call create service on save for new entity', () => {
             // GIVEN
-            const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
+            const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
             const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
             jest.spyOn(<%= entityInstance %>Service, 'create').mockReturnValue(saveSubject);
             jest.spyOn(comp, 'previousState');
@@ -217,7 +217,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
 
         it('Should set isSaving to false on error', () => {
             // GIVEN
-            const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
+            const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
             const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
             jest.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
             jest.spyOn(comp, 'previousState');

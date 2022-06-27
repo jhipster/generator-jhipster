@@ -40,17 +40,6 @@ export interface I<%= entityAngularName %> {
 <%_ }); _%>
 }
 
-export class <%= entityAngularName %> implements I<%= entityAngularName %> {
-    constructor(
-<%_ variablesWithTypes.forEach(variablesWithType => { _%>
-        public <%- variablesWithType %>,
-<%_ }); _%>
-    ) {
-<%_ for (idx in defaultVariablesValues) { _%>
-        <%- defaultVariablesValues[idx] %>
-<%_ } _%>
-    }
-}
 <%_ if (primaryKey) { _%>
 
 export function get<%= entityAngularName %>Identifier(<%= entityInstance %>: I<%= entityAngularName %>): <%= primaryKey.tsType %> | undefined {

@@ -26,7 +26,7 @@ import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } fro
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 
 import { <%= entityAngularName %>RoutingResolveService } from './<%= entityFileName %>-routing-resolve.service';
@@ -93,7 +93,7 @@ describe('<%= entityAngularName %> routing resolve service', () => {
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as <%= entityAngularName %>})));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<I<%= entityAngularName %>>({ body: null })));
       mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
 
       // WHEN

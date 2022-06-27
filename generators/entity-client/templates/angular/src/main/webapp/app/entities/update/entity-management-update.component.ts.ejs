@@ -47,7 +47,7 @@ import dayjs from 'dayjs/esm';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
 
-import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 <%_ if (fieldsContainBlob) { _%>
 import { AlertError } from 'app/shared/alert/alert-error.model';
@@ -103,9 +103,13 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
 
     editForm = this.fb.group({
 <%_ for (const field of fields.filter(field => !field.autoGenerate)) {
-  const fieldName = field.fieldName;
+      const { fieldName } = field;
 _%>
-        <%= fieldName %>: [<% if (field.fieldValidate === true) { %>null,[<% if (field.fieldValidationRequired) { %>Validators.required,<% } %><% if (field.fieldValidationMinLength) { %>Validators.minLength(<%= field.fieldValidateRulesMinlength %>),<% } %><% if (field.fieldValidationMaxLength) { %>Validators.maxLength(<%= field.fieldValidateRulesMaxlength %>),<% } %><% if (field.fieldValidationMin) { %>Validators.min(<%= field.fieldValidateRulesMin %>),<% } %><% if (field.fieldValidationMax) { %>Validators.max(<%= field.fieldValidateRulesMax %>),<% } %><% if (field.fieldValidationPattern) { %>Validators.pattern('<%= field.fieldValidateRulesPattern.replace(/\\/g, '\\\\') %>'),<% } %>]<% } %>],
+  <%_ if (field.fieldTypeBoolean) { _%>
+        <%= fieldName %>: <% if (field.fieldValidationRequired) { %>[false, [Validators.required]]<% } else { %>false<% } %>,
+  <%_ } else { _%>
+        <%= fieldName %>: [<% if (field.fieldValidate === true) { %>null, [<% if (field.fieldValidationRequired) { %>Validators.required,<% } %><% if (field.fieldValidationMinLength) { %>Validators.minLength(<%= field.fieldValidateRulesMinlength %>),<% } %><% if (field.fieldValidationMaxLength) { %>Validators.maxLength(<%= field.fieldValidateRulesMaxlength %>),<% } %><% if (field.fieldValidationMin) { %>Validators.min(<%= field.fieldValidateRulesMin %>),<% } %><% if (field.fieldValidationMax) { %>Validators.max(<%= field.fieldValidateRulesMax %>),<% } %><% if (field.fieldValidationPattern) { %>Validators.pattern('<%= field.fieldValidateRulesPattern.replace(/\\/g, '\\\\') %>'),<% } %>]<% } %>],
+  <%_ } _%>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
         <%= fieldName %>ContentType: [],
   <%_ } _%>
@@ -353,7 +357,6 @@ _%>
 
     protected createFromForm(): I<%= entityAngularName %> {
         return {
-            ...new <%= entityAngularName %>(),
             ...this.editForm.getRawValue(),
 <%_ for (const field of fields) {
   const fieldName = field.fieldName;
