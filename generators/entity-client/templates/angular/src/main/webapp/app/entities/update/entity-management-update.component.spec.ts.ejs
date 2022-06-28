@@ -197,10 +197,10 @@ describe('<%= entityAngularName %> Management Update Component', () => {
         it('Should call create service on save for new entity', () => {
             // GIVEN
             const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
-            const <%= entityInstance %> = new <%= entityAngularName %>();
+            const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
             jest.spyOn(<%= entityInstance %>Service, 'create').mockReturnValue(saveSubject);
             jest.spyOn(comp, 'previousState');
-            activatedRoute.data = of({ <%= entityInstance %> });
+            activatedRoute.data = of({ <%= entityInstance %>: null });
             comp.ngOnInit();
 
             // WHEN
@@ -210,7 +210,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             saveSubject.complete();
 
             // THEN
-            expect(<%= entityInstance %>Service.create).toHaveBeenCalledWith(<%= entityInstance %>);
+            expect(<%= entityInstance %>Service.create).toHaveBeenCalled();
             expect(comp.isSaving).toEqual(false);
             expect(comp.previousState).toHaveBeenCalled();
         });
@@ -230,7 +230,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             saveSubject.error('This is an error!');
 
             // THEN
-            expect(<%= entityInstance %>Service.update).toHaveBeenCalledWith(<%= entityInstance %>);
+            expect(<%= entityInstance %>Service.update).toHaveBeenCalled();
             expect(comp.isSaving).toEqual(false);
             expect(comp.previousState).not.toHaveBeenCalled();
         });
