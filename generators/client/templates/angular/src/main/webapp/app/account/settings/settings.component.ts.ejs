@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
@@ -28,46 +28,50 @@ import { Account } from 'app/core/auth/account.model';
 import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
 
+const initialAccount: Account = {} as Account;
+
 @Component({
   selector: '<%= jhiPrefixDashed %>-settings',
   templateUrl: './settings.component.html',
 })
 export class SettingsComponent implements OnInit {
-  account!: Account;
   success = false;
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
-  <%_ } _%>
-  settingsForm = this.fb.group({
-    firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-    lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-    email: [undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-    <%_ if (enableTranslation) { _%>
-    langKey: [undefined],
-    <%_ } _%>
+<%_ } _%>
+
+  settingsForm = new FormGroup({
+    firstName: new FormControl(initialAccount.firstName, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
+    }),
+    lastName: new FormControl(initialAccount.lastName, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
+    }),
+    email: new FormControl(initialAccount.email, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
+    }),
+    langKey: new FormControl(initialAccount.langKey, { nonNullable: true }),
+
+    activated: new FormControl(initialAccount.activated, { nonNullable: true }),
+    authorities: new FormControl(initialAccount.authorities, { nonNullable: true }),
+    imageUrl: new FormControl(initialAccount.imageUrl, { nonNullable: true }),
+    login: new FormControl(initialAccount.login, { nonNullable: true }),
   });
 
   constructor(
     private accountService: AccountService,
-    private fb: FormBuilder,
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
-    <%_ } _%>
+<%_ } _%>
   ) {}
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {
       if (account) {
-        this.settingsForm.patchValue({
-          firstName: account.firstName,
-          lastName: account.lastName,
-          email: account.email,
-          <%_ if (enableTranslation) { _%>
-          langKey: account.langKey,
-          <%_ } _%>
-        });
-
-        this.account = account;
+        this.settingsForm.patchValue(account);
       }
     });
   }
@@ -75,23 +79,17 @@ export class SettingsComponent implements OnInit {
   save(): void {
     this.success = false;
 
-    this.account.firstName = this.settingsForm.get('firstName')!.value;
-    this.account.lastName = this.settingsForm.get('lastName')!.value;
-    this.account.email = this.settingsForm.get('email')!.value;
-    <%_ if (enableTranslation) { _%>
-    this.account.langKey = this.settingsForm.get('langKey')!.value;
-    <%_ } _%>
-
-    this.accountService.save(this.account).subscribe(() => {
+    const account = this.settingsForm.getRawValue();
+    this.accountService.save(account).subscribe(() => {
       this.success = true;
 
-      this.accountService.authenticate(this.account);
+      this.accountService.authenticate(account);
 
-      <%_ if (enableTranslation) { _%>
-      if (this.account.langKey !== this.translateService.currentLang) {
-        this.translateService.use(this.account.langKey);
+<%_ if (enableTranslation) { _%>
+      if (account.langKey !== this.translateService.currentLang) {
+        this.translateService.use(account.langKey);
       }
-      <%_ } _%>
+<%_ } _%>
     });
   }
 }

@@ -27,9 +27,8 @@ import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize<% if (relationships.some(rel => rel.ownerSide === true)) { %>, map<% } %> } from 'rxjs/operators';
-import { FormGroup } from '@angular/forms';
 
-import { <%= entityAngularName %>FormService } from './<%= entityFileName %>-form.service';
+import { <%= entityAngularName %>FormService, <%= entityAngularName %>FormGroup } from './<%= entityFileName %>-form.service';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 <%_ if (fieldsContainBlob) { _%>
@@ -84,7 +83,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
   <%_ } _%>
 <%_ } _%>
 
-    editForm: FormGroup = this.<%= entityInstance %>FormService.create<%= entityAngularName %>FormGroup();
+    editForm: <%= entityAngularName %>FormGroup = this.<%= entityInstance %>FormService.create<%= entityAngularName %>FormGroup();
 
     constructor(
 <%_ if (fieldsContainBlob) { _%>
@@ -205,7 +204,7 @@ _%>
     <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
     <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
       <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
-        this.<%= otherEntity.entityInstancePlural %>SharedCollection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(
+        this.<%= otherEntity.entityInstancePlural %>SharedCollection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(
             this.<%= otherEntity.entityInstancePlural %>SharedCollection,
       <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
         <%_ const reference = relationship.reference _%>
@@ -216,7 +215,7 @@ _%>
     <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
       <%_ const otherEntity = relationship.otherEntity _%>
       <%_ const reference = relationship.reference _%>
-        this.<%= relationship.relationshipFieldNamePlural %>Collection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(this.<%= relationship.relationshipFieldNamePlural %>Collection, <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= reference.name %><%= relationship.collection ? ' ?? [])' : '' %>);
+        this.<%= relationship.relationshipFieldNamePlural %>Collection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(this.<%= relationship.relationshipFieldNamePlural %>Collection, <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= reference.name %><%= relationship.collection ? ' ?? [])' : '' %>);
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
@@ -232,7 +231,7 @@ _%>
         this.<%= otherEntity.entityInstance %>Service
             .query()
             .pipe(map((res: HttpResponse<I<%= otherEntity.entityAngularName %>[]>) => res.body ?? []))
-            .pipe(map((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(
+            .pipe(map((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(
                 <%= otherEntity.entityInstancePlural %>,
       <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
         <%_ if (relationship.collection) { _%>
@@ -250,7 +249,7 @@ _%>
         this.<%= relationship.otherEntityName %>Service
             .query({<%- filter %>})
             .pipe(map((res: HttpResponse<I<%= relationship.otherEntityAngularName %>[]>) => res.body ?? []))
-            .pipe(map((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(<%= otherEntity.entityInstancePlural %>, this.<%= entityInstance %>?.<%= relationship.propertyName %>)))
+            .pipe(map((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(<%= otherEntity.entityInstancePlural %>, this.<%= entityInstance %>?.<%= relationship.propertyName %>)))
             .subscribe((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => (this.<%= relationship.relationshipFieldNamePlural %>Collection = <%= otherEntity.entityInstancePlural %>));
       <%_ } _%>
     <%_ } _%>

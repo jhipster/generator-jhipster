@@ -52,9 +52,27 @@ interface New<%= entityAngularName %>FormRawValue extends Omit<New<%= entityAngu
 type <%= entityAngularName %>FormDefaults = Pick<New<%= entityAngularName %>, '<%- formDefaultProperties.join("' | '") %>'>;
 
 <%_ } _%>
+type <%= entityAngularName %>FormGroupContent = {
+<%_ for (field of fields) {
+      const { fieldName, fieldType, fieldTypeBlobContent, fieldValidationRequired, tsType, fieldIsEnum } = field;
+_%>
+  <%= fieldName %>: FormControl<<%= entityFormName %>['<%= fieldName %>']>;
+  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+  <%= fieldName %>ContentType: FormControl<<%= entityFormName %>['<%= fieldName %>ContentType']>;
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) {
+      const { propertyName, otherEntity } = relationship;
+_%>
+  <%= propertyName %>: FormControl<<%= entityFormName %>['<%= propertyName %>']>;
+<%_ } _%>
+};
+
+export type <%= entityAngularName %>FormGroup = FormGroup<<%= entityAngularName %>FormGroupContent>;
+
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>FormService {
-  create<%= entityAngularName %>FormGroup(<%= entityInstance %>: I<%= entityAngularName %> | Partial<New<%= entityAngularName %>> = {}): FormGroup {
+  create<%= entityAngularName %>FormGroup(<%= entityInstance %>: I<%= entityAngularName %> | Partial<New<%= entityAngularName %>> = {}): <%= entityAngularName %>FormGroup {
     const <%= entityInstance %>RawValue =
 <%_ if (fieldsContainTimed) { _%>
       this.convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(
@@ -73,7 +91,7 @@ export class <%= entityAngularName %>FormService {
     ;
     const entityExists = '<%= primaryKey.name %>' in <%= entityInstance %>RawValue;
 
-    return new FormGroup({
+    return new FormGroup<<%= entityAngularName %>FormGroupContent>({
 <%_ for (const field of fields) {
       const { fieldName, fieldType, fieldTypeBlobContent, fieldValidateRules, fieldTypeTemporal, fieldValidationRequired, fieldValidationMinLength, fieldValidationMaxLength, fieldValidationMin, fieldValidationMax, fieldValidationPattern } = field;
       const usesValidators = fieldValidationRequired || fieldValidationMinLength || fieldValidationMaxLength || fieldValidationMin || fieldValidationMax || fieldValidationPattern || field.id;
@@ -86,6 +104,9 @@ _%>
   <%_ } _%>
   <%_ if (usesValidators) { _%>
         {
+    <%_ if (field.id) { _%>
+          nonNullable: true,
+    <%_ } _%>
           validators: [
     <%_ if (field.fieldValidationRequired || field.id) { _%>
             Validators.required,
@@ -128,7 +149,7 @@ _%>
     });
   }
 
-  get<%= entityAngularName %>(form: FormGroup): I<%= entityAngularName %> | New<%= entityAngularName %> {
+  get<%= entityAngularName %>(form: <%= entityAngularName %>FormGroup): I<%= entityAngularName %> | New<%= entityAngularName %> {
 <%_ if (noPropertyEntity) { _%>
     if (form.controls.<%= primaryKey.name %>.disabled) {
       // form.value returns <%= primaryKey.name %> with null value for FormGroup with only one FormControl
@@ -142,7 +163,7 @@ _%>
 <%_ } _%>
   }
 
-  resetForm(form: FormGroup, <%= entityInstance %>: I<%= entityAngularName %> | Partial<New<%= entityAngularName %>>): void {
+  resetForm(form: <%= entityAngularName %>FormGroup, <%= entityInstance %>: I<%= entityAngularName %> | Partial<New<%= entityAngularName %>>): void {
     const <%= entityInstance %>RawValue =
 <%_ if (fieldsContainTimed) { _%>
       this.convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(
@@ -162,7 +183,7 @@ _%>
 <%_ for (const field of fields.filter(field => field.id && field.autoGenerate)) { _%>
       <%= field.fieldName %>: { value: entityExists ? <%= entityInstance %>RawValue.<%= field.fieldName %> : null!, disabled: !entityExists },
 <%_ } _%>
-    });
+    } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */);
   }
 <%_ if (containDefaultProperties) { _%>
 

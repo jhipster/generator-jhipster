@@ -16,68 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-  const testEntityPrimaryKey0 = generateTestEntityPrimaryKey(primaryKey, 0);
-  const testEntityPrimaryKey1 = generateTestEntityPrimaryKey(primaryKey, 1);
-_%>
 import { TestBed } from '@angular/core/testing';
-<%_ if (fieldsContainDate) { _%>
-import dayjs from 'dayjs/esm';
-<%_ } _%>
 
-<%_ generateEntityClientEnumImports(fields).forEach( (importedPath, importedType) => { _%>
-import { <%- importedType %> } from '<%- importedPath %>';
-<%_ }); _%>
-import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { requiredSample, newSample } from '../<%= entityFileName %>.test-samples';
 
 import { <%= entityAngularName %>FormService } from './<%= entityFileName %>-form.service';
 
 describe('<%= entityAngularName %> Form Service', () => {
   let service: <%= entityAngularName %>FormService;
-  let elemDefault: I<%= entityAngularName %>;
-<%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
-  let currentTime: dayjs.Dayjs;
-<%_ } _%>
-<%_ if (fields.some(field => field.fieldTypeLocalDate)) { _%>
-  let currentDate: dayjs.Dayjs;
-<%_ } _%>
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(<%= entityAngularName %>FormService);
-<%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
-    currentTime = dayjs().startOf('minute');
-<%_ } _%>
-<%_ if (fields.some(field => field.fieldTypeLocalDate)) { _%>
-    currentDate = dayjs().startOf('day');
-<%_ } _%>
-
-    elemDefault = {
-<%_ fields.forEach((field) => {
-      const { fieldType } = field;
-_%>
-  <%_ if (field.fieldIsEnum) { _%>
-      <%= field.fieldName %>: <%= fieldType + '.' + field.enumValues[0].name %>,
-  <%_ } else if (field.fieldTypeBoolean) { _%>
-      <%= field.fieldName %>: false,
-  <%_ } else if (field.fieldTypeDuration) { _%>
-      <%= field.fieldName %>: 'PT1S',
-  <%_ } else if (field.fieldTypeNumeric) { _%>
-      <%= field.fieldName %>: 0,
-  <%_ } else if (field.fieldTypeCharSequence) { _%>
-      <%= field.fieldName %>: 'AAAAAAA',
-  <%_ } else if (field.fieldTypeLocalDate) { _%>
-      <%= field.fieldName %>: currentDate,
-  <%_ } else if (field.fieldTypeTimed) { _%>
-      <%= field.fieldName %>: currentTime,
-  <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-      <%= field.fieldName %>ContentType: 'image/png',
-      <%= field.fieldName %>: 'AAAAAAA',
-  <%_ } else { _%>
-      <%= field.fieldName %>: 'AAAAAAA',
-  <%_ } _%>
-<%_ }) _%>
-        };
   });
 
   describe('Service methods', () => {
@@ -89,7 +39,7 @@ _%>
       });
 
       it('passing I<%= entityAngularName %> should create a new form with <%= primaryKey.name %> FormControl enabled', () => {
-        const formGroup = service.create<%= entityAngularName %>FormGroup(<%- testEntityPrimaryKey0 %>);
+        const formGroup = service.create<%= entityAngularName %>FormGroup(requiredSample);
 
         expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(false);
       });
@@ -98,13 +48,12 @@ _%>
     describe('get<%= entityAngularName %>', () => {
       it('should return New<%= entityAngularName %> for default <%= entityAngularName %> initial value', () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { <%= primaryKey.name %>, ...<%= entityInstance %>Value } = elemDefault;
-        const formGroup = service.create<%= entityAngularName %>FormGroup(<%= entityInstance %>Value);
+        const formGroup = service.create<%= entityAngularName %>FormGroup(newSample);
 
         const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup) as any;
 
         expect('<%= primaryKey.name %>' in <%= entityInstance %>).toBe(false);
-        expect(<%= entityInstance %>).toMatchObject(<%= entityInstance %>Value);
+        expect(<%= entityInstance %>).toMatchObject(newSample);
       });
 
       it('should return New<%= entityAngularName %> for empty <%= entityAngularName %> initial value', () => {
@@ -117,13 +66,12 @@ _%>
       });
 
       it('should return I<%= entityAngularName %>', () => {
-        const <%= entityInstance %>Value = elemDefault;
-        const formGroup = service.create<%= entityAngularName %>FormGroup(<%= entityInstance %>Value);
+        const formGroup = service.create<%= entityAngularName %>FormGroup(requiredSample);
 
         const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup) as any;
 
         expect('<%= primaryKey.name %>' in <%= entityInstance %>).toBe(true);
-        expect(<%= entityInstance %>).toMatchObject(<%= entityInstance %>Value);
+        expect(<%= entityInstance %>).toMatchObject(requiredSample);
       });
     });
 
@@ -132,13 +80,13 @@ _%>
         const formGroup = service.create<%= entityAngularName %>FormGroup();
         expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(true);
 
-        service.resetForm(formGroup, <%- testEntityPrimaryKey0 %>);
+        service.resetForm(formGroup, requiredSample);
 
         expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(false);
       });
 
       it('passing New<%= entityAngularName %> should disable <%= primaryKey.name %> FormControl', () => {
-        const formGroup = service.create<%= entityAngularName %>FormGroup(<%- testEntityPrimaryKey0 %>);
+        const formGroup = service.create<%= entityAngularName %>FormGroup(requiredSample);
         expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(false);
 
         service.resetForm(formGroup, {});

@@ -19,37 +19,33 @@
 <%_
 const tsKeyId = generateTestEntityId(primaryKey.type);
 const enumImports = generateEntityClientEnumImports(fields);
-const testEntityPrimaryKey0 = generateTestEntityPrimaryKey(primaryKey, 0);
-const testEntityPrimaryKey1 = generateTestEntityPrimaryKey(primaryKey, 1);
 _%>
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-<%_ if (fieldsContainDate) { _%>
-import dayjs from 'dayjs/esm';
-<%_ } _%>
 
 <%_ if (fieldsContainLocalDate) { _%>
 import { DATE_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
-<%_ enumImports.forEach( (importedPath, importedType) => { _%>
-import { <%- importedType %> } from '<%- importedPath %>';
-<%_ }); _%>
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { requiredSample, newSample, partialSample, fullSample } from '../<%= entityFileName %>.test-samples';
 
 import { <%= entityAngularName %>Service<% if (fieldsContainDate) { %>, Rest<%= entityAngularName %><% } %> } from './<%= entityFileName %>.service';
+
+const requireRestSample: <% if (fieldsContainDate) { %>Rest<% } else { %>I<% } %><%= entityAngularName %> = {
+  ...requiredSample,
+<%_ fields.forEach((field) => { _%>
+<%_  if (field.fieldTypeLocalDate) { _%>
+  <%= field.fieldName %>: requiredSample.<%= field.fieldName %>?.format(DATE_FORMAT),
+<%_ } else if (field.fieldTypeTimed) { _%>
+  <%= field.fieldName %>: requiredSample.<%= field.fieldName %>?.toJSON(),
+<%_ } _%>
+<%_ }) _%>
+};
 
 describe('<%= entityAngularName %> Service', () => {
     let service: <%= entityAngularName %>Service;
     let httpMock: HttpTestingController;
-    let elemDefault: I<%= entityAngularName %>;
-    let restElemDefault: <% if (fieldsContainDate) { %>Rest<% } else { %>I<% } %><%= entityAngularName %>;
     let expectedResult: I<%= entityAngularName %> | I<%= entityAngularName %>[] | boolean | null;
-<%_ if (fieldsContainLocalDate) { _%>
-    let currentDate: dayjs.Dayjs;
-<%_ } _%>
-<%_ if (fieldsContainZonedDateTime | fieldsContainInstant) { _%>
-    let currentTime: dayjs.Dayjs;
-<%_ } _%>
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -60,56 +56,12 @@ describe('<%= entityAngularName %> Service', () => {
         expectedResult = null;
         service = TestBed.inject(<%= entityAngularName %>Service);
         httpMock = TestBed.inject(HttpTestingController);
-<%_ if (fieldsContainLocalDate) { _%>
-        currentDate = dayjs().startOf('day');
-<%_ } _%>
-<%_ if (fieldsContainZonedDateTime | fieldsContainInstant) { _%>
-        currentTime = dayjs(dayjs().toJSON());
-<%_ } _%>
-
-        elemDefault = {
-<%_ fields.forEach((field) => {
-      const { fieldType } = field;
-_%>
-    <%_ if (field.fieldIsEnum) { _%>
-            <%= field.fieldName %>: <%= fieldType + '.' + field.enumValues[0].name %>,
-    <%_ } else if (field.fieldTypeBoolean) { _%>
-            <%= field.fieldName %>: false,
-    <%_ } else if (field.fieldTypeDuration) { _%>
-            <%= field.fieldName %>: 'PT1S',
-    <%_ } else if (field.fieldTypeNumeric) { _%>
-            <%= field.fieldName %>: 0,
-    <%_ } else if (field.fieldTypeCharSequence) { _%>
-            <%= field.fieldName %>: 'AAAAAAA',
-    <%_ } else if (field.fieldTypeLocalDate) { _%>
-            <%= field.fieldName %>: currentDate,
-    <%_ } else if (field.fieldTypeTimed) { _%>
-            <%= field.fieldName %>: currentTime,
-    <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%= field.fieldName %>ContentType: 'image/png',
-            <%= field.fieldName %>: 'AAAAAAA',
-    <%_ } else if (!field.fieldIsEnum) { /* (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' */ _%>
-            <%= field.fieldName %>: 'AAAAAAA',
-    <%_ } _%>
-<%_ }) _%>
-        };
-
-        restElemDefault = {
-            ...elemDefault,
-<%_ fields.forEach((field) => { _%>
-    <%_  if (field.fieldTypeLocalDate) { _%>
-            <%= field.fieldName %>: currentDate.format(DATE_FORMAT),
-    <%_ } else if (field.fieldTypeTimed) { _%>
-            <%= field.fieldName %>: currentTime.toJSON(),
-    <%_ } _%>
-<%_ }) _%>
-        };
     });
 
     describe('Service methods', () => {
         it('should find an element', () => {
-            const returnedFromService = { ...restElemDefault };
-            const expected = { ...elemDefault };
+            const returnedFromService = { ...requireRestSample };
+            const expected = { ...requiredSample };
 
             service.find(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.body);
 
@@ -121,9 +73,9 @@ _%>
 <%_ if (!readOnly) { _%>
         it('should create a <%= entityAngularName %>', () => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { <%= primaryKey.name %>, ...<%= entityInstance %> } = elemDefault;
-            const returnedFromService = { ...restElemDefault };
-            const expected = { ...elemDefault };
+            const <%= entityInstance %> = { ...newSample };
+            const returnedFromService = { ...requireRestSample };
+            const expected = { ...requiredSample };
 
             service.create(<%= entityInstance %>).subscribe(resp => expectedResult = resp.body);
 
@@ -133,9 +85,9 @@ _%>
         });
 
         it('should update a <%= entityAngularName %>', () => {
-            const <%= entityInstance %> = { ...elemDefault };
-            const returnedFromService = { ...restElemDefault };
-            const expected = { ...elemDefault };
+            const <%= entityInstance %> = { ...requiredSample };
+            const returnedFromService = { ...requireRestSample };
+            const expected = { ...requiredSample };
 
             service.update(<%= entityInstance %>).subscribe(resp => expectedResult = resp.body);
 
@@ -144,17 +96,10 @@ _%>
             expect(expectedResult).toMatchObject(expected);
         });
 
-<%_ const fieldsToIncludeInPartialPatchTest = fields.filter(field => field.id || (!field.transient && faker.datatype.boolean())); _%>
         it('should partial update a <%= entityAngularName %>', () => {
-            const patchObject = {
-<%_ fieldsToIncludeInPartialPatchTest.forEach((field) => { _%>
-    <%_ if (!field.fieldIsEnum) { _%>
-                <%= field.fieldName %>: elemDefault.<%= field.fieldName %>,
-    <%_ } _%>
-<%_ }) _%>
-            };
-            const returnedFromService = { ...restElemDefault };
-            const expected = { ...elemDefault }
+            const patchObject = { ...partialSample };
+            const returnedFromService = { ...requireRestSample };
+            const expected = { ...requiredSample }
 
             service.partialUpdate(patchObject).subscribe(resp => expectedResult = resp.body);
 
@@ -165,9 +110,9 @@ _%>
 <%_ } _%>
 
         it('should return a list of <%= entityAngularName %>', () => {
-            const returnedFromService = { ...restElemDefault };
+            const returnedFromService = { ...requireRestSample };
 
-            const expected = { ...elemDefault };
+            const expected = { ...requiredSample };
 
             service.query().subscribe(resp => expectedResult = resp.body);
 
@@ -189,39 +134,39 @@ _%>
 
         describe('add<%= entityAngularName %>ToCollectionIfMissing', () => {
             it('should add a <%= entityAngularName %> to an empty array', () => {
-                const <%= entityInstance %>: I<%= entityAngularName %> = <%- testEntityPrimaryKey0 %>;
+                const <%= entityInstance %>: I<%= entityAngularName %> = requiredSample;
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing([], <%= entityInstance %>);
                 expect(expectedResult).toHaveLength(1);
                 expect(expectedResult).toContain(<%= entityInstance %>);
             });
 
             it('should not add a <%= entityAngularName %> to an array that contains it', () => {
-                const <%= entityInstance %>: I<%= entityAngularName %> = <%- testEntityPrimaryKey0 %>;
+                const <%= entityInstance %>: I<%= entityAngularName %> = requiredSample;
                 const <%= entityInstance %>Collection: I<%= entityAngularName %>[] = [{
                     ...<%= entityInstance %>,
-                }, <%- testEntityPrimaryKey1 %>];
+                }, partialSample];
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing(<%= entityInstance %>Collection, <%= entityInstance %>);
                 expect(expectedResult).toHaveLength(2);
             });
 
             it("should add a <%= entityAngularName %> to an array that doesn't contain it", () => {
-                const <%= entityInstance %>: I<%= entityAngularName %> = <%- testEntityPrimaryKey0 %>;
-                const <%= entityInstance %>Collection: I<%= entityAngularName %>[] = [<%- testEntityPrimaryKey1 %>];
+                const <%= entityInstance %>: I<%= entityAngularName %> = requiredSample;
+                const <%= entityInstance %>Collection: I<%= entityAngularName %>[] = [partialSample];
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing(<%= entityInstance %>Collection, <%= entityInstance %>);
                 expect(expectedResult).toHaveLength(2);
                 expect(expectedResult).toContain(<%= entityInstance %>);
             });
 
             it('should add only unique <%= entityAngularName %> to an array', () => {
-                const <%= entityInstance %>Array: I<%= entityAngularName %>[] = [<%- testEntityPrimaryKey0 %>, <%- testEntityPrimaryKey1 %>, <%- generateTestEntityPrimaryKey(primaryKey) %>];
-                const <%= entityInstance %>Collection: I<%= entityAngularName %>[] = [<%- testEntityPrimaryKey0 %>];
+                const <%= entityInstance %>Array: I<%= entityAngularName %>[] = [requiredSample, partialSample, fullSample];
+                const <%= entityInstance %>Collection: I<%= entityAngularName %>[] = [requiredSample];
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing(<%= entityInstance %>Collection, ...<%= entityInstance %>Array);
                 expect(expectedResult).toHaveLength(3);
             });
 
             it('should accept varargs', () => {
-                const <%= entityInstance %>: I<%= entityAngularName %> = <%- testEntityPrimaryKey0 %>;
-                const <%= entityInstance %>2: I<%= entityAngularName %> = <%- testEntityPrimaryKey1 %>;
+                const <%= entityInstance %>: I<%= entityAngularName %> = requiredSample;
+                const <%= entityInstance %>2: I<%= entityAngularName %> = partialSample;
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing([], <%= entityInstance %>, <%= entityInstance %>2);
                 expect(expectedResult).toHaveLength(2);
                 expect(expectedResult).toContain(<%= entityInstance %>);
@@ -229,14 +174,14 @@ _%>
             });
 
             it('should accept null and undefined values', () => {
-                const <%= entityInstance %>: I<%= entityAngularName %> = <%- testEntityPrimaryKey0 %>;
+                const <%= entityInstance %>: I<%= entityAngularName %> = requiredSample;
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing([], null, <%= entityInstance %>, undefined);
                 expect(expectedResult).toHaveLength(1);
                 expect(expectedResult).toContain(<%= entityInstance %>);
             });
 
             it('should return initial array if no <%= entityAngularName %> is added', () => {
-                const <%= entityInstance %>Collection: I<%= entityAngularName %>[] = [<%- testEntityPrimaryKey0 %>];
+                const <%= entityInstance %>Collection: I<%= entityAngularName %>[] = [requiredSample];
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing(<%= entityInstance %>Collection, undefined, null);
                 expect(expectedResult).toEqual(<%= entityInstance %>Collection);
             });

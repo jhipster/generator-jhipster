@@ -20,7 +20,7 @@
   const idType = getTypescriptKeyType(user.primaryKey.type);
 _%>
 export interface IUser {
-  id?: <%= idType %>;
+  id?: <%= idType %> | null;
   login?: string;
   firstName?: string | null;
   lastName?: string | null;
@@ -36,7 +36,7 @@ export interface IUser {
 
 export class User implements IUser {
   constructor(
-    public id?: <%= idType %>,
+    public id?: <%= idType %> | null,
     public login?: string,
     public firstName?: string | null,
     public lastName?: string | null,
