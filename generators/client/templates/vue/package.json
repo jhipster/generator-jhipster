@@ -26,7 +26,7 @@
     "@types/vuelidate": "0.7.15",
     "@vue/eslint-config-prettier": "7.0.0",
     "@vue/eslint-config-typescript": "10.0.0",
-    "@vue/vue2-jest": "28.0.0",
+    "@vue/vue2-jest": "28.0.1",
     "@vue/test-utils": "1.3.0",
     "axios-mock-adapter": "1.21.1",
     "autoprefixer": "10.4.7",
