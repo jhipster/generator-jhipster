@@ -47,7 +47,7 @@ import dayjs from 'dayjs/esm';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
 
-import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %>, New<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 <%_ if (fieldsContainBlob) { _%>
 import { AlertError } from 'app/shared/alert/alert-error.model';
@@ -97,7 +97,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     <%= otherEntity.entityInstancePlural %>SharedCollection: I<%= otherEntity.entityAngularName %>[] = [];
   <%_ } _%>
   <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
-    <%= relationship.relationshipFieldNamePlural %>Collection: I<%= relationship.otherEntityAngularName %>[] = [];
+    <%= relationship.relationshipFieldNamePlural %>Collection: I<%= relationship.otherEntity.entityAngularName %>[] = [];
   <%_ } _%>
 <%_ } _%>
 
@@ -152,6 +152,13 @@ _%>
         protected activatedRoute: ActivatedRoute,
         protected fb: FormBuilder,
     ) {}
+<%_ for (const relationshipsByEntity of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.ownerSide && rel.otherEntity.primaryKey))) {
+      const { otherEntity } = relationshipsByEntity[0];
+_%>
+
+    compare<%= otherEntity.entityAngularName %> = (o1: I<%= otherEntity.entityAngularName %> | null, o2: I<%= otherEntity.entityAngularName %> | null): boolean =>
+        this.<%= otherEntity.entityInstance %>Service.compare<%= otherEntity.entityAngularName %>(o1, o2);
+<%_ } _%>
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
@@ -222,7 +229,7 @@ _%>
     save(): void {
         this.isSaving = true;
         const <%= entityInstance %> = this.createFromForm();
-        if (<%= entityInstance %>.<%= primaryKey.name %> != null) {
+        if ('<%= primaryKey.name %>' in <%= entityInstance %>) {
             this.subscribeToSaveResponse(
                 this.<%= entityInstance %>Service.update(<%= entityInstance %>));
         } else {
@@ -230,25 +237,6 @@ _%>
                 this.<%= entityInstance %>Service.create(<%= entityInstance %>));
         }
     }
-<%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
-
-    track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(_index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
-        return item.<%= reference.relationship.otherEntity.primaryKey.name %>!;
-    }
-<%_ } _%>
-<%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipManyToMany && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
-
-    getSelected<%= reference.relationship.otherEntity.entityAngularName %>(option: I<%= reference.relationship.otherEntity.entityAngularName %>, selectedVals?: I<%= reference.relationship.otherEntity.entityAngularName %>[]): I<%= reference.relationship.otherEntity.entityAngularName %> {
-        if (selectedVals) {
-          for (const selectedVal of selectedVals) {
-              if (option.<%= reference.relationship.otherEntity.primaryKey.name %> === selectedVal.<%= reference.relationship.otherEntity.primaryKey.name %>) {
-                  return selectedVal;
-              }
-          }
-        }
-        return option;
-    }
-<%_ } _%>
 
     protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>): void {
         result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
@@ -355,8 +343,8 @@ _%>
     }
 <%_ } _%>
 
-    protected createFromForm(): I<%= entityAngularName %> {
-        return {
+    protected createFromForm(): I<%= entityAngularName %> | New<%= entityAngularName %> {
+        const rawValue = {
             ...this.editForm.getRawValue(),
 <%_ for (const field of fields) {
   const fieldName = field.fieldName;
@@ -365,6 +353,10 @@ _%>
             <%= fieldName %>: this.editForm.get(['<%= fieldName %>'])!.value ? dayjs(this.editForm.get(['<%= fieldName %>'])!.value, DATE_TIME_FORMAT) : undefined,
   <%_ } _%>
 <%_ } _%>
-        } as I<%= entityAngularName %>;
+        };
+        if (rawValue.<%= primaryKey.name %> != null) {
+            return rawValue as I<%= entityAngularName %>;
+        }
+        return rawValue as New<%= entityAngularName %>;
     }
 }

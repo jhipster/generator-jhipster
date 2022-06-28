@@ -235,56 +235,22 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             expect(comp.previousState).not.toHaveBeenCalled();
         });
     });
-<%_ const trackedEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
-if (trackedEntities.length > 0) {
+
+<%_ const trackedRelationships = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.ownerSide && rel.otherEntity.primaryKey));
+    if (trackedRelationships.length > 0) {
 _%>
 
-    describe('Tracking relationships identifiers', () => {
-  <%_ for (reference of trackedEntities) {
-        const otherEntity = reference.relationship.otherEntity;
+    describe('Compare relationships', () => {
+  <%_ for (const relationship of trackedRelationships) {
+        const { otherEntity } = relationship[0];
   _%>
-        describe('track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>', () => {
-            it('Should return tracked <%= otherEntity.entityAngularName %> primary key', () => {
-                const entity = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey, 0) %>;
-                const trackResult = comp.track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>(0, entity);
-                expect(trackResult).toEqual(entity.<%= otherEntity.primaryKey.name %>);
-            });
-        });
-
-  <%_ } _%>
-    });
-<%_ } _%>
-<%_ const selectableEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipManyToMany && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
-if (selectableEntities.length > 0) {
-_%>
-
-    describe('Getting selected relationships', () => {
-  <%_ for (reference of selectableEntities) {
-        const otherEntity = reference.relationship.otherEntity;
-  _%>
-        describe('getSelected<%= otherEntity.entityAngularName %>', () => {
-            it('Should return option if no <%= otherEntity.entityAngularName %> is selected', () => {
-                const option = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey, 0) %>;
-                const result = comp.getSelected<%= otherEntity.entityAngularName %>(option);
-                expect(result === option).toEqual(true);
-            });
-
-            it('Should return selected <%= otherEntity.entityAngularName %> for according option', () => {
-                const option = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey, 0) %>;
-                const selected = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey, 0) %>;
-                const selected2 = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey, 1) %>;
-                const result = comp.getSelected<%= otherEntity.entityAngularName %>(option, [selected2, selected]);
-                expect(result === selected).toEqual(true);
-                expect(result === selected2).toEqual(false);
-                expect(result === option).toEqual(false);
-            });
-
-            it('Should return option if this <%= otherEntity.entityAngularName %> is not selected', () => {
-                const option = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey, 0) %>;
-                const selected = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey, 1) %>;
-                const result = comp.getSelected<%= otherEntity.entityAngularName %>(option, [selected]);
-                expect(result === option).toEqual(true);
-                expect(result === selected).toEqual(false);
+        describe('compare<%= otherEntity.entityAngularName %>', () => {
+            it('Should forward to <%= otherEntity.entityInstance %>Service', () => {
+                const entity = <%- this.generateTestEntityPrimaryKey(otherEntity.primaryKey, 0) %>;
+                const entity2 = <%- this.generateTestEntityPrimaryKey(otherEntity.primaryKey, 1) %>;
+                jest.spyOn(<%= otherEntity.entityInstance %>Service, 'compare<%= otherEntity.entityAngularName %>');
+                comp.compare<%= otherEntity.entityAngularName %>(entity, entity2);
+                expect(<%= otherEntity.entityInstance %>Service.compare<%= otherEntity.entityAngularName %>).toHaveBeenCalledWith(entity, entity2);
             });
         });
 

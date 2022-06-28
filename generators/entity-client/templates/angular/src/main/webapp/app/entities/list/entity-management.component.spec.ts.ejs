@@ -103,7 +103,17 @@ describe('<%= entityAngularName %> Management Component', () => {
         expect(comp.<%= entityInstancePlural %><%= entityArrayOptionalChainSymbol %>[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
     });
 
+    describe('track<%= primaryKey.nameCapitalized %>', () => {
+        it('Should forward to <%= entityInstance %>Service', () => {
+            const entity = <%- this.generateTestEntityPrimaryKey(primaryKey, 0) %>;
+            jest.spyOn(service, 'get<%= entityAngularName %>Identifier');
+            const <%= primaryKey.name %> = comp.track<%= primaryKey.nameCapitalized %>(0, entity);
+            expect(service.get<%= entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
+            expect(<%= primaryKey.name %>).toBe(entity.<%= primaryKey.name %>);
+        });
+    });
 <%_ if (!paginationNo) { _%>
+
     it('should load a page', () => {
         // WHEN
         comp.navigateToPage(1);
@@ -136,8 +146,8 @@ describe('<%= entityAngularName %> Management Component', () => {
               })
           }));
     });
-
   <%_ if (paginationInfiniteScroll) { _%>
+
     it('should re-initialize the page', () => {
         // WHEN
         comp.loadPage(1);
@@ -149,8 +159,8 @@ describe('<%= entityAngularName %> Management Component', () => {
         expect(comp.<%= entityInstancePlural %><%= entityArrayOptionalChainSymbol %>[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
     });
   <%_ } _%>
-
   <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+
     it('should calculate the filter attribute', () => {
         // WHEN
         comp.ngOnInit();

@@ -688,7 +688,7 @@ describe('JHipster generator for entity', () => {
           assert.file(expectedFiles.clientBazGatewayMicroserviceEntity);
         });
         it('generates a string id for the mongodb entity', () => {
-          assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.model.ts`, 'id?: string');
+          assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.model.ts`, 'id: string');
         });
       });
 

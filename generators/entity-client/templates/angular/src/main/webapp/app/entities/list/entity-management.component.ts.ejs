@@ -121,11 +121,9 @@ export class <%= entityAngularName %>Component implements OnInit {
 
 <%_ } _%>
 <%_ if (primaryKey) { _%>
-    track<%= primaryKey.nameCapitalized %>(_index: number, item: I<%= entityAngularName %>): <%= primaryKey.tsType %> {
-      return item.<%= primaryKey.name %>!;
-    }
-<%_ } _%>
+    track<%= primaryKey.nameCapitalized %> = (_index: number, item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
 
+<%_ } _%>
 <%_ if (searchEngine) { _%>
     search(query: string): void {
   <%_ if (notSortableFieldsAfterSearch) { _%>
@@ -140,8 +138,8 @@ export class <%= entityAngularName %>Component implements OnInit {
       this.currentSearch = query;
       this.navigateToWithComponentValues();
     }
-<%_ } _%>
 
+<%_ } _%>
     ngOnInit(): void {
       this.load();
     }
@@ -154,8 +152,8 @@ export class <%= entityAngularName %>Component implements OnInit {
     openFile(base64String: string, contentType: string | null | undefined): void {
       return this.dataUtils.openFile(base64String, contentType);
     }
-<%_ } _%>
 
+<%_ } _%>
 <%_ if (!readOnly) { _%>
     delete(<%= entityInstance %>: I<%= entityAngularName %>): void {
       const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
@@ -172,8 +170,8 @@ export class <%= entityAngularName %>Component implements OnInit {
           }
         });
     }
-<%_ } _%>
 
+<%_ } _%>
     load(): void {
       this.loadFromBackendWithRouteInformations().subscribe({
         next: (res: EntityArrayResponseType) => {
@@ -190,8 +188,8 @@ export class <%= entityAngularName %>Component implements OnInit {
     navigateToPage(page = this.page): void {
       this.handleNavigation(page, this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>);
     }
-<%_ } _%>
 
+<%_ } _%>
     protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
       return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
         .pipe(
@@ -236,8 +234,8 @@ export class <%= entityAngularName %>Component implements OnInit {
     protected refineData(data: I<%= entityAngularName %>[]): I<%= entityAngularName %>[] {
       return data.sort(this.sortService.startSort(this.predicate, this.ascending ? 1 : -1))
     }
-<%_ } _%>
 
+<%_ } _%>
     protected fillComponentAttributesFromResponseBody(data: I<%= entityAngularName %>[] | null): I<%= entityAngularName %>[] {
 <%_ if (paginationInfiniteScroll) { _%>
       const <%= entityInstancePlural %>New = this.<%= entityInstancePlural %> ?? [];
@@ -273,8 +271,8 @@ export class <%= entityAngularName %>Component implements OnInit {
       }
     <%_ } _%>
     }
-<%_ } _%>
 
+<%_ } _%>
     protected queryBackend(<% if (!paginationNo) { %>page?: number, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filters?: IFilterOptions<% } %><% if (searchEngine) { %>, currentSearch?: string<% } %>): Observable<EntityArrayResponseType> {
       this.isLoading = true;
 <%_ if (!paginationNo) { _%>

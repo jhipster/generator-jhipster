@@ -156,21 +156,17 @@ _%>
                 </div>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) {
-  const otherEntity = relationship.otherEntity;
-  const ownerSide = relationship.ownerSide;
+  const { otherEntity, ownerSide, relationshipName, propertyName, otherEntityField, relationshipRequired } = relationship;
   const otherEntityName = relationship.otherEntityName;
-  const relationshipName = relationship.relationshipName;
   const relationshipFieldName = relationship.relationshipFieldName;
   const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-  const otherEntityField = relationship.otherEntityField;
-  const relationshipRequired = relationship.relationshipRequired;
   const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
 _%>
   <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
 
                 <div class="row mb-3">
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%- this._getEntityClientTranslation(translationKey) %></label>
-                    <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>">
+                    <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>" [compareWith]="compare<%= otherEntity.entityAngularName %>">
     <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
     <%_ } else if (!relationship.otherRelationship) { _%>
@@ -178,15 +174,15 @@ _%>
     <%_ } else { _%>
                         <option *ngIf="editForm.get([<%- buildAngularFormPath(relationship.reference) %>])!.value == null" [ngValue]="null" selected></option>
     <%_ } _%>
-                        <option [ngValue]="<%= otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === editForm.get('<%= relationshipFieldName %>')!.value?.<%= relationship.otherEntity.primaryKey.name %> ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <% if (!relationship.otherRelationship || relationship.relationshipManyToOne) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationshipFieldNamePlural %><% } %>Collection; trackBy: track<%= relationship.otherEntity.entityAngularName %>By<%= relationship.otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                        <option [ngValue]="<%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <% if (!relationship.otherRelationship || relationship.relationshipManyToOne) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationshipFieldNamePlural %><% } %>Collection">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
                 </div>
   <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
 
                 <div class="row mb-3">
                     <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%- this._getEntityClientTranslation(translationKey) %></label>
-                    <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%= relationshipFieldNamePlural %>">
-                        <option [ngValue]="getSelected<%= relationship.otherEntity.entityAngularName %>(<%= otherEntityName %>Option, editForm.get('<%= relationshipFieldNamePlural %>')!.value)" *ngFor="let <%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection; trackBy: track<%= relationship.otherEntity.entityAngularName %>By<%= relationship.otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                    <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%= relationshipFieldNamePlural %>" [compareWith]="compare<%= otherEntity.entityAngularName %>">
+                        <option [ngValue]="<%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
                 </div>
   <%_ } _%>
