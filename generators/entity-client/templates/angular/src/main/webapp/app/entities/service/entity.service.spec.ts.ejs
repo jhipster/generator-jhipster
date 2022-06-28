@@ -34,7 +34,7 @@ import { <% if (fieldsContainLocalDate) { %>DATE_FORMAT,<% } if (fieldsContainIn
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
-import { I<%= entityAngularName %><% if (!readOnly) { %>, <%= entityAngularName %><% } %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
@@ -132,7 +132,7 @@ _%>
 <%_ }) _%>
             }, returnedFromService);
 
-            service.create(new <%= entityAngularName %>()).subscribe(resp => expectedResult = resp.body);
+            service.create({}).subscribe(resp => expectedResult = resp.body);
 
             const req = httpMock.expectOne({ method: 'POST' });
             req.flush(returnedFromService);
@@ -177,7 +177,7 @@ _%>
 
 <%_ const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient && faker.datatype.boolean()); _%>
         it('should partial update a <%= entityAngularName %>', () => {
-            const patchObject = Object.assign({
+            const patchObject = {
 <%_ fieldsToIncludeInPartialPatchTest.forEach((field) => { _%>
     <%_ if (field.fieldTypeBoolean) { _%>
                     <%= field.fieldName %>: true,
@@ -186,26 +186,26 @@ _%>
     <%_ } else if (field.fieldTypeCharSequence) { _%>
                     <%= field.fieldName %>: 'BBBBBB',
     <%_ } else if (field.fieldTypeLocalDate) { _%>
-                    <%= field.fieldName %>: currentDate.format(DATE_FORMAT),
+                    <%= field.fieldName %>: currentDate,
     <%_ } else if (field.fieldTypeTimed) { _%>
-                    <%= field.fieldName %>: currentDate.format(DATE_TIME_FORMAT),
-    <%_ } else { _%>
+                    <%= field.fieldName %>: currentDate,
+    <%_ } else if (!field.fieldIsEnum) { _%>
                     <%= field.fieldName %>: 'BBBBBB',
     <%_ } _%>
 <%_ }) _%>
-            }, new <%= entityAngularName %>())
+            };
 
-            const returnedFromService = Object.assign(patchObject, elemDefault);
-
-            const expected = Object.assign({
+            const returnedFromService = Object.assign({
 <%_ fields.forEach((field) => { _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
-                    <%= field.fieldName %>: currentDate,
+                    <%= field.fieldName %>: currentDate.format(DATE_FORMAT),
     <%_ } else if (field.fieldTypeTimed) { _%>
-                    <%= field.fieldName %>: currentDate,
+                    <%= field.fieldName %>: currentDate.format(DATE_TIME_FORMAT),
     <%_ } _%>
 <%_ }) _%>
-            }, returnedFromService);
+            }, elemDefault, patchObject);
+
+            const expected = Object.assign({}, patchObject, returnedFromService);
 
             service.partialUpdate(patchObject).subscribe(resp => expectedResult = resp.body);
 
