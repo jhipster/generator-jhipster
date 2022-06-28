@@ -37,7 +37,8 @@ const JHIPSTER_DEPENDENCIES_VERSION = '7.8.2-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.7.1';
 const LIQUIBASE_VERSION = '4.12.0';
-const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
+// TODO v8: Remove this constant
+const LIQUIBASE_DTD_VERSION = 'latest';
 const HIBERNATE_VERSION = '5.6.9.Final';
 const JACOCO_VERSION = '0.8.8';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
@@ -409,6 +410,7 @@ const constants = {
   JHIPSTER_DEPENDENCIES_VERSION,
   SPRING_BOOT_VERSION,
   LIQUIBASE_VERSION,
+  // TODO v8: Remove this constant
   LIQUIBASE_DTD_VERSION,
   HIBERNATE_VERSION,
   JIB_VERSION,

@@ -195,6 +195,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.JHIPSTER_DEPENDENCIES_VERSION = this.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
         this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
+        // TODO v8: Remove this constant
         this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
         this.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
         this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;

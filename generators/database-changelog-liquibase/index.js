@@ -38,6 +38,7 @@ const TYPE_LONG = CommonDBTypes.LONG;
 
 const constants = require('../generator-constants');
 
+// TODO v8: Remove this constant
 const { LIQUIBASE_DTD_VERSION } = constants;
 const { prepareFieldForTemplates } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
@@ -216,6 +217,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       setupConstants() {
         // Make constants available in templates
+        // TODO v8: Remove this constant
         this.LIQUIBASE_DTD_VERSION = LIQUIBASE_DTD_VERSION;
       },
     };
