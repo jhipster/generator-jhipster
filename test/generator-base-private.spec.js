@@ -1,10 +1,12 @@
 const path = require('path');
 const expect = require('chai').expect;
+const { expect: jestExpect } = require('expect');
 // using base generator which extends the private base
 const BaseGeneratorPrivate = require('../generators/generator-base-private').prototype;
 const BaseGenerator = require('../generators/generator-base').prototype; // TODO remove in favor of a cleaner architecture
 const { CASSANDRA, MONGODB, MYSQL, SQL } = require('../jdl/jhipster/database-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
+const { CommonDBTypes } = require('../jdl/jhipster/field-types');
 
 const NO_DTO = MapperTypes.NO;
 
@@ -282,6 +284,35 @@ export * from './entityFolderName/entityFileName.state';`;
     describe('when passing ../../foo', () => {
       it('throw an error', () => {
         expect(() => BaseGeneratorPrivate.getEntityParentPathAddition('../../foo')).to.throw();
+      });
+    });
+  });
+
+  describe('getTypescriptType', () => {
+    describe('when called with sql DB name', () => {
+      it('return SQL', () => {
+        jestExpect(Object.fromEntries(Object.values(CommonDBTypes).map(dbType => [dbType, BaseGeneratorPrivate.getTypescriptType(dbType)])))
+          .toMatchInlineSnapshot(`
+Object {
+  "AnyBlob": "string",
+  "BigDecimal": "number",
+  "Blob": "string",
+  "Boolean": "boolean",
+  "Double": "number",
+  "Duration": "string",
+  "Enum": "Enum",
+  "Float": "number",
+  "ImageBlob": "string",
+  "Instant": "dayjs.Dayjs",
+  "Integer": "number",
+  "LocalDate": "dayjs.Dayjs",
+  "Long": "number",
+  "String": "string",
+  "TextBlob": "string",
+  "UUID": "string",
+  "ZonedDateTime": "dayjs.Dayjs",
+}
+`);
       });
     });
   });
