@@ -113,16 +113,18 @@ export const AdministrationSlice = createSlice({
     <%_ } _%>
   },
   extraReducers(builder) {
+<%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
+    builder
       <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-    builder.addCase(getGatewayRoutes.fulfilled, (state, action) => {
+      .addCase(getGatewayRoutes.fulfilled, (state, action) => {
         state.loading = false;
         state.gateway = {
           routes: action.payload.data
         };
-      });
+      })
       <%_ } _%>
       <%_ if (withAdminUi) { _%>
-    builder.addCase(getSystemHealth.fulfilled, (state, action) => {
+      .addCase(getSystemHealth.fulfilled, (state, action) => {
         state.loading = false;
         state.health = action.payload.data;
       })
@@ -155,7 +157,6 @@ export const AdministrationSlice = createSlice({
         };
       })
       <%_ } _%>
-      <%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
       .addMatcher(
         isPending(
           <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
@@ -175,8 +176,6 @@ export const AdministrationSlice = createSlice({
           state.loading = true;
         }
       )
-      <%_ } _%>
-      <%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
       .addMatcher(
         isRejected(
           <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
@@ -196,7 +195,7 @@ export const AdministrationSlice = createSlice({
           state.loading = false;
         }
       );
-      <%_ } _%>
+<%_ } _%>
   },
 });
 

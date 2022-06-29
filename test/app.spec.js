@@ -646,6 +646,59 @@ describe('JHipster generator', () => {
       });
     });
 
+    describe('oauth2 + react, no db, no service discovery & no admin ui', () => {
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/app'))
+          .withOptions({ skipInstall: true })
+          .withPrompts({
+            applicationType: 'gateway',
+            authenticationType: 'oauth2',
+            baseName: 'reacttest',
+            blueprints: [],
+            buildTool: 'maven',
+            cacheProvider: 'no',
+            clientFramework: 'react',
+            clientPackageManager: 'npm',
+            clientTheme: 'darkly',
+            clientThemeVariant: 'dark',
+            databaseType: 'no',
+            devDatabaseType: 'no',
+            enableHibernateCache: false,
+            enableSwaggerCodegen: false,
+            enableTranslation: false,
+            entitySuffix: '',
+            jhiPrefix: 'jhi',
+            jwtSecretKey: 'somerandomkey',
+            languages: ['en'],
+            nativeLanguage: 'en',
+            otherModules: [],
+            packageName: 'com.test.reactui',
+            pages: [],
+            prodDatabaseType: 'no',
+            searchEngine: false,
+            serverSideOptions: [],
+            serviceDiscoveryType: 'no',
+            skipCommitHook: true,
+            skipFakeData: false,
+            skipUserManagement: true,
+            testFrameworks: [],
+            withAdminUi: false,
+          })
+          .run();
+      });
+
+      it('creates expected files for the oauth2 + react custom options', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+      it('uses correct prettier formatting', () => {
+        // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+        assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+        assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
+      });
+    });
+
     describe('hazelcast', () => {
       before(async () => {
         await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
