@@ -79,6 +79,14 @@ const angularFiles = {
       path: ANGULAR_DIR,
       templates: [
         {
+          file: 'entities/update/entity-form.service.ts',
+          renameTo: generator => `entities/${generator.entityFolderName}/update/${generator.entityFileName}-form.service.ts`,
+        },
+        {
+          file: 'entities/update/entity-form.service.spec.ts',
+          renameTo: generator => `entities/${generator.entityFolderName}/update/${generator.entityFileName}-form.service.spec.ts`,
+        },
+        {
           file: 'entities/update/entity-management-update.component.html',
           renameTo: generator => `entities/${generator.entityFolderName}/update/${generator.entityFileName}-update.component.html`,
         },
