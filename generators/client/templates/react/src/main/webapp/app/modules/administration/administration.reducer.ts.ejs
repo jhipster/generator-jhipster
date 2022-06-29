@@ -113,19 +113,17 @@ export const AdministrationSlice = createSlice({
     <%_ } _%>
   },
   extraReducers(builder) {
+<%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
+    builder
       <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-    builder.addCase(getGatewayRoutes.fulfilled, (state, action) => {
+      .addCase(getGatewayRoutes.fulfilled, (state, action) => {
         state.loading = false;
         state.gateway = {
           routes: action.payload.data
         };
-      })<%_ if (withAdminUi) { _%>;
-        <%_ } else { _%>
-            <%# Required for code formatting %>
-        <%_ } _%>
-      <%_ } _%>
+      })
       <%_ if (withAdminUi) { _%>
-    builder.addCase(getSystemHealth.fulfilled, (state, action) => {
+      .addCase(getSystemHealth.fulfilled, (state, action) => {
         state.loading = false;
         state.health = action.payload.data;
       })
@@ -200,6 +198,7 @@ export const AdministrationSlice = createSlice({
         }
       );
       <%_ } _%>
+<%_ } _%>
   },
 });
 
