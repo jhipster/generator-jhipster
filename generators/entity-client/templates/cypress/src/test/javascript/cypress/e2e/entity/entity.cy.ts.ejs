@@ -248,11 +248,21 @@ describe('<%= entityClass %> e2e test', () => {
       });
 
 <%_ if (!readOnly) { _%>
-      it('edit button click should load edit <%= entityClass %> page', () => {
+      it('edit button click should load edit <%= entityClass %> page and go back', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('<%= entityClass %>');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', <%= entityInstance %>PageUrlPattern);
+      });
+
+      it('edit button click should load edit <%= entityClass %> page and save', () => {
+        cy.get(entityEditButtonSelector).first().click();
+        cy.getEntityCreateUpdateHeading('<%= entityClass %>');
+        cy.get(entityCreateSaveButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response.statusCode).to.equal(200);
         });
