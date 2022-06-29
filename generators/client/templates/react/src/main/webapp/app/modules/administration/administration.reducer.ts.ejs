@@ -157,7 +157,6 @@ export const AdministrationSlice = createSlice({
         };
       })
       <%_ } _%>
-      <%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
       .addMatcher(
         isPending(
           <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
@@ -177,8 +176,6 @@ export const AdministrationSlice = createSlice({
           state.loading = true;
         }
       )
-      <%_ } _%>
-      <%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
       .addMatcher(
         isRejected(
           <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
@@ -198,7 +195,6 @@ export const AdministrationSlice = createSlice({
           state.loading = false;
         }
       );
-      <%_ } _%>
 <%_ } _%>
   },
 });
