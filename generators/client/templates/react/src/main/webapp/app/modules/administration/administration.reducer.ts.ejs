@@ -122,6 +122,7 @@ export const AdministrationSlice = createSlice({
           routes: action.payload.data
         };
       })
+      <%_ } _%>
       <%_ if (withAdminUi) { _%>
       .addCase(getSystemHealth.fulfilled, (state, action) => {
         state.loading = false;
