@@ -20,7 +20,7 @@
   const idType = getTypescriptKeyType(user.primaryKey.type);
 _%>
 export interface IUser {
-  id?: <%= idType %>;
+  id: <%= idType %>;
   login?: string;
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
     <%= field.fieldName %>?: string;
@@ -37,6 +37,6 @@ export class User implements IUser {
   ) {}
 }
 
-export function getUserIdentifier(user: IUser): <%= idType %> | undefined {
+export function getUserIdentifier(user: IUser): <%= idType %> {
   return user.id;
 }

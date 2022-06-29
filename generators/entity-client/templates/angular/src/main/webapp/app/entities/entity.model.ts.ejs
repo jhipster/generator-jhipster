@@ -35,14 +35,21 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
 export interface I<%= entityAngularName %> {
-<%_ variablesWithTypes.forEach(variablesWithType => { _%>
-    <%- variablesWithType %>;
-<%_ }); _%>
+<%_ for (const field of fields) {
+      const { fieldName, fieldValidationRequired, tsType, id } = field;
+_%>
+  <%= fieldName %><% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: <%= tsType %><% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>;
+  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+  <%= fieldName %>ContentType<% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: string<% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>,
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const relationship of relationships) {
+      const { propertyName, relationshipRequired, otherEntity, id, collection } = relationship;
+_%>
+  <%= propertyName %>?: I<%= otherEntity.entityAngularName %><% if (collection) { %>[]<% } %> | null;
+<%_ } _%>
 }
-
 <%_ if (primaryKey) { _%>
 
-export function get<%= entityAngularName %>Identifier(<%= entityInstance %>: I<%= entityAngularName %>): <%= primaryKey.tsType %> | undefined {
-  return <%= entityInstance %>.<%= primaryKey.name %>;
-}
+export type New<%= entityAngularName %> = Omit<I<%= entityAngularName %>, '<%= primaryKey.name %>'>;
 <%_ } _%>
