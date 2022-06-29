@@ -134,7 +134,7 @@ module.exports = class extends BaseBlueprintGenerator {
           this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/${this.entityModelFileName}.model.ts`);
           this.fields.forEach(field => {
             if (field.fieldIsEnum === true) {
-              const enumFileName = _.kebabCase(field.fieldType);
+              const { enumFileName } = field;
               this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/enumerations/${enumFileName}.model.ts`);
             }
           });

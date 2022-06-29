@@ -1002,13 +1002,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     const typeImports = new Map();
     const uniqueEnums = {};
     fields.forEach(field => {
-      const fileName = _.kebabCase(field.fieldType);
-      if (field.fieldIsEnum && (!uniqueEnums[field.fieldType] || (uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))) {
-        const importType = `${field.fieldType}`;
+      const { enumFileName, fieldType } = field;
+      if (field.fieldIsEnum && (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues.length !== 0))) {
+        const importType = `${fieldType}`;
         const basePath = clientFramework === VUE ? '@' : 'app';
         const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
-        const importPath = `${basePath}/${modelPath}/enumerations/${fileName}.model`;
-        uniqueEnums[field.fieldType] = field.fieldType;
+        const importPath = `${basePath}/${modelPath}/enumerations/${enumFileName}.model`;
+        uniqueEnums[fieldType] = field.fieldType;
         typeImports.set(importType, importPath);
       }
     });
