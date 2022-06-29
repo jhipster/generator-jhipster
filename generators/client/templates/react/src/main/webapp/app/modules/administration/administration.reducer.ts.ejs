@@ -119,7 +119,10 @@ export const AdministrationSlice = createSlice({
         state.gateway = {
           routes: action.payload.data
         };
-      });
+      })<%_ if (withAdminUi) { _%>;
+        <%_ } else { _%>
+            <%# Required for code formatting %>
+        <%_ } _%>
       <%_ } _%>
       <%_ if (withAdminUi) { _%>
     builder.addCase(getSystemHealth.fulfilled, (state, action) => {
