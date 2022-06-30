@@ -37,7 +37,7 @@
     "folder-hash": "4.0.2",
     "fork-ts-checker-webpack-plugin": "7.2.11",
     "html-webpack-plugin": "5.5.0",
-    "jest": "28.1.1",
+    "jest": "28.1.2",
     "jest-environment-jsdom": "28.1.2",
     "jest-junit": "14.0.0",
     "jest-serializer-vue": "2.0.2",
