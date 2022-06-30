@@ -26,14 +26,14 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { I<%= entityAngularName %>, New<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 
 <%_ if (fieldsContainDate) { _%>
-interface <%= entityAngularName %>FormRawValue extends Omit<I<%= entityAngularName %>, '<%- fields.filter(field => field.fieldTypeTemporal).map(field => field.fieldName).join("' | '") %>'> {
-  <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
+interface <%= entityAngularName %>FormRawValue extends Omit<I<%= entityAngularName %>, '<%- fields.filter(field => field.fieldTypeTimed).map(field => field.fieldName).join("' | '") %>'> {
+  <%_ for (const field of fields.filter(field => field.fieldTypeTimed)) { _%>
   <%= field.fieldName %>?: string | null;
   <%_ } _%>
 }
 
-interface New<%= entityAngularName %>FormRawValue extends Omit<New<%= entityAngularName %>, '<%- fields.filter(field => field.fieldTypeTemporal).map(field => field.fieldName).join("' | '") %>'> {
-  <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
+interface New<%= entityAngularName %>FormRawValue extends Omit<New<%= entityAngularName %>, '<%- fields.filter(field => field.fieldTypeTimed).map(field => field.fieldName).join("' | '") %>'> {
+  <%_ for (const field of fields.filter(field => field.fieldTypeTimed)) { _%>
   <%= field.fieldName %>?: string | null;
   <%_ } _%>
 }
@@ -179,9 +179,9 @@ _%>
     return {
       ...raw<%= entityAngularName %>,
 <%_ for (field of fields) {
-      const { fieldName, fieldTypeTemporal } = field;
+      const { fieldName, fieldTypeTimed } = field;
 _%>
-  <%_ if (fieldTypeTemporal) { _%>
+  <%_ if (fieldTypeTimed) { _%>
       <%= fieldName %>: dayjs(raw<%= entityAngularName %>.<%= fieldName %>, DATE_TIME_FORMAT),
   <%_ } _%>
 <%_ } _%>
@@ -193,9 +193,9 @@ _%>
     return {
       ...<%= entityInstance %>,
 <%_ for (field of fields) {
-      const { fieldName, fieldTypeTemporal } = field;
+      const { fieldName, fieldTypeTimed } = field;
 _%>
-  <%_ if (fieldTypeTemporal) { _%>
+  <%_ if (fieldTypeTimed) { _%>
       <%= fieldName %>: <%= entityInstance %>.<%= fieldName %> ? <%= entityInstance %>.<%= fieldName %>.format(DATE_TIME_FORMAT) : undefined,
   <%_ } _%>
 <%_ } _%>
