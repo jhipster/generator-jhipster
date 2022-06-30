@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
 const utils = require('../utils');
 const constants = require('../generator-constants');
 const { angularFiles } = require('./files-angular.cjs');
@@ -45,7 +44,7 @@ module.exports = {
 function addEnumerationFiles(generator, clientFolder) {
   generator.fields.forEach(field => {
     if (field.fieldIsEnum === true) {
-      const enumFileName = _.kebabCase(field.fieldType);
+      const { enumFileName } = field;
       const enumInfo = {
         ...utils.getEnumInfo(field, generator.clientRootFolder),
         frontendAppName: generator.frontendAppName,
