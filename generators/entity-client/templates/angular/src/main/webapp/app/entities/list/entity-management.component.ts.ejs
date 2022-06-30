@@ -18,10 +18,10 @@
 -%>
 <%_
   const notSortableFieldsAfterSearchArray = !searchEngine ? [] : fields
-      .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal)
+      .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal);
 
   const notSortableFieldsAfterSearchFieldNames = notSortableFieldsAfterSearchArray
-      .map(field => field.fieldName)
+      .map(field => field.fieldName);
 
   const notSortableFieldsAfterSearch = notSortableFieldsAfterSearchArray
       .map(field => `'${field.fieldName}'`)
@@ -79,6 +79,10 @@ import { SortService } from 'app/shared/sort/sort.service';
 })
 export class <%= componentName %> implements OnInit {
 
+<%_ if (notSortableFieldsAfterSearch) { _%>
+    private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = [<%- notSortableFieldsAfterSearch %>];
+
+<%_ } _%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     isLoading = false;
 
@@ -96,9 +100,7 @@ export class <%= componentName %> implements OnInit {
 <%_ } else if (paginationInfiniteScroll) { _%>
 <%- include('infinite-scroll-template'); -%>
 <%_ } _%>
-<%_ if (notSortableFieldsAfterSearch) { _%>
-    private static readonly NOT_SEARCHABLE_FIELDS_AFTER_SEARCH = [<%- notSortableFieldsAfterSearch %>];
-<%_ } _%>
+
     constructor(
       protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
       protected activatedRoute: ActivatedRoute,
@@ -136,7 +138,7 @@ export class <%= componentName %> implements OnInit {
 <%_ if (searchEngine) { _%>
     search(query: string): void {
   <%_ if (notSortableFieldsAfterSearch) { _%>
-      if (query && <%= componentName %>.NOT_SEARCHABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
+      if (query && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
     <%_ if (notSortableFieldsAfterSearchFieldNames.includes(primaryKey.name)) { _%>
         this.predicate = '';
     <%_ } else { _%>
@@ -228,7 +230,7 @@ export class <%= componentName %> implements OnInit {
       if (params.has('search') && params.get('search') !== '') {
         this.currentSearch = params.get('search') as string;
   <%_ if (notSortableFieldsAfterSearch) { _%>
-          if (<%= componentName %>.NOT_SEARCHABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
+          if (<%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
             this.predicate = '';
           }
   <%_ } _%>
