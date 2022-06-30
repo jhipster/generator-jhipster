@@ -42,7 +42,6 @@ describe('<%= entityAngularName %> Form Service', () => {
   let currentDate: dayjs.Dayjs;
 <%_ } _%>
 
-
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(<%= entityAngularName %>FormService);
@@ -74,7 +73,7 @@ _%>
   <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
       <%= field.fieldName %>ContentType: 'image/png',
       <%= field.fieldName %>: 'AAAAAAA',
-  <%_ } else if (!field.fieldIsEnum) { /* (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' */ _%>
+  <%_ } else { _%>
       <%= field.fieldName %>: 'AAAAAAA',
   <%_ } _%>
 <%_ }) _%>
