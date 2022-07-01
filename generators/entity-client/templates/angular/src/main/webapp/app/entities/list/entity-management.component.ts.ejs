@@ -17,10 +17,17 @@
  limitations under the License.
 -%>
 <%_
-  const notSortableFieldsAfterSearch = !searchEngine ? '' : fields
-      .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal)
+  const notSortableFieldsAfterSearchArray = !searchEngine ? [] : fields
+      .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal);
+
+  const notSortableFieldsAfterSearchFieldNames = notSortableFieldsAfterSearchArray
+      .map(field => field.fieldName);
+
+  const notSortableFieldsAfterSearch = notSortableFieldsAfterSearchArray
       .map(field => `'${field.fieldName}'`)
       .join(', ');
+  
+  const componentName = entityAngularName + 'Component';
 _%>
 import { Component, OnInit } from '@angular/core';
 <%_ if (!paginationNo) { _%>
@@ -70,8 +77,12 @@ import { SortService } from 'app/shared/sort/sort.service';
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html'
 })
-export class <%= entityAngularName %>Component implements OnInit {
+export class <%= componentName %> implements OnInit {
 
+<%_ if (notSortableFieldsAfterSearch) { _%>
+    private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = [<%- notSortableFieldsAfterSearch %>];
+
+<%_ } _%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     isLoading = false;
 
@@ -85,9 +96,9 @@ export class <%= entityAngularName %>Component implements OnInit {
 <%_ } _%>
 
 <%_ if (paginationPagination) { _%>
-<%- include('pagination-template', { notSortableFieldsAfterSearch: notSortableFieldsAfterSearch }); -%>
+<%- include('pagination-template'); -%>
 <%_ } else if (paginationInfiniteScroll) { _%>
-<%- include('infinite-scroll-template', { notSortableFieldsAfterSearch: notSortableFieldsAfterSearch }); -%>
+<%- include('infinite-scroll-template'); -%>
 <%_ } _%>
 
     constructor(
@@ -127,9 +138,13 @@ export class <%= entityAngularName %>Component implements OnInit {
 <%_ if (searchEngine) { _%>
     search(query: string): void {
   <%_ if (notSortableFieldsAfterSearch) { _%>
-      if (query && [<%- notSortableFieldsAfterSearch %>].includes(this.predicate)) {
+      if (query && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
+    <%_ if (notSortableFieldsAfterSearchFieldNames.includes(primaryKey.name)) { _%>
+        this.predicate = '';
+    <%_ } else { _%>
         this.predicate = '<%- primaryKey.name %>';
         this.ascending = true;
+    <%_ } _%>
       }
   <%_ } _%>
   <%_ if (!paginationNo) { _%>
@@ -214,6 +229,11 @@ export class <%= entityAngularName %>Component implements OnInit {
 <%_ if (searchEngine) { _%>
       if (params.has('search') && params.get('search') !== '') {
         this.currentSearch = params.get('search') as string;
+  <%_ if (notSortableFieldsAfterSearch) { _%>
+          if (<%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
+            this.predicate = '';
+          }
+  <%_ } _%>
       }
 <%_ } _%>
     }
@@ -342,6 +362,10 @@ export class <%= entityAngularName %>Component implements OnInit {
 
     protected getSortQueryParam(predicate = this.predicate, ascending = this.ascending): string[] {
       const ascendingQueryParam = ascending ? ASC : DESC;
-      return [predicate + ',' + ascendingQueryParam];
+      if (predicate === '') {
+        return [];
+      } else {
+        return [predicate + ',' + ascendingQueryParam];
+      }
     }
 }
