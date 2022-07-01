@@ -19,13 +19,13 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-<%_ if (fields.some(field => field.fieldTypeTemporal)) { _%>
+<%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
 import dayjs from 'dayjs/esm';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
 import { I<%= entityAngularName %>, New<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 
-<%_ if (fieldsContainDate) { _%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 interface <%= entityAngularName %>FormRawValue extends Omit<I<%= entityAngularName %>, '<%- fields.filter(field => field.fieldTypeTimed).map(field => field.fieldName).join("' | '") %>'> {
   <%_ for (const field of fields.filter(field => field.fieldTypeTimed)) { _%>
   <%= field.fieldName %>?: string | null;
@@ -42,10 +42,10 @@ interface New<%= entityAngularName %>FormRawValue extends Omit<New<%= entityAngu
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>FormService {
   create<%= entityAngularName %>FormGroup(<%= entityInstance %>: Partial<New<%= entityAngularName %>> | I<%= entityAngularName %> = {}): FormGroup {
-    const <%= entityInstance %>RawValue = <% if (fieldsContainDate) { %>this.convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(<% } %>{
+    const <%= entityInstance %>RawValue = <% if (fieldsContainInstant || fieldsContainZonedDateTime) { %>this.convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(<% } %>{
       ...this.getFormDefaults(),
       ...<%= entityInstance %>,
-    }<% if (fieldsContainDate) { %>)<% } %>;
+    }<% if (fieldsContainInstant || fieldsContainZonedDateTime) { %>)<% } %>;
 
     const formGroup = new FormGroup({
 <%_ for (const field of fields.filter(field => !field.autoGenerate)) {
@@ -102,13 +102,13 @@ _%>
 
   get<%= entityAngularName %>(form: FormGroup): I<%= entityAngularName %> | New<%= entityAngularName %> {
     if (form.contains('id')) {
-<%_ if (fieldsContainDate) { _%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
       return this.convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(form.getRawValue() as <%= entityAngularName %>FormRawValue);
 <%_ } else { _%>
       return form.getRawValue() as I<%= entityAngularName %>;
 <%_ } _%>
     }
-<%_ if (fieldsContainDate) { _%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
     return this.convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(form.getRawValue() as New<%= entityAngularName %>FormRawValue);
 <%_ } else { _%>
     return form.getRawValue() as New<%= entityAngularName %>;
@@ -143,9 +143,6 @@ _%>
 <%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
     const currentTime = dayjs();
 <%_ } _%>
-<%_ if (fields.some(field => field.fieldTypeLocalDate)) { _%>
-    const today = dayjs().startOf('day');
-<%_ } _%>
 
     return {
 <%_ for (field of fields.filter(field => !field.id)) {
@@ -155,8 +152,6 @@ _%>
       <%= fieldName %>: false,
   <%_ } else if (fieldTypeTimed) { _%>
       <%= fieldName %>: currentTime,
-  <%_ } else if (fieldTypeLocalDate) { _%>
-      <%= fieldName %>: today,
   <%_ } else { _%>
       <%= fieldName %>: null,
   <%_ } _%>
@@ -172,7 +167,7 @@ _%>
 <%_ } _%>
     };
   }
-<%_ if (fieldsContainDate) { _%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 
   private convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(raw<%= entityAngularName %>: New<%= entityAngularName %>FormRawValue): New<%= entityAngularName %>
   private convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(raw<%= entityAngularName %>: <%= entityAngularName %>FormRawValue): I<%= entityAngularName %> {
