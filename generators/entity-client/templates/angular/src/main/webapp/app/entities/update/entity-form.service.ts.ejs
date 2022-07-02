@@ -1,0 +1,209 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Injectable } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+<%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
+import dayjs from 'dayjs/esm';
+import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+<%_ } _%>
+import { I<%= entityAngularName %>, New<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+interface <%= entityAngularName %>FormRawValue extends Omit<I<%= entityAngularName %>, '<%- fields.filter(field => field.fieldTypeTimed).map(field => field.fieldName).join("' | '") %>'> {
+  <%_ for (const field of fields.filter(field => field.fieldTypeTimed)) { _%>
+  <%= field.fieldName %>?: string | null;
+  <%_ } _%>
+}
+
+interface New<%= entityAngularName %>FormRawValue extends Omit<New<%= entityAngularName %>, '<%- fields.filter(field => field.fieldTypeTimed).map(field => field.fieldName).join("' | '") %>'> {
+  <%_ for (const field of fields.filter(field => field.fieldTypeTimed)) { _%>
+  <%= field.fieldName %>?: string | null;
+  <%_ } _%>
+}
+
+<%_ } _%>
+@Injectable({ providedIn: 'root' })
+export class <%= entityAngularName %>FormService {
+  create<%= entityAngularName %>FormGroup(<%= entityInstance %>: Partial<New<%= entityAngularName %>> | I<%= entityAngularName %> = {}): FormGroup {
+    const <%= entityInstance %>RawValue = <% if (fieldsContainInstant || fieldsContainZonedDateTime) { %>this.convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(<% } %>{
+      ...this.getFormDefaults(),
+      ...<%= entityInstance %>,
+    }<% if (fieldsContainInstant || fieldsContainZonedDateTime) { %>)<% } %>;
+
+    const formGroup = new FormGroup({
+<%_ for (const field of fields.filter(field => !field.autoGenerate)) {
+      const { fieldName } = field;
+_%>
+      <%= fieldName %>: new FormControl(
+        <%= entityInstance %>RawValue.<%= fieldName %>,
+    <%_ if (field.fieldValidate) { _%>
+        {
+          validators: [
+      <%_ if (field.fieldValidationRequired) { _%>
+            Validators.required,
+      <%_ } _%>
+      <%_ if (field.fieldValidationMinLength) { _%>
+            Validators.minLength(<%= field.fieldValidateRulesMinlength %>),
+      <%_ } _%>
+      <%_ if (field.fieldValidationMaxLength) { _%>
+            Validators.maxLength(<%= field.fieldValidateRulesMaxlength %>),
+      <%_ } _%>
+      <%_ if (field.fieldValidationMin) { _%>
+            Validators.min(<%= field.fieldValidateRulesMin %>),
+      <%_ } _%>
+      <%_ if (field.fieldValidationMax) { _%>
+            Validators.max(<%= field.fieldValidateRulesMax %>),
+      <%_ } _%>
+      <%_ if (field.fieldValidationPattern) { _%>
+            Validators.pattern('<%= field.fieldValidateRulesPattern.replace(/\\/g, '\\\\') %>'),
+      <%_ } _%>
+          ],
+        }
+    <% } %>
+      ),
+  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+      <%= fieldName %>ContentType: new FormControl(<%= entityInstance %>RawValue.<%= fieldName %>ContentType),
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide)) {
+      const { ownerSide, propertyName, relationshipRequired } = relationship;
+_%>
+      <%= propertyName %>: new FormControl(<%= entityInstance %>RawValue.<%= propertyName %><% if (relationshipRequired) { %>, { validators: [Validators.required] }<% } %>),
+<%_ } _%>
+    });
+    if ('<%= primaryKey.name %>' in <%= entityInstance %>) {
+      formGroup.addControl(
+        '<%= primaryKey.name %>',
+        new FormControl(
+          (<%= entityInstance %>RawValue as <% if (fieldsContainDate) { %><%= entityAngularName %>FormRawValue<% } else { %>I<%= entityAngularName %><% } %>).<%= primaryKey.name %>,
+          { validators: [Validators.required] }
+        )
+      );
+    }
+    return formGroup;
+  }
+
+  get<%= entityAngularName %>(form: FormGroup): I<%= entityAngularName %> | New<%= entityAngularName %> {
+    if (form.contains('id')) {
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+      return this.convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(form.getRawValue() as <%= entityAngularName %>FormRawValue);
+<%_ } else { _%>
+      return form.getRawValue() as I<%= entityAngularName %>;
+<%_ } _%>
+    }
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+    return this.convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(form.getRawValue() as New<%= entityAngularName %>FormRawValue);
+<%_ } else { _%>
+    return form.getRawValue() as New<%= entityAngularName %>;
+<%_ } _%>
+  }
+
+  resetForm(form: FormGroup, <%= entityInstance %>: Partial<I<%= entityAngularName %>>): void {
+    if ('<%= primaryKey.name %>' in <%= entityInstance %>) {
+      if (!form.contains('<%= primaryKey.name %>')) {
+        form.addControl(
+          '<%= primaryKey.name %>',
+          new FormControl(
+            <%= entityInstance %>.<%= primaryKey.name %>,
+            { validators: [Validators.required] }
+          )
+        );
+      }
+    } else {
+      if (form.contains('<%= primaryKey.name %>')) {
+        form.removeControl('<%= primaryKey.name %>');
+      }
+    }
+
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+    form.reset(this.convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(<%= entityInstance %>));
+<%_ } else { _%>
+    form.reset(<%= entityInstance %>);
+<%_ } _%>
+  }
+
+  private getFormDefaults(): Partial<New<%= entityAngularName %>> {
+<%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
+    const currentTime = dayjs();
+<%_ } _%>
+
+    return {
+<%_ for (field of fields.filter(field => !field.id)) {
+      const { fieldName, fieldTypeBoolean, fieldTypeTimed, fieldTypeLocalDate } = field;
+_%>
+  <%_ if (fieldTypeBoolean) { _%>
+      <%= fieldName %>: false,
+  <%_ } else if (fieldTypeTimed) { _%>
+      <%= fieldName %>: currentTime,
+  <%_ } else { _%>
+      <%= fieldName %>: null,
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const relationship of relationships.filter(({ ownerSide }) => ownerSide)) {
+      const { relationshipRequired, propertyName, collection, otherEntity, relationshipName } = relationship;
+_%>
+  <%_ if (collection) { _%>
+      <%= propertyName %>: [],
+  <%_ } else { _%>
+      <%= propertyName %>: null,
+  <%_ } _%>
+<%_ } _%>
+    };
+  }
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+
+  private convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(raw<%= entityAngularName %>: New<%= entityAngularName %>FormRawValue): New<%= entityAngularName %>
+  private convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(raw<%= entityAngularName %>: <%= entityAngularName %>FormRawValue): I<%= entityAngularName %> {
+    return {
+      ...raw<%= entityAngularName %>,
+<%_ for (field of fields) {
+      const { fieldName, fieldTypeTimed } = field;
+_%>
+  <%_ if (fieldTypeTimed) { _%>
+      <%= fieldName %>: dayjs(raw<%= entityAngularName %>.<%= fieldName %>, DATE_TIME_FORMAT),
+  <%_ } _%>
+<%_ } _%>
+    };
+  }
+
+  private convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(<%= entityInstance %>: New<%= entityAngularName %>): New<%= entityAngularName %>FormRawValue
+  private convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(<%= entityInstance %>: I<%= entityAngularName %>): <%= entityAngularName %>FormRawValue {
+    return {
+      ...<%= entityInstance %>,
+<%_ for (field of fields) {
+      const { fieldName, fieldTypeTimed } = field;
+_%>
+  <%_ if (fieldTypeTimed) { _%>
+      <%= fieldName %>: <%= entityInstance %>.<%= fieldName %> ? <%= entityInstance %>.<%= fieldName %>.format(DATE_TIME_FORMAT) : undefined,
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const relationship of relationships.filter(({ ownerSide }) => ownerSide)) {
+      const { relationshipRequired, propertyName, collection, otherEntity, relationshipName } = relationship;
+_%>
+  <%_ if (collection) { _%>
+  <%= propertyName %>: <%= entityInstance %>.<%= propertyName %>,
+    <%_ } else { _%>
+  <%= propertyName %>: <%= entityInstance %>.<%= propertyName %>,
+  <%_ } _%>
+<%_ } _%>
+    };
+  }
+<%_ } _%>
+}
