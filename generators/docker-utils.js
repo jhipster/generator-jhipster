@@ -35,7 +35,6 @@ module.exports = {
 
 /**
  * Check that Docker exists.
- * @param failOver flag
  */
 function checkDocker() {
   if (this.abort || this.skipChecks) return;

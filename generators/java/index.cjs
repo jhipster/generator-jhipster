@@ -270,8 +270,8 @@ module.exports = class extends MixedChain {
 
   /**
    * Validates packageName
-   * @param String input - Package name to be checked
-   * @returns Boolean
+   * @param {string} input - Package name to be checked
+   * @returns {Boolean|string} true if valid, error message otherwise
    */
   validatePackageName(input) {
     if (!/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) {

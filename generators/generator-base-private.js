@@ -106,6 +106,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {any} _this - reference to generator
    * @param {string} resourceDir - resource directory
    * @param {string} lang - language code
+   * @param {string} testResourceDir - test resource directory
    */
   installI18nServerFilesByLanguage(_this, resourceDir, lang, testResourceDir) {
     const generator = _this || this;
@@ -198,6 +199,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * Update Languages In MailServiceIT
    *
    * @param languages
+   * @param packageFolder
    */
   updateLanguagesInLanguageMailServiceIT(languages, packageFolder) {
     const fullPath = `${SERVER_TEST_SRC_DIR}${packageFolder}/service/MailServiceIT.java`;
@@ -845,6 +847,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * Generate Entity Client Field Default Values
    *
    * @param {Array|Object} fields - array of fields
+   * @param [clientFramework]
    * @returns {Array} defaultVariablesValues
    */
   generateEntityClientFieldDefaultValues(fields, clientFramework = ANGULAR) {
@@ -908,6 +911,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {Array|Object} fields - array of fields
    * @param {Array|Object} relationships - array of relationships
    * @param {string} dto - dto
+   * @param [customDateType]
    * @param {boolean} embedded - either the actual entity is embedded or not
    * @returns variablesWithTypes: Array
    */
@@ -1061,6 +1065,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   /**
    * Generate language objects in array of "'en': { name: 'English' }" format
    * @param {string[]} languages
+   * @param clientFramework
    * @returns generated language options
    */
   generateLanguageOptions(languages, clientFramework) {
@@ -1169,7 +1174,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   /**
    * Generate a test entity, according to the type
    *
-   * @param {any} primaryKey - primary key definition.
+   * @param references
    * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
    */
   generateTestEntity(references, index = 'random') {
@@ -1269,7 +1274,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   /**
    * Returns the primary key value based on the primary key type, DB and default value
    *
-   * @param {string} primaryKeyType - the primary key type
+   * @param {string} primaryKey - the primary key type
    * @param {string} databaseType - the database type
    * @param {string} defaultValue - default value
    * @returns {string} java primary key value
@@ -1559,7 +1564,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * Create a angular form path getter method of reference.
    *
    * @param {object} reference
-   * @param {string[]} valueDefinition
+   * @param {string[]} prefix
    * @return {string}
    */
   buildAngularFormPath(reference, prefix = []) {

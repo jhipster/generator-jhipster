@@ -43,6 +43,7 @@ module.exports = {
  * Constructor taking the jdl object to check against application settings.
  * @param {JDLObject} jdlObject -  the jdl object to check.
  * @param {Object} logger - the logger to use, default to the console.
+ * @param {Object} [options]
  */
 function createValidator(jdlObject, logger = console, options = {}) {
   if (!jdlObject) {

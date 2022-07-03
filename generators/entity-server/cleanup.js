@@ -23,8 +23,6 @@
  * @param {any} generator - reference to generator
  * @param {string} javaDir - Java directory
  * @param {string} testDir - Java tests directory
- * @param {string} mainResourceDir - Main resources directory
- * @param {string} testResourceDir - Test resources directory
  */
 function cleanupOldFiles(generator, javaDir, testDir) {
   if (generator.isJhipsterVersionLessThan('7.6.1')) {

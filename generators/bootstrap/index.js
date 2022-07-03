@@ -156,6 +156,7 @@ module.exports = class extends BaseGenerator {
   /**
    * Commits the MemFs to the disc.
    * @param {Stream} [stream] - files stream, defaults to this.sharedFs.stream().
+   * @param {boolean} [skipPrettier]
    * @return {Promise}
    */
   async _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
