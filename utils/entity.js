@@ -51,6 +51,7 @@ const BASE_TEMPLATE_DATA = {
 
   requiresPersistableImplementation: false,
   fieldsContainDate: false,
+  fieldsContainTimed: false,
   fieldsContainInstant: false,
   fieldsContainUUID: false,
   fieldsContainZonedDateTime: false,

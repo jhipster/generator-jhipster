@@ -82,16 +82,16 @@ _%>
 
   describe('Service methods', () => {
     describe('create<%= entityAngularName %>FormGroup', () => {
-      it('should create a new form without <%= primaryKey.name %> FromControl', () => {
+      it('should create a new form with <%= primaryKey.name %> FormControl disabled', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup();
 
-        expect(formGroup.contains('<%= primaryKey.name %>')).toBe(false);
+        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(true);
       });
 
-      it('should create a new form with <%= primaryKey.name %> FromControl', () => {
+      it('passing I<%= entityAngularName %> should create a new form with <%= primaryKey.name %> FormControl enabled', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup(<%- testEntityPrimaryKey0 %>);
 
-        expect(formGroup.contains('<%= primaryKey.name %>')).toBe(true);
+        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(false);
       });
     });
 
@@ -128,22 +128,22 @@ _%>
     });
 
     describe('resetForm', () => {
-      it('should add <%= primaryKey.name %> FormControl', () => {
+      it('passing I<%= entityAngularName %> should enable <%= primaryKey.name %> FormControl', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup();
-        expect(formGroup.contains('<%= primaryKey.name %>')).toBe(false);
+        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(true);
 
         service.resetForm(formGroup, <%- testEntityPrimaryKey0 %>);
 
-        expect(formGroup.contains('<%= primaryKey.name %>')).toBe(true);
+        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(false);
       });
 
-      it('should remove <%= primaryKey.name %> FormControl', () => {
+      it('passing New<%= entityAngularName %> should disable <%= primaryKey.name %> FormControl', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup(<%- testEntityPrimaryKey0 %>);
-        expect(formGroup.contains('<%= primaryKey.name %>')).toBe(true);
+        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(false);
 
         service.resetForm(formGroup, {});
 
-        expect(formGroup.contains('<%= primaryKey.name %>')).toBe(false);
+        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(true);
       });
     });
   });

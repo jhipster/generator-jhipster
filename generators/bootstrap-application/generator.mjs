@@ -301,6 +301,7 @@ export default class extends BaseEntityGenerator {
         entity.fieldsContainBigDecimal = fieldsType.includes(BIG_DECIMAL);
         entity.fieldsContainUUID = fieldsType.includes(UUID);
         entity.fieldsContainDate = intersection(fieldsType, [ZONED_DATE_TIME, INSTANT, LOCAL_DATE]).length > 0;
+        entity.fieldsContainTimed = intersection(fieldsType, [ZONED_DATE_TIME, INSTANT]).length > 0;
 
         entity.fieldsContainBlob = intersection(fieldsType, [BYTES, BYTE_BUFFER]).length > 0;
         if (entity.fieldsContainBlob) {

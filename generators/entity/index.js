@@ -735,9 +735,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
           if (fieldType === ZONED_DATE_TIME) {
             entity.fieldsContainZonedDateTime = true;
+            entity.fieldsContainTimed = true;
             entity.fieldsContainDate = true;
           } else if (fieldType === INSTANT) {
             entity.fieldsContainInstant = true;
+            entity.fieldsContainTimed = true;
             entity.fieldsContainDate = true;
           } else if (fieldType === DURATION) {
             entity.fieldsContainDuration = true;

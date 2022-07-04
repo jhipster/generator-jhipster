@@ -93,6 +93,13 @@ const fakeStringTemplateForFieldName = columnName => {
   return `{{${fakeTemplate}}}`;
 };
 
+/**
+ * @param {*} field
+ * @param {*} faker
+ * @param {*} changelogDate
+ * @param {string} type csv, cypress, json-serializable, ts
+ * @returns fake value
+ */
 const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
   let data;
   if (field.fakerTemplate) {
@@ -140,7 +147,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
       // See https://stackoverflow.com/a/34053802/150868
       // YYYY-MM-DDTHH:mm:ss
       data = isoDate.split('.')[0];
-      if (type === 'cypress') {
+      if (type === 'cypress' || type === 'ts') {
         // YYYY-MM-DDTHH:mm
         data = data.substr(0, data.length - 3);
       }

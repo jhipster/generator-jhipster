@@ -17,19 +17,16 @@
  limitations under the License.
 -%>
 <%
-const variablesWithTypes = generateEntityClientFields(primaryKey, fields, relationships, dto, undefined, embedded);
-const typeImports = generateEntityClientImports(relationships, dto);
-const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
 const enumImports = generateEntityClientEnumImports(fields);
 %>
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
 import dayjs from 'dayjs/esm';
 <%_ } _%>
-<%_ typeImports.forEach((importedPath, importedType) => { _%>
-    <%_ if (importedType !== `I${entityAngularName}`) { _%>
-import { <%- importedType %> } from '<%- importedPath %>';
-    <%_ } _%>
-<%_ }); _%>
+<%_ for (const relationshipsByType of Object.values(differentRelationships).filter(relationshipsByType => relationshipsByType.some(relationship => relationship.ownerSide && relationship.otherEntity.entityAngularName !== entityAngularName))) {
+      const { otherEntity } = relationshipsByType[0];
+_%>
+import { I<%- otherEntity.entityAngularName %> } from 'app/entities/<%= otherEntity.entityClientRootFolder %><%= otherEntity.entityFolderName %>/<%= otherEntity.entityFileName %>.model';
+<%_ } _%>
 <%_ enumImports.forEach((importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
@@ -43,8 +40,8 @@ _%>
   <%= fieldName %>ContentType<% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: string<% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>,
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships) {
-      const { propertyName, relationshipRequired, otherEntity, id, collection } = relationship;
+<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide)) {
+      const { propertyName, relationshipRequired, otherEntity, id, collection, otherEntityField } = relationship;
 _%>
   <%= propertyName %>?: I<%= otherEntity.entityAngularName %><% if (collection) { %>[]<% } %> | null;
 <%_ } _%>
