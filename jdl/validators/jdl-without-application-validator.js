@@ -42,13 +42,14 @@ module.exports = {
 /**
  * Constructor taking the jdl object to check against application settings.
  * @param {JDLObject} jdlObject -  the jdl object to check.
- * @param {Object} applicationSettings - the settings object.
+ * @param {Object} [applicationSettings] - the settings object.
  * @param {String} applicationSettings.baseName - the application's name.
  * @param {String} applicationSettings.applicationType - the application type.
  * @param {String} applicationSettings.databaseType - the DB type.
  * @param {Boolean} applicationSettings.skippedUserManagement - whether user management is skipped.
  * @param {Array} applicationSettings.blueprints - the blueprints used.
- * @param {Object} logger - the logger to use, default to the console.
+ * @param {Object} [logger] - the logger to use, default to the console.
+ * @param {Object} [options]
  */
 function createValidator(jdlObject, applicationSettings = {}, logger = console, options = {}) {
   if (!jdlObject) {

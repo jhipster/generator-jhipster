@@ -117,7 +117,7 @@ class JHipsterCommand extends Command {
 
   /**
    * Register options using cli/commands.js structure.
-   * @param {object[]} lazyBuildCommandCallBack
+   * @param {object[]} [opts]
    * @return {JHipsterCommand} this;
    */
   addCommandOptions(opts = []) {

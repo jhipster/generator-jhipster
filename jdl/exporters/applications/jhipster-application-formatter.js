@@ -27,6 +27,7 @@ module.exports = {
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).
  * @param applications the applications to exporters (key: application name, value: a JDLApplication).
+ * @param {Object} [configuration]
  * @return object[] exported applications in their final form.
  */
 function formatApplicationsToExport(applications, configuration) {
@@ -41,6 +42,7 @@ function formatApplicationsToExport(applications, configuration) {
 /**
  * Exports JDL a application to a JDL file in the current directory.
  * @param {Object} application - the JDL application to export.
+ * @param {Object} [configuration]
  * @return {Object} the exported application in its final form.
  */
 function formatApplicationToExport(application, configuration = {}) {

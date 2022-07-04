@@ -483,7 +483,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    * Compose external blueprint module
    * @param {string} blueprint - name of the blueprint
    * @param {string} subGen - sub generator
-   * @param {any} options - options to pass to blueprint generator
+   * @param {any} [extraOptions] - options to pass to blueprint generator
    * @return {Generator|undefined}
    */
   async _composeBlueprint(blueprint, subGen, extraOptions = {}) {

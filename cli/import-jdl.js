@@ -140,8 +140,7 @@ function writeApplicationConfig(applicationWithEntities, basePath) {
  * @param {string} options.cwd
  * @param {boolean} options.fork
  * @param {Environment} options.env
- * @param {Object} generatorOptions
- * @param {Promise}
+ * @param {Object} [generatorOptions]
  */
 function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
   const { workspaces } = generatorOptions;
@@ -516,9 +515,9 @@ class JDLProcessor {
 
 /**
  * Import-JDL sub generator
- * @param {any} args arguments passed for import-jdl
- * @param {any} options options passed from CLI
- * @param {any} env the yeoman environment
+ * @param {any} jdlFiles jdl files
+ * @param {any} [options] options passed from CLI
+ * @param {any} [env] the yeoman environment
  */
 module.exports = (jdlFiles, options = {}, env) => {
   logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));

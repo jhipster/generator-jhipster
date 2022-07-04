@@ -69,7 +69,7 @@ function parseBluePrints(blueprints) {
 /**
  * @private
  * Merges blueprint arrays, keeping order and version priority.
- * @param {...Blueprint[]} blueprints - Blueprint arrays to be merged.
+ * @param {...Blueprint[]} blueprintsToMerge - Blueprint arrays to be merged.
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
 function mergeBlueprints(...blueprintsToMerge) {

@@ -170,7 +170,7 @@ module.exports = class extends MixedChain {
    */
 
   /**
-   * @param String baseName - Base name to be derived
+   * @param {String} baseName - Base name to be derived
    * @returns default app name
    */
   _getDefaultProjectName(baseName) {
@@ -179,7 +179,7 @@ module.exports = class extends MixedChain {
 
   /**
    * Validates baseName
-   * @param String input - Base name to be checked
+   * @param {String} input - Base name to be checked
    * @returns Boolean
    */
   _validateBaseName(input) {

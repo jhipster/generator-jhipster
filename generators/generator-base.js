@@ -1567,6 +1567,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   /**
    * Compose with a jhipster generator using default jhipster config.
    * @param {string} generator - jhipster generator.
+   * @param {object} args - args to pass
    * @param {object} [options] - options to pass
    * @param {boolean} [once] - compose once with the generator
    * @return {object} the composed generator
@@ -3296,7 +3297,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @experimental
    * Load dependabot package.json into shared dependabot dependencies.
    * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
-   * @param String dependabotFile - package.json path
+   * @param {string} packageJson - package.json path
    */
   loadDependabotDependencies(packageJson) {
     const { dependencies, devDependencies } = this.fs.readJSON(packageJson);
@@ -3365,7 +3366,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param String options - Object containing options.
+   * @param {Object} [options] - Object containing options.
    */
   jhipsterOptions(options = {}) {
     options = _.cloneDeep(options);

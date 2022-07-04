@@ -41,7 +41,9 @@ module.exports = class EnvironmentBuilder {
   /**
    * Creates a new EnvironmentBuilder with a new Environment.
    *
-   * @param {...any} args - Arguments passed to Environment.createEnv().
+   * @param {any} args - Arguments passed to Environment.createEnv().
+   * @param {Object} [options] - options passed to Environment.createEnv().
+   * @param [adapter] - adapter passed to Environment.createEnv().
    * @return {EnvironmentBuilder} envBuilder
    */
   static create(args, options = {}, adapter) {
