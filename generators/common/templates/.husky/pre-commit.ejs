@@ -1,9 +1,17 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-
 <%_ if (skipClient || skipServer) { _%>
 npx --no-install lint-staged
 <%_ } else { _%>
 "$(dirname "$0")/../npmw" exec --no-install lint-staged
+
+DELTA=$(git diff --name-only --diff-filter d --staged | grep -E "^(src|webpack)\/.*\.(md|json|yml|html|cjs|mjs|js|ts|tsx|css|scss|java)$" | xargs)
+if [ -n "$DELTA" ]; then
+    echo "There are changes that require prettier..."
+    # shellcheck disable=SC2086
+    "$(dirname "$0")/../npmw" exec --no-install prettier -- --write $DELTA
+else
+    echo "There are no changes that require prettier"
+fi
 <%_ } _%>
