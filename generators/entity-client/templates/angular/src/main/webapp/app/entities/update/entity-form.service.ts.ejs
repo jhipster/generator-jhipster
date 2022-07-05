@@ -19,10 +19,11 @@
 <%_
   const formDefaultProperties = [
     ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean).map(field => field.fieldName),
-    ...relationships.filter(relationship => relationship.collection && relationship.ownerSide).map(relationship => relationship.propertyName)
+    ...relationships.filter(relationship => relationship.relationshipManyToMany || relationship.ownerSide).map(relationship => relationship.propertyName)
   ];
   const containDefaultProperties = formDefaultProperties.length > 0;
   const entityFormName = fieldsContainDate ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
+  const noPropertyEntity = fields.filter(field => !field.id).length === 0 && relationships.filter(relationship => !relationship.ownerSide && !relationship.relationshipManyToMany).length === 0;
 _%>
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -112,7 +113,7 @@ _%>
       <%= fieldName %>ContentType: new FormControl(<%= entityInstance %>RawValue.<%= fieldName %>ContentType),
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide)) {
+<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) {
       const { relationshipRequired, propertyName, relationshipName, collection, otherEntity } = relationship;
 _%>
       <%= propertyName %>: new FormControl(
@@ -128,6 +129,12 @@ _%>
   }
 
   get<%= entityAngularName %>(form: FormGroup): I<%= entityAngularName %> | New<%= entityAngularName %> {
+<%_ if (noPropertyEntity) { _%>
+    if (form.controls.<%= primaryKey.name %>.disabled) {
+      // form.value returns <%= primaryKey.name %> with null value for FormGroup with only one FormControl
+      return {};
+    }
+<%_ } _%>
 <%_ if (fieldsContainTimed) { _%>
     return this.convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(form.value as <%= entityAngularName %>FormRawValue | New<%= entityAngularName %>FormRawValue);
 <%_ } else { _%>
@@ -174,7 +181,7 @@ _%>
       <%= fieldName %>: currentTime,
     <%_ } _%>
   <%_ } _%>
-  <%_ for (const relationship of relationships.filter(({ ownerSide }) => ownerSide)) {
+  <%_ for (const relationship of relationships.filter(({ ownerSide, relationshipManyToMany }) => ownerSide || relationshipManyToMany)) {
         const { relationshipRequired, propertyName, collection, otherEntity, relationshipName } = relationship;
   _%>
     <%_ if (collection) { _%>
@@ -210,7 +217,7 @@ _%>
       <%= fieldName %>: <%= entityInstance %>.<%= fieldName %> ? <%= entityInstance %>.<%= fieldName %>.format(DATE_TIME_FORMAT) : undefined,
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(({ ownerSide }) => ownerSide)) {
+<%_ for (const relationship of relationships.filter(({ ownerSide, relationshipManyToMany }) => ownerSide || relationshipManyToMany)) {
       const { relationshipRequired, propertyName, collection } = relationship;
 _%>
   <%_ if (collection) { _%>

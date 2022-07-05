@@ -22,7 +22,7 @@ const enumImports = generateEntityClientEnumImports(fields);
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
 import dayjs from 'dayjs/esm';
 <%_ } _%>
-<%_ for (const relationshipsByType of Object.values(differentRelationships).filter(relationshipsByType => relationshipsByType.some(relationship => relationship.ownerSide && relationship.otherEntity.entityAngularName !== entityAngularName))) {
+<%_ for (const relationshipsByType of Object.values(differentRelationships).filter(relationshipsByType => relationshipsByType.some(relationship => (relationship.ownerSide || relationship.relationshipManyToMany) && relationship.otherEntity.entityAngularName !== entityAngularName))) {
       const { otherEntity } = relationshipsByType[0];
 _%>
 import { I<%- otherEntity.entityAngularName %> } from 'app/entities/<%= otherEntity.entityClientRootFolder %><%= otherEntity.entityFolderName %>/<%= otherEntity.entityFileName %>.model';
@@ -40,7 +40,7 @@ _%>
   <%= fieldName %>ContentType<% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: string<% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>,
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide)) {
+<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) {
       const { propertyName, relationshipRequired, otherEntity, id, collection, otherEntityField } = relationship;
 _%>
   <%= propertyName %>?: I<%= otherEntity.entityAngularName %><% if (collection) { %>[]<% } %> | null;
