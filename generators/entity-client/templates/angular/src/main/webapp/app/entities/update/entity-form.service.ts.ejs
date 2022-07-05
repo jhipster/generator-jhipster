@@ -19,7 +19,7 @@
 <%_
   const formDefaultProperties = [
     ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean).map(field => field.fieldName),
-    ...relationships.filter(relationship => relationship.relationshipManyToMany || relationship.ownerSide).map(relationship => relationship.propertyName)
+    ...relationships.filter(relationship => relationship.collection && (relationship.relationshipManyToMany || relationship.ownerSide)).map(relationship => relationship.propertyName)
   ];
   const containDefaultProperties = formDefaultProperties.length > 0;
   const entityFormName = fieldsContainDate ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
