@@ -225,17 +225,17 @@ public class <%= entityClass %>Resource {
         if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
+        if (<%= primaryKey.name %> != null && !Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
   <%_ if (reactive) { _%>
-        return <%= entityInstance %>Repository.existsById(<%= primaryKey.name %>).flatMap(exists -> {
+        return <%= entityInstance %>Repository.existsById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>()).flatMap(exists -> {
             if (!exists) {
                 return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
             }
   <%_ } else { _%>
-        if (!<%= entityInstance %>Repository.existsById(<%= primaryKey.name %>)) {
+        if (!<%= entityInstance %>Repository.existsById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
   <%_ } _%>
@@ -290,17 +290,17 @@ public class <%= entityClass %>Resource {
         if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
+        if (<%= primaryKey.name %> != null && !Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
   <%_ if (reactive) { _%>
-        return <%= entityInstance %>Repository.existsById(<%= primaryKey.name %>).flatMap(exists -> {
+        return <%= entityInstance %>Repository.existsById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>()).flatMap(exists -> {
             if (!exists) {
                 return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
             }
   <%_ } else { _%>
-        if (!<%= entityInstance %>Repository.existsById(<%= primaryKey.name %>)) {
+        if (!<%= entityInstance %>Repository.existsById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
   <%_ } _%>
