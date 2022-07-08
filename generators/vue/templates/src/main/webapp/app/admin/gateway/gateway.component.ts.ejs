@@ -16,6 +16,20 @@ export default class <%=jhiPrefixCapitalized%>GatewayComponent extends Vue {
     this.updatingRoutes = true;
     this.gatewayService().findAll().then((res) => {
       this.gatewayRoutes = res.data;
+      <%_ if (serviceDiscoveryType === 'consul') { _%>
+      this.gatewayRoutes.serviceInstances = this.gatewayRoutes.serviceInstances.map(serviceInstance => {
+        if (serviceInstance.healthService && serviceInstance.healthService.checks) {
+          if (serviceInstance.healthService.checks.filter(
+            check => check.status === 'PASSING'
+          ).length === serviceInstance.healthService.checks.length) {
+            serviceInstance.instanceInfo.status = 'UP'
+          } else {
+            serviceInstance.instanceInfo.status = 'DOWN'
+          }
+        }
+        return serviceInstance;
+      });
+      <%_ } _%>
       this.updatingRoutes = false;
     });
   }
