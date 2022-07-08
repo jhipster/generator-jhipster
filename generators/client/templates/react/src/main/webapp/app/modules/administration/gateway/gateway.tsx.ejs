@@ -50,11 +50,19 @@ export const GatewayPage = () => {
 
   const badgeInfo = info => {
     if (info) {
+      <%_ if (serviceDiscoveryType === 'consul') { _%>
+      if (info.checks && info.checks.filter(check => check.status === 'PASSING').length === info.checks.length) {
+        return <Badge color="success">UP</Badge>;
+      } else {
+        return <Badge color="danger">DOWN</Badge>;
+      }
+      <%_ } else { _%>
       if (info.status === 'UP') {
         return <Badge color="success">{info.status}</Badge>;
       } else {
         return <Badge color="danger">{info.status}</Badge>;
       }
+      <%_ } _%>
     } else {
       return <Badge color="warning">?</Badge>;
     }
@@ -68,7 +76,7 @@ export const GatewayPage = () => {
             {route.serviceInstances.map((instance, i) =>
               <tr key={instance.instanceInfo + '-info'}>
                 <td><a href={instance.uri} target="_blank" rel="noopener noreferrer">{instance.uri}</a></td>
-                <td>{badgeInfo(instance.instanceInfo)}</td>
+                <td>{badgeInfo(<% if (serviceDiscoveryType === 'consul') { %>instance.healthService<% } else { %>instance.instanceInfo<% } %>)}</td>
                 <td>{metadata(instance.metadata)}</td>
               </tr>
             )}
