@@ -23,7 +23,7 @@
   ];
   const containDefaultProperties = formDefaultProperties.length > 0;
   const entityFormName = fieldsContainDate ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
-  const noPropertyEntity = fields.filter(field => !field.id).length === 0 && relationships.filter(relationship => !relationship.ownerSide && !relationship.relationshipManyToMany).length === 0;
+  const noPropertyEntity = fields.filter(field => !field.id).length === 0 && relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany).length === 0;
 _%>
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
