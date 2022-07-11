@@ -189,12 +189,16 @@ module.exports = class extends BaseBlueprintGenerator {
       generatePackageJson() {
         if (!this.generateWorkspaces) return;
 
+        const {
+          dependencies: { rxjs },
+        } = this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'angular', 'package.json'));
+
         this.packageJson.merge({
           workspaces: {
             packages: this.packages,
           },
           devDependencies: {
-            rxjs: '^7', // Not required, workaround https://github.com/npm/cli/issues/4437
+            rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
             concurrently: this.dependabotPackageJson.devDependencies.concurrently,
           },
           scripts: {
