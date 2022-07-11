@@ -190,7 +190,7 @@ module.exports = class extends BaseBlueprintGenerator {
         if (!this.generateWorkspaces) return;
 
         const {
-          devDependencies: { rxjs },
+          dependencies: { rxjs },
         } = this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'angular', 'package.json'));
 
         this.packageJson.merge({
