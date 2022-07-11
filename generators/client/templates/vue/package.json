@@ -35,7 +35,7 @@
     "css-loader": "6.7.1",
     "css-minimizer-webpack-plugin": "4.0.0",
     "folder-hash": "4.0.2",
-    "fork-ts-checker-webpack-plugin": "7.2.11",
+    "fork-ts-checker-webpack-plugin": "7.2.12",
     "html-webpack-plugin": "5.5.0",
     "jest": "28.1.2",
     "jest-environment-jsdom": "28.1.2",
