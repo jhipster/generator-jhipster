@@ -206,7 +206,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is updated with identifier ' + param.id;
         <%_ } _%>
-        return this.$root.$bvToast.toast(message.toString(), {
+        return (this.$root as any).$bvToast.toast(message.toString(), {
           toaster: 'b-toaster-top-center',
           title: 'Info',
           variant: 'info',
@@ -226,7 +226,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is created with identifier ' + param.id;
         <%_ } _%>
-        this.$root.$bvToast.toast(message.toString(), {
+        (this.$root as any).$bvToast.toast(message.toString(), {
           toaster: 'b-toaster-top-center',
           title: 'Success',
           variant: 'success',

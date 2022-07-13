@@ -58,7 +58,7 @@ describe('Register Component', () => {
 
   it('should open login modal when asked to', () => {
     let called = false;
-    register.$root.$on('bv::show::modal', () => {
+    (register.$root as any).$on('bv::show::modal', () => {
       called = true;
     });
     register.openLogin();
