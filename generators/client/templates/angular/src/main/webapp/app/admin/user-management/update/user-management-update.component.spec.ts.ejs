@@ -107,7 +107,7 @@ describe('User Management Update Component', () => {
         tick(); // simulate async
 
         // THEN
-        expect(comp.editForm.value.id).toBeNull();
+        expect(comp.editForm.getRawValue().id).toBeNull();
         expect(service.create).toHaveBeenCalledWith(expect.objectContaining(entity));
         expect(comp.isSaving).toEqual(false);
       })

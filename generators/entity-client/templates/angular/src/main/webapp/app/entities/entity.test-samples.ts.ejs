@@ -17,7 +17,8 @@
  limitations under the License.
 -%>
 <%_
-  const enumImports = generateEntityClientEnumImports(fields);
+const tsKeyId = generateTestEntityId(primaryKey.type);
+const enumImports = generateEntityClientEnumImports(fields);
 _%>
 <%_ if (fieldsContainDate) { _%>
 import dayjs from 'dayjs/esm';

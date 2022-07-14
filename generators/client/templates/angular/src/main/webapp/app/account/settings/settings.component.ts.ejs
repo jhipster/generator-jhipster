@@ -79,7 +79,7 @@ export class SettingsComponent implements OnInit {
   save(): void {
     this.success = false;
 
-    const account = this.settingsForm.value;
+    const account = this.settingsForm.getRawValue();
     this.accountService.save(account).subscribe(() => {
       this.success = true;
 

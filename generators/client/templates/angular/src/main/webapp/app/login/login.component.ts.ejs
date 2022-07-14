@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   login(): void {
-    this.loginService.login(this.loginForm.value).subscribe({
+    this.loginService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
         this.authenticationError = false;
         if (!this.router.getCurrentNavigation()) {
