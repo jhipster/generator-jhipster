@@ -82,37 +82,50 @@ _%>
 
   describe('Service methods', () => {
     describe('create<%= entityAngularName %>FormGroup', () => {
-      it('should create a new form with <%= primaryKey.name %> FormControl disabled', () => {
+      it('should create a new form with form controls', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup();
 
-        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(true);
+        expect(formGroup.controls).toEqual(
+          expect.objectContaining({
+<%_ for (const field of fields) { _%>
+            <%= field.fieldName %>: expect.any(Object),
+<%_ } _%>
+<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) { _%>
+            <%= relationship.propertyName %>: expect.any(Object),
+<%_ } _%>
+          })
+        );
       });
 
       it('passing I<%= entityAngularName %> should create a new form with <%= primaryKey.name %> FormControl enabled', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup(<%- testEntityPrimaryKey0 %>);
 
-        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(false);
+        expect(formGroup.controls).toEqual(expect.objectContaining({
+<%_ for (const field of fields) { _%>
+          <%= field.fieldName %>: expect.any(Object),
+<%_ } _%>
+<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) { _%>
+          <%= relationship.propertyName %>: expect.any(Object),
+<%_ } _%>
+        }));
       });
     });
 
     describe('get<%= entityAngularName %>', () => {
       it('should return New<%= entityAngularName %> for default <%= entityAngularName %> initial value', () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { <%= primaryKey.name %>, ...<%= entityInstance %>Value } = elemDefault;
+        const <%= entityInstance %>Value = { ...elemDefault, <%= primaryKey.name %>: null };
         const formGroup = service.create<%= entityAngularName %>FormGroup(<%= entityInstance %>Value);
 
         const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup) as any;
 
-        expect('<%= primaryKey.name %>' in <%= entityInstance %>).toBe(false);
         expect(<%= entityInstance %>).toMatchObject(<%= entityInstance %>Value);
       });
 
       it('should return New<%= entityAngularName %> for empty <%= entityAngularName %> initial value', () => {
-        const formGroup = service.create<%= entityAngularName %>FormGroup({});
+        const formGroup = service.create<%= entityAngularName %>FormGroup();
 
         const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup) as any;
 
-        expect('<%= primaryKey.name %>' in <%= entityInstance %>).toBe(false);
         expect(<%= entityInstance %>).toMatchObject({});
       });
 
@@ -122,26 +135,25 @@ _%>
 
         const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup) as any;
 
-        expect('<%= primaryKey.name %>' in <%= entityInstance %>).toBe(true);
         expect(<%= entityInstance %>).toMatchObject(<%= entityInstance %>Value);
       });
     });
 
     describe('resetForm', () => {
-      it('passing I<%= entityAngularName %> should enable <%= primaryKey.name %> FormControl', () => {
+      it('passing I<%= entityAngularName %> should not enable <%= primaryKey.name %> FormControl', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup();
         expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(true);
 
         service.resetForm(formGroup, <%- testEntityPrimaryKey0 %>);
 
-        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(false);
+        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(true);
       });
 
       it('passing New<%= entityAngularName %> should disable <%= primaryKey.name %> FormControl', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup(<%- testEntityPrimaryKey0 %>);
-        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(false);
+        expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(true);
 
-        service.resetForm(formGroup, {});
+        service.resetForm(formGroup, { <%= primaryKey.name %>: null });
 
         expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(true);
       });

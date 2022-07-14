@@ -206,7 +206,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             // GIVEN
             const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
             const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
-            jest.spyOn(<%= entityInstance %>FormService, 'get<%= entityAngularName %>').mockReturnValue({});
+            jest.spyOn(<%= entityInstance %>FormService, 'get<%= entityAngularName %>').mockReturnValue({ <%= primaryKey.name %>: null });
             jest.spyOn(<%= entityInstance %>Service, 'create').mockReturnValue(saveSubject);
             jest.spyOn(comp, 'previousState');
             activatedRoute.data = of({ <%= entityInstance %>: null });
