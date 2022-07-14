@@ -168,7 +168,7 @@ _%>
     save(): void {
         this.isSaving = true;
         const <%= entityInstance %> = this.<%= entityInstance %>FormService.get<%= entityAngularName %>(this.editForm);
-        if ('<%= primaryKey.name %>' in <%= entityInstance %>) {
+        if (<%= entityInstance %>.<%= primaryKey.name %> !== null) {
             this.subscribeToSaveResponse(this.<%= entityInstance %>Service.update(<%= entityInstance %>));
         } else {
             this.subscribeToSaveResponse(this.<%= entityInstance %>Service.create(<%= entityInstance %>));

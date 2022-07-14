@@ -48,5 +48,5 @@ _%>
 }
 <%_ if (primaryKey) { _%>
 
-export type New<%= entityAngularName %> = Omit<I<%= entityAngularName %>, '<%= primaryKey.name %>'>;
+export type New<%= entityAngularName %> = Omit<I<%= entityAngularName %>, '<%= primaryKey.name %>'> & { <%= primaryKey.name %>: null };
 <%_ } _%>

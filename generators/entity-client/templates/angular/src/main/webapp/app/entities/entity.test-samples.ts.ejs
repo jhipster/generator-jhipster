@@ -17,8 +17,7 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(primaryKey.type);
-const enumImports = generateEntityClientEnumImports(fields);
+  const enumImports = generateEntityClientEnumImports(fields);
 _%>
 <%_ if (fieldsContainDate) { _%>
 import dayjs from 'dayjs/esm';
@@ -37,7 +36,7 @@ export const partialSample: I<%= entityAngularName %> = <%- generateTypescriptTe
 export const fullSample: I<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => !field.transient).map(field => field.reference)) %>;
 <%_ if (primaryKey) { _%>
 
-export const newSample: New<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => !field.id && field.fieldValidationRequired).map(field => field.reference)) %>;
+export const newSample: New<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => !field.id && field.fieldValidationRequired).map(field => field.reference), { [primaryKey.name]: null }) %>;
 
 Object.freeze(newSample);
 <%_ } _%>

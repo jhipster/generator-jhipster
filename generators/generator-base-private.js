@@ -1171,12 +1171,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     );
   }
 
-  generateTypescriptTestEntity(references) {
+  /**
+   * Generate a test entity, according to the references
+   *
+   * @param references
+   * @param additionalFields
+   * @return {String} test sample
+   */
+  generateTypescriptTestEntity(references, additionalFields = {}) {
     const entries = references
       .map(reference => {
         if (reference.field) {
           const field = reference.field;
-          const { fieldIsEnum, fieldType, fieldTypeTimed, fieldTypeLocalDate, fieldWithContentType, fieldName, contentTypeFieldName } = field;
+          const { fieldIsEnum, fieldType, fieldTypeTimed, fieldTypeLocalDate, fieldWithContentType, fieldName, contentTypeFieldName } =
+            field;
 
           const fakeData = field.generateFakeData('ts');
           if (fieldWithContentType) {
@@ -1197,7 +1205,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       })
       .flat();
     return `{
-  ${entries.map(([key, value]) => `${key}: ${value}`).join(',\n  ')}
+  ${[...entries, ...Object.entries(additionalFields)].map(([key, value]) => `${key}: ${value}`).join(',\n  ')}
 }`;
   }
 

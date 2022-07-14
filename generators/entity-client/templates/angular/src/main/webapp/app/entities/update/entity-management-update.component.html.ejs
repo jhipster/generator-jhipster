@@ -44,7 +44,7 @@
   }
 _%>
 
-                <div class="row mb-3"<% if (field.autoGenerate) { %> *ngIf="!editForm.controls.<%= field.fieldName %>.disabled"<% } %>>
+                <div class="row mb-3"<% if (field.autoGenerate) { %> *ngIf="editForm.controls.<%= field.fieldName %>.value !== null"<% } %>>
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
   <%_ if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
