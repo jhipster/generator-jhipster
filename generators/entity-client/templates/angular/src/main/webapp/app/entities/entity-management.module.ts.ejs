@@ -39,10 +39,5 @@ import { <%= entityAngularName %>RoutingModule } from './route/<%= entityFileNam
     <%= entityAngularName %>DeleteDialogComponent,
 <%_ } %>
   ],
-<%_ if (!readOnly) { _%>
-  entryComponents: [
-    <%= entityAngularName %>DeleteDialogComponent
-  ]
-<%_ } _%>
 })
 export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : '' %><%= entityAngularName %>Module {}
