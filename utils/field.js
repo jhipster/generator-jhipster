@@ -359,7 +359,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   field.generateFakeData = (type = 'csv') => {
     let data = generateFakeDataForField(field, faker, entityWithConfig.changelogDateForRecent, type);
     // manage uniqueness
-    if (field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE)) {
+    if ((field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE)) || field.id) {
       let i = 0;
       while (field.uniqueValue.indexOf(data) !== -1) {
         if (i++ === 5) {
