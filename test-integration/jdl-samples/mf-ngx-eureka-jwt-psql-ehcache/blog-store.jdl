@@ -104,23 +104,23 @@ entity UserData {
   address String
 }
 
-@ChangelogDate(20210408164811)
+@ChangelogDate(20210408164810)
 entity Blog {
   name String required minlength(3)
   handle String required minlength(2)
 }
 
-@ChangelogDate(20210408164812)
+@ChangelogDate(20210408164811)
 entity Post {
   title String required
 }
 
-@ChangelogDate(20210408164813)
+@ChangelogDate(20210408164812)
 entity Tag {
   name String required minlength(2)
 }
 
-@ChangelogDate(20210408164814)
+@ChangelogDate(20210408164813)
 entity Product {
   title String required
   price BigDecimal required min(0)
