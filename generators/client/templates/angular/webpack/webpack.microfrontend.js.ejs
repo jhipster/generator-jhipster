@@ -41,7 +41,7 @@ module.exports = (config, options, targetOptions) => {
 <%_ if (applicationTypeGateway) { _%>
         remotes: {
   <%_ for (const remote of microfrontends) { _%>
-          '<%= remote.lowercaseBaseName %>': `<%= remote.lowercaseBaseName %>@/<%= remote.endpointPrefix %>/remoteEntry.js`,
+          '<%= remote.lowercaseBaseName %>': '<%= remote.lowercaseBaseName %>@/<%= remote.endpointPrefix %>/remoteEntry.js',
   <%_ } _%>
         },
 <%_ } _%>
