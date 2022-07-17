@@ -134,6 +134,11 @@
     "webpack-notifier": "<%= dependabotPackageJson.devDependencies['webpack-notifier'] %>"
   },
   "overrides": {
+<%#
+  Force autoprefixer@10.4.5 to workaround https://github.com/twbs/bootstrap/issues/36259
+  Drop when bootstrap@5.2.0 or 5.1.4 is released
+_%>
+    "autoprefixer": "10.4.5",
     "webpack": "<%= dependabotPackageJson.devDependencies['webpack'] %>"
   },
   "engines": {
