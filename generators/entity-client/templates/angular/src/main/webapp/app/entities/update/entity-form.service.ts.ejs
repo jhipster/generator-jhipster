@@ -22,8 +22,8 @@
     ...relationships.filter(relationship => relationship.collection && (relationship.relationshipManyToMany || relationship.ownerSide)).map(relationship => relationship.propertyName)
   ];
   const containDefaultProperties = formDefaultProperties.length > 0;
-  const entityFormName = fieldsContainDate ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
-  const newEntityFormName = fieldsContainDate ? `New${entityAngularName}FormRawValue` : `New${entityAngularName}`;
+  const entityFormName = fieldsContainTimed ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
+  const newEntityFormName = fieldsContainTimed ? `New${entityAngularName}FormRawValue` : `New${entityAngularName}`;
   const noPropertyEntity = fields.filter(field => !field.id).length === 0 && relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany).length === 0;
 _%>
 import { Injectable } from '@angular/core';
