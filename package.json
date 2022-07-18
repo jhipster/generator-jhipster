@@ -88,7 +88,7 @@
     "axios": "0.27.2",
     "chalk": "4.1.2",
     "chevrotain": "10.1.2",
-    "commander": "9.3.0",
+    "commander": "9.4.0",
     "conf": "10.1.2",
     "debug": "4.3.4",
     "didyoumean": "1.2.2",
