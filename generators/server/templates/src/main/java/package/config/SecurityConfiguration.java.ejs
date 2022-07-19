@@ -225,16 +225,11 @@ public class SecurityConfiguration {
             .antMatchers("/i18n/**").permitAll()
             .antMatchers("/content/**").permitAll()
   <%_ } _%>
-  <%_ if (devDatabaseTypeH2Any) { _%>
-            .antMatchers("/h2-console/**").permitAll()
-  <%_ } _%>
             .antMatchers("/swagger-ui/**").permitAll()
             .antMatchers("/test/**").permitAll()
-    }
-<%_ } else { _%>
-  <%_ if (devDatabaseTypeH2Any) { _%>
+<%_ } _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
             .antMatchers("/h2-console/**").permitAll()
-  <%_ } _%>
 <%_ } _%>
             .antMatchers("/api/authenticate").permitAll()
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
