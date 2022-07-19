@@ -219,11 +219,12 @@ const serverFiles = {
       templates: [
         {
           file: 'package/repository/EntityRepositoryWithBagRelationships.java',
-          renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}RepositoryWithBagRelationships.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/${generator.entityClass}RepositoryWithBagRelationships.java`,
         },
         {
           file: 'package/repository/EntityRepositoryWithBagRelationshipsImpl.java',
-          renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}RepositoryWithBagRelationshipsImpl.java`,
+          renameTo: generator =>
+            `${generator.entityAbsoluteFolder}/repository/${generator.entityClass}RepositoryWithBagRelationshipsImpl.java`,
         },
       ],
     },

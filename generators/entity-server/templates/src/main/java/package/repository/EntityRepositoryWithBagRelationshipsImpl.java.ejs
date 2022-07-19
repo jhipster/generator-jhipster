@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository;
+package <%= entityAbsoluteFolder %>.repository;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +34,7 @@ import org.hibernate.annotations.QueryHints;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
-import <%= packageName %>.domain.<%= persistClass %>;
+import <%= entityAbsoluteFolder %>.domain.<%= persistClass %>;
 
 /**
  * Utility repository to load bag relationships based on https://vladmihalcea.com/hibernate-multiplebagfetchexception/
