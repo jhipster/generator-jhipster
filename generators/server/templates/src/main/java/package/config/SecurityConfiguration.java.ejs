@@ -36,7 +36,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 <%_ if (!applicationTypeMicroservice || !authenticationTypeOauth2) { _%>
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -160,32 +159,6 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 <%_ } _%>
-<%_ if (!applicationTypeMicroservice) { _%>
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-            .antMatchers(HttpMethod.OPTIONS, "/**")
-  <%_ if (!skipClient) { _%>
-            .antMatchers("/app/**/*.{js,html}")
-            .antMatchers("/i18n/**")
-            .antMatchers("/content/**")
-  <%_ } _%>
-  <%_ if (devDatabaseTypeH2Any) { _%>
-            .antMatchers("/h2-console/**")
-  <%_ } _%>
-            .antMatchers("/swagger-ui/**")
-            .antMatchers("/test/**");
-    }
-<%_ } else { _%>
-  <%_ if (devDatabaseTypeH2Any) { _%>
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-            .antMatchers("/h2-console/**");
-    }
-  <%_ } _%>
-<%_ } _%>
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -245,6 +218,24 @@ public class SecurityConfiguration {
         .and()
 <%_ } _%>
             .authorizeRequests()
+<%_ if (!applicationTypeMicroservice) { _%>
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+  <%_ if (!skipClient) { _%>
+            .antMatchers("/app/**/*.{js,html}").permitAll()
+            .antMatchers("/i18n/**").permitAll()
+            .antMatchers("/content/**").permitAll()
+  <%_ } _%>
+  <%_ if (devDatabaseTypeH2Any) { _%>
+            .antMatchers("/h2-console/**").permitAll()
+  <%_ } _%>
+            .antMatchers("/swagger-ui/**").permitAll()
+            .antMatchers("/test/**").permitAll()
+    }
+<%_ } else { _%>
+  <%_ if (devDatabaseTypeH2Any) { _%>
+            .antMatchers("/h2-console/**").permitAll()
+  <%_ } _%>
+<%_ } _%>
             .antMatchers("/api/authenticate").permitAll()
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
             .antMatchers("/api/register").permitAll()
