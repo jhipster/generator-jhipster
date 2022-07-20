@@ -70,6 +70,10 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=17']
+      # Force autoprefixer@10.4.5 to workaround https://github.com/twbs/bootstrap/issues/36259
+      # Drop when bootstrap@5.2.0 or 5.1.4 is released
+      - dependency-name: 'autoprefixer'
+        versions: ['>=10.4.6']
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/vue/'
@@ -91,6 +95,10 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=17']
+      # Force autoprefixer@10.4.5 to workaround https://github.com/twbs/bootstrap/issues/36259
+      # Drop when bootstrap@5.2.0 or 5.1.4 is released
+      - dependency-name: 'autoprefixer'
+        versions: ['>=10.4.6']
 
   - package-ecosystem: 'github-actions'
     directory: '/'
