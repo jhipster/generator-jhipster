@@ -191,13 +191,6 @@
     "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
     "webpack": "webpack --config webpack/webpack.common.js"
   },
-<%#
-  Force autoprefixer@10.4.5 to workaround https://github.com/twbs/bootstrap/issues/36259
-  Drop when bootstrap@5.2.0 or 5.1.4 is released
-_%>
-  "overrides": {
-    "autoprefixer": "10.4.5"
-  },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",
     "reportFile": "TESTS-results-sonar.xml"
