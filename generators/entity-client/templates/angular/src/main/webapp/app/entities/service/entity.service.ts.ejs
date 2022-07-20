@@ -41,19 +41,23 @@ import { <%= searchType %> } from 'app/core/request/request.model';
 <%_ } _%>
 import { I<%= entityAngularName %>, New<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 
+export type PartialUpdate<%= entityAngularName %> = Partial<I<%= entityAngularName %>> & Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'>;
+
 <%_ const entityRestName = fieldsContainDate ? `Rest${entityAngularName}` : `I${entityAngularName}`; _%>
 <%_ if (fieldsContainDate) { _%>
-export interface <%= entityRestName %> extends Omit<I<%= entityAngularName %>, '<%- fields.filter(field => field.fieldTypeTemporal).map(field => field.fieldName).join("' | '") %>'> {
+type RestOf<T extends I<%= entityAngularName %> | New<%= entityAngularName %>> =
+  Omit<T, '<%- fields.filter(field => field.fieldTypeTemporal).map(field => field.fieldName).join("' | '") %>'> &
+  {
   <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
   <%= field.fieldName %>?: string | null;
   <%_ } _%>
-}
+  };
 
-interface New<%= entityRestName %> extends Omit<New<%= entityAngularName %>, '<%- fields.filter(field => field.fieldTypeTemporal).map(field => field.fieldName).join("' | '") %>'> {
-  <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
-  <%= field.fieldName %>?: string | null;
-  <%_ } _%>
-}
+export type <%= entityRestName %> = RestOf<I<%= entityAngularName %>>;
+
+export type New<%= entityRestName %> = RestOf<New<%= entityAngularName %>>;
+
+export type PartialUpdate<%= entityRestName %> = RestOf<PartialUpdate<%= entityAngularName %>>;
 
 <%_ } _%>
 export type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
@@ -89,7 +93,7 @@ export class <%= entityAngularName %>Service {
         <% if (fieldsContainDate) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
     }
 
-    partialUpdate(<%= entityInstance %>: Partial<I<%= entityAngularName %>> & Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'>): Observable<EntityResponseType> {
+    partialUpdate(<%= entityInstance %>: PartialUpdate<%= entityAngularName %>): Observable<EntityResponseType> {
     <%_ if (fieldsContainDate) { _%>
         const copy = this.convertDateFromClient(<%= entityInstance %>);
     <%_ } _%>
@@ -133,8 +137,8 @@ export class <%= entityAngularName %>Service {
         return o1 && o2 ? this.get<%= entityAngularName %>Identifier(o1) === this.get<%= entityAngularName %>Identifier(o2) : o1 === o2;
     }
 
-    add<%= entityAngularName %>ToCollectionIfMissing(<%= entityInstance %>Collection: I<%= entityAngularName %>[], ...<%= entityInstancePlural %>ToCheck: (I<%= entityAngularName %> | null | undefined)[]): I<%= entityAngularName %>[] {
-        const <%= entityInstancePlural %>: I<%= entityAngularName %>[] = <%= entityInstancePlural %>ToCheck.filter(isPresent);
+    add<%= entityAngularName %>ToCollectionIfMissing<Type extends Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'>>(<%= entityInstance %>Collection: Type[], ...<%= entityInstancePlural %>ToCheck: (Type | null | undefined)[]): Type[] {
+        const <%= entityInstancePlural %>: Type[] = <%= entityInstancePlural %>ToCheck.filter(isPresent);
         if (<%= entityInstancePlural %>.length > 0) {
             const <%= entityInstance %>CollectionIdentifiers = <%= entityInstance %>Collection.map(<%= entityInstance %>Item => this.get<%= entityAngularName %>Identifier(<%= entityInstance %>Item)!);
             const <%= entityInstancePlural %>ToAdd = <%= entityInstancePlural %>.filter(<%= entityInstance %>Item => {
@@ -151,9 +155,7 @@ export class <%= entityAngularName %>Service {
     }
 
 <%_ if (fieldsContainDate) { _%>
-    protected convertDateFromClient(<%= entityInstance %>: Partial<I<%= entityAngularName %>>): Partial<<%= entityRestName %>>;
-    protected convertDateFromClient(<%= entityInstance %>: New<%= entityAngularName %>): New<%= entityRestName %>;
-    protected convertDateFromClient(<%= entityInstance %>: I<%= entityAngularName %>): <%= entityRestName %> {
+    protected convertDateFromClient<T extends I<%= entityAngularName %> | New<%= entityAngularName %> | PartialUpdate<%= entityAngularName %>>(<%= entityInstance %>: T): RestOf<T> {
         return {
             ...<%= entityInstance %>,
     <%_ for (const field of fields) { _%>
