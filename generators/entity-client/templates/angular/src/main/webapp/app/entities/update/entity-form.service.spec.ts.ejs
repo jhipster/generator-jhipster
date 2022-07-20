@@ -82,7 +82,7 @@ _%>
 
   describe('Service methods', () => {
     describe('create<%= entityAngularName %>FormGroup', () => {
-      it('should create a new form with form controls', () => {
+      it('should create a new form with FormControl', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup();
 
         expect(formGroup.controls).toEqual(
