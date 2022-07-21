@@ -32,7 +32,7 @@ describe('<%= entityAngularName %> Form Service', () => {
 
   describe('Service methods', () => {
     describe('create<%= entityAngularName %>FormGroup', () => {
-      it('should create a new form with form controls', () => {
+      it('should create a new form with FormControl', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup();
 
         expect(formGroup.controls).toEqual(
@@ -47,7 +47,7 @@ describe('<%= entityAngularName %> Form Service', () => {
         );
       });
 
-      it('passing I<%= entityAngularName %> should create a new form with form controls', () => {
+      it('passing I<%= entityAngularName %> should create a new form with FormGroup', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup(requiredSample);
 
         expect(formGroup.controls).toEqual(expect.objectContaining({

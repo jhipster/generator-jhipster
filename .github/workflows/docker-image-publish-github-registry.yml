@@ -72,7 +72,7 @@ jobs:
           images: ghcr.io/${{ github.repository }}${{ (steps.login-hub.outcome == 'success' && ',jhipster/jhipster') || ''}}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3.0.0
+        uses: docker/build-push-action@v3.1.0
         with:
           context: .
           platforms: linux/amd64,linux/arm64
