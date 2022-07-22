@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository;
+package <%= entityAbsolutePackage %>.repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +26,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 
-import <%= packageName %>.domain.<%= persistClass %>;
+import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 
 public interface <%= entityClass %>RepositoryWithBagRelationships {
     Optional<<%= persistClass %>> fetchBagRelationships(Optional<<%= persistClass %>> <%= entityInstance %>);
