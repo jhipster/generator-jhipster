@@ -106,12 +106,16 @@ metadata:
   name: jhipster-grafana
   namespace: <%= kubernetesNamespace %>
 spec:
+  ingressClassName: nginx
   rules:
   - host: jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: jhipster-grafana
-          servicePort: 3000
+          service:
+            name: jhipster-grafana
+            port: 
+              number: 3000
 <%_ } _%>

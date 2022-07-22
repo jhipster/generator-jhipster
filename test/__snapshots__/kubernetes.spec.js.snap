@@ -1553,20 +1553,24 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-k8s/jhgate-ingress.yml": Object {
-    "contents": "apiVersion: networking.k8s.io/v1beta1
+    "contents": "apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: jhgate
   namespace: default
 spec:
+  ingressClassName: nginx
   rules:
     - host: jhgate.default.example.com
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: jhgate
-              servicePort: 8080
+              service:
+                name: jhgate
+                port:
+                  name: http
 ",
     "stateCleared": "modified",
   },
