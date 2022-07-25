@@ -117,7 +117,7 @@ const KUBERNETES_CORE_API_VERSION = 'v1';
 const KUBERNETES_BATCH_API_VERSION = 'batch/v1';
 const KUBERNETES_DEPLOYMENT_API_VERSION = 'apps/v1';
 const KUBERNETES_STATEFULSET_API_VERSION = 'apps/v1';
-const KUBERNETES_INGRESS_API_VERSION = 'networking.k8s.io/v1beta1';
+const KUBERNETES_INGRESS_API_VERSION = 'networking.k8s.io/v1';
 const KUBERNETES_ISTIO_NETWORKING_API_VERSION = 'networking.istio.io/v1beta1';
 const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
 
