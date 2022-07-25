@@ -134,19 +134,19 @@ _%>
         <%_ if (relationship.otherEntityUser) { _%>
             <%_ if (relationship.relationshipManyToMany) { _%>
                         <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                            {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
+                            {{ <%= relationshipFieldName %><% if (!relationship.relatedField.id) { %>?<% } %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
                         </span>
             <%_ } else { _%>
-                        {{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}
+                        {{ <%= entityInstance %>.<%= relationshipFieldName %><% if (!relationship.relatedField.id) { %>?<% } %>.<%= otherEntityField %> }}
             <%_ } _%>
         <%_ } else { _%>
             <%_ if (relationship.relationshipManyToMany) { _%>
                         <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                            <a class="form-control-static" [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+                            <a class="form-control-static" [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %><% if (!relationship.relatedField.id) { %>?<% } %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                         </span>
             <%_ } else { _%>
                         <div *ngIf="<%= entityInstance + "." + relationshipFieldName %>">
-                            <a [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= entityInstance %>.<%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
+                            <a [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= entityInstance %>.<%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %><% if (!relationship.relatedField.id) { %>?<% } %>.<%= otherEntityField %> }}</a>
                         </div>
             <%_ } _%>
         <%_ } _%>
