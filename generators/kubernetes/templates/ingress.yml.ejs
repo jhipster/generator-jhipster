@@ -22,7 +22,7 @@ metadata:
   name: <%= app.baseName.toLowerCase() %>
   namespace: <%= kubernetesNamespace %>
 spec:
-  ingressClassName: <%= ingressTypeNginx || "nginx" %>
+  ingressClassName: <%= ingressType || "nginx" %>
   rules:
   <%_ if (ingressDomain) { _%>
   - host: <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
