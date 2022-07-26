@@ -210,7 +210,7 @@ public class SecurityConfiguration {
             .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
         .and()
             .frameOptions()
-            .deny()
+            .sameOrigin()
         .and()
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
             .sessionManagement()
