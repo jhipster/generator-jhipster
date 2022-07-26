@@ -6,7 +6,7 @@
     "@reduxjs/toolkit": "1.8.3",
     "axios": "0.27.2",
     "bootstrap": "5.2.0",
-    "bootswatch": "5.1.3",
+    "bootswatch": "5.2.0",
     "lodash": "4.17.21",
     "path-browserify": "1.0.1",
     "react": "18.2.0",
