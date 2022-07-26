@@ -3,7 +3,7 @@
     "@angular/common": "13.3.11",
     "@fortawesome/angular-fontawesome": "0.10.2",
     "@fortawesome/fontawesome-svg-core": "6.1.2",
-    "@fortawesome/free-solid-svg-icons": "6.1.1",
+    "@fortawesome/free-solid-svg-icons": "6.1.2",
     "@ng-bootstrap/ng-bootstrap": "12.1.2",
     "@ngx-translate/core": "14.0.0",
     "@ngx-translate/http-loader": "7.0.0",
