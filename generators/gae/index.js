@@ -789,7 +789,7 @@ module.exports = class extends BaseBlueprintGenerator {
       addDependencies() {
         if (this.abort) return;
         if (this.buildTool === MAVEN) {
-          this.addMavenDependency('org.springframework.boot.experimental', 'spring-boot-thin-layout', '1.0.23.RELEASE');
+          this.addMavenDependency('org.springframework.boot.experimental', 'spring-boot-thin-layout', '1.0.28.RELEASE');
         }
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
         if (this.prodDatabaseType === MYSQL || this.prodDatabaseType === MARIADB) {
