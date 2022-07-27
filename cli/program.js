@@ -101,6 +101,7 @@ const buildCommands = ({
   defaultCommand = 'app',
   printLogo = printJHipsterLogo,
   printBlueprintLogo = () => {},
+  createEnvBuilder,
 }) => {
   /* create commands */
   Object.entries(commands).forEach(([cmdName, opts]) => {
@@ -224,7 +225,7 @@ const buildCommands = ({
 
         if (cliOnly) {
           logger.debug('Executing CLI only script');
-          return loadCommand(cmdName)(args, options, env, envBuilder);
+          return loadCommand(cmdName)(args, options, env, envBuilder, createEnvBuilder);
         }
         await env.composeWith('jhipster:bootstrap', options);
 
@@ -247,7 +248,8 @@ const buildJHipster = ({
   program = createProgram({ executableName, executableVersion }),
   blueprints,
   lookups,
-  envBuilder = EnvironmentBuilder.create().prepare({ blueprints, lookups }),
+  createEnvBuilder = (args, options) => EnvironmentBuilder.create(args, options).prepare({ blueprints, lookups }),
+  envBuilder = createEnvBuilder(),
   commands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() },
   printLogo,
   printBlueprintLogo,
@@ -259,7 +261,7 @@ const buildJHipster = ({
   /* setup debugging */
   logger.init(program);
 
-  buildCommands({ program, commands, envBuilder, env, loadCommand, defaultCommand, printLogo, printBlueprintLogo });
+  buildCommands({ program, commands, envBuilder, env, loadCommand, defaultCommand, printLogo, printBlueprintLogo, createEnvBuilder });
 
   return program;
 };

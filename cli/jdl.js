@@ -41,13 +41,14 @@ const toJdlFile = file => {
  * @param {string[]} args[0] jdl files
  * @param {any} options options passed from CLI
  * @param {any} env the yeoman environment
- * @param {function} forkProcess the method to use for process forking
+ * @param {EnvironmentBuilder} envBuilder
+ * @param {(string[], object) => EnvironmentBuilder} createEnvBuilder
  */
-module.exports = ([jdlFiles = []], options = {}, env, forkProcess) => {
+module.exports = ([jdlFiles = []], options = {}, env, envBuilder, createEnvBuilder) => {
   logger.debug('cmd: import-jdl from ./import-jdl');
   logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
   if (options.inline) {
-    return importJdl(jdlFiles, options, env, forkProcess);
+    return importJdl(jdlFiles, options, env, envBuilder, createEnvBuilder);
   }
   if (!jdlFiles || jdlFiles.length === 0) {
     logger.fatal(chalk.red('\nAt least one jdl file is required.\n'));
@@ -59,5 +60,5 @@ module.exports = ([jdlFiles = []], options = {}, env, forkProcess) => {
     }
     return Promise.resolve(filename);
   });
-  return Promise.all(promises).then(jdlFiles => importJdl(jdlFiles.flat(), options, env, forkProcess));
+  return Promise.all(promises).then(jdlFiles => importJdl(jdlFiles.flat(), options, env, envBuilder, createEnvBuilder));
 };

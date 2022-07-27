@@ -142,7 +142,7 @@ function writeApplicationConfig(applicationWithEntities, basePath) {
  * @param {Environment} options.env
  * @param {Object} [generatorOptions]
  */
-function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
+function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOptions = {}) {
   const { workspaces } = generatorOptions;
   generatorOptions = {
     ...generatorOptions,
@@ -171,7 +171,7 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
   if (!fork) {
     const oldCwd = process.cwd();
     process.chdir(cwd);
-    env = env || EnvironmentBuilder.createDefaultBuilder(undefined, { cwd }).getEnvironment();
+    env = env || createEnvBuilder(undefined, { cwd }).getEnvironment();
     return env
       .run(`${CLI_NAME}:${command}`, generatorOptions)
       .then(
@@ -263,10 +263,11 @@ const generateDeploymentFiles = ({ processor, deployment }) => {
   logger.info(`Generating deployment ${deploymentType} in a new parallel process`);
   logger.debug(`Generating deployment: ${JSON.stringify(deployment[GENERATOR_NAME], null, 2)}`);
 
-  const cwd = path.join(processor.pwd, deploymentType);
+  const { pwd, createEnvBuilder } = processor;
+  const cwd = path.join(pwd, deploymentType);
   logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
 
-  return runGenerator(deploymentType, { cwd, fork: false }, { force: true, ...processor.options, skipPrompts: true });
+  return runGenerator(deploymentType, { cwd, fork: false, createEnvBuilder }, { force: true, ...processor.options, skipPrompts: true });
 };
 
 /**
@@ -276,7 +277,7 @@ const generateDeploymentFiles = ({ processor, deployment }) => {
  */
 const generateApplicationFiles = ({ processor, applicationWithEntities }) => {
   logger.debug(`Generating application: ${JSON.stringify(applicationWithEntities.config, null, 2)}`);
-  const { inFolder, fork, force, reproducible } = processor;
+  const { inFolder, fork, force, reproducible, createEnvBuilder } = processor;
   const baseName = applicationWithEntities.config.baseName;
   const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
   if (processor.options.jsonOnly) {
@@ -293,7 +294,7 @@ const generateApplicationFiles = ({ processor, applicationWithEntities }) => {
     generatorOptions.applicationWithEntities = applicationWithEntities;
   }
 
-  return runGenerator('app', { cwd, fork }, generatorOptions);
+  return runGenerator('app', { cwd, fork, createEnvBuilder }, generatorOptions);
 };
 
 /**
@@ -304,7 +305,7 @@ const generateApplicationFiles = ({ processor, applicationWithEntities }) => {
  * @return Promise
  */
 const generateEntityFiles = (processor, exportedEntities, env) => {
-  const { fork, inFolder, force } = processor;
+  const { fork, inFolder, force, createEnvBuilder } = processor;
   const generatorOptions = {
     force,
     ...processor.options,
@@ -328,7 +329,7 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
     logger.info(`Generating entities for application ${baseName} in a new parallel process`);
 
     logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
-    return runGenerator('entities', { cwd, env, fork }, generatorOptions);
+    return runGenerator('entities', { cwd, env, fork, createEnvBuilder }, generatorOptions);
   };
 
   if (fork) {
@@ -346,7 +347,7 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
 };
 
 class JDLProcessor {
-  constructor(jdlFiles, jdlContent, options) {
+  constructor(jdlFiles, jdlContent, options, createEnvBuilder) {
     logger.debug(
       `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${toString(options)}`
     );
@@ -354,6 +355,7 @@ class JDLProcessor {
     this.jdlContent = jdlContent;
     this.options = options;
     this.pwd = process.cwd();
+    this.createEnvBuilder = createEnvBuilder;
   }
 
   importJDL() {
@@ -391,7 +393,7 @@ class JDLProcessor {
   }
 
   generateWorkspaces(options, generateJdl) {
-    return EnvironmentBuilder.createDefaultBuilder()
+    return this.createEnvBuilder()
       .getEnvironment()
       .run('jhipster:workspaces', { workspaces: false, ...options, importState: this.importState, generateJdl });
   }
@@ -519,11 +521,11 @@ class JDLProcessor {
  * @param {any} [options] options passed from CLI
  * @param {any} [env] the yeoman environment
  */
-module.exports = (jdlFiles, options = {}, env) => {
+module.exports = (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
   logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
   logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
   try {
-    const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options);
+    const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options, createEnvBuilder);
     jdlImporter.importJDL();
     jdlImporter.sendInsight();
     jdlImporter.config();
