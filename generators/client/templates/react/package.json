@@ -11,8 +11,8 @@
     "path-browserify": "1.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "7.33.1",
-    "react-jhipster": "jhipster/react-jhipster",
+    "react-hook-form": "7.30.0",
+    "react-jhipster": "0.21.0",
     "react-loadable": "5.5.0",
     "react-redux": "8.0.2",
     "react-redux-loading-bar": "5.0.4",
@@ -30,7 +30,7 @@
     "@testing-library/react": "13.3.0",
     "@types/jest": "28.1.6",
     "@types/lodash": "4.14.182",
-    "@types/node": "16.11.45",
+    "@types/node": "16.11.46",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
     "@types/react-redux": "7.1.24",
@@ -83,6 +83,6 @@
     "webpack-dev-server": "4.9.3",
     "webpack-merge": "5.8.0",
     "webpack-notifier": "1.15.0",
-    "workbox-webpack-plugin": "6.5.3"
+    "workbox-webpack-plugin": "6.5.4"
   }
 }
