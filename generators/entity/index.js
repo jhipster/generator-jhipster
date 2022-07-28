@@ -622,10 +622,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
             (relationship.relationshipType === 'many-to-many' ||
               // OneToOne back reference is required due to filtering
               relationship.relationshipType === 'one-to-one' ||
-              (relationship.relationshipType === 'one-to-many' && !this.context.databaseTypeNeo4j))
+              (relationship.relationshipType === 'one-to-many' && !this.context.databaseTypeNeo4j && !this.context.databaseTypeNo))
           ) {
             relationship.otherEntityRelationshipName = _.lowerFirst(this.context.name);
             otherEntity.relationships.push({
+              otherEntity: this.context,
               otherEntityName: relationship.otherEntityRelationshipName,
               ownerSide: !relationship.ownerSide,
               otherEntityRelationshipName: relationship.relationshipName,

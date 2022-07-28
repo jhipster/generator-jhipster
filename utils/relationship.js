@@ -21,7 +21,7 @@ const _ = require('lodash');
 const pluralize = require('pluralize');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 const { stringify } = require('.');
-const { NEO4J } = require('../jdl/jhipster/database-types');
+const { NEO4J, NO: DATABASE_NO } = require('../jdl/jhipster/database-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
 const { REQUIRED } = require('../jdl/jhipster/validations');
 
@@ -121,7 +121,8 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
       });
     } else if (
       !ignoreMissingRequiredRelationship &&
-      generator.jhipsterConfig.databaseType !== NEO4J &&
+      entityWithConfig.databaseType !== NEO4J &&
+      entityWithConfig.databaseType !== DATABASE_NO &&
       (relationship.relationshipType === 'one-to-many' || relationship.ownerSide === false)
     ) {
       throw new Error(`Error at entity ${entityName}: could not find the other side of the relationship ${stringify(relationship)}`);
