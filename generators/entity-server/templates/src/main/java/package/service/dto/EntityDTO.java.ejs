@@ -45,8 +45,8 @@ import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 <%_ } _%>
 <%_ if (dtoReferences.some(reference => reference.collection)) { _%>
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 <%_ } _%>
 <%_ if (fieldsContainUUID) { _%>
 import java.util.UUID;
@@ -91,7 +91,7 @@ _%>
   <%_ if (field && field.blobContentTypeText) { _%>
     private String <%= reference.name %>;
   <%_ } else if (reference.collection && reference.relationship) { _%>
-    private Set<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.name %> = new HashSet<>();
+    private List<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.name %> = new ArrayList<>();
   <%_ } else if (reference.relationship) { _%>
     private <%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %> <%= reference.name %>;
   <%_ } else { _%>
@@ -108,7 +108,7 @@ _%>
   <%_ if (reference.field && reference.field.blobContentTypeText) { _%>
     public <%= buildJavaGetter(reference, 'String') %> {
   <%_ } else if (reference.collection && reference.relationship) { _%>
-    public <%- buildJavaGetter(reference, `Set<${ asDto(reference.relationship.otherEntity.entityNameCapitalized) }>` ) %> {
+    public <%- buildJavaGetter(reference, `List<${ asDto(reference.relationship.otherEntity.entityNameCapitalized) }>` ) %> {
   <%_ } else if (reference.relationship) { _%>
     public <%= buildJavaGetter(reference, asDto(reference.relationship.otherEntity.entityNameCapitalized)) %> {
   <%_ } else { _%>
@@ -120,7 +120,7 @@ _%>
   <%_ if (reference.field && reference.field.blobContentTypeText) { _%>
     public void <%= buildJavaSetter(reference, `String ${reference.name}`) %> {
   <%_ } else if (reference.collection && reference.relationship) { _%>
-    public void <%- buildJavaSetter(reference, `Set<${ asDto(reference.relationship.otherEntity.entityNameCapitalized) }> ${reference.name}`) %> {
+    public void <%- buildJavaSetter(reference, `List<${ asDto(reference.relationship.otherEntity.entityNameCapitalized) }> ${reference.name}`) %> {
   <%_ } else if (reference.relationship) { _%>
     public void <%= buildJavaSetter(reference, `${ asDto(reference.relationship.otherEntity.entityNameCapitalized) } ${reference.name}`) %> {
   <%_ } else { _%>

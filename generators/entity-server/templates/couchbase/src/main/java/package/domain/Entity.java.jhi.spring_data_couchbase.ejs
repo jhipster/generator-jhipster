@@ -41,6 +41,10 @@ import org.springframework.data.couchbase.core.mapping.Field;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.stream.Collectors;
   <%_ } _%>
+  <%_ if (entityContainsCollectionField) { _%>
+import java.util.HashSet;
+import java.util.Set;
+  <%_ } _%>
 <&_ } -&>
 
 <&_ if (fragment.annotationSection) { -&>
@@ -118,7 +122,7 @@ import java.util.stream.Collectors;
 <%_ for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection) { -&>
   <%_ if (relationship.collection) { _%>
-    public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
+    public void set<%= relationship.relationshipNameCapitalizedPlural %>(List<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
     <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
         if (this.<%= relationship.relationshipFieldNamePlural %> != null) {
       <%_ if (relationship.otherRelationship.reference.collection) { _%>

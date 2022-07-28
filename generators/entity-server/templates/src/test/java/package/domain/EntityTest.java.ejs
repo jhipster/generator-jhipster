@@ -30,7 +30,7 @@ class <%= persistClass %>Test {
     @Test
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= persistClass %>.class);
-<%_if (!embedded) { _%>
+<%_if (primaryKey) { _%>
         <%= persistClass %> <%= persistInstance %>1 = new <%= persistClass %>();
         <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeString) { %>"id1"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
         <%= persistClass %> <%= persistInstance %>2 = new <%= persistClass %>();

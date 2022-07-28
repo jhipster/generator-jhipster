@@ -67,8 +67,8 @@ import java.time.ZonedDateTime;
 <%_ } if (fieldsContainDuration) { _%>
 import java.time.Duration;
 <%_ } if (entityContainsCollectionField) { _%>
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 <%_ } _%>
 <%_ if (fieldsContainUUID || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
 import java.util.UUID;
@@ -97,7 +97,7 @@ public class <%= persistClass %> implements Serializable<&- fragments.additional
 
     private static final long serialVersionUID = 1L;
 
-<%_ if (!embedded && primaryKey.composite) { _%>
+<%_ if (primaryKey && primaryKey.composite) { _%>
     @Id
     private <%= primaryKey.type %> <%= primaryKey.name %>;
 
@@ -140,7 +140,7 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
         <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
-    private Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.relationshipFieldNamePlural %> = new HashSet<>();
+    private List<<%= relationship.otherEntity.persistClass %>> <%= relationship.relationshipFieldNamePlural %> = new ArrayList<>();
 
   <%_ } else if (relationship.relationshipManyToOne) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
@@ -160,7 +160,7 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
       <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
-    private Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.relationshipFieldNamePlural %> = new HashSet<>();
+    private List<<%= relationship.otherEntity.persistClass %>> <%= relationship.relationshipFieldNamePlural %> = new ArrayList<>();
 
   <%_ } else { _%>
     private <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
@@ -216,7 +216,7 @@ for (const relationship of relationships) {
   }
 _%>
   <%_ if (relationship.collection) { _%>
-    public Set<<%= relationship.otherEntity.persistClass %>> get<%= relationship.relationshipNameCapitalizedPlural %>() {
+    public List<<%= relationship.otherEntity.persistClass %>> get<%= relationship.relationshipNameCapitalizedPlural %>() {
         return this.<%= relationship.relationshipFieldNamePlural %>;
     }
 
@@ -229,7 +229,7 @@ _%>
 <&- fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection() -&>
 <&_ if (!fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection()) { -&>
   <%_ if (relationship.collection) { _%>
-    public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
+    public void set<%= relationship.relationshipNameCapitalizedPlural %>(List<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
     <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
         if (this.<%= relationship.relationshipFieldNamePlural %> != null) {
       <%_ if (relationship.otherRelationship.reference.collection) { _%>
@@ -273,7 +273,7 @@ _%>
     <%_ if (fluentMethods) { _%>
       <%_ if (relationship.collection) { _%>
 
-    public <%= persistClass %> <%= relationship.relationshipFieldNamePlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
+    public <%= persistClass %> <%= relationship.relationshipFieldNamePlural %>(List<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
         this.set<%= relationship.relationshipNameCapitalizedPlural %>(<%= relationship.otherEntityNamePlural %>);
         return this;
     }
@@ -332,7 +332,7 @@ _%>
         if (!(o instanceof <%= persistClass %>)) {
             return false;
         }
-<%_ if (!embedded) { _%>
+<%_ if (primaryKey) { _%>
         return <%= primaryKey.name %> != null && <%= primaryKey.name %>.equals(((<%= persistClass %>) o).<%= primaryKey.name %>);
 <%_ } else { _%>
         return false;
@@ -349,7 +349,7 @@ _%>
     @Override
     public String toString() {
         return "<%= persistClass %>{" +
-<%_ if (!embedded) { _%>
+<%_ if (primaryKey) { _%>
             "<%= primaryKey.name %>=" + get<%= primaryKey.nameCapitalized %>() +
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
