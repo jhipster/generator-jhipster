@@ -204,9 +204,8 @@ class JHipsterBaseGenerator extends PrivateBase {
     try {
       this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
     } catch (error) {
-      throw new Error(
-        `The Namespace ${this.options.namespace} may not be correct. Please check your configuration and ensure your blueprint folder start with "generator-". Detail: ${error}`
-      );
+      const split = this.options.namespace.split(':', 2);
+      this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
     }
     return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
   }

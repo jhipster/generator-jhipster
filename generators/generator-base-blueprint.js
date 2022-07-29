@@ -535,7 +535,11 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
       this.warning(`Could not retrieve packagePath of blueprint '${blueprintPkgName}'`);
       return undefined;
     }
-    return JSON.parse(fs.readFileSync(path.join(blueprintPackagePath, 'package.json')));
+    const packageJsonFile = path.join(blueprintPackagePath, 'package.json');
+    if (!fs.existsSync(packageJsonFile)) {
+      return undefined;
+    }
+    return JSON.parse(fs.readFileSync(packageJsonFile));
   }
 
   /**
@@ -562,13 +566,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     if (blueprint === 'generator-jhipster') {
       this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
     }
-    if (!this._findBlueprintPackageJson(blueprint)) {
-      this.error(
-        `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
-          `npm i -g ${blueprint}`
-        )}.`
-      );
-    }
+    this._findBlueprintPackageJson(blueprint);
   }
 
   /**
@@ -584,19 +582,19 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     }
     const mainGeneratorJhipsterVersion = packagejs.version;
     const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
-    if (blueprintJhipsterVersion && !semver.valid(blueprintJhipsterVersion) && !semver.validRange(blueprintJhipsterVersion)) {
-      this.info(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
-      return;
-    }
     if (blueprintJhipsterVersion) {
-      if (mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
-        this.error(
-          `The installed ${chalk.yellow(
-            blueprintPkgName
-          )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
-        );
+      if (!semver.valid(blueprintJhipsterVersion) && !semver.validRange(blueprintJhipsterVersion)) {
+        this.info(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
+        return;
       }
-      return;
+      if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintJhipsterVersion)) {
+        return;
+      }
+      throw new Error(
+        `The installed ${chalk.yellow(
+          blueprintPkgName
+        )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
+      );
     }
     const blueprintPeerJhipsterVersion =
       blueprintPackageJson.peerDependencies && blueprintPackageJson.peerDependencies['generator-jhipster'];
