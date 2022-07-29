@@ -38,11 +38,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
-/**
- * The default is to use a file path string. It implies use of the template method.
- * For any other config an object { file:.., method:.., template:.. } can be used
- */
-const serverFiles = {
+const cassandraChangelogFiles = {
   dbChangelog: [
     {
       condition: generator => generator.databaseType === CASSANDRA && !generator.skipDbChangelog,
@@ -55,7 +51,10 @@ const serverFiles = {
       ],
     },
   ],
-  server: [
+};
+
+const modelFiles = {
+  model: [
     {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -63,6 +62,31 @@ const serverFiles = {
           file: 'package/domain/Entity.java.jhi',
           renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi`,
         },
+      ],
+    },
+  ],
+  modelTestFiles: [
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/EntityTest.java',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}Test.java`,
+        },
+      ],
+    },
+  ],
+};
+
+/**
+ * The default is to use a file path string. It implies use of the template method.
+ * For any other config an object { file:.., method:.., template:.. } can be used
+ */
+const entityFiles = {
+  server: [
+    {
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
         {
           file: 'package/domain/Entity.java.jhi.javax_validation',
           renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.javax_validation`,
@@ -169,6 +193,11 @@ const serverFiles = {
         },
       ],
     },
+  ],
+};
+
+const restFiles = {
+  restFiles: [
     {
       condition: generator => !generator.embedded,
       path: SERVER_MAIN_SRC_DIR,
@@ -179,6 +208,31 @@ const serverFiles = {
         },
       ],
     },
+  ],
+  restTestFiles: [
+    {
+      condition: generator => !generator.embedded,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/web/rest/EntityResourceIT.java',
+          options: {
+            context: {
+              _,
+              chalkRed: chalk.red,
+              fs,
+              SERVER_TEST_SRC_DIR,
+            },
+          },
+          renameTo: generator => `${generator.entityAbsoluteFolder}/web/rest/${generator.entityClass}ResourceIT.java`,
+        },
+      ],
+    },
+  ],
+};
+
+const filteringFiles = {
+  filteringFiles: [
     {
       condition: generator => generator.jpaMetamodelFiltering,
       path: SERVER_MAIN_SRC_DIR,
@@ -193,6 +247,11 @@ const serverFiles = {
         },
       ],
     },
+  ],
+};
+
+const elasticSearchFiles = {
+  elasticSearchFiles: [
     {
       condition: generator => generator.searchEngine === ELASTICSEARCH && !generator.embedded,
       path: SERVER_MAIN_SRC_DIR,
@@ -203,6 +262,11 @@ const serverFiles = {
         },
       ],
     },
+  ],
+};
+
+const respositoryFiles = {
+  respositoryFiles: [
     {
       condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
@@ -256,6 +320,11 @@ const serverFiles = {
         },
       ],
     },
+  ],
+};
+
+const serviceFiles = {
+  serviceFiles: [
     {
       condition: generator => generator.service === SERVICE_IMPL && !generator.embedded,
       path: SERVER_MAIN_SRC_DIR,
@@ -280,6 +349,11 @@ const serverFiles = {
         },
       ],
     },
+  ],
+};
+
+const dtoFiles = {
+  dtoFiles: [
     {
       condition: generator => generator.dto === MAPSTRUCT,
       path: SERVER_MAIN_SRC_DIR,
@@ -299,45 +373,7 @@ const serverFiles = {
       ],
     },
   ],
-  test: [
-    {
-      condition: generator => !generator.embedded,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/EntityResourceIT.java',
-          options: {
-            context: {
-              _,
-              chalkRed: chalk.red,
-              fs,
-              SERVER_TEST_SRC_DIR,
-            },
-          },
-          renameTo: generator => `${generator.entityAbsoluteFolder}/web/rest/${generator.entityClass}ResourceIT.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.gatlingTests,
-      path: TEST_DIR,
-      templates: [
-        {
-          file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
-          options: { interpolate: INTERPOLATE_REGEX },
-          renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/domain/EntityTest.java',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}Test.java`,
-        },
-      ],
-    },
+  dtoTestFiles: [
     {
       condition: generator => generator.dto === MAPSTRUCT,
       path: SERVER_TEST_SRC_DIR,
@@ -359,6 +395,35 @@ const serverFiles = {
       ],
     },
   ],
+};
+
+const gatlingFiles = {
+  gatlingFiles: [
+    {
+      condition: generator => generator.gatlingTests,
+      path: TEST_DIR,
+      templates: [
+        {
+          file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
+          options: { interpolate: INTERPOLATE_REGEX },
+          renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
+        },
+      ],
+    },
+  ],
+};
+
+const serverFiles = {
+  ...cassandraChangelogFiles,
+  ...modelFiles,
+  ...entityFiles,
+  ...restFiles,
+  ...filteringFiles,
+  ...elasticSearchFiles,
+  ...respositoryFiles,
+  ...serviceFiles,
+  ...dtoFiles,
+  ...gatlingFiles,
 };
 
 module.exports = {
