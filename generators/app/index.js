@@ -266,6 +266,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       type: Boolean,
     });
 
+    this.option('cypress-audit', {
+      desc: 'Enable cypress-audit/lighthouse report generation',
+      type: Boolean,
+    });
+
     this.option('microfrontend', {
       desc: 'Force generation of experimental microfrontend support',
       type: Boolean,

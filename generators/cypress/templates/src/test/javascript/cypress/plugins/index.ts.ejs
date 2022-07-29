@@ -28,19 +28,24 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+<%_ if (cypressAudit) { _%>
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { lighthouse, pa11y, prepareAudit } from 'cypress-audit';
 import ReportGenerator from 'lighthouse/report/generator/report-generator';
+<%_ } _%>
 
 export default async (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) => {
   on('before:browser:launch', (browser, launchOptions) => {
+<%_ if (cypressAudit) { _%>
     prepareAudit(launchOptions);
+<%_ } _%>
     if (browser.name === 'chrome' && browser.isHeadless) {
       launchOptions.args.push('--disable-gpu');
       return launchOptions;
     }
   });
 
+<%_ if (cypressAudit) { _%>
   on('task', {
     lighthouse: lighthouse((lighthouseReport) => {
       !existsSync('<%= BUILD_DIR %>cypress') && mkdirSync('<%= BUILD_DIR %>cypress', { recursive: true });
@@ -48,6 +53,7 @@ export default async (on: Cypress.PluginEvents, config: Cypress.PluginConfigOpti
     }),
     pa11y: pa11y(),
   });
+<%_ } _%>
 <%_ if (cypressCoverage) { _%>
   (await import('@cypress/code-coverage/task')).default(on, config);
 <%_ } _%>

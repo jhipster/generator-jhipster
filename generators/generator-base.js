@@ -2797,6 +2797,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.cypressCoverage !== undefined) {
       this.jhipsterConfig.cypressCoverage = options.cypressCoverage;
     }
+    if (options.cypressAudit !== undefined) {
+      this.jhipsterConfig.cypressAudit = options.cypressAudit;
+    }
     if (options.legacyDbNames !== undefined) {
       this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
     }
@@ -2942,6 +2945,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.testFrameworks = config.testFrameworks || [];
     dest.cypressCoverage = config.cypressCoverage;
+    dest.cypressAudit = config.cypressAudit === undefined ? true : config.cypressAudit;
 
     dest.remotes = Object.entries(config.applications || {}).map(([baseName, config]) => ({ baseName, ...config })) || [];
 

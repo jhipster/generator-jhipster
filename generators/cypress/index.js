@@ -68,22 +68,26 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _prompting() {
     return {
-      async askForCypressCoverage() {
-        if (
-          this.options.existingProject ||
-          this.jhipsterConfig.clientFramework !== constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR ||
-          !this.jhipsterConfig.testFrameworks.includes(CYPRESS)
-        ) {
+      async askForCypressOptions() {
+        if (this.options.existingProject || !this.jhipsterConfig.testFrameworks.includes(CYPRESS)) {
           return;
         }
-        const answers = await this.prompt({
-          type: 'confirm',
-          name: 'cypressCoverage',
-          message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
-          default: this.jhipsterConfig.cypressCoverage || false,
-        });
-
-        this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
+        await this.prompt(
+          [
+            {
+              when: this.jhipsterConfig.clientFramework === constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR,
+              type: 'confirm',
+              name: 'cypressCoverage',
+              message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
+            },
+            {
+              type: 'confirm',
+              name: 'cypressAudit',
+              message: 'Would you like to audit Cypress tests?',
+            },
+          ],
+          this.config
+        );
       },
     };
   }
@@ -193,6 +197,7 @@ module.exports = class extends BaseBlueprintGenerator {
       },
 
       configureAudits() {
+        if (!this.cypressAudit) return;
         this.packageJson.merge({
           devDependencies: {
             lighthouse: this.dependabotPackageJson.devDependencies.lighthouse,
