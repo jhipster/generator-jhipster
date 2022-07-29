@@ -110,7 +110,7 @@ const fakeFiles = {
             interpolate: INTERPOLATE_REGEX,
           },
           renameTo: generator => {
-            if (!generator.jhipsterConfig.incrementalChangelog) {
+            if (!generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog) {
               return `config/liquibase/fake-data/${generator.entity.entityTableName}.csv`;
             }
 
