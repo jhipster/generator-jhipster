@@ -165,7 +165,7 @@ _%>
                                     class="btn btn-info btn-sm"
                                     data-cy="filterOtherEntityButton">
                                 <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.show"  [translateValues]="{ otherEntity: ('<%= otherEntityTranslationKey %>' | translate) }"><%- this._getClientTranslation('entity.action.show', {'otherEntity' : 'Other entity' }) %></span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.show"  [translateValues]="{ otherEntity: ('<%= otherEntityTranslationKey %>' | translate) }"><%- this._getClientTranslation('entity.action.show', {'otherEntity' : relationship.otherEntity.entityClassHumanized }) %></span>
                             </button>
     <%_ } _%>
 <%_ } _%>
