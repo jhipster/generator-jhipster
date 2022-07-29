@@ -29,17 +29,17 @@ import { <%- importedType %> } from '<%- importedPath %>';
 
 import { I<%= entityAngularName %><% if (primaryKey) { %>, New<%= entityAngularName %><% } %> } from './<%= entityFileName %>.model';
 
-export const requiredSample: I<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => field.id || field.fieldValidationRequired).map(field => field.reference)) %>;
+export const sampleWithRequiredData: I<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => field.id || field.fieldValidationRequired).map(field => field.reference)) %>;
 
-export const partialSample: I<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => field.id || field.fieldValidationRequired || (!field.transient && faker.datatype.boolean())).map(field => field.reference)) %>;
+export const sampleWithPartialData: I<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => field.id || field.fieldValidationRequired || (!field.transient && faker.datatype.boolean())).map(field => field.reference)) %>;
 
-export const fullSample: I<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => !field.transient).map(field => field.reference)) %>;
+export const sampleWithFullData: I<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => !field.transient).map(field => field.reference)) %>;
 <%_ if (primaryKey) { _%>
 
-export const newSample: New<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => !field.id && field.fieldValidationRequired).map(field => field.reference), { [primaryKey.name]: null }) %>;
+export const sampleWithNewData: New<%= entityAngularName %> = <%- generateTypescriptTestEntity(fields.filter(field => !field.id && field.fieldValidationRequired).map(field => field.reference), { [primaryKey.name]: null }) %>;
 
-Object.freeze(newSample);
+Object.freeze(sampleWithNewData);
 <%_ } _%>
-Object.freeze(requiredSample);
-Object.freeze(partialSample);
-Object.freeze(fullSample);
+Object.freeze(sampleWithRequiredData);
+Object.freeze(sampleWithPartialData);
+Object.freeze(sampleWithFullData);
