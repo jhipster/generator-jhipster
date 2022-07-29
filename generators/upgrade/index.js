@@ -146,7 +146,7 @@ module.exports = class extends BaseGenerator {
   }
 
   _cleanUp() {
-    const ignoredFiles = gitignore(fs.readFileSync('.gitignore'));
+    const ignoredFiles = gitignore(fs.readFileSync('.gitignore')).patterns || [];
     const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn', ...ignoredFiles];
     shelljs.ls('-A').forEach(file => {
       if (!filesToKeep.includes(file)) {
