@@ -1548,28 +1548,16 @@ Object {
   "src/main/webapp/i18n/en/activate.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/configuration.json": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/en/error.json": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/global.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/health.json": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/en/home.json": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/login.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/logs.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/metrics.json": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/password.json": Object {
@@ -1593,28 +1581,16 @@ Object {
   "src/main/webapp/i18n/fr/activate.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/fr/configuration.json": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/fr/error.json": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/fr/global.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/fr/health.json": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/fr/home.json": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/fr/login.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/logs.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/metrics.json": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/fr/password.json": Object {
