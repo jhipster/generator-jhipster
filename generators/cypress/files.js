@@ -29,7 +29,7 @@ const { stringHashCode } = require('../utils');
 const cypressFiles = {
   common: [
     {
-      templates: ['cypress.config.ts', 'cypress-audits.config.ts'],
+      templates: ['cypress.config.ts'],
     },
   ],
   clientTestFw: [
@@ -40,7 +40,6 @@ const cypressFiles = {
         'fixtures/integration-test.png',
         'plugins/index.ts',
         'e2e/administration/administration.cy.ts',
-        'e2e/lighthouse.audits.ts',
         'support/commands.ts',
         'support/navbar.ts',
         'support/index.ts',
@@ -68,6 +67,17 @@ const cypressFiles = {
       condition: generator => generator.authenticationTypeOauth2,
       path: generator => generator.cypressFolder,
       templates: ['support/oauth2.ts'],
+    },
+  ],
+  audit: [
+    {
+      condition: generator => generator.cypressAudit,
+      path: generator => generator.cypressFolder,
+      templates: ['e2e/lighthouse.audits.ts'],
+    },
+    {
+      condition: generator => generator.cypressAudit,
+      templates: ['cypress-audits.config.ts'],
     },
   ],
   coverage: [

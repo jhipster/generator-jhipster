@@ -179,6 +179,8 @@ declare global {
   }
 }
 
+<%_ if (cypressAudit) { _%>
 import 'cypress-audit/commands';
+<%_ } _%>
 // Convert this to a module instead of script (allows import/export)
 export {};
