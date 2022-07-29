@@ -2438,7 +2438,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         return val;
       }
       if (typeof val === 'function') {
-        return val.call(this, context, this);
+        return val.call(this, context, this) || false;
       }
       throw new Error(`Type not supported ${val}`);
     };
