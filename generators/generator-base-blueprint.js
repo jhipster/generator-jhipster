@@ -409,7 +409,10 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
       this._configureBlueprints();
     }
 
-    const blueprints = this.jhipsterConfig.blueprints || [];
+    let blueprints = this.jhipsterConfig.blueprints || [];
+    if (this.options.localBlueprint) {
+      blueprints = blueprints.concat({ name: '@jhipster/local' });
+    }
     for (const blueprint of blueprints) {
       const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, extraOptions);
       if (blueprintGenerator) {
