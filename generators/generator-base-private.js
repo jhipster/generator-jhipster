@@ -1172,6 +1172,44 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   }
 
   /**
+   * Generate a test entity, according to the references
+   *
+   * @param references
+   * @param additionalFields
+   * @return {String} test sample
+   */
+  generateTypescriptTestEntity(references, additionalFields = {}) {
+    const entries = references
+      .map(reference => {
+        if (reference.field) {
+          const field = reference.field;
+          const { fieldIsEnum, fieldType, fieldTypeTimed, fieldTypeLocalDate, fieldWithContentType, fieldName, contentTypeFieldName } =
+            field;
+
+          const fakeData = field.generateFakeData('ts');
+          if (fieldWithContentType) {
+            return [
+              [fieldName, fakeData],
+              [contentTypeFieldName, "'unknown'"],
+            ];
+          }
+          if (fieldIsEnum) {
+            return [[fieldName, `${fieldType}[${fakeData}]`]];
+          }
+          if (fieldTypeTimed || fieldTypeLocalDate) {
+            return [[fieldName, `dayjs(${fakeData})`]];
+          }
+          return [[fieldName, fakeData]];
+        }
+        return [[reference.name, this.generateTestEntityId(reference.type, 'random', false)]];
+      })
+      .flat();
+    return `{
+  ${[...entries, ...Object.entries(additionalFields)].map(([key, value]) => `${key}: ${value}`).join(',\n  ')}
+}`;
+  }
+
+  /**
    * Generate a test entity, according to the type
    *
    * @param references

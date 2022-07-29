@@ -43,7 +43,7 @@ _%>
 <%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) {
       const { propertyName, relationshipRequired, otherEntity, id, collection, otherEntityField } = relationship;
 _%>
-  <%= propertyName %>?: I<%= otherEntity.entityAngularName %><% if (collection) { %>[]<% } %> | null;
+  <%= propertyName %>?: Pick<I<%= otherEntity.entityAngularName %>, '<%= otherEntity.primaryKey.name %>'<% if (otherEntity.primaryKey.name !== otherEntityField) { %> | '<%= otherEntityField %>'<% } %>><% if (collection) { %>[]<% } %> | null;
 <%_ } _%>
 }
 <%_ if (primaryKey) { _%>

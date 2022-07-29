@@ -19,8 +19,8 @@
 <div>
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
-      <h2 <%= jhiPrefix %>Translate="settings.title" [translateValues]="{ username: account.login }" *ngIf="account">
-        <%- this._getClientTranslation('settings.title', { username: '{{ account.login }}' }) %>
+      <h2 <%= jhiPrefix %>Translate="settings.title" [translateValues]="{ username: settingsForm.value.login }" *ngIf="settingsForm.value.login">
+        <%- this._getClientTranslation('settings.title', { username: '{{ settingsForm.value.login }}' }) %>
       </h2>
 
       <div class="alert alert-success" *ngIf="success" <%= jhiPrefix %>Translate="settings.messages.success">
@@ -29,7 +29,7 @@
 
       <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
-      <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="account" novalidate>
+      <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.value.login" novalidate>
         <div class="mb-3">
           <label class="form-label" for="firstName" <%= jhiPrefix %>Translate="settings.form.firstname"><%- this._getClientTranslation('settings.form.firstname') %></label>
           <input
