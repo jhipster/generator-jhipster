@@ -74,21 +74,21 @@ _%>
                 <dt><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.<%= relationshipName %>"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.' + relationshipName) %></span></dt>
                 <dd>
     <%_ if (relationship.otherEntityUser) { _%>
-        <%_ if (relationship.relationshipManyToMany) { _%>
+        <%_ if (relationship.collection) { _%>
                     <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                        {{ <%= relationshipFieldName %><% if (!relationship.relatedField.id) { %>?<% } %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
+                        {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
                     </span>
         <%_ } else { _%>
-                    <span>{{ <%= entityInstance %>.<%= relationshipFieldName %><% if (!relationship.relatedField.id) { %>?<% } %>.<%= otherEntityField %> }}</span>
+                    <span>{{ <%= entityInstance %>.<%= relationshipFieldName %>?.<%= otherEntityField %> }}</span>
         <%_ } _%>
     <%_ } else { _%>
-        <%_ if (relationship.relationshipManyToMany) { _%>
+        <%_ if (relationship.collection) { _%>
                     <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %><% if (!relationship.relatedField.id) { %>?<% } %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                     </span>
         <%_ } else { _%>
                     <div *ngIf="<%= entityInstance + '.' + relationshipFieldName %>">
-                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %><% if (!relationship.relatedField.id) { %>?<% } %>.<%= otherEntityField %> }}</a>
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %>?.<%= otherEntityField %> }}</a>
                     </div>
         <%_ } _%>
     <%_ } _%>
