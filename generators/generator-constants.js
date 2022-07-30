@@ -41,7 +41,7 @@ const LIQUIBASE_VERSION = '4.12.0';
 const LIQUIBASE_DTD_VERSION = 'latest';
 const HIBERNATE_VERSION = '5.6.10.Final';
 const JACOCO_VERSION = '0.8.8';
-const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
+const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.3';
 const JIB_VERSION = '3.2.1';
 // TODO upgrade to h2 v2 once liquibase issues has been addressed
 const H2_VERSION = '1.4.200';
