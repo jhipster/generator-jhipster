@@ -26,7 +26,7 @@
 _%>
 <%_ if (jpaMetamodelFiltering) { _%>
     public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (!paginationNo) { %>, @org.springdoc.api.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% } %>) {
-        log.debug("REST request to get <%= entityClassPlural %> by criteria: {}", criteria);
+        log.debug("REST request to get <%= entityClassPlural %> by criteria: {}", criteria.toString().replaceAll("[\n\r\t]", "_"));
   <%_ if (paginationNo) { _%>
         List<<%= instanceType %>> entityList = <%= entityInstance %>QueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
@@ -45,7 +45,7 @@ _%>
      */
     @GetMapping("/<%= entityApiUrl %>/count")
     public ResponseEntity<Long> count<%= entityClassPlural %>(<%= entityClass %>Criteria criteria) {
-        log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
+        log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria.toString().replaceAll("[\n\r\t]", "_"));
         return ResponseEntity.ok().body(<%= entityInstance %>QueryService.countByCriteria(criteria));
     }
 <%_ } else { _%>
