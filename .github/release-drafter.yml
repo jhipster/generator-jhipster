@@ -4,9 +4,9 @@ template: |
   $CHANGES
 
 exclude-labels:
-  - 'theme: dependencies'
+  - 'skip-changelog'
 exclude-contributors:
-  - 'dependabot'
+  - 'app/dependabot'
 categories:
   - title: 💎 Features & Enhancements
     labels:
