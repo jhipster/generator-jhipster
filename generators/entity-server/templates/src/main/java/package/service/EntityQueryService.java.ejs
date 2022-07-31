@@ -78,7 +78,7 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
      */
     @Transactional(readOnly = true)
     public List<<%= instanceType %>> findByCriteria(<%= criteria %> criteria) {
-        log.debug("find by criteria : {}", criteria.toString().replaceAll("[\n\r\t]", "_"));
+        log.debug("find by criteria : {}", () => criteria.toString().replaceAll("[\n\r\t]", "_"));
         final Specification<<%= persistClass %>> specification = createSpecification(criteria);
 <%_ if (dtoMapstruct) { _%>
         return <%= entityListToDto %>(<%= repository %>.findAll(specification));
@@ -95,7 +95,7 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
      */
     @Transactional(readOnly = true)
     public Page<<%= instanceType %>> findByCriteria(<%= criteria %> criteria, Pageable page) {
-        log.debug("find by criteria : {}, page: {}", criteria.toString().replaceAll("[\n\r\t]", "_"), page);
+        log.debug("find by criteria : {}, page: {}", () => criteria.toString().replaceAll("[\n\r\t]", "_"), page);
         final Specification<<%= persistClass %>> specification = createSpecification(criteria);
 <%_ if (dtoMapstruct) { _%>
         return <%= repository %>.findAll(specification, page)
@@ -112,7 +112,7 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
      */
     @Transactional(readOnly = true)
     public long countByCriteria(<%= criteria %> criteria) {
-        log.debug("count by criteria : {}", criteria.toString().replaceAll("[\n\r\t]", "_"));
+        log.debug("count by criteria : {}", () => criteria.toString().replaceAll("[\n\r\t]", "_"));
         final Specification<<%= persistClass %>> specification = createSpecification(criteria);
         return <%= repository %>.count(specification);
     }
