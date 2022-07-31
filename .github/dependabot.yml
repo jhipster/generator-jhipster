@@ -9,6 +9,7 @@ updates:
     labels:
       - 'theme: jhipster-internals'
       - 'theme: dependencies'
+      - 'skip-changelog'
     ignore:
       # ESM only version
       - dependency-name: 'p-queue'
@@ -30,6 +31,7 @@ updates:
     labels:
       - 'theme: angular'
       - 'theme: dependencies'
+      - 'skip-changelog'
     ignore:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
@@ -44,6 +46,7 @@ updates:
     versioning-strategy: increase
     labels:
       - 'theme: dependencies'
+      - 'skip-changelog'
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/common/'
@@ -55,6 +58,7 @@ updates:
     labels:
       - 'theme: front'
       - 'theme: dependencies'
+      - 'skip-changelog'
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/react/'
@@ -66,6 +70,7 @@ updates:
     labels:
       - 'theme: react'
       - 'theme: dependencies'
+      - 'skip-changelog'
     ignore:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
@@ -81,6 +86,7 @@ updates:
     labels:
       - 'theme: vue'
       - 'theme: dependencies'
+      - 'skip-changelog'
     ignore:
       # vue3 dependency
       - dependency-name: 'vue-loader'
@@ -100,3 +106,4 @@ updates:
     labels:
       - 'theme: github_actions'
       - 'theme: CI builds'
+      - 'skip-changelog'
