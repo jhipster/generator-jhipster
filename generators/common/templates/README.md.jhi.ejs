@@ -37,7 +37,7 @@ let clientPackageMngrName = 'Npm';
 let clientPackageMngrAddGlobal = 'install -g';
 let clientPackageMngrAdd = 'install --save --save-exact';
 let clientPackageMngrAddDev = 'install --save-dev --save-exact';
-let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL}`;
+let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL + DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`;
 _%>
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
 <%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
