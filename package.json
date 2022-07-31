@@ -89,7 +89,7 @@
     "chalk": "4.1.2",
     "chevrotain": "10.1.2",
     "commander": "9.4.0",
-    "conf": "10.1.2",
+    "conf": "10.2.0",
     "debug": "4.3.4",
     "didyoumean": "1.2.2",
     "ejs": "3.1.8",
