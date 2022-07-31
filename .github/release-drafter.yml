@@ -6,7 +6,7 @@ template: |
 exclude-labels:
   - 'theme: dependencies'
 exclude-contributors:
-  - 'dependabot'
+  - 'app/dependabot'
 categories:
   - title: 💎 Features & Enhancements
     labels:
