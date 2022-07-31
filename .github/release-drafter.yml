@@ -3,6 +3,8 @@ template: |
 
   $CHANGES
 
+exclude-labels:
+  - 'theme: dependencies'
 exclude-contributors:
   - 'dependabot'
 categories:
