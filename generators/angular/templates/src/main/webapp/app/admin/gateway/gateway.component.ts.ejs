@@ -43,20 +43,25 @@ export default class GatewayComponent implements OnInit {
     this.updatingRoutes = true;
     this.gatewayRoutesService.findAll().subscribe(gatewayRoutes => {
       <%_ if (serviceDiscoveryType === 'consul') { _%>
-      gatewayRoutes.serviceInstances = gatewayRoutes.serviceInstances.map(serviceInstance => {
-        if (serviceInstance.healthService && serviceInstance.healthService.checks) {
-          if (serviceInstance.healthService.checks.filter(
-            check => check.status === 'PASSING'
-          ).length === serviceInstance.healthService.checks.length) {
-            serviceInstance.instanceInfo.status = 'UP'
-          } else {
-            serviceInstance.instanceInfo.status = 'DOWN'
+      this.gatewayRoutes = gatewayRoutes.map(gatewayRoute => {
+        gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
+          if (serviceInstance.healthService && serviceInstance.healthService.checks) {
+            if (
+              serviceInstance.healthService.checks.filter((check: any) => check.status === 'PASSING').length ===
+              serviceInstance.healthService.checks.length
+            ) {
+              serviceInstance.instanceInfo = { status: 'UP' };
+            } else {
+              serviceInstance.instanceInfo = { status: 'DOWN'} ;
+            }
           }
-        }
-        return serviceInstance;
+          return serviceInstance;
+        });
+        return gatewayRoute;
       });
-      <%_ } _%>
+      <%_ } else { _%>
       this.gatewayRoutes = gatewayRoutes;
+      <%_ } _%>
       this.updatingRoutes = false;
     });
   }
