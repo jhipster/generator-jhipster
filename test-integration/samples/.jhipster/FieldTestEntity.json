@@ -23,8 +23,7 @@
       "fieldName": "numberPatternRequiredTom",
       "fieldType": "String",
       "fieldValidateRules": ["pattern", "required"],
-      "fieldValidateRulesPattern": "^\\\\d+$",
-      "fieldValidateRulesPatternJava": "^\\\\d+$"
+      "fieldValidateRulesPattern": "^\\d+$"
     },
     { "fieldName": "integerTom", "fieldType": "Integer" },
     { "fieldName": "integerRequiredTom", "fieldType": "Integer", "fieldValidateRules": ["required"] },
