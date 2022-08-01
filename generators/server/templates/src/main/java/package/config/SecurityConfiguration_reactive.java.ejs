@@ -134,6 +134,9 @@ import reactor.core.publisher.Mono;
   <%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+
 import java.util.Arrays;
 import java.util.Map;
   <%_ } _%>
@@ -141,7 +144,6 @@ import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
   <%_ if (!applicationTypeMicroservice) { _%>
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
   <%_ } _%>
 <%_ } _%>
@@ -170,8 +172,13 @@ public class SecurityConfiguration {
 
     private final ReactiveClientRegistrationRepository clientRegistrationRepository;
 
-    // todo: optimize for scale https://github.com/jhipster/generator-jhipster/issues/18868
-    private final Map<String, Mono<Jwt>> users = new ConcurrentHashMap<>();
+    // See https://github.com/jhipster/generator-jhipster/issues/18868
+    // We don't use a distributed cache or the user selected cache implementation here on purpose
+    private final Cache<String, Mono<Jwt>> users = Caffeine.newBuilder()
+        .maximumSize(10_000)
+        .expireAfterWrite(Duration.ofHours(1))
+        .recordStats()
+        .build();
 
   <%_ } _%>
 <%_ } _%>
@@ -425,7 +432,7 @@ public class SecurityConfiguration {
                     return Mono.just(jwt);
                 }
                 // Retrieve user info from OAuth provider if not already loaded
-                return users.computeIfAbsent(jwt.getSubject(), s -> {
+                return users.get(jwt.getSubject(), s -> {
                     WebClient webClient = WebClient.create();
 
                     return webClient

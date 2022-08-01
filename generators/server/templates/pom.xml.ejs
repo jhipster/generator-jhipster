@@ -130,8 +130,10 @@
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine) { _%>
+<%_ if (cacheProviderCaffeine || authenticationTypeOauth2) { _%>
         <caffeine.version>3.1.1</caffeine.version>
+<%_ } _%>
+<%_ if (cacheProviderCaffeine) { _%>
         <typesafe.version>1.4.2</typesafe.version>
 <%_ } _%>
         <!-- Plugin versions -->
@@ -408,12 +410,14 @@
         </dependency>
   <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine) { _%>
+<%_ if (cacheProviderCaffeine || authenticationTypeOauth2) { _%>
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <version>${caffeine.version}</version>
         </dependency>
+<%_ } _%>
+<%_ if (cacheProviderCaffeine) { _%>
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>jcache</artifactId>

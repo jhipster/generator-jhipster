@@ -373,8 +373,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.hibernate:hibernate-jcache"
   <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine) { _%>
+<%_ if (cacheProviderCaffeine || authenticationTypeOauth2) { _%>
     implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
+<%_ } _%>
+<%_ if (cacheProviderCaffeine) { _%>
     implementation "com.github.ben-manes.caffeine:jcache:${caffeineVersion}"
     implementation "com.typesafe:config:${typesafeConfigVersion}"
   <%_ if (enableHibernateCache) { _%>
