@@ -818,15 +818,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: \\"8500\\"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -1265,30 +1260,14 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.default.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.default.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
@@ -1338,10 +1317,7 @@ metadata:
   name: jhipster-registry
   namespace: default
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: jhipster-registry
@@ -1352,7 +1328,6 @@ spec:
         app: jhipster-registry
         version: "1.0"
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
           image: jhipster-registry-placeholder
@@ -1396,7 +1371,7 @@ spec:
               value: "/central-config/"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
@@ -1564,15 +1539,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: \\"8500\\"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -1784,30 +1754,14 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.default.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.default.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
@@ -1857,10 +1811,7 @@ metadata:
   name: jhipster-registry
   namespace: default
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: jhipster-registry
@@ -1871,7 +1822,6 @@ spec:
         app: jhipster-registry
         version: "1.0"
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
           image: jhipster-registry-placeholder
@@ -1915,7 +1865,7 @@ spec:
               value: "/central-config/"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
@@ -2096,15 +2046,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: \\"8500\\"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -2274,15 +2219,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: \\"8500\\"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -3575,15 +3515,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: \\"8500\\"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -4104,15 +4039,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: \\"8500\\"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -4971,30 +4901,14 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
@@ -5044,10 +4958,7 @@ metadata:
   name: jhipster-registry
   namespace: mynamespace
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: jhipster-registry
@@ -5058,7 +4969,6 @@ spec:
         app: jhipster-registry
         version: "1.0"
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
           image: jhipster-registry-placeholder
@@ -5102,7 +5012,7 @@ spec:
               value: "/central-config/"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
@@ -7566,15 +7476,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.mynamespace.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.mynamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: \\"8500\\"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -7769,30 +7674,14 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
@@ -7842,10 +7731,7 @@ metadata:
   name: jhipster-registry
   namespace: mynamespace
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: jhipster-registry
@@ -7856,7 +7742,6 @@ spec:
         app: jhipster-registry
         version: "1.0"
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
           image: jhipster-registry-placeholder
@@ -7900,7 +7785,7 @@ spec:
               value: "/central-config/"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
@@ -8069,15 +7954,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.mynamespace.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.mynamespace.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.mynamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: \\"8500\\"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
@@ -8270,30 +8150,14 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name:  JHipster Registry
-      status: Connected to the JHipster Registry running in Kubernetes
-    eureka:
-      client:
-        initial-instance-info-replication-interval-seconds: 15
-        instance-info-replication-interval-seconds: 15
-        registry-fetch-interval-seconds: 15
-        fetch-registry: true
-        register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 15
-      instance:
-        lease-renewal-interval-in-seconds: 10
-        registry-default-open-for-traffic-count: 0
+      name: Consul
+      status: Connected to Consul running in Kubernetes
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: SECRET--50
   # app specific configuration
-  jhipster-registry.yml: |-
-    eureka:
-      client:
-        service-url:
-          defaultZone: http://admin:\${spring.security.user.password}@jhipster-registry-0.jhipster-registry.jhipsternamespace.svc.cluster.local:8761/eureka/,http://admin:\${spring.security.user.password}@jhipster-registry-1.jhipster-registry.jhipsternamespace.svc.cluster.local:8761/eureka/
 ",
     "stateCleared": "modified",
   },
@@ -8343,10 +8207,7 @@ metadata:
   name: jhipster-registry
   namespace: jhipsternamespace
 spec:
-  # added to circumvent kustomize bug
-  volumeClaimTemplates: []
-  serviceName: jhipster-registry
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: jhipster-registry
@@ -8357,7 +8218,6 @@ spec:
         app: jhipster-registry
         version: "1.0"
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
           image: jhipster-registry-placeholder
@@ -8401,7 +8261,7 @@ spec:
               value: "/central-config/"
           volumeMounts:
             - name: config-volume
-              mountPath: /central-config
+              mountPath: /config
       volumes:
         - name: config-volume
           configMap:
@@ -8570,15 +8430,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.jhipsternamespace.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:\${jhipster.registry.password}@jhipster-registry.jhipsternamespace.svc.cluster.local:8761/eureka/
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-headless.jhipsternamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: \\"8500\\"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL

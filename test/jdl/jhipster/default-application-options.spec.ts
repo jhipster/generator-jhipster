@@ -144,11 +144,24 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should set the withAdminUi option to true', () => {
         expect(options.withAdminUi).to.be.true;
       });
-      it('should set the service discovery type to eureka', () => {
-        expect(options.serviceDiscoveryType).to.equal('eureka');
+      it('should set the service discovery type to consul', () => {
+        expect(options.serviceDiscoveryType).to.equal('consul');
       });
       it('should set the reactive to true', () => {
         expect(options.reactive).to.be.true;
+      });
+    });
+    context('when the service discovery type option is false', () => {
+      let serviceDiscoveryTypeOption;
+
+      before(() => {
+        serviceDiscoveryTypeOption = getConfigForGatewayApplication({
+          serviceDiscoveryType: false,
+        }).serviceDiscoveryType;
+      });
+
+      it('should set it to consul', () => {
+        expect(serviceDiscoveryTypeOption).to.equal('consul');
       });
     });
     context('when the service discovery type option is no', () => {
@@ -227,8 +240,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should set the user management skipping option to true', () => {
         expect(options.skipUserManagement).to.be.true;
       });
-      it('should set the service discovery type option to eureka', () => {
-        expect(options.serviceDiscoveryType).to.equal('eureka');
+      it('should set the service discovery type option to consul', () => {
+        expect(options.serviceDiscoveryType).to.equal('consul');
       });
       it('should set the client skipping option to true', () => {
         expect(options.skipClient).to.be.true;
@@ -244,6 +257,19 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
       it('should unset the server skipping option', () => {
         expect(options.skipServer).to.be.undefined;
+      });
+    });
+    context('when the service discovery type option is false', () => {
+      let serviceDiscoveryTypeOption;
+
+      before(() => {
+        serviceDiscoveryTypeOption = getConfigForMicroserviceApplication({
+          serviceDiscoveryType: false,
+        }).serviceDiscoveryType;
+      });
+
+      it('should set it to consul', () => {
+        expect(serviceDiscoveryTypeOption).to.equal('consul');
       });
     });
     context('when the service discovery type option is no', () => {

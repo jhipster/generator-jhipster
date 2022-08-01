@@ -134,7 +134,7 @@ spec:
                     app.kubernetes.io/name: consul
                     app: consul
                 namespaces:
-                  - jhipster
+                  - <%= kubernetesNamespace %>
                 topologyKey: kubernetes.io/hostname
               weight: 1
         nodeAffinity:
@@ -146,6 +146,7 @@ spec:
           image: <%= dockerContainers.consul %>
           imagePullPolicy: "IfNotPresent"
           securityContext:
+            allowPrivilegeEscalation: false
             runAsNonRoot: true
             runAsUser: 1001
           ports:

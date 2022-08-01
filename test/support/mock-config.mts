@@ -28,7 +28,7 @@ export const deploymentTestSamples = {
     baseName: 'jhgate',
     databaseType: 'sql',
     prodDatabaseType: 'mysql',
-    serviceDiscoveryType: 'eureka',
+    serviceDiscoveryType: 'consul',
     serverPort: 8080,
   },
   '02-mysql': {
@@ -36,7 +36,7 @@ export const deploymentTestSamples = {
     baseName: 'msmysql',
     databaseType: 'sql',
     prodDatabaseType: 'mysql',
-    serviceDiscoveryType: 'eureka',
+    serviceDiscoveryType: 'consul',
     serverPort: 8081,
   },
   '03-psql': {
@@ -93,7 +93,7 @@ export const deploymentTestSamples = {
     baseName: 'mscouchbase',
     databaseType: 'couchbase',
     prodDatabaseType: 'couchbase',
-    serviceDiscoveryType: 'eureka',
+    serviceDiscoveryType: 'consul',
     serverPort: 8081,
   },
   '11-mssql': {
