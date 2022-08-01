@@ -17,8 +17,7 @@
       "fieldName": "numberPatternTom",
       "fieldType": "String",
       "fieldValidateRules": ["pattern"],
-      "fieldValidateRulesPattern": "^\\\\d+$",
-      "fieldValidateRulesPatternJava": "^\\\\d+$"
+      "fieldValidateRulesPattern": "^\\d+$"
     },
     {
       "fieldName": "numberPatternRequiredTom",
