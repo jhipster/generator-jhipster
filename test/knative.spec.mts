@@ -128,7 +128,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files and content', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
         assert.fileContent('./registry-knative/jhipster-registry.yml', /# base64 encoded "meetup"/);
       });
       it('creates expected gateway files and content', () => {
@@ -168,7 +168,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -208,7 +208,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
         assert.file(expectedFiles.msmysql);
@@ -249,7 +249,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -287,7 +287,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it("doesn't creates gateway files", () => {
         assert.noFile(expectedFiles.jhgate);
@@ -335,7 +335,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -386,7 +386,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
         assert.file(expectedFiles.msmysql);
@@ -429,7 +429,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(expectedFiles.eurekaregistry);
+        assert.file(expectedFiles.consulregistry);
       });
       it('creates expected service gateway files', () => {
         assert.file(expectedFiles.jhgate);
@@ -472,7 +472,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files and content', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files and content', () => {
@@ -512,7 +512,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
@@ -554,7 +554,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected mysql files', () => {
@@ -597,7 +597,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
@@ -642,7 +642,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it("doesn't creates gateway files", () => {
@@ -694,7 +694,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected gateway files', () => {
@@ -748,7 +748,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
       });
       it('creates expected mysql files', () => {
         assert.file(helmExpectedFiles.msmysql);
@@ -794,7 +794,7 @@ describe('generator - Knative', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
-        assert.file(helmExpectedFiles.eurekaregistry);
+        assert.file(helmExpectedFiles.consulregistry);
         assert.file(helmExpectedFiles.csvcfiles);
       });
       it('creates expected service gateway files', () => {

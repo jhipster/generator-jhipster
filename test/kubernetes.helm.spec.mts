@@ -101,7 +101,7 @@ describe('generator - Kubernetes Helm', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
       assert.file(expectedFiles.csvcfiles);
     });
     it('creates expected gateway files and content', () => {
@@ -140,7 +140,7 @@ describe('generator - Kubernetes Helm', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
       assert.file(expectedFiles.csvcfiles);
     });
     it('creates expected gateway files', () => {
@@ -181,7 +181,7 @@ describe('generator - Kubernetes Helm', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
       assert.file(expectedFiles.csvcfiles);
     });
     it('creates expected mysql files', () => {
@@ -224,7 +224,7 @@ describe('generator - Kubernetes Helm', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
       assert.file(expectedFiles.csvcfiles);
     });
     it('creates expected gateway files', () => {
@@ -269,7 +269,7 @@ describe('generator - Kubernetes Helm', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
       assert.file(expectedFiles.csvcfiles);
     });
     it("doesn't creates gateway files", () => {
@@ -320,7 +320,7 @@ describe('generator - Kubernetes Helm', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
       assert.file(expectedFiles.csvcfiles);
     });
     it('creates expected gateway files', () => {
@@ -374,7 +374,7 @@ describe('generator - Kubernetes Helm', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it("doesn't creates registry files", () => {
-      assert.noFile(expectedFiles.eurekaregistry);
+      assert.noFile(expectedFiles.consulregistry);
     });
     it('creates expected default files', () => {
       assert.file(expectedFiles.monolith);
@@ -446,7 +446,7 @@ describe('generator - Kubernetes Helm', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected mysql files', () => {
       assert.file(expectedFiles.msmysql);
@@ -491,7 +491,7 @@ describe('generator - Kubernetes Helm', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
       assert.file(expectedFiles.csvcfiles);
     });
     it('creates expected service gateway files', () => {

@@ -73,6 +73,48 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
+      assert.file(expectedFiles.consulregistry);
+      assert.fileContent('./registry-k8s/consul.yml', /a 24 chars base64 encoded string/);
+    });
+    it('creates expected gateway files and content', () => {
+      assert.file(expectedFiles.jhgate);
+      assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+      assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+    });
+    it('create the apply script', () => {
+      assert.file(expectedFiles.applyScript);
+    });
+  });
+
+  describe('only gateway with eureka', () => {
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          createMockedConfig('13-gateway-eureka', dir);
+        })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .withPrompts({
+          deploymentApplicationType: 'microservice',
+          directoryPath: './',
+          chosenApps: ['13-gateway-eureka'],
+          adminPassword: 'meetup',
+          dockerRepositoryName: 'jhipsterrepository',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'jhipsternamespace',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        })
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('creates expected registry files and content', () => {
       assert.file(expectedFiles.eurekaregistry);
       assert.fileContent('./registry-k8s/jhipster-registry.yml', /# base64 encoded "meetup"/);
     });
@@ -115,7 +157,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);
@@ -156,7 +198,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected mysql files', () => {
       assert.file(expectedFiles.msmysql);
@@ -197,7 +239,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);
@@ -236,7 +278,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it("doesn't creates gateway files", () => {
       assert.noFile(expectedFiles.jhgate);
@@ -285,7 +327,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);
@@ -339,6 +381,7 @@ describe('generator - Kubernetes', () => {
     });
     it("doesn't creates registry files", () => {
       assert.noFile(expectedFiles.eurekaregistry);
+      assert.noFile(expectedFiles.consulregistry);
     });
     it('creates expected default files', () => {
       assert.file(expectedFiles.monolith);
@@ -377,6 +420,7 @@ describe('generator - Kubernetes', () => {
     });
     it("doesn't creates registry files", () => {
       assert.noFile(expectedFiles.eurekaregistry);
+      assert.noFile(expectedFiles.consulregistry);
     });
     it('creates expected default files', () => {
       assert.file(expectedFiles.kafka);
@@ -413,7 +457,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected mysql files', () => {
       assert.file(expectedFiles.msmysql);
@@ -457,7 +501,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected service gateway files', () => {
       assert.file(expectedFiles.jhgate);
@@ -503,7 +547,7 @@ describe('generator - Kubernetes', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected gateway files', () => {
       assert.file(expectedFiles.jhgate);

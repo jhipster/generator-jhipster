@@ -45,7 +45,7 @@ export const deploymentTestSamples = {
     databaseType: 'sql',
     prodDatabaseType: 'postgresql',
     searchEngine: 'elasticsearch',
-    serviceDiscoveryType: 'eureka',
+    serviceDiscoveryType: 'consul',
     serverPort: 8081,
   },
   '04-mongo': {
@@ -110,6 +110,14 @@ export const deploymentTestSamples = {
     prodDatabaseType: 'oracle',
     serverPort: 8080,
     skipClient: true,
+  },
+  '13-gateway-eureka': {
+    applicationType: 'gateway',
+    baseName: 'jhgate',
+    databaseType: 'sql',
+    prodDatabaseType: 'mysql',
+    serviceDiscoveryType: 'eureka',
+    serverPort: 8080,
   },
 };
 
