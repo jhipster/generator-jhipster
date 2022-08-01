@@ -116,11 +116,11 @@ export async function askForServerSideOpts({ control }) {
       choices: [
         {
           value: CONSUL,
-          name: 'Consul',
+          name: 'Consul (recommended)',
         },
         {
           value: EUREKA,
-          name: 'JHipster Registry (uses Eureka, provides Spring Cloud Config support and monitoring dashboards)',
+          name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)',
         },
         {
           value: NO_SERVICE_DISCOVERY,
