@@ -187,15 +187,13 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
       data = undefined;
     }
   }
-  if (
-    data !== undefined &&
-    type === 'ts' &&
+  if (data !== undefined) {
     // eslint-disable-next-line no-template-curly-in-string
-    ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)
-  ) {
-    data = `'${data}'`;
-  } else if (data !== undefined && type === 'csv' && field.fieldValidate && field.fieldValidateRules.includes(PATTERN)) {
-    data = `"${data}"`;
+    if (type === 'ts' && ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
+      data = `'${typeof data === 'string' ? data.replace(/'/g, "\\'") : data}'`;
+    } else if (type === 'csv' && field.fieldValidate && field.fieldValidateRules.includes(PATTERN)) {
+      data = `"${typeof data === 'string' ? data.replace(/"/g, '\\"') : data}"`;
+    }
   }
 
   return data;
