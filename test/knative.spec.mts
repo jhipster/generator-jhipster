@@ -129,7 +129,7 @@ describe('generator - Knative', () => {
       });
       it('creates expected registry files and content', () => {
         assert.file(expectedFiles.consulregistry);
-        assert.fileContent('./registry-knative/jhipster-registry.yml', /# base64 encoded "meetup"/);
+        assert.fileContent('./registry-knative/consul.yml', /a 24 chars base64 encoded string/);
       });
       it('creates expected gateway files and content', () => {
         assert.file(expectedFiles.jhgate);

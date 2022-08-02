@@ -48,8 +48,8 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
-      assert.file(expectedFiles.eurekaregistry);
-      assert.fileContent('./ocp/registry/jhipster-registry.yml', /# base64 encoded "openshiftpaas"/);
+      assert.file(expectedFiles.consulregistry);
+      assert.fileContent('./ocp/registry/consul.yml', /a 24 chars base64 encoded string/);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
@@ -85,7 +85,7 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
@@ -123,7 +123,7 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
@@ -167,7 +167,7 @@ describe('generator - OpenShift', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
-      assert.file(expectedFiles.eurekaregistry);
+      assert.file(expectedFiles.consulregistry);
     });
     it('creates expected scc files', () => {
       assert.file(expectedFiles.sccconfig);
