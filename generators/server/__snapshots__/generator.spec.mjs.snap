@@ -593,6 +593,10 @@ Object {
           "renameTo": [Function],
         },
         Object {
+          "file": "package/config/CRLFLogConverter.java",
+          "renameTo": [Function],
+        },
+        Object {
           "file": "package/config/DateTimeFormatConfiguration.java",
           "renameTo": [Function],
         },
