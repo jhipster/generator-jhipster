@@ -843,6 +843,10 @@ const baseServerFiles = {
           renameTo: generator => `${generator.javaDir}config/AsyncConfiguration.java`,
         },
         {
+          file: 'package/config/CRLFLogConverter.java',
+          renameTo: generator => `${generator.javaDir}config/CRLFLogConverter.java`,
+        },
+        {
           file: 'package/config/DateTimeFormatConfiguration.java',
           renameTo: generator => `${generator.javaDir}config/DateTimeFormatConfiguration.java`,
         },
