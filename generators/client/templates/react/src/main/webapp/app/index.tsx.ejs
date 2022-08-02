@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -42,18 +42,17 @@ setupAxiosInterceptors(() => actions.clearAuthentication('login.error.unauthoriz
 loadIcons();
 
 const rootEl = document.getElementById('root');
+const root = createRoot(rootEl);
 
 const render = Component =>
-  // eslint-disable-next-line react/no-render-return-value
-  ReactDOM.render(
+  root.render(
     <ErrorBoundary>
       <Provider store={store}>
         <div>
           <Component />
         </div>
       </Provider>
-    </ErrorBoundary>,
-    rootEl
+    </ErrorBoundary>
   );
 
 render(AppComponent);
