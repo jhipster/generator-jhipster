@@ -17,7 +17,7 @@ export default class <%=jhiPrefixCapitalized%>GatewayComponent extends Vue {
     this.gatewayService().findAll().then((res) => {
       this.gatewayRoutes = res.data;
       <%_ if (serviceDiscoveryType === 'consul') { _%>
-      this.gatewayRoutes.map(route => {
+      this.gatewayRoutes.forEach(route => {
         route.serviceInstances = gatewayRoutes.serviceInstances.map(serviceInstance => {
           if (serviceInstance.healthService && serviceInstance.healthService.checks) {
             if (serviceInstance.healthService.checks.filter(

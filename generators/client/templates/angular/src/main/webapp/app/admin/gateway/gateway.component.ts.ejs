@@ -40,7 +40,7 @@ export class GatewayComponent implements OnInit {
     this.updatingRoutes = true;
     this.gatewayRoutesService.findAll().subscribe(gatewayRoutes => {
       <%_ if (serviceDiscoveryType === 'consul') { _%>
-      gatewayRoutes.map(route => {
+      gatewayRoutes.forEach(route => {
         route.serviceInstances = gatewayRoutes.serviceInstances.map(serviceInstance => {
           if (serviceInstance.healthService && serviceInstance.healthService.checks) {
             if (serviceInstance.healthService.checks.filter(
