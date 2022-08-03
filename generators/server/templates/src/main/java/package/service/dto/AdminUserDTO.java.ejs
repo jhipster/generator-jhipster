@@ -25,6 +25,7 @@ import <%= packageName %>.domain.Authority;<% } %>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 
+import java.io.Serializable;
 import javax.validation.constraints.*;
 <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
 import java.time.Instant;
@@ -40,7 +41,8 @@ import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
-public class <%= asDto('AdminUser') %> {
+public class <%= asDto('AdminUser') %> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private <%= user.primaryKey.type %> id;
 
