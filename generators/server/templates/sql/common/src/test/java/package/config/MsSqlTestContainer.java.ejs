@@ -26,9 +26,9 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 import java.util.Collections;
 
-public class MsSqlServerContainer implements SqlTestContainer {
+public class MsSqlTestContainer implements SqlTestContainer {
 
-    private static final Logger log = LoggerFactory.getLogger(MsSqlServerContainer.class);
+    private static final Logger log = LoggerFactory.getLogger(MsSqlTestContainer.class);
 
     private MSSQLServerContainer<?> mSSQLServerContainer;
 
@@ -42,7 +42,6 @@ public class MsSqlServerContainer implements SqlTestContainer {
     public void afterPropertiesSet() {
         if (null == mSSQLServerContainer) {
             mSSQLServerContainer = new MSSQLServerContainer<>("<%= DOCKER_MSSQL %>")
-                .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))
                 .withReuse(true);
