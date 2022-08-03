@@ -42,8 +42,6 @@ public class MsSqlTestContainer implements SqlTestContainer {
     public void afterPropertiesSet() {
         if (null == mSSQLServerContainer) {
             mSSQLServerContainer = new MSSQLServerContainer<>("<%= DOCKER_MSSQL %>")
-                // MSSQLServerContainer does not support withDatabaseName. Using default database "master" for tests.
-                //.withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))
                 .withReuse(true);
