@@ -119,6 +119,9 @@ Object {
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -701,6 +704,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -1303,6 +1309,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/Constants.java": Object {
