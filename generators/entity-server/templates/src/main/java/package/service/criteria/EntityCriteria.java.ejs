@@ -1,6 +1,7 @@
 package <%= entityAbsolutePackage %>.service.criteria;
 
 import java.io.Serializable;
+import java.lang.SuppressWarnings;
 import java.util.Objects;
 import org.springdoc.api.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
@@ -78,6 +79,7 @@ _%>
  * fix type specific filters.
  */
 @ParameterObject
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class <%= entityClass %>Criteria implements Serializable, Criteria {
 <%_ Object.keys(extraFilters).forEach((key) => {
   extraFilter = extraFilters[key]; _%>

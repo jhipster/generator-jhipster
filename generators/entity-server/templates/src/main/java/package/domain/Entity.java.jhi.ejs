@@ -56,6 +56,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 <%_ } _%>
 
 import java.io.Serializable;
+import java.lang.SuppressWarnings;
 <%_ if (fieldsContainBigDecimal) { _%>
 import java.math.BigDecimal;
 <%_ } if (fieldsContainInstant) { _%>
@@ -93,6 +94,7 @@ import <%= otherEntity.entityAbsoluteClass %>;
   <%_ } _%>
 <%_ } _%>
 <&- fragments.annotationSection() -&>
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class <%= persistClass %> implements Serializable<&- fragments.additionalInterfacesSection() -&> {
 
     private static final long serialVersionUID = 1L;
