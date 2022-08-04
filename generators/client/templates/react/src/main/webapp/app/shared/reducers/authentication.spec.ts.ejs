@@ -219,11 +219,11 @@ describe('Authentication reducer tests', () => {
         {
           type: getAccount.pending.type
         },
+        <%_ if (enableTranslation) { _%>
         {
           type: getAccount.fulfilled.type,
           payload: resolvedObject
         },
-        <%_ if (enableTranslation) { _%>
         {
           type: setLocale.pending.type,
         },
