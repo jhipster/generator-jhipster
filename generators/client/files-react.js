@@ -76,7 +76,7 @@ const files = {
     {
       condition: generator => generator.enableTranslation,
       path: REACT_DIR,
-      templates: ['config/translation.ts', 'config/translation-middleware.ts'],
+      templates: ['config/translation.ts'],
     },
     {
       condition: generator => generator.websocket === SPRING_WEBSOCKET,
@@ -358,6 +358,9 @@ function cleanup() {
   if (this.isJhipsterVersionLessThan('7.8.2')) {
     this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/error/error-boundary-route.tsx`);
     this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/error/error-boundary-route.spec.tsx`);
+  }
+  if (this.isJhipsterVersionLessThan('7.9.3')) {
+    this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/config/translation-middleware.ts`);
   }
 }
 

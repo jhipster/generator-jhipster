@@ -56,7 +56,7 @@ export const getSession = (): AppThunk => <% if (enableTranslation) { %>async<% 
   const { account } = getState().authentication;
   if (account && account.langKey) {
     const langKey = Storage.session.get('locale', account.langKey);
-    dispatch(setLocale(langKey));
+    await dispatch(setLocale(langKey));
   }
 <%_ } else { _%>
   dispatch(getAccount());
