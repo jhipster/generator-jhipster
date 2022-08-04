@@ -35,7 +35,7 @@ const serviceDiscoveryTypes = require('./service-discovery-types');
 
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
-const { ANGULAR, ANGULAR_X } = require('./client-framework-types');
+const { ANGULAR, ANGULAR_X, NO } = require('./client-framework-types');
 
 const { MAVEN } = require('./build-tool-types');
 
@@ -118,7 +118,14 @@ function getConfigForMonolithApplication(customOptions = {}) {
   if (options[AUTHENTICATION_TYPE] === OAUTH2) {
     options[SKIP_USER_MANAGEMENT] = true;
   }
-
+  let skipClient = options[SKIP_CLIENT];
+  if (skipClient === undefined) {
+    skipClient = options[CLIENT_FRAMEWORK] === undefined || options[CLIENT_FRAMEWORK] === NO;
+  }
+  if (skipClient) {
+    delete options[CLIENT_FRAMEWORK];
+    delete options[SKIP_SERVER];
+  }
   return {
     ...options,
     [APPLICATION_TYPE]: MONOLITH,
@@ -226,6 +233,14 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
   }
   if (!options[PACKAGE_FOLDER] && options[PACKAGE_NAME]) {
     options[PACKAGE_FOLDER] = options[PACKAGE_NAME].replace(/\./g, '/');
+  }
+  let skipClient = options[SKIP_CLIENT];
+  if (skipClient === undefined) {
+    skipClient = options[CLIENT_FRAMEWORK] === undefined || options[CLIENT_FRAMEWORK] === NO;
+  }
+  if (skipClient) {
+    delete options[CLIENT_FRAMEWORK];
+    delete options[SKIP_SERVER];
   }
   if (options[CLIENT_FRAMEWORK] === ANGULAR) {
     options[CLIENT_FRAMEWORK] = ANGULAR_X;
