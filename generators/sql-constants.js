@@ -24,6 +24,9 @@ const databaseData = {
   [MSSQL]: {
     protocolSuffix: 'sqlserver://',
     port: ':1433;database=',
+    jdbc: {
+      extraOptions: ';encrypt=false',
+    },
     r2dbc: {
       protocolSuffix: 'mssql://',
       port: ':1433/',
