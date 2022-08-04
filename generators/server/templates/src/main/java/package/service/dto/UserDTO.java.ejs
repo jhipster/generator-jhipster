@@ -22,6 +22,7 @@ package <%= packageName %>.service.dto;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 
+import java.io.Serializable;
 <%_ if (user.primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
@@ -29,7 +30,8 @@ import java.util.UUID;
 /**
  * A DTO representing a user, with only the public attributes.
  */
-public class <%= asDto('User') %> {
+public class <%= asDto('User') %> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private <%= user.primaryKey.type %> id;
 

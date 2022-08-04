@@ -127,7 +127,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
     @Override
 <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> update(<%= instanceType %> <%= instanceName %>) {
-        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
+        log.debug("Request to update <%= entityClass %> : {}", <%= instanceName %>);
 <%- include('/partials/update_template', {updatableEntity, viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false, isPersisted: requiresPersistableImplementation}); -%>
     }
 

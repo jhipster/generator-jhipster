@@ -18,6 +18,7 @@
 -%>
 package <%= entityAbsolutePackage %>.service.dto;
 
+import java.lang.SuppressWarnings;
 import java.util.Objects;
 <%_ if (typeof javadoc !== 'undefined' || importApiModelProperty) { _%>
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -68,6 +69,7 @@ import <%= `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoCl
 <%_ if (typeof javadoc !== 'undefined') { _%>
 @Schema(description = "<%- formatAsApiDescription(javadoc) %>")
 <%_ } _%>
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class <%= dtoClass %> implements Serializable {
 
 <%_ for (reference of dtoReferences) {
