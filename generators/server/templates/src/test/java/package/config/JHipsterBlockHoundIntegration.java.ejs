@@ -39,6 +39,9 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         builder.allowBlockingCallsInside("org.mariadb.r2dbc.message.client.HandshakeResponse", "writeConnectAttributes");
         builder.allowBlockingCallsInside("org.mariadb.r2dbc.client.MariadbPacketDecoder", "decode");
 <%_} _%>
+<%_ if (devDatabaseTypeMssql || prodDatabaseTypeMssql) { _%>
+        builder.allowBlockingCallsInside("io.r2dbc.mssql.client.ssl.TdsSslHandler", "createSslHandler");
+<%_} _%>
 <%_ if (searchEngineElasticsearch) { _%>
         builder.allowBlockingCallsInside("org.elasticsearch.client.indices.CreateIndexRequest", "settings");
 <%_} _%>
