@@ -130,7 +130,7 @@
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine || authenticationTypeOauth2) { _%>
+<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
         <caffeine.version>3.1.1</caffeine.version>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
@@ -410,7 +410,7 @@
         </dependency>
   <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine || authenticationTypeOauth2) { _%>
+<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>

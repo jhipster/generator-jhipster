@@ -32,7 +32,7 @@ archunitJunit5Version=0.22.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine || authenticationTypeOauth2) { _%>
+<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
 caffeineVersion=3.1.1
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
