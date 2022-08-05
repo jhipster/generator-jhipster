@@ -592,9 +592,9 @@ describe('Generator Base', () => {
       });
     });
     describe('when called for mssql', () => {
-      it('return jdbc:sqlserver://localhost:1433;database=test', () => {
+      it('return jdbc:sqlserver://localhost:1433;database=test;encrypt=false', () => {
         expect(BaseGenerator.getJDBCUrl(MSSQL, { databaseName: 'test', hostname: 'localhost' })).to.equal(
-          'jdbc:sqlserver://localhost:1433;database=test'
+          'jdbc:sqlserver://localhost:1433;database=test;encrypt=false'
         );
       });
     });
