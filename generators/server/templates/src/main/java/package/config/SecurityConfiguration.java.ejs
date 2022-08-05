@@ -165,6 +165,9 @@ public class SecurityConfiguration {
         // @formatter:off
         http
             .csrf()
+<%_ if (devDatabaseTypeH2Any) { _%>
+            .ignoringAntMatchers("/h2-console/**")
+<%_ } _%>
 <%_ if ((authenticationTypeOauth2 || authenticationTypeSession) && !applicationTypeMicroservice) { _%>
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
