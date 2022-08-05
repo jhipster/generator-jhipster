@@ -98,9 +98,6 @@ Object {
   "src/main/webapp/app/config/store.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/config/translation-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/config/translation.ts": Object {
     "stateCleared": "modified",
   },

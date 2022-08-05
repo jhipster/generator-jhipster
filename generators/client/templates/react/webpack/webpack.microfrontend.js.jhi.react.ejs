@@ -36,7 +36,7 @@ const { DefinePlugin } = require('webpack');
         },
 <%_ } _%>
         shared: {
-          ...Object.fromEntries(Object.entries(packageJson.dependencies).map(([module]) => ([module, { singleton: true, shareScope: 'default' }]))),
+          ...Object.fromEntries(Object.entries(packageJson.dependencies).map(([module, version]) => ([module, { requiredVersion: version, singleton: true, shareScope: 'default' }]))),
           'app/config/constants': {
             singleton: true,
             import: 'app/config/constants',
