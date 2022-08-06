@@ -855,7 +855,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
        */
       processEagerLoadRelationships() {
         this.context.relationships.forEach(relationship => {
-          if (relationship.otherEntity.embedded) {
+          if (!relationship.otherEntity.primaryKey) {
             relationship.bagRelationship = false;
             relationship.relationshipEagerLoad = false;
             return;
