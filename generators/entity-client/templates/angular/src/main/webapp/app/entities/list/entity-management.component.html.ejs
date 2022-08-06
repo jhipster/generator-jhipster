@@ -68,12 +68,19 @@
         <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.notFound') %></span>
     </div>
 
-    <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
+    <div class="table-responsive table-entities" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+                <tr<% if (!field.transient) { %>> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()"<% } %>>
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
-                    <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>"><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%- this._getEntityClientTranslation(field.fieldTranslationKey) %></span> <fa-icon <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon></th>
+                    <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>">
+                        <div class="d-flex">
+                            <span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%- this._getEntityClientTranslation(field.fieldTranslationKey) %></span>
+  <%_ if (!field.transient) { _%>
+                            <fa-icon class="p-1" <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon>
+  <%_ } _%>
+                        </div>
+                    </th>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
   <%_ if (relationship.relationshipManyToOne
