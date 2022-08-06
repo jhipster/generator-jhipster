@@ -243,9 +243,6 @@ describe('DefaultApplicationOptions', () => {
       it('should set the client skipping option to true', () => {
         expect(options.skipClient).to.be.true;
       });
-      it('should unset the client framework option', () => {
-        expect(options.clientFramework).to.be.undefined;
-      });
       it('should unset the client theme option', () => {
         expect(options.clientTheme).to.be.undefined;
       });
