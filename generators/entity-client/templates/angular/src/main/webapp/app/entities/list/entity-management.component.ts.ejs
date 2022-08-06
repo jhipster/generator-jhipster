@@ -26,7 +26,7 @@
   const notSortableFieldsAfterSearch = notSortableFieldsAfterSearchArray
       .map(field => `'${field.fieldName}'`)
       .join(', ');
-  
+
   const componentName = entityAngularName + 'Component';
 _%>
 import { Component, OnInit } from '@angular/core';
@@ -314,7 +314,7 @@ export class <%= componentName %> implements OnInit {
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
       if (filters?.hasAnyFilterSet()) {
         filters.filterOptions.forEach(filterOption => {
-          queryObject[filterOption.name] = filterOption.value;
+          queryObject[filterOption.name] = filterOption.values;
         });
       }
 <%_ } _%>
@@ -349,7 +349,7 @@ export class <%= componentName %> implements OnInit {
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
       if (filters?.hasAnyFilterSet()) {
         filters.filterOptions.forEach(filterOption => {
-          queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.value;
+          queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.values;
         });
       }
 <%_ } _%>

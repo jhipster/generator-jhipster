@@ -5,7 +5,7 @@ export interface IFilterOptions {
   filterOptions: IFilterOption[];
   hasAnyFilterSet(): boolean;
   clear(): void;
-  removeByName(name: string): void;
+  removeByName(name: string, value?: string): void;
   initializeFromParams(params: ParamMap): boolean;
   equals(other: IFilterOptions): boolean;
   clone(): IFilterOptions;
@@ -13,25 +13,37 @@ export interface IFilterOptions {
 
 export interface IFilterOption {
   name: string;
-  value: string | null;
+  values: string[];
   isSet(): boolean;
   nameAsQueryParam(): string;
+  removeValue(value: string): void;
+  equals(other: IFilterOption): boolean;
 }
 
 export interface IFilterableComponent {
-  clearFilter(filterName: string): void;
+  clearFilter(filterName: string, value?: string): void;
   clearAllFilters(): void;
 }
 
 export class FilterOption implements IFilterOption {
-  constructor(public name: string, public value: string | null) {}
+  constructor(public name: string, public values: string[]) {}
 
   nameAsQueryParam(): string {
     return 'filter[' + this.name + ']';
   }
 
   isSet(): boolean {
-    return this.value != null && this.value.length > 0;
+    return this.values.length > 0;
+  }
+
+  removeValue(value: string): void {
+    this.values = this.values.filter(thisValue => thisValue !== value);
+  }
+
+  equals(other: IFilterOption): boolean {
+    return (
+      this.values.every(thisValue => other.values.includes(thisValue)) && other.values.every(otherValue => this.values.includes(otherValue))
+    );
   }
 }
 
@@ -39,7 +51,7 @@ export class FilterOptions implements IFilterOptions {
   filterOptions: IFilterOption[] = [];
 
   hasAnyFilterSet(): boolean {
-    return this.filterOptions.length > 0 && this.filterOptions.every(e => e.isSet());
+    return this.filterOptions.length > 0 && this.filterOptions.some(e => e.isSet());
   }
 
   clear(): void {
@@ -50,8 +62,13 @@ export class FilterOptions implements IFilterOptions {
     this.filterOptions.push(option);
   }
 
-  removeByName(name: string): void {
-    this.filterOptions = this.filterOptions.filter(option => option.name !== name);
+  removeByName(name: string, value?: string): void {
+    if (value === undefined) {
+      this.filterOptions = this.filterOptions.filter(thisOption => thisOption.name !== name);
+      return;
+    }
+    const option = this.filterOptions.find(thisOption => thisOption.name === name);
+    option?.removeValue(value);
   }
 
   equals(other: IFilterOptions): boolean {
@@ -65,7 +82,7 @@ export class FilterOptions implements IFilterOptions {
     const newObject: FilterOptions = new FilterOptions();
 
     this.filterOptions.forEach(option => {
-      newObject.add(new FilterOption(option.name, option.value));
+      newObject.add(new FilterOption(option.name, option.values));
     });
 
     return newObject;
@@ -82,7 +99,7 @@ export class FilterOptions implements IFilterOptions {
       .forEach(matchingParam => {
         const matches = matchingParam.match(filterRegex);
         if (matches && matches.length > 1) {
-          this.add(new FilterOption(matches[1], params.get(matchingParam)));
+          this.add(new FilterOption(matches[1], params.getAll(matchingParam)));
         }
       });
 
@@ -90,6 +107,6 @@ export class FilterOptions implements IFilterOptions {
   }
 
   containsSameOption(optionToSearch: IFilterOption): boolean {
-    return this.filterOptions.some(option => option.name === optionToSearch.name && option.value === optionToSearch.value);
+    return this.filterOptions.some(option => option.name === optionToSearch.name && option.equals(optionToSearch));
   }
 }

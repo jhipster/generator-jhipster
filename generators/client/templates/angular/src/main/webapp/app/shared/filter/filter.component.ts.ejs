@@ -16,8 +16,8 @@ export class FilterComponent implements IFilterableComponent {
     this.filterChange.emit();
   }
 
-  clearFilter(filterName: string): void {
-    this.filters.removeByName(filterName);
+  clearFilter(filterName: string, value?: string): void {
+    this.filters.removeByName(filterName, value);
     this.filterChange.emit();
   }
 }

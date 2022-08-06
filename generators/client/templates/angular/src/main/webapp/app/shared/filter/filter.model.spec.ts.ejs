@@ -15,6 +15,10 @@ describe('FilterModel Tests', () => {
     filter_invalid2: 'invalid',
   };
 
+  const paramWithTwoValues: Params = {
+    'filter[hello.in]': ['world', 'world2'],
+  };
+
   it('should parse from Params if there are any', () => {
     const filters: IFilterOptions = new FilterOptions();
 
@@ -24,8 +28,7 @@ describe('FilterModel Tests', () => {
 
     expect(filters.hasAnyFilterSet()).toBeTruthy();
 
-    expect(filters.filterOptions[0].name).toBe('hello.in');
-    expect(filters.filterOptions[0].value).toBe('world');
+    expect(filters.filterOptions).toMatchObject([{ name: 'hello.in', values: ['world'] }]);
   });
 
   it('should parse from Params and have none if there are none', () => {
@@ -36,5 +39,15 @@ describe('FilterModel Tests', () => {
     filters.initializeFromParams(paramMap);
 
     expect(filters.hasAnyFilterSet()).toBeFalsy();
+  });
+
+  it('should parse from Params and have a parameter with 2 values', () => {
+    const filters: IFilterOptions = new FilterOptions();
+
+    const paramMap: ParamMap = convertToParamMap(paramWithTwoValues);
+
+    filters.initializeFromParams(paramMap);
+
+    expect(filters.filterOptions).toMatchObject([{ name: 'hello.in', values: ['world', 'world2'] }]);
   });
 });
