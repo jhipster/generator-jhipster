@@ -24,6 +24,7 @@ const path = require('path');
 const { expect } = require('chai');
 
 const ApplicationTypes = require('../../jdl/jhipster/application-types');
+const { NO: NO_CLIENT_FRAMEWORK } = require('../../jdl/jhipster/client-framework-types');
 const DatabaseTypes = require('../../jdl/jhipster/database-types');
 const { createImporterFromFiles, createImporterFromContent } = require('../../jdl/jdl-importer');
 
@@ -1126,6 +1127,21 @@ Array [
   },
 ]
 `);
+      });
+    });
+    context('when importing a JDL application with clientFramework no', () => {
+      it('should return the clientFramework attribute in the application', () => {
+        const importer = createImporterFromContent(
+          `application {
+  config {
+    clientFramework no
+  }
+}
+`,
+          { skipFileGeneration: true }
+        );
+        const importState = importer.import();
+        jestExpect(importState.exportedApplications[0]['generator-jhipster'].clientFramework).toBe(NO_CLIENT_FRAMEWORK);
       });
     });
   });

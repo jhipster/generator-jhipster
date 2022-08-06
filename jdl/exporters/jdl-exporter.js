@@ -27,10 +27,15 @@ module.exports = {
  * Writes down the given JDL to a file.
  * @param jdl the JDL to write.
  * @param path the path where the file will be written.
+ * @returns {string} file contents
  */
 function exportToJDL(jdl, path = 'app.jdl') {
   if (!jdl) {
     throw new Error('A JDLObject has to be passed to be exported.');
   }
-  fs.writeFileSync(path, jdl.toString());
+  const fileContents = jdl.toString();
+  if (path) {
+    fs.writeFileSync(path, fileContents);
+  }
+  return fileContents;
 }
