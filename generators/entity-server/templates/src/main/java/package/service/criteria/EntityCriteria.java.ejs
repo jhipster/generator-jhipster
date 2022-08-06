@@ -12,7 +12,7 @@ import tech.jhipster.service.filter.*;
 <%_
 var filterVariables = [];
 var extraFilters = {};
-fields.forEach((field) => {
+fields.filter(field => !field.transient).forEach((field) => {
   const fieldType = field.fieldType;
   if (isFilterableType(fieldType)) {
     var filterType;
