@@ -239,7 +239,7 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     skipClient = options[CLIENT_FRAMEWORK] === undefined || options[CLIENT_FRAMEWORK] === NO;
   }
   if (skipClient) {
-    options[CLIENT_FRAMEWORK] = NO;
+    delete options[CLIENT_FRAMEWORK];
     delete options[SKIP_SERVER];
   }
   if (options[CLIENT_FRAMEWORK] === ANGULAR) {
