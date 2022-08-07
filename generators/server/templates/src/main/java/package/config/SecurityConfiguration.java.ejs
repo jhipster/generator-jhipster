@@ -91,7 +91,9 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import <%= packageName %>.security.oauth2.CustomClaimConverter;
 <%_ } _%>
+<%_ if(!skipClient) { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+<%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
@@ -204,22 +206,23 @@ public class SecurityConfiguration {
             .logoutSuccessHandler(ajaxLogoutSuccessHandler())
             .permitAll()
 <%_ } _%>
+<%_ if (!skipClient) { _%>
         .and()
             .headers()
-            .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
-        .and()
-            .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-        .and()
-            .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
-        .and()
-            .frameOptions()
-            .sameOrigin()
-        .and()
-<%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
+                .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
+            .and()
+                .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+            .and()
+                .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
+            .and()
+                .frameOptions().sameOrigin()
 <%_ } _%>
+<%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
+        .and()
+            .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+<%_ } _%>
+        .and()
             .authorizeRequests()
 <%_ if (!applicationTypeMicroservice) { _%>
             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
