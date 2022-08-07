@@ -18,7 +18,7 @@
  */
 
 const Types = {
-  ANGULAR_X: 'angularX',
+  ANGULAR_X: 'angular',
   ANGULAR: 'angular',
   REACT: 'react',
   VUE: 'vue',

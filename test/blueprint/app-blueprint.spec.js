@@ -38,7 +38,7 @@ describe('JHipster application generator with blueprint', () => {
         .run();
     });
 
-    it('creates expected default files for server and angularX', () => {
+    it('creates expected default files for server and angular', () => {
       jestExpect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
 
@@ -137,7 +137,7 @@ describe('JHipster application generator with blueprint', () => {
         .run();
     });
 
-    it('creates expected default files for server and angularX', () => {
+    it('creates expected default files for server and angular', () => {
       jestExpect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
 

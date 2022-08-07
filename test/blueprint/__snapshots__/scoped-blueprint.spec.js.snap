@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster application generator with scoped blueprint generate monolith application with scoped blueprint creates expected default files for server and angularX 1`] = `
+exports[`JHipster application generator with scoped blueprint generate monolith application with scoped blueprint creates expected default files for server and angular 1`] = `
 Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",

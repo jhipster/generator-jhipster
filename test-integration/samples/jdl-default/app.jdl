@@ -8,7 +8,7 @@ application {
     buildTool maven,
     searchEngine false,
     testFrameworks [gatling, cypress],
-    clientFramework angularX,
+    clientFramework angular,
     enableTranslation true,
     nativeLanguage en,
     languages [ en, fr ]

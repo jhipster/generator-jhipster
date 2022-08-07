@@ -72,7 +72,7 @@ function isReservedPaginationWords(keyword) {
 
 function isReservedFieldName(keyword, clientFramework) {
   if (clientFramework) {
-    if (clientFramework === clientFrameworks.angularX) {
+    if (clientFramework === clientFrameworks.angular) {
       // Angular client framework
       return isReserved(keyword, 'ANGULAR') || isReserved(keyword, 'TYPESCRIPT') || isReserved(keyword, 'JAVA');
     }

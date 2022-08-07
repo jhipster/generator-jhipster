@@ -6,7 +6,7 @@
     "blueprints": [],
     "buildTool": "gradle",
     "cacheProvider": "infinispan",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "clientTheme": "none",
     "creationTimestamp": 1596513172471,

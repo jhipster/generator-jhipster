@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster generator custom path Default configuration with AngularX creates expected default files for angularX 1`] = `
+exports[`JHipster generator custom path Default configuration with Angular creates expected default files for angular 1`] = `
 Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",

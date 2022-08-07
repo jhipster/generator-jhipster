@@ -5,7 +5,7 @@
     "baseName": "sampleCouchbaseNoCache",
     "buildTool": "maven",
     "cacheProvider": "no",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "couchbase",

@@ -16,7 +16,7 @@
     "serviceDiscoveryType": false,
     "buildTool": "maven",
     "jwtSecretKey": "SECRET--50",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
         "clientPackageManager": "npm",
     "applicationType": "monolith",
     "testFrameworks": [

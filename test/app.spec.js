@@ -33,7 +33,7 @@ const NO_CACHE_PROVIDER = cacheProviders.NO;
 
 describe('JHipster generator', () => {
   context('Default configuration with', () => {
-    describe('AngularX', () => {
+    describe('Angular', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
@@ -63,11 +63,11 @@ describe('JHipster generator', () => {
           .run();
       });
 
-      it('creates expected default files for angularX', () => {
+      it('creates expected default files for angular', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
-      it('contains clientFramework with angularX value', () => {
-        assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
+      it('contains clientFramework with angular value', () => {
+        assert.fileContent('.yo-rc.json', /"clientFramework": "angular"/);
       });
       it('contains correct custom prefix when specified', () => {
         assert.fileContent('angular.json', /"prefix": "test"/);
@@ -486,7 +486,7 @@ describe('JHipster generator', () => {
           baseName: 'jhipster',
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
-          clientFramework: 'angularX',
+          clientFramework: 'angular',
           serviceDiscoveryType: false,
           authenticationType: JWT,
           cacheProvider: NO_CACHE_PROVIDER,

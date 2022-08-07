@@ -533,7 +533,7 @@ JDLApplication {
       "clientFramework": StringJDLApplicationConfigurationOption {
         "name": "clientFramework",
         "quoted": false,
-        "value": "angularX",
+        "value": "angular",
       },
       "clientPackageManager": StringJDLApplicationConfigurationOption {
         "name": "clientPackageManager",

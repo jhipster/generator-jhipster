@@ -6,7 +6,7 @@
     "blueprints": [],
     "buildTool": "gradle",
     "cacheProvider": "no",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "",

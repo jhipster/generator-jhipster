@@ -2,7 +2,7 @@
  * Microservice stack sample to test compilation and base microfrontend functionality.
  *
  * Test focus:
- * - clientFramework: angularX with microfrontend
+ * - clientFramework: angular with microfrontend
  * - serviceDiscovery: eureka
  * - authenticationType: jwt
  * - prodDatabaseType: postgresql
@@ -23,7 +23,7 @@ application {
     authenticationType jwt
     baseName gateway
     buildTool maven
-    clientFramework angularX
+    clientFramework angular
     creationTimestamp 1617901618886
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.gateway
@@ -43,7 +43,7 @@ application {
     baseName blog
     buildTool maven
     cacheProvider ehcache
-    clientFramework angularX
+    clientFramework angular
     creationTimestamp 1617901618887
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.blog
@@ -63,7 +63,7 @@ application {
     baseName store,
     buildTool gradle
     cacheProvider ehcache
-    clientFramework angularX
+    clientFramework angular
     creationTimestamp 1617901618888
     dtoSuffix Rest
     entitySuffix Entity
@@ -84,7 +84,7 @@ application {
     authenticationType jwt
     baseName notification,
     buildTool gradle
-    clientFramework angularX
+    clientFramework angular
     creationTimestamp 1617901618889
     dtoSuffix Rest
     entitySuffix Entity

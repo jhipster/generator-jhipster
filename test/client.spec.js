@@ -59,8 +59,8 @@ describe('JHipster client generator', () => {
     it('creates expected files for default configuration for client generator', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
-    it('contains clientFramework with angularX value', () => {
-      assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
+    it('contains clientFramework with angular value', () => {
+      assert.fileContent('.yo-rc.json', /"clientFramework": "angular"/);
     });
     it('contains clientPackageManager with npm value', () => {
       assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);

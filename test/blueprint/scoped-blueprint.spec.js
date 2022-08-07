@@ -29,7 +29,7 @@ describe('JHipster application generator with scoped blueprint', () => {
         .run();
     });
 
-    it('creates expected default files for server and angularX', () => {
+    it('creates expected default files for server and angular', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
 

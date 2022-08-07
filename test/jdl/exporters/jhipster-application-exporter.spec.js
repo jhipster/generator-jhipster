@@ -159,7 +159,7 @@ Object {
     "baseName": "toto",
     "buildTool": "maven",
     "cacheProvider": "ehcache",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "",
