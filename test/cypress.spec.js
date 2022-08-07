@@ -3,7 +3,7 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('./utils/expected-files');
 const { appDefaultConfig } = require('../generators/generator-defaults');
-const { REACT, ANGULAR_X, VUE } = require('../jdl/jhipster/client-framework-types');
+const { REACT, ANGULAR, VUE } = require('../jdl/jhipster/client-framework-types');
 const { CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { OAUTH2, JWT } = require('../jdl/jhipster/authentication-types');
 
@@ -58,7 +58,7 @@ describe('jhipster:cypress', () => {
   });
 
   describe('generate cypress with Angular client with JWT', () => {
-    const options = { testFrameworks: [CYPRESS], clientFramework: ANGULAR_X, authenticationType: JWT };
+    const options = { testFrameworks: [CYPRESS], clientFramework: ANGULAR, authenticationType: JWT };
     before(() => {
       return helpers
         .create(path.join(__dirname, '../generators/cypress'))
@@ -83,7 +83,7 @@ describe('jhipster:cypress', () => {
   });
 
   describe('generate cypress with Angular client with OAuth2', () => {
-    const options = { testFrameworks: [CYPRESS], clientFramework: ANGULAR_X, authenticationType: OAUTH2 };
+    const options = { testFrameworks: [CYPRESS], clientFramework: ANGULAR, authenticationType: OAUTH2 };
     before(() => {
       return helpers
         .create(path.join(__dirname, '../generators/cypress'))

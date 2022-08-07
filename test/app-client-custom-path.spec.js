@@ -3,7 +3,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const { SQL, H2_MEMORY, POSTGRESQL } = require('../jdl/jhipster/database-types');
-const { ANGULAR_X, REACT } = require('../jdl/jhipster/client-framework-types');
+const { ANGULAR, REACT } = require('../jdl/jhipster/client-framework-types');
 const { JWT } = require('../jdl/jhipster/authentication-types');
 const { EHCACHE } = require('../jdl/jhipster/cache-types');
 const { MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -33,7 +33,7 @@ describe('JHipster generator custom path', () => {
           })
           .withPrompts({
             baseName: 'jhipster',
-            clientFramework: ANGULAR_X,
+            clientFramework: ANGULAR,
             packageName: 'com.mycompany.myapp',
             packageFolder: 'com/mycompany/myapp',
             serviceDiscoveryType: false,

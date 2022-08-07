@@ -6,7 +6,7 @@ const expectedFiles = require('../utils/expected-files');
 const ClientGenerator = require('../../generators/client');
 const ServerGenerator = require('../../generators/server');
 const { MYSQL, SQL, H2_MEMORY } = require('../../jdl/jhipster/database-types');
-const { ANGULAR_X } = require('../../jdl/jhipster/client-framework-types');
+const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
 const { JWT } = require('../../jdl/jhipster/authentication-types');
 const { EHCACHE } = require('../../jdl/jhipster/cache-types');
 
@@ -131,7 +131,7 @@ describe('JHipster entity generator with multiple blueprints', () => {
           ])
           .withPrompts({
             baseName: 'jhipster',
-            clientFramework: ANGULAR_X,
+            clientFramework: ANGULAR,
             packageName: 'com.mycompany.myapp',
             packageFolder: 'com/mycompany/myapp',
             serviceDiscoveryType: false,

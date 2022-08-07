@@ -8,7 +8,7 @@ const ServerGenerator = require('../../generators/server');
 const CommonGenerator = require('../../generators/common');
 const LanguagesGenerator = require('../../generators/languages');
 const { MYSQL, SQL, H2_MEMORY } = require('../../jdl/jhipster/database-types');
-const { ANGULAR_X } = require('../../jdl/jhipster/client-framework-types');
+const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
 const { JWT } = require('../../jdl/jhipster/authentication-types');
 const { EHCACHE } = require('../../jdl/jhipster/cache-types');
 
@@ -73,7 +73,7 @@ const options = {
 
 const prompts = {
   baseName: 'jhipster',
-  clientFramework: ANGULAR_X,
+  clientFramework: ANGULAR,
   packageName: 'com.mycompany.myapp',
   packageFolder: 'com/mycompany/myapp',
   serviceDiscoveryType: false,

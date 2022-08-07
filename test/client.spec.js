@@ -2,7 +2,7 @@ const { expect } = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
 const { CYPRESS } = require('../jdl/jhipster/test-framework-types');
-const { ANGULAR_X, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
+const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
 const { skipPrettierHelpers: helpers } = require('./utils/utils');
 const expectedFiles = require('./utils/expected-files');
 const constants = require('../generators/generator-constants');
@@ -52,7 +52,7 @@ describe('JHipster client generator', () => {
           enableTranslation: true,
           nativeLanguage: 'en',
           languages: ['fr', 'en'],
-          clientFramework: ANGULAR_X,
+          clientFramework: ANGULAR,
         });
     });
 
@@ -74,7 +74,7 @@ describe('JHipster client generator', () => {
   });
 
   describe('--skip-jhipster-dependencies', () => {
-    [ANGULAR_X, REACT, VUE].forEach(clientFramework => {
+    [ANGULAR, REACT, VUE].forEach(clientFramework => {
       describe(`and ${clientFramework}`, () => {
         let runResult;
         before(async () => {
@@ -106,7 +106,7 @@ describe('JHipster client generator', () => {
         runResult = await helpers
           .create(require.resolve('../generators/client'))
           .withOptions({
-            defaultLocalConfig: { ...appDefaultConfig, clientFramework: ANGULAR_X, testFrameworks: ['cypress'] },
+            defaultLocalConfig: { ...appDefaultConfig, clientFramework: ANGULAR, testFrameworks: ['cypress'] },
           })
           .run();
       });
@@ -199,7 +199,7 @@ describe('JHipster client generator', () => {
           .withOptions({
             defaultLocalConfig: {
               ...appDefaultConfig,
-              clientFramework: ANGULAR_X,
+              clientFramework: ANGULAR,
               testFrameworks: [CYPRESS],
               withAdminUi: false,
             },

@@ -4,7 +4,7 @@ const helpers = require('yeoman-test');
 const Generator = require('yeoman-generator');
 const expectedFiles = require('../utils/expected-files');
 const { MYSQL } = require('../../jdl/jhipster/database-types');
-const { ANGULAR_X } = require('../../jdl/jhipster/client-framework-types');
+const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
 const { JWT } = require('../../jdl/jhipster/authentication-types');
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 
@@ -44,7 +44,7 @@ describe('JHipster client generator with sbs blueprint', () => {
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
       .withPrompts({
         baseName: 'jhipster',
-        clientFramework: ANGULAR_X,
+        clientFramework: ANGULAR,
         enableTranslation: true,
         nativeLanguage: 'en',
         languages: ['fr', 'en'],
