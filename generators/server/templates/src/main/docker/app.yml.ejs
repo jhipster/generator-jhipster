@@ -79,6 +79,8 @@ _%>
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
       - JHIPSTER_SLEEP=60 # gives time for microservices to boot before the gateway, the entire stack will be ready to accept incomming requests.
+<%_ } else if (applicationTypeMicroservice && authenticationTypeOauth2) { _%>
+      - JHIPSTER_SLEEP=40 # gives time for other services to boot before the application
 <%_ } else { _%>
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
 <%_ } _%>
