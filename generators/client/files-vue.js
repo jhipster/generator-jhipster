@@ -267,6 +267,7 @@ const vueFiles = {
         'spec/app/shared/alert/alert.service.spec.ts',
         'spec/app/shared/config/axios-interceptor.spec.ts',
         'spec/app/shared/data/data-utils.service.spec.ts',
+        'spec/app/shared/sort/sorts.spec.ts',
       ],
     },
     {

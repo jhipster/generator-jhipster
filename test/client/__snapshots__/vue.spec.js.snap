@@ -497,6 +497,9 @@ Object {
   "src/test/javascript/spec/app/shared/data/data-utils.service.spec.ts": Object {
     "stateCleared": "modified",
   },
+  "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/i18n/messages_en.properties": Object {
     "stateCleared": "modified",
   },
