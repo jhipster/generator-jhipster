@@ -12,4 +12,10 @@ describe('Formatter i18n', () => {
 
     expect(result[0]).toBe('val1');
   });
+
+  it('should not interpolate message without values', () => {
+    const result = formatter.interpolate('this is a text', undefined);
+
+    expect(result[0]).toBe('this is a text');
+  });
 });
