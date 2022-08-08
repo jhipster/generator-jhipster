@@ -27,6 +27,7 @@ import {
   getSortState
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
@@ -43,6 +44,16 @@ export const UserManagement = () => {
   const [pagination, setPagination] = useState(
     overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, 'id'), location.search)
   );
+
+  const [sortIcons, setSortIcons] = useState({
+      id: faSortUp,
+      login: faSort,
+      email: faSort,
+      langKey: faSort,
+      createdDate: faSort,
+      lastModifiedBy: faSort,
+      lastModifiedDate: faSort,
+  });
 
   const getUsersFromProps = () => {
     dispatch(
@@ -77,12 +88,25 @@ export const UserManagement = () => {
     }
   }, [location.search]);
 
-  const sort = p => () =>
+  const sort = p => () => {
+    const asc = pagination.sort !== p || pagination.order !== ASC;
+    const icons = {
+      id: faSort,
+      login: faSort,
+      email: faSort,
+      langKey: faSort,
+      createdDate: faSort,
+      lastModifiedBy: faSort,
+      lastModifiedDate: faSort,
+    };
+    icons[p] = asc ? faSortUp : faSortDown;
+    setSortIcons(icons);
     setPagination({
       ...pagination,
-      order: pagination.order === ASC ? DESC : ASC,
+      order: asc ? ASC : DESC,
       sort: p
     });
+  }
 
   const handlePagination = currentPage =>
     setPagination({
@@ -124,21 +148,21 @@ export const UserManagement = () => {
       <Table responsive striped>
         <thead>
           <tr>
-            <th className="hand" onClick={sort('id')}><Translate contentKey="global.field.id">ID</Translate><FontAwesomeIcon icon="sort" /></th>
-            <th className="hand" onClick={sort('login')}><Translate contentKey="userManagement.login">Login</Translate><FontAwesomeIcon icon="sort" /></th>
-            <th className="hand" onClick={sort('email')}><Translate contentKey="userManagement.email">Email</Translate><FontAwesomeIcon icon="sort" /></th>
+            <th className="hand" onClick={sort('id')}><Translate contentKey="global.field.id">ID</Translate><FontAwesomeIcon icon={sortIcons.id} /></th>
+            <th className="hand" onClick={sort('login')}><Translate contentKey="userManagement.login">Login</Translate><FontAwesomeIcon icon={sortIcons.login} /></th>
+            <th className="hand" onClick={sort('email')}><Translate contentKey="userManagement.email">Email</Translate><FontAwesomeIcon icon={sortIcons.email} /></th>
             <th />
 <%_ if (enableTranslation) { _%>
-            <th className="hand" onClick={sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate><FontAwesomeIcon icon="sort" /></th>
+            <th className="hand" onClick={sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate><FontAwesomeIcon icon={sortIcons.langKey} /></th>
 <%_ } _%>
             <th><Translate contentKey="userManagement.profiles">Profiles</Translate></th>
 <%_ if (!databaseTypeCassandra) { _%>
-            <th className="hand" onClick={sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate><FontAwesomeIcon icon="sort" /></th>
+            <th className="hand" onClick={sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate><FontAwesomeIcon icon={sortIcons.createdDate} /></th>
             <th className="hand" onClick={sort('lastModifiedBy')}>
-              <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate><FontAwesomeIcon icon="sort" />
+              <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate><FontAwesomeIcon icon={sortIcons.lastModifiedBy} />
             </th>
             <th id="modified-date-sort" className="hand" onClick={sort('lastModifiedDate')}>
-              <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate><FontAwesomeIcon icon="sort" />
+              <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate><FontAwesomeIcon icon={sortIcons.lastModifiedDate} />
             </th>
             <th />
 <%_ } _%>
