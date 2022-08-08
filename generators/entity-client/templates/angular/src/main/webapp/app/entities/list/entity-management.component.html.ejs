@@ -71,7 +71,7 @@
     <div class="table-responsive table-entities" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr<% if (!field.transient) { %>> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()"<% } %>>
+                <tr <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
                     <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>">
                         <div class="d-flex">
