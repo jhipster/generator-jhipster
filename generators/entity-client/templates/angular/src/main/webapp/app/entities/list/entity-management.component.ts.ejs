@@ -216,7 +216,7 @@ export class <%= componentName %> implements OnInit {
     }
 
     protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
-<%_ if (!paginationNo) { _%>
+<%_ if (paginationPagination) { _%>
       const page = params.get(PAGE_HEADER);
       this.page = +(page ?? 1);
 <%_ } _%>

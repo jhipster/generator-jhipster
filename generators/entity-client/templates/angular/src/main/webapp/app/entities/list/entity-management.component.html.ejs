@@ -87,7 +87,7 @@
                     <th scope="col"></th>
                 </tr>
             </thead>
-            <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
+            <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page - 1 >= links['last']" [infiniteScrollDistance]="0"<% } %>>
                 <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: track<%= primaryKey.nameCapitalized %>" data-cy="entityTable">
 <%_
 const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKey.name}, 'view']"`;
