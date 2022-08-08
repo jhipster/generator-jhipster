@@ -19,11 +19,18 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
+const { expect: jestExpect } = require('expect');
 
 const fs = require('fs');
 const JDLObject = require('../../../jdl/models/jdl-object');
 const JDLEntity = require('../../../jdl/models/jdl-entity');
 const JDLExporter = require('../../../jdl/exporters/jdl-exporter');
+const JDLApplication = require('../../../jdl/models/jdl-application');
+
+const {
+  OptionNames: { CLIENT_FRAMEWORK },
+} = require('../../../jdl/jhipster/application-options');
+const { NO: NO_CLIENT_FRAMEWORK } = require('../../../jdl/jhipster/client-framework-types');
 
 describe('JDLExporter', () => {
   describe('exportToJDL', () => {
@@ -66,31 +73,54 @@ describe('JDLExporter', () => {
         });
       });
       context('without a path', () => {
-        const DEFAULT_PATH = 'app.jdl';
-        let fileExistence;
-        let jdlContent = '';
+        context('exports entity', () => {
+          const DEFAULT_PATH = 'app.jdl';
+          let fileExistence;
+          let jdlContent = '';
 
-        before(() => {
-          const jdlObject = new JDLObject();
-          jdlObject.addEntity(
-            new JDLEntity({
-              name: 'Toto',
-            })
-          );
-          JDLExporter.exportToJDL(jdlObject);
-          fileExistence = fs.statSync(DEFAULT_PATH).isFile();
-          jdlContent = fs.readFileSync(DEFAULT_PATH, 'utf-8').toString();
-        });
+          before(() => {
+            const jdlObject = new JDLObject();
+            jdlObject.addEntity(
+              new JDLEntity({
+                name: 'Toto',
+              })
+            );
+            JDLExporter.exportToJDL(jdlObject);
+            fileExistence = fs.statSync(DEFAULT_PATH).isFile();
+            jdlContent = fs.readFileSync(DEFAULT_PATH, 'utf-8').toString();
+          });
 
-        after(() => {
-          fs.unlinkSync(DEFAULT_PATH);
-        });
+          after(() => {
+            fs.unlinkSync(DEFAULT_PATH);
+          });
 
-        it('should export the JDL to the default one', () => {
-          expect(fileExistence).to.be.true;
+          it('should export the JDL to the default one', () => {
+            expect(fileExistence).to.be.true;
+          });
+          it('should write the JDL inside the file', () => {
+            expect(jdlContent).to.equal('entity Toto\n');
+          });
         });
-        it('should write the JDL inside the file', () => {
-          expect(jdlContent).to.equal('entity Toto\n');
+        context('exports application', () => {
+          context('with clientFramework no', () => {
+            let jdlObject;
+            before(() => {
+              jdlObject = new JDLObject();
+              jdlObject.addApplication(new JDLApplication({ config: { [CLIENT_FRAMEWORK]: NO_CLIENT_FRAMEWORK } }));
+            });
+
+            it('should export the JDL and match snapshot', () => {
+              jestExpect(JDLExporter.exportToJDL(jdlObject, false)).toMatchInlineSnapshot(`
+"application {
+  config {
+    clientFramework no
+  }
+}
+
+"
+`);
+            });
+          });
         });
       });
     });

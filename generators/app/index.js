@@ -407,6 +407,12 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             this.jhipsterConfig.clientFramework === CLIENT_FRAMEWORK_NO;
           this.jhipsterConfig.withAdminUi = false;
           this.jhipsterConfig.skipUserManagement = true;
+        } else {
+          this.jhipsterConfig.skipClient = this.jhipsterConfig.skipClient || this.jhipsterConfig.clientFramework === CLIENT_FRAMEWORK_NO;
+        }
+
+        if (this.jhipsterConfig.skipClient) {
+          this.jhipsterConfig.clientFramework = CLIENT_FRAMEWORK_NO;
         }
 
         // Set app defaults
@@ -441,7 +447,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         if (!this.jhipsterConfig.skipServer) {
           await this.composeWithJHipster(GENERATOR_SERVER, true);
         }
-        if (!this.jhipsterConfig.skipClient) {
+        if (this.jhipsterConfig.clientFramework !== CLIENT_FRAMEWORK_NO) {
           await this.composeWithJHipster(GENERATOR_CLIENT, true);
         }
         if (!this.configOptions.skipI18n) {

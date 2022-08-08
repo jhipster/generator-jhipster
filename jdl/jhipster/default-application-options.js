@@ -35,7 +35,7 @@ const serviceDiscoveryTypes = require('./service-discovery-types');
 
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
-const { ANGULAR, ANGULAR_X } = require('./client-framework-types');
+const { ANGULAR, ANGULAR_X, NO: NO_CLIENT_FRAMEWORK } = require('./client-framework-types');
 
 const { MAVEN } = require('./build-tool-types');
 
@@ -118,7 +118,9 @@ function getConfigForMonolithApplication(customOptions = {}) {
   if (options[AUTHENTICATION_TYPE] === OAUTH2) {
     options[SKIP_USER_MANAGEMENT] = true;
   }
-
+  if (options[SKIP_CLIENT]) {
+    options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
+  }
   return {
     ...options,
     [APPLICATION_TYPE]: MONOLITH,
@@ -169,12 +171,11 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
     [SKIP_USER_MANAGEMENT]: true,
     ...customOptions,
   };
-  let skipClient = options[SKIP_CLIENT];
-  if (skipClient === undefined) {
-    skipClient = options[CLIENT_FRAMEWORK] === undefined;
+  if (options[SKIP_CLIENT] === undefined) {
+    options[SKIP_CLIENT] = options[CLIENT_FRAMEWORK] === undefined || options[CLIENT_FRAMEWORK] === NO_CLIENT_FRAMEWORK;
   }
-  if (skipClient) {
-    delete options[CLIENT_FRAMEWORK];
+  if (options[SKIP_CLIENT]) {
+    options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
     delete options[SKIP_SERVER];
   }
   delete options[CLIENT_THEME];
@@ -192,7 +193,6 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
   return {
     ...options,
     [APPLICATION_TYPE]: MICROSERVICE,
-    [SKIP_CLIENT]: skipClient,
   };
 }
 
@@ -226,6 +226,9 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
   }
   if (!options[PACKAGE_FOLDER] && options[PACKAGE_NAME]) {
     options[PACKAGE_FOLDER] = options[PACKAGE_NAME].replace(/\./g, '/');
+  }
+  if (options[SKIP_CLIENT]) {
+    options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
   }
   if (options[CLIENT_FRAMEWORK] === ANGULAR) {
     options[CLIENT_FRAMEWORK] = ANGULAR_X;
