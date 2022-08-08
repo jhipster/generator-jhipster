@@ -169,6 +169,12 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.jhipsterConfig.devServerPort = devServerPort;
       },
 
+      upgradeAngular() {
+        if (this.jhipsterConfig.clientFramework === 'angularX') {
+          this.jhipsterConfig.clientFramework = ANGULAR;
+        }
+      },
+
       saveConfig() {
         this.setConfigDefaults(clientDefaultConfig);
       },
