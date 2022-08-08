@@ -214,11 +214,6 @@ const baseServerFiles = {
       templates: ['entrypoint.sh'],
     },
   ],
-  node: [
-    {
-      templates: ['.npmrc'],
-    },
-  ],
   packageJson: [
     {
       condition: generator => generator.skipClient,
