@@ -1,53 +1,190 @@
 import { convertToParamMap, ParamMap, Params } from '@angular/router';
-import { FilterOptions, IFilterOptions } from './filter.model';
+import { FilterOptions, IFilterOptions, IFilterOption, FilterOption } from './filter.model';
 
 describe('FilterModel Tests', () => {
-  const oneValidParam: Params = {
-    test: 'blub',
-    'filter[hello.in]': 'world',
-    'filter[invalid': 'invalid',
-    filter_invalid2: 'invalid',
-  };
+  describe('FilterOption', () => {
+    let filterOption: IFilterOption;
 
-  const noValidParam: Params = {
-    test: 'blub',
-    'filter[invalid': 'invalid',
-    filter_invalid2: 'invalid',
-  };
+    beforeEach(() => {
+      filterOption = new FilterOption('foo', ['bar', 'bar2']);
+    });
 
-  const paramWithTwoValues: Params = {
-    'filter[hello.in]': ['world', 'world2'],
-  };
+    it('nameAsQueryParam returns query key', () => {
+      expect(filterOption.nameAsQueryParam()).toEqual('filter[foo]');
+    });
 
-  it('should parse from Params if there are any', () => {
-    const filters: IFilterOptions = new FilterOptions();
+    describe('addValue', () => {
+      it('adds multiples unique values and returns true', () => {
+        const ret = filterOption.addValue('bar2', 'bar3', 'bar4');
+        expect(filterOption.values).toMatchObject(['bar', 'bar2', 'bar3', 'bar4']);
+        expect(ret).toBe(true);
+      });
+      it("doesn't adds duplicated values and return false", () => {
+        const ret = filterOption.addValue('bar', 'bar2');
+        expect(filterOption.values).toMatchObject(['bar', 'bar2']);
+        expect(ret).toBe(false);
+      });
+    });
 
-    const paramMap: ParamMap = convertToParamMap(oneValidParam);
+    describe('removeValue', () => {
+      it('removes the exiting value and return true', () => {
+        const ret = filterOption.removeValue('bar');
+        expect(filterOption.values).toMatchObject(['bar2']);
+        expect(ret).toBe(true);
+      });
+      it("doesn't removes the value and return false", () => {
+        const ret = filterOption.removeValue('foo');
+        expect(filterOption.values).toMatchObject(['bar', 'bar2']);
+        expect(ret).toBe(false);
+      });
+    });
 
-    filters.initializeFromParams(paramMap);
-
-    expect(filters.hasAnyFilterSet()).toBeTruthy();
-
-    expect(filters.filterOptions).toMatchObject([{ name: 'hello.in', values: ['world'] }]);
+    describe('equals', () => {
+      it('returns true to matching options', () => {
+        const otherFilterOption = new FilterOption(filterOption.name, filterOption.values.concat());
+        expect(filterOption.equals(otherFilterOption)).toBe(true);
+        expect(otherFilterOption.equals(filterOption)).toBe(true);
+      });
+      it('returns false to different name', () => {
+        const otherFilterOption = new FilterOption('bar', filterOption.values.concat());
+        expect(filterOption.equals(otherFilterOption)).toBe(false);
+        expect(otherFilterOption.equals(filterOption)).toBe(false);
+      });
+      it('returns false to different values', () => {
+        const otherFilterOption = new FilterOption('bar', []);
+        expect(filterOption.equals(otherFilterOption)).toBe(false);
+        expect(otherFilterOption.equals(filterOption)).toBe(false);
+      });
+    });
   });
 
-  it('should parse from Params and have none if there are none', () => {
-    const filters: IFilterOptions = new FilterOptions();
+  describe('FilterOptions', () => {
+    describe('hasAnyFilterSet', () => {
+      it('with empty options returns false', () => {
+        const filters = new FilterOptions();
+        expect(filters.hasAnyFilterSet()).toBe(false);
+      });
+      it('with options and empty values returns false', () => {
+        const filters = new FilterOptions([new FilterOption('foo'), new FilterOption('bar')]);
+        expect(filters.hasAnyFilterSet()).toBe(false);
+      });
+      it('with option and value returns true', () => {
+        const filters = new FilterOptions([new FilterOption('foo', ['bar'])]);
+        expect(filters.hasAnyFilterSet()).toBe(true);
+      });
+    });
 
-    const paramMap: ParamMap = convertToParamMap(noValidParam);
+    describe('clear', () => {
+      it('removes filters', () => {
+        const filters = new FilterOptions([new FilterOption('foo'), new FilterOption('bar')]);
+        filters.clear();
+        expect(filters.filterOptions).toMatchObject([]);
+      });
+    });
 
-    filters.initializeFromParams(paramMap);
+    describe('clone', () => {
+      it('returns an identical FilterOptions', () => {
+        const filters = new FilterOptions([new FilterOption('foo', ['aValue', 'anotherValue']), new FilterOption('bar')]);
+        expect(filters.clone()).toMatchObject(filters);
+      });
+    });
 
-    expect(filters.hasAnyFilterSet()).toBeFalsy();
-  });
+    describe('equals', () => {
+      it('returns true for identical FilterOptions', () => {
+        const filters = new FilterOptions([new FilterOption('foo', ['aValue', 'anotherValue']), new FilterOption('bar')]);
+        const otherFilters = new FilterOptions([new FilterOption('foo', ['aValue', 'anotherValue']), new FilterOption('bar')]);
+        expect(filters.equals(otherFilters)).toBe(true);
+      });
+      it('returns false for different FilterOptions', () => {
+        const filters = new FilterOptions([new FilterOption('foo', ['aValue', 'anotherValue']), new FilterOption('bar')]);
+        const otherFilters = new FilterOptions([new FilterOption('foo', ['aValue', 'anotherValue']), new FilterOption('bar', ['bar'])]);
+        expect(filters.equals(otherFilters)).toBe(false);
+      });
+    });
 
-  it('should parse from Params and have a parameter with 2 values', () => {
-    const filters: IFilterOptions = new FilterOptions();
+    describe('getFilterOptionByName', () => {
+      it('finds the option if exists', () => {
+        const fooOption = new FilterOption('foo');
+        const filters = new FilterOptions([fooOption, new FilterOption('bar')]);
+        expect(filters.getFilterOptionByName('foo')).toStrictEqual(fooOption);
+      });
 
-    const paramMap: ParamMap = convertToParamMap(paramWithTwoValues);
+      it("doesn't finds the option if doesn't exists", () => {
+        const filters = new FilterOptions();
+        expect(filters.getFilterOptionByName('bar')).toBe(null);
+      });
 
-    filters.initializeFromParams(paramMap);
+      it('passing true to add, creates the option', () => {
+        const filters = new FilterOptions();
+        expect(filters.getFilterOptionByName('bar', true)).toMatchObject({ name: 'bar' });
+      });
+    });
 
-    expect(filters.filterOptions).toMatchObject([{ name: 'hello.in', values: ['world', 'world2'] }]);
+    describe('initializeFromParams', () => {
+      const oneValidParam: Params = {
+        test: 'blub',
+        'filter[hello.in]': 'world',
+        'filter[invalid': 'invalid',
+        filter_invalid2: 'invalid',
+      };
+
+      const noValidParam: Params = {
+        test: 'blub',
+        'filter[invalid': 'invalid',
+        filter_invalid2: 'invalid',
+      };
+
+      const paramWithTwoValues: Params = {
+        'filter[hello.in]': ['world', 'world2'],
+      };
+
+      const paramWithTwoKeys: Params = {
+        'filter[hello.in]': ['world', 'world2'],
+        'filter[hello.notIn]': ['world3', 'world4'],
+      };
+
+      it('should parse from Params if there are any', () => {
+        const filters: IFilterOptions = new FilterOptions();
+
+        const paramMap: ParamMap = convertToParamMap(oneValidParam);
+
+        filters.initializeFromParams(paramMap);
+
+        expect(filters.filterOptions).toMatchObject([{ name: 'hello.in', values: ['world'] }]);
+      });
+
+      it('should parse from Params and have none if there are none', () => {
+        const filters: IFilterOptions = new FilterOptions();
+
+        const paramMap: ParamMap = convertToParamMap(noValidParam);
+
+        filters.initializeFromParams(paramMap);
+
+        expect(filters.filterOptions).toMatchObject([]);
+      });
+
+      it('should parse from Params and have a parameter with 2 values', () => {
+        const filters: IFilterOptions = new FilterOptions();
+
+        const paramMap: ParamMap = convertToParamMap(paramWithTwoValues);
+
+        filters.initializeFromParams(paramMap);
+
+        expect(filters.filterOptions).toMatchObject([{ name: 'hello.in', values: ['world', 'world2'] }]);
+      });
+
+      it('should parse from Params and have a parameter with 2 keys', () => {
+        const filters: IFilterOptions = new FilterOptions();
+
+        const paramMap: ParamMap = convertToParamMap(paramWithTwoKeys);
+
+        filters.initializeFromParams(paramMap);
+
+        expect(filters.filterOptions).toMatchObject([
+          { name: 'hello.in', values: ['world', 'world2'] },
+          { name: 'hello.notIn', values: ['world3', 'world4'] },
+        ]);
+      });
+    });
   });
 });

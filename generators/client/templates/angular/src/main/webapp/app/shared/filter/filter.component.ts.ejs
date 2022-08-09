@@ -6,8 +6,7 @@ import { IFilterableComponent, IFilterOptions } from './filter.model';
   templateUrl: './filter.component.html',
 })
 export class FilterComponent implements IFilterableComponent {
-  @Input()
-  filters!: IFilterOptions;
+  @Input() filters!: IFilterOptions;
 
   @Output() filterChange = new EventEmitter<IFilterOptions>();
 
@@ -16,8 +15,9 @@ export class FilterComponent implements IFilterableComponent {
     this.filterChange.emit();
   }
 
-  clearFilter(filterName: string, value?: string): void {
-    this.filters.removeByName(filterName, value);
-    this.filterChange.emit();
+  clearFilter(filterName: string, value: string): void {
+    if (this.filters.getFilterOptionByName(filterName)?.removeValue(value)) {
+      this.filterChange.emit();
+    }
   }
 }
