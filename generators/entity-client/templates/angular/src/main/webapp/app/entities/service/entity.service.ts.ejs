@@ -67,7 +67,7 @@ export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 export class <%= entityAngularName %>Service {
     protected resourceUrl = this.applicationConfigService.getEndpointFor('api/<%= entityApiUrl %>'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
 <%_ if (searchEngine) { _%>
-    protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/<%= entityApiUrl %>'<% if ((applicationTypeGateway || locals.microserviceName) && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
+    protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/<%= entityApiUrl %>'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
 <%_ } _%>
 
     constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
