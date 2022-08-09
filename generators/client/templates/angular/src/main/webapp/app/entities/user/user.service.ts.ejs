@@ -28,7 +28,7 @@ import { IUser, getUserIdentifier } from './user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private resourceUrl = this.applicationConfigService.getEndpointFor('api/users'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/users'<% if ((applicationTypeGateway || applicationTypeMicroservice) && user.microserviceName) { %>, '<%= user.microserviceName.toLowerCase() %>'<% } %>);
 
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
