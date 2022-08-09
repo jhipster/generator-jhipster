@@ -39,6 +39,7 @@ import {
   } _%>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ if (!paginationNo) { _%>
@@ -72,6 +73,18 @@ export const <%= entityReactName %> = () => {
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
   const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), location.search));
+  const createSortIcons = (sortUp: boolean, sort: string) => {
+    const icons = {
+<%_ for (field of fields) {
+  const fieldName = field.fieldName;
+_%>
+    <%= fieldName %>: faSort,
+<%_ } _%>
+    }
+    icons[sort] = sortUp ? faSortUp : faSortDown;
+    return icons;
+  };
+  const [sortIcons, setSortIcons] = useState(createSortIcons(paginationState.order === ASC, paginationState.sort));
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   const [sorting, setSorting] = useState(false);
@@ -248,17 +261,29 @@ export const <%= entityReactName %> = () => {
   const sort = p => () => {
   <%_ if (paginationInfiniteScroll) { _%>
     dispatch(reset());
+    const asc = paginationState.sort !== p || paginationState.order !== ASC;
+    setSortIcons(createSortIcons(asc, p));
     setPaginationState({
       ...paginationState,
       activePage: 1,
-      order: paginationState.order === ASC ? DESC : ASC,
+      order: asc ? ASC : DESC,
       sort: p
     });
     setSorting(true);
   <%_ } else { _%>
+    const asc = paginationState.sort !== p || paginationState.order !== ASC;
+    const icons = {
+      <%_ for (field of fields) {
+        const fieldName = field.fieldName;
+      _%>
+        <%= fieldName %>: faSort,
+      <%_ } _%>
+    };
+    icons[p] = asc ? faSortUp : faSortDown;
+    setSortIcons(icons);
     setPaginationState({
       ...paginationState,
-      order: paginationState.order === ASC ? DESC : ASC,
+      order: asc ? ASC : DESC,
       sort: p
     });
   <%_ } _%>
@@ -336,13 +361,13 @@ export const <%= entityReactName %> = () => {
               <thead>
                 <tr>
 <%_ for (field of fields) { _%>
-                  <th<% if (!paginationNo) { %> className="hand" onClick={sort('<%= field.fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate><% if (!paginationNo) { %> <FontAwesomeIcon icon="sort" /><% } %></th>
+                  <th<% if (!paginationNo) { %> className="hand" onClick={sort('<%= field.fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate><% if (!paginationNo) { %> <FontAwesomeIcon icon={sortIcons.<%= field.fieldName %>} /><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
     <%_ if (relationship.relationshipManyToOne
     || (relationship.relationshipOneToOne && relationship.ownerSide)
     || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) { _%>
-                  <th<% if (!paginationNo) { %> <% } %>><Translate contentKey="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%= relationship.relationshipNameHumanized %></Translate><% if (!paginationNo) { %> <FontAwesomeIcon icon="sort" /><% } %></th>
+                  <th<% if (!paginationNo) { %> <% } %>><Translate contentKey="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%= relationship.relationshipNameHumanized %></Translate></th>
     <%_ } _%>
 <%_ } _%>
                   <th />
