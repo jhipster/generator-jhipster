@@ -88,7 +88,12 @@
     || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
     const fieldName = "." + relationship.otherEntityField;
   _%>
-                    <th scope="col" <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.' + relationship.relationshipName) %></span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>">
+                        <div class="d-flex">
+                            <span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.' + relationship.relationshipName) %></span>
+                            <fa-icon class="p-1" icon="sort"></fa-icon>
+                        </div>
+                    </th>
   <%_ } _%>
 <%_ } _%>
                     <th scope="col"></th>
