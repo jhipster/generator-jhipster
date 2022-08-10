@@ -45,7 +45,7 @@ export default class GatewayComponent implements OnInit {
       <%_ if (serviceDiscoveryConsul) { _%>
       this.gatewayRoutes = gatewayRoutes.map(gatewayRoute => {
         gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
-          if (serviceInstance.healthService && serviceInstance.healthService.checks) {
+          if (serviceInstance?.healthService?.checks) {
             if (
               serviceInstance.healthService.checks.filter((check: any) => check.status === 'PASSING').length ===
               serviceInstance.healthService.checks.length
@@ -55,7 +55,7 @@ export default class GatewayComponent implements OnInit {
               serviceInstance.instanceInfo = { status: 'DOWN'} ;
             }
           }
-          return serviceInstance;
+          return serviceInstance as object;
         });
         return gatewayRoute;
       });
