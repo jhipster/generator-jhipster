@@ -41,9 +41,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -1448,9 +1445,6 @@ Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
-  ".npmrc": Object {
     "stateCleared": "modified",
   },
   ".prettierignore": Object {
