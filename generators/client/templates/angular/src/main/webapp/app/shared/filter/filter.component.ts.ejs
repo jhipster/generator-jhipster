@@ -1,23 +1,18 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { IFilterableComponent, IFilterOptions } from './filter.model';
+import { Component, Input } from '@angular/core';
+import { IFilterOptions } from './filter.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-filter',
   templateUrl: './filter.component.html',
 })
-export class FilterComponent implements IFilterableComponent {
+export class FilterComponent {
   @Input() filters!: IFilterOptions;
-
-  @Output() filterChange = new EventEmitter<IFilterOptions>();
 
   clearAllFilters(): void {
     this.filters.clear();
-    this.filterChange.emit();
   }
 
   clearFilter(filterName: string, value: string): void {
-    if (this.filters.getFilterOptionByName(filterName)?.removeValue(value)) {
-      this.filterChange.emit();
-    }
+    this.filters.removeFilter(filterName, value);
   }
 }

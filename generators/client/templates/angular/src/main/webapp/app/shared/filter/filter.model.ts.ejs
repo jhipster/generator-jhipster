@@ -1,30 +1,20 @@
 import { ParamMap } from '@angular/router';
+import { Subject } from 'rxjs';
 
 export interface IFilterOptions {
-  filterOptions: IFilterOption[];
+  readonly filterChanges: Subject<FilterOption[]>;
+  get filterOptions(): IFilterOption[];
   hasAnyFilterSet(): boolean;
-  clear(): void;
-  getFilterOptionByName(name: string, add: true): IFilterOption;
-  getFilterOptionByName(name: string, add: false): IFilterOption | null;
-  getFilterOptionByName(name: string): IFilterOption | null;
+  clear(): boolean;
   initializeFromParams(params: ParamMap): boolean;
-  equals(other: IFilterOptions): boolean;
-  clone(): IFilterOptions;
+  addFilter(name: string, ...values: string[]): boolean;
+  removeFilter(name: string, value: string): boolean;
 }
 
 export interface IFilterOption {
   name: string;
   values: string[];
-  isSet(): boolean;
   nameAsQueryParam(): string;
-  addValue(...values: string[]): boolean;
-  removeValue(value: string): boolean;
-  equals(other: IFilterOption): boolean;
-}
-
-export interface IFilterableComponent {
-  clearFilter(filterName: string, value?: string): void;
-  clearAllFilters(): void;
 }
 
 export class FilterOption implements IFilterOption {
@@ -59,6 +49,10 @@ export class FilterOption implements IFilterOption {
     return true;
   }
 
+  clone(): FilterOption {
+    return new FilterOption(this.name, this.values.concat());
+  }
+
   equals(other: IFilterOption): boolean {
     return (
       this.name === other.name &&
@@ -70,58 +64,34 @@ export class FilterOption implements IFilterOption {
 }
 
 export class FilterOptions implements IFilterOptions {
-  filterOptions: IFilterOption[];
+  readonly filterChanges: Subject<FilterOption[]> = new Subject();
+  private _filterOptions: FilterOption[];
 
-  constructor(filterOptions: IFilterOption[] = []) {
-    this.filterOptions = filterOptions;
+  constructor(filterOptions: FilterOption[] = []) {
+    this._filterOptions = filterOptions;
+  }
+
+  get filterOptions(): FilterOption[] {
+    return this._filterOptions.filter(option => option.isSet());
   }
 
   hasAnyFilterSet(): boolean {
-    return this.filterOptions.length > 0 && this.filterOptions.some(e => e.isSet());
+    return this._filterOptions.some(e => e.isSet());
   }
 
-  clear(): void {
-    this.filterOptions = [];
-  }
-
-  getFilterOptionByName(name: string, add: true): IFilterOption;
-  getFilterOptionByName(name: string, add: false): IFilterOption | null;
-  getFilterOptionByName(name: string): IFilterOption | null;
-  getFilterOptionByName(name: string, add = false): IFilterOption | null {
-    const addOption = (option: IFilterOption): IFilterOption => {
-      this.filterOptions.push(option);
-      return option;
-    };
-
-    return this.filterOptions.find(thisOption => thisOption.name === name) ?? (add ? addOption(new FilterOption(name)) : null);
-  }
-
-  equals(other: IFilterOptions): boolean {
-    const thisFilters = this.filterOptions.filter(option => option.isSet());
-    const otherFilters = other.filterOptions.filter(option => option.isSet());
-    if (thisFilters.length !== otherFilters.length) {
-      return false;
+  clear(): boolean {
+    const hasFields = this.hasAnyFilterSet();
+    this._filterOptions = [];
+    if (hasFields) {
+      this.changed();
     }
-    return (
-      thisFilters.every(option => other.getFilterOptionByName(option.name)?.equals(option)) &&
-      otherFilters.every(option => this.getFilterOptionByName(option.name)?.equals(option))
-    );
-  }
-
-  clone(): IFilterOptions {
-    const newObject: FilterOptions = new FilterOptions();
-
-    this.filterOptions.forEach(option => {
-      newObject.filterOptions.push(new FilterOption(option.name, option.values.concat()));
-    });
-
-    return newObject;
+    return hasFields;
   }
 
   initializeFromParams(params: ParamMap): boolean {
-    const oldFilters: IFilterOptions = this.clone();
+    const oldFilters: FilterOptions = this.clone();
 
-    this.clear();
+    this._filterOptions = [];
 
     const filterRegex = /filter\[(.+)\]/;
     params.keys
@@ -133,6 +103,54 @@ export class FilterOptions implements IFilterOptions {
         }
       });
 
-    return !oldFilters.equals(this);
+    if (oldFilters.equals(this)) {
+      return false;
+    }
+    return true;
+  }
+
+  addFilter(name: string, ...values: string[]): boolean {
+    if (this.getFilterOptionByName(name, true).addValue(...values)) {
+      this.changed();
+      return true;
+    }
+    return false;
+  }
+
+  removeFilter(name: string, value: string): boolean {
+    if (this.getFilterOptionByName(name)?.removeValue(value)) {
+      this.changed();
+      return true;
+    }
+    return false;
+  }
+
+  protected changed(): void {
+    this.filterChanges.next(this.filterOptions.map(option => option.clone()));
+  }
+
+  protected equals(other: FilterOptions): boolean {
+    const thisFilters = this.filterOptions;
+    const otherFilters = other.filterOptions;
+    if (thisFilters.length !== otherFilters.length) {
+      return false;
+    }
+    return thisFilters.every(option => other.getFilterOptionByName(option.name)?.equals(option));
+  }
+
+  protected clone(): FilterOptions {
+    return new FilterOptions(this.filterOptions.map(option => new FilterOption(option.name, option.values.concat())));
+  }
+
+  protected getFilterOptionByName(name: string, add: true): FilterOption;
+  protected getFilterOptionByName(name: string, add: false): FilterOption | null;
+  protected getFilterOptionByName(name: string): FilterOption | null;
+  protected getFilterOptionByName(name: string, add = false): FilterOption | null {
+    const addOption = (option: FilterOption): FilterOption => {
+      this._filterOptions.push(option);
+      return option;
+    };
+
+    return this._filterOptions.find(thisOption => thisOption.name === name) ?? (add ? addOption(new FilterOption(name)) : null);
   }
 }

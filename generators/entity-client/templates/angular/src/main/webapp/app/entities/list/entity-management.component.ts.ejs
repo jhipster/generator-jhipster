@@ -67,7 +67,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-import { FilterOptions, IFilterOptions } from 'app/shared/filter/filter.model';
+import { FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter/filter.model';
 <%_ } _%>
 <%_ if (paginationNo) { _%>
 import { SortService } from 'app/shared/sort/sort.service';
@@ -157,6 +157,9 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
     ngOnInit(): void {
       this.load();
+<% if (jpaMetamodelFiltering && paginationPagination) { %>
+      this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.predicate, this.ascending, filterOptions));
+<% } %>
     }
 
 <%_ if (fieldsContainBlob) { _%>
@@ -196,12 +199,12 @@ export class <%= componentName %> implements OnInit {
     }
 
     navigateToWithComponentValues(): void {
-      this.handleNavigation(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>);
+      this.handleNavigation(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>);
     }
 
 <%_ if (!paginationNo) { _%>
     navigateToPage(page = this.page): void {
-      this.handleNavigation(page, this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>);
+      this.handleNavigation(page, this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>);
     }
 
 <%_ } _%>
@@ -210,7 +213,7 @@ export class <%= componentName %> implements OnInit {
         .pipe(
           tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
           switchMap(() =>
-            this.queryBackend(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>)
+            this.queryBackend(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>)
           )
         );
     }
@@ -293,7 +296,7 @@ export class <%= componentName %> implements OnInit {
     }
 
 <%_ } _%>
-    protected queryBackend(<% if (!paginationNo) { %>page?: number, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filters?: IFilterOptions<% } %><% if (searchEngine) { %>, currentSearch?: string<% } %>): Observable<EntityArrayResponseType> {
+    protected queryBackend(<% if (!paginationNo) { %>page?: number, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngine) { %>, currentSearch?: string<% } %>): Observable<EntityArrayResponseType> {
       this.isLoading = true;
 <%_ if (!paginationNo) { _%>
       const pageToLoad: number = page ?? 1;
@@ -312,11 +315,9 @@ export class <%= componentName %> implements OnInit {
         sort: this.getSortQueryParam(predicate, ascending),
       };
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-      if (filters?.hasAnyFilterSet()) {
-        filters.filterOptions.forEach(filterOption => {
-          queryObject[filterOption.name] = filterOption.values;
-        });
-      }
+      filterOptions?.forEach(filterOption => {
+        queryObject[filterOption.name] = filterOption.values;
+      });
 <%_ } _%>
 <%_ if (searchEngine) { _%>
       if (this.currentSearch && this.currentSearch !== '') {
@@ -335,7 +336,7 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
     }
 
-    protected handleNavigation(<% if (!paginationNo) { %>page = this.page, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filters?: IFilterOptions<% } %><% if (searchEngine) { %>, currentSearch?: string<% } %>): void {
+    protected handleNavigation(<% if (!paginationNo) { %>page = this.page, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngine) { %>, currentSearch?: string<% } %>): void {
       const queryParamsObj<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>: any<%_ } _%> = {
 <%_ if (searchEngine) { _%>
         search: currentSearch,
@@ -346,12 +347,11 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
         sort: this.getSortQueryParam(predicate, ascending),
       };
+
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-      if (filters?.hasAnyFilterSet()) {
-        filters.filterOptions.forEach(filterOption => {
-          queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.values;
-        });
-      }
+      filterOptions?.forEach(filterOption => {
+        queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.values;
+      });
 <%_ } _%>
 
       this.router.navigate([ './' ], {
