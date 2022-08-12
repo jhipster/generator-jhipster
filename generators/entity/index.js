@@ -872,7 +872,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.context.relationshipsContainEagerLoad = this.context.relationships.some(relationship => relationship.relationshipEagerLoad);
         this.context.containsBagRelationships = this.context.relationships.some(relationship => relationship.bagRelationship);
         this.context.implementsEagerLoadApis = // Cassandra doesn't provides *WithEagerReationships apis
-          ![CASSANDRA, COUCHBASE].includes(this.context.databaseType) &&
+          ![CASSANDRA, COUCHBASE, NEO4J].includes(this.context.databaseType) &&
           // Only sql and mongodb provides *WithEagerReationships apis for imperative implementation
           (this.context.reactive || [SQL, MONGODB].includes(this.context.databaseType)) &&
           this.context.relationshipsContainEagerLoad;
