@@ -238,7 +238,8 @@ module.exports = class extends BaseBlueprintGenerator {
   _getOtherScripts() {
     if (this.dockerCompose) {
       return {
-        'ci:e2e:prepare': 'docker-compose -f docker-compose/docker-compose.yml up -d',
+        'docker-compose': 'docker-compose -f docker-compose/docker-compose.yml up -d',
+        'ci:e2e:prepare': 'npm run docker-compose',
         'ci:e2e:teardown': 'docker-compose -f docker-compose/docker-compose.yml down -v',
       };
     }
