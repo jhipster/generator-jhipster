@@ -35,7 +35,7 @@ const serviceDiscoveryTypes = require('./service-discovery-types');
 
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
-const { ANGULAR } = require('./client-framework-types');
+const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = require('./client-framework-types');
 
 const { MAVEN } = require('./build-tool-types');
 
