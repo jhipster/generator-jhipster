@@ -157,7 +157,6 @@ const optionValues = {
   },
   [optionNames.CLIENT_FRAMEWORK]: {
     [ANGULAR]: ANGULAR,
-    [ANGULAR]: ANGULAR,
     [REACT]: REACT,
     [VUE]: VUE,
     [SVELTE]: SVELTE,
