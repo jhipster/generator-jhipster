@@ -35,8 +35,9 @@ export const <%= entityReactName %>DeleteDialog = () => {
   const [loadModal, setLoadModal] = useState(false);
 
   useEffect(() => {
-    dispatch(getEntity(id));
-    setLoadModal(true);
+    dispatch(getEntity(id)).then(() => {
+      setLoadModal(true);
+    });
   }, []);
 
   const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityReactState %>.entity);
