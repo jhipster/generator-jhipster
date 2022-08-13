@@ -101,8 +101,8 @@
       "workspaces": "true"
     },
     {
-      "name": "ms-mf-ngx-consul-jwt-neo4j",
-      "jdl-samples": "ms-mf-ngx-consul-jwt-neo4j",
+      "name": "ms-mf-ngx-consul-oauth2-neo4j",
+      "jdl-samples": "ms-mf-ngx-consul-oauth2-neo4j",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true"
     }

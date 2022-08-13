@@ -42,11 +42,7 @@ module.exports = {
   coverageThreshold: {
     global: {
       statements: 80,
-<%_ if (microfrontend) { _%>
-      branches: 57,
-<%_ } else { _%>
       branches: 60,
-<%_ } _%>
       functions: 70,
       lines: 80,
     },
