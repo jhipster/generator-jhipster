@@ -4,7 +4,7 @@
  * Test focus:
  * - clientFramework: angularX with microservice/microfrontend
  * - serviceDiscovery: consul
- * - authenticationType: jwt
+ * - authenticationType: oauth2
  * - databaseType: neo4j
  * - testFrameworks: cypress
  *
@@ -21,7 +21,7 @@
 application {
   config {
     applicationType gateway
-    authenticationType jwt
+    authenticationType oauth2
     baseName gateway
     buildTool maven
     clientFramework angularX
@@ -42,7 +42,7 @@ application {
 application {
   config {
     applicationType microservice
-    authenticationType jwt
+    authenticationType oauth2
     baseName blog
     buildTool maven
     cacheProvider no
@@ -62,7 +62,7 @@ application {
 application {
   config {
     applicationType microservice
-    authenticationType jwt
+    authenticationType oauth2
     baseName store,
     buildTool gradle
     cacheProvider no
@@ -82,7 +82,7 @@ application {
 application {
   config {
     applicationType microservice
-    authenticationType jwt
+    authenticationType oauth2
     baseName notification,
     buildTool gradle
     clientFramework angularX

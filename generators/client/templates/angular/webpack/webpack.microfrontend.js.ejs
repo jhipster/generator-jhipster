@@ -33,9 +33,6 @@ module.exports = (config, options, targetOptions) => {
   <%_ } _%>
           './entity-navbar-items': 'app/entities/entity-navbar-items.ts',
           './entity-routing': 'app/entities/entity-routing.module.ts',
-  <%_ for (entity of Object.values(this.configOptions.sharedEntities || {}).filter(e => e.microserviceName)) { _%>
-          './<%= entity.entityFileName %>': 'app/entities/<%= entity.entityFolderName %>/<%= entity.entityFileName %>.module.ts',
-  <%_ } _%>
         },
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
