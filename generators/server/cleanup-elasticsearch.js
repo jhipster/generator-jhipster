@@ -41,6 +41,11 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
       generator.removeFile(`${testDir}repository/search/UserSearchRepositoryMockConfiguration.java`);
     }
   }
+  if (generator.isJhipsterVersionLessThan('7.9.3')) {
+    if (generator.reactive) {
+      generator.removeFile(`${testDir}config/ElasticsearchReactiveTestConfiguration.java`);
+    }
+  }
 }
 
 module.exports = {

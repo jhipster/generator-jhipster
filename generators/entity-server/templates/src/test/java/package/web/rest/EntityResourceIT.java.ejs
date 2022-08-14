@@ -104,7 +104,7 @@ import org.assertj.core.util.IterableUtil;
 import org.apache.commons.collections4.IterableUtils;
 import java.util.concurrent.TimeUnit;
 <%_ } _%>
-<%_ if (databaseTypeSql && reactive) { _%>
+<%_ if ((databaseTypeSql && reactive) || searchEngineElasticsearch) { _%>
 import org.junit.jupiter.api.AfterEach;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
@@ -585,6 +585,14 @@ _%>
     }
 
 <%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+    @AfterEach
+    public void cleanupElasticSearchRepository() {
+        <%= entityInstance %>SearchRepository.deleteAll()<%= callBlock %>;
+        assertThat(<%= entityInstance %>SearchRepository.count()<%= callBlock %>).isEqualTo(0);
+    }
+
+<%_ } _%>
 <%_ if (reactive && testsNeedCsrf) { _%>
     @BeforeEach
     public void setupCsrf() {
@@ -598,9 +606,6 @@ _%>
         <%= entityInstance %>Repository.deleteAll()<%= callBlock %>;
 <%_ } else if (databaseTypeSql && reactive) {  _%>
         deleteEntities(em);
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-        <%= entityInstance %>SearchRepository.deleteAll()<%= callBlock %>;
 <%_ } _%>
         <%= persistInstance %> = createEntity(<% if (databaseTypeSql) { %>em<% } %>);
     }
@@ -1336,7 +1341,7 @@ _%>
 <%_ if (!readOnly) { _%>
 
     @Test<%= transactionalAnnotation %>
-    void putNew<%= entityClass %>() throws Exception {
+    void putExisting<%= entityClass %>() throws Exception {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
@@ -1347,7 +1352,6 @@ _%>
 
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
   <%_ if (searchEngineElasticsearch) { _%>
-        <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
 
