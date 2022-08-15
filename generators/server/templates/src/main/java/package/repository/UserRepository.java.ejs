@@ -315,7 +315,7 @@ public interface UserRepository extends R2dbcRepository<<%= asEntity('User') %>,
     Mono<Void> deleteAllUserAuthorities();
 
     @Query("DELETE FROM <%= jhiTablePrefix %>_user_authority WHERE user_id = :userId")
-    Mono<Void> deleteUserAuthorities(Long userId);
+    Mono<Void> deleteUserAuthorities(<%= user.primaryKey.type %> userId);
 
 }
 

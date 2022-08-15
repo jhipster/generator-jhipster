@@ -142,17 +142,19 @@ public interface <%= entityClass %>Service {
      * @return a Mono to signal the deletion
 <%_ } _%>
      */
-    <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKey.type %> id);<% if (searchEngine) { %>
+    <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKey.type %> id);
+<%_ if (searchEngine) { _%>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
      * @param query the query of the search.
-<%_ if (!paginationNo) { _%>
+  <%_ if (!paginationNo) { _%>
      *
      * @param pageable the pagination information.
-<%_ } _%>
+  <%_ } _%>
      * @return the list of entities.
      */
-    <% if (!paginationNo) { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);<% } %>
+    <% if (!paginationNo) { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+<%_ } _%>
 }
