@@ -88,7 +88,7 @@ _%>
                     </span>
         <%_ } else { _%>
                     <div *ngIf="<%= entityInstance + '.' + relationshipFieldName %>">
-                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %>.<%= otherEntityField %> }}</a>
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %>?.<%= otherEntityField %> }}</a>
                     </div>
         <%_ } _%>
     <%_ } _%>
