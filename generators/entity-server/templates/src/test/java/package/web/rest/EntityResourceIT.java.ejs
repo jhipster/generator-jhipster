@@ -1550,7 +1550,7 @@ _%>
   <%_ } _%>
     }
 
-  <%
+  <%_
     const prepareFieldForPatchTest = (field, includeCb) => {
       const includeField = includeCb();
       const fieldNameUnderscoreUppercased = field.fieldNameUnderscored.toUpperCase();
@@ -1558,7 +1558,7 @@ _%>
       const testWithConstant = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : `DEFAULT_${fieldNameUnderscoreUppercased}`;
       return { includeField, updateWithValue, testWithConstant, ...field};
     };
-  %>
+  _%>
     @Test<%= transactionalAnnotation %>
     void partialUpdate<%= entityClass %>WithPatch() throws Exception {
         // Initialize the database
@@ -1569,7 +1569,7 @@ _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-  <% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient).map(field => prepareFieldForPatchTest(field, () => faker.datatype.boolean())); %>
+  <%_ const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient).map(field => prepareFieldForPatchTest(field, () => faker.datatype.boolean())); _%>
 <%- include('/partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
     }
 
@@ -1719,7 +1719,7 @@ _%>
         <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
   <%_ } _%>
 
-    int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeBefore).isEqualTo(databaseSizeBeforeDelete);

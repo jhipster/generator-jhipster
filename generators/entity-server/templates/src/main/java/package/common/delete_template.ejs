@@ -17,9 +17,13 @@
  limitations under the License.
 -%>
 <%_ if (reactive) { _%>
-        return <%= entityInstance %><%= viaService ? 'Service.delete' : 'Repository.deleteById' %>(id)<%_ if (!viaService && searchEngineElasticsearch) { %>
-            .then(<%= entityInstance %>SearchRepository.deleteById(id))<%_ } _%><%_ if (!fromResource) { _%>;
-<%_ } _%>
+        return <%= entityInstance %><%= viaService ? 'Service.delete' : 'Repository.deleteById' %>(id)
+  <%_ if (!viaService && searchEngineElasticsearch) { %>
+            .then(<%= entityInstance %>SearchRepository.deleteById(id))
+  <%_ } -%>
+  <%_ if (!fromResource) { -%>
+        ;
+  <%_ } _%>
 <%_ } else { _%>
         <%= entityInstance %><%= viaService ? 'Service.delete' : 'Repository.deleteById' %>(id);
   <%_ if (!viaService && searchEngineElasticsearch) { _%>
