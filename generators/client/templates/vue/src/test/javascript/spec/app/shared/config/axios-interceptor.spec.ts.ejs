@@ -56,5 +56,17 @@ describe('Axios errors interceptor', () => {
         expect(callback.called).toBeTruthy();
       }
     });
+    it('should not use callback for errors different 50x, 401, 403', async () => {
+      const callback = sinon.spy();
+  
+      setupAxiosConfig.setupAxiosInterceptors(() => {}, callback);
+  
+      try {
+        mock.onGet().reply(402);
+        await axios('/api/test');
+      } catch {
+        expect(callback.called).toBeFalsy();
+      }
+    });
   });
   
