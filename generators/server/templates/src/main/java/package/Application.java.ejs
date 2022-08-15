@@ -119,8 +119,12 @@ public class <%= mainClass %> {
         if (configServerStatus == null) {
             configServerStatus = "Not found or not setup for this application";
         }
-        log.info("\n----------------------------------------------------------\n\t" +
-                "Config Server: \t{}\n----------------------------------------------------------", configServerStatus);
+        log.info(
+            CRLFLogConverter.CRLF_SAFE_MARKER,
+            "\n----------------------------------------------------------\n\t" +
+            "Config Server: \t{}\n----------------------------------------------------------",
+            configServerStatus
+        );
 <%_ } _%>
     }
 }

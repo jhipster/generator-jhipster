@@ -53,6 +53,7 @@ public class ElasticsearchTestContainer implements InitializingBean, DisposableB
                     .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
                     .withSharedMemorySize(256000000L)
                     .withEnv("ES_JAVA_OPTS", "-Xms256m -Xmx256m")
+                    .withEnv("xpack.security.enabled", "false")
                     .withLogConsumer(new Slf4jLogConsumer(log))
                     .withReuse(true);
         }
