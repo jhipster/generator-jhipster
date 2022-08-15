@@ -88,6 +88,8 @@ describe('Account Service test suite', () => {
   });
 
   it('should init service and check for authority after retrieving account', async () => {
+    const reqUrl = 'requrl';
+    sessionStorage.setItem('requested-url', reqUrl);
 <%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'token');
 <%_ } %>
@@ -95,6 +97,8 @@ describe('Account Service test suite', () => {
     accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>mockedCookie,<%_ } %> router);
 
     return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
+      expect((<any>router).history.current.fullPath).toBe(`/${reqUrl}`);
+      expect(sessionStorage.getItem('requested-url')).toBe(null);
       expect(value).toBe(true);
     });
   });
