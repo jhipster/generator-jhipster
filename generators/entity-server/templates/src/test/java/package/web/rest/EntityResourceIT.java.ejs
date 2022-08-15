@@ -1352,6 +1352,7 @@ _%>
 
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
   <%_ if (searchEngineElasticsearch) { _%>
+        <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
 
