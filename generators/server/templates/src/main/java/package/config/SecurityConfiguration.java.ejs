@@ -37,13 +37,6 @@ import org.springframework.http.HttpMethod;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-<%_ if (!applicationTypeMicroservice || !authenticationTypeOauth2) { _%>
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-<%_ } else { _%>
-  <%_ if (devDatabaseTypeH2Any) { _%>
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-  <%_ } _%>
-<%_ } _%>
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
