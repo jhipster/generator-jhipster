@@ -77,7 +77,7 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
         LinkedHashMap<String, Object> tempClaims = new LinkedHashMap<>();
         for (String key : claims.keySet()) {
             Object value = claims.get(key);
-            if (key.equals("exp") || key.equals("iat")) {
+            if (value instanceof Date && (key.equals("exp") || key.equals("iat"))) {
                 value = ((Date) value).toInstant();
             }
             tempClaims.put(key, value);
