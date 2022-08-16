@@ -25,6 +25,7 @@ permissions:
 jobs:
   dependency-review:
     runs-on: ubuntu-latest
+    if: ${{ github.repository == 'jhipster/generator-jhipster' }}
     steps:
       - name: 'Checkout Repository'
         uses: actions/checkout@v3
