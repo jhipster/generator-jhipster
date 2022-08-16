@@ -143,21 +143,21 @@ export const UserManagement = () => {
       <Table responsive striped>
         <thead>
           <tr>
-            <th className="hand" onClick={sort('id')}><Translate contentKey="global.field.id">ID</Translate><FontAwesomeIcon icon={sortIcons.id} /></th>
-            <th className="hand" onClick={sort('login')}><Translate contentKey="userManagement.login">Login</Translate><FontAwesomeIcon icon={sortIcons.login} /></th>
-            <th className="hand" onClick={sort('email')}><Translate contentKey="userManagement.email">Email</Translate><FontAwesomeIcon icon={sortIcons.email} /></th>
+            <th className="hand" onClick={sort('id')}><Translate contentKey="global.field.id">ID</Translate><FontAwesomeIcon className="ms-1" icon={sortIcons.id} /></th>
+            <th className="hand" onClick={sort('login')}><Translate contentKey="userManagement.login">Login</Translate><FontAwesomeIcon className="ms-1" icon={sortIcons.login} /></th>
+            <th className="hand" onClick={sort('email')}><Translate contentKey="userManagement.email">Email</Translate><FontAwesomeIcon className="ms-1" icon={sortIcons.email} /></th>
             <th />
 <%_ if (enableTranslation) { _%>
-            <th className="hand" onClick={sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate><FontAwesomeIcon icon={sortIcons.langKey} /></th>
+            <th className="hand" onClick={sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate><FontAwesomeIcon className="ms-1" icon={sortIcons.langKey} /></th>
 <%_ } _%>
             <th><Translate contentKey="userManagement.profiles">Profiles</Translate></th>
 <%_ if (!databaseTypeCassandra) { _%>
-            <th className="hand" onClick={sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate><FontAwesomeIcon icon={sortIcons.createdDate} /></th>
+            <th className="hand" onClick={sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate><FontAwesomeIcon className="ms-1" icon={sortIcons.createdDate} /></th>
             <th className="hand" onClick={sort('lastModifiedBy')}>
-              <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate><FontAwesomeIcon icon={sortIcons.lastModifiedBy} />
+              <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate><FontAwesomeIcon className="ms-1" icon={sortIcons.lastModifiedBy} />
             </th>
             <th id="modified-date-sort" className="hand" onClick={sort('lastModifiedDate')}>
-              <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate><FontAwesomeIcon icon={sortIcons.lastModifiedDate} />
+              <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate><FontAwesomeIcon className="ms-1" icon={sortIcons.lastModifiedDate} />
             </th>
             <th />
 <%_ } _%>
