@@ -73,17 +73,7 @@ export const <%= entityReactName %> = () => {
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
   const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), location.search));
-  const createSortIcons = (sortUp: boolean, sort: string) => {
-    const icons = {
-<%_ for (field of fields) {
-  const fieldName = field.fieldName;
-_%>
-    <%= fieldName %>: faSort,
-<%_ } _%>
-    }
-    icons[sort] = sortUp ? faSortUp : faSortDown;
-    return icons;
-  };
+  const createSortIcons = (sortUp: boolean, sort: string) => ({ [sort]: sortUp ? faSortUp : faSortDown });
   const [sortIcons, setSortIcons] = useState(createSortIcons(paginationState.order === ASC, paginationState.sort));
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
@@ -272,15 +262,7 @@ _%>
     setSorting(true);
   <%_ } else { _%>
     const asc = paginationState.sort !== p || paginationState.order !== ASC;
-    const icons = {
-      <%_ for (field of fields) {
-        const fieldName = field.fieldName;
-      _%>
-        <%= fieldName %>: faSort,
-      <%_ } _%>
-    };
-    icons[p] = asc ? faSortUp : faSortDown;
-    setSortIcons(icons);
+    setSortIcons(createSortIcons(asc, p));
     setPaginationState({
       ...paginationState,
       order: asc ? ASC : DESC,
@@ -361,7 +343,7 @@ _%>
               <thead>
                 <tr>
 <%_ for (field of fields) { _%>
-                  <th<% if (!paginationNo) { %> className="hand" onClick={sort('<%= field.fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate><% if (!paginationNo) { %> <FontAwesomeIcon icon={sortIcons.<%= field.fieldName %>} /><% } %></th>
+                  <th<% if (!paginationNo) { %> className="hand" onClick={sort('<%= field.fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate><% if (!paginationNo) { %> <FontAwesomeIcon icon={sortIcons.<%= field.fieldName %>  ?? faSort} /><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
     <%_ if (relationship.relationshipManyToOne
