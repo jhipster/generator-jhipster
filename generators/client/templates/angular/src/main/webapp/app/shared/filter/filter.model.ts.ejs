@@ -1,80 +1,97 @@
 import { ParamMap } from '@angular/router';
+import { Subject } from 'rxjs';
 
 export interface IFilterOptions {
-  containsSameOption(option: IFilterOption): unknown;
-  filterOptions: IFilterOption[];
+  readonly filterChanges: Subject<FilterOption[]>;
+  get filterOptions(): IFilterOption[];
   hasAnyFilterSet(): boolean;
-  clear(): void;
-  removeByName(name: string): void;
+  clear(): boolean;
   initializeFromParams(params: ParamMap): boolean;
-  equals(other: IFilterOptions): boolean;
-  clone(): IFilterOptions;
+  addFilter(name: string, ...values: string[]): boolean;
+  removeFilter(name: string, value: string): boolean;
 }
 
 export interface IFilterOption {
   name: string;
-  value: string | null;
-  isSet(): boolean;
+  values: string[];
   nameAsQueryParam(): string;
 }
 
-export interface IFilterableComponent {
-  clearFilter(filterName: string): void;
-  clearAllFilters(): void;
-}
-
 export class FilterOption implements IFilterOption {
-  constructor(public name: string, public value: string | null) {}
+  constructor(public name: string, public values: string[] = []) {
+    this.values = [...new Set(values)];
+  }
 
   nameAsQueryParam(): string {
     return 'filter[' + this.name + ']';
   }
 
   isSet(): boolean {
-    return this.value != null && this.value.length > 0;
+    return this.values.length > 0;
+  }
+
+  addValue(...values: string[]): boolean {
+    const missingValues = values.filter(value => value && !this.values.includes(value));
+    if (missingValues.length > 0) {
+      this.values.push(...missingValues);
+      return true;
+    }
+    return false;
+  }
+
+  removeValue(value: string): boolean {
+    const indexOf = this.values.indexOf(value);
+    if (indexOf === -1) {
+      return false;
+    }
+
+    this.values.splice(indexOf, 1);
+    return true;
+  }
+
+  clone(): FilterOption {
+    return new FilterOption(this.name, this.values.concat());
+  }
+
+  equals(other: IFilterOption): boolean {
+    return (
+      this.name === other.name &&
+      this.values.length === other.values.length &&
+      this.values.every(thisValue => other.values.includes(thisValue)) &&
+      other.values.every(otherValue => this.values.includes(otherValue))
+    );
   }
 }
 
 export class FilterOptions implements IFilterOptions {
-  filterOptions: IFilterOption[] = [];
+  readonly filterChanges: Subject<FilterOption[]> = new Subject();
+  private _filterOptions: FilterOption[];
+
+  constructor(filterOptions: FilterOption[] = []) {
+    this._filterOptions = filterOptions;
+  }
+
+  get filterOptions(): FilterOption[] {
+    return this._filterOptions.filter(option => option.isSet());
+  }
 
   hasAnyFilterSet(): boolean {
-    return this.filterOptions.length > 0 && this.filterOptions.every(e => e.isSet());
+    return this._filterOptions.some(e => e.isSet());
   }
 
-  clear(): void {
-    this.filterOptions = [];
-  }
-
-  add(option: IFilterOption): void {
-    this.filterOptions.push(option);
-  }
-
-  removeByName(name: string): void {
-    this.filterOptions = this.filterOptions.filter(option => option.name !== name);
-  }
-
-  equals(other: IFilterOptions): boolean {
-    return (
-      this.filterOptions.every(thisOption => other.containsSameOption(thisOption)) &&
-      other.filterOptions.every(otherOption => this.containsSameOption(otherOption))
-    );
-  }
-
-  clone(): IFilterOptions {
-    const newObject: FilterOptions = new FilterOptions();
-
-    this.filterOptions.forEach(option => {
-      newObject.add(new FilterOption(option.name, option.value));
-    });
-
-    return newObject;
+  clear(): boolean {
+    const hasFields = this.hasAnyFilterSet();
+    this._filterOptions = [];
+    if (hasFields) {
+      this.changed();
+    }
+    return hasFields;
   }
 
   initializeFromParams(params: ParamMap): boolean {
-    const oldFilters: IFilterOptions = this.clone();
+    const oldFilters: FilterOptions = this.clone();
 
-    this.clear();
+    this._filterOptions = [];
 
     const filterRegex = /filter\[(.+)\]/;
     params.keys
@@ -82,14 +99,58 @@ export class FilterOptions implements IFilterOptions {
       .forEach(matchingParam => {
         const matches = matchingParam.match(filterRegex);
         if (matches && matches.length > 1) {
-          this.add(new FilterOption(matches[1], params.get(matchingParam)));
+          this.getFilterOptionByName(matches[1], true).addValue(...params.getAll(matchingParam));
         }
       });
 
-    return !oldFilters.equals(this);
+    if (oldFilters.equals(this)) {
+      return false;
+    }
+    return true;
   }
 
-  containsSameOption(optionToSearch: IFilterOption): boolean {
-    return this.filterOptions.some(option => option.name === optionToSearch.name && option.value === optionToSearch.value);
+  addFilter(name: string, ...values: string[]): boolean {
+    if (this.getFilterOptionByName(name, true).addValue(...values)) {
+      this.changed();
+      return true;
+    }
+    return false;
+  }
+
+  removeFilter(name: string, value: string): boolean {
+    if (this.getFilterOptionByName(name)?.removeValue(value)) {
+      this.changed();
+      return true;
+    }
+    return false;
+  }
+
+  protected changed(): void {
+    this.filterChanges.next(this.filterOptions.map(option => option.clone()));
+  }
+
+  protected equals(other: FilterOptions): boolean {
+    const thisFilters = this.filterOptions;
+    const otherFilters = other.filterOptions;
+    if (thisFilters.length !== otherFilters.length) {
+      return false;
+    }
+    return thisFilters.every(option => other.getFilterOptionByName(option.name)?.equals(option));
+  }
+
+  protected clone(): FilterOptions {
+    return new FilterOptions(this.filterOptions.map(option => new FilterOption(option.name, option.values.concat())));
+  }
+
+  protected getFilterOptionByName(name: string, add: true): FilterOption;
+  protected getFilterOptionByName(name: string, add: false): FilterOption | null;
+  protected getFilterOptionByName(name: string): FilterOption | null;
+  protected getFilterOptionByName(name: string, add = false): FilterOption | null {
+    const addOption = (option: FilterOption): FilterOption => {
+      this._filterOptions.push(option);
+      return option;
+    };
+
+    return this._filterOptions.find(thisOption => thisOption.name === name) ?? (add ? addOption(new FilterOption(name)) : null);
   }
 }
