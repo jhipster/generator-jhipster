@@ -28,6 +28,8 @@ export const SUB_GENERATORS = 'subGenerators';
 export const ADDITIONAL_SUB_GENERATORS = 'additionalSubGenerators';
 export const DYNAMIC = 'dynamic';
 export const JS = 'js';
+export const LOCAL_BLUEPRINT_OPTION = 'localBlueprint';
+export const CLI_OPTION = 'cli';
 
 export const SBS = 'sbs';
 export const COMMAND = 'command';
@@ -59,6 +61,16 @@ export const options = () => ({
     type: Boolean,
     scope: 'storage',
   },
+  [LOCAL_BLUEPRINT_OPTION]: {
+    desc: 'Generate a local blueprint',
+    type: Boolean,
+    scope: 'storage',
+  },
+  [CLI_OPTION]: {
+    desc: 'Generate a cli for the blueprint',
+    type: Boolean,
+    scope: 'storage',
+  },
   [ALL_GENERATORS]: {
     desc: 'Use js extension',
     type: Boolean,
@@ -74,10 +86,12 @@ export const requiredConfig = () => ({});
 /**
  * Default config that will be used for templates
  */
-export const defaultConfig = () => ({
+export const defaultConfig = (config = {}) => ({
   ...requiredConfig,
   [DYNAMIC]: false,
   [JS]: false,
+  [LOCAL_BLUEPRINT_OPTION]: false,
+  [CLI_OPTION]: !config[LOCAL_BLUEPRINT_OPTION],
   [SUB_GENERATORS]: [],
   [ADDITIONAL_SUB_GENERATORS]: '',
 });
@@ -108,8 +122,16 @@ export const allGeneratorsConfig = () => ({
   ),
 });
 
+const { [LOCAL_BLUEPRINT_OPTION]: LOCAL_BLUEPRINT_OPTION_DEFAULT_VALUE, [CLI_OPTION]: CLI_OPTION_DEFAULT_VALUE } = defaultConfig();
+
 export const prompts = () => {
   return [
+    {
+      type: 'confirm',
+      name: LOCAL_BLUEPRINT_OPTION,
+      message: 'Do you want to generate a local blueprint inside your application?',
+      default: LOCAL_BLUEPRINT_OPTION_DEFAULT_VALUE,
+    },
     {
       type: 'checkbox',
       name: SUB_GENERATORS,
@@ -130,15 +152,16 @@ export const prompts = () => {
       },
     },
     {
+      when: answers => !answers[LOCAL_BLUEPRINT_OPTION],
       type: 'confirm',
-      name: 'cli',
+      name: CLI_OPTION,
       message: 'Add a cli?',
-      default: true,
+      default: CLI_OPTION_DEFAULT_VALUE,
     },
   ];
 };
 
-export const subGeneratorPrompts = (subGenerator, additionalSubGenerator) => {
+export const subGeneratorPrompts = ({ subGenerator, additionalSubGenerator, localBlueprint }) => {
   return [
     {
       type: 'confirm',
@@ -148,6 +171,7 @@ export const subGeneratorPrompts = (subGenerator, additionalSubGenerator) => {
       default: true,
     },
     {
+      when: !localBlueprint,
       type: 'confirm',
       name: COMMAND,
       message: `Is ${chalk.yellow(subGenerator)} generator a cli command?`,

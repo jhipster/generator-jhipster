@@ -16,10 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { LOCAL_BLUEPRINT_OPTION } from './constants.mjs';
 
 export const files = {
   baseFiles: [
     {
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
       templates: [
         '.github/workflows/generator.yml',
         '.eslintrc.json',
@@ -44,18 +46,18 @@ export const generatorFiles = {
   generator: [
     {
       path: 'generators/generator',
-      to: ctx => `generators/${ctx.generator}`,
+      to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
       templates: [{ file: 'generator.mjs.jhi', renameTo: ctx => (ctx.js ? 'generator.js.jhi' : 'generator.mjs.jhi') }],
     },
     {
       path: 'generators/generator',
-      to: ctx => `generators/${ctx.generator}`,
+      to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
       templates: [{ file: 'index.mjs', renameTo: ctx => (ctx.js ? 'index.js' : 'index.mjs') }],
     },
     {
       path: 'generators/generator',
-      to: ctx => `generators/${ctx.generator}`,
-      condition: ctx => !ctx.generator.startsWith('entity'),
+      to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
+      condition: ctx => !ctx.generator.startsWith('entity') && !ctx.application[LOCAL_BLUEPRINT_OPTION],
       templates: [
         {
           file: 'generator.spec.mjs',
@@ -65,7 +67,7 @@ export const generatorFiles = {
     },
     {
       path: 'generators/generator',
-      to: ctx => `generators/${ctx.generator}`,
+      to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
       condition(ctx) {
         return (this.options.force || !ctx.written) && ctx.priorities.find(priority => priority.name === 'writing');
       },
