@@ -166,7 +166,7 @@ describe('<%= entityAngularName %> Management Component', () => {
         comp.ngOnInit();
 
         // THEN
-        expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ 'someId.in': 'dc4279ea-cfb9-11ec-9d64-0242ac120002' }));
+        expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ 'someId.in': ['dc4279ea-cfb9-11ec-9d64-0242ac120002'] }));
     });
   <%_ } _%>
 <%_ } _%>
