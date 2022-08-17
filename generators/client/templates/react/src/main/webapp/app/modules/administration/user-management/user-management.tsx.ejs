@@ -45,19 +45,7 @@ export const UserManagement = () => {
     overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, 'id'), location.search)
   );
 
-  const createSortIcons = (sortUp: boolean, sort: string) => {
-    const icons = {
-      id: faSort,
-      login: faSort,
-      email: faSort,
-      langKey: faSort,
-      createdDate: faSort,
-      lastModifiedBy: faSort,
-      lastModifiedDate: faSort,
-    }
-    icons[sort] = sortUp ? faSortUp : faSortDown;
-    return icons;
-  };
+  const createSortIcons = (sortUp: boolean, sort: string) => ({ [sort]: sortUp ? faSortUp : faSortDown });
   const [sortIcons, setSortIcons] = useState(createSortIcons(pagination.order === ASC, pagination.sort));
 
   const getUsersFromProps = () => {
