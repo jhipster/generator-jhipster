@@ -84,7 +84,7 @@ Object {
     describe('local-blueprint option and app generator', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ localBlueprint: true, subGenerators: ['app'] });
+        runResult = await helpers.run(generatorPath).withOptions({ localBlueprint: true, subGenerators: ['app'], allPriorities: true });
       });
       it('should write java files with gradle build tool and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
@@ -93,6 +93,9 @@ Object {
     "stateCleared": "modified",
   },
   ".blueprint/app/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  ".blueprint/app/templates/template-file-app.ejs": Object {
     "stateCleared": "modified",
   },
   ".yo-rc.json": Object {

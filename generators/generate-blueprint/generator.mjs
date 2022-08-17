@@ -34,7 +34,9 @@ import {
   INSTALL_PRIORITY,
   END_PRIORITY,
   COMPOSING_PRIORITY,
+  BASE_PRIORITY_NAMES,
 } from '../../lib/constants/priorities.mjs';
+
 import {
   options,
   requiredConfig,
@@ -50,6 +52,7 @@ import {
   ADDITIONAL_SUB_GENERATORS,
   WRITTEN,
   LOCAL_BLUEPRINT_OPTION,
+  ALL_PRIORITIES,
 } from './constants.mjs';
 
 import GENERATOR_LIST from '../generator-list.js';
@@ -75,11 +78,8 @@ export default class extends BaseBlueprintGenerator {
       this.config.set(allGeneratorsConfig());
     }
     if (this.options.defaults) {
-      this.config.defaults(defaultConfig(this.jhipsterConfig));
+      this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
     }
-    this.config.defaults({
-      [SKIP_COMMIT_HOOK]: true,
-    });
   }
 
   /** @inheritdoc */
@@ -121,20 +121,28 @@ export default class extends BaseBlueprintGenerator {
       },
       async eachSubGenerator() {
         const { localBlueprint } = this.jhipsterConfig;
+        const { [ALL_PRIORITIES]: allPriorities } = this.options;
         const subGenerators = this.config.get(SUB_GENERATORS) || [];
         for (const subGenerator of subGenerators) {
           const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
-          await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint }), subGeneratorStorage);
+          if (allPriorities) {
+            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES });
+          }
+          await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, options: this.options }), subGeneratorStorage);
         }
       },
       async eachAdditionalSubGenerator() {
         const { localBlueprint } = this.jhipsterConfig;
+        const { [ALL_PRIORITIES]: allPriorities } = this.options;
         const additionalSubGenerators = this.config.get(ADDITIONAL_SUB_GENERATORS) || '';
         for (const subGenerator of additionalSubGenerators
           .split(',')
           .map(sub => sub.trim())
           .filter(Boolean)) {
           const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
+          if (allPriorities) {
+            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES });
+          }
           await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: true }), subGeneratorStorage);
         }
       },
@@ -150,6 +158,13 @@ export default class extends BaseBlueprintGenerator {
     return {
       requiredConfig() {
         this.config.defaults(requiredConfig());
+      },
+      conditionalConfig() {
+        if (!this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) {
+          this.config.defaults({
+            [SKIP_COMMIT_HOOK]: true,
+          });
+        }
       },
     };
   }

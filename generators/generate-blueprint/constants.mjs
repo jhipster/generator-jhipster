@@ -35,6 +35,7 @@ export const SBS = 'sbs';
 export const COMMAND = 'command';
 export const PRIORITIES = 'priorities';
 export const ALL_GENERATORS = 'allGenerators';
+export const ALL_PRIORITIES = 'allPriorities';
 export const WRITTEN = 'written';
 
 /**
@@ -72,9 +73,13 @@ export const options = () => ({
     scope: 'storage',
   },
   [ALL_GENERATORS]: {
-    desc: 'Use js extension',
+    desc: 'Generate every sub generator',
     type: Boolean,
     scope: 'generator',
+  },
+  [ALL_PRIORITIES]: {
+    desc: 'Generate every priority',
+    type: Boolean,
   },
 });
 
@@ -86,7 +91,7 @@ export const requiredConfig = () => ({});
 /**
  * Default config that will be used for templates
  */
-export const defaultConfig = (config = {}) => ({
+export const defaultConfig = ({ config = {} } = {}) => ({
   ...requiredConfig,
   [DYNAMIC]: false,
   [JS]: false,
@@ -122,9 +127,8 @@ export const allGeneratorsConfig = () => ({
   ),
 });
 
-const { [LOCAL_BLUEPRINT_OPTION]: LOCAL_BLUEPRINT_OPTION_DEFAULT_VALUE, [CLI_OPTION]: CLI_OPTION_DEFAULT_VALUE } = defaultConfig();
-
 export const prompts = () => {
+  const { [LOCAL_BLUEPRINT_OPTION]: LOCAL_BLUEPRINT_OPTION_DEFAULT_VALUE, [CLI_OPTION]: CLI_OPTION_DEFAULT_VALUE } = defaultConfig();
   return [
     {
       type: 'confirm',
@@ -162,13 +166,14 @@ export const prompts = () => {
 };
 
 export const subGeneratorPrompts = ({ subGenerator, additionalSubGenerator, localBlueprint }) => {
+  const { [SBS]: SBS_DEFAULT_VALUE } = defaultSubGeneratorConfig();
   return [
     {
       type: 'confirm',
       name: SBS,
       when: !additionalSubGenerator,
       message: `Is ${chalk.yellow(subGenerator)} generator a side-by-side blueprint?`,
-      default: true,
+      default: SBS_DEFAULT_VALUE,
     },
     {
       when: !localBlueprint,
