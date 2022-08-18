@@ -297,6 +297,16 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
+          "file": "package/config/EurekaWorkaroundConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
           "file": "package/ApplicationWebXml.java",
           "renameTo": [Function],
         },
