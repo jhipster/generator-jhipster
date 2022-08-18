@@ -784,6 +784,16 @@ const baseServerFiles = {
       templates: [{ file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` }],
     },
     {
+      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryEureka,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/EurekaWorkaroundConfiguration.java',
+          renameTo: generator => `${generator.javaDir}/config/EurekaWorkaroundConfiguration.java`,
+        },
+      ],
+    },
+    {
       condition: generator => !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [{ file: 'package/ApplicationWebXml.java', renameTo: generator => `${generator.javaDir}ApplicationWebXml.java` }],
