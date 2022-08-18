@@ -1314,6 +1314,9 @@ Object {
   "src/main/java/com/mycompany/myapp/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/EurekaWorkaroundConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/FeignConfiguration.java": Object {
     "stateCleared": "modified",
   },
