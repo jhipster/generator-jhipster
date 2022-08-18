@@ -343,7 +343,7 @@ export const <%= entityReactName %> = () => {
               <thead>
                 <tr>
 <%_ for (field of fields) { _%>
-                  <th<% if (!paginationNo) { %> className="hand" onClick={sort('<%= field.fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate><% if (!paginationNo) { %> <FontAwesomeIcon icon={sortIcons.<%= field.fieldName %>  ?? faSort} /><% } %></th>
+                  <th<% if (!paginationNo) { %> className="hand" onClick={sort('<%= field.fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate><% if (!paginationNo) { %> <FontAwesomeIcon icon={sortIcons.<%= field.fieldName %> ?? faSort} /><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
     <%_ if (relationship.relationshipManyToOne
