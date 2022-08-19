@@ -75,7 +75,7 @@ jobs:
       github.event.action != 'closed' &&
       !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci') &&
       needs.build-matrix.outputs.workflow-react == 'true'
-    timeout-minutes: 40
+    timeout-minutes: 50
     strategy:
       fail-fast: false
       # Matrix available at https://github.com/jhipster/generator-jhipster/tree/main/test-integration/workflow-samples/
@@ -195,7 +195,7 @@ jobs:
       - name: 'TESTS: frontend'
         if: steps.compare.outputs.equals != 'true' && matrix.skip-frontend-tests != 1 && needs.build-matrix.outputs.client != 'false'
         run: npm run ci:frontend:test
-        timeout-minutes: 10
+        timeout-minutes: 12
       - name: 'TESTS: packaging'
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:package
