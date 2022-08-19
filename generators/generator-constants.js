@@ -86,7 +86,7 @@ const DOCKER_ELASTICSEARCH_CONTAINER = 'docker.elastic.co/elasticsearch/elastics
 const ELASTICSEARCH_VERSION = '7.17.4'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_ELASTICSEARCH = `${DOCKER_ELASTICSEARCH_CONTAINER}:${ELASTICSEARCH_VERSION}`;
 // TODO V8 Rename KAFKA_VERSION to DOCKER_KAFKA_VERSION
-const KAFKA_VERSION = '7.1.1';
+const KAFKA_VERSION = '7.2.1';
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
 const DOCKER_SONAR_VERSION = '9.5.0-community';
