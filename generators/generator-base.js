@@ -2917,6 +2917,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadAppConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
+    dest.projectVersion = process.env.JHI_PROJECT_VERSION || '0.0.1-SNAPSHOT';
     dest.applicationType = config.applicationType;
     dest.reactive = config.reactive;
     dest.jhiPrefix = config.jhiPrefix;
