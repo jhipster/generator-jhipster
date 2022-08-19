@@ -226,6 +226,7 @@ jobs:
         uses: jwalton/gh-docker-logs@v2
       - name: 'ANALYSIS: Sonar analysis'
         if: >-
+          secrets.SONAR_TOKEN &&
           github.repository == 'jhipster/generator-jhipster' &&
           matrix.sonar-analyse == 'true' &&
           steps.compare.outputs.equals != 'true' &&
