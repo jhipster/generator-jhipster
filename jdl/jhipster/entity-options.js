@@ -36,6 +36,7 @@ const PaginationTypes = {
 const SearchTypes = {
   ELASTICSEARCH: 'elasticsearch',
   COUCHBASE: 'couchbase',
+  NO: 'no',
 };
 
 const FilteringTypes = {
