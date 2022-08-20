@@ -25,6 +25,9 @@ const {
   patternFilter,
   patternSpy,
 } = require('yeoman-environment/transform');
+const { transform } = require('p-transform');
+const { stat } = require('fs/promises');
+const { isBinaryFile } = require('isbinaryfile');
 
 const { hasState, setModifiedFileState } = State;
 
@@ -44,6 +47,7 @@ const { prepareFieldForTemplates } = require('../../utils/field');
 const { createUserEntity } = require('../../utils/user');
 const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
 const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
+const { detectCrLf, normalizeLineEndings } = require('../utils');
 
 const { LONG: TYPE_LONG } = CommonDBTypes;
 
@@ -161,7 +165,7 @@ module.exports = class extends BaseGenerator {
    */
   async _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
     const { skipYoResolve } = this.options;
-    const { withGeneratedFlag } = this.jhipsterConfig;
+    const { withGeneratedFlag, autoCrlf } = this.jhipsterConfig;
 
     // JDL writes directly to disk, set the file as modified so prettier will be applied
     const { upgradeCommand, ignoreErrors } = this.options;
@@ -199,6 +203,33 @@ module.exports = class extends BaseGenerator {
         file.conflicter = 'force';
       }, '**/.jhipster/*.json').name('jhipster:config-files:force');
 
+    const convertToCRLF = () =>
+      transform(async file => {
+        if (!file.contents) {
+          return file;
+        }
+        if (await isBinaryFile(file.contents)) {
+          return file;
+        }
+        const fstat = await stat(file.path);
+        if (!fstat.isFile()) {
+          return file;
+        }
+        const attributes = Object.fromEntries(
+          (await this.createGit().raw('check-attr', 'binary', 'eol', '--', file.path))
+            .split(/\r\n|\r|\n/)
+            .map(attr => attr.split(':'))
+            .map(([_file, attr, value]) => [attr, value])
+        );
+        if (attributes.binary === 'set' || attributes.eol !== 'lf') {
+          return file;
+        }
+        if (attributes.eol === 'crlf' || (await detectCrLf(file.path))) {
+          file.contents = Buffer.from(normalizeLineEndings(file.contents.toString(), '\r\n'));
+        }
+        return file;
+      }, 'jhipster:crlf');
+
     const transformStreams = [
       // multi-step changes the file path, should be executed earlier in the pipeline
       new MultiStepTransform(),
@@ -207,6 +238,7 @@ module.exports = class extends BaseGenerator {
       createForceWriteConfigFiles(),
       ...(withGeneratedFlag ? [generatedAnnotationTransform(this)] : []),
       ...(skipPrettier ? [] : [createApplyPrettierTransform()]),
+      ...(autoCrlf ? [convertToCRLF()] : []),
       createConflicterCheckTransform(this.env.conflicter, conflicterStatus),
       createConflicterStatusTransform(),
     ];

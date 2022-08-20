@@ -301,6 +301,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       type: Boolean,
     });
 
+    this.option('auto-crlf', {
+      desc: 'Detect line endings',
+      type: Boolean,
+    });
+
     // Just constructing help, stop here
     if (this.options.help) {
       return;

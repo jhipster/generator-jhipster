@@ -2806,6 +2806,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.enableTranslation !== undefined) {
       this.jhipsterConfig.enableTranslation = options.enableTranslation;
     }
+    if (options.autoCrlf !== undefined) {
+      this.jhipsterConfig.autoCrlf = options.autoCrlf;
+    }
     if (options.language) {
       // workaround double options parsing, remove once generator supports skipping parse options
       const languages = options.language.flat();
