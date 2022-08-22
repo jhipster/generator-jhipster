@@ -23,6 +23,31 @@ const { expect } = require('chai');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 
 describe('BinaryOptions', () => {
+  it('should match values', () => {
+    jestExpect(BinaryOptions.Values).toMatchInlineSnapshot(`
+Object {
+  "dto": Object {
+    "MAPSTRUCT": "mapstruct",
+    "NO": "no",
+  },
+  "pagination": Object {
+    "INFINITE-SCROLL": "infinite-scroll",
+    "NO": "no",
+    "PAGINATION": "pagination",
+  },
+  "search": Object {
+    "COUCHBASE": "couchbase",
+    "ELASTICSEARCH": "elasticsearch",
+    "NO": "no",
+  },
+  "service": Object {
+    "NO": "no",
+    "SERVICE_CLASS": "serviceClass",
+    "SERVICE_IMPL": "serviceImpl",
+  },
+}
+`);
+  });
   describe('exists', () => {
     context('when checking for a valid binary option', () => {
       it('should return true', () => {

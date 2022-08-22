@@ -20,6 +20,7 @@
 const Types = {
   ELASTICSEARCH: 'elasticsearch',
   COUCHBASE: 'couchbase',
+  NO: 'no',
   FALSE: false,
 };
 

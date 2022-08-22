@@ -1885,14 +1885,14 @@ Object {
         context(option, () => {
           Object.keys(Values[option]).forEach(key => {
             let parsedOption;
+            const value = Values[option][key];
 
             before(() => {
-              const value = Values[option][key];
               const content = parseFromContent(`${option === PAGINATION ? 'paginate' : option} A with ${value}`);
               parsedOption = content.options[option][value];
             });
 
-            it('should parse it', () => {
+            it(`should parse ${value} value`, () => {
               expect(parsedOption).to.deep.equal({
                 list: ['A'],
                 excluded: [],
