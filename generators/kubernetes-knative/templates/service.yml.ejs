@@ -76,7 +76,7 @@ spec:
               value: <%= app.baseName.toLowerCase() %>
   <%_ } _%>
 <%_ } _%>
-<%_ if (!app.serviceDiscoveryType && app.authenticationTypeJwt) { _%>
+<%_ if (!app.serviceDiscoveryAny && app.authenticationTypeJwt) { _%>
             - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
               valueFrom:
                 secretKeyRef:
@@ -162,14 +162,14 @@ spec:
             - containerPort: <%= app.serverPort %>
             readinessProbe:
               httpGet:
-                path: <%= app.applicationTypeMicroservice && !app.serviceDiscoveryType ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health/readiness
+                path: <%= app.applicationTypeMicroservice && !app.serviceDiscoveryAny ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health/readiness
               initialDelaySeconds: 20
               periodSeconds: 15
               failureThreshold: 6
               timeoutSeconds: 5
             livenessProbe:
               httpGet:
-                path: <%= app.applicationTypeMicroservice && !app.serviceDiscoveryType ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health/liveness
+                path: <%= app.applicationTypeMicroservice && !app.serviceDiscoveryAny ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health/liveness
               initialDelaySeconds: 120
               timeoutSeconds: 5
   traffic:

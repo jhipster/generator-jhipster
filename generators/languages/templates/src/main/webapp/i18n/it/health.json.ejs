@@ -32,7 +32,7 @@
 <%_ if (messageBrokerKafka) { _%>
             "binders": "Message broker",
 <%_ } _%>
-<%_ if (applicationTypeGateway || serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Scopo di Aggiornamento Microservice",
             "clientConfigServer": "Server di Configurazioni Microservice",

@@ -166,7 +166,7 @@ processResources {
         filter {
             it.replace("#project.version#", version)
         }
-<%_ if (!serviceDiscoveryType) { _%>
+<%_ if (!serviceDiscoveryAny) { _%>
         filter {
             it.replace("#spring.profiles.active#", profiles)
         }

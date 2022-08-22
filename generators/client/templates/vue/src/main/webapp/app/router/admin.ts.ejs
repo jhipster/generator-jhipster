@@ -12,7 +12,7 @@ import {Authority} from "@/shared/security/authority";
   const <%= jhiPrefixCapitalized %>LogsComponent = () => import('@/admin/logs/logs.vue');
   const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('@/admin/metrics/metrics.vue');
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
   const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('@/admin/gateway/gateway.vue');
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
@@ -78,7 +78,7 @@ export default [
       meta: { authorities: [Authority.ADMIN] }
     },
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
     {
       path: '/admin/gateway',
       name: '<%= jhiPrefixCapitalized %>GatewayComponent',

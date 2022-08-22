@@ -767,7 +767,7 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (serviceDiscoveryType) { _%>
+<%_ if (serviceDiscoveryAny) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
@@ -2075,7 +2075,7 @@
                 </plugins>
             </build>
         </profile>
-<%_ if (serviceDiscoveryType || applicationTypeGateway || applicationTypeMicroservice) { _%>
+<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
         <profile>
             <!--
                 Profile for tracing requests with Zipkin.

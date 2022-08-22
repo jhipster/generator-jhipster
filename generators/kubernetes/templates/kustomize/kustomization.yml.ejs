@@ -31,7 +31,7 @@ const appOut = appName.concat('-', suffix); _%>
 - <%= appOut %>/<%= appName %>-ingress.yml
     <%_ } _%>
   <%_ } _%>
-  <%_ if (!appConfig.serviceDiscoveryType && appConfig.authenticationTypeJwt) { _%>
+  <%_ if (!appConfig.serviceDiscoveryAny && appConfig.authenticationTypeJwt) { _%>
 - <%= appOut %>/jwt-secret.yml
   <%_ } _%>
   <%_ if (monitoringPrometheus) { _%>

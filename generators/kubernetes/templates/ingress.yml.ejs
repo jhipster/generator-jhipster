@@ -38,7 +38,7 @@ spec:
             name: <%= app.baseName.toLowerCase() %>
             port:
               name: http
-      <%_ if (!app.serviceDiscoveryType) { _%>
+      <%_ if (!app.serviceDiscoveryAny) { _%>
         <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
       - path: /services/<%= config.baseName.toLowerCase() %>/<%= ingressTypeNginx ? "" : "*" %>
         pathType: Prefix

@@ -23,7 +23,7 @@ import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
 import administration, {
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
   getGatewayRoutes,
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
@@ -56,7 +56,7 @@ describe('Administration reducer tests', () => {
       errorMessage: null,
       totalItems: 0
     });
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
     expect(isEmpty(state.gateway.routes));
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
@@ -84,7 +84,7 @@ describe('Administration reducer tests', () => {
     it('should set state to loading', () => {
       testMultipleTypes(
         [
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
           getGatewayRoutes.pending.type,
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
@@ -111,7 +111,7 @@ describe('Administration reducer tests', () => {
     it('should set state to failed and put an error message in errorMessage', () => {
       testMultipleTypes(
         [
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
           getGatewayRoutes.rejected.type,
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
@@ -138,7 +138,7 @@ describe('Administration reducer tests', () => {
   });
 
   describe('Success', () => {
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
     it('should update state according to a successful fetch gateway routes request', () => {
       const payload = { data: [] };
       const toTest = administration(undefined, { type: getGatewayRoutes.fulfilled.type, payload });
@@ -264,7 +264,7 @@ describe('Administration reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
-<%_ if (applicationTypeGateway && serviceDiscoveryType || withAdminUi) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny || withAdminUi) { _%>
     beforeEach(() => {
       const mockStore = configureStore([thunk]);
       store = mockStore({});
@@ -272,7 +272,7 @@ describe('Administration reducer tests', () => {
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
     it('dispatches FETCH_GATEWAY_ROUTE_PENDING and FETCH_GATEWAY_ROUTE_FULFILLED actions', async () => {
       const expectedActions = [
         {

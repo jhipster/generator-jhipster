@@ -251,7 +251,7 @@ spring:
 <%_ } _%>
   thymeleaf:
     cache: false
-<%_ if (serviceDiscoveryType || applicationTypeGateway || applicationTypeMicroservice) { _%>
+<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
   sleuth:
     # https://github.com/spring-projects/spring-framework/issues/27844#issuescomment-1002866885
     # https://github.com/spring-cloud/spring-cloud-sleuth/issues/2094

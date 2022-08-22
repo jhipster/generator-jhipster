@@ -27,7 +27,7 @@ import { Translate, translate } from 'react-jhipster';
 
 const adminMenuItems = () => (
   <>
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
     <MenuItem icon="road" to="/admin/gateway"><Translate contentKey="global.menu.admin.gateway">Gateway</Translate></MenuItem>
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>

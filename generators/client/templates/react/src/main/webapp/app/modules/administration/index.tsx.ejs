@@ -30,7 +30,7 @@ import Metrics from './metrics/metrics';
 import Configuration from './configuration/configuration';
 <%_ } _%>
 import Docs from './docs/docs';
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
 import Gateway from './gateway/gateway';
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
@@ -46,7 +46,7 @@ const AdministrationRoutes = () => (
 <%_ if (communicationSpringWebsocket) { _%>
       <Route path="tracker" element={<Tracker />} />
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
       <Route path="gateway" element={<Gateway />} />
 <%_ } _%>
 <%_ if (withAdminUi) { _%>

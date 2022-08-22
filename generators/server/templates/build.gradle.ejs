@@ -88,7 +88,7 @@ if (project.hasProperty("gae")) {
     appengineStage.dependsOn thinResolve
 }
 
-<%_ if (serviceDiscoveryType || applicationTypeGateway || applicationTypeMicroservice) { _%>
+<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
 if (project.hasProperty("zipkin")) {
     apply from: "gradle/zipkin.gradle"
 }
@@ -501,7 +501,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.springframework.retry:spring-retry"
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
 <%_ } _%>
-<%_ if (serviceDiscoveryType) { _%>
+<%_ if (serviceDiscoveryAny) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
   <%_ if (serviceDiscoveryEureka) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"

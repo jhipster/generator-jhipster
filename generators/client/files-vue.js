@@ -238,7 +238,7 @@ const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType,
+      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryAny,
       path: VUE_DIR,
       templates: ['admin/gateway/gateway.vue', 'admin/gateway/gateway.component.ts', 'admin/gateway/gateway.service.ts'],
     },
@@ -330,7 +330,7 @@ const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType,
+      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryAny,
       path: CLIENT_TEST_SRC_DIR,
       templates: ['spec/app/admin/gateway/gateway.component.spec.ts'],
     },

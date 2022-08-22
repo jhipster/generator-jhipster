@@ -5,14 +5,14 @@
 Launch all your infrastructure by running: `docker-compose up -d`.
 
 ## Configured Docker services
-<%_ if (serviceDiscoveryType) { _%>
+<%_ if (serviceDiscoveryAny) { _%>
 
 ### Service registry and configuration server:
 <%_ } _%>
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 - [JHipster Registry](http://localhost:8761)
 <%_ } _%>
-<%_ if (serviceDiscoveryType === 'consul') { _%>
+<%_ if (serviceDiscoveryConsul) { _%>
 - [Consul](http://localhost:8500)
 <%_ } _%>
 
