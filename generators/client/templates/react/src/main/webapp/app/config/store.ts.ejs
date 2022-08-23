@@ -38,9 +38,6 @@ import loggerMiddleware from './logger-middleware';
 <%_ if (communicationSpringWebsocket) { _%>
 import websocketMiddleware from './websocket-middleware';
 <%_ } _%>
-<%_ if (enableTranslation) { _%>
-import translationMiddleware from './translation-middleware';
-<%_ } _%>
 
 const store = configureStore({
   reducer: sharedReducers,
@@ -56,9 +53,6 @@ const store = configureStore({
       loadingBarMiddleware(),
 <%_ if (communicationSpringWebsocket) { _%>
       websocketMiddleware,
-<%_ } _%>
-<%_ if (enableTranslation) { _%>
-      translationMiddleware,
 <%_ } _%>
       loggerMiddleware
     ),

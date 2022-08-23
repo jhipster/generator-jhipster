@@ -68,6 +68,7 @@ import <%= `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoCl
 <%_ if (typeof javadoc !== 'undefined') { _%>
 @Schema(description = "<%- formatAsApiDescription(javadoc) %>")
 <%_ } _%>
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class <%= dtoClass %> implements Serializable {
 
 <%_ for (reference of dtoReferences) {

@@ -16,8 +16,7 @@
                 "pattern",
                 "required"
             ],
-            "fieldValidateRulesPattern": "^[0-9]+$",
-            "fieldValidateRulesPatternJava": "^[0-9]+$"
+            "fieldValidateRulesPattern": "^\\d+$"
         }
     ],
     "relationships": [],

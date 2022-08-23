@@ -7,31 +7,7 @@ import tech.jhipster.service.Criteria;
 <%_ for (const field of fields) { if (field.fieldIsEnum === true) { _%>
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 <%_ } } _%>
-import tech.jhipster.service.filter.BooleanFilter;
-import tech.jhipster.service.filter.DoubleFilter;
-import tech.jhipster.service.filter.Filter;
-import tech.jhipster.service.filter.FloatFilter;
-import tech.jhipster.service.filter.IntegerFilter;
-import tech.jhipster.service.filter.LongFilter;
-import tech.jhipster.service.filter.StringFilter;
-<%_ if (fieldsContainBigDecimal) { _%>
-import tech.jhipster.service.filter.BigDecimalFilter;
-<%_ } _%>
-<%_ if (fieldsContainDuration) { _%>
-import tech.jhipster.service.filter.DurationFilter;
-<%_ } _%>
-<%_ if (fieldsContainInstant) { _%>
-import tech.jhipster.service.filter.InstantFilter;
-<%_ } _%>
-<%_ if (fieldsContainLocalDate) { _%>
-import tech.jhipster.service.filter.LocalDateFilter;
-<%_ } _%>
-<%_ if (fieldsContainUUID || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
-import tech.jhipster.service.filter.UUIDFilter;
-<%_ } _%>
-<%_ if (fieldsContainZonedDateTime) { _%>
-import tech.jhipster.service.filter.ZonedDateTimeFilter;
-<%_ } _%>
+import tech.jhipster.service.filter.*;
 
 <%_
 var filterVariables = [];
@@ -78,6 +54,7 @@ _%>
  * fix type specific filters.
  */
 @ParameterObject
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class <%= entityClass %>Criteria implements Serializable, Criteria {
 <%_ Object.keys(extraFilters).forEach((key) => {
   extraFilter = extraFilters[key]; _%>

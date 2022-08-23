@@ -28,14 +28,14 @@ const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17', '18'
 const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
 
 // Version of Node, NPM
-const NODE_VERSION = '16.16.0';
+const NODE_VERSION = '16.17.0';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.9.0';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.9.3-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.7.2';
+const SPRING_BOOT_VERSION = '2.7.3';
 const LIQUIBASE_VERSION = '4.15.0';
 // TODO v8: Remove this constant
 const LIQUIBASE_DTD_VERSION = 'latest';

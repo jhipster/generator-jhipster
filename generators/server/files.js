@@ -214,11 +214,6 @@ const baseServerFiles = {
       templates: ['entrypoint.sh'],
     },
   ],
-  node: [
-    {
-      templates: ['.npmrc'],
-    },
-  ],
   packageJson: [
     {
       condition: generator => generator.skipClient,
@@ -789,6 +784,16 @@ const baseServerFiles = {
       templates: [{ file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` }],
     },
     {
+      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryEureka,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/EurekaWorkaroundConfiguration.java',
+          renameTo: generator => `${generator.javaDir}/config/EurekaWorkaroundConfiguration.java`,
+        },
+      ],
+    },
+    {
       condition: generator => !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [{ file: 'package/ApplicationWebXml.java', renameTo: generator => `${generator.javaDir}ApplicationWebXml.java` }],
@@ -841,6 +846,10 @@ const baseServerFiles = {
         {
           file: 'package/config/AsyncConfiguration.java',
           renameTo: generator => `${generator.javaDir}config/AsyncConfiguration.java`,
+        },
+        {
+          file: 'package/config/CRLFLogConverter.java',
+          renameTo: generator => `${generator.javaDir}config/CRLFLogConverter.java`,
         },
         {
           file: 'package/config/DateTimeFormatConfiguration.java',
@@ -1673,12 +1682,12 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: ({ searchEngineElasticsearch, reactive }) => searchEngineElasticsearch && reactive,
+      condition: ({ searchEngineElasticsearch }) => searchEngineElasticsearch,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/config/ElasticsearchReactiveTestConfiguration.java',
-          renameTo: generator => `${generator.testDir}config/ElasticsearchReactiveTestConfiguration.java`,
+          file: 'package/config/ElasticsearchTestConfiguration.java',
+          renameTo: generator => `${generator.testDir}config/ElasticsearchTestConfiguration.java`,
         },
       ],
     },

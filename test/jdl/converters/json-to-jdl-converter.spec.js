@@ -43,7 +43,8 @@ describe('JSONToJDLConverter', () => {
         });
 
         it('should write a JDL file with the application', () => {
-          expect(jdlFileContent).to.equal(`application {
+          jestExpect(jdlFileContent).toMatchInlineSnapshot(`
+"application {
   config {
     applicationType microservice
     authenticationType jwt
@@ -51,6 +52,7 @@ describe('JSONToJDLConverter', () => {
     blueprints [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
     buildTool maven
     cacheProvider hazelcast
+    clientFramework no
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
@@ -59,10 +61,10 @@ describe('JSONToJDLConverter', () => {
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost ""
+    gradleEnterpriseHost \\"\\"
     jhiPrefix jhi
-    jhipsterVersion "6.0.1"
-    jwtSecretKey "HIDDEN"
+    jhipsterVersion \\"6.0.1\\"
+    jwtSecretKey \\"HIDDEN\\"
     languages []
     messageBroker false
     nativeLanguage en
@@ -80,6 +82,7 @@ describe('JSONToJDLConverter', () => {
   }
 }
 
+"
 `);
         });
       });
@@ -95,13 +98,15 @@ describe('JSONToJDLConverter', () => {
         });
 
         it('should export apps & entities', () => {
-          expect(jdlFileContent).to.equal(`application {
+          jestExpect(jdlFileContent).toMatchInlineSnapshot(`
+"application {
   config {
     applicationType microservice
     authenticationType jwt
     baseName truc
     buildTool maven
     cacheProvider hazelcast
+    clientFramework no
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
@@ -110,10 +115,10 @@ describe('JSONToJDLConverter', () => {
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost ""
+    gradleEnterpriseHost \\"\\"
     jhiPrefix jhi
-    jhipsterVersion "6.0.1"
-    jwtSecretKey "HIDDEN"
+    jhipsterVersion \\"6.0.1\\"
+    jwtSecretKey \\"HIDDEN\\"
     languages []
     messageBroker false
     nativeLanguage en
@@ -191,6 +196,7 @@ relationship ManyToMany {
 
 noFluentMethod Country, Department, Employee, Job, JobHistory, Location, Region, Task
 paginate Country with pager
+"
 `);
         });
       });
@@ -227,13 +233,15 @@ paginate Country with pager
         });
 
         it('should export each app', () => {
-          expect(jdlFileContent).to.equal(`application {
+          jestExpect(jdlFileContent).toMatchInlineSnapshot(`
+"application {
   config {
     applicationType microservice
     authenticationType jwt
     baseName app1
     buildTool maven
     cacheProvider hazelcast
+    clientFramework no
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
@@ -242,10 +250,10 @@ paginate Country with pager
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost ""
+    gradleEnterpriseHost \\"\\"
     jhiPrefix jhi
-    jhipsterVersion "6.0.1"
-    jwtSecretKey "HIDDEN"
+    jhipsterVersion \\"6.0.1\\"
+    jwtSecretKey \\"HIDDEN\\"
     languages []
     messageBroker false
     nativeLanguage en
@@ -271,6 +279,7 @@ application {
     baseName app2
     buildTool maven
     cacheProvider hazelcast
+    clientFramework no
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
@@ -279,10 +288,10 @@ application {
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost ""
+    gradleEnterpriseHost \\"\\"
     jhiPrefix jhi
-    jhipsterVersion "6.0.1"
-    jwtSecretKey "HIDDEN"
+    jhipsterVersion \\"6.0.1\\"
+    jwtSecretKey \\"HIDDEN\\"
     languages []
     messageBroker false
     nativeLanguage en
@@ -308,6 +317,7 @@ application {
     baseName app3
     buildTool maven
     cacheProvider hazelcast
+    clientFramework no
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
@@ -316,10 +326,10 @@ application {
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
-    gradleEnterpriseHost ""
+    gradleEnterpriseHost \\"\\"
     jhiPrefix jhi
-    jhipsterVersion "6.0.1"
-    jwtSecretKey "HIDDEN"
+    jhipsterVersion \\"6.0.1\\"
+    jwtSecretKey \\"HIDDEN\\"
     languages []
     messageBroker false
     nativeLanguage en
@@ -354,6 +364,7 @@ relationship OneToOne {
 }
 
 noFluentMethod Region, Country, Location
+"
 `);
         });
       });

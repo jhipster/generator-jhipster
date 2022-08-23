@@ -32,9 +32,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -117,6 +114,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -616,9 +616,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -701,6 +698,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -1200,9 +1200,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -1305,6 +1302,9 @@ Object {
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/Constants.java": Object {
     "stateCleared": "modified",
   },
@@ -1312,6 +1312,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/EurekaWorkaroundConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/FeignConfiguration.java": Object {

@@ -4,8 +4,8 @@ const { requiredDefaultConfig, defaultConfig } = require('../generators/generato
 const { skipPrettierHelpers } = require('./utils/utils');
 
 describe('JHipster generator with required configuration', () => {
-  before(() => {
-    return skipPrettierHelpers
+  before(async () => {
+    await skipPrettierHelpers
       .create('jhipster:app')
       .withOptions({
         defaultLocalConfig: requiredDefaultConfig,
@@ -18,7 +18,7 @@ describe('JHipster generator with required configuration', () => {
 
   it('writes additional default config to .yo-rc.json', () => {
     assert.JSONFileContent('.yo-rc.json', {
-      'generator-jhipster': { ...defaultConfig, languages: [defaultConfig.nativeLanguage] },
+      'generator-jhipster': { ...defaultConfig, skipClient: false, languages: [defaultConfig.nativeLanguage] },
     });
   });
 });

@@ -40,7 +40,7 @@ describe('Alert Service test suite', () => {
     // WHEN
     alertService.showError((<any>vueInstance) as Vue, <% if (enableTranslation) { %>translationKey<%} else {%>message<% } %>);
 
-    //THEN
+    // THEN
     <%_ if (enableTranslation) { _%>
     expect(translationStub.withArgs(translationKey).callCount).toEqual(1);
     <%_ } _%>
@@ -71,7 +71,7 @@ describe('Alert Service test suite', () => {
     // WHEN
     alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
 
-    //THEN
+    // THEN
     <%_ if (enableTranslation) { _%>
     expect(translationStub.withArgs(translationKey).callCount).toEqual(1);
     <%_ } _%>
@@ -107,9 +107,112 @@ describe('Alert Service test suite', () => {
     // WHEN
     alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
 
-    //THEN
+    // THEN
     <%_ if (enableTranslation) { _%>
     expect(translationStub.withArgs(translationKey, { entityName: 'DummyEntity' }).callCount).toEqual(1);
+    <%_ } _%>
+    expect(
+      toastStub.calledOnceWith(message, {
+        toaster: 'b-toaster-top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+        autoHideDelay: 5000,
+      })
+    ).toBeTruthy();
+  });
+
+  it('should show error toast with data.message when http status = 400 and entity headers', async () => {
+    const message = 'Validation error';
+    const httpErrorResponse = {
+      status: 400,
+      headers: {
+        'x-jhipsterapp-error400': 'error',
+        'x-jhipsterapp-params400': 'dummyEntity',
+      },
+      data: {
+        message,
+        fieldErrors: {
+          'field1': 'error1',
+        },
+      },
+    };
+
+    <%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.withArgs(message).returns(message);
+    <%_ } _%>
+
+    // WHEN
+    alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
+
+    // THEN
+    <%_ if (enableTranslation) { _%>
+    expect(translationStub.withArgs(message).callCount).toEqual(1);
+    <%_ } _%>
+    expect(
+      toastStub.calledOnceWith(message, {
+        toaster: 'b-toaster-top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+        autoHideDelay: 5000,
+      })
+    ).toBeTruthy();
+  });
+
+  it('should show error toast when http status = 404', async () => {
+    <%_ if (enableTranslation) { _%>
+    const translationKey = 'error.http.404';
+    <%_ } _%>
+    const message = 'Not found';
+    const httpErrorResponse = {
+      status: 404,
+    };
+
+    <%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.withArgs(translationKey).returns(message);
+    <%_ } _%>
+
+    // WHEN
+    alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
+
+    // THEN
+    <%_ if (enableTranslation) { _%>
+    expect(translationStub.withArgs(translationKey).callCount).toEqual(1);
+    <%_ } _%>
+    expect(
+      toastStub.calledOnceWith(message, {
+        toaster: 'b-toaster-top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+        autoHideDelay: 5000,
+      })
+    ).toBeTruthy();
+  });
+
+  it('should show error toast when http status != 400,404', async () => {
+    const message = 'Error 500';
+    const httpErrorResponse = {
+      status: 500,
+      data: {
+        message,
+      }
+    };
+
+    <%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.withArgs(message).returns(message);
+    <%_ } _%>
+
+    // WHEN
+    alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
+
+    // THEN
+    <%_ if (enableTranslation) { _%>
+    expect(translationStub.withArgs(message).callCount).toEqual(1);
     <%_ } _%>
     expect(
       toastStub.calledOnceWith(message, {

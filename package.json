@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "7.8.1",
+  "version": "7.9.2",
   "description": "Spring Boot + Angular/React/Vue in one handy generator",
   "keywords": [
     "yeoman-generator",
@@ -84,10 +84,10 @@
   },
   "dependencies": {
     "@faker-js/faker": "5.5.3",
-    "aws-sdk": "2.1185.0",
+    "aws-sdk": "2.1199.0",
     "axios": "0.27.2",
     "chalk": "4.1.2",
-    "chevrotain": "10.1.2",
+    "chevrotain": "10.3.0",
     "commander": "9.4.0",
     "conf": "10.2.0",
     "debug": "4.3.4",
@@ -98,7 +98,7 @@
     "insight": "0.11.1",
     "js-yaml": "4.1.0",
     "lodash": "4.17.21",
-    "mem-fs-editor": "9.4.0",
+    "mem-fs-editor": "9.5.0",
     "minimatch": "5.1.0",
     "normalize-path": "3.0.0",
     "os-locale": "5.0.0",
@@ -113,7 +113,7 @@
     "randexp": "0.5.3",
     "semver": "7.3.7",
     "shelljs": "0.8.5",
-    "simple-git": "3.11.0",
+    "simple-git": "3.12.0",
     "then-request": "6.0.2",
     "uuid": "8.3.2",
     "winston": "3.8.1",
@@ -123,7 +123,7 @@
   "devDependencies": {
     "chai": "4.3.6",
     "ejs-lint": "1.2.2",
-    "eslint": "8.20.0",
+    "eslint": "8.22.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-chai-friendly": "0.7.2",

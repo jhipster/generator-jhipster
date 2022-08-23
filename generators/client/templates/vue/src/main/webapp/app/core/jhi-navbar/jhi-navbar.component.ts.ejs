@@ -31,7 +31,8 @@ export default class JhiNavbar extends Vue {
 
   created() {
 <%_ if (enableTranslation) { _%>
-    this.translationService().refreshTranslation(this.currentLanguage);
+    const currentLanguage = Object.keys(this.languages).includes(navigator.language) ? navigator.language : this.currentLanguage;
+    this.translationService().refreshTranslation(currentLanguage);
 <%_ } _%>
   }
 

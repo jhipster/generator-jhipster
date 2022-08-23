@@ -61,19 +61,26 @@
 <%_ } _%>
 
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-    <<%= jhiPrefixDashed %>-filter [filters]="filters" (filterChange)="navigateToWithComponentValues()"></<%= jhiPrefixDashed %>-filter>
+    <<%= jhiPrefixDashed %>-filter [filters]="filters"></<%= jhiPrefixDashed %>-filter>
 <%_ } _%>
 
     <div class="alert alert-warning" id="no-result" *ngIf="<%= entityInstancePlural %>?.length === 0">
         <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.notFound') %></span>
     </div>
 
-    <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
+    <div class="table-responsive table-entities" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
-                    <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>"><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%- this._getEntityClientTranslation(field.fieldTranslationKey) %></span> <fa-icon <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon></th>
+                    <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>">
+                        <div class="d-flex">
+                            <span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%- this._getEntityClientTranslation(field.fieldTranslationKey) %></span>
+  <%_ if (!field.transient) { _%>
+                            <fa-icon class="p-1" <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon>
+  <%_ } _%>
+                        </div>
+                    </th>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
   <%_ if (relationship.relationshipManyToOne
@@ -81,13 +88,18 @@
     || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
     const fieldName = "." + relationship.otherEntityField;
   _%>
-                    <th scope="col" <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.' + relationship.relationshipName) %></span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>">
+                        <div class="d-flex">
+                            <span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.' + relationship.relationshipName) %></span>
+                            <fa-icon class="p-1" icon="sort"></fa-icon>
+                        </div>
+                    </th>
   <%_ } _%>
 <%_ } _%>
                     <th scope="col"></th>
                 </tr>
             </thead>
-            <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
+            <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page - 1 >= links['last']" [infiniteScrollDistance]="0"<% } %>>
                 <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: track<%= primaryKey.nameCapitalized %>" data-cy="entityTable">
 <%_
 const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKey.name}, 'view']"`;
@@ -146,7 +158,7 @@ _%>
                         </span>
             <%_ } else { _%>
                         <div *ngIf="<%= entityInstance + "." + relationshipFieldName %>">
-                            <a [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= entityInstance %>.<%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %>?.<%= otherEntityField %> }}</a>
+                            <a [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= entityInstance %>.<%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %>.<%= otherEntityField %> }}</a>
                         </div>
             <%_ } _%>
         <%_ } _%>

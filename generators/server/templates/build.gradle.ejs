@@ -367,8 +367,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.hibernate:hibernate-jcache"
   <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine) { _%>
+<%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
     implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
+<%_ } _%>
+<%_ if (cacheProviderCaffeine) { _%>
     implementation "com.github.ben-manes.caffeine:jcache:${caffeineVersion}"
     implementation "com.typesafe:config:${typesafeConfigVersion}"
   <%_ if (enableHibernateCache) { _%>
@@ -568,14 +570,10 @@ task webapp_test(type: NpmTask, dependsOn: "npm_install") {
 }
 
 if (project.hasProperty("nodeInstall")) {
-    // Workaround node grade plugin not working on apple silicon https://github.com/node-gradle/gradle-node-plugin/issues/154
-    OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
-    Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
-    Boolean downloadNode = !os.isMacOsX() || arch.isAmd64()
     node {
         version = "<%= NODE_VERSION %>"
         npmVersion = "<%= NPM_VERSION %>"
-        download = downloadNode
+        download = true
     }
 
     // Copy local node and npm to a fixed location for npmw

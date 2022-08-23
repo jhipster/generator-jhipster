@@ -93,6 +93,7 @@ import <%= otherEntity.entityAbsoluteClass %>;
   <%_ } _%>
 <%_ } _%>
 <&- fragments.annotationSection() -&>
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class <%= persistClass %> implements Serializable<&- fragments.additionalInterfacesSection() -&> {
 
     private static final long serialVersionUID = 1L;

@@ -2812,7 +2812,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       if (languages.length === 1 && languages[0] === 'false') {
         this.jhipsterConfig.enableTranslation = false;
       } else {
-        this.jhipsterConfig.languages = [...this.jhipsterConfig.languages, ...languages];
+        this.jhipsterConfig.languages = [...(this.jhipsterConfig.languages || []), ...languages];
       }
     }
     if (options.nativeLanguage) {
@@ -3029,6 +3029,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFrameworkAngular = dest.clientFramework === ANGULAR;
     dest.clientFrameworkReact = dest.clientFramework === REACT;
     dest.clientFrameworkVue = dest.clientFramework === VUE;
+    dest.clientFrameworkNo = dest.clientFramework === CLIENT_FRAMEWORK_NO;
     dest.clientThemeNone = dest.clientTheme === 'none';
     dest.clientThemePrimary = dest.clientThemeVariant === 'primary';
     dest.clientThemeLight = dest.clientThemeVariant === 'light';

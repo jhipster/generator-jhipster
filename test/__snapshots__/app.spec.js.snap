@@ -23,9 +23,6 @@ Object {
   ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -132,6 +129,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -529,9 +529,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -608,6 +605,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -1967,9 +1967,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -2064,6 +2061,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -3382,9 +3382,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -3485,6 +3482,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/Constants.java": Object {
@@ -4761,9 +4761,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -4858,6 +4855,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/test/reactui/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/test/reactui/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/test/reactui/config/CacheConfiguration.java": Object {
@@ -5435,9 +5435,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -5529,6 +5526,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -6832,9 +6832,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -6926,6 +6923,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -8241,9 +8241,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -8335,6 +8332,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -9641,9 +9641,6 @@ Object {
   ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -9765,6 +9762,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -11077,9 +11077,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -11168,6 +11165,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -11450,9 +11450,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/store.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/translation-middleware.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/translation.ts": Object {
@@ -12081,9 +12078,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -12175,6 +12169,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -13490,9 +13487,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -13584,6 +13578,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -14866,9 +14863,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -14960,6 +14954,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
@@ -16239,9 +16236,6 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -16333,6 +16327,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {

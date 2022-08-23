@@ -157,13 +157,6 @@ Object {
       ],
     },
   ],
-  "node": Array [
-    Object {
-      "templates": Array [
-        ".npmrc",
-      ],
-    },
-  ],
   "packageJson": Array [
     Object {
       "condition": [Function],
@@ -295,6 +288,16 @@ Object {
       "templates": Array [
         Object {
           "file": "package/Application.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/EurekaWorkaroundConfiguration.java",
           "renameTo": [Function],
         },
       ],
@@ -590,6 +593,10 @@ Object {
         },
         Object {
           "file": "package/config/AsyncConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/CRLFLogConverter.java",
           "renameTo": [Function],
         },
         Object {
@@ -1171,7 +1178,7 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/config/ElasticsearchReactiveTestConfiguration.java",
+          "file": "package/config/ElasticsearchTestConfiguration.java",
           "renameTo": [Function],
         },
       ],
