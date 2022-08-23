@@ -28,6 +28,9 @@ module.exports = {
   ],
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: ['<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/**/@(*.)@(spec.ts)'],
+  testEnvironmentOptions: {
+    url: 'https://jhipster.tech',
+  },
   snapshotSerializers: ['jest-serializer-vue'],
   globals: {
 <%_ if (enableTranslation) { _%>
