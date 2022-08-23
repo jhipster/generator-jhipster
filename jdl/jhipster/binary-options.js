@@ -27,7 +27,7 @@ const NO_SERVICE = ServiceTypes.NO;
 const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
 const NO_PAGINATION = PaginationTypes.NO;
 
-const { ELASTICSEARCH, COUCHBASE } = SearchTypes;
+const { ELASTICSEARCH, COUCHBASE, NO: NO_SEARCH } = SearchTypes;
 
 const Options = {
   DTO: 'dto',
@@ -49,7 +49,7 @@ const Values = {
     'INFINITE-SCROLL': INFINITE_SCROLL,
     NO: NO_PAGINATION,
   },
-  [Options.SEARCH]: { ELASTICSEARCH, COUCHBASE },
+  [Options.SEARCH]: { ELASTICSEARCH, COUCHBASE, NO: NO_SEARCH },
 };
 
 const DefaultValues = {
