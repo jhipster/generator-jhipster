@@ -675,21 +675,11 @@ Object {
     "contents": "version: 2.1
 jobs:
   build:
-    docker:
-      - image: jhipster/jhipster:v
+    machine:
+      image: ubuntu-2004:current
+    resource_class: large
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 19.03.13
-      - run:
-          name: Install docker and docker-compose
-          command: |
-            echo jhipster | sudo -S apt update
-            echo jhipster | sudo -S apt install -y docker.io
-            echo jhipster | sudo -S curl -Lo /usr/local/bin/docker-compose $(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep \\"browser_download_url.*docker-compose-Linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
-            echo jhipster | sudo -S chmod +x /usr/local/bin/docker-compose
-            docker version
-            docker-compose version
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -777,21 +767,11 @@ Object {
     "contents": "version: 2.1
 jobs:
   build:
-    docker:
-      - image: jhipster/jhipster:v
+    machine:
+      image: ubuntu-2004:current
+    resource_class: large
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 19.03.13
-      - run:
-          name: Install docker and docker-compose
-          command: |
-            echo jhipster | sudo -S apt update
-            echo jhipster | sudo -S apt install -y docker.io
-            echo jhipster | sudo -S curl -Lo /usr/local/bin/docker-compose $(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep \\"browser_download_url.*docker-compose-Linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
-            echo jhipster | sudo -S chmod +x /usr/local/bin/docker-compose
-            docker version
-            docker-compose version
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -890,21 +870,11 @@ Object {
     "contents": "version: 2.1
 jobs:
   build:
-    docker:
-      - image: jhipster/jhipster:v
+    machine:
+      image: ubuntu-2004:current
+    resource_class: large
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 19.03.13
-      - run:
-          name: Install docker and docker-compose
-          command: |
-            echo jhipster | sudo -S apt update
-            echo jhipster | sudo -S apt install -y docker.io
-            echo jhipster | sudo -S curl -Lo /usr/local/bin/docker-compose $(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep \\"browser_download_url.*docker-compose-Linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
-            echo jhipster | sudo -S chmod +x /usr/local/bin/docker-compose
-            docker version
-            docker-compose version
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -992,21 +962,11 @@ Object {
     "contents": "version: 2.1
 jobs:
   build:
-    docker:
-      - image: jhipster/jhipster:v
+    machine:
+      image: ubuntu-2004:current
+    resource_class: large
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 19.03.13
-      - run:
-          name: Install docker and docker-compose
-          command: |
-            echo jhipster | sudo -S apt update
-            echo jhipster | sudo -S apt install -y docker.io
-            echo jhipster | sudo -S curl -Lo /usr/local/bin/docker-compose $(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep \\"browser_download_url.*docker-compose-Linux\\" | cut -d ':' -f 2,3 | tr -d \\\\\\" | tr -d ' ')
-            echo jhipster | sudo -S chmod +x /usr/local/bin/docker-compose
-            docker version
-            docker-compose version
       # Download and cache dependencies
       - restore_cache:
           keys:
