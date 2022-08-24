@@ -113,30 +113,46 @@ jobs:
         run: $JHI_SCRIPTS/10-install-jhipster.sh
         continue-on-error: true
 
-      # maven
-      - name: 'mvn: config'
-        run: $JHI_SCRIPTS/11-generate-config.sh
-        continue-on-error: true
-      - name: 'mvn: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
-        continue-on-error: true
-      - name: 'mvn: install workspaces deps'
-        run: npm install --force
-        continue-on-error: true
-      - name: 'mvn: build cache'
-        run: npm run backend:build-cache || true
+      - name: 'maven'
+        run: |
+          $JHI_SCRIPTS/11-generate-config.sh
+          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
+          npm install --force
+          npm run backend:build-cache || true
+          cd ..
+          rm -rf app
+          mkdir app
         continue-on-error: true
 
-      # gradle
-      - name: 'gradle: config'
-        run: $JHI_SCRIPTS/11-generate-config.sh
+      - name: 'maven reactive'
+        run: |
+          $JHI_SCRIPTS/11-generate-config.sh
+          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces --reactive
+          npm install --force
+          npm run backend:build-cache || true
+          cd ..
+          rm -rf app
+          mkdir app
         continue-on-error: true
-      - name: 'gradle: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
+
+      - name: 'gradle'
+        run: |
+          $JHI_SCRIPTS/11-generate-config.sh
+          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces --build gradle
+          npm install --force
+          npm run backend:build-cache || true
+          cd ..
+          rm -rf app
+          mkdir app
         continue-on-error: true
-      - name: 'gradle: install workspaces deps'
-        run: npm install --force
-        continue-on-error: true
-      - name: 'gradle: build cache'
-        run: npm run backend:build-cache || true
+
+      - name: 'gradle reactive'
+        run: |
+          $JHI_SCRIPTS/11-generate-config.sh
+          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces --build gradle --reactive
+          npm install --force
+          npm run backend:build-cache || true
+          cd ..
+          rm -rf app
+          mkdir app
         continue-on-error: true
