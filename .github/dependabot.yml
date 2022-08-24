@@ -20,6 +20,8 @@ updates:
         versions: ['>=5']
       - dependency-name: 'escape-string-regexp'
         versions: ['>=5']
+      - dependency-name: 'isbinaryfile'
+        versions: ['>=5']
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/angular/'
