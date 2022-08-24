@@ -9574,7 +9574,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.29
+          image: mysql:8.0.30
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9857,7 +9857,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:14.4
+          image: postgres:14.5
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -10461,7 +10461,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.29
+          image: mysql:8.0.30
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11086,7 +11086,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.29
+          image: mysql:8.0.30
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11312,7 +11312,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.29
+          image: mysql:8.0.30
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11908,7 +11908,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.29
+          image: mysql:8.0.30
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -12548,7 +12548,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.29
+          image: mysql:8.0.30
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -13187,7 +13187,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.14
+          image: mongo:4.4.15
           command:
             - /work-dir/peer-finder
           args:
@@ -13217,7 +13217,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.14
+          image: mongo:4.4.15
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -13481,7 +13481,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU16-ubuntu-20.04
+          image: mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
@@ -13685,7 +13685,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.29
+          image: mysql:8.0.30
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -13968,7 +13968,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:14.4
+          image: postgres:14.5
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -16927,7 +16927,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:9.0.1
+          image: grafana/grafana:9.1.0
           ports:
             - containerPort: 3000
               name: http
@@ -17218,7 +17218,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.29
+          image: mysql:8.0.30
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -17816,7 +17816,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.29
+          image: mysql:8.0.30
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -18420,7 +18420,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.29
+          image: mysql:8.0.30
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
