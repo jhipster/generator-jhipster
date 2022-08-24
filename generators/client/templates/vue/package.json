@@ -7,7 +7,7 @@
     "bootstrap": "4.6.2",
     "bootstrap-vue": "2.22.0",
     "bootswatch": "5.2.0",
-    "vue": "2.7.5",
+    "vue": "2.7.10",
     "vue-class-component": "7.2.6",
     "vue-cookie": "1.1.4",
     "vue-infinite-loading": "2.4.5",
