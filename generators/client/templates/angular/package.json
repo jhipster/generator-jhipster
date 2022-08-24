@@ -22,7 +22,7 @@
     "@angular-builders/custom-webpack": "14.0.1",
     "@angular-builders/jest": "14.0.0",
     "@angular-eslint/eslint-plugin": "14.0.2",
-    "@types/node": "16.11.54",
+    "@types/node": "16.11.56",
     "@types/jest": "28.1.7",
     "@typescript-eslint/eslint-plugin": "5.34.0",
     "browser-sync": "2.27.10",
