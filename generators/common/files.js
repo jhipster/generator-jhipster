@@ -46,11 +46,12 @@ const commonFiles = {
           file: 'editorconfig',
           renameTo: () => '.editorconfig',
         },
-        {
-          file: 'sonar-project.properties',
-          renameTo: () => 'sonar-project.properties',
-        },
       ],
+    },
+  ],
+  sonar: [
+    {
+      templates: ['sonar-project.properties'],
     },
   ],
   commitHooks: [

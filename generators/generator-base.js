@@ -3034,6 +3034,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFrameworkReact = dest.clientFramework === REACT;
     dest.clientFrameworkVue = dest.clientFramework === VUE;
     dest.clientFrameworkNo = dest.clientFramework === CLIENT_FRAMEWORK_NO;
+    dest.clientFrameworkAny = dest.clientFramework && dest.clientFramework !== CLIENT_FRAMEWORK_NO;
     dest.clientThemeNone = dest.clientTheme === 'none';
     dest.clientThemePrimary = dest.clientThemeVariant === 'primary';
     dest.clientThemeLight = dest.clientThemeVariant === 'light';
