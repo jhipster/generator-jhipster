@@ -116,7 +116,7 @@ spec:
           value: <%= app.baseName.toLowerCase() %>
   <%_ } _%>
 <%_ } _%>
-<%_ if (!app.serviceDiscoveryType && app.authenticationTypeJwt) { _%>
+<%_ if (!app.serviceDiscoveryAny && app.authenticationTypeJwt) { _%>
         - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
           valueFrom:
             secretKeyRef:

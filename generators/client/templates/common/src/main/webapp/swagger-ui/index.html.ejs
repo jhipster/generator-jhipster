@@ -74,7 +74,7 @@
 
         const baseUrl = '/v3/api-docs';
         let urls;
-<%_ if (!applicationTypeMonolith && serviceDiscoveryType) { _%>
+<%_ if (!applicationTypeMonolith && serviceDiscoveryAny) { _%>
 
         try {
           const response = await axios.get('/management/health/discoveryComposite', axiosConfig);

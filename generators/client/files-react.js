@@ -199,7 +199,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType,
+      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryAny,
       path: REACT_DIR,
       templates: ['modules/administration/gateway/gateway.tsx'],
     },

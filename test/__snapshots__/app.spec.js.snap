@@ -5079,9 +5079,6 @@ Object {
   "src/main/webapp/app/modules/administration/docs/docs.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/modules/administration/gateway/gateway.tsx": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/modules/administration/index.tsx": Object {
     "stateCleared": "modified",
   },

@@ -270,7 +270,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType,
+      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryAny,
       path: ANGULAR_DIR,
       templates: [
         'admin/gateway/gateway.route.ts',

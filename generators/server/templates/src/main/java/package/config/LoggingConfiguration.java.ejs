@@ -23,11 +23,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import tech.jhipster.config.JHipsterProperties;
 import org.slf4j.LoggerFactory;
-<%_ if (serviceDiscoveryConsul || (serviceDiscoveryType && applicationTypeGateway || applicationTypeMicroservice)) { _%>
+<%_ if (serviceDiscoveryConsul || (serviceDiscoveryAny && applicationTypeGateway || applicationTypeMicroservice)) { _%>
 import org.springframework.beans.factory.ObjectProvider;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Value;
-<%_ if (serviceDiscoveryType && (applicationTypeGateway || applicationTypeMicroservice)) { _%>
+<%_ if (serviceDiscoveryAny && (applicationTypeGateway || applicationTypeMicroservice)) { _%>
 import org.springframework.boot.info.BuildProperties;
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
@@ -58,7 +58,7 @@ public class LoggingConfiguration {
 <%_ if (serviceDiscoveryConsul) { _%>
                                 ObjectProvider<ConsulRegistration> consulRegistration,
 <%_ } _%>
-<%_ if (serviceDiscoveryType && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
+<%_ if (serviceDiscoveryAny && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
                                 ObjectProvider<BuildProperties> buildProperties,
 <%_ } _%>
                                 ObjectMapper mapper) throws JsonProcessingException {
@@ -68,7 +68,7 @@ public class LoggingConfiguration {
         Map<String, String> map = new HashMap<>();
         map.put("app_name", appName);
         map.put("app_port", serverPort);
-<%_ if (serviceDiscoveryType && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
+<%_ if (serviceDiscoveryAny && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
         buildProperties.ifAvailable(it -> map.put("version", it.getVersion()));
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>

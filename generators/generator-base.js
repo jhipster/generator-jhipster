@@ -3099,6 +3099,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.packageFolder = dest.packageName.replace(/\./g, '/');
     }
 
+    dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     // Convert to false for templates.
     if (dest.serviceDiscoveryType === NO_SERVICE_DISCOVERY || !dest.serviceDiscoveryType) {
       dest.serviceDiscoveryType = false;
@@ -3173,7 +3174,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadDerivedPlatformConfig(dest = this) {
     dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
     dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryConsul || dest.serviceDiscoveryEureka;
+    dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     dest.monitoringELK = dest.monitoring === ELK;
     dest.monitoringPrometheus = dest.monitoring === PROMETHEUS;
   }

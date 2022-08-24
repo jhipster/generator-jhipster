@@ -57,7 +57,7 @@ spec:
   gateways:
   - <%= app.baseName.toLowerCase() %>-gateway
   http:
-<%_ if (!app.serviceDiscoveryType) { _%>
+<%_ if (!app.serviceDiscoveryAny) { _%>
   <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
   - match:
     - uri:

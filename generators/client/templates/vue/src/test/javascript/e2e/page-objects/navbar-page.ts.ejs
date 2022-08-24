@@ -8,7 +8,7 @@ import SettingsPage from './settings-page';
 <%_ } _%>
 import {
   ConfigurationsPage,
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
   GatewayPage,
 <%_ } _%>
   HealthPage,
@@ -155,7 +155,7 @@ async getRegisterPage() {
     await waitUntilDisplayed(logsPage.title);
     return logsPage;
   }
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
 
   async getGatewayPage() {
     await this.clickOnAdminMenuItem('gateway');

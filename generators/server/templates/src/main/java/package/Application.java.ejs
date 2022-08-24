@@ -113,7 +113,7 @@ public class <%= mainClass %> {
             contextPath,
             env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles()
         );
-<%_ if (serviceDiscoveryType && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
+<%_ if (serviceDiscoveryAny && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
 
         String configServerStatus = env.getProperty("configserver.status");
         if (configServerStatus == null) {

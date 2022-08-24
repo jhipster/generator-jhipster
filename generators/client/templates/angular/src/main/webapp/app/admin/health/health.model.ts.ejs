@@ -22,7 +22,7 @@ export type HealthKey =
   <%_ if (messageBrokerKafka) { _%>
   | 'binders'
   <%_ } _%>
-  <%_ if (applicationTypeGateway || serviceDiscoveryType) { _%>
+  <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>
   | 'discoveryComposite'
   | 'refreshScope'
   | 'clientConfigServer'

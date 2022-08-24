@@ -33,7 +33,7 @@ import '../content/scss/vendor.scss';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { %>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
 import GatewayService from '@/admin/gateway/gateway.service';
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
@@ -107,7 +107,7 @@ router.beforeEach(async (to, from, next) => {
     registerService: () => new RegisterService(),
     userManagementService: () => new UserManagementService(),
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { %>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { %>
     gatewayService: () => new GatewayService(),
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
