@@ -199,7 +199,7 @@ jobs:
       - name: 'TESTS: packaging'
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:package
-        timeout-minutes: 5
+        timeout-minutes: 7
       - name: 'TESTS: Start docker-compose containers for e2e tests'
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:prepare
@@ -208,7 +208,7 @@ jobs:
         id: e2e
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:run --if-present
-        timeout-minutes: 10
+        timeout-minutes: 15
       - name: 'BACKEND: Store failure logs'
         uses: actions/upload-artifact@v3
         if: always() && steps.backend.outcome == 'failure'

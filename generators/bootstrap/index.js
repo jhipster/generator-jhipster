@@ -221,7 +221,7 @@ module.exports = class extends BaseGenerator {
             .map(attr => attr.split(':'))
             .map(([_file, attr, value]) => [attr, value])
         );
-        if (attributes.binary === 'set' || attributes.eol !== 'lf') {
+        if (attributes.binary === 'set' || attributes.eol === 'lf') {
           return file;
         }
         if (attributes.eol === 'crlf' || (await detectCrLf(file.path))) {
