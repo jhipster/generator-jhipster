@@ -148,12 +148,6 @@ jobs:
         with:
           name: screenshots-${{ matrix.app-sample }}
           path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
-      - name: 'ANALYSIS: Sonar analysis'
-        if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse == 'true'
-        run: $JHI_SCRIPTS/25-sonar-analyze.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   check-dev-server:
     permissions:
       contents: none

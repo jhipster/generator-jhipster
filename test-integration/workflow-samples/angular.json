@@ -3,14 +3,14 @@
     {
       "name": "ngx-default",
       "app-sample": "ngx-default",
-      "entity": "sqlfull"
+      "entity": "sqlfull",
+      "sonar-analyse": "true"
     },
     {
       "name": "ngx-default-additional",
       "entity": "none",
       "app-sample": "ngx-default",
-      "jdl-entity": "*",
-      "sonar-analyse": "false"
+      "jdl-entity": "*"
     },
     {
       "name": "ngx-mysql-es-noi18n-mapsid",

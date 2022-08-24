@@ -141,6 +141,12 @@ runs:
         echo "SPRING_JPA_SHOW_SQL=false" >> $GITHUB_ENV
         echo "NG_CLI_ANALYTICS=ci" >> $GITHUB_ENV
 
+        JHI_PROJECT_VERSION=$JHI_VERSION
+        if [[ "true" != "{{ startsWith(github.ref, 'refs/tags/v') }}" ]]; then
+          JHI_PROJECT_VERSION="$JHI_VERSION-git"
+        fi
+        echo "JHI_PROJECT_VERSION=$JHI_PROJECT_VERSION" >> $GITHUB_ENV
+
         if [[ "${{inputs.jhipster-bom-branch}}" != "release" && "${{inputs.jhipster-bom-branch}}" != "ignore" ]]; then
           echo "JHI_BOM_VERSION=0.0.0-CICD" >> $GITHUB_ENV
         fi
