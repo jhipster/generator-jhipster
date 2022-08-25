@@ -79,7 +79,7 @@ _%>
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
 <%_ if (authenticationTypeOauth2) { _%>
-      - JHIPSTER_SLEEP=70 # gives time for microservices, dependencies to boot before the gateway, the entire stack will be ready to accept incoming requests.
+      - JHIPSTER_SLEEP=90 # gives time for microservices, dependencies to boot before the gateway, the entire stack will be ready to accept incoming requests.
 <%_ } else { _%>
       - JHIPSTER_SLEEP=60 # gives time for microservices to boot before the gateway, the entire stack will be ready to accept incoming requests.
 <%_ } _%>
