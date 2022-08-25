@@ -20,9 +20,9 @@ module.exports = {
   }),
   reporters: [
     'default',
-    [ 'jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' } ]
+    ['jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }],
+    ['jest-sonar', { outputDirectory: './<%= BUILD_DIR %>test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
   ],
-  testResultsProcessor: 'jest-sonar-reporter',
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/'
   ],

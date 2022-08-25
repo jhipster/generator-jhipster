@@ -33,8 +33,11 @@ module.exports = {
   cacheDirectory: '<rootDir>/<%= BUILD_DIR %>jest-cache',
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
   moduleNameMapper: pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),
-  reporters: ['default', ['jest-junit', { outputDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }]],
-  testResultsProcessor: 'jest-sonar-reporter',
+  reporters: [
+    'default',
+    ['jest-junit', { outputDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }],
+    ['jest-sonar', { outputDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
+  ],
   testMatch: ['<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/**/@(*.)@(spec.ts)'],
   testEnvironmentOptions: {
     url: 'https://jhipster.tech',
