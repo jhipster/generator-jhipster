@@ -18,9 +18,24 @@
  */
 
 module.exports = {
-  deduplicate,
+  addAll,
+  join,
 };
 
-function deduplicate(array = []) {
-  return Array.from(new Set(array));
+function addAll<T>(set: Set<T>, elements: T[]) {
+  if (!set) {
+    throw new Error('A Set must be passed so as to insert elements.');
+  }
+  if (!elements || elements.length === 0) {
+    return set;
+  }
+  elements.forEach(element => set.add(element));
+  return set;
+}
+
+function join(set: Set<unknown>, separator = ',') {
+  if (!set) {
+    throw new Error('A Set must be passed so as to join elements.');
+  }
+  return Array.from(set).join(separator);
 }

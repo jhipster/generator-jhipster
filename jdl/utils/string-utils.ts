@@ -23,7 +23,7 @@ module.exports = {
   lowerFirst,
 };
 
-function camelCase(string) {
+function camelCase(string: string): string {
   checkStringIsValid(string);
   if (string === '') {
     return string;
@@ -32,7 +32,7 @@ function camelCase(string) {
   return `${firstLetter.toLowerCase()}${rest.join('')}`;
 }
 
-function upperFirst(string) {
+function upperFirst(string: string): string {
   checkStringIsValid(string);
   if (string === '') {
     return string;
@@ -41,7 +41,7 @@ function upperFirst(string) {
   return `${firstLetter.toUpperCase()}${rest.join('')}`;
 }
 
-function lowerFirst(string) {
+function lowerFirst(string: string): string {
   checkStringIsValid(string);
   if (string === '') {
     return string;
@@ -50,7 +50,7 @@ function lowerFirst(string) {
   return `${firstLetter.toLowerCase()}${rest.join('')}`;
 }
 
-function checkStringIsValid(string) {
+function checkStringIsValid(string: string): void {
   if (string === undefined || string === null) {
     throw new Error('The passed string cannot be nil.');
   }

@@ -30,7 +30,7 @@ module.exports = {
  *        - deprecatedObject
  *        - preferredObject
  */
-function displayObjectDeprecationMessage({ deprecatedObject, preferredObject }) {
+function displayObjectDeprecationMessage({ deprecatedObject, preferredObject }: { deprecatedObject: string; preferredObject: string }) {
   logger.warn(getDeprecationMessage(deprecatedObject, preferredObject, 'object'));
 }
 
@@ -40,11 +40,11 @@ function displayObjectDeprecationMessage({ deprecatedObject, preferredObject }) 
  *        - deprecatedMethod
  *        - preferredMethod
  */
-function displayMethodDeprecationMessage({ deprecatedMethod, preferredMethod }) {
+function displayMethodDeprecationMessage({ deprecatedMethod, preferredMethod }: { deprecatedMethod: string; preferredMethod: string }) {
   logger.warn(getDeprecationMessage(deprecatedMethod, preferredMethod, 'method'));
 }
 
-function getDeprecationMessage(deprecated, preferred, targetType) {
+function getDeprecationMessage(deprecated: string, preferred: string, targetType: string) {
   const firstPart = `The ${targetType} '${deprecated}' is deprecated and will be removed in the next major release.`;
   if (!preferred) {
     return firstPart;

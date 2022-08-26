@@ -18,24 +18,28 @@
  */
 
 module.exports = {
-  addAll,
-  join,
+  formatComment,
 };
 
-function addAll(set, elements) {
-  if (!set) {
-    throw new Error('A Set must be passed so as to insert elements.');
-  }
-  if (!elements || elements.length === 0) {
-    return set;
-  }
-  elements.forEach(element => set.add(element));
-  return set;
-}
+/**
+ * formats a comment
+ * @param comment string.
+ * @returns formatted comment string
+ */
+function formatComment(comment: string) {
+  const parts = comment.trim().split('\n');
 
-function join(set, separator = ',') {
-  if (!set) {
-    throw new Error('A Set must be passed so as to join elements.');
+  if (parts.length === 1 && parts[0].indexOf('*') !== 0) {
+    return parts[0];
   }
-  return Array.from(set).join(separator);
+  return parts.reduce((previousValue, currentValue) => {
+    // newlines in the middle of the comment should stay to achieve:
+    // multiline comments entered by user drive unchanged from JDL
+    // studio to generated domain class
+    let delimiter = '';
+    if (previousValue !== '') {
+      delimiter = '\\n';
+    }
+    return previousValue.concat(delimiter, currentValue.trim().replace(/[*]*\s*/, ''));
+  }, '');
 }
