@@ -85,7 +85,6 @@
   },
   "dependencies": {
     "@faker-js/faker": "5.5.3",
-    "@types/lodash": "^4.14.184",
     "aws-sdk": "2.1201.0",
     "axios": "0.27.2",
     "chalk": "4.1.2",
@@ -124,6 +123,7 @@
     "yeoman-generator": "5.7.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.184",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@typescript-eslint/parser": "^5.35.1",
     "chai": "4.3.6",
