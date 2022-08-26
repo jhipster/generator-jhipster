@@ -21,7 +21,7 @@ package <%= packageName %>.domain;
 <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.data.couchbase.core.mapping.Field;
 <%_ } _%>
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <%_ if (!reactive) { _%>
 import org.springframework.data.annotation.CreatedBy;
 <%_ } _%>
@@ -58,6 +58,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 <%_ } _%>
+@JsonIgnoreProperties(value = { "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" }, allowGetters = true)
 public abstract class AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -77,7 +78,6 @@ public abstract class AbstractAuditingEntity implements Serializable {
 <%_ if (databaseTypeNeo4j) { _%>
     @Property("created_by")
 <%_ } _%>
-    @JsonIgnore
     private String createdBy;
 
     @CreatedDate
@@ -93,7 +93,6 @@ public abstract class AbstractAuditingEntity implements Serializable {
 <%_ if (databaseTypeNeo4j) { _%>
     @Property("created_date")
 <%_ } _%>
-    @JsonIgnore
     private Instant createdDate = Instant.now();
 
 <%_ if (!reactive) { _%>
@@ -111,7 +110,6 @@ public abstract class AbstractAuditingEntity implements Serializable {
 <%_ if (databaseTypeNeo4j) { _%>
     @Property("last_modified_by")
 <%_ } _%>
-    @JsonIgnore
     private String lastModifiedBy;
 
     @LastModifiedDate
@@ -127,7 +125,6 @@ public abstract class AbstractAuditingEntity implements Serializable {
 <%_ if (databaseTypeNeo4j) { _%>
     @Property("last_modified_date")
 <%_ } _%>
-    @JsonIgnore
     private Instant lastModifiedDate = Instant.now();
 
     public String getCreatedBy() {
