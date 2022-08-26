@@ -105,7 +105,7 @@ public class <%= persistClass %> implements Serializable<&- fragments.additional
 <%_ } _%>
 <&- fragments.classStaticFieldsSection() -&>
 <&- fragments.classFieldsSection() -&>
-<%_ for (const field of fields.filter(field => !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
+<%_ for (const field of fields.filter(field => !field.javaInherited && !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
   <%_ if (typeof field.javadoc !== 'undefined') { _%>
 <%- formatAsFieldJavadoc(field.javadoc) %>
   <%_ } _%>
@@ -171,10 +171,12 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
 <&- fragments.classAdditionalRelationshipsSection() -&>
     // jhipster-needle-entity-add-field - JHipster will add fields here
 <%_ for (const field of fields.filter(field => !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
+  <%_ if (!field.javaInherited) { _%>
 
     public <%= field.javaFieldType %> get<%= field.fieldInJavaBeanMethod %>() {
         return this.<%= field.fieldName %>;
     }
+  <%_ } _%>
   <%_ if (fluentMethods) { _%>
 
     public <%= persistClass %> <%= field.fieldName %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
@@ -182,6 +184,7 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
         return this;
     }
   <%_ } _%>
+  <%_ if (!field.javaInherited) { _%>
 
 <&- fragments.field<%- field.fieldNameCapitalized %>CustomSetSection() -&>
 <&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomSetSection()) { -&>
@@ -189,6 +192,7 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
         this.<%= field.fieldName %> = <%= field.fieldName %>;
     }
 <&_ } -&>
+  <%_ } _%>
   <%_ if (field.fieldWithContentType) { _%>
 
     public String get<%= field.fieldInJavaBeanMethod %>ContentType() {
