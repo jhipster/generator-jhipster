@@ -124,9 +124,11 @@
     "yeoman-generator": "5.7.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.35.1",
     "chai": "4.3.6",
     "ejs-lint": "1.2.2",
-    "eslint": "8.22.0",
+    "eslint": "^8.22.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-chai-friendly": "0.7.2",
@@ -143,6 +145,7 @@
     "sinon": "14.0.0",
     "sinon-chai": "3.7.0",
     "sort-keys": "4.2.0",
+    "typescript": "^4.8.2",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "6.3.0"
   },
