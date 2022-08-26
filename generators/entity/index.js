@@ -1145,7 +1145,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   _checkPersistableInterfaceRequirement() {
-    this.context.requiresPersistableImplementation = this.context.fields.some(field => field.requiresPersistableImplementation);
+    this.context.requiresPersistableImplementation =
+      this.context.requiresPersistableImplementation || this.context.fields.some(field => field.requiresPersistableImplementation);
   }
 }
 
