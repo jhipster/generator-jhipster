@@ -3386,6 +3386,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       if (optionValue !== undefined) {
         if (optionDesc.scope === 'storage') {
           this.config.set(optionName, optionValue);
+        } else if (optionDesc.scope === 'blueprint') {
+          this.blueprintStorage.set(optionName, optionValue);
         } else if (optionDesc.scope === 'runtime') {
           this.configOptions[optionName] = optionValue;
         } else if (optionDesc.scope === 'generator') {
