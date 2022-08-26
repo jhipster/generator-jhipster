@@ -66,6 +66,7 @@
     "!**/*.spec.?(c|m)js"
   ],
   "scripts": {
+    "build": "tsc",
     "completion": "tabtab install --name jhipster --auto",
     "ejs-lint": "mocha test/ejslint.js",
     "ejslint": "ejslint",
