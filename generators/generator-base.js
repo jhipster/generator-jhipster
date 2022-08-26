@@ -2548,6 +2548,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             to: blockToCallback,
             condition: blockConditionCallback,
             transform: blockTransform = [],
+            renameTo: blockRenameTo,
           } = block;
           assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
           assert(Array.isArray(block.templates), `Block templates must be an array for ${blockSpecPath}`);
@@ -2570,7 +2571,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             }
             if (typeof fileSpec === 'string') {
               const sourceFile = path.join(blockPath, fileSpec);
-              const destinationFile = this.destinationPath(blockTo, fileSpec);
+              let destinationFile;
+              if (blockRenameTo) {
+                destinationFile = this.destinationPath(blockRenameTo.call(this, context, fileSpec, this));
+              } else {
+                destinationFile = this.destinationPath(blockTo, fileSpec);
+              }
               return { sourceFile, destinationFile, noEjs, transform: derivedTransform };
             }
 
