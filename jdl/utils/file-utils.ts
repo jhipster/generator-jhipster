@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const fs = require('fs');
+import fs from 'fs';
 
 module.exports = {
   doesFileExist,
@@ -27,10 +27,10 @@ module.exports = {
 
 /**
  * Checks the file exists.
- * @param file the file to check.
- * @returns {boolean} whether the file exists and is actually a file.
+ * @param the file to check.
+ * @returns whether the file exists and is actually a file.
  */
-function doesFileExist(file) {
+function doesFileExist(file: string) {
   const statObject = getStatObject(file);
   return statObject && statObject.isFile();
 }
@@ -38,9 +38,9 @@ function doesFileExist(file) {
 /**
  * Checks the directory exists.
  * @param directory the directory to check.
- * @returns {boolean} whether the directory exists and is actually a directory.
+ * @returns whether the directory exists and is actually a directory.
  */
-function doesDirectoryExist(directory) {
+function doesDirectoryExist(directory: string) {
   const statObject = getStatObject(directory);
   return statObject && statObject.isDirectory();
 }
@@ -50,7 +50,7 @@ function doesDirectoryExist(directory) {
  * @param directory the directory to create.
  * @throws WrongDirException if the directory to create exists and is a file.
  */
-function createFolderIfItDoesNotExist(directory) {
+function createFolderIfItDoesNotExist(directory: string) {
   if (!directory) {
     throw new Error('A directory must be passed to be created.');
   }
@@ -61,7 +61,7 @@ function createFolderIfItDoesNotExist(directory) {
   fs.mkdirSync(directory, { recursive: true });
 }
 
-function getStatObject(file) {
+function getStatObject(file: string) {
   try {
     return fs.statSync(file);
   } catch (error) {
