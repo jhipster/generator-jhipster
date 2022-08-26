@@ -66,6 +66,7 @@
     "!**/*.spec.?(c|m)js"
   ],
   "scripts": {
+    "build": "tsc",
     "completion": "tabtab install --name jhipster --auto",
     "ejs-lint": "mocha test/ejslint.js",
     "ejslint": "ejslint",
@@ -84,6 +85,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "5.5.3",
+    "@types/lodash": "^4.14.184",
     "aws-sdk": "2.1201.0",
     "axios": "0.27.2",
     "chalk": "4.1.2",
