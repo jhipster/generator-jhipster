@@ -26,6 +26,7 @@ const {
   PREPARING_EACH_ENTITY_FIELD,
   PREPARING_EACH_ENTITY_RELATIONSHIP,
   POST_PREPARING_EACH_ENTITY,
+  DEFAULT,
   WRITING_ENTITIES,
   POST_WRITING_ENTITIES,
 } = PRIORITY_NAMES;
@@ -103,7 +104,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
 
   getDataArgForPriority(priorityName) {
     const dataArg = super.getDataArgForPriority(priorityName);
-    if (priorityName === WRITING_ENTITIES || priorityName === POST_WRITING_ENTITIES) {
+    if (priorityName === WRITING_ENTITIES || priorityName === POST_WRITING_ENTITIES || priorityName === DEFAULT) {
       return {
         ...dataArg,
         ...this.getEntitiesDataToWrite(),

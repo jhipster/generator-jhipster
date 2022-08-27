@@ -855,7 +855,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
        */
       processEagerLoadRelationships() {
         this.context.relationships.forEach(relationship => {
-          if (relationship.otherEntity.embedded) {
+          if (!relationship.otherEntity.primaryKey) {
             relationship.bagRelationship = false;
             relationship.relationshipEagerLoad = false;
             return;
@@ -1145,7 +1145,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   _checkPersistableInterfaceRequirement() {
-    this.context.requiresPersistableImplementation = this.context.fields.some(field => field.requiresPersistableImplementation);
+    this.context.requiresPersistableImplementation =
+      this.context.requiresPersistableImplementation || this.context.fields.some(field => field.requiresPersistableImplementation);
   }
 }
 

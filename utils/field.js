@@ -326,7 +326,9 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   }
 
   field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
-  field.nullable = !(field.fieldValidate === true && field.fieldValidateRules.includes(REQUIRED));
+  _.defaults(field, {
+    nullable: !(field.fieldValidate === true && field.fieldValidateRules.includes(REQUIRED)),
+  });
   field.unique = field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE);
   if (field.unique) {
     field.uniqueConstraintName = generator.getUXConstraintName(
