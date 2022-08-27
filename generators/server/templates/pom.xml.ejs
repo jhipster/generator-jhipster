@@ -103,12 +103,6 @@
   <%_ if (!reactive) { _%>
         <liquibase-hibernate5.version><%= LIQUIBASE_VERSION %></liquibase-hibernate5.version>
   <%_ } _%>
-  <%_ if (devDatabaseTypeH2Any && (prodDatabaseTypeMysql || reactive)) { _%>
-        <h2.version><%= H2_VERSION %></h2.version>
-    <%_ if (reactive) { _%>
-        <h2-r2dbc.version><%= H2_R2DBC_VERSION %></h2-r2dbc.version>
-    <%_ } _%>
-  <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
   <%_ if (reactive) { _%>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
@@ -1585,15 +1579,11 @@
                 <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
-  <%_ if (prodDatabaseTypeMysql || reactive) { _%>
-                    <version>${h2.version}</version>
-  <%_ } _%>
                 </dependency>
   <%_ if (reactive) { _%>
                 <dependency>
                     <groupId>io.r2dbc</groupId>
                     <artifactId>r2dbc-h2</artifactId>
-                    <version>${h2-r2dbc.version}</version>
                 </dependency>
   <%_ } _%>
 <%_ } _%>
@@ -1782,9 +1772,6 @@
                                 <dependency>
                                     <groupId>com.h2database</groupId>
                                     <artifactId>h2</artifactId>
-    <%_ if (prodDatabaseTypeMysql || reactive) { _%>
-                                    <version>${h2.version}</version>
-    <%_ } _%>
                                 </dependency>
   <%_ } _%>
                             </dependencies>
