@@ -45,7 +45,7 @@ export class ParseLinks {
         throw new Error('section could not be split on ";"');
       }
 
-      const url: string = section[0].replace(/<(.*)>/, '$1').trim();
+      const url: string = section[0].replace(/<(.*)>/, '$1').trim(); // NOSONAR
       const queryString: { [key: string]: string | undefined } = {};
 
       url.replace(
