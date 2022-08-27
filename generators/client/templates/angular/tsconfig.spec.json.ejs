@@ -18,10 +18,9 @@
 -%>
 {
   "extends": "./tsconfig.json",
+  "include": ["<%= MAIN_SRC_DIR %>**/*.ts"],
   "compilerOptions": {
     "outDir": "<%= BUILD_DIR %>out-tsc/spec",
     "types": ["jest", "node"]
-  },
-  "files": ["<%= MAIN_SRC_DIR %>polyfills.ts"],
-  "include": ["<%= MAIN_SRC_DIR %>**/*.ts"]
+  }
 }

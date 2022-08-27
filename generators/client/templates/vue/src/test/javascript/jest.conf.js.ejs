@@ -24,9 +24,9 @@ module.exports = {
   },
   reporters: [
     'default',
-    [ 'jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' } ],
+    ['jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }],
+    ['jest-sonar', { outputDirectory: './<%= BUILD_DIR %>test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
   ],
-  testResultsProcessor: 'jest-sonar-reporter',
   testMatch: ['<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/**/@(*.)@(spec.ts)'],
   testEnvironmentOptions: {
     url: 'https://jhipster.tech',

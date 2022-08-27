@@ -92,7 +92,7 @@
     "jest-environment-jsdom": "<%= dependabotPackageJson.devDependencies['jest-environment-jsdom'] %>",
     "jest-junit": "<%= dependabotPackageJson.devDependencies['jest-junit'] %>",
     "jest-serializer-vue": "<%= dependabotPackageJson.devDependencies['jest-serializer-vue'] %>",
-    "jest-sonar-reporter": "<%= dependabotPackageJson.devDependencies['jest-sonar-reporter'] %>",
+    "jest-sonar": "<%= dependabotPackageJson.devDependencies['jest-sonar'] %>",
 <%_ if (enableTranslation) { _%>
     "folder-hash": "<%= dependabotPackageJson.devDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%= dependabotPackageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
@@ -190,10 +190,6 @@
     "webapp:test": "<%= clientPackageManager %> run test --",
     "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
     "webpack": "webpack --config webpack/webpack.common.js"
-  },
-  "jestSonar": {
-    "reportPath": "<%= BUILD_DIR %>test-results/jest",
-    "reportFile": "TESTS-results-sonar.xml"
   },
   "browserslist": [
     "> 1%",

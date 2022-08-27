@@ -112,7 +112,7 @@
     "jest": "<%= dependabotPackageJson.devDependencies['jest'] %>",
     "jest-environment-jsdom": "<%= dependabotPackageJson.devDependencies['jest-environment-jsdom'] %>",
     "jest-junit": "<%= dependabotPackageJson.devDependencies['jest-junit'] %>",
-    "jest-sonar-reporter": "<%= dependabotPackageJson.devDependencies['jest-sonar-reporter'] %>",
+    "jest-sonar": "<%= dependabotPackageJson.devDependencies['jest-sonar'] %>",
     "json-loader": "<%= dependabotPackageJson.devDependencies['json-loader'] %>",
 <%_ if (enableTranslation) { _%>
     "folder-hash": "<%= dependabotPackageJson.devDependencies['folder-hash'] %>",
@@ -221,9 +221,5 @@
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod --",
     "webapp:test": "<%= clientPackageManager %> run test --",
     "webpack-dev-server": "webpack serve"
-  },
-  "jestSonar": {
-    "reportPath": "<%= BUILD_DIR %>test-results/jest",
-    "reportFile": "TESTS-results-sonar.xml"
   }
 }

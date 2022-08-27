@@ -120,7 +120,7 @@
     "jest-preset-angular": "<%= dependabotPackageJson.devDependencies['jest-preset-angular'] %>",
     "jest-date-mock": "<%= dependabotPackageJson.devDependencies['jest-date-mock'] %>",
     "jest-junit": "<%= dependabotPackageJson.devDependencies['jest-junit'] %>",
-    "jest-sonar-reporter": "<%= dependabotPackageJson.devDependencies['jest-sonar-reporter'] %>",
+    "jest-sonar": "<%= dependabotPackageJson.devDependencies['jest-sonar'] %>",
     "prettier": "<%= dependabotPackageJson.devDependencies['prettier'] %>",
     "prettier-plugin-packagejson": "<%= dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>",
 <%_ if (enableI18nRTL) { _%>
@@ -191,9 +191,5 @@
     "webapp:dev-ssl": "ng serve --ssl",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
     "webapp:test": "<%= clientPackageManager %> run test --"
-  },
-  "jestSonar": {
-    "reportPath": "<%= BUILD_DIR %>test-results/jest",
-    "reportFile": "TESTS-results-sonar.xml"
   }
 }
