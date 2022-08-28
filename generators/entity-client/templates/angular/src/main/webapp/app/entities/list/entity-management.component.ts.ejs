@@ -43,7 +43,9 @@ import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (!paginationNo) { %>
 import {
   ITEMS_PER_PAGE,
+<%_ if (paginationPagination) { _%>
   PAGE_HEADER,
+<%_ } _%>
 <%_ if (paginationPagination) { _%>
   TOTAL_COUNT_RESPONSE_HEADER,
 <%_ } _%>
