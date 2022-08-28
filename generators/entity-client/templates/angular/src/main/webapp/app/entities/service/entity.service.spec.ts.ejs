@@ -124,11 +124,13 @@ describe('<%= entityAngularName %> Service', () => {
 
 <%_ if (!readOnly) { _%>
         it('should delete a <%= entityAngularName %>', () => {
+            const expected = true;
+
             service.delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
 
             const req = httpMock.expectOne({ method: 'DELETE' });
             req.flush({ status: 200 });
-            expect(expectedResult);
+            expect(expectedResult).toBe(expected);
         });
 <%_ } _%>
 
