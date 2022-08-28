@@ -53,7 +53,9 @@ import {
   ASC,
   DESC,
   SORT,
+<%_ if (!readOnly) { _%>
   ITEM_DELETED_EVENT,
+<%_ } _%>
   DEFAULT_SORT_DATA
 } from 'app/config/navigation.constants';
 import { EntityArrayResponseType, <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
