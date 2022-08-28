@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-const Rule = require('./rule');
-const { INFO, WARNING, ERROR } = require('./rule-levels');
+import Rule from './rule';
+import { INFO, WARNING, ERROR } from './rule-levels';
 
-const rulesNames = {
+export const rulesNames = {
   ENT_SHORTER_DECL: 'ENT_SHORTER_DECL',
   ENT_OPTIONAL_TABLE_NAME: 'ENT_OPTIONAL_TABLE_NAME',
   ENT_DUPLICATED: 'ENT_DUPLICATED',
@@ -31,7 +31,11 @@ const rulesNames = {
   ENUM_UNUSED: 'ENUM_UNUSED',
 };
 
-const rules = {
+type RuleNames = keyof typeof rulesNames;
+
+export const rules: {
+  [key in RuleNames]: Rule;
+} = {
   ENT_SHORTER_DECL: new Rule({
     name: 'ShorterEntityDeclaration',
     level: INFO,
@@ -74,19 +78,13 @@ const rules = {
   }),
 };
 
-module.exports = {
-  RuleNames: rulesNames,
-  getRule,
-  ...rules,
-};
-
 /**
  * Gets and returns the rule having the passed name.
- * @param {string} ruleName - the name of the rule to fetch
- * @returns {Object} the rule.
+ * @param ruleName - the name of the rule to fetch
+ * @returns the rule.
  * @throws if no ruleName is passed.
  */
-function getRule(ruleName) {
+export function getRule(ruleName: RuleNames): Rule {
   if (!ruleName) {
     throw new Error('A rule name has to be passed to get a rule.');
   }

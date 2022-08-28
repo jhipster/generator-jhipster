@@ -17,23 +17,27 @@
  * limitations under the License.
  */
 
-const Rules = require('./rules');
-const EntityIssue = require('./issues/entity-issue');
-const { getTableNameFromEntityName } = require('../jhipster/entity-table-name-creator');
+import EntityIssue from './issues/entity-issue';
+import { getTableNameFromEntityName } from '../jhipster/entity-table-name-creator';
+import { rulesNames } from './rules';
 
-let issues;
+let issues: EntityIssue[];
 
-module.exports = {
-  checkEntities,
+export type EntityDeclaration = {
+  children: {
+    entityTableNameDeclaration: any;
+    NAME: [any, ...any];
+    entityBody: [any, ...any];
+  };
 };
 
 /**
  * Check entities for lint issues.
  * That is done by passing the list of entity declarations from the CST (from the JDLReader output).
- * @param {Array} entityDeclarations - the list of entity declarations
- * @return {Array} the found entity issues.
+ * @param entityDeclarations - the list of entity declarations
+ * @return the found entity issues.
  */
-function checkEntities(entityDeclarations) {
+export function checkEntities(entityDeclarations: EntityDeclaration[]): EntityIssue[] {
   if (!entityDeclarations) {
     return [];
   }
@@ -46,7 +50,7 @@ function checkEntities(entityDeclarations) {
   return issues;
 }
 
-function checkForDuplicatedEntities(entityDeclarations) {
+function checkForDuplicatedEntities(entityDeclarations: EntityDeclaration[]) {
   const entityNames = new Set();
   const duplicatedEntityIssues = new Map(); // key: entityName, value: issue
   entityDeclarations.forEach(entityDeclaration => {
@@ -56,7 +60,7 @@ function checkForDuplicatedEntities(entityDeclarations) {
         duplicatedEntityIssues.set(
           entityName,
           new EntityIssue({
-            ruleName: Rules.RuleNames.ENT_DUPLICATED,
+            ruleName: rulesNames.ENT_DUPLICATED,
             entityName,
           })
         );
@@ -70,21 +74,21 @@ function checkForDuplicatedEntities(entityDeclarations) {
   });
 }
 
-function checkForUselessEntityBraces(entityDeclaration) {
+function checkForUselessEntityBraces(entityDeclaration: EntityDeclaration) {
   const entityBody = entityDeclaration.children.entityBody;
   const nextTokensAfterRelationshipType = entityBody && entityBody[0].children;
   const onlyCurlyBracesAsRelationshipBody = entityBody && Object.keys(nextTokensAfterRelationshipType).length === 2;
   if (onlyCurlyBracesAsRelationshipBody) {
     issues.push(
       new EntityIssue({
-        ruleName: Rules.RuleNames.ENT_SHORTER_DECL,
+        ruleName: rulesNames.ENT_SHORTER_DECL,
         entityName: entityDeclaration.children.NAME[0].image,
       })
     );
   }
 }
 
-function checkForUselessTableName(entityDeclaration) {
+function checkForUselessTableName(entityDeclaration: EntityDeclaration) {
   const entityName = entityDeclaration.children.NAME[0].image;
   const entityTableNameDeclaration = entityDeclaration.children.entityTableNameDeclaration;
   if (entityTableNameDeclaration) {
@@ -92,7 +96,7 @@ function checkForUselessTableName(entityDeclaration) {
     if (getTableNameFromEntityName(entityName) === tableName) {
       issues.push(
         new EntityIssue({
-          ruleName: Rules.RuleNames.ENT_OPTIONAL_TABLE_NAME,
+          ruleName: rulesNames.ENT_OPTIONAL_TABLE_NAME,
           entityName,
         })
       );

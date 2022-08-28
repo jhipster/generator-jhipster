@@ -17,7 +17,17 @@
  * limitations under the License.
  */
 
-class Issues {
+import EntityIssue from './entity-issue';
+import FieldIssue from './field-issue';
+import EnumIssue from './enum-issue';
+import RelationshipIssue from './relationship-issue';
+
+export default class Issues {
+  entityIssues: EntityIssue[];
+  fieldIssues: FieldIssue[];
+  enumIssues: EnumIssue[];
+  relationshipIssues: RelationshipIssue[];
+
   constructor() {
     this.entityIssues = [];
     this.fieldIssues = [];
@@ -25,19 +35,19 @@ class Issues {
     this.relationshipIssues = [];
   }
 
-  addEntityIssues(issues = []) {
+  addEntityIssues(issues: EntityIssue[] = []) {
     this.entityIssues = this.entityIssues.concat(issues);
   }
 
-  addFieldIssues(issues = []) {
+  addFieldIssues(issues: FieldIssue[] = []) {
     this.fieldIssues = this.fieldIssues.concat(issues);
   }
 
-  addEnumIssues(issues = []) {
+  addEnumIssues(issues: EnumIssue[] = []) {
     this.enumIssues = this.enumIssues.concat(issues);
   }
 
-  addRelationshipIssues(issues = []) {
+  addRelationshipIssues(issues: RelationshipIssue[] = []) {
     this.relationshipIssues = this.relationshipIssues.concat(issues);
   }
 
@@ -72,5 +82,3 @@ class Issues {
     };
   }
 }
-
-module.exports = Issues;

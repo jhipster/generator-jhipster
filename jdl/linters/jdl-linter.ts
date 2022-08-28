@@ -17,26 +17,21 @@
  * limitations under the License.
  */
 
-const { readFile } = require('../readers/file-reader');
-const JDLReader = require('../readers/jdl-reader');
-const Issues = require('./issues/issues');
-const { checkEntities } = require('./entity-linter');
-const { checkFields } = require('./field-linter');
-const { checkEnums } = require('./enum-linter');
-const { checkRelationships } = require('./relationship-linter');
-
-module.exports = {
-  createJDLLinterFromContent,
-  createJDLLinterFromFile,
-};
+import { readFile } from '../readers/file-reader';
+import JDLReader from '../readers/jdl-reader';
+import Issues from './issues/issues';
+import { checkEntities, EntityDeclaration } from './entity-linter';
+import { checkFields } from './field-linter';
+import { checkEnums } from './enum-linter';
+import { checkRelationships } from './relationship-linter';
 
 /**
  * Creates a new JDL linters from a JDL string content.
- * @param {string} jdlString - the JDL string content to lint.
+ * @param jdlString - the JDL string content to lint.
  * @return {Object} the JDL linters.
  * @throws {Error} if the content isn't passed.
  */
-function createJDLLinterFromContent(jdlString) {
+export function createJDLLinterFromContent(jdlString: string) {
   if (!jdlString) {
     throw new Error('A JDL content must be passed to create a new JDL linter.');
   }
@@ -45,11 +40,11 @@ function createJDLLinterFromContent(jdlString) {
 
 /**
  * Creates a new JDL linters from a JDL file.
- * @param {string} file - the JDL file.
+ * @param file - the JDL file.
  * @return {Object} the JDL linters.
  * @throws {Error} if the JDL file isn't passed.
  */
-function createJDLLinterFromFile(file) {
+export function createJDLLinterFromFile(file: string) {
   if (!file) {
     throw new Error('A JDL file must be passed to create a new JDL linter.');
   }
@@ -57,10 +52,18 @@ function createJDLLinterFromFile(file) {
   return makeJDLLinter(jdlString);
 }
 
-let cst;
-let issues;
+type CST = {
+  children: {
+    entityDeclaration: EntityDeclaration[];
+    enumDeclaration: [];
+    relationDeclaration: [];
+  };
+};
 
-function makeJDLLinter(content) {
+let cst: CST;
+let issues: Issues;
+
+function makeJDLLinter(content: any) {
   cst = JDLReader.getCstFromContent(content);
   issues = new Issues();
 
@@ -110,7 +113,7 @@ function checkForRelationshipIssues() {
   issues.addRelationshipIssues(relationshipIssues);
 }
 
-function getAllFieldDeclarations(entityDeclarations) {
+function getAllFieldDeclarations(entityDeclarations: EntityDeclaration[]) {
   if (!entityDeclarations) {
     return [];
   }
@@ -119,7 +122,7 @@ function getAllFieldDeclarations(entityDeclarations) {
   }, []);
 }
 
-function getFieldDeclarationsFromEntity(entityDeclaration) {
+function getFieldDeclarationsFromEntity(entityDeclaration: EntityDeclaration) {
   const entityBody = entityDeclaration.children.entityBody;
   const entityFields = entityBody && entityBody[0].children.fieldDeclaration;
   if (entityBody && entityFields) {

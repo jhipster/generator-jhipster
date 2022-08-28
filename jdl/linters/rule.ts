@@ -17,13 +17,18 @@
  * limitations under the License.
  */
 
+import { RuleLevel, INFO } from './rule-levels';
+
 const merge = require('../utils/object-utils').merge;
-const { INFO } = require('./rule-levels');
 
 /**
  * Represents a rule for the linters.
  */
-class Rule {
+export default class Rule {
+  name: any;
+  level: RuleLevel;
+  comment: any;
+
   /**
    * Creates a new rule from an arg object.
    * @param args the argument object, keys:
@@ -31,7 +36,7 @@ class Rule {
    *               - level: the rule's level (INFO, WARNING, etc.), default: RuleLevels.INFO
    *               - comment: a possible comment for the rule
    */
-  constructor(args) {
+  constructor(args: { name: any; level: RuleLevel; comment: any }) {
     if (!args || !args.name) {
       throw new Error('A rule must at least have a name.');
     }
@@ -44,9 +49,9 @@ class Rule {
   /**
    * Compares this rule to another.
    * @param otherRule the other rule.
-   * @returns {number} 1 if this rule has a higher priority, 0 if they are equal, -1 otherwise.
+   * @returns 1 if this rule has a higher priority, 0 if they are equal, -1 otherwise.
    */
-  compareTo(otherRule) {
+  compareTo(otherRule: Rule): number {
     if (!otherRule) {
       throw new Error('A rule has to be passed so as to be compared.');
     }
@@ -59,8 +64,6 @@ class Rule {
     return -1;
   }
 }
-
-module.exports = Rule;
 
 function defaults() {
   return {

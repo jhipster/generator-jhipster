@@ -17,23 +17,26 @@
  * limitations under the License.
  */
 
-const Rules = require('./rules');
-const FieldIssue = require('./issues/field-issue');
+import { rulesNames } from './rules';
+import FieldIssue from './issues/field-issue';
 
-let issues;
-
-module.exports = {
-  checkFields,
+export type FieldDeclaration = {
+  children: {
+    NAME: any[];
+    type: any[]
+  };
 };
+
+let issues: FieldIssue[];
 
 /**
  * Check fields for lint issues.
  * That is done by passing the list of fields declarations from the CST (from the JDLReader output).
- * @param {string} entityName - the name of the entity having the fields
+ * @param entityName - the name of the entity having the fields
  * @param {Array} fieldDeclarations - the field declaration list
- * @return {Array} the found entity issues.
+ * @return the found entity issues.
  */
-function checkFields(entityName, fieldDeclarations) {
+export function checkFields(entityName: string, fieldDeclarations: FieldDeclaration[]): FieldIssue[] {
   if (fieldDeclarations.length === 0) {
     return [];
   }
@@ -42,9 +45,9 @@ function checkFields(entityName, fieldDeclarations) {
   return issues;
 }
 
-function checkForDuplicatedFields(entityName, fieldDeclarations) {
+function checkForDuplicatedFields(entityName: string, fieldDeclarations: FieldDeclaration[]) {
   const fieldNames = new Set();
-  const duplicatedFieldIssues = new Map(); // key: fieldName, value: issue
+  const duplicatedFieldIssues = new Map<string, FieldIssue>(); // key: fieldName, value: issue
   fieldDeclarations.forEach(fieldDeclaration => {
     const fieldName = fieldDeclaration.children.NAME[0].image;
     if (fieldNames.has(fieldName)) {
@@ -52,7 +55,7 @@ function checkForDuplicatedFields(entityName, fieldDeclarations) {
         duplicatedFieldIssues.set(
           fieldName,
           new FieldIssue({
-            ruleName: Rules.RuleNames.FLD_DUPLICATED,
+            ruleName: rulesNames.FLD_DUPLICATED,
             fieldName,
             entityName,
           })

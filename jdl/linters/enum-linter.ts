@@ -17,23 +17,26 @@
  * limitations under the License.
  */
 
-const Rules = require('./rules');
-const EnumIssue = require('./issues/enum-issue');
+import { rulesNames } from './rules';
+import EnumIssue from './issues/enum-issue';
+import { FieldDeclaration } from './field-linter';
 
-let issues;
+let issues: EnumIssue[];
 
-module.exports = {
-  checkEnums,
+export type EnumDeclaration = {
+  children: {
+    NAME: any[];
+  };
 };
 
 /**
  * Check enums for lint issues.
  * That is done by passing the list of enum declarations from the CST (from the JDLReader output).
- * @param {Array} enumDeclarations - the list of enum declarations
- * @param {Array} fieldDeclarations - the list of field declarations, to check for unused enums
- * @return {Array} the found entity issues.
+ * @param enumDeclarations - the list of enum declarations
+ * @param fieldDeclarations - the list of field declarations, to check for unused enums
+ * @return the found entity issues.
  */
-function checkEnums(enumDeclarations, fieldDeclarations) {
+export function checkEnums(enumDeclarations: EnumDeclaration[], fieldDeclarations: FieldDeclaration[]): EnumIssue[] {
   if (!enumDeclarations) {
     return [];
   }
@@ -43,7 +46,7 @@ function checkEnums(enumDeclarations, fieldDeclarations) {
   return issues;
 }
 
-function checkForDuplicatedEnums(enumDeclarations) {
+function checkForDuplicatedEnums(enumDeclarations: EnumDeclaration[]) {
   const enumNames = new Set();
   const duplicatedEnumIssues = new Map(); // key: enumName, value: issue
   enumDeclarations.forEach(enumDeclaration => {
@@ -53,7 +56,7 @@ function checkForDuplicatedEnums(enumDeclarations) {
         duplicatedEnumIssues.set(
           enumName,
           new EnumIssue({
-            ruleName: Rules.RuleNames.ENUM_DUPLICATED,
+            ruleName: rulesNames.ENUM_DUPLICATED,
             enumName,
           })
         );
@@ -67,7 +70,7 @@ function checkForDuplicatedEnums(enumDeclarations) {
   });
 }
 
-function checkForUnusedEnums(enumDeclarations, fieldDeclarations) {
+function checkForUnusedEnums(enumDeclarations: EnumDeclaration[], fieldDeclarations: FieldDeclaration[]) {
   const fieldTypes = fieldDeclarations.map(fieldDeclaration => {
     return fieldDeclaration.children.type[0].children.NAME[0].image;
   });
@@ -81,7 +84,7 @@ function checkForUnusedEnums(enumDeclarations, fieldDeclarations) {
   });
   if (declaredEnums.size !== 0) {
     declaredEnums.forEach(unusedEnum => {
-      issues.push(new EnumIssue({ enumName: unusedEnum, ruleName: Rules.RuleNames.ENUM_UNUSED }));
+      issues.push(new EnumIssue({ enumName: unusedEnum, ruleName: rulesNames.ENUM_UNUSED }));
     });
   }
 }
