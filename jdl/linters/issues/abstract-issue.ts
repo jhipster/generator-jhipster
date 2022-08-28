@@ -17,16 +17,15 @@
  * limitations under the License.
  */
 
-const AbstractIssue = require('./abstract-issue');
+export type AbstractIssueArgs = { ruleName: string };
 
-class EntityIssue extends AbstractIssue {
-  constructor(args) {
-    super(args);
-    if (!args.entityName) {
-      throw new Error('An entity name must be passed.');
+export default class AbstractIssue {
+  ruleName: string;
+
+  constructor(args: AbstractIssueArgs) {
+    if (!args || !args.ruleName) {
+      throw new Error('An issue must at least have a rule name.');
     }
-    this.entityName = args.entityName;
+    this.ruleName = args.ruleName;
   }
 }
-
-module.exports = EntityIssue;

@@ -17,17 +17,18 @@
  * limitations under the License.
  */
 
-const AbstractIssue = require('./abstract-issue');
+import AbstractIssue, { AbstractIssueArgs } from './abstract-issue';
 
-class FieldIssue extends AbstractIssue {
-  constructor(args) {
+type EntityIssueArgs = AbstractIssueArgs & { enumName: string };
+
+export default class EnumIssue extends AbstractIssue {
+  enumName: string;
+
+  constructor(args: EntityIssueArgs) {
     super(args);
-    if (!args.fieldName || !args.entityName) {
-      throw new Error("A field name and its entity's name must be passed.");
+    if (!args.enumName) {
+      throw new Error('An enum name must be passed.');
     }
-    this.entityName = args.entityName;
-    this.fieldName = args.fieldName;
+    this.enumName = args.enumName;
   }
 }
-
-module.exports = FieldIssue;

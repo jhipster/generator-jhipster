@@ -17,16 +17,16 @@
  * limitations under the License.
  */
 
-const AbstractIssue = require('./abstract-issue');
+export type RuleLevel = {
+  name: string;
+  priority: number;
+};
 
-class EnumIssue extends AbstractIssue {
-  constructor(args) {
-    super(args);
-    if (!args.enumName) {
-      throw new Error('An enum name must be passed.');
-    }
-    this.enumName = args.enumName;
-  }
-}
+/** To inform of a better way to do things. */
+export const INFO: RuleLevel = { name: 'info', priority: 0 };
 
-module.exports = EnumIssue;
+/** To warn there's something that can be improved (readability, etc.) */
+export const WARNING: RuleLevel = { name: 'warning', priority: 1 };
+
+/** To tell there's a problem in the JDL (syntax error). */
+export const ERROR: RuleLevel = { name: 'error', priority: 2 };

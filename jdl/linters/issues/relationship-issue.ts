@@ -17,10 +17,16 @@
  * limitations under the License.
  */
 
-const AbstractIssue = require('./abstract-issue');
+import AbstractIssue, { AbstractIssueArgs } from './abstract-issue';
 
-class RelationshipIssue extends AbstractIssue {
-  constructor(args) {
+type RelationshipIssueArgs = AbstractIssueArgs & { from: string; to: string; type: string };
+
+export default class RelationshipIssue extends AbstractIssue {
+  from: string;
+  to: string;
+  type: string;
+
+  constructor(args: RelationshipIssueArgs) {
     super(args);
     if (!args.from || !args.to || !args.type) {
       throw new Error("A relationship's source, destination & type must be passed.");
@@ -30,5 +36,3 @@ class RelationshipIssue extends AbstractIssue {
     this.type = args.type;
   }
 }
-
-module.exports = RelationshipIssue;

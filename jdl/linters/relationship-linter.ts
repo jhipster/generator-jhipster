@@ -17,23 +17,26 @@
  * limitations under the License.
  */
 
-const Rules = require('./rules');
-const RelationshipIssue = require('./issues/relationship-issue');
-const RelationshipTypes = require('../jhipster/relationship-types');
+import RelationshipIssue from './issues/relationship-issue';
 
-let issues;
+import { rulesNames } from './rules';
+import RelationshipTypes from '../jhipster/relationship-types';
 
-module.exports = {
-  checkRelationships,
+let issues: RelationshipIssue[];
+
+type RelationshipDeclaration = {
+  children: {
+    relationshipType: any[];
+  };
 };
 
 /**
  * Check relationships for lint issues.
  * That is done by passing the list of relationship declarations from the CST (from the JDLReader output).
  * @param {Array} relationshipDeclarations - the list of relationship declarations
- * @return {Array} the found relationship issues.
+ * @return the found relationship issues.
  */
-function checkRelationships(relationshipDeclarations) {
+export function checkRelationships(relationshipDeclarations: RelationshipDeclaration[]): RelationshipIssue[] {
   if (!relationshipDeclarations || relationshipDeclarations.length === 0) {
     return [];
   }
@@ -42,14 +45,16 @@ function checkRelationships(relationshipDeclarations) {
   return issues;
 }
 
-function checkForCollapsibleRelationships(relationshipDeclarations) {
-  const sortedRelationships = {
+function checkForCollapsibleRelationships(relationshipDeclarations: RelationshipDeclaration[]) {
+  const sortedRelationships: {
+    [key in string]: { from: string; to: string }[];
+  } = {
     [RelationshipTypes.ONE_TO_ONE]: [],
     [RelationshipTypes.ONE_TO_MANY]: [],
     [RelationshipTypes.MANY_TO_ONE]: [],
     [RelationshipTypes.MANY_TO_MANY]: [],
   };
-  relationshipDeclarations.forEach(relationshipDeclaration => {
+  relationshipDeclarations.forEach((relationshipDeclaration: any) => {
     const type = relationshipDeclaration.children.relationshipType[0].children.RELATIONSHIP_TYPE[0].image;
     const from = relationshipDeclaration.children.relationshipBody[0].children.from[0].children.NAME[0].image;
     const to = relationshipDeclaration.children.relationshipBody[0].children.to[0].children.NAME[0].image;
@@ -60,7 +65,7 @@ function checkForCollapsibleRelationships(relationshipDeclarations) {
       sortedRelationships[type].forEach(relationship => {
         issues.push(
           new RelationshipIssue({
-            ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
+            ruleName: rulesNames.REL_INDIVIDUAL_DECL,
             from: relationship.from,
             to: relationship.to,
             type,

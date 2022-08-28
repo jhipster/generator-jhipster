@@ -17,13 +17,18 @@
  * limitations under the License.
  */
 
-class AbstractIssue {
-  constructor(args) {
-    if (!args || !args.ruleName) {
-      throw new Error('An issue must at least have a rule name.');
+import AbstractIssue, { AbstractIssueArgs } from './abstract-issue';
+
+type EntityIssueArgs = AbstractIssueArgs & { entityName: string };
+
+export default class EntityIssue extends AbstractIssue {
+  entityName: string;
+
+  constructor(args: EntityIssueArgs) {
+    super(args);
+    if (!args.entityName) {
+      throw new Error('An entity name must be passed.');
     }
-    this.ruleName = args.ruleName;
+    this.entityName = args.entityName;
   }
 }
-
-module.exports = AbstractIssue;
