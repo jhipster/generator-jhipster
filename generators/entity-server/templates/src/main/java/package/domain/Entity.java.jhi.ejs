@@ -22,6 +22,7 @@
     importSection: 0,
     staticImportSection: 0,
     annotationSection: 0,
+    extendsSection: 1,
     additionalInterfacesSection: 0,
     classStaticFieldsSection: 0,
     classFieldsSection: 0,
@@ -30,6 +31,8 @@
     classAdditionalRelationshipsSection: 0,
     classAdditionalRelationshipsMethodsSection: 0,
 <%_ for (const field of fields) { _%>
+    field<%- field.fieldNameCapitalized %>CustomDeclarationSection: 1,
+    field<%- field.fieldNameCapitalized %>CustomMethodsSection: 1,
     field<%- field.fieldNameCapitalized %>AnnotationSection: 0,
   <%_ if (field.fieldWithContentType) { _%>
     field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection: 0,
@@ -94,7 +97,7 @@ import <%= otherEntity.entityAbsoluteClass %>;
 <%_ } _%>
 <&- fragments.annotationSection() -&>
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class <%= persistClass %> implements Serializable<&- fragments.additionalInterfacesSection() -&> {
+public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Serializable<&- fragments.additionalInterfacesSection() -&> {
 
     private static final long serialVersionUID = 1L;
 
@@ -106,6 +109,8 @@ public class <%= persistClass %> implements Serializable<&- fragments.additional
 <&- fragments.classStaticFieldsSection() -&>
 <&- fragments.classFieldsSection() -&>
 <%_ for (const field of fields.filter(field => !field.javaInherited && !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
+<&- fragments.field<%- field.fieldNameCapitalized %>CustomDeclarationSection() -&>
+<&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomDeclarationSection()) { -&>
   <%_ if (typeof field.javadoc !== 'undefined') { _%>
 <%- formatAsFieldJavadoc(field.javadoc) %>
   <%_ } _%>
@@ -120,6 +125,7 @@ public class <%= persistClass %> implements Serializable<&- fragments.additional
     private String <%= field.fieldName %>ContentType;
 
   <%_ } _%>
+<&_ } -&>
 <%_ } _%>
 <&- fragments.classAdditionalFieldsSection() -&>
 
@@ -171,12 +177,12 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
 <&- fragments.classAdditionalRelationshipsSection() -&>
     // jhipster-needle-entity-add-field - JHipster will add fields here
 <%_ for (const field of fields.filter(field => !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
-  <%_ if (!field.javaInherited) { _%>
+<&- fragments.field<%- field.fieldNameCapitalized %>CustomMethodsSection() -&>
+<&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomMethodsSection()) { -&>
 
     public <%= field.javaFieldType %> get<%= field.fieldInJavaBeanMethod %>() {
         return this.<%= field.fieldName %>;
     }
-  <%_ } _%>
   <%_ if (fluentMethods) { _%>
 
     public <%= persistClass %> <%= field.fieldName %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
@@ -184,15 +190,13 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
         return this;
     }
   <%_ } _%>
-  <%_ if (!field.javaInherited) { _%>
 
-<&- fragments.field<%- field.fieldNameCapitalized %>CustomSetSection() -&>
-<&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomSetSection()) { -&>
+  <&- fragments.field<%- field.fieldNameCapitalized %>CustomSetSection() -&>
+  <&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomSetSection()) { -&>
     public void set<%= field.fieldInJavaBeanMethod %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
         this.<%= field.fieldName %> = <%= field.fieldName %>;
     }
-<&_ } -&>
-  <%_ } _%>
+  <&_ } -&>
   <%_ if (field.fieldWithContentType) { _%>
 
     public String get<%= field.fieldInJavaBeanMethod %>ContentType() {
@@ -210,6 +214,7 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
         this.<%= field.fieldName %>ContentType = <%= field.fieldName %>ContentType;
     }
   <%_ } _%>
+<&_ } -&>
 <%_ } _%>
 
 <&- fragments.classAdditionalFieldsMethodsSection('\n\n') -&>

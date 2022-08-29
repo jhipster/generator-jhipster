@@ -39,6 +39,7 @@ const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, norma
  * Base class for a generator that can be extended through a blueprint.
  *
  * @class
+ * @extends {BaseGenerator}
  * @property {import('yeoman-generator/lib/util/storage')} blueprintStorage - Storage for blueprint config (Blueprints only).
  * @property {object} blueprintConfig - Proxy object for blueprintStorage (Blueprints only).
  * @property {import('yeoman-generator')} jhipsterContext - JHipster parent generator (Blueprints only).

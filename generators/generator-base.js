@@ -119,6 +119,7 @@ const isWin32 = os.platform() === 'win32';
  * @param {...EditFileCallback} callbacks
  * @returns {CascatedEditFileCallback} callback for cascated edit
  */
+
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
@@ -126,7 +127,10 @@ const isWin32 = os.platform() === 'win32';
  *
  * The method signatures in public API should not be changed without a major version change
  *
+ * @class
  * @extends {import('yeoman-generator')}
+ * @property {import('yeoman-generator/lib/util/storage')} config - Storage for config.
+ * @property {object} jhipsterConfig - Proxy object for config.
  */
 class JHipsterBaseGenerator extends PrivateBase {
   constructor(args, options, features) {
@@ -2384,24 +2388,64 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * Block of files to written.
+   *
+   * @typedef {object} WriteFileBlock
+   * @property {string | function(this: JHipsterBaseGenerator, any): string} [from] - relative path were sources are placed
+   * @property {string | function(this: JHipsterBaseGenerator, any): string} [to=from] - relative path were the files should be written, fallbacks to from/path
+   * @property {string | function(this: JHipsterBaseGenerator, any): string} [path] - same as from
+   * @property {string | function(this: JHipsterBaseGenerator, any, string): string} [renameTo] - generate destinationFile based on sourceFile
+   * @property {boolean | function(this: JHipsterBaseGenerator, any): boolean} [condition=true] - condition to enable to write the block
+   * @property {EditFileCallback[]} transform - transforms (files processing) to be applied
+   */
+
+  /**
+   * Template file to be written.
+   *
+   * @typedef {object} WriteFileTemplate
+   * @property {string | function(this: JHipsterBaseGenerator, any): string} [sourceFile] - source file
+   * @property {string | function(this: JHipsterBaseGenerator, any): string} [destinationFile] - destination file
+   * @property {string | function(this: JHipsterBaseGenerator, any): string} [file] - deprecated, use sourceFile instead
+   * @property {string | function(this: JHipsterBaseGenerator, any): string} [renameTo] - deprecated, use destinationFile insted
+   * @property {EditFileCallback[]} [transform] - transforms (files processing) to be applied
+   * @property {boolean} [binary] - binary files skips ejs render, ejs extension and file transform
+   * @property {object} [options] - ejs options. Refer to https://ejs.co/#docs
+   */
+
+  /**
+   * Sections of blocks to be writter.
+   *
+   * @typedef {Record<string, WriteFileBlock> & { _: {
+   *   transform: EditFileCallback[]
+   * } }} WriteFileSection
+   */
+
+  /**
+   * Template options to be passed to ejs renderFile.
+   *
+   * @typedef {object} WriteFileOptions
+   * @property {WriteFileSection} [sections] - sections to be writter
+   * @property {WriteFileBlock[]} [blocks] - block to be writter
+   * @property {WriteFileTemplate[]} [templates] - templates to be writter
+   * @property {EditFileCallback[]} [transform] - transforms (files processing) to be applied
+   * @property {object} [context=this] - context to be used as template data
+   * @property {string|string[]} [rootTemplatesPath] - path(s) to look for templates.
+   *        Single absolute path or relative path(s) between the templates folder and template path.
+   */
+
+  /**
    * write the given files using provided options.
    *
-   * @param {object} options
-   * @param {object} [options.sections] - sections to write
-   * @param {object} [options.blocks] - blocks to write
-   * @param {object} [options.files] - files to write
-   * @param {object} [options.context] - context for templates
-   * @param {string|string[]} [options.rootTemplatesPath] - path(s) to look for templates.
-   *        Single absolute path or relative path(s) between the templates folder and template path.
-   * @return {string[]}
+   * @param {WriteFileOptions} options
+   * @return {Promise<string[]>}
    */
   async writeFiles(options) {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
-    assert(paramCount > 0, 'One of sections, blocks or files is required');
-    assert(paramCount === 1, 'Only one of sections, blocks or files must be provided');
+    assert(paramCount > 0, 'One of sections, blocks or templates is required');
+    assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
     const { sections, blocks, templates, rootTemplatesPath, context = this, transform: methodTransform = [] } = options;
-    const { _: commonSpec = {} } = sections;
+    const { _: commonSpec = {} } = sections || {};
     const { transform: sectionTransform = [] } = commonSpec;
     const startTime = new Date();
 
@@ -2449,7 +2493,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       const appendEjs = noEjs === undefined ? !binary && extension !== '.ejs' : !noEjs;
       const ejsFile = appendEjs || extension === '.ejs';
 
-      destinationFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
+      if (typeof destinationFile === 'function') {
+        destinationFile = resolveCallback(destinationFile);
+      } else {
+        destinationFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
+      }
 
       let sourceFileFrom;
       if (Array.isArray(rootTemplatesAbsolutePath)) {
@@ -3407,6 +3455,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     });
   }
 
+  /**
+   * @private
+   */
   getArgsForPriority(priorityName) {
     if (this.features.priorityArgs) {
       return [this.getDataArgForPriority(priorityName)];
@@ -3415,6 +3466,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @private
    */
   getDataArgForPriority(priorityName) {
     if (
