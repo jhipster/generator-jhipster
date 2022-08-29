@@ -3,7 +3,7 @@
     "node": true,
     "es2022": true
   },
-  "extends": ["airbnb-base", "plugin:prettier/recommended", "'plugin:@typescript-eslint/recommended'"],
+  "extends": ["airbnb-base", "plugin:prettier/recommended", "plugin:@typescript-eslint/recommended"],
   "parser": "@typescript-eslint/parser",
   "plugins": ["mocha", "prettier", "chai-friendly", "@typescript-eslint"],
   "settings": {
