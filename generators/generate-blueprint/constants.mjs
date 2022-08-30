@@ -24,6 +24,7 @@ import { BASE_PRIORITY_NAMES, ENTITY_PRIORITY_NAMES } from '../../lib/constants/
 const prioritiesForSub = subGenerator => (subGenerator.startsWith('entit') ? ENTITY_PRIORITY_NAMES : BASE_PRIORITY_NAMES);
 
 export const GENERATE_SNAPSHOTS = 'generateSnapshots';
+export const LINK_JHIPSTER_DEPENDENCY = 'linkJhipsterDependency';
 export const GENERATORS = 'generators';
 export const SUB_GENERATORS = 'subGenerators';
 export const ADDITIONAL_SUB_GENERATORS = 'additionalSubGenerators';
@@ -43,6 +44,11 @@ export const options = () => ({
   [GENERATE_SNAPSHOTS]: {
     desc: 'Generate test snapshots',
     type: Boolean,
+  },
+  [LINK_JHIPSTER_DEPENDENCY]: {
+    desc: 'Link JHipster dependency for testing',
+    type: Boolean,
+    hide: true,
   },
   [SUB_GENERATORS]: {
     desc: 'Sub generators to generate',

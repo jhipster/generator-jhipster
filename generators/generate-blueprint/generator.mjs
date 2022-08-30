@@ -43,6 +43,7 @@ import {
   prompts,
   subGeneratorPrompts,
   GENERATE_SNAPSHOTS,
+  LINK_JHIPSTER_DEPENDENCY,
   ALL_GENERATORS,
   GENERATORS,
   PRIORITIES,
@@ -332,6 +333,9 @@ export default class extends BaseBlueprintGenerator {
         this.log(`
 This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' to generate snapshots and commit to git.`);
         try {
+          if (this.options[LINK_JHIPSTER_DEPENDENCY]) {
+            await this.spawnCommand('npm', ['link', 'generator-jhipster']);
+          }
           await this.spawnCommand('npm', ['run', 'update-snapshot']);
         } catch (error) {
           if (generateSnapshots !== undefined) {
