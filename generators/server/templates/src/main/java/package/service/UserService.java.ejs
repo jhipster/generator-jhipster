@@ -1046,7 +1046,12 @@ public class UserService {
         if (username != null) {
             user.setLogin(username);
         } else if (user.getLogin() == null) {
-            user.setLogin(user.getId());
+            // special handling for Auth0
+            if (sub.contains("|")) {
+                user.setLogin(details.get("email").toString());
+            } else {
+                user.setLogin(user.getId());
+            }
         }
         if (details.get("given_name") != null) {
             user.setFirstName((String) details.get("given_name"));
