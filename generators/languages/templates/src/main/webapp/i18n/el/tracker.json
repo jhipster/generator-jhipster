@@ -2,7 +2,7 @@
     "tracker": {
         "title": "Δραστηριότητες χρηστών σε πραγματικό χρόνο",
         "table": {
-            "userlogin": "Χρηστης",
+            "userlogin": "Χρήστης",
             "ipaddress": "Διεύθυνση IP",
             "userAgent": "User agent",
             "page": "Τρέχουσα σελίδα",
