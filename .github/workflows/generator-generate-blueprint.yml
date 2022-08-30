@@ -89,7 +89,7 @@ jobs:
           mkdir generator-jhipster-foo
           cd generator-jhipster-foo
           cp $JHI_INTEG/generate-blueprint-samples/default/.yo-rc.json .
-          jhipster generate-blueprint --force --skip-jhipster-dependencies
+          jhipster generate-blueprint --force --skip-jhipster-dependencies --generate-snapshots
           npm link generator-jhipster
           npm link
       - name: 'GENERATION: config'

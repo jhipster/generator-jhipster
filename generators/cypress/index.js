@@ -69,7 +69,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _prompting() {
     return {
       async askForCypressOptions() {
-        if (this.options.existingProject || !this.jhipsterConfig.testFrameworks.includes(CYPRESS)) {
+        if (this.options.existingProject || !(this.jhipsterConfig.testFrameworks || []).includes(CYPRESS)) {
           return;
         }
         await this.prompt(

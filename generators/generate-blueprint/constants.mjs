@@ -23,6 +23,7 @@ import { BASE_PRIORITY_NAMES, ENTITY_PRIORITY_NAMES } from '../../lib/constants/
 
 const prioritiesForSub = subGenerator => (subGenerator.startsWith('entit') ? ENTITY_PRIORITY_NAMES : BASE_PRIORITY_NAMES);
 
+export const GENERATE_SNAPSHOTS = 'generateSnapshots';
 export const GENERATORS = 'generators';
 export const SUB_GENERATORS = 'subGenerators';
 export const ADDITIONAL_SUB_GENERATORS = 'additionalSubGenerators';
@@ -39,6 +40,10 @@ export const WRITTEN = 'written';
  * Options exposed to cli
  */
 export const options = () => ({
+  [GENERATE_SNAPSHOTS]: {
+    desc: 'Generate test snapshots',
+    type: Boolean,
+  },
   [SUB_GENERATORS]: {
     desc: 'Sub generators to generate',
     type: Array,
