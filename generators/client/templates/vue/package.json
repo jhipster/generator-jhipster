@@ -38,7 +38,7 @@
     "fork-ts-checker-webpack-plugin": "7.2.13",
     "html-webpack-plugin": "5.5.0",
     "jest": "28.1.3",
-    "jest-environment-jsdom": "28.1.3",
+    "jest-environment-jsdom": "29.0.1",
     "jest-junit": "14.0.1",
     "jest-serializer-vue": "2.0.2",
     "jest-sonar": "0.2.12",
