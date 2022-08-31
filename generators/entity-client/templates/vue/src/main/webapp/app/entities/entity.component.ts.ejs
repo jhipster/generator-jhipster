@@ -111,7 +111,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   <%_ if (paginationInfiniteScroll) { _%>
         if ((<any>this.$refs.infiniteLoading)) {
           (<any>this.$refs.infiniteLoading).stateChanger.loaded();
-          if (this.links !== {} && this.page > this.links['last']) {
+          if (JSON.stringify(this.links) !== JSON.stringify({}) && this.page > this.links['last']) {
             (<any>this.$refs.infiniteLoading).stateChanger.complete();
           }
         }
@@ -144,7 +144,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
 <%_ if (paginationInfiniteScroll) { _%>
       if ((<any>this.$refs.infiniteLoading)) {
         (<any>this.$refs.infiniteLoading).stateChanger.loaded();
-        if (this.links !== {} && this.page > this.links['last']) {
+        if (JSON.stringify(this.links) !== JSON.stringify({}) && this.page > this.links['last']) {
           (<any>this.$refs.infiniteLoading).stateChanger.complete();
         }
       }
