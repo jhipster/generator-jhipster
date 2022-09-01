@@ -275,7 +275,7 @@ export default class extends BaseBlueprintGenerator {
 
   get postWriting() {
     return {
-      packageJsom() {
+      packageJson() {
         if (this.shouldSkipFiles() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
         this.packageJson.merge({
