@@ -20,6 +20,7 @@ const assert = require('assert');
 const chalk = require('chalk');
 const _ = require('lodash');
 const path = require('path');
+const { existsSync } = require('fs');
 const Environment = require('yeoman-environment');
 const { CLI_NAME, logger } = require('./utils');
 const { loadYoRc, packageNameToNamespace } = require('../generators/utils');
@@ -88,7 +89,7 @@ module.exports = class EnvironmentBuilder {
   }
 
   prepare({ blueprints, lookups } = {}) {
-    this._lookupJHipster()._loadBlueprints(blueprints)._lookups(lookups)._lookupBlueprints()._loadSharedOptions();
+    this._lookupJHipster()._lookupLocalBlueprint()._loadBlueprints(blueprints)._lookups(lookups)._lookupBlueprints()._loadSharedOptions();
     return this;
   }
 
@@ -122,6 +123,19 @@ module.exports = class EnvironmentBuilder {
         `Error on the registered namespace ${generator.namespace}, make sure your folder is called generator-jhipster.`
       );
     });
+    return this;
+  }
+
+  _lookupLocalBlueprint() {
+    const localBlueprintPath = path.join(process.cwd(), '.blueprint');
+    if (existsSync(localBlueprintPath)) {
+      // Register jhipster generators.
+      const generators = this.env.lookup({ packagePaths: [localBlueprintPath], lookups: ['.'] });
+      if (generators.length > 0) {
+        this.env.alias(/^@jhipster\/jhipster-local(:(.*))?$/, '.blueprint$1');
+        this.env.sharedOptions.localBlueprint = true;
+      }
+    }
     return this;
   }
 

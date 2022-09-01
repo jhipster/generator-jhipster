@@ -33,7 +33,10 @@ import {
   POST_WRITING_PRIORITY,
   INSTALL_PRIORITY,
   END_PRIORITY,
+  COMPOSING_PRIORITY,
+  BASE_PRIORITY_NAMES,
 } from '../../lib/constants/priorities.mjs';
+
 import {
   options,
   requiredConfig,
@@ -48,13 +51,15 @@ import {
   SUB_GENERATORS,
   ADDITIONAL_SUB_GENERATORS,
   WRITTEN,
+  LOCAL_BLUEPRINT_OPTION,
+  ALL_PRIORITIES,
 } from './constants.mjs';
 
 import GENERATOR_LIST from '../generator-list.js';
 import { files, generatorFiles } from './files.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
-const { GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
+const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
 
 export default class extends BaseBlueprintGenerator {
   constructor(args, opts, features) {
@@ -73,22 +78,18 @@ export default class extends BaseBlueprintGenerator {
       this.config.set(allGeneratorsConfig());
     }
     if (this.options.defaults) {
-      this.config.defaults(defaultConfig());
+      this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
     }
-    this.config.defaults({
-      [SKIP_COMMIT_HOOK]: true,
-    });
   }
 
   /** @inheritdoc */
   async getPossibleDependencies() {
-    return [GENERATOR_INIT];
+    return [GENERATOR_PROJECT_NAME, GENERATOR_INIT];
   }
 
   async _beforeQueue() {
     if (!this.fromBlueprint) {
-      const configure = this.options.configure || !this.shouldComposeModular();
-      await this.dependsOnJHipster(GENERATOR_INIT, [], { configure });
+      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
       await this.composeWithBlueprints(GENERATOR_GENERATE_BLUEPRINT);
     }
   }
@@ -119,20 +120,30 @@ export default class extends BaseBlueprintGenerator {
         await this.prompt(prompts(this), this.config);
       },
       async eachSubGenerator() {
+        const { localBlueprint } = this.jhipsterConfig;
+        const { [ALL_PRIORITIES]: allPriorities } = this.options;
         const subGenerators = this.config.get(SUB_GENERATORS) || [];
         for (const subGenerator of subGenerators) {
           const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
-          await this.prompt(subGeneratorPrompts(subGenerator), subGeneratorStorage);
+          if (allPriorities) {
+            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES });
+          }
+          await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, options: this.options }), subGeneratorStorage);
         }
       },
       async eachAdditionalSubGenerator() {
+        const { localBlueprint } = this.jhipsterConfig;
+        const { [ALL_PRIORITIES]: allPriorities } = this.options;
         const additionalSubGenerators = this.config.get(ADDITIONAL_SUB_GENERATORS) || '';
         for (const subGenerator of additionalSubGenerators
           .split(',')
           .map(sub => sub.trim())
           .filter(Boolean)) {
           const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
-          await this.prompt(subGeneratorPrompts(subGenerator, true), subGeneratorStorage);
+          if (allPriorities) {
+            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES });
+          }
+          await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: true }), subGeneratorStorage);
         }
       },
     };
@@ -148,12 +159,33 @@ export default class extends BaseBlueprintGenerator {
       requiredConfig() {
         this.config.defaults(requiredConfig());
       },
+      conditionalConfig() {
+        if (!this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) {
+          this.config.defaults({
+            [SKIP_COMMIT_HOOK]: true,
+          });
+        }
+      },
     };
   }
 
   get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this.configuring;
+  }
+
+  get composing() {
+    return {
+      async compose() {
+        const configure = this.options.configure || !this.shouldComposeModular() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION];
+        await this.composeWithJHipster(GENERATOR_INIT, [], { configure });
+      },
+    };
+  }
+
+  get [COMPOSING_PRIORITY]() {
+    if (this.delegateToBlueprint) return {};
+    return this.composing;
   }
 
   get loading() {
@@ -183,6 +215,9 @@ export default class extends BaseBlueprintGenerator {
             this.application.commands.push(generator);
           }
         }
+      },
+      preparePath() {
+        this.application.blueprintsPath = this.application[LOCAL_BLUEPRINT_OPTION] ? '.blueprint/' : 'generators/';
       },
     };
   }
@@ -240,8 +275,8 @@ export default class extends BaseBlueprintGenerator {
 
   get postWriting() {
     return {
-      postWriting() {
-        if (this.shouldSkipFiles()) return;
+      packageJson() {
+        if (this.shouldSkipFiles() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
         this.packageJson.merge({
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
@@ -284,7 +319,7 @@ export default class extends BaseBlueprintGenerator {
         });
       },
       addCliToPackageJson() {
-        if (this.shouldSkipFiles() || !this.jhipsterConfig.cli) return;
+        if (this.shouldSkipFiles() || !this.jhipsterConfig.cli || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { baseName, cliName = `jhipster-${baseName}` } = this.application;
         this.packageJson.merge({
           bin: {
@@ -294,7 +329,7 @@ export default class extends BaseBlueprintGenerator {
         });
       },
       addGeneratorJHipsterDependency() {
-        if (this.shouldSkipFiles()) return;
+        if (this.shouldSkipFiles() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
         if (this.jhipsterConfig.dynamic) {
           this.packageJson.merge({
@@ -324,7 +359,7 @@ export default class extends BaseBlueprintGenerator {
   get install() {
     return {
       async addSnapshot() {
-        if (this.options.skipInstall || this.options.skipGit || this.config.existed) return;
+        if (this.options.skipInstall || this.options.skipGit || this.config.existed || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         // Generate snapshots to add to git.
         this.log(`
 This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' to generate snapshots and commit to git.`);
@@ -345,6 +380,8 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
   get end() {
     return {
       end() {
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+
         this.log(`${chalk.bold.green('##### USAGE #####')}
 To begin to work:
 - launch: ${chalk.yellow.bold('npm install')}
