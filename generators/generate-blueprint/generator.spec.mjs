@@ -66,5 +66,44 @@ describe(`JHipster ${generator} generator`, () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
     });
+    describe('local-blueprint option', () => {
+      let runResult;
+      before(async () => {
+        runResult = await helpers.run(generatorPath).withOptions({ localBlueprint: true });
+      });
+      it('should write java files with gradle build tool and match snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
+Object {
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`);
+      });
+    });
+    describe('local-blueprint option and app generator', () => {
+      let runResult;
+      before(async () => {
+        runResult = await helpers.run(generatorPath).withOptions({ localBlueprint: true, subGenerators: ['app'], allPriorities: true });
+      });
+      it('should write java files with gradle build tool and match snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
+Object {
+  ".blueprint/app/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  ".blueprint/app/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  ".blueprint/app/templates/template-file-app.ejs": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`);
+      });
+    });
   });
 });

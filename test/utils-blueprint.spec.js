@@ -28,13 +28,17 @@ describe('JHipster Blueprint Utils', () => {
       const actual = utils.parseBluePrints('generator-jhipster-foo@1.0.1');
       assert.deepStrictEqual(actual, expected);
     });
-    it("doesn't modify scoped package and extracts version", () => {
-      const expected = [{ name: '@corp/foo', version: '1.0.1' }];
+    it('adds generator-jhipster prefix to scoped package and extracts version', () => {
+      const expected = [{ name: '@corp/generator-jhipster-foo', version: '1.0.1' }];
       const actual = utils.parseBluePrints('@corp/foo@1.0.1');
       assert.deepStrictEqual(actual, expected);
     });
     it('parses comma separated list', () => {
-      const expected = [{ name: 'generator-jhipster-foo' }, { name: 'generator-jhipster-bar', version: '1.0.1' }, { name: '@corp/foo' }];
+      const expected = [
+        { name: 'generator-jhipster-foo' },
+        { name: 'generator-jhipster-bar', version: '1.0.1' },
+        { name: '@corp/generator-jhipster-foo' },
+      ];
       const actual = utils.parseBluePrints('foo,bar@1.0.1,@corp/foo');
       assert.deepStrictEqual(actual, expected);
     });
@@ -130,9 +134,9 @@ describe('JHipster Blueprint Utils', () => {
       const generatorName = utils.normalizeBlueprintName('generator-jhipster-foo');
       assert.textEqual(generatorName, 'generator-jhipster-foo');
     });
-    it("doesn't  do anything for scoped package", () => {
+    it('adds generator-jhipster prefix for scoped package', () => {
       const generatorName = utils.normalizeBlueprintName('@corp/foo');
-      assert.textEqual(generatorName, '@corp/foo');
+      assert.textEqual(generatorName, '@corp/generator-jhipster-foo');
     });
   });
 });

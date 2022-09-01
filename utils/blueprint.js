@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const YeomanNamespace = require('yeoman-environment/lib/util/namespace');
 
 module.exports = {
   mergeBlueprints,
@@ -134,6 +135,15 @@ function parseBlueprintInfo(blueprint) {
  * @returns {string} the normalized blueprint name
  */
 function normalizeBlueprintName(blueprint) {
+  try {
+    const parsed = YeomanNamespace.parse(blueprint);
+    if (parsed.unscoped.startsWith('generator-jhipster-')) {
+      return blueprint;
+    }
+    const namespace = new YeomanNamespace(parsed);
+    return namespace.with({ unscoped: `generator-jhipster-${namespace.unscoped}` }).toString();
+    // eslint-disable-next-line no-empty
+  } catch (e) {}
   if (blueprint && blueprint.startsWith('@')) {
     return blueprint;
   }
