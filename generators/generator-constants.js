@@ -33,7 +33,7 @@ const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.9.3-SNAPSHOT';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.9.3';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.7.3';
 const LIQUIBASE_VERSION = '4.15.0';
