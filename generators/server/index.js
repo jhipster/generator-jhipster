@@ -22,7 +22,7 @@ const os = require('os');
 const prompts = require('./prompts');
 const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER } = require('../generator-list');
 const databaseTypes = require('../../jdl/jhipster/database-types');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const BaseApplicationGenerator = require('../generator-base-entities.cjs');
 const { writeFiles } = require('./files');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
@@ -60,7 +60,11 @@ const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TE
 
 const WAIT_TIMEOUT = 3 * 60000;
 
-module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
+/**
+ * @class
+ * @extends {BaseApplicationGenerator<import('../bootstrap-application-server/types').SpringBootApplication>}
+ */
+module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -111,9 +115,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     }
   }
 
-  // Public API method used by the getter and also by Blueprints
   _initializing() {
-    return {
+    return this.asInitialingTaskGroup({
       validateFromCli() {
         this.checkInvocationFromCLI();
       },
@@ -235,17 +238,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           this.existingProject = true;
         }
       },
-    };
+    });
   }
 
   get [INITIALIZING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.asInitialingTaskGroup(this.delegateToBlueprint ? {} : this._initializing());
   }
 
-  /** @inheritdoc */
   _prompting() {
-    return {
+    return this.asPromptingTaskGroup({
       askForModuleName: prompts.askForModuleName,
       askForServerSideOpts: prompts.askForServerSideOpts,
       askForOptionalItems: prompts.askForOptionalItems,
@@ -255,17 +256,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool);
         this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool) + constants.CLIENT_DIST_DIR;
       },
-    };
+    });
   }
 
   get [PROMPTING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this._prompting());
   }
 
-  /** @inheritdoc */
   _configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
       configServerPort() {
         if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
           this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
@@ -282,17 +281,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       configure() {
         this._configureServer();
       },
-    };
+    });
   }
 
   get [CONFIGURING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.asConfiguringTaskGroup(this.delegateToBlueprint ? {} : this._configuring());
   }
 
-  /** @inheritdoc */
   _composing() {
-    return {
+    return this.asComposingTaskGroup({
       async composeCommon() {
         await this.composeWithJHipster(GENERATOR_COMMON, true);
       },
@@ -302,17 +299,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         if (this.jhipsterConfig.enableTranslation === false) return;
         await this.composeWithJHipster(GENERATOR_LANGUAGES, true);
       },
-    };
+    });
   }
 
   get [COMPOSING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._composing();
+    return this.asComposingTaskGroup(this.delegateToBlueprint ? {} : this._composing());
   }
 
-  /** @inheritdoc */
   _loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadSharedConfig() {
         this.loadAppConfig();
         this.loadDerivedAppConfig();
@@ -322,17 +317,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.loadPlatformConfig();
         this.loadTranslationConfig();
       },
-    };
+    });
   }
 
   get [LOADING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.asLoadingTaskGroup(this.delegateToBlueprint ? {} : this._loading());
   }
 
-  /** @inheritdoc */
   _preparing() {
-    return {
+    return this.asPreparingTaskGroup({
       prepareForTemplates() {
         // Application name modified, using each technology's conventions
         this.frontendAppName = this.getFrontendAppName();
@@ -351,7 +344,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.srcMainDir = MAIN_DIR;
         this.srcTestDir = TEST_DIR;
       },
-    };
+    });
   }
 
   get [PREPARING_PRIORITY]() {
@@ -361,7 +354,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
   /** @inheritdoc */
   _default() {
-    return {
+    return this.asDefaultTaskGroup({
       ...super._missingPreDefault(),
 
       loadUserManagementEntities() {
@@ -402,30 +395,27 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           },
         });
       },
-    };
+    });
   }
 
   get [DEFAULT_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._default();
+    return this.asDefaultTaskGroup(this.delegateToBlueprint ? {} : this._default());
   }
 
   /** @inheritdoc */
   _writing() {
-    return {
+    return this.asWritingTaskGroup({
       ...writeFiles(),
       ...super._missingPostWriting(),
-    };
+    });
   }
 
   get [WRITING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this._writing());
   }
 
-  /** @inheritdoc */
   _postWriting() {
-    return {
+    return this.asPostWritingTaskGroup({
       packageJsonScripts() {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = this.gatewayServerPort || this.serverPort;
@@ -600,17 +590,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           });
         }
       },
-    };
+    });
   }
 
   get [POST_WRITING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._postWriting();
+    return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this._postWriting());
   }
 
-  /** @inheritdoc */
   _end() {
-    return {
+    return this.asEndTaskGroup({
       checkLocaleValue() {
         if (this.languages && this.languages.includes('in')) {
           this.warning(
@@ -632,12 +620,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         }
         this.log(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
       },
-    };
+    });
   }
 
   get [END_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.asEndTaskGroup(this.delegateToBlueprint ? {} : this._end());
   }
 
   _configureServer(config = this.jhipsterConfig) {

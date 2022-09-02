@@ -46,7 +46,8 @@ const {
  * This is the base class for a generator that generates entities.
  *
  * @class
- * @extends {BaseBlueprintGenerator}
+ * @template ApplicationType
+ * @extends {BaseBlueprintGenerator<ApplicationType>}
  */
 class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -65,46 +66,253 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
     });
   }
 
-  get configuringEachEntity() {
-    return this._configuringEachEntity();
-  }
-
-  _configuringEachEntity() {
-    return {};
-  }
-
+  /**
+   * Priority API stub for blueprints.
+   */
   get preparingEachEntity() {
-    return this._preparingEachEntity();
+    return this.asPreparingEachEntityTaskGroup({});
   }
 
-  _preparingEachEntity() {
-    return {};
+  /**
+   * Priority API stub for blueprints.
+   *
+   * Configuring each entity should configure entities.
+   */
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({});
   }
 
+  /**
+   * Priority API stub for blueprints.
+   */
   get preparingEachEntityField() {
-    return this._preparingEachEntityField();
+    return this.asPreparingEachEntityFieldTaskGroup({});
   }
 
-  _preparingEachEntityField() {
-    return {};
-  }
-
+  /**
+   * Priority API stub for blueprints.
+   */
   get preparingEachEntityRelationship() {
-    return this._preparingEachEntityRelationship();
+    return this.asPreparingEachEntityRelationshipTaskGroup({});
   }
 
-  _preparingEachEntityRelationship() {
-    return {};
+  /**
+   * Priority API stub for blueprints.
+   */
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({});
   }
 
-  get writingEachEntity() {
-    return this._writingEachEntity();
+  /**
+   * Priority API stub for blueprints.
+   */
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({});
   }
 
-  _writingEachEntity() {
-    return {};
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').InitializingTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').InitializingTaskGroup<this>}
+   */
+  asInitialingTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').ConfiguringTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').ConfiguringTaskGroup<this>}
+   */
+  asConfiguringTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PromptingTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').PromptingTaskGroup<this>}
+   */
+  asPromptingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').ComposingTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').ComposingTaskGroup<this>}
+   */
+  asComposingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').LoadingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').LoadingTaskGroup<this, ApplicationType>}
+   */
+  asLoadingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PreparingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PreparingTaskGroup<this, ApplicationType>}
+   */
+  asPreparingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').ConfiguringEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').ConfiguringEachEntityTaskGroup<this, ApplicationType>}
+   */
+  asConfiguringEachEntityTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').LoadingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').LoadingEachEntityTaskGroup<this, ApplicationType>}
+   */
+  asLoadingEachEntityTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PreparingEachEntityTaskGroup<this, ApplicationType>}
+   */
+  asPreparingEachEntityTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PreparingEachEntityFieldTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PreparingEachEntityFieldTaskGroup<this, ApplicationType>}
+   */
+  asPreparingEachEntityFieldTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>}
+   */
+  asPreparingEachEntityRelationshipTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PostPreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PostPreparingEachEntityTaskGroup<this, ApplicationType>}
+   */
+  asPostPreparingEachEntityTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').DefaultTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').DefaultTaskGroup<this, ApplicationType>}
+   */
+  asDefaultTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').WritingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').WritingTaskGroup<this, ApplicationType>}
+   */
+  asWritingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').WritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').WritingEntitiesTaskGroup<this, ApplicationType>}
+   */
+  asWritingEntitiesTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PostWritingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PostWritingTaskGroup<this, ApplicationType>}
+   */
+  asPostWritingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PostWritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PostWritingEntitiesTaskGroup<this, ApplicationType>}
+   */
+  asPostWritingEntitiesTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').InstallTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').InstallTaskGroup<this, ApplicationType>}
+   */
+  asInstallTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PostInstallTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PostInstallTaskGroup<this, ApplicationType>}
+   */
+  asPostInstallTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').EndTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').EndTaskGroup<this, ApplicationType>}
+   */
+  asEndTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * @private
+   */
   getDataArgForPriority(priorityName) {
     const dataArg = super.getDataArgForPriority(priorityName);
     if (priorityName === WRITING_ENTITIES || priorityName === POST_WRITING_ENTITIES || priorityName === DEFAULT) {
