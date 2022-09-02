@@ -31,7 +31,7 @@ import {
   PREPARING_PRIORITY,
   WRITING_PRIORITY,
   POST_WRITING_PRIORITY,
-  INSTALL_PRIORITY,
+  POST_INSTALL_PRIORITY,
   END_PRIORITY,
   COMPOSING_PRIORITY,
   BASE_PRIORITY_NAMES,
@@ -45,6 +45,8 @@ import {
   allGeneratorsConfig,
   prompts,
   subGeneratorPrompts,
+  GENERATE_SNAPSHOTS,
+  LINK_JHIPSTER_DEPENDENCY,
   ALL_GENERATORS,
   GENERATORS,
   PRIORITIES,
@@ -356,25 +358,40 @@ export default class extends BaseBlueprintGenerator {
     return this.postWriting;
   }
 
-  get install() {
+  get postInstall() {
     return {
       async addSnapshot() {
-        if (this.options.skipInstall || this.options.skipGit || this.config.existed || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        const { [LOCAL_BLUEPRINT_OPTION]: localBlueprint } = this.jhipsterConfig;
+        const {
+          skipInstall,
+          skipGit,
+          existed,
+          [GENERATE_SNAPSHOTS]: generateSnapshots = !localBlueprint && !skipInstall && !skipGit && !existed,
+        } = this.options;
+        if (!generateSnapshots) return;
+
         // Generate snapshots to add to git.
         this.log(`
 This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' to generate snapshots and commit to git.`);
         try {
+          if (this.options[LINK_JHIPSTER_DEPENDENCY]) {
+            await this.spawnCommand('npm', ['link', 'generator-jhipster']);
+          }
           await this.spawnCommand('npm', ['run', 'update-snapshot']);
         } catch (error) {
+          if (generateSnapshots !== undefined) {
+            // We are forcing to generate snapshots fail the generation.
+            throw error;
+          }
           this.log('Fail to generate snapshots');
         }
       },
     };
   }
 
-  get [INSTALL_PRIORITY]() {
+  get [POST_INSTALL_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
-    return this.install;
+    return this.postInstall;
   }
 
   get end() {

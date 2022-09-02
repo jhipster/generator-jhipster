@@ -356,6 +356,24 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   /**
    * Priority API stub for blueprints.
    *
+   * PostWriting priority should used to customize files.
+   *
+   * @returns {Object.<string, YeomanTask>} generator tasks
+   */
+  get postInstall() {
+    return this._postInstall();
+  }
+
+  /**
+   * Public API method used by the getter and also by Blueprints
+   */
+  _postInstall() {
+    return {};
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
    * End priority should used to say good bye and print instructions.
    *
    * @returns {Object.<string, YeomanTask>} generator tasks
