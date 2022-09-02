@@ -44,7 +44,7 @@ const basicTests = data => {
   describe('with default options', () => {
     let runResult;
     before(async () => {
-      runResult = await contextBuilder().withOptions({ skipPrompts: true, configure: true }).run();
+      runResult = await contextBuilder().withOptions({ skipPrompts: true, configure: true, baseName: 'jhipster' }).run();
     });
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -220,7 +220,7 @@ const testBlueprintSupport = (generatorName, options = {}) => {
       result = await helpers
         .run(generatorPath)
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
-        .withOptions({ blueprint: 'foo', skipChecks: true })
+        .withOptions({ blueprint: 'foo', skipChecks: true, baseName: 'jhipster' })
         .on('ready', generator => {
           spy = addSpies(generator);
         });
@@ -239,7 +239,7 @@ const testBlueprintSupport = (generatorName, options = {}) => {
       if (skipSbsBlueprint) {
         this.skip();
       }
-      let options = { blueprint: 'foo-sbs', skipChecks: true };
+      let options = { blueprint: 'foo-sbs', skipChecks: true, baseName: 'jhipster' };
       if (entity) {
         options = {
           ...options,

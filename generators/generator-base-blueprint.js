@@ -27,18 +27,10 @@ const BaseGenerator = require('./generator-base');
 const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../utils/blueprint');
 
 /**
- * Basic task definition
- *
- * @async
- * @function YeomanTask
- * @param {...string} cliArgs - Arguments passed to cli.
- * @return {Promise<any>}.
- */
-
-/**
  * Base class for a generator that can be extended through a blueprint.
  *
  * @class
+ * @template ApplicationType
  * @extends {BaseGenerator}
  * @property {import('yeoman-generator/lib/util/storage')} blueprintStorage - Storage for blueprint config (Blueprints only).
  * @property {object} blueprintConfig - Proxy object for blueprintStorage (Blueprints only).
@@ -78,19 +70,27 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    * Priority API stub for blueprints.
    *
    * Initializing priority is used to show logo and tasks related to preparing for prompts, like loading constants.
-   *
-   * @returns {Object.<string, YeomanTask>} generator tasks
    */
   get initializing() {
-    return this._initializing();
+    return this.asInitialingTaskGroup(this._initializing());
   }
 
   /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _initializing() {
     return {};
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
+   */
+  asInitialingTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
@@ -98,85 +98,82 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    *
    * Prompting priority is used to prompt users for configuration values.
    *
-   * @returns {Object.<string, YeomanTask>} generator tasks
+   * @returns {BasicTask}
    */
   get prompting() {
-    return this._prompting();
+    return this.asPromptingTaskGroup(this._prompting());
   }
 
   /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _prompting() {
     return {};
   }
 
   /**
-   * Priority API stub for blueprints.
+   * Utility method to get typed objects for autocomplete.
    *
-   * Configuring priority is used to customize and validate the configuration.
-   *
-   * @returns {Object.<string, YeomanTask>} generator tasks
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
    */
-  get configuring() {
-    return this._configuring();
+  asPromptingTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * Configuring priority is used to customize and validate the configuration.
+   */
+  get configuring() {
+    return this.asConfiguringTaskGroup(this._configuring());
+  }
+
+  /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _configuring() {
     return {};
   }
 
   /**
-   * Configuring entities task argument
+   * Utility method to get typed objects for autocomplete.
    *
-   * @typedef {object} ConfiguringEntityArgument
-   * @property {string} entityName - Entity name.
-   * @property {import('yeoman-generator/lib/util/storage')} entityStorage - Storage for entity.
-   * @property {object} entityConfig - Proxy object for entityStorage.
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
    */
-
-  /**
-   * Configuring entities task definition
-   *
-   * @async
-   * @function ConfiguringEntityTask
-   * @param {ConfiguringEntityArgument} taskData
-   * @return {Promise<any>}.
-   */
-
-  /**
-   * Priority API stub for blueprints.
-   *
-   * Configuring each entity priority is used to customize and validate the entity configuration.
-   *
-   * @returns {Object.<string, ConfiguringEntityTask>} taskGroup
-   */
-  get configuringEachEntity() {
-    return {};
+  asConfiguringTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
    * Priority API stub for blueprints.
    *
    * Composing should be used to compose with others generators.
-   *
-   * @returns {Object.<string, requestCallback>} taskGroup
    */
   get composing() {
-    return this._composing();
+    return this.asComposingTaskGroup(this._composing());
   }
 
   /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _composing() {
     return {};
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
+   */
+  asComposingTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
@@ -184,43 +181,58 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    *
    * Loading should be used to load application configuration from jhipster configuration.
    * Before this priority the configuration should be considered dirty, while each generator configures itself at configuring priority, another generator composed at composing priority can still change it.
-   *
-   * @returns {Object.<string, YeomanTask>} taskGroup
    */
   get loading() {
-    return this._loading();
+    return this.asLoadingTaskGroup(this._loading());
   }
 
   /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _loading() {
     return {};
   }
 
   /**
-   * Priority API stub for blueprints.
+   * Utility method to get typed objects for autocomplete.
    *
-   * Preparing should be used to generate derived properties.
-   *
-   * @returns {Object.<string, YeomanTask>} taskGroup
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
    */
-  get preparing() {
-    return this._preparing();
+  asLoadingTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * Preparing should be used to generate derived properties.
+   */
+  get preparing() {
+    return this.asPreparingTaskGroup(this._preparing());
+  }
+
+  /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _preparing() {
     return {};
   }
 
   /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
+   */
+  asPreparingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _preparingFields() {
     return {};
@@ -228,7 +240,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
 
   /**
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _preparingRelationships() {
     return {};
@@ -239,7 +250,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    * @deprecated
    * Execute custom priorities if they are not declared
    * Should be used by jhipster official generators only.
-   * @returns {Object} tasks
    */
   _missingPreDefault() {
     let tasks = {};
@@ -266,38 +276,54 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    * Priority API stub for blueprints.
    *
    * Default priority should used as misc customizations.
-   *
-   * @returns {Object.<string, YeomanTask>} generator tasks
    */
   get default() {
-    return this._default();
+    return this.asDefaultTaskGroup(this._default());
   }
 
   /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _default() {
     return {};
   }
 
   /**
-   * Priority API stub for blueprints.
+   * Utility method to get typed objects for autocomplete.
    *
-   * Writing priority should used to write files.
-   *
-   * @returns {Object.<string, YeomanTask>} generator tasks
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
    */
-  get writing() {
-    return this._writing();
+  asDefaultTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * Writing priority should used to write files.
+   */
+  get writing() {
+    return this.asWritingTaskGroup(this._writing());
+  }
+
+  /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _writing() {
     return {};
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
+   */
+  asWritingTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
@@ -305,7 +331,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    * @deprecated
    * Execute custom priorities if they are not declared
    * Should be used by jhipster official generators only.
-   * @returns {Object} tasks
    */
   _missingPostWriting() {
     let tasks = {};
@@ -320,14 +345,13 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    * Priority API stub for blueprints.
    *
    * PostWriting priority should used to customize files.
-   *
-   * @returns {Object.<string, YeomanTask>} generator tasks
    */
   get postWriting() {
-    return this._postWriting();
+    return this.asPostWritingTaskGroup(this._postWriting());
   }
 
   /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
    */
   _postWriting() {
@@ -335,36 +359,53 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
-   * Priority API stub for blueprints.
+   * Utility method to get typed objects for autocomplete.
    *
-   * Install priority should used to prepare the project.
-   *
-   * @returns {Object.<string, YeomanTask>} generator tasks
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
    */
-  get install() {
-    return this._install();
+  asPostWritingTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * Install priority should used to prepare the project.
+   */
+  get install() {
+    return this.asInstallTaskGroup(this._install());
+  }
+
+  /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _install() {
     return {};
   }
 
   /**
-   * Priority API stub for blueprints.
+   * Utility method to get typed objects for autocomplete.
    *
-   * PostWriting priority should used to customize files.
-   *
-   * @returns {Object.<string, YeomanTask>} generator tasks
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
    */
-  get postInstall() {
-    return this._postInstall();
+  asInstallTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * PostWriting priority should used to customize files.
+   */
+  get postInstall() {
+    return this.asPostInstallTaskGroup(this._postInstall());
+  }
+
+  /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
    */
   _postInstall() {
@@ -372,22 +413,40 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
-   * Priority API stub for blueprints.
+   * Utility method to get typed objects for autocomplete.
    *
-   * End priority should used to say good bye and print instructions.
-   *
-   * @returns {Object.<string, YeomanTask>} generator tasks
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
    */
-  get end() {
-    return this._end();
+  asPostInstallTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * End priority should used to say good bye and print instructions.
+   */
+  get end() {
+    return this.asEndTaskGroup(this._end());
+  }
+
+  /**
+   * @deprecated
    * Public API method used by the getter and also by Blueprints
-   * @returns {Object} tasks
    */
   _end() {
     return {};
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').BasicTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').BasicTaskGroup<this>}
+   */
+  asEndTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
   /**
