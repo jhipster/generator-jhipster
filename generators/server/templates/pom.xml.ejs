@@ -574,6 +574,11 @@
             <artifactId>netty-tcnative-boringssl-static</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-resolver-dns-native-macos</artifactId>
+            <classifier>osx-aarch_64</classifier>
+        </dependency>
 <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -2212,23 +2217,6 @@
                     </plugins>
                 </pluginManagement>
             </build>
-        </profile>
-<%_ } _%>
-<%_ if (reactive) { _%>
-        <profile>
-            <activation>
-                <os>
-                    <family>mac</family>
-                    <arch>aarch64</arch>
-                </os>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>io.netty</groupId>
-                    <artifactId>netty-resolver-dns-native-macos</artifactId>
-                    <classifier>osx-aarch_64</classifier>
-                </dependency>
-            </dependencies>
         </profile>
 <%_ } _%>
         <!-- jhipster-needle-maven-add-profile -->
