@@ -41,7 +41,7 @@
     "react": "<%= dependabotPackageJson.dependencies['react'] %>",
     "react-dom": "<%= dependabotPackageJson.dependencies['react-dom'] %>",
     "react-hook-form": "<%= dependabotPackageJson.dependencies['react-hook-form'] %>",
-    "react-jhipster": "<%= dependabotPackageJson.dependencies['react-jhipster'] %>",
+    "react-jhipster": "github:Tcharl/react-jhipster#namedJsxElements",
     "react-loadable": "<%= dependabotPackageJson.dependencies['react-loadable'] %>",
     "react-redux": "<%= dependabotPackageJson.dependencies['react-redux'] %>",
     "react-redux-loading-bar": "<%= dependabotPackageJson.dependencies['react-redux-loading-bar'] %>",
@@ -154,6 +154,7 @@
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "<%= dependabotPackageJson.devDependencies['cypress'] %>",
+    "cypress-intellij-reporter": "^0.0.7",
 <%_ } _%>
     "typescript": "<%= dependabotPackageJson.devDependencies['typescript'] %>",
 <%_ if (protractorTests) { _%>

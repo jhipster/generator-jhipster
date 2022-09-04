@@ -296,11 +296,11 @@ _%>
           />
   <%_ } else if (field.fieldTypeBinary) { _%>
     <%_ if (!field.blobContentTypeText) {  _%>
-            <%_ if (field.blobContentTypeImage) {_%>
+      <%_ if (field.blobContentTypeImage) {_%>
             isImage accept="image/*"
-            <%_ } else { _%>
+      <%_ } else { _%>
             openActionLabel={translate('entity.action.open')}
-            <%_ } _%>
+      <%_ } _%>
             <%- include('react_validators'); %>
           />
     <%_ } else { _%>
