@@ -77,17 +77,13 @@ _%>
 <%_ if (databaseTypeCassandra) { _%>
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
 <%_ } _%>
-<%_ if (applicationTypeGateway) { _%>
-  <%_ if (authenticationTypeOauth2) { _%>
-      - JHIPSTER_SLEEP=80 # gives time for microservices, dependencies to boot before the gateway, the entire stack will be ready to accept incoming requests.
-  <%_ } else { _%>
-      - JHIPSTER_SLEEP=60 # gives time for microservices to boot before the gateway, the entire stack will be ready to accept incoming requests.
-  <%_ } _%>
-<%_ } else if (authenticationTypeOauth2) { _%>
-      - JHIPSTER_SLEEP=60 # gives time for other services to boot before the application
-<%_ } else { _%>
-      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
-<%_ } _%>
+<%_
+  let jhipsterSleep = 30;
+  if (applicationTypeGateway) jhipsterSleep += 20;
+  if (serviceDiscoveryEureka) jhipsterSleep += 10;
+  if (authenticationTypeOauth2) jhipsterSleep += 20;
+_%>
+      - JHIPSTER_SLEEP=<%= jhipsterSleep %> # gives time for microservices, dependencies to boot before the gateway, the entire stack will be ready to accept incoming requests.
 <%_ if (searchEngineElasticsearch) { _%>
       - SPRING_ELASTICSEARCH_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
 <%_ } _%>
