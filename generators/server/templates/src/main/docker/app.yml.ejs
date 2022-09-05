@@ -79,11 +79,23 @@ _%>
 <%_ } _%>
 <%_
   let jhipsterSleep = 30;
-  if (applicationTypeGateway) jhipsterSleep += 20;
-  if (serviceDiscoveryEureka) jhipsterSleep += 10;
-  if (authenticationTypeOauth2) jhipsterSleep += 20;
+  let jhipsterSleepComment = 'database, other services';
+  if (serviceDiscoveryAny) {
+    jhipsterSleep += 10;
+    jhipsterSleepComment = `${jhipsterSleepComment}, serviceDiscovery`;
+  }
+  if (authenticationTypeOauth2) {
+    jhipsterSleep += 20;
+    jhipsterSleepComment = `${jhipsterSleepComment}, keycloak`;
+  }
+  if (applicationTypeGateway) {
+    jhipsterSleep += 20;
+    jhipsterSleepComment = `gives time for microservices, ${jhipsterSleepComment} to boot before the gateway, the entire stack will be ready to accept incoming requests.`;
+  } else {
+    jhipsterSleepComment = `gives time for ${jhipsterSleepComment} to boot before the application.`;
+  }
 _%>
-      - JHIPSTER_SLEEP=<%= jhipsterSleep %> # gives time for microservices, dependencies to boot before the gateway, the entire stack will be ready to accept incoming requests.
+      - JHIPSTER_SLEEP=<%= jhipsterSleep %> # <%= jhipsterSleepComment %>
 <%_ if (searchEngineElasticsearch) { _%>
       - SPRING_ELASTICSEARCH_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
 <%_ } _%>
