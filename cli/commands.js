@@ -197,9 +197,6 @@ const defaultCommands = {
   upgrade: {
     desc: 'Upgrade the JHipster version, and upgrade the generated application',
   },
-  'upgrade-config': {
-    desc: 'Upgrade the JHipster configuration',
-  },
   workspaces: {
     desc: 'Add workspaces configuration',
   },
