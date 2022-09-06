@@ -195,6 +195,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.NPM_VERSION = constants.NPM_VERSION;
         this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
+        this.H2_VERSION = constants.H2_VERSION;
+
         this.JIB_VERSION = constants.JIB_VERSION;
         this.JHIPSTER_DEPENDENCIES_VERSION = this.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;

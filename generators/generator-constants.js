@@ -32,6 +32,9 @@ const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
 const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
+
+const H2_VERSION = '1.4.200';
+
 const JIB_VERSION = '3.1.4';
 
 // Libraries version
@@ -390,6 +393,7 @@ const constants = {
   GRADLE_VERSION,
 
   // Libraries
+  H2_VERSION,
   JIB_VERSION,
   JHIPSTER_DEPENDENCIES_VERSION,
   SPRING_BOOT_VERSION,
