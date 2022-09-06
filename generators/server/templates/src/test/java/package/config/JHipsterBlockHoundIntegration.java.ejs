@@ -47,6 +47,7 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
 <%_} _%>
 <%_ if (databaseTypeCassandra) { _%>
         builder.allowBlockingCallsInside("io.netty.util.NetUtil", "<clinit>");
+        builder.allowBlockingCallsInside("io.netty.util.concurrent.FastThreadLocalRunnable", "run");
 <%_} _%>
     }
 
