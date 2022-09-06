@@ -39,6 +39,7 @@ const SPRING_BOOT_VERSION = '2.7.3';
 const LIQUIBASE_VERSION = '4.15.0';
 // TODO v8: Remove this constant
 const LIQUIBASE_DTD_VERSION = 'latest';
+const H2_VERSION = '1.4.200';
 const HIBERNATE_VERSION = '5.6.10.Final';
 const JACOCO_VERSION = '0.8.8';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.3';
@@ -408,6 +409,7 @@ const constants = {
   LIQUIBASE_VERSION,
   // TODO v8: Remove this constant
   LIQUIBASE_DTD_VERSION,
+  H2_VERSION,
   HIBERNATE_VERSION,
   JIB_VERSION,
   JACOCO_VERSION,
