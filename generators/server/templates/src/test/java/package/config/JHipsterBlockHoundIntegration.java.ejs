@@ -45,6 +45,9 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
 <%_ if (searchEngineElasticsearch) { _%>
         builder.allowBlockingCallsInside("org.elasticsearch.client.indices.CreateIndexRequest", "settings");
 <%_} _%>
+<%_ if (databaseTypeCassandra) { _%>
+        builder.allowBlockingCallsInside("io.netty.util.NetUtil", "<clinit>");
+<%_} _%>
     }
 
 }
