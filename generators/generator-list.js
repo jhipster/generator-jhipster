@@ -66,7 +66,6 @@ const Generators = {
   GENERATOR_SPRING_CONTROLLER: 'spring-controller',
   GENERATOR_SPRING_SERVICE: 'spring-service',
   GENERATOR_UPGRADE: 'upgrade',
-  GENERATOR_UPGRADE_CONFIG: 'upgrade-config',
   GENERATOR_WORKSPACES: 'workspaces',
 };
 

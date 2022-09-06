@@ -539,18 +539,6 @@ Object {
   "generators/spring-service/templates/template-file-spring-service.ejs": Object {
     "stateCleared": "modified",
   },
-  "generators/upgrade-config/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/upgrade-config/generator.spec.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/upgrade-config/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/upgrade-config/templates/template-file-upgrade-config.ejs": Object {
-    "stateCleared": "modified",
-  },
   "generators/upgrade/generator.mjs": Object {
     "stateCleared": "modified",
   },

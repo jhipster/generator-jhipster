@@ -335,20 +335,6 @@ module.exports = class extends BaseGenerator {
         this.sourceBranch = gitRevParse.stdout.replace('\n', '');
       },
 
-      async upgradeConfig() {
-        return this.prompt({
-          type: 'confirm',
-          name: 'upgradeConfig',
-          message: 'Unify blueprints configurations?',
-        }).then(
-          function (answer) {
-            if (answer.upgradeConfig) {
-              this.composeWith(require.resolve('../upgrade-config'), this.options);
-            }
-          }.bind(this)
-        );
-      },
-
       async prepareUpgradeBranch() {
         const getGitVersion = () => {
           const gitVersion = this.gitExec(['--version'], { silent: this.silent });
