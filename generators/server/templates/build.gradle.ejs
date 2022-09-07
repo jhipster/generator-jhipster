@@ -358,7 +358,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
     implementation "org.lz4:lz4-java"
-    testImplementation "org.cassandraunit:cassandra-unit-spring"
+    testImplementation "io.github.btjfsu:cassandra-unit-spring"
     testImplementation "org.testcontainers:cassandra"
 <%_ } _%>
 <%_ if (cacheProviderEhCache) { _%>
