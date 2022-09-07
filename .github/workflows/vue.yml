@@ -200,7 +200,7 @@ jobs:
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:package
         timeout-minutes: 7
-      - name: 'TESTS: Start docker-compose containers for e2e tests'
+      - name: 'TESTS: Start docker compose containers for e2e tests'
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:prepare
         timeout-minutes: 5

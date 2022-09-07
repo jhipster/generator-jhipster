@@ -53,7 +53,7 @@ module.exports = class extends BaseDockerGenerator {
 
         const done = this.async();
 
-        shelljs.exec('docker-compose -v', { silent: true }, (code, stdout, stderr) => {
+        shelljs.exec('docker compose version', { silent: true }, (code, stdout, stderr) => {
           if (stderr) {
             this.log(
               chalk.red(
@@ -296,7 +296,7 @@ module.exports = class extends BaseDockerGenerator {
     } else {
       this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
     }
-    this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker-compose up -d')}`);
+    this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
     if (this.gatewayNb + this.monolithicNb > 1) {
       this.log('\nYour applications will be accessible on these URLs:');
       this.appConfigs.forEach(appConfig => {

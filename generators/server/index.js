@@ -447,8 +447,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             scriptsStorage.set('docker:db:up', `echo "Docker for db ${prodDatabaseType} not configured for application ${this.baseName}"`);
           } else {
             scriptsStorage.set({
-              'docker:db:up': `docker-compose -f src/main/docker/${prodDatabaseType}.yml up -d`,
-              'docker:db:down': `docker-compose -f src/main/docker/${prodDatabaseType}.yml down -v`,
+              'docker:db:up': `docker compose -f src/main/docker/${prodDatabaseType}.yml up -d`,
+              'docker:db:down': `docker compose -f src/main/docker/${prodDatabaseType}.yml down -v`,
             });
           }
         } else {
@@ -465,14 +465,14 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
           if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
             scriptsStorage.set({
-              'docker:db:build': `docker-compose -f ${dockerFile} build`,
-              'docker:db:up': `docker-compose -f ${dockerFile} up -d`,
-              'docker:db:down': `docker-compose -f ${dockerFile} down -v`,
+              'docker:db:build': `docker compose -f ${dockerFile} build`,
+              'docker:db:up': `docker compose -f ${dockerFile} up -d`,
+              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
             });
           } else if (this.fs.exists(this.destinationPath(dockerFile))) {
             scriptsStorage.set({
-              'docker:db:up': `docker-compose -f ${dockerFile} up -d`,
-              'docker:db:down': `docker-compose -f ${dockerFile} down -v`,
+              'docker:db:up': `docker compose -f ${dockerFile} up -d`,
+              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
             });
           } else {
             scriptsStorage.set('docker:db:up', `echo "Docker for db ${databaseType} not configured for application ${this.baseName}"`);
@@ -491,7 +491,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           const dockerFile = `src/main/docker/${dockerConfig}.yml`;
           if (this.fs.exists(this.destinationPath(dockerFile))) {
             if (['cassandra', 'couchbase'].includes(dockerConfig)) {
-              scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
+              scriptsStorage.set(`docker:${dockerConfig}:build`, `docker compose -f ${dockerFile} build`);
               dockerBuild.push(`npm run docker:${dockerConfig}:build`);
             } else if (dockerConfig === 'jhipster-registry') {
               if (authenticationTypeOauth2 && !applicationTypeMicroservice) {
@@ -510,14 +510,14 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               dockerAwaitScripts.push('npm run docker:keycloak:await');
             }
 
-            scriptsStorage.set(`docker:${dockerConfig}:up`, `docker-compose -f ${dockerFile} up -d`);
+            scriptsStorage.set(`docker:${dockerConfig}:up`, `docker compose -f ${dockerFile} up -d`);
             dockerOthersUp.push(`npm run docker:${dockerConfig}:up`);
-            scriptsStorage.set(`docker:${dockerConfig}:down`, `docker-compose -f ${dockerFile} down -v`);
+            scriptsStorage.set(`docker:${dockerConfig}:down`, `docker compose -f ${dockerFile} down -v`);
             dockerOthersDown.push(`npm run docker:${dockerConfig}:down`);
           }
         });
         scriptsStorage.set({
-          'docker:app:up': `docker-compose -f ${this.DOCKER_DIR}app.yml up -d`,
+          'docker:app:up': `docker compose -f ${this.DOCKER_DIR}app.yml up -d`,
           'docker:others:await': dockerAwaitScripts.join(' && '),
           'predocker:others:up': dockerBuild.join(' && '),
           'docker:others:up': dockerOthersUp.join(' && '),
