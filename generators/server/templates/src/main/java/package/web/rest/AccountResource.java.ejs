@@ -397,7 +397,7 @@ public class AccountResource {
                 }))
                 .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")))
                 .flatMap(user -> userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                    userDTO.getLangKey()<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { %>, userDTO.getImageUrl()<% } %>));
+                    userDTO.getLangKey()<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { %>, userDTO.getImageUrl()<% } %>, userDTO.getAuthorities()));
   <%_ } else { _%>
     public void saveAccount(@Valid @RequestBody <%= asDto('AdminUser') %> userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
@@ -410,7 +410,7 @@ public class AccountResource {
             throw new AccountResourceException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey()<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { %>, userDTO.getImageUrl()<% } %>);
+            userDTO.getLangKey()<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { %>, userDTO.getImageUrl()<% } %>, userDTO.getAuthorities());
   <%_ } _%>
     }
 

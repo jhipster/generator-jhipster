@@ -24,7 +24,8 @@ import <%= packageName %>.config.Constants;
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
+import <%= packageName %>.domain.Authority;
 import <%= packageName %>.repository.AuthorityRepository;
 <%_ } _%>
 <%_ if (authenticationTypeSession && !reactive) { _%>
@@ -806,11 +807,22 @@ class AccountResourceIT {
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
         assertThat(updatedUser.getLangKey()).isEqualTo(userDTO.getLangKey());
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
         assertThat(updatedUser.getImageUrl()).isEqualTo(userDTO.getImageUrl());
 <%_ } _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+        Authority authorityAdmin = new Authority();
+        authorityAdmin.setName(AuthoritiesConstants.ADMIN);
+        Set<Authority> authorityAdminList = new HashSet<Authority>();
+        authorityAdminList.add(authorityAdmin);
+        assertThat(updatedUser.getAuthorities()).isEqualTo(authorityAdminList);
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+        Set<String> authorityAdminList = new HashSet<String>();
+        authorityAdminList.add(AuthoritiesConstants.ADMIN);
+        assertThat(updatedUser.getAuthorities()).isEqualTo(authorityAdminList);
+<%_ } _%>
         assertThat(updatedUser.isActivated()).isTrue();
-        assertThat(updatedUser.getAuthorities()).isEmpty();
     }
 
     @Test

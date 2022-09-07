@@ -611,6 +611,7 @@ public class UserService {
      * @param langKey   language key.
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
      * @param imageUrl  image URL of user.
+     * @param authorities authorities of the user.
   <%_ } _%>
   <%_ if (reactive) { _%>
      * @return a completed {@link Mono}.
@@ -619,7 +620,7 @@ public class UserService {
   <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
   <%_ } _%>
-    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { %>, String imageUrl<% } %>) {
+    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { %>, String imageUrl<% } %>, Collection<String> authorities) {
         <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
@@ -631,6 +632,22 @@ public class UserService {
                 user.setLangKey(langKey);
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
                 user.setImageUrl(imageUrl);
+  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+                Set<Authority> authorityList = new HashSet<Authority>();
+                for (String authorityName : authorities) {
+                  Authority authority = new Authority();
+                  authority.setName(authorityName);
+                  authorityList.add(authority);
+                }
+                user.setAuthorities(authorityList);
+  <%_ } _%>
+  <%_ if (databaseTypeCouchbase) { _%>
+                Set<String> authorityList = new HashSet<String>();
+                for (String authorityName : authorities) {
+                  authorityList.add(authorityName);
+                }
+                user.setAuthorities(authorityList);
+  <%_ } _%>
   <%_ } _%>
   <%_ if (reactive) { _%>
                 return saveUser(user);
@@ -920,13 +937,13 @@ public class UserService {
                     if (idpModifiedDate.isAfter(dbModifiedDate)) {
                         log.debug("Updating user '{}' in local database", user.getLogin());
                         return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                            user.getLangKey(), user.getImageUrl());
+                            user.getLangKey(), user.getImageUrl(), userAuthorities);
                     }
                     // no last updated info, blindly update
                 } else {
                     log.debug("Updating user '{}' in local database", user.getLogin());
                     return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                        user.getLangKey(), user.getImageUrl());
+                        user.getLangKey(), user.getImageUrl(), userAuthorities);
                 }
                 return Mono.empty();
             })
@@ -962,13 +979,13 @@ public class UserService {
                 if (idpModifiedDate.isAfter(dbModifiedDate)) {
                     log.debug("Updating user '{}' in local database", user.getLogin());
                     updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                        user.getLangKey(), user.getImageUrl());
+                        user.getLangKey(), user.getImageUrl(), userAuthorities);
                 }
                 // no last updated info, blindly update
             } else {
                 log.debug("Updating user '{}' in local database", user.getLogin());
                 updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                    user.getLangKey(), user.getImageUrl());
+                    user.getLangKey(), user.getImageUrl(), userAuthorities);
             }
         } else {
             log.debug("Saving user '{}' in local database", user.getLogin());
