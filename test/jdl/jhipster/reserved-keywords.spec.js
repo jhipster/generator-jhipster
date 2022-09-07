@@ -86,8 +86,8 @@ describe('ReservedKeywords', () => {
     context('when passing an invalid Angular field name', () => {
       it('should return true', () => {
         expect(ReservedKeywords.isReservedFieldName('injectable')).to.be.true;
-        expect(ReservedKeywords.isReservedFieldName('injectable', 'angularX')).to.be.true;
-        expect(ReservedKeywords.isReservedFieldName('status', 'angularX')).to.be.false;
+        expect(ReservedKeywords.isReservedFieldName('injectable', 'angular')).to.be.true;
+        expect(ReservedKeywords.isReservedFieldName('status', 'angular')).to.be.false;
       });
     });
   });

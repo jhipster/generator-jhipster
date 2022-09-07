@@ -6,7 +6,7 @@
     "applicationType": "monolith",
     "baseName": "jhipster",
     "clientPackageManager": "npm",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientTheme": "none",
     "clientThemeVariant": "",
     "authenticationType": "jwt",

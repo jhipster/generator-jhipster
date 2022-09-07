@@ -8197,7 +8197,7 @@ Object {
 }
 `;
 
-exports[`JHipster generator Default configuration with AngularX creates expected default files for angularX 1`] = `
+exports[`JHipster generator Default configuration with Angular creates expected default files for angular 1`] = `
 Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",

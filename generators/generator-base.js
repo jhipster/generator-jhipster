@@ -43,7 +43,7 @@ const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { databaseData } = require('./sql-constants');
-const { ANGULAR_X: ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
+const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
 const {
   PRIORITY_NAMES: {
     LOADING,

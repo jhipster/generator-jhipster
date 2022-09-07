@@ -19,7 +19,7 @@
 const validationOptions = require('../jdl/jhipster/validations');
 const gradleOptions = require('./gradle/constants.cjs');
 const databaseTypes = require('../jdl/jhipster/database-types');
-const { ANGULAR_X, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
+const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
 const commonPackageJson = require('./common/templates/package.json');
 
 // Version of Java
@@ -145,7 +145,7 @@ const SUPPORTED_VALIDATION_RULES = Object.keys(validationOptions)
   .filter(e => typeof e === 'string');
 
 const SUPPORTED_CLIENT_FRAMEWORKS = {
-  ANGULAR: ANGULAR_X,
+  ANGULAR,
   REACT,
   VUE,
 };

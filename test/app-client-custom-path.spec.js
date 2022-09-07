@@ -3,7 +3,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const { SQL, H2_MEMORY, POSTGRESQL } = require('../jdl/jhipster/database-types');
-const { ANGULAR_X, REACT } = require('../jdl/jhipster/client-framework-types');
+const { ANGULAR, REACT } = require('../jdl/jhipster/client-framework-types');
 const { JWT } = require('../jdl/jhipster/authentication-types');
 const { EHCACHE } = require('../jdl/jhipster/cache-types');
 const { MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -16,7 +16,7 @@ const applyCustomizers = paths => clientTestPathCustomizer(outputPathCustomizer(
 
 describe('JHipster generator custom path', () => {
   context('Default configuration with', () => {
-    describe('AngularX', () => {
+    describe('Angular', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
@@ -33,7 +33,7 @@ describe('JHipster generator custom path', () => {
           })
           .withPrompts({
             baseName: 'jhipster',
-            clientFramework: ANGULAR_X,
+            clientFramework: ANGULAR,
             packageName: 'com.mycompany.myapp',
             packageFolder: 'com/mycompany/myapp',
             serviceDiscoveryType: false,
@@ -55,15 +55,15 @@ describe('JHipster generator custom path', () => {
           .run();
       });
 
-      it('creates expected default files for angularX', () => {
+      it('creates expected default files for angular', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it('outputPathCustomizer converts webapp to webapp2', () => {
         assert.equal(applyCustomizers('src/main/webapp/foo'), 'src/main/webapp2/foo');
         assert.equal(applyCustomizers('src/main/javascript/foo'), 'src/main/javascript2/foo');
       });
-      it('contains clientFramework with angularX value', () => {
-        assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
+      it('contains clientFramework with angular value', () => {
+        assert.fileContent('.yo-rc.json', /"clientFramework": "angular"/);
       });
       it('contains correct custom prefix when specified', () => {
         assert.fileContent('angular.json', /"prefix": "test"/);

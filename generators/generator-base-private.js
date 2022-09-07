@@ -973,7 +973,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    *
    * @param {Array|Object} relationships - array of relationships
    * @param {string} dto - dto
-   * @param {string} clientFramework the client framework, 'angularX' or 'react'.
+   * @param {string} clientFramework the client framework, 'angular' or 'react'.
    * @returns typeImports: Map
    */
   generateEntityClientImports(relationships, dto, clientFramework = this.clientFramework) {
@@ -999,7 +999,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * Generate Entity Client Enum Imports
    *
    * @param {Array|Object} fields - array of the entity fields
-   * @param {string} clientFramework the client framework, 'angularX' or 'react'.
+   * @param {string} clientFramework the client framework, 'angular' or 'react'.
    * @returns typeImports: Map
    */
   generateEntityClientEnumImports(fields, clientFramework = this.clientFramework) {

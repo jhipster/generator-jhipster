@@ -219,7 +219,7 @@ describe('JHipster generator for entity', () => {
       });
     });
 
-    context('monolith with angularX', () => {
+    context('monolith with angular', () => {
       describe('no dto, no service, no pagination', () => {
         before(async () => {
           await helpers
@@ -791,7 +791,7 @@ describe('JHipster generator for entity', () => {
   });
 
   context('regeneration from json file', () => {
-    context('monolith with angularX', () => {
+    context('monolith with angular', () => {
       describe('no dto, no service, no pagination', () => {
         before(async () => {
           await helpers

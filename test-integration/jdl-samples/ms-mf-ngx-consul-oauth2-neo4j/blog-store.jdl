@@ -2,7 +2,7 @@
  * Microservice stack sample to test compilation and base microfrontend functionality.
  *
  * Test focus:
- * - clientFramework: angularX with microservice/microfrontend
+ * - clientFramework: angular with microservice/microfrontend
  * - serviceDiscovery: consul
  * - authenticationType: oauth2
  * - databaseType: neo4j
@@ -24,7 +24,7 @@ application {
     authenticationType oauth2
     baseName gateway
     buildTool maven
-    clientFramework angularX
+    clientFramework angular
     creationTimestamp 1617901618886
     // TODO enable databaseType
     // databaseType neo4j
@@ -46,7 +46,7 @@ application {
     baseName blog
     buildTool maven
     cacheProvider no
-    clientFramework angularX
+    clientFramework angular
     creationTimestamp 1617901618887
     databaseType neo4j
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
@@ -85,7 +85,7 @@ application {
     authenticationType oauth2
     baseName notification,
     buildTool gradle
-    clientFramework angularX
+    clientFramework angular
     creationTimestamp 1617901618889
     databaseType neo4j
     dtoSuffix Rest

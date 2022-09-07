@@ -5,7 +5,7 @@
     "baseName": "sampleOauth2SassInfinispan",
     "buildTool": "maven",
     "cacheProvider": "infinispan",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",

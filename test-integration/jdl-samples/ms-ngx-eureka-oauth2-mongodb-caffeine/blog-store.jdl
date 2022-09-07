@@ -23,7 +23,7 @@ application {
     authenticationType oauth2
     baseName gateway
     buildTool maven
-    clientFramework angularX
+    clientFramework angular
     creationTimestamp 1617901618886
     databaseType mongodb
     jhiPrefix custom

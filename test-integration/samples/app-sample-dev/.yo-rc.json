@@ -5,7 +5,7 @@
     "baseName": "jhipsterSampleApplication",
     "buildTool": "maven",
     "cacheProvider": "ehcache",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",

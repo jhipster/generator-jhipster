@@ -29,7 +29,7 @@ const { MONOLITH } = require('../../../jdl/jhipster/application-types');
 const { MAVEN } = require('../../../jdl/jhipster/build-tool-types');
 const { EHCACHE } = require('../../../jdl/jhipster/cache-types');
 const { JWT } = require('../../../jdl/jhipster/authentication-types');
-const { ANGULAR_X } = require('../../../jdl/jhipster/client-framework-types');
+const { ANGULAR } = require('../../../jdl/jhipster/client-framework-types');
 const { SQL, H2_DISK, MYSQL } = require('../../../jdl/jhipster/database-types');
 
 describe('JHipsterApplicationExporter', () => {
@@ -46,7 +46,7 @@ describe('JHipsterApplicationExporter', () => {
               baseName: 'toto',
               buildTool: MAVEN,
               cacheProvider: EHCACHE,
-              clientFramework: ANGULAR_X,
+              clientFramework: ANGULAR,
               clientTheme: 'none',
               clientThemeVariant: '',
               clientPackageManager: 'npm',
@@ -111,7 +111,7 @@ describe('JHipsterApplicationExporter', () => {
               baseName: 'toto',
               buildTool: MAVEN,
               cacheProvider: EHCACHE,
-              clientFramework: ANGULAR_X,
+              clientFramework: ANGULAR,
               clientTheme: 'none',
               clientThemeVariant: '',
               clientPackageManager: 'npm',
@@ -159,7 +159,7 @@ Object {
     "baseName": "toto",
     "buildTool": "maven",
     "cacheProvider": "ehcache",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "",
@@ -214,7 +214,7 @@ Object {
               baseName: 'toto',
               buildTool: MAVEN,
               cacheProvider: EHCACHE,
-              clientFramework: ANGULAR_X,
+              clientFramework: ANGULAR,
               clientTheme: 'none',
               clientThemeVariant: '',
               clientPackageManager: 'npm',
@@ -251,7 +251,7 @@ Object {
               baseName: 'titi',
               buildTool: MAVEN,
               cacheProvider: EHCACHE,
-              clientFramework: ANGULAR_X,
+              clientFramework: ANGULAR,
               clientTheme: 'none',
               clientThemeVariant: '',
               clientPackageManager: 'npm',

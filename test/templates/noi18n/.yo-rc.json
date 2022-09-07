@@ -4,7 +4,7 @@
     "baseName": "sampleNoi8n",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "authenticationType": "session",
     "cacheProvider": "hazelcast",
     "enableHibernateCache": true,

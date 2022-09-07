@@ -35,7 +35,7 @@ const serviceDiscoveryTypes = require('./service-discovery-types');
 
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
-const { ANGULAR, ANGULAR_X, NO: NO_CLIENT_FRAMEWORK } = require('./client-framework-types');
+const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = require('./client-framework-types');
 
 const { MAVEN } = require('./build-tool-types');
 
@@ -102,7 +102,7 @@ function getConfigForMonolithApplication(customOptions = {}) {
   const options = {
     [AUTHENTICATION_TYPE]: JWT,
     [CACHE_PROVIDER]: EHCACHE,
-    [CLIENT_FRAMEWORK]: ANGULAR_X,
+    [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: false,
     [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
@@ -130,7 +130,7 @@ function getConfigForMonolithApplication(customOptions = {}) {
 function getConfigForGatewayApplication(customOptions = {}) {
   const options = {
     [AUTHENTICATION_TYPE]: JWT,
-    [CLIENT_FRAMEWORK]: ANGULAR_X,
+    [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: EUREKA,
     [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
@@ -231,7 +231,7 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
   }
   if (options[CLIENT_FRAMEWORK] === ANGULAR) {
-    options[CLIENT_FRAMEWORK] = ANGULAR_X;
+    options[CLIENT_FRAMEWORK] = ANGULAR;
   }
   if (!options[CLIENT_PACKAGE_MANAGER] && OptionValues[USE_NPM]) {
     options[CLIENT_PACKAGE_MANAGER] = OptionValues[CLIENT_PACKAGE_MANAGER].npm;

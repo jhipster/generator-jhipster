@@ -45,7 +45,7 @@ const cacheTypes = require('./cache-types');
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
 const { PROTRACTOR, CYPRESS, CUCUMBER, GATLING } = require('./test-framework-types');
-const { ANGULAR_X, ANGULAR, REACT, VUE, SVELTE, NO } = require('./client-framework-types');
+const { ANGULAR, REACT, VUE, SVELTE, NO } = require('./client-framework-types');
 const { ELASTICSEARCH } = require('./search-engine-types');
 const searchEngines = require('./search-engine-types');
 
@@ -156,7 +156,6 @@ const optionValues = {
     [NO_CACHE_PROVIDER]: NO_CACHE_PROVIDER,
   },
   [optionNames.CLIENT_FRAMEWORK]: {
-    [ANGULAR_X]: ANGULAR_X,
     [ANGULAR]: ANGULAR,
     [REACT]: REACT,
     [VUE]: VUE,

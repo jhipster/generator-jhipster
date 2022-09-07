@@ -51,7 +51,7 @@ describe('DefaultApplicationOptions', () => {
         expect(options.skipUserManagement).to.be.false;
       });
       it('should set the client framework option to angular', () => {
-        expect(options.clientFramework).to.equal('angularX');
+        expect(options.clientFramework).to.equal('angular');
       });
       it('should set the client theme option to none', () => {
         expect(options.clientTheme).to.equal('none');
@@ -130,7 +130,7 @@ describe('DefaultApplicationOptions', () => {
         expect(options.skipUserManagement).to.be.false;
       });
       it('should set the client framework option to angular', () => {
-        expect(options.clientFramework).to.equal('angularX');
+        expect(options.clientFramework).to.equal('angular');
       });
       it('should set the client theme option to none', () => {
         expect(options.clientTheme).to.equal('none');
@@ -427,8 +427,8 @@ describe('DefaultApplicationOptions', () => {
         }).clientFramework;
       });
 
-      it('should set the option to angularX', () => {
-        expect(clientFrameworkOption).to.equal('angularX');
+      it('should set the option to angular', () => {
+        expect(clientFrameworkOption).to.equal('angular');
       });
     });
     context('when the dto suffix option is a boolean', () => {

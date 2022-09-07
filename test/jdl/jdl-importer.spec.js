@@ -770,7 +770,7 @@ Object {
   config {
     applicationType monolith
     baseName tata
-    clientFramework angularX
+    clientFramework angular
   }
   entities A
 }
@@ -924,7 +924,7 @@ ${entities}`,
               blueprints: [{ name: 'generator-jhipster-vuejs' }, { name: 'generator-jhipster-dotnetcore' }],
               buildTool: 'maven',
               cacheProvider: 'ehcache',
-              clientFramework: 'angularX',
+              clientFramework: 'angular',
               clientPackageManager: 'npm',
               clientTheme: 'none',
               clientThemeVariant: '',
