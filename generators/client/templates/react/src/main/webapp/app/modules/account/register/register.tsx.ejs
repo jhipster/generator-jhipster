@@ -17,15 +17,18 @@
  limitations under the License.
 -%>
 import React, { useState, useEffect } from 'react';
-import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
-import { Row, Col, Alert, Button } from 'reactstrap';
+import { Translate, translate, ValidatedTextInput, isEmail } from 'react-jhipster';
+import { Row, Col, Alert, Button, Form } from 'reactstrap';
 import { toast } from 'react-toastify';
 
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { handleRegister, reset } from './register.reducer';
+import { useForm } from 'react-hook-form';
 
 export const RegisterPage = () => {
+
+  const { register, handleSubmit, setValue, formState: { errors, touchedFields }} = useForm();
   const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
 
@@ -40,16 +43,15 @@ export const RegisterPage = () => {
   const currentLocale = useAppSelector(state => state.locale.currentLocale);
 <%_ } _%>
 
-  const handleValidSubmit = ({ username, email, firstPassword }) => {
+  const handleValidSubmit = data => {
 <%_ if (enableTranslation) { _%>
-    dispatch(handleRegister({ login: username, email, password: firstPassword, langKey: currentLocale }));
+    dispatch(handleRegister({ login: data.username, email: data.email, password: data.firstPassword, langKey: currentLocale }));
 <%_ } else { _%>
-    dispatch(handleRegister({ login: username, email, password: firstPassword, langKey: 'en' }));
+    dispatch(handleRegister({ login: data.username, email: data.email, password: data.firstPassword, langKey: 'en' }));
 <%_ } _%>
   };
 
-  const updatePassword = event => setPassword(event.target.value);
-
+  const updatePassword = event => { setPassword(event.target.value); setValue('firstPassword', event.target.value, { shouldValidate: true, shouldDirty: true, shouldTouch: true }); };
   const successMessage = useAppSelector(state => state.register.successMessage);
 
   useEffect(() => {
@@ -73,13 +75,16 @@ export const RegisterPage = () => {
       </Row>
       <Row className="justify-content-center">
         <Col md="8">
-          <ValidatedForm id="register-form" onSubmit={handleValidSubmit}>
-            <ValidatedField
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+          <Form id="register-form" onSubmit={ handleSubmit(handleValidSubmit) }>
+            <ValidatedTextInput
+              register={ register }
+              touchedFields={ touchedFields }
+              errors={ errors }
+              setValue={ setValue }
               name="username"
-              label={translate('global.form.username.label')}
-              placeholder={translate('global.form.username.placeholder')}
               validate={{
-                required: { value: true, message: translate('register.messages.validate.login.required') },
+                required: 'register.messages.validate.login.required',
                 pattern: {
                   value: /^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$/,
                   message: translate('register.messages.validate.login.pattern'),
@@ -87,39 +92,48 @@ export const RegisterPage = () => {
                 minLength: { value: 1, message: translate('register.messages.validate.login.minlength') },
                 maxLength: { value: 50, message: translate('register.messages.validate.login.maxlength') },
               }}
-              data-cy="username"
+              labelPlaceholderKey="global.form.username.label"
+              inputPlaceholderKey="global.form.username.placeholder"
             />
-            <ValidatedField
+            <ValidatedTextInput
+              register={ register }
+              touchedFields={ touchedFields }
+              errors={ errors }
+              setValue={ setValue }
               name="email"
-              label={translate('global.form.email.label')}
-              placeholder={translate('global.form.email.placeholder')}
               type="email"
               validate={{
-                required: { value: true, message: translate('global.messages.validate.email.required') },
+                required: translate('global.messages.validate.email.required'),
                 minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
                 maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
                 validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
               }}
-              data-cy="email"
+              labelPlaceholderKey="global.form.email.label"
+              inputPlaceholderKey="global.form.email.placeholder"
             />
-            <ValidatedField
+            <ValidatedTextInput
+              register={ register }
+              touchedFields={ touchedFields }
+              errors={ errors }
+              setValue={ setValue }
               name="firstPassword"
-              label={translate('global.form.newpassword.label')}
-              placeholder={translate('global.form.newpassword.placeholder')}
               type="password"
-              onChange={updatePassword}
               validate={{
-                required: { value: true, message: translate('global.messages.validate.newpassword.required') },
+                required: translate('global.messages.validate.newpassword.required'),
                 minLength: { value: 4, message: translate('global.messages.validate.newpassword.minlength') },
-                maxLength: { value: 50, message: translate('global.messages.validate.newpassword.maxlength') },
+                maxLength: { value: 50, message: translate('global.messages.validate.newpassword.maxlength') }
               }}
-              data-cy="firstPassword"
+              labelPlaceholderKey="global.form.newpassword.label"
+              inputPlaceholderKey="global.form.newpassword.placeholder"
+              updateValueOverrideMethod={ updatePassword }
             />
             <PasswordStrengthBar password={password} />
-            <ValidatedField
+            <ValidatedTextInput
+              register={ register }
+              touchedFields={ touchedFields }
+              errors={ errors }
+              setValue={ setValue }
               name="secondPassword"
-              label={translate('global.form.confirmpassword.label')}
-              placeholder={translate('global.form.confirmpassword.placeholder')}
               type="password"
               validate={{
                 required: { value: true, message: translate('global.messages.validate.confirmpassword.required') },
@@ -127,12 +141,13 @@ export const RegisterPage = () => {
                 maxLength: { value: 50, message: translate('global.messages.validate.confirmpassword.maxlength') },
                 validate: v => v === password || translate('global.messages.error.dontmatch'),
               }}
-              data-cy="secondPassword"
+              labelPlaceholderKey="global.form.confirmpassword.label"
+              inputPlaceholderKey="global.form.confirmpassword.placeholder"
             />
             <Button id="register-submit" color="primary" type="submit" data-cy="submit">
               <Translate contentKey="register.form.button">Register</Translate>
             </Button>
-          </ValidatedForm>
+          </Form>
           <p>&nbsp;</p>
           <Alert color="warning">
             <span>
