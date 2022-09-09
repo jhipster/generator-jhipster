@@ -69,14 +69,14 @@ const databaseData = {
   [H2_DISK]: {
     protocolSuffix: 'h2:file:',
     useDirectory: true,
-    extraOptions: ';DB_CLOSE_DELAY=-1;MODE=LEGACY',
+    extraOptions: ';DB_CLOSE_DELAY=-1',
     r2dbc: {
       protocolSuffix: 'h2:file://',
     },
   },
   [H2_MEMORY]: {
     protocolSuffix: 'h2:mem:',
-    extraOptions: ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=LEGACY',
+    extraOptions: ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE',
     r2dbc: {
       protocolSuffix: 'h2:mem:///',
     },
