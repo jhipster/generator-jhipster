@@ -84,7 +84,7 @@ export const RegisterPage = () => {
               setValue={ setValue }
               name="username"
               validate={{
-                required: 'register.messages.validate.login.required',
+                required: translate('register.messages.validate.login.required'),
                 pattern: {
                   value: /^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$/,
                   message: translate('register.messages.validate.login.pattern'),
@@ -136,7 +136,7 @@ export const RegisterPage = () => {
               name="secondPassword"
               type="password"
               validate={{
-                required: { value: true, message: translate('global.messages.validate.confirmpassword.required') },
+                required: translate('global.messages.validate.confirmpassword.required'),
                 minLength: { value: 4, message: translate('global.messages.validate.confirmpassword.minlength') },
                 maxLength: { value: 50, message: translate('global.messages.validate.confirmpassword.maxlength') },
                 validate: v => v === password || translate('global.messages.error.dontmatch'),
