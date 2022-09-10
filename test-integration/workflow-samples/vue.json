@@ -6,23 +6,23 @@
       "entity": "sqlfull"
     },
     {
-      "name": "vue-noi18n-ws-oauth2",
+      "name": "vue-noi18n-mysql-ws-oauth2",
       "app-sample": "vue-noi18n-ws-oauth2",
       "entity": "sqlfull"
     },
     {
-      "name": "vue-fulli18n-es",
+      "name": "vue-fulli18n-mysql-es",
       "app-sample": "vue-fulli18n-es",
       "entity": "sql"
     },
     {
-      "name": "vue-gradle-ws-session",
+      "name": "vue-gradle-h2mem-ws-session",
       "app-sample": "vue-gradle-ws-session",
       "entity": "sql",
       "environment": "dev"
     },
     {
-      "name": "vue-ws-theme",
+      "name": "vue-h2disk-ws-theme",
       "app-sample": "vue-ws-theme",
       "entity": "sql",
       "environment": "dev"
