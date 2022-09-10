@@ -138,7 +138,7 @@ spring:
     username: SA
     password: yourStrong(!)Password
   <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: devDatabaseTypeH2Disk ? `./${BUILD_DIR}h2db/db` : undefined }) %><% if (prodDatabaseTypeMysql) { %>;MODE=MYSQL<% } %><% if (prodDatabaseTypeMariadb) { %>;MODE=LEGACY<% } %>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
     username: <%= baseName %>
     password:
   <%_ } _%>
@@ -203,7 +203,7 @@ spring:
   <%_ } else if (devDatabaseTypeOracle) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
   <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: devDatabaseTypeH2Disk ? `./${BUILD_DIR}h2db/db` : undefined }) %><% if (prodDatabaseTypeMariadb) { %>;MODE=LEGACY<% } %>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>

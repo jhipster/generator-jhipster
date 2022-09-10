@@ -1265,7 +1265,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (!protocol) {
       throw new Error('protocol is required');
     }
-    const { databaseName, localDirectory, hostname, itests, skipExtraOptions } = options;
+    const { databaseName, hostname, skipExtraOptions } = options;
     if (!databaseName) {
       throw new Error("option 'databaseName' is required");
     }
@@ -1281,23 +1281,18 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         ...databaseDataForType[protocol],
       };
     }
-    const { protocolSuffix = '', extraOptions = '', useDirectory = false } = databaseDataForType;
-    let { port = '' } = databaseDataForType;
-    if (useDirectory && !localDirectory) {
-      throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
+    if (databaseDataForType.getData) {
+      databaseDataForType = {
+        ...databaseDataForType,
+        ...(databaseDataForType.getData(options) || {}),
+      };
     }
-    if (itests && H2_MEMORY === databaseType) {
-      port = ':12344';
-    }
+    const { port = '', protocolSuffix = '', extraOptions = '', localDirectory = options.localDirectory } = databaseDataForType;
     let url = `${protocol}:${protocolSuffix}`;
-    if (localDirectory) {
-      url += `${localDirectory}/`;
-    } else {
-      url += hostname || databaseName;
-      url += port;
-    }
     if (hostname || localDirectory) {
-      url += databaseName;
+      url = `${url}${localDirectory || hostname + port}${databaseName}`;
+    } else {
+      url = `${url}${databaseName}${port}`;
     }
     return `${url}${skipExtraOptions ? '' : extraOptions}`;
   }
