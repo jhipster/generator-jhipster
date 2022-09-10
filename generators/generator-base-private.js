@@ -1265,11 +1265,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (!protocol) {
       throw new Error('protocol is required');
     }
-    const { databaseName } = options;
+    const { databaseName, localDirectory, hostname, itests, skipExtraOptions } = options;
     if (!databaseName) {
       throw new Error("option 'databaseName' is required");
     }
-    if ([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL].includes(databaseType) && !options.hostname) {
+    if ([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL].includes(databaseType) && !hostname) {
       throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
     } else if (![MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL, H2_DISK, H2_MEMORY].includes(databaseType)) {
       throw new Error(`${databaseType} databaseType is not supported`);
@@ -1283,24 +1283,23 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
     const { protocolSuffix = '', extraOptions = '', useDirectory = false } = databaseDataForType;
     let { port = '' } = databaseDataForType;
-    if (useDirectory && !options.localDirectory) {
+    if (useDirectory && !localDirectory) {
       throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
     }
-    const databaseHasHost = options.hostname;
-    if (options.itests && H2_MEMORY === databaseType) {
+    if (itests && H2_MEMORY === databaseType) {
       port = ':12344';
     }
     let url = `${protocol}:${protocolSuffix}`;
-    if (options.localDirectory) {
-      url += `${options.localDirectory}/`;
+    if (localDirectory) {
+      url += `${localDirectory}/`;
     } else {
-      url += databaseHasHost ? options.hostname : databaseName;
+      url += hostname || databaseName;
       url += port;
     }
-    if (databaseHasHost || options.localDirectory) {
+    if (hostname || localDirectory) {
       url += databaseName;
     }
-    return `${url}${options.skipExtraOptions ? '' : extraOptions}`;
+    return `${url}${skipExtraOptions ? '' : extraOptions}`;
   }
 
   getDBCExtraOption(databaseType) {
