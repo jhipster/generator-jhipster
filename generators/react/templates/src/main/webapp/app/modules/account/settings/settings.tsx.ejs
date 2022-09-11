@@ -27,7 +27,7 @@ import { locales, languages } from 'app/config/translation';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getSession } from 'app/shared/reducers/authentication';
 import { saveAccountSettings, reset } from './settings.reducer';
-import { useForm } from 'react-hook-form';
+import { DefaultValues, FieldValues, useForm } from 'react-hook-form';
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
@@ -38,7 +38,16 @@ export const SettingsPage = () => {
     handleSubmit,
     setValue,
     formState: { errors, touchedFields },
-  } = useForm();
+  } = useForm({
+      defaultValues: {
+        firstName: account?.firstName,
+        lastName: account?.lastName,
+        email: account?.email,
+<%_ if (enableTranslation) { _%>
+        langKey: account?.langKey,
+<%_ } _%>
+      } as DefaultValues<FieldValues>
+  });
 
   useEffect(() => {
     dispatch(getSession());
@@ -76,13 +85,13 @@ export const SettingsPage = () => {
             </Translate>
           </h2>
           {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <Form id="settings-form" onSubmit={handleSubmit(handleValidSubmit)} defaultValues={account}>
+          <Form id="settings-form" onSubmit={handleSubmit(handleValidSubmit)}>
             <ValidatedTextInput
               register={ register }
               touchedFields={ touchedFields }
               errors={ errors }
               setValue={ setValue }
-              name="firstName"
+              nameIdCy="firstName"
               validate={{
                 required: translate('settings.messages.validate.firstname.required'),
                 minLength: { value: 1, message: translate('settings.messages.validate.firstname.minlength') },
@@ -96,7 +105,7 @@ export const SettingsPage = () => {
               touchedFields={ touchedFields }
               errors={ errors }
               setValue={ setValue }
-              name="lastName"
+              nameIdCy="lastName"
               validate={{
                 required: translate('settings.messages.validate.lastname.required'),
                 minLength: { value: 1, message: translate('settings.messages.validate.lastname.minlength') },
@@ -110,7 +119,7 @@ export const SettingsPage = () => {
               touchedFields={ touchedFields }
               errors={ errors }
               setValue={ setValue }
-              name="email"
+              nameIdCy="email"
               type="email"
               validate={{
                 required: translate('global.messages.validate.email.required'),
