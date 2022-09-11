@@ -53,7 +53,7 @@
   },
   "main": "dist/lib/index.js",
   "bin": {
-    "jhipster": "cli/jhipster.js"
+    "jhipster": "dist/cli/jhipster.js"
   },
   "files": [
     "cli",
