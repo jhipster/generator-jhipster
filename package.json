@@ -66,7 +66,8 @@
     "!**/*.spec.?(c|m)js"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "npm run compile && npm run copy-files",
+    "compile": "tsc",
     "completion": "tabtab install --name jhipster --auto",
     "copy-files": "cpy 'generators/**' '!**/*.(js|ts|cjs|ejs|mjs)' dist/generators",
     "ejs-lint": "mocha test/ejslint.js",
