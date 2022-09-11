@@ -68,6 +68,7 @@
   "scripts": {
     "build": "tsc",
     "completion": "tabtab install --name jhipster --auto",
+    "copy-files": "cpy 'generators/**' '!**/*.(js|ts|cjs|ejs|mjs)' dist/generators",
     "ejs-lint": "mocha test/ejslint.js",
     "ejslint": "ejslint",
     "eslint": "eslint . --ext .js,.cjs,.mjs",
@@ -91,6 +92,7 @@
     "chevrotain": "10.3.0",
     "commander": "9.4.0",
     "conf": "10.2.0",
+    "cpy-cli": "^4.2.0",
     "debug": "4.3.4",
     "didyoumean": "1.2.2",
     "ejs": "3.1.8",
