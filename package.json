@@ -56,11 +56,7 @@
     "jhipster": "dist/cli/jhipster.js"
   },
   "files": [
-    "cli",
-    "generators",
-    "jdl",
-    "lib",
-    "utils",
+    "dist",
     "!**/__*",
     "!**/*.snap",
     "!**/*.spec.?(c|m)js"
