@@ -51,7 +51,7 @@
     "./esm/priorities": "./lib/constants/priorities.mjs",
     "./esm/support": "./lib/support/index.cjs"
   },
-  "main": "lib/index.js",
+  "main": "dist/lib/index.js",
   "bin": {
     "jhipster": "cli/jhipster.js"
   },
