@@ -1055,6 +1055,9 @@ Object {
   "src/main/webapp2/app/shared/sort/sort.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/template-page-title-strategy.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/bootstrap.ts": Object {
     "stateCleared": "modified",
   },

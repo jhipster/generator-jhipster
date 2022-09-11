@@ -1707,6 +1707,9 @@ Object {
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/bootstrap.ts": Object {
     "stateCleared": "modified",
   },
@@ -2982,6 +2985,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/bootstrap.ts": Object {
@@ -4385,6 +4391,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/bootstrap.ts": Object {
@@ -6449,6 +6458,9 @@ Object {
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/bootstrap.ts": Object {
     "stateCleared": "modified",
   },
@@ -7841,6 +7853,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/bootstrap.ts": Object {
@@ -9250,6 +9265,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/bootstrap.ts": Object {
@@ -10680,6 +10698,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/bootstrap.ts": Object {
@@ -13089,6 +13110,9 @@ Object {
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/bootstrap.ts": Object {
     "stateCleared": "modified",
   },
@@ -14495,6 +14519,9 @@ Object {
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/bootstrap.ts": Object {
     "stateCleared": "modified",
   },
@@ -15871,6 +15898,9 @@ Object {
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/bootstrap.ts": Object {
     "stateCleared": "modified",
   },
@@ -17245,6 +17275,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sort.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/template-page-title-strategy.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/bootstrap.ts": Object {
