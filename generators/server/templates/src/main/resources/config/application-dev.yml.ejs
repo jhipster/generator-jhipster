@@ -234,7 +234,7 @@ spring:
     username: SA
     password: yourStrong(!)Password
   <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: devDatabaseTypeH2Disk ? `./${BUILD_DIR}h2db/db` : undefined }) %><% if (prodDatabaseTypeMariadb) { %>;MODE=LEGACY<% } %>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
     username: <%= baseName %>
     password:
   <%_ } _%>
