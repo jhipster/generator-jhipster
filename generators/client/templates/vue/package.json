@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "1.1.4",
-    "@types/jest": "28.1.8",
+    "@types/jest": "29.0.1",
     "@types/node": "16.11.58",
     "@types/sinon": "10.0.13",
     "@types/vuelidate": "0.7.15",
