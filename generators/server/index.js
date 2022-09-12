@@ -101,7 +101,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
 
           try {
-            await this.spawnCommand('./npmw', ['install'], { preferLocal: true });
+            await this.spawnCommand('npmw', ['install'], { preferLocal: true });
           } catch (error) {
             this.log(chalk.red(`Error executing './npmw install', execute it yourself. (${error.shortMessage})`));
           }
