@@ -131,7 +131,7 @@
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-mocha": "10.1.0",
     "eslint-plugin-prettier": "4.2.1",
-    "expect": "29.0.2",
+    "expect": "29.0.3",
     "fs-extra": "10.1.0",
     "jest-mock": "29.0.2",
     "jsdoc": "3.6.11",
