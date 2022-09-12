@@ -137,12 +137,8 @@ spring:
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: SA
     password: yourStrong(!)Password
-  <%_ } else if (devDatabaseTypeH2Disk) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
+  <%_ } else if (devDatabaseTypeH2Any) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
     username: <%= baseName %>
     password:
   <%_ } _%>
@@ -206,10 +202,8 @@ spring:
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
   <%_ } else if (devDatabaseTypeOracle) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeH2Disk) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
-  <%_ } else if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
+  <%_ } else if (devDatabaseTypeH2Any) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>
@@ -239,12 +233,8 @@ spring:
     url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: SA
     password: yourStrong(!)Password
-  <%_ } else if (devDatabaseTypeH2Disk) { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `././${BUILD_DIR}h2db/db` }) %>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
+  <%_ } else if (devDatabaseTypeH2Any) { _%>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
     username: <%= baseName %>
     password:
   <%_ } _%>
