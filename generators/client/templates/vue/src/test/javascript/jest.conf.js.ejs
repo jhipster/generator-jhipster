@@ -2,6 +2,7 @@ const { pathsToModuleNameMapper } = require('ts-jest');
 const config = require('../../../webpack/config');
 const { compilerOptions: { paths = {}, baseUrl = './' } } = require('../../../tsconfig.json');
 
+/** @type {import('ts-jest').InitialOptionsTsJest} */
 module.exports = {
   rootDir: '../../../',
   roots: ['<rootDir>', `<rootDir>/${baseUrl}`, `<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/app/`],
@@ -12,7 +13,12 @@ module.exports = {
   moduleFileExtensions: ['js', 'json', 'ts', 'vue'],
   transform: {
     '.*\\.(vue)$': '<%= microfrontend ? '@vue/vue2-jest' : 'vue-jest' %>',
-    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tsconfig.spec.json',
+      },
+    ],
   },
   moduleNameMapper: {
     rxjs: '<rootDir>/node_modules/rxjs/dist/bundles/rxjs.umd.js',
@@ -38,9 +44,6 @@ module.exports = {
 <%_ } _%>
     SERVER_API_URL: config.serverApiUrl,
     VERSION: config.version,
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-    },
   },
   coverageThreshold: {
     global: {
