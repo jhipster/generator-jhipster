@@ -62,11 +62,11 @@ module.exports = class extends BaseGenerator {
         let result = shelljs.cat('.yo-rc.json');
         result = result.replace(
           /"rememberMeKey": ".*"/g,
-          '"rememberMeKey": "YourJWTSecretKeyWasReplacedByThisMeaninglessTextByTheJHipsterInfoCommandForObviousSecurityReasons"'
+          '"rememberMeKey": "Delete this line so this value is regenerated"'
         );
         result = result.replace(
           /"jwtSecretKey": ".*"/g,
-          '"jwtSecretKey": "YourJWTSecretKeyWasReplacedByThisMeaninglessTextByTheJHipsterInfoCommandForObviousSecurityReasons"'
+          '"jwtSecretKey": "Delete this line so this value is regenerated"'
         );
         console.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n');
         console.log(`\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
