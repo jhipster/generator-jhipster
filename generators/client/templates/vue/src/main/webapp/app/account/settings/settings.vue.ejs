@@ -27,7 +27,7 @@
             <input type="text" class="form-control" id="firstName" name="firstName"
               v-bind:placeholder="$t('settings.form[\'firstname.placeholder\']')"
               :class="{ valid: !$v.settingsAccount.firstName.$invalid, invalid: $v.settingsAccount.firstName.$invalid }"
-              v-model="$v.settingsAccount.firstName.$model" minlength="1" maxlength="50" required data-cy="firstname" />
+              v-model="$v.settingsAccount.firstName.$model" minlength="1" maxlength="50" required data-cy="firstName" />
             <div v-if="$v.settingsAccount.firstName.$anyDirty && $v.settingsAccount.firstName.$invalid">
               <small class="form-text text-danger" v-if="!$v.settingsAccount.firstName.required"
                 v-text="$t('settings.messages.validate.firstname.required')">
@@ -48,7 +48,7 @@
             <input type="text" class="form-control" id="lastName" name="lastName"
               v-bind:placeholder="$t('settings.form[\'lastname.placeholder\']')"
               :class="{ valid: !$v.settingsAccount.lastName.$invalid, invalid: $v.settingsAccount.lastName.$invalid }"
-              v-model="$v.settingsAccount.lastName.$model" minlength="1" maxlength="50" required data-cy="lastname" />
+              v-model="$v.settingsAccount.lastName.$model" minlength="1" maxlength="50" required data-cy="lastName" />
             <div v-if="$v.settingsAccount.lastName.$anyDirty && $v.settingsAccount.lastName.$invalid">
               <small class="form-text text-danger" v-if="!$v.settingsAccount.lastName.required"
                 v-text="$t('settings.messages.validate.lastname.required')">
