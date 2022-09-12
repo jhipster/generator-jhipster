@@ -133,7 +133,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "expect": "29.0.3",
     "fs-extra": "10.1.0",
-    "jest-mock": "29.0.2",
+    "jest-mock": "29.0.3",
     "jsdoc": "3.6.11",
     "mocha": "10.0.0",
     "mocha-expect-snapshot": "5.0.1",
