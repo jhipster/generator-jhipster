@@ -21,7 +21,7 @@ type DatabaseType = {
   databaseType: 'no' | 'sql' | 'cassandra' | 'couchbase' | 'mongodb' | 'neo4j';
 };
 
-type DatabaseTypeSqlApplication = OptionalGenericDerivedProperty<DatabaseType, 'sql'> &
+type DatabaseTypeSqlApplication = GenericDerivedProperty<DatabaseType, 'sql'> &
   (
     | ReactiveApplication
     | (ImperativeApplication & {
@@ -34,11 +34,11 @@ type DatabaseTypeSqlApplication = OptionalGenericDerivedProperty<DatabaseType, '
 
 type DatabaseTypeApplication =
   | DatabaseTypeSqlApplication
-  | OptionalGenericDerivedProperty<DatabaseType, 'no'>
-  | OptionalGenericDerivedProperty<DatabaseType, 'cassandra'>
-  | OptionalGenericDerivedProperty<DatabaseType, 'couchbase'>
-  | OptionalGenericDerivedProperty<DatabaseType, 'mongodb'>
-  | OptionalGenericDerivedProperty<DatabaseType, 'neo4j'>;
+  | GenericDerivedProperty<DatabaseType, 'no'>
+  | GenericDerivedProperty<DatabaseType, 'cassandra'>
+  | GenericDerivedProperty<DatabaseType, 'couchbase'>
+  | GenericDerivedProperty<DatabaseType, 'mongodb'>
+  | GenericDerivedProperty<DatabaseType, 'neo4j'>;
 
 type BuildTool = {
   buildTool: 'maven' | 'gradle';
@@ -47,6 +47,7 @@ type BuildTool = {
 type BuildToolGradleApplication = GenericDerivedProperty<BuildTool, 'gradle'> & {
   enableGradleEnterprise: boolean;
 };
+type BuildToolApplication = BuildToolGradleApplication | GenericDerivedProperty<BuildTool, 'maven'>;
 
 type SearchEngine = {
   searchEngine: string;
@@ -54,7 +55,7 @@ type SearchEngine = {
 
 export type SpringBootApplication = ClientServerApplication &
   (ImperativeApplication | ReactiveApplication) &
-  (GenericDerivedProperty<BuildTool, 'maven'> | BuildToolGradleApplication) &
+  BuildToolApplication &
   SearchEngine &
   DatabaseTypeApplication & {
     packageName: string;

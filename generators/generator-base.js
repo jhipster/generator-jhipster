@@ -44,30 +44,6 @@ const defaultApplicationOptions = require('../jdl/jhipster/default-application-o
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { databaseData } = require('./sql-constants');
 const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
-const {
-  PRIORITY_NAMES: {
-    LOADING,
-    PREPARING,
-
-    CONFIGURING_EACH_ENTITY,
-    LOADING_EACH_ENTITY,
-    PREPARING_EACH_ENTITY,
-    PREPARING_FIELDS,
-    PREPARING_EACH_ENTITY_FIELD,
-    PREPARING_RELATIONSHIPS,
-    PREPARING_EACH_ENTITY_RELATIONSHIP,
-    POST_PREPARING_EACH_ENTITY,
-
-    DEFAULT,
-    WRITING,
-    WRITING_ENTITIES,
-    POST_WRITING,
-    POST_WRITING_ENTITIES,
-    PRE_CONFLICTS,
-    INSTALL,
-    END,
-  },
-} = require('../lib/constants/priorities.cjs');
 const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
 const { joinCallbacks } = require('../lib/support/base.cjs');
 
@@ -3456,49 +3432,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * @private
+   * @protected
    */
   getArgsForPriority(priorityName) {
-    if (this.features.priorityArgs) {
-      return [this.getDataArgForPriority(priorityName)];
-    }
     return this.args;
-  }
-
-  /**
-   * @private
-   */
-  getDataArgForPriority(priorityName) {
-    if (
-      ![
-        LOADING,
-        PREPARING,
-
-        CONFIGURING_EACH_ENTITY,
-        LOADING_EACH_ENTITY,
-        PREPARING_EACH_ENTITY,
-        PREPARING_FIELDS,
-        PREPARING_EACH_ENTITY_FIELD,
-        PREPARING_RELATIONSHIPS,
-        PREPARING_EACH_ENTITY_RELATIONSHIP,
-        POST_PREPARING_EACH_ENTITY,
-
-        DEFAULT,
-        WRITING,
-        WRITING_ENTITIES,
-        POST_WRITING,
-        POST_WRITING_ENTITIES,
-        PRE_CONFLICTS,
-        INSTALL,
-        END,
-      ].includes(priorityName)
-    ) {
-      throw new Error(`${priorityName} data not available`);
-    }
-    if (!this.jhipsterConfig.baseName) {
-      return {};
-    }
-    return { application: this.sharedData.getApplication() };
   }
 
   /**

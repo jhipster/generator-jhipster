@@ -20,15 +20,25 @@ const BaseBlueprintGenerator = require('./generator-base-blueprint');
 const { CUSTOM_PRIORITIES_ENTITIES, PRIORITY_NAMES, QUEUES } = require('../lib/constants/priorities.cjs');
 
 const {
+  LOADING,
+  PREPARING,
+
   CONFIGURING_EACH_ENTITY,
   LOADING_EACH_ENTITY,
   PREPARING_EACH_ENTITY,
+  PREPARING_FIELDS,
   PREPARING_EACH_ENTITY_FIELD,
+  PREPARING_RELATIONSHIPS,
   PREPARING_EACH_ENTITY_RELATIONSHIP,
   POST_PREPARING_EACH_ENTITY,
   DEFAULT,
+  WRITING,
+  POST_WRITING,
   WRITING_ENTITIES,
   POST_WRITING_ENTITIES,
+  PRE_CONFLICTS,
+  INSTALL,
+  END,
 } = PRIORITY_NAMES;
 
 const {
@@ -311,17 +321,53 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   }
 
   /**
-   * @private
+   * @protected
    */
-  getDataArgForPriority(priorityName) {
-    const dataArg = super.getDataArgForPriority(priorityName);
-    if (priorityName === WRITING_ENTITIES || priorityName === POST_WRITING_ENTITIES || priorityName === DEFAULT) {
+  getArgsForPriority(priorityName) {
+    return [this.getTaskFirstArgForPriority(priorityName)];
+  }
+
+  /**
+   * @protected
+   */
+  getTaskFirstArgForPriority(priorityName) {
+    if (
+      ![
+        LOADING,
+        PREPARING,
+
+        CONFIGURING_EACH_ENTITY,
+        LOADING_EACH_ENTITY,
+        PREPARING_EACH_ENTITY,
+        PREPARING_FIELDS,
+        PREPARING_EACH_ENTITY_FIELD,
+        PREPARING_RELATIONSHIPS,
+        PREPARING_EACH_ENTITY_RELATIONSHIP,
+        POST_PREPARING_EACH_ENTITY,
+
+        DEFAULT,
+        WRITING,
+        WRITING_ENTITIES,
+        POST_WRITING,
+        POST_WRITING_ENTITIES,
+        PRE_CONFLICTS,
+        INSTALL,
+        END,
+      ].includes(priorityName)
+    ) {
+      throw new Error(`${priorityName} data not available`);
+    }
+    if (!this.jhipsterConfig.baseName) {
+      throw new Error(`${this.jhipsterConfig.baseName} application not available`);
+    }
+    if ([WRITING_ENTITIES, POST_WRITING_ENTITIES, DEFAULT].includes(priorityName)) {
       return {
-        ...dataArg,
+        application: this.sharedData.getApplication(),
         ...this.getEntitiesDataToWrite(),
       };
     }
-    return dataArg;
+
+    return { application: this.sharedData.getApplication() };
   }
 
   /**
@@ -444,7 +490,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(CONFIGURING_EACH_ENTITY), entityName, entityStorage, entityConfig }],
+              args: [{ ...this.getTaskFirstArgForPriority(CONFIGURING_EACH_ENTITY), entityName, entityStorage, entityConfig }],
             });
           });
         });
@@ -463,7 +509,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(LOADING_EACH_ENTITY), entityName, entityStorage }],
+              args: [{ ...this.getTaskFirstArgForPriority(LOADING_EACH_ENTITY), entityName, entityStorage }],
             });
           });
         });
@@ -482,7 +528,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(PREPARING_EACH_ENTITY), description, ...data }],
+              args: [{ ...this.getTaskFirstArgForPriority(PREPARING_EACH_ENTITY), description, ...data }],
             });
           });
         });
@@ -500,7 +546,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(PREPARING_EACH_ENTITY_FIELD), description, ...data }],
+              args: [{ ...this.getTaskFirstArgForPriority(PREPARING_EACH_ENTITY_FIELD), description, ...data }],
             });
           });
         });
@@ -518,7 +564,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP), description, ...data }],
+              args: [{ ...this.getTaskFirstArgForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP), description, ...data }],
             });
           });
         });
@@ -536,7 +582,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(POST_PREPARING_EACH_ENTITY), description, ...data }],
+              args: [{ ...this.getTaskFirstArgForPriority(POST_PREPARING_EACH_ENTITY), description, ...data }],
             });
           });
         });
