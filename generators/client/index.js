@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 
-const BaseApplicationGenerator = require('../generator-base-entities.cjs');
+const BaseApplicationGenerator = require('../generator-base-application.cjs');
 const {
   INITIALIZING_PRIORITY,
   PROMPTING_PRIORITY,

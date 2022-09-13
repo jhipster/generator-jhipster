@@ -19,7 +19,7 @@
 import assert from 'assert';
 import lodash from 'lodash';
 
-import BaseApplicationGenerator from '../generator-base-entities.cjs';
+import BaseApplicationGenerator from '../generator-base-application.cjs';
 import {
   PRIORITY_PREFIX,
   LOADING_PRIORITY,
