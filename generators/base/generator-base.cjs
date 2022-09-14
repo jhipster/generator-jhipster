@@ -157,9 +157,6 @@ class JHipsterBaseGenerator extends PrivateBase {
     // TODO v8 rename to existingProject.
     this.existingModularProject = this.configOptions.existingProject;
 
-    /* Register generator for compose once */
-    this.registerComposedGenerator(this.options.namespace);
-
     this.loadRuntimeOptions();
     this.loadStoredAppOptions();
 
@@ -173,7 +170,7 @@ class JHipsterBaseGenerator extends PrivateBase {
         this.env.queueGenerator(generator, true);
       }
       */
-      this.composeWithJHipster(GENERATOR_BOOTSTRAP, { ...this.options, configOptions: this.configOptions }, true);
+      this.composeWithJHipster(GENERATOR_BOOTSTRAP, { ...this.options, configOptions: this.configOptions });
     }
   }
 
@@ -1414,52 +1411,19 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @deprecated
-   * Register the composed generator for compose once.
-   * @param {string} namespace - jhipster generator.
-   * @return {boolean} false if already composed
-   */
-  registerComposedGenerator(namespace) {
-    this.configOptions.composedWith = this.configOptions.composedWith || [];
-    if (this.configOptions.composedWith.includes(namespace)) {
-      return false;
-    }
-    this.configOptions.composedWith.push(namespace);
-    return true;
-  }
-
-  /**
    * Compose with a jhipster generator using default jhipster config.
    * @param {string} generator - jhipster generator.
    * @param {object} args - args to pass
    * @param {object} [options] - options to pass
-   * @param {boolean} [once] - compose once with the generator
+   * @param {object} [composeOptions] - compose options
    * @return {object} the composed generator
    */
-  composeWithJHipster(generator, args, options, once = false) {
+  composeWithJHipster(generator, args, options, { immediately = false } = {}) {
     assert(typeof generator === 'string', 'generator should to be a string');
     const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
-    let immediately = false;
-    if (typeof once === 'object') {
-      immediately = once.immediately;
-      once = false;
-    }
-    if (typeof args === 'boolean') {
-      once = args;
-      args = [];
-      options = {};
-    } else if (!Array.isArray(args)) {
-      once = options;
+    if (!Array.isArray(args)) {
       options = args;
       args = [];
-    } else if (typeof options === 'boolean') {
-      once = options;
-      options = {};
-    }
-    if (once) {
-      if (!this.registerComposedGenerator(namespace)) {
-        return undefined;
-      }
     }
 
     if (this.env.get(namespace)) {
