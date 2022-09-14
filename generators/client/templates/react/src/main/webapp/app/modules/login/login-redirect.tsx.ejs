@@ -6,7 +6,7 @@ export const LoginRedirect = () => {
   const location = useLocation();
 
   useEffect(() => {
-    localStorage.setItem(REDIRECT_URL, (location.state as any).from.pathname);
+    localStorage.setItem(REDIRECT_URL, location.state.from.pathname);
     window.location.reload();
   });
 
