@@ -136,7 +136,6 @@ const createAllBlueprint = mockedPriorities => {
 
     _default() {
       return {
-        ...this._missingPreDefault(),
         mockedDefault() {
           mockedPriorities.default();
         },
@@ -152,7 +151,6 @@ const createAllBlueprint = mockedPriorities => {
         mockedWriting() {
           mockedPriorities.writing();
         },
-        ...this._missingPostWriting(),
       };
     }
 

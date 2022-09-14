@@ -43,8 +43,6 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _default() {
     return {
-      ...super._missingPreDefault(),
-
       loadEntityIntoGenerator() {
         utils.copyObjectProps(this, this.entity);
       },

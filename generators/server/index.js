@@ -355,8 +355,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   /** @inheritdoc */
   _default() {
     return this.asDefaultTaskGroup({
-      ...super._missingPreDefault(),
-
       loadUserManagementEntities() {
         // TODO v8 move to preparingEntities priority.
         if (!this.configOptions.sharedEntities) return;

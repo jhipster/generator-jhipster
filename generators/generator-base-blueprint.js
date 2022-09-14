@@ -246,33 +246,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
-   * @private
-   * @deprecated
-   * Execute custom priorities if they are not declared
-   * Should be used by jhipster official generators only.
-   */
-  _missingPreDefault() {
-    let tasks = {};
-    if (this.sbsBlueprint) return tasks;
-    if (this._isPriorityMissing('composing', 'default')) {
-      tasks = { ...tasks, ...this._composing() };
-    }
-    if (this._isPriorityMissing('loading', 'default')) {
-      tasks = { ...tasks, ...this._loading() };
-    }
-    if (this._isPriorityMissing('preparing', 'default')) {
-      tasks = { ...tasks, ...this._preparing() };
-    }
-    if (this._isPriorityMissing('preparingFields', 'default')) {
-      tasks = { ...tasks, ...this._preparingFields() };
-    }
-    if (this._isPriorityMissing('preparingRelationships', 'default')) {
-      tasks = { ...tasks, ...this._preparingRelationships() };
-    }
-    return tasks;
-  }
-
-  /**
    * Priority API stub for blueprints.
    *
    * Default priority should used as misc customizations.

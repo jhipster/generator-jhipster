@@ -232,8 +232,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _default() {
     return {
-      ...super._missingPreDefault(),
-
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_LANGUAGES);
       },

@@ -299,8 +299,6 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
   // Public API method used by the getter and also by Blueprints
   _default() {
     return this.asDefaultTaskGroup({
-      ...super._missingPreDefault(),
-
       loadUserManagementEntities() {
         if (!this.configOptions.sharedEntities || !this.configOptions.sharedEntities.User) return;
         // Make user entity available to templates.

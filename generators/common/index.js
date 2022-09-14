@@ -20,15 +20,8 @@
 const _ = require('lodash');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const {
-  INITIALIZING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-  DEFAULT_PRIORITY,
-  WRITING_PRIORITY,
-  POST_WRITING_PRIORITY,
-} = require('../../lib/constants/priorities.cjs').compat;
+const { INITIALIZING_PRIORITY, CONFIGURING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
 
 const writeFiles = require('./files').writeFiles;
 const prettierConfigFiles = require('./files').prettierConfigFiles;
@@ -151,18 +144,6 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparing();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _default() {
-    return {
-      ...super._missingPreDefault(),
-    };
-  }
-
-  get [DEFAULT_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._default();
   }
 
   // Public API method used by the getter and also by Blueprints

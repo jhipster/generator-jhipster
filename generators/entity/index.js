@@ -793,8 +793,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _default() {
     return {
-      ...super._missingPreDefault(),
-
       loadUserManagementEntities() {
         if (!this.configOptions.sharedEntities) return;
         // Make user entity available to templates.
