@@ -116,7 +116,17 @@ module.exports = class EnvironmentBuilder {
    */
   _lookupJHipster() {
     // Register jhipster generators.
-    this.env.lookup({ packagePaths: [path.join(__dirname, '../..')], lookups: ['dist/generators'] }).forEach(generator => {
+    const sourceRoot = path.basename(path.join(__dirname, '..'));
+    let packagePath;
+    let lookup;
+    if (sourceRoot === 'generator-jhipster') {
+      packagePath = path.join(__dirname, '..');
+      lookup = 'generators';
+    } else {
+      packagePath = path.join(__dirname, '../..');
+      lookup = `${sourceRoot}/generators`;
+    }
+    this.env.lookup({ packagePaths: [packagePath], lookups: [lookup] }).forEach(generator => {
       // Verify jhipster generators namespace.
       assert(
         generator.namespace.startsWith(`${CLI_NAME}:`),
