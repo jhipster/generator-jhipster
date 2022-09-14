@@ -920,8 +920,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
           this.removeFile(`${constants.ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
         }
       },
-
-      ...super._missingPostWriting(),
     };
   }
 

@@ -152,7 +152,6 @@ module.exports = class extends BaseBlueprintGenerator {
         }
       },
       ...writeFiles(),
-      ...super._missingPostWriting(),
     };
   }
 

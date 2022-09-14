@@ -356,8 +356,6 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
         if (this.skipClient) return;
         return writeCommonFiles.call(this);
       },
-
-      ...super._missingPostWriting(),
     });
   }
 

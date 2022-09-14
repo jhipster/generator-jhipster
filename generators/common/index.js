@@ -167,7 +167,6 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
         return this.writeFilesToDisk(prettierConfigFiles);
       },
       ...writeFiles(),
-      ...super._missingPostWriting(),
     };
   }
 

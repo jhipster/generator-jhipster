@@ -300,21 +300,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
-   * @private
-   * @deprecated
-   * Execute custom priorities if they are not declared
-   * Should be used by jhipster official generators only.
-   */
-  _missingPostWriting() {
-    let tasks = {};
-    if (this.sbsBlueprint) return tasks;
-    if (this._isPriorityMissing('postWriting', 'writing')) {
-      tasks = { ...tasks, ...this._postWriting() };
-    }
-    return tasks;
-  }
-
-  /**
    * Priority API stub for blueprints.
    *
    * PostWriting priority should used to customize files.

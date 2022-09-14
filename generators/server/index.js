@@ -404,7 +404,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   _writing() {
     return this.asWritingTaskGroup({
       ...writeFiles(),
-      ...super._missingPostWriting(),
     });
   }
 

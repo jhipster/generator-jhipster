@@ -534,8 +534,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         cleanup.cleanupOldFiles(this);
         cleanup.upgradeFiles(this);
       },
-
-      ...super._missingPostWriting(),
     };
   }
 

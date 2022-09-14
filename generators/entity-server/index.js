@@ -185,7 +185,6 @@ module.exports = class extends BaseBlueprintGenerator {
   _writing() {
     return {
       ...writeFiles(),
-      ...super._missingPostWriting(),
     };
   }
 
