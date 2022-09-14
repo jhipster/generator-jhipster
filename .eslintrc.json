@@ -1,19 +1,19 @@
 {
   "env": {
     "node": true,
-    "es2020": true
+    "es2022": true
   },
   "extends": ["airbnb-base", "plugin:prettier/recommended"],
   "plugins": ["mocha", "prettier", "chai-friendly"],
   "settings": {
     "import/core-modules": ["generator-jhipster", "generator-jhipster/support"]
   },
+  "parserOptions": {
+    "ecmaVersion": 13
+  },
   "overrides": [
     {
       "files": ["**/*.mjs"],
-      "parserOptions": {
-        "ecmaVersion": 11
-      },
       "rules": {
         "import/extensions": [0, { "pattern": { "{c,m,}js": "always" } }]
       }
