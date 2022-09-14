@@ -408,7 +408,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
-   * @private
+   * @protected
    * Composes with blueprint generators, if any.
    * @param {String} subGen - sub generator
    * @param {Object} extraOptions - extra options to pass to blueprint generator
@@ -434,6 +434,23 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
         } else {
           // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
           this.delegateToBlueprint = true;
+          this.checkBlueprintImplementsPriorities(blueprintGenerator);
+        }
+      }
+    }
+  }
+
+  checkBlueprintImplementsPriorities(blueprintGenerator = this) {
+    const { taskPrefix: baseGeneratorTaskPrefix = '' } = this.features;
+    const { taskPrefix: blueprintTaskPrefix = '' } = blueprintGenerator.features;
+    // v8 remove deprecated priorities
+    const DEPRECATED_PRIORITIES = ['preparingFields', 'preparingRelationships', 'preConflicts'];
+    for (const priorityName of Object.values(PRIORITY_NAMES).filter(p => !DEPRECATED_PRIORITIES.includes(p))) {
+      const baseGeneratorPriorityName = `${baseGeneratorTaskPrefix}${priorityName}`;
+      if (baseGeneratorPriorityName in this) {
+        const blueprintPriorityName = `${blueprintTaskPrefix}${priorityName}`;
+        if (!Object.hasOwn(Object.getPrototypeOf(blueprintGenerator), blueprintPriorityName)) {
+          this.warning(`Priority ${blueprintPriorityName} not implemented at ${blueprintGenerator.options.namespace}.`);
         }
       }
     }

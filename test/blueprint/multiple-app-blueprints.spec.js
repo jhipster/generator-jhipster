@@ -34,10 +34,6 @@ const mockAppBlueprintSubGen = class extends AppGenerator {
     return super._initializing();
   }
 
-  get writing() {
-    return super._writing();
-  }
-
   get prompting() {
     // Here we are not overriding this phase and hence its being handled by JHipster
     return super._prompting();
@@ -48,14 +44,34 @@ const mockAppBlueprintSubGen = class extends AppGenerator {
     return super._configuring();
   }
 
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return super._preparing();
+  }
+
   get default() {
     // Here we are not overriding this phase and hence its being handled by JHipster
     return super._default();
   }
 
+  get postWriting() {
+    return super._postWriting();
+  }
+
   get install() {
     // Here we are not overriding this phase and hence its being handled by JHipster
     return super._install();
+  }
+
+  get postInstall() {
+    return super._postInstall();
   }
 
   get end() {

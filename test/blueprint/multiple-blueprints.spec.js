@@ -30,6 +30,18 @@ const mockClientBlueprintSubGen = class extends ClientGenerator {
     return super._configuring();
   }
 
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return super._preparing();
+  }
+
   get default() {
     // Here we are not overriding this phase and hence its being handled by JHipster
     return super._default();
@@ -48,9 +60,17 @@ const mockClientBlueprintSubGen = class extends ClientGenerator {
     };
   }
 
+  get postWriting() {
+    return super._postWriting();
+  }
+
   get install() {
     // Here we are not overriding this phase and hence its being handled by JHipster
     return super._install();
+  }
+
+  get postInstall() {
+    return super._postInstall();
   }
 
   get end() {
@@ -69,6 +89,33 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
     return super._initializing();
   }
 
+  get prompting() {
+    // Here we are not overriding this phase and hence its being handled by JHipster
+    return super._prompting();
+  }
+
+  get configuring() {
+    // Here we are not overriding this phase and hence its being handled by JHipster
+    return super._configuring();
+  }
+
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return super._preparing();
+  }
+
+  get default() {
+    // Here we are not overriding this phase and hence its being handled by JHipster
+    return super._default();
+  }
+
   get writing() {
     const phaseFromJHipster = super._writing();
     const customPhaseSteps = {
@@ -82,24 +129,17 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
     };
   }
 
-  get prompting() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
-    return super._prompting();
-  }
-
-  get configuring() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
-    return super._configuring();
-  }
-
-  get default() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
-    return super._default();
+  get postWriting() {
+    return super._postWriting();
   }
 
   get install() {
     // Here we are not overriding this phase and hence its being handled by JHipster
     return super._install();
+  }
+
+  get postInstall() {
+    return super._postInstall();
   }
 
   get end() {

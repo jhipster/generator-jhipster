@@ -33,6 +33,18 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     return super._configuring();
   }
 
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return super._preparing();
+  }
+
   get default() {
     return super._default();
   }
@@ -47,8 +59,16 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     return { ...phaseFromJHipster, ...customPhaseSteps };
   }
 
+  get postWriting() {
+    return super._postWriting();
+  }
+
   get install() {
     return super._install();
+  }
+
+  get postInstall() {
+    return super._postInstall();
   }
 
   get end() {
@@ -61,7 +81,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
 
   blueprintNames.forEach(blueprintName => {
     describe(`generate client with blueprint option '${blueprintName}'`, () => {
-      before(done => {
+      before(() =>
         helpers
           .run(path.join(__dirname, '../../generators/client'))
           .withOptions({
@@ -81,8 +101,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
             nativeLanguage: 'en',
             languages: ['en', 'fr'],
           })
-          .on('end', done);
-      });
+      );
 
       it('creates expected files from jhipster client generator', () => {
         assert.file(
