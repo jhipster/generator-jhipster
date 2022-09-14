@@ -9,8 +9,8 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 const mockBlueprintSubGen = class extends ClientGenerator {
-  constructor(args, opts) {
-    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts, features) {
+    super(args, opts, features);
     this.sbsBlueprint = true;
   }
 

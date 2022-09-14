@@ -9,37 +9,22 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };
 
 const mockBlueprintSubGen = class extends ServerGenerator {
-  constructor(args, opts) {
-    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts, features) {
+    super(args, opts, features);
 
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
       this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
+
+    this.sbsBlueprint = true;
   }
 
-  get initializing() {
-    return super._initializing();
-  }
-
-  get prompting() {
-    return super._prompting();
-  }
-
-  get configuring() {
-    return super._configuring();
-  }
-
-  get default() {
-    return super._default();
-  }
-
-  get writing() {
-    const phaseFromJHipster = super._writing();
-    const customPhaseSteps = {
+  get postWriting() {
+    return {
       ehCacheStep() {
-        if (this.cacheProvider === 'ehcache') {
+        if (this.jhipsterConfig.cacheProvider === 'ehcache') {
           this.addEntryToEhcache('entry', 'com/mycompany/myapp');
           this.addEntityToEhcache(
             'entityClass',
@@ -53,7 +38,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         }
       },
       caffeineStep() {
-        if (this.cacheProvider === 'caffeine') {
+        if (this.jhipsterConfig.cacheProvider === 'caffeine') {
           this.addEntryToCache('entry', 'com/mycompany/myapp', 'caffeine');
           this.addEntityToCache(
             'entityClass',
@@ -68,7 +53,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         }
       },
       infinispanCacheStep() {
-        if (this.cacheProvider === 'infinispan') {
+        if (this.jhipsterConfig.cacheProvider === 'infinispan') {
           this.addEntryToCache('entry', 'com/mycompany/myapp', 'infinispan');
           this.addEntityToCache(
             'entityClass',
@@ -83,7 +68,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         }
       },
       redisCacheStep() {
-        if (this.cacheProvider === 'redis') {
+        if (this.jhipsterConfig.cacheProvider === 'redis') {
           this.addEntryToCache('entry', 'com/mycompany/myapp', 'redis');
           this.addEntityToCache(
             'entityClass',
@@ -98,7 +83,6 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         }
       },
     };
-    return { ...phaseFromJHipster, ...customPhaseSteps };
   }
 };
 

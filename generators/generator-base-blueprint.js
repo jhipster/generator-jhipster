@@ -25,6 +25,7 @@ const packagejs = require('../package.json');
 const { packageNameToNamespace } = require('./utils');
 const BaseGenerator = require('./generator-base');
 const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../utils/blueprint');
+const { PRIORITY_NAMES } = require('../lib/constants/priorities.cjs');
 
 /**
  * Base class for a generator that can be extended through a blueprint.
@@ -440,7 +441,11 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     }
   }
 
-  checkBlueprintImplementsPriorities(blueprintGenerator = this) {
+  /**
+   * Check if the blueprint implements every priority implemented by the parent generator
+   * @param {BaseGenerator} blueprintGenerator
+   */
+  checkBlueprintImplementsPriorities(blueprintGenerator) {
     const { taskPrefix: baseGeneratorTaskPrefix = '' } = this.features;
     const { taskPrefix: blueprintTaskPrefix = '' } = blueprintGenerator.features;
     // v8 remove deprecated priorities
@@ -450,7 +455,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
       if (baseGeneratorPriorityName in this) {
         const blueprintPriorityName = `${blueprintTaskPrefix}${priorityName}`;
         if (!Object.hasOwn(Object.getPrototypeOf(blueprintGenerator), blueprintPriorityName)) {
-          this.warning(`Priority ${blueprintPriorityName} not implemented at ${blueprintGenerator.options.namespace}.`);
+          this.debug(`Priority ${blueprintPriorityName} not implemented at ${blueprintGenerator.options.namespace}.`);
         }
       }
     }

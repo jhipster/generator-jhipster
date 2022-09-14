@@ -220,64 +220,14 @@ describe('Generator Base Blueprint', () => {
       });
     });
 
-    describe('when custom priorities are missing', () => {
-      let mockedPriorities;
-      let mockBlueprintSubGen;
-      before(() => {
-        mockedPriorities = createPrioritiesFakes();
-        mockBlueprintSubGen = class extends createAllBlueprint(mockedPriorities) {
-          get initializing() {
-            return this._initializing();
-          }
-
-          get prompting() {
-            return this._prompting();
-          }
-
-          get configuring() {
-            return this._configuring();
-          }
-
-          get default() {
-            return this._default();
-          }
-
-          get writing() {
-            return this._writing();
-          }
-
-          get install() {
-            return this._install();
-          }
-
-          get end() {
-            return this._end();
-          }
-        };
-        return helpers.create(mockBlueprintSubGen).run();
-      });
-
-      priorities.forEach((priority, idx) => {
-        it(`should execute ${priority} once`, () => {
-          assert.equal(mockedPriorities[priority].callCount, 1);
-        });
-        if (idx > 0) {
-          const lastPriority = priorities[idx - 1];
-          it(`should execute ${priority} after ${lastPriority} `, () => {
-            assert(mockedPriorities[priority].calledAfter(mockedPriorities[lastPriority]));
-          });
-        }
-      });
-    });
-
     describe('when custom priorities are missing and the blueprint is sbs', () => {
       let mockedPriorities;
       let mockBlueprintSubGen;
       before(() => {
         mockedPriorities = createPrioritiesFakes();
         mockBlueprintSubGen = class extends createAllBlueprint(mockedPriorities) {
-          constructor(args, opts) {
-            super(args, opts);
+          constructor(args, opts, features) {
+            super(args, opts, features);
             this.sbsBlueprint = true;
           }
 
