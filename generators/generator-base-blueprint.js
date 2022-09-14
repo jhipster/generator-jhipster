@@ -409,30 +409,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
 
   /**
    * @private
-   * @deprecated
-   * Detect if a priority is implemented in the super class but missing in current one.
-   * That indicates the blueprint was not updated with the custom priorities.
-   * @param {string} priorityName - Priority to be checked.
-   * @param {sring} destPriority - Priority that the task is related to for logging purpose.
-   * @return {boolean} true if the priority is missing.
-   */
-  _isPriorityMissing(priorityName, destPriority = 'related') {
-    const ownPrototype = Object.getPrototypeOf(this);
-    const parentPrototype = Object.getPrototypeOf(ownPrototype);
-    priorityName = `${this.features.taskPrefix || ''}${priorityName}`;
-    if (
-      parentPrototype !== JHipsterBaseBlueprintGenerator.prototype &&
-      !Object.getOwnPropertyDescriptor(ownPrototype, priorityName) &&
-      Object.getOwnPropertyDescriptor(parentPrototype, priorityName)
-    ) {
-      this.warning(`Priority ${priorityName} is missing for generator ${this.options.namespace}. Merging into ${destPriority} priority.`);
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @private
    * Composes with blueprint generators, if any.
    * @param {String} subGen - sub generator
    * @param {Object} extraOptions - extra options to pass to blueprint generator
