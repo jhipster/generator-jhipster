@@ -58,6 +58,7 @@ module.exports = class extends BaseGenerator {
       },
 
       displayConfiguration() {
+        // Omit sensitive information.
         const result = JSON.stringify({ ...this.jhipsterConfig, jwtSecretKey: undefined, rememberMeKey: undefined }, null, 2);
         console.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n');
         console.log(`\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
