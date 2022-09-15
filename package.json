@@ -65,7 +65,7 @@
     "build": "npm run compile && npm run copy-files",
     "compile": "tsc",
     "completion": "tabtab install --name jhipster --auto",
-    "copy-files": "cpy 'generators/**' '!**/*.(js|ts|cjs|mjs|snap)' '!**/__*/*' dist/generators && cpy 'package.json' dist",
+    "copy-files": "cpy 'src/generators/**' '!**/*.(js|ts|cjs|mjs|snap)' '!**/__*/*' dist/generators && cpy 'package.json' dist",
     "ejs-lint": "mocha test/ejslint.js",
     "ejslint": "ejslint",
     "eslint": "eslint . --ext .js,.cjs,.mjs",
