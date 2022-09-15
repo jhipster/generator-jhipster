@@ -119,7 +119,7 @@ module.exports = class extends BaseGenerator {
         this.clientPackageManager = this.config.get('clientPackageManager');
       },
       disableHusky() {
-        process.env.HUSKY=0
+        process.env.HUSKY = 0;
       },
     };
   }
