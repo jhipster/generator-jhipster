@@ -23,6 +23,7 @@ describe('JHipster upgrade generator', function () {
           skipChecks: true,
           fromCli: true,
           defaults: true,
+          skipCommitHooks: true,
           localConfig: {
             skipClient: true,
             skipServer: true,
