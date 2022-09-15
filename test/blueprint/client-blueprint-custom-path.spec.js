@@ -24,36 +24,36 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     }
   }
 
-  get initializing() {
-    return super._initializing();
+  get [ClientGenerator.INITIALIZING]() {
+    return super.initializing;
   }
 
-  get prompting() {
-    return super._prompting();
+  get [ClientGenerator.PROMPTING]() {
+    return super.prompting;
   }
 
-  get configuring() {
-    return super._configuring();
+  get [ClientGenerator.CONFIGURING]() {
+    return super.configuring;
   }
 
-  get composing() {
-    return super._composing();
+  get [ClientGenerator.COMPOSING]() {
+    return super.composing;
   }
 
-  get loading() {
-    return super._loading();
+  get [ClientGenerator.LOADING]() {
+    return super.loading;
   }
 
-  get preparing() {
-    return super._preparing();
+  get [ClientGenerator.PREPARING]() {
+    return super.preparing;
   }
 
-  get default() {
-    return super._default();
+  get [ClientGenerator.DEFAULT]() {
+    return super.default;
   }
 
-  get writing() {
-    const phaseFromJHipster = super._writing();
+  get [ClientGenerator.WRITING]() {
+    const phaseFromJHipster = super.writing;
     const customPhaseSteps = {
       addDummyProperty() {
         this.addNpmDependency('dummy-blueprint-property', '2.0');
@@ -62,20 +62,20 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     return { ...phaseFromJHipster, ...customPhaseSteps };
   }
 
-  get postWriting() {
-    return super._postWriting();
+  get [ClientGenerator.POST_WRITING]() {
+    return super.postWriting;
   }
 
-  get install() {
-    return super._install();
+  get [ClientGenerator.INSTALL]() {
+    return super.install;
   }
 
-  get postInstall() {
-    return super._postInstall();
+  get [ClientGenerator.POST_INSTALL]() {
+    return super.postInstall;
   }
 
-  get end() {
-    return super._end();
+  get [ClientGenerator.END]() {
+    return super.end;
   }
 };
 

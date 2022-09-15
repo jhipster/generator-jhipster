@@ -25,7 +25,13 @@ const packagejs = require('../package.json');
 const { packageNameToNamespace } = require('./utils');
 const BaseGenerator = require('./generator-base');
 const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../utils/blueprint');
-const { PRIORITY_NAMES } = require('../lib/constants/priorities.cjs');
+
+const { compat, PRIORITY_NAMES } = require('../lib/constants/priorities.cjs');
+
+const { PRIORITY_PREFIX } = compat;
+
+const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
+  PRIORITY_NAMES;
 
 /**
  * Base class for a generator that can be extended through a blueprint.
@@ -38,8 +44,34 @@ const { PRIORITY_NAMES } = require('../lib/constants/priorities.cjs');
  * @property {import('yeoman-generator')} jhipsterContext - JHipster parent generator (Blueprints only).
  */
 module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
+  static asPriority = priorityName => `${PRIORITY_PREFIX}${priorityName}`;
+
+  static INITIALIZING = JHipsterBaseBlueprintGenerator.asPriority(INITIALIZING);
+
+  static PROMPTING = JHipsterBaseBlueprintGenerator.asPriority(PROMPTING);
+
+  static CONFIGURING = JHipsterBaseBlueprintGenerator.asPriority(CONFIGURING);
+
+  static COMPOSING = JHipsterBaseBlueprintGenerator.asPriority(COMPOSING);
+
+  static LOADING = JHipsterBaseBlueprintGenerator.asPriority(LOADING);
+
+  static PREPARING = JHipsterBaseBlueprintGenerator.asPriority(PREPARING);
+
+  static DEFAULT = JHipsterBaseBlueprintGenerator.asPriority(DEFAULT);
+
+  static WRITING = JHipsterBaseBlueprintGenerator.asPriority(WRITING);
+
+  static POST_WRITING = JHipsterBaseBlueprintGenerator.asPriority(POST_WRITING);
+
+  static INSTALL = JHipsterBaseBlueprintGenerator.asPriority(INSTALL);
+
+  static POST_INSTALL = JHipsterBaseBlueprintGenerator.asPriority(POST_INSTALL);
+
+  static END = JHipsterBaseBlueprintGenerator.asPriority(END);
+
   constructor(args, options, features) {
-    super(args, options, features);
+    super(args, options, { taskPrefix: PRIORITY_PREFIX, ...features });
 
     if (this.options.help) {
       return;

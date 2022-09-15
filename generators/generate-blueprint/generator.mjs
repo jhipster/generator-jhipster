@@ -245,7 +245,7 @@ export default class extends BaseBlueprintGenerator {
           const subGeneratorConfig = subGeneratorStorage.getAll();
           const priorities = (subGeneratorConfig[PRIORITIES] || []).map(priority => ({
             name: priority,
-            constant: `${snakeCase(priority).toUpperCase()}_PRIORITY`,
+            constant: `${snakeCase(priority).toUpperCase()}`,
           }));
           const customGenerator = !Object.values(GENERATOR_LIST).includes(generator);
           const jhipsterGenerator = customGenerator ? 'base' : generator;

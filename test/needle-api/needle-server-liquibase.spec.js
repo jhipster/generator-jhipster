@@ -33,7 +33,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
     this.sbsBlueprint = true;
   }
 
-  get postWriting() {
+  get [ServerGenerator.POST_WRITING]() {
     const customPhaseSteps = {
       writeTestFiles() {
         return this.writeFilesToDisk(serverFiles, this, false);

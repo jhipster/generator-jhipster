@@ -22,7 +22,7 @@ const os = require('os');
 const prompts = require('./prompts');
 const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER } = require('../generator-list');
 const databaseTypes = require('../../jdl/jhipster/database-types');
-const BaseApplicationGenerator = require('../generator-base-application.cjs');
+const BaseApplicationGenerator = require('../base-application/generator.cjs');
 const { writeFiles } = require('./files');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
@@ -39,18 +39,6 @@ const { MICROSERVICE, GATEWAY } = require('../../jdl/jhipster/application-types'
 const { getBase64Secret, getRandomHex } = require('../utils');
 const cacheTypes = require('../../jdl/jhipster/cache-types');
 const websocketTypes = require('../../jdl/jhipster/websocket-types');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  COMPOSING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-  DEFAULT_PRIORITY,
-  WRITING_PRIORITY,
-  POST_WRITING_PRIORITY,
-  END_PRIORITY,
-} = require('../../lib/constants/priorities.cjs').compat;
 
 const NO_CACHE = cacheTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
@@ -115,7 +103,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     }
   }
 
-  _initializing() {
+  get initializing() {
     return this.asInitialingTaskGroup({
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -241,11 +229,11 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [INITIALIZING_PRIORITY]() {
-    return this.asInitialingTaskGroup(this.delegateToBlueprint ? {} : this._initializing());
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.asInitialingTaskGroup(this.delegateToBlueprint ? {} : this.initializing);
   }
 
-  _prompting() {
+  get prompting() {
     return this.asPromptingTaskGroup({
       askForModuleName: prompts.askForModuleName,
       askForServerSideOpts: prompts.askForServerSideOpts,
@@ -259,11 +247,11 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [PROMPTING_PRIORITY]() {
-    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this._prompting());
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this.prompting);
   }
 
-  _configuring() {
+  get configuring() {
     return this.asConfiguringTaskGroup({
       configServerPort() {
         if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
@@ -284,11 +272,11 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [CONFIGURING_PRIORITY]() {
-    return this.asConfiguringTaskGroup(this.delegateToBlueprint ? {} : this._configuring());
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.asConfiguringTaskGroup(this.delegateToBlueprint ? {} : this.configuring);
   }
 
-  _composing() {
+  get composing() {
     return this.asComposingTaskGroup({
       async composeCommon() {
         await this.composeWithJHipster(GENERATOR_COMMON, true);
@@ -302,11 +290,11 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [COMPOSING_PRIORITY]() {
-    return this.asComposingTaskGroup(this.delegateToBlueprint ? {} : this._composing());
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.asComposingTaskGroup(this.delegateToBlueprint ? {} : this.composing);
   }
 
-  _loading() {
+  get loading() {
     return this.asLoadingTaskGroup({
       loadSharedConfig() {
         this.loadAppConfig();
@@ -320,11 +308,11 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [LOADING_PRIORITY]() {
-    return this.asLoadingTaskGroup(this.delegateToBlueprint ? {} : this._loading());
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.asLoadingTaskGroup(this.delegateToBlueprint ? {} : this.loading);
   }
 
-  _preparing() {
+  get preparing() {
     return this.asPreparingTaskGroup({
       prepareForTemplates() {
         // Application name modified, using each technology's conventions
@@ -347,13 +335,12 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [PREPARING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._preparing();
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.asPreparingTaskGroup(this.delegateToBlueprint ? {} : this.preparing);
   }
 
   /** @inheritdoc */
-  _default() {
+  get default() {
     return this.asDefaultTaskGroup({
       loadUserManagementEntities() {
         // TODO v8 move to preparingEntities priority.
@@ -396,22 +383,22 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [DEFAULT_PRIORITY]() {
-    return this.asDefaultTaskGroup(this.delegateToBlueprint ? {} : this._default());
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.asDefaultTaskGroup(this.delegateToBlueprint ? {} : this.default);
   }
 
   /** @inheritdoc */
-  _writing() {
+  get writing() {
     return this.asWritingTaskGroup({
       ...writeFiles(),
     });
   }
 
-  get [WRITING_PRIORITY]() {
-    return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this._writing());
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this.writing);
   }
 
-  _postWriting() {
+  get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts() {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
@@ -590,11 +577,11 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [POST_WRITING_PRIORITY]() {
-    return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this._postWriting());
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
   }
 
-  _end() {
+  get end() {
     return this.asEndTaskGroup({
       checkLocaleValue() {
         if (this.languages && this.languages.includes('in')) {
@@ -620,8 +607,8 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [END_PRIORITY]() {
-    return this.asEndTaskGroup(this.delegateToBlueprint ? {} : this._end());
+  get [BaseApplicationGenerator.END]() {
+    return this.asEndTaskGroup(this.delegateToBlueprint ? {} : this.end);
   }
 
   _configureServer(config = this.jhipsterConfig) {

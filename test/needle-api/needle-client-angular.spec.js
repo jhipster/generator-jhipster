@@ -14,7 +14,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     this.sbsBlueprint = true;
   }
 
-  get postWriting() {
+  get [ClientGenerator.POST_WRITING]() {
     return {
       addCssStylesProperty() {
         this.addMainSCSSStyle('@import style_without_comment;');

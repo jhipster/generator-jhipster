@@ -36,6 +36,7 @@ describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipst
         .withOptions({
           reproducible: true,
           defaults: true,
+          baseName: 'jhipster',
 <%_ if (!customGenerator) { _%>
           blueprint: '<%= application.baseName %>',
 <%_ } _%>

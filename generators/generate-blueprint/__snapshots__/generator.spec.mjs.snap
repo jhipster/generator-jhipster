@@ -95,6 +95,18 @@ Object {
   "generators/azure-spring-cloud/templates/template-file-azure-spring-cloud.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/base-application/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/templates/template-file-base-application.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/base/generator.mjs": Object {
     "stateCleared": "modified",
   },

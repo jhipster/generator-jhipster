@@ -13,27 +13,27 @@ const createGenerator = async env => class extends (await env.requireGenerator('
   }
 
   get ['>initializing']() {
-      return super._initializing();
+      return super.initializing;
   }
 
   get ['>prompting']() {
-      return super._prompting();
+      return super.prompting;
   }
 
   get ['>configuring']() {
-      return super._configuring();
+      return super.configuring;
   }
 
   get ['>composing']() {
-    return super._composing();
+    return super.composing;
   }
 
   get ['>loading']() {
-    return super._loading();
+    return super.loading;
   }
 
   get ['>preparing']() {
-    return super._preparing();
+    return super.preparing;
   }
 
   get ['>configuringEachEntity']() {
@@ -61,7 +61,7 @@ const createGenerator = async env => class extends (await env.requireGenerator('
   }
 
   get ['>writing']() {
-      return super._writing();
+      return super.writing;
   }
 
   get ['>writingEntities']() {
@@ -77,15 +77,15 @@ const createGenerator = async env => class extends (await env.requireGenerator('
   }
 
   get ['>install']() {
-      return super._install();
+      return super.install;
   }
 
   get ['>postInstall']() {
-      return super._postInstall();
+      return super.postInstall;
   }
 
   get ['>end']() {
-      return super._end();
+      return super.end;
   }
 };
 

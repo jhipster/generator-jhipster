@@ -20,7 +20,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     this.sbsBlueprint = true;
   }
 
-  get writing() {
+  get [ClientGenerator.POST_WRITING]() {
     const customPhaseSteps = {
       addAppCssStep() {
         // please change this to public API when it will be available see https://github.com/jhipster/generator-jhipster/issues/9234

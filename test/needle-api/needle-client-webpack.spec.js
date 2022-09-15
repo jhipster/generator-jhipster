@@ -22,7 +22,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     this.sbsBlueprint = true;
   }
 
-  get postWriting() {
+  get [ClientGenerator.POST_WRITING]() {
     const customPhaseSteps = {
       webpackPhase() {
         this.copyExternalAssetsInWebpack(assetFrom, assetTo);
