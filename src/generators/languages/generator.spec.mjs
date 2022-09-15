@@ -21,7 +21,7 @@ import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import testSupport from '../../test/support/index.cjs';
+import testSupport from '../../../test/support/index.cjs';
 import Generator from './index.js';
 
 const { snakeCase } = lodash;
