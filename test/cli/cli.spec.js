@@ -13,7 +13,7 @@ const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeom
 const { logger } = require('../../src/cli/utils');
 const BaseGenerator = require('../../src/generators/generator-base');
 
-const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.js'));
+const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'src', 'cli', 'cli.js'));
 
 const mockCli = (opts = {}) => {
   const program = buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
