@@ -118,6 +118,9 @@ module.exports = class extends BaseGenerator {
         this.currentJhipsterVersion = this.config.get('jhipsterVersion');
         this.clientPackageManager = this.config.get('clientPackageManager');
       },
+      disableHusky() {
+        process.env.HUSKY=0
+      },
     };
   }
 
