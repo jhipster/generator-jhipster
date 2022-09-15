@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('expect');
-const { convertDeployments } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/deployment-converter');
+const { convertDeployments } = require('../../../../src/jdl/converters/parsed-jdl-to-jdl-object/deployment-converter');
 
 describe('DeploymentConverter', () => {
   describe('convertDeployments', () => {

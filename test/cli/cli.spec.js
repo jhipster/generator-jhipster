@@ -8,10 +8,10 @@ const sinon = require('sinon');
 const Environment = require('yeoman-environment');
 const helpers = require('yeoman-test');
 
-const { createProgram, buildJHipster } = require('../../cli/program');
+const { createProgram, buildJHipster } = require('../../src/cli/program');
 const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
-const { logger } = require('../../cli/utils');
-const BaseGenerator = require('../../generators/generator-base');
+const { logger } = require('../../src/cli/utils');
+const BaseGenerator = require('../../src/generators/generator-base');
 
 const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.js'));
 

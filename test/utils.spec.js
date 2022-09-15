@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const { expect } = require('expect');
 const { writeFileSync } = require('fs');
 
-const utils = require('../generators/utils');
+const utils = require('../src/generators/utils');
 const { prepareTempDir } = require('./utils/utils');
 
 const { detectCrLf } = utils;

@@ -1,8 +1,8 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const ClientGenerator = require('../../generators/client');
-const constants = require('../../generators/generator-constants');
+const ClientGenerator = require('../../src/generators/client');
+const constants = require('../../src/generators/generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 

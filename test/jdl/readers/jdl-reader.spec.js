@@ -21,7 +21,7 @@
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
-const JDLReader = require('../../../jdl/readers/jdl-reader');
+const JDLReader = require('../../../src/jdl/readers/jdl-reader');
 
 describe('JDLReader', () => {
   describe('parseFromFiles', () => {

@@ -6,8 +6,8 @@ const fse = require('fs-extra');
 const fs = require('fs');
 const { createHelpers } = require('yeoman-test');
 
-const EnvironmentBuilder = require('../../cli/environment-builder');
-const constants = require('../../generators/generator-constants');
+const EnvironmentBuilder = require('../../src/cli/environment-builder');
+const constants = require('../../src/generators/generator-constants');
 
 const DOCKER_DIR = constants.DOCKER_DIR;
 const FAKE_BLUEPRINT_DIR = path.join(__dirname, '../templates/fake-blueprint');

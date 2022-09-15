@@ -1,7 +1,7 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const constants = require('../generators/generator-constants');
-const EnvironmentBuilder = require('../cli/environment-builder');
+const constants = require('../src/generators/generator-constants');
+const EnvironmentBuilder = require('../src/cli/environment-builder');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;

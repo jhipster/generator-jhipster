@@ -18,11 +18,11 @@
  */
 
 const { expect } = require('expect');
-const UnaryOptions = require('../../../../jdl/jhipster/unary-options');
-const BinaryOptions = require('../../../../jdl/jhipster/binary-options');
-const { convertOptions } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/option-converter');
-const { MapperTypes, PaginationTypes } = require('../../../../jdl/jhipster/entity-options');
-const { COUCHBASE } = require('../../../../jdl/jhipster/search-engine-types');
+const UnaryOptions = require('../../../../src/jdl/jhipster/unary-options');
+const BinaryOptions = require('../../../../src/jdl/jhipster/binary-options');
+const { convertOptions } = require('../../../../src/jdl/converters/parsed-jdl-to-jdl-object/option-converter');
+const { MapperTypes, PaginationTypes } = require('../../../../src/jdl/jhipster/entity-options');
+const { COUCHBASE } = require('../../../../src/jdl/jhipster/search-engine-types');
 
 const { MAPSTRUCT } = MapperTypes;
 const { PAGINATION } = PaginationTypes;

@@ -18,19 +18,19 @@
  */
 
 const { expect } = require('chai');
-const JDLObject = require('../../../jdl/models/jdl-object');
-const JDLEntity = require('../../../jdl/models/jdl-entity');
-const JDLField = require('../../../jdl/models/jdl-field');
-const JDLValidation = require('../../../jdl/models/jdl-validation');
-const JDLRelationship = require('../../../jdl/models/jdl-relationship');
-const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
-const ApplicationTypes = require('../../../jdl/jhipster/application-types');
-const DatabaseTypes = require('../../../jdl/jhipster/database-types');
-const FieldTypes = require('../../../jdl/jhipster/field-types');
-const Validations = require('../../../jdl/jhipster/validations');
-const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
-const BinaryOptions = require('../../../jdl/jhipster/binary-options');
-const { createValidator } = require('../../../jdl/validators/jdl-without-application-validator');
+const JDLObject = require('../../../src/jdl/models/jdl-object');
+const JDLEntity = require('../../../src/jdl/models/jdl-entity');
+const JDLField = require('../../../src/jdl/models/jdl-field');
+const JDLValidation = require('../../../src/jdl/models/jdl-validation');
+const JDLRelationship = require('../../../src/jdl/models/jdl-relationship');
+const JDLBinaryOption = require('../../../src/jdl/models/jdl-binary-option');
+const ApplicationTypes = require('../../../src/jdl/jhipster/application-types');
+const DatabaseTypes = require('../../../src/jdl/jhipster/database-types');
+const FieldTypes = require('../../../src/jdl/jhipster/field-types');
+const Validations = require('../../../src/jdl/jhipster/validations');
+const RelationshipTypes = require('../../../src/jdl/jhipster/relationship-types');
+const BinaryOptions = require('../../../src/jdl/jhipster/binary-options');
+const { createValidator } = require('../../../src/jdl/validators/jdl-without-application-validator');
 
 describe('JDLWithoutApplicationValidator', () => {
   describe('createValidator', () => {

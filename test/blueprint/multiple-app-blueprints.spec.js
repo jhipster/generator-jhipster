@@ -2,15 +2,15 @@
 const path = require('path');
 const helpers = require('yeoman-test');
 const sinon = require('sinon');
-const AppGenerator = require('../../generators/app');
-const ClientGenerator = require('../../generators/client');
-const ServerGenerator = require('../../generators/server');
-const CommonGenerator = require('../../generators/common');
-const LanguagesGenerator = require('../../generators/languages');
-const { MYSQL, SQL, H2_MEMORY } = require('../../jdl/jhipster/database-types');
-const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { EHCACHE } = require('../../jdl/jhipster/cache-types');
+const AppGenerator = require('../../src/generators/app');
+const ClientGenerator = require('../../src/generators/client');
+const ServerGenerator = require('../../src/generators/server');
+const CommonGenerator = require('../../src/generators/common');
+const LanguagesGenerator = require('../../src/generators/languages');
+const { MYSQL, SQL, H2_MEMORY } = require('../../src/jdl/jhipster/database-types');
+const { ANGULAR } = require('../../src/jdl/jhipster/client-framework-types');
+const { JWT } = require('../../src/jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../../src/jdl/jhipster/cache-types');
 
 const createMockBlueprint = function (parent, spy) {
   return class extends parent {

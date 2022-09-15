@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('expect');
-const { convertField } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/field-converter');
+const { convertField } = require('../../../../src/jdl/converters/parsed-jdl-to-jdl-object/field-converter');
 
 describe('FieldConverter', () => {
   describe('convertField', () => {

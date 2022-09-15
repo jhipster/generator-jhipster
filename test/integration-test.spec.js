@@ -22,10 +22,10 @@ const fse = require('fs-extra');
 const path = require('path');
 const sortKeys = require('sort-keys');
 
-const { JWT, SESSION } = require('../jdl/jhipster/authentication-types');
-const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
+const { JWT, SESSION } = require('../src/jdl/jhipster/authentication-types');
+const { GATEWAY, MICROSERVICE } = require('../src/jdl/jhipster/application-types');
 
-const { formatDateForChangelog } = require('../utils/liquibase');
+const { formatDateForChangelog } = require('../src/utils/liquibase');
 
 const fixSamples = process.argv.includes('--fix-samples');
 const itSamplesPath = path.join(__dirname, '..', 'test-integration', 'samples');

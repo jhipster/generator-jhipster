@@ -2,11 +2,11 @@ const { expect } = require('expect');
 const path = require('path');
 const helpers = require('yeoman-test');
 
-const { JWT, OAUTH2 } = require('../jdl/jhipster/authentication-types');
-const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
-const { CAFFEINE, EHCACHE } = require('../jdl/jhipster/cache-types');
-const { SQL, H2_MEMORY, POSTGRESQL } = require('../jdl/jhipster/database-types');
-const { MAVEN } = require('../jdl/jhipster/build-tool-types');
+const { JWT, OAUTH2 } = require('../src/jdl/jhipster/authentication-types');
+const { GATEWAY, MICROSERVICE } = require('../src/jdl/jhipster/application-types');
+const { CAFFEINE, EHCACHE } = require('../src/jdl/jhipster/cache-types');
+const { SQL, H2_MEMORY, POSTGRESQL } = require('../src/jdl/jhipster/database-types');
+const { MAVEN } = require('../src/jdl/jhipster/build-tool-types');
 
 describe('JHipster server generator', () => {
   describe('generate server with ehcache', () => {

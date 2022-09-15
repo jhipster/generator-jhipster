@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const JDLEntity = require('../../../jdl/models/jdl-entity');
-const EntityValidator = require('../../../jdl/validators/entity-validator');
+const JDLEntity = require('../../../src/jdl/models/jdl-entity');
+const EntityValidator = require('../../../src/jdl/validators/entity-validator');
 
 describe('EntityValidator', () => {
   let validator;

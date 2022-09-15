@@ -21,7 +21,7 @@
 const { expect } = require('chai');
 const path = require('path');
 
-const JSONFileReader = require('../../../jdl/readers/json-file-reader');
+const JSONFileReader = require('../../../src/jdl/readers/json-file-reader');
 
 describe('JSONFileReader', () => {
   describe('toFilePath', () => {

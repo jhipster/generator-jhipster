@@ -19,8 +19,8 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('expect');
-const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
-const BinaryOptions = require('../../../jdl/jhipster/binary-options');
+const JDLBinaryOption = require('../../../src/jdl/models/jdl-binary-option');
+const BinaryOptions = require('../../../src/jdl/jhipster/binary-options');
 
 describe('AbstractJDLOption', () => {
   describe('resolveEntityNames', () => {

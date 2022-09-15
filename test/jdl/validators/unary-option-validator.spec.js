@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
-const UnaryOptionValidator = require('../../../jdl/validators/unary-option-validator');
+const JDLUnaryOption = require('../../../src/jdl/models/jdl-unary-option');
+const UnaryOptionValidator = require('../../../src/jdl/validators/unary-option-validator');
 
 describe('UnaryOptionValidator', () => {
   let validator;

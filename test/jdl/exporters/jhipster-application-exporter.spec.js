@@ -23,14 +23,14 @@ const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
-const { exportApplication, exportApplications } = require('../../../jdl/exporters/applications/jhipster-application-exporter');
+const { exportApplication, exportApplications } = require('../../../src/jdl/exporters/applications/jhipster-application-exporter');
 
-const { MONOLITH } = require('../../../jdl/jhipster/application-types');
-const { MAVEN } = require('../../../jdl/jhipster/build-tool-types');
-const { EHCACHE } = require('../../../jdl/jhipster/cache-types');
-const { JWT } = require('../../../jdl/jhipster/authentication-types');
-const { ANGULAR } = require('../../../jdl/jhipster/client-framework-types');
-const { SQL, H2_DISK, MYSQL } = require('../../../jdl/jhipster/database-types');
+const { MONOLITH } = require('../../../src/jdl/jhipster/application-types');
+const { MAVEN } = require('../../../src/jdl/jhipster/build-tool-types');
+const { EHCACHE } = require('../../../src/jdl/jhipster/cache-types');
+const { JWT } = require('../../../src/jdl/jhipster/authentication-types');
+const { ANGULAR } = require('../../../src/jdl/jhipster/client-framework-types');
+const { SQL, H2_DISK, MYSQL } = require('../../../src/jdl/jhipster/database-types');
 
 describe('JHipsterApplicationExporter', () => {
   describe('exportApplication', () => {

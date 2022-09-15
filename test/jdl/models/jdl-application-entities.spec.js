@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const JDLApplicationEntities = require('../../../jdl/models/jdl-application-entities');
+const JDLApplicationEntities = require('../../../src/jdl/models/jdl-application-entities');
 
 describe('JDLApplicationEntities', () => {
   describe('addEntityNames', () => {

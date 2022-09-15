@@ -20,11 +20,11 @@
 
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
-const { OptionNames } = require('../../../jdl/jhipster/application-options');
-const BinaryOptions = require('../../../jdl/jhipster/binary-options');
-const StringJDLApplicationConfigurationOption = require('../../../jdl/models/string-jdl-application-configuration-option');
-const JDLApplication = require('../../../jdl/models/jdl-application');
-const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
+const { OptionNames } = require('../../../src/jdl/jhipster/application-options');
+const BinaryOptions = require('../../../src/jdl/jhipster/binary-options');
+const StringJDLApplicationConfigurationOption = require('../../../src/jdl/models/string-jdl-application-configuration-option');
+const JDLApplication = require('../../../src/jdl/models/jdl-application');
+const JDLBinaryOption = require('../../../src/jdl/models/jdl-binary-option');
 
 describe('JDLApplication', () => {
   describe('hasConfigurationOption', () => {

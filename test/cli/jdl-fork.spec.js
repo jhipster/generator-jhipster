@@ -4,7 +4,7 @@ const path = require('path');
 const sinon = require('sinon');
 
 const { prepareTempDir } = require('../utils/utils');
-const { runJHipster } = require('../../cli/program');
+const { runJHipster } = require('../../src/cli/program');
 
 describe('jhipster cli with jdl fork', () => {
   let cleanup;

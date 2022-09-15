@@ -2,10 +2,10 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('./utils/expected-files');
-const { appDefaultConfig } = require('../generators/generator-defaults');
-const { REACT, ANGULAR, VUE } = require('../jdl/jhipster/client-framework-types');
-const { CYPRESS } = require('../jdl/jhipster/test-framework-types');
-const { OAUTH2, JWT } = require('../jdl/jhipster/authentication-types');
+const { appDefaultConfig } = require('../src/generators/generator-defaults');
+const { REACT, ANGULAR, VUE } = require('../src/jdl/jhipster/client-framework-types');
+const { CYPRESS } = require('../src/jdl/jhipster/test-framework-types');
+const { OAUTH2, JWT } = require('../src/jdl/jhipster/authentication-types');
 
 describe('jhipster:cypress', () => {
   describe('generate cypress with React client with JWT', () => {

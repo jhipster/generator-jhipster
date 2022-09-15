@@ -4,7 +4,7 @@ const assert = require('yeoman-assert');
 const { createEnv } = require('yeoman-environment');
 
 const { dryRunHelpers: helpers } = require('../utils/utils');
-const { JHIPSTER_CONFIG_DIR } = require('../../generators/generator-constants');
+const { JHIPSTER_CONFIG_DIR } = require('../../src/generators/generator-constants');
 
 const mockedComposedGenerators = [
   'jhipster:common',

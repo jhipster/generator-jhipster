@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const EnumIssue = require('../../../../jdl/linters/issues/enum-issue');
+const EnumIssue = require('../../../../src/jdl/linters/issues/enum-issue');
 
 describe('EnumIssue', () => {
   describe('new', () => {

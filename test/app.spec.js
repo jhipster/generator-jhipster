@@ -1,7 +1,7 @@
 const path = require('path');
 const { expect } = require('expect');
 const assert = require('yeoman-assert');
-const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
+const { GATEWAY, MICROSERVICE, MONOLITH } = require('../src/jdl/jhipster/application-types');
 const {
   CASSANDRA,
   COUCHBASE,
@@ -14,19 +14,19 @@ const {
   NEO4J,
   POSTGRESQL,
   SQL,
-} = require('../jdl/jhipster/database-types');
-const { SESSION } = require('../jdl/jhipster/authentication-types');
-const { EHCACHE, HAZELCAST } = require('../jdl/jhipster/cache-types');
-const cacheProviders = require('../jdl/jhipster/cache-types');
-const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
-const { JWT } = require('../jdl/jhipster/authentication-types');
-const { CUCUMBER, PROTRACTOR } = require('../jdl/jhipster/test-framework-types');
-const { ANGULAR, REACT } = require('../jdl/jhipster/client-framework-types');
-const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
+} = require('../src/jdl/jhipster/database-types');
+const { SESSION } = require('../src/jdl/jhipster/authentication-types');
+const { EHCACHE, HAZELCAST } = require('../src/jdl/jhipster/cache-types');
+const cacheProviders = require('../src/jdl/jhipster/cache-types');
+const { CONSUL, EUREKA } = require('../src/jdl/jhipster/service-discovery-types');
+const { JWT } = require('../src/jdl/jhipster/authentication-types');
+const { CUCUMBER, PROTRACTOR } = require('../src/jdl/jhipster/test-framework-types');
+const { ANGULAR, REACT } = require('../src/jdl/jhipster/client-framework-types');
+const { GRADLE, MAVEN } = require('../src/jdl/jhipster/build-tool-types');
 
 const { skipPrettierHelpers: helpers, shouldBeV3DockerfileCompatible } = require('./utils/utils');
 const expectedFiles = require('./utils/expected-files');
-const constants = require('../generators/generator-constants');
+const constants = require('../src/generators/generator-constants');
 
 const { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } = constants;
 const NO_CACHE_PROVIDER = cacheProviders.NO;

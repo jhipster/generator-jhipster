@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const ReservedKeywords = require('../../../jdl/jhipster/reserved-keywords');
+const ReservedKeywords = require('../../../src/jdl/jhipster/reserved-keywords');
 
 describe('ReservedKeywords', () => {
   describe('isReserved', () => {

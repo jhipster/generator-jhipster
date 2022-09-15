@@ -23,10 +23,10 @@ const fse = require('fs-extra');
 const path = require('path');
 const { expect } = require('chai');
 
-const ApplicationTypes = require('../../jdl/jhipster/application-types');
-const { NO: NO_CLIENT_FRAMEWORK } = require('../../jdl/jhipster/client-framework-types');
-const DatabaseTypes = require('../../jdl/jhipster/database-types');
-const { createImporterFromFiles, createImporterFromContent } = require('../../jdl/jdl-importer');
+const ApplicationTypes = require('../../src/jdl/jhipster/application-types');
+const { NO: NO_CLIENT_FRAMEWORK } = require('../../src/jdl/jhipster/client-framework-types');
+const DatabaseTypes = require('../../src/jdl/jhipster/database-types');
+const { createImporterFromFiles, createImporterFromContent } = require('../../src/jdl/jdl-importer');
 
 describe('JDLImporter', () => {
   describe('createImporterFromFiles', () => {

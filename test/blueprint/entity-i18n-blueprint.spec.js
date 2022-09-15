@@ -3,9 +3,9 @@ const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files').entity;
-const EntityI18NGenerator = require('../../generators/entity-i18n');
-const constants = require('../../generators/generator-constants');
-const { MapperTypes, ServiceTypes, PaginationTypes } = require('../../jdl/jhipster/entity-options');
+const EntityI18NGenerator = require('../../src/generators/entity-i18n');
+const constants = require('../../src/generators/generator-constants');
+const { MapperTypes, ServiceTypes, PaginationTypes } = require('../../src/jdl/jhipster/entity-options');
 
 const NO_SERVICE = ServiceTypes.NO;
 const NO_PAGINATION = PaginationTypes.NO;

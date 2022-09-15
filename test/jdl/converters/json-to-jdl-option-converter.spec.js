@@ -20,10 +20,10 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const { convertServerOptionsToJDL } = require('../../../jdl/converters/json-to-jdl-option-converter');
-const JDLObject = require('../../../jdl/models/jdl-object');
-const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
-const { SKIP_CLIENT } = require('../../../jdl/jhipster/unary-options');
+const { convertServerOptionsToJDL } = require('../../../src/jdl/converters/json-to-jdl-option-converter');
+const JDLObject = require('../../../src/jdl/models/jdl-object');
+const JDLUnaryOption = require('../../../src/jdl/models/jdl-unary-option');
+const { SKIP_CLIENT } = require('../../../src/jdl/jhipster/unary-options');
 
 describe('JSONToJDLOptionConverter', () => {
   describe('convertToServerOptions', () => {

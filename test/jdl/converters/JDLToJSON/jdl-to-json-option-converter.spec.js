@@ -25,14 +25,14 @@ const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const { expect } = require('chai');
 
-const JDLObject = require('../../../../jdl/models/jdl-object');
-const JDLEntity = require('../../../../jdl/models/jdl-entity');
-const JDLUnaryOption = require('../../../../jdl/models/jdl-unary-option');
-const JDLBinaryOption = require('../../../../jdl/models/jdl-binary-option');
-const UnaryOptions = require('../../../../jdl/jhipster/unary-options');
-const BinaryOptions = require('../../../../jdl/jhipster/binary-options');
-const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-option-converter');
-const logger = require('../../../../jdl/utils/objects/logger');
+const JDLObject = require('../../../../src/jdl/models/jdl-object');
+const JDLEntity = require('../../../../src/jdl/models/jdl-entity');
+const JDLUnaryOption = require('../../../../src/jdl/models/jdl-unary-option');
+const JDLBinaryOption = require('../../../../src/jdl/models/jdl-binary-option');
+const UnaryOptions = require('../../../../src/jdl/jhipster/unary-options');
+const BinaryOptions = require('../../../../src/jdl/jhipster/binary-options');
+const { convert } = require('../../../../src/jdl/converters/jdl-to-json/jdl-to-json-option-converter');
+const logger = require('../../../../src/jdl/utils/objects/logger');
 
 describe('JDLToJSONOptionConverter', () => {
   describe('convert', () => {

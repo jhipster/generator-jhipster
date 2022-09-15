@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const { NAME, KEYWORD } = require('../../../../jdl/parsing/lexer/shared-tokens');
-const { createTokenFromConfig } = require('../../../../jdl/parsing/lexer/token-creator');
+const { NAME, KEYWORD } = require('../../../../src/jdl/parsing/lexer/shared-tokens');
+const { createTokenFromConfig } = require('../../../../src/jdl/parsing/lexer/token-creator');
 
 describe('TokenCreator', () => {
   describe('createTokenFromConfig', () => {

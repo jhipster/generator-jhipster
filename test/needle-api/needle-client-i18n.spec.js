@@ -2,8 +2,8 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
-const LanguagesGenerator = require('../../generators/languages');
-const constants = require('../../generators/generator-constants');
+const LanguagesGenerator = require('../../src/generators/languages');
+const constants = require('../../src/generators/generator-constants');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;

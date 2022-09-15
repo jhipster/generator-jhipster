@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const { JDLLexer } = require('../../../jdl/parsing/lexer/lexer');
+const { JDLLexer } = require('../../../src/jdl/parsing/lexer/lexer');
 
 describe('JDLLexer', () => {
   context('when passing a valid JDL input', () => {

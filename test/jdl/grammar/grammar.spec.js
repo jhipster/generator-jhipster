@@ -21,12 +21,12 @@
 
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
-const { parseFromContent } = require('../../../jdl/readers/jdl-reader');
-const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../../jdl/jhipster/relationship-types');
-const { MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN, REQUIRED, UNIQUE } = require('../../../jdl/jhipster/validations');
-const { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED } = require('../../../jdl/jhipster/unary-options');
+const { parseFromContent } = require('../../../src/jdl/readers/jdl-reader');
+const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../../src/jdl/jhipster/relationship-types');
+const { MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN, REQUIRED, UNIQUE } = require('../../../src/jdl/jhipster/validations');
+const { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED } = require('../../../src/jdl/jhipster/unary-options');
 
-const { Options, Values, OptionValues } = require('../../../jdl/jhipster/binary-options');
+const { Options, Values, OptionValues } = require('../../../src/jdl/jhipster/binary-options');
 
 const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX, MICROSERVICE } = Options;
 

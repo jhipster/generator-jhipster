@@ -21,11 +21,11 @@
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 
-const JDLOptions = require('../../../jdl/models/jdl-options');
-const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
-const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
-const UnaryOptions = require('../../../jdl/jhipster/unary-options');
-const BinaryOptions = require('../../../jdl/jhipster/binary-options');
+const JDLOptions = require('../../../src/jdl/models/jdl-options');
+const JDLUnaryOption = require('../../../src/jdl/models/jdl-unary-option');
+const JDLBinaryOption = require('../../../src/jdl/models/jdl-binary-option');
+const UnaryOptions = require('../../../src/jdl/jhipster/unary-options');
+const BinaryOptions = require('../../../src/jdl/jhipster/binary-options');
 
 describe('JDLOptions', () => {
   describe('addOption', () => {

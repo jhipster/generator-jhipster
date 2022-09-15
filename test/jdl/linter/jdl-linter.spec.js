@@ -23,7 +23,7 @@ const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const { writeFileSync, unlinkSync } = require('fs');
 const path = require('path');
-const { createJDLLinterFromFile, createJDLLinterFromContent } = require('../../../jdl/linters/jdl-linter');
+const { createJDLLinterFromFile, createJDLLinterFromContent } = require('../../../src/jdl/linters/jdl-linter');
 
 describe('JDLLinter', () => {
   describe('createJDLLinterFromFile', () => {

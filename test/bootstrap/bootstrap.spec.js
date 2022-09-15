@@ -1,5 +1,5 @@
 const { dryRunHelpers: helpers } = require('../utils/utils');
-const GeneratorBase = require('../../generators/generator-base');
+const GeneratorBase = require('../../src/generators/generator-base');
 
 const MockedGenerator = class extends GeneratorBase {
   get install() {

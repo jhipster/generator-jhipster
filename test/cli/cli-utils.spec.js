@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const cliUtil = require('../../cli/utils');
+const cliUtil = require('../../src/cli/utils');
 
 describe('jhipster cli utils test', () => {
   describe('toString', () => {

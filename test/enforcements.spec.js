@@ -27,7 +27,7 @@ const {
   GENERATOR_ENTITY_I_18_N,
   GENERATOR_ENTITY_CLIENT,
   GENERATOR_ENTITIES_CLIENT,
-} = require('../generators/generator-list');
+} = require('../src/generators/generator-list');
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 

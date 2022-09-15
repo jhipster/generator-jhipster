@@ -1,12 +1,12 @@
 const { expect } = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
-const { CYPRESS } = require('../jdl/jhipster/test-framework-types');
-const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
+const { CYPRESS } = require('../src/jdl/jhipster/test-framework-types');
+const { ANGULAR, REACT, VUE } = require('../src/jdl/jhipster/client-framework-types');
 const { skipPrettierHelpers: helpers } = require('./utils/utils');
 const expectedFiles = require('./utils/expected-files');
-const constants = require('../generators/generator-constants');
-const { appDefaultConfig } = require('../generators/generator-defaults');
+const constants = require('../src/generators/generator-constants');
+const { appDefaultConfig } = require('../src/generators/generator-defaults');
 
 const { CLIENT_TEST_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
 

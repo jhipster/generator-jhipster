@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
-const UnaryOptions = require('../../../jdl/jhipster/unary-options');
+const UnaryOptions = require('../../../src/jdl/jhipster/unary-options');
 
 describe('UnaryOptions', () => {
   describe('exists', () => {

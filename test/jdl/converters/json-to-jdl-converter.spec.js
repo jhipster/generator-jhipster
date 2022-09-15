@@ -22,7 +22,7 @@ const fs = require('fs');
 const path = require('path');
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
-const { convertToJDL, convertSingleContentToJDL } = require('../../../jdl/converters/json-to-jdl-converter');
+const { convertToJDL, convertSingleContentToJDL } = require('../../../src/jdl/converters/json-to-jdl-converter');
 
 describe('JSONToJDLConverter', () => {
   describe('convertToJDL', () => {

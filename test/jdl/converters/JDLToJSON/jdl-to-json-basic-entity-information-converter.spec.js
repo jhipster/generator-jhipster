@@ -26,9 +26,9 @@ const { expect } = require('chai');
 
 chai.use(sinonChai);
 
-const JDLEntity = require('../../../../jdl/models/jdl-entity');
-const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-basic-entity-converter');
-const logger = require('../../../../jdl/utils/objects/logger');
+const JDLEntity = require('../../../../src/jdl/models/jdl-entity');
+const { convert } = require('../../../../src/jdl/converters/jdl-to-json/jdl-to-json-basic-entity-converter');
+const logger = require('../../../../src/jdl/utils/objects/logger');
 
 describe('JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {

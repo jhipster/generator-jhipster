@@ -20,10 +20,10 @@
 
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
-const JDLRelationship = require('../../../../jdl/models/jdl-relationship');
-const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-relationship-converter');
-const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../../../jdl/jhipster/relationship-types');
-const { JPA_DERIVED_IDENTIFIER } = require('../../../../jdl/jhipster/relationship-options');
+const JDLRelationship = require('../../../../src/jdl/models/jdl-relationship');
+const { convert } = require('../../../../src/jdl/converters/jdl-to-json/jdl-to-json-relationship-converter');
+const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../../../src/jdl/jhipster/relationship-types');
+const { JPA_DERIVED_IDENTIFIER } = require('../../../../src/jdl/jhipster/relationship-options');
 
 describe('JDLToJSONRelationshipConverter', () => {
   describe('convert', () => {

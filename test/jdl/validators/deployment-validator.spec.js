@@ -18,11 +18,11 @@
  */
 
 const { expect } = require('chai');
-const { Options } = require('../../../jdl/jhipster/deployment-options');
-const { MICROSERVICE } = require('../../../jdl/jhipster/application-types');
-const { MONGODB, NO } = require('../../../jdl/jhipster/database-types');
-const SearchEngineTypes = require('../../../jdl/jhipster/search-engine-types');
-const DeploymentValidator = require('../../../jdl/validators/deployment-validator');
+const { Options } = require('../../../src/jdl/jhipster/deployment-options');
+const { MICROSERVICE } = require('../../../src/jdl/jhipster/application-types');
+const { MONGODB, NO } = require('../../../src/jdl/jhipster/database-types');
+const SearchEngineTypes = require('../../../src/jdl/jhipster/search-engine-types');
+const DeploymentValidator = require('../../../src/jdl/validators/deployment-validator');
 
 describe('DeploymentValidator', () => {
   let validator;

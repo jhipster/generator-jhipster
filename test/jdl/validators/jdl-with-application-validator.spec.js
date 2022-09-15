@@ -18,20 +18,20 @@
  */
 
 const { expect } = require('chai');
-const ApplicationTypes = require('../../../jdl/jhipster/application-types');
-const BinaryOptions = require('../../../jdl/jhipster/binary-options');
-const DatabaseTypes = require('../../../jdl/jhipster/database-types');
-const FieldTypes = require('../../../jdl/jhipster/field-types');
-const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
-const Validations = require('../../../jdl/jhipster/validations');
-const JDLObject = require('../../../jdl/models/jdl-object');
-const { createJDLApplication } = require('../../../jdl/models/jdl-application-factory');
-const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
-const JDLEntity = require('../../../jdl/models/jdl-entity');
-const JDLField = require('../../../jdl/models/jdl-field');
-const JDLRelationship = require('../../../jdl/models/jdl-relationship');
-const JDLValidation = require('../../../jdl/models/jdl-validation');
-const { createValidator } = require('../../../jdl/validators/jdl-with-application-validator');
+const ApplicationTypes = require('../../../src/jdl/jhipster/application-types');
+const BinaryOptions = require('../../../src/jdl/jhipster/binary-options');
+const DatabaseTypes = require('../../../src/jdl/jhipster/database-types');
+const FieldTypes = require('../../../src/jdl/jhipster/field-types');
+const RelationshipTypes = require('../../../src/jdl/jhipster/relationship-types');
+const Validations = require('../../../src/jdl/jhipster/validations');
+const JDLObject = require('../../../src/jdl/models/jdl-object');
+const { createJDLApplication } = require('../../../src/jdl/models/jdl-application-factory');
+const JDLBinaryOption = require('../../../src/jdl/models/jdl-binary-option');
+const JDLEntity = require('../../../src/jdl/models/jdl-entity');
+const JDLField = require('../../../src/jdl/models/jdl-field');
+const JDLRelationship = require('../../../src/jdl/models/jdl-relationship');
+const JDLValidation = require('../../../src/jdl/models/jdl-validation');
+const { createValidator } = require('../../../src/jdl/validators/jdl-with-application-validator');
 
 describe('JDLWithApplicationValidator', () => {
   describe('createValidator', () => {

@@ -2,7 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
-const EnvironmentBuilder = require('../../cli/environment-builder');
+const EnvironmentBuilder = require('../../src/cli/environment-builder');
 
 describe('JHipster application generator with blueprint with constructor error', () => {
   describe('generate monolith application with scoped blueprint', () => {

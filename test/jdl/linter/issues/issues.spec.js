@@ -18,13 +18,13 @@
  */
 
 const expect = require('chai').expect;
-const Issues = require('../../../../jdl/linters/issues/issues');
-const Rules = require('../../../../jdl/linters/rules');
-const RelationshipTypes = require('../../../../jdl/jhipster/relationship-types');
-const EntityIssue = require('../../../../jdl/linters/issues/entity-issue');
-const FieldIssue = require('../../../../jdl/linters/issues/field-issue');
-const EnumIssue = require('../../../../jdl/linters/issues/enum-issue');
-const RelationshipIssue = require('../../../../jdl/linters/issues/relationship-issue');
+const Issues = require('../../../../src/jdl/linters/issues/issues');
+const Rules = require('../../../../src/jdl/linters/rules');
+const RelationshipTypes = require('../../../../src/jdl/jhipster/relationship-types');
+const EntityIssue = require('../../../../src/jdl/linters/issues/entity-issue');
+const FieldIssue = require('../../../../src/jdl/linters/issues/field-issue');
+const EnumIssue = require('../../../../src/jdl/linters/issues/enum-issue');
+const RelationshipIssue = require('../../../../src/jdl/linters/issues/relationship-issue');
 
 describe('Issues', () => {
   describe('getNumberOfIssues', () => {

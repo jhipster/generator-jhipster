@@ -21,9 +21,9 @@
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 
-const JDLRelationship = require('../../../jdl/models/jdl-relationship');
-const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
-const JDLRelationships = require('../../../jdl/models/jdl-relationships');
+const JDLRelationship = require('../../../src/jdl/models/jdl-relationship');
+const RelationshipTypes = require('../../../src/jdl/jhipster/relationship-types');
+const JDLRelationships = require('../../../src/jdl/models/jdl-relationships');
 
 describe('JDLRelationships', () => {
   describe('add', () => {

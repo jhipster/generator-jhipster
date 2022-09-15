@@ -19,8 +19,8 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
 
-const EnvironmentBuilder = require('../../cli/environment-builder');
-const BaseGenerator = require('../../generators/generator-base');
+const EnvironmentBuilder = require('../../src/cli/environment-builder');
+const BaseGenerator = require('../../src/generators/generator-base');
 
 const { prepareTempDir } = require('../utils/utils');
 

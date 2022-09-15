@@ -2,11 +2,11 @@ const { expect } = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const { SQL, H2_MEMORY, POSTGRESQL } = require('../jdl/jhipster/database-types');
-const { ANGULAR, REACT } = require('../jdl/jhipster/client-framework-types');
-const { JWT } = require('../jdl/jhipster/authentication-types');
-const { EHCACHE } = require('../jdl/jhipster/cache-types');
-const { MAVEN } = require('../jdl/jhipster/build-tool-types');
+const { SQL, H2_MEMORY, POSTGRESQL } = require('../src/jdl/jhipster/database-types');
+const { ANGULAR, REACT } = require('../src/jdl/jhipster/client-framework-types');
+const { JWT } = require('../src/jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../src/jdl/jhipster/cache-types');
+const { MAVEN } = require('../src/jdl/jhipster/build-tool-types');
 
 const outputPathCustomizer = paths => (paths ? paths.replace(/^src\/main\/webapp([$/])/, 'src/main/webapp2$1') : undefined);
 

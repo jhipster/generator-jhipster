@@ -19,9 +19,9 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const JDLApplicationConfiguration = require('../../../jdl/models/jdl-application-configuration');
-const StringJDLApplicationConfigurationOption = require('../../../jdl/models/string-jdl-application-configuration-option');
-const { OptionNames } = require('../../../jdl/jhipster/application-options');
+const JDLApplicationConfiguration = require('../../../src/jdl/models/jdl-application-configuration');
+const StringJDLApplicationConfigurationOption = require('../../../src/jdl/models/string-jdl-application-configuration-option');
+const { OptionNames } = require('../../../src/jdl/jhipster/application-options');
 
 describe('JDLApplicationConfiguration', () => {
   describe('hasOption', () => {

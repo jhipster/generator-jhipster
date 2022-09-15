@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const EntityIssue = require('../../../../jdl/linters/issues/entity-issue');
+const EntityIssue = require('../../../../src/jdl/linters/issues/entity-issue');
 
 describe('EntityIssue', () => {
   describe('new', () => {

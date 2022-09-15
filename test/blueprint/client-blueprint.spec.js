@@ -2,11 +2,11 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
-const ClientGenerator = require('../../generators/client');
-const { MYSQL } = require('../../jdl/jhipster/database-types');
-const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const ClientGenerator = require('../../src/generators/client');
+const { MYSQL } = require('../../src/jdl/jhipster/database-types');
+const { ANGULAR } = require('../../src/jdl/jhipster/client-framework-types');
+const { JWT } = require('../../src/jdl/jhipster/authentication-types');
+const { MAVEN } = require('../../src/jdl/jhipster/build-tool-types');
 
 const MockedClientGenerator = class MockedClientGenerator extends ClientGenerator {
   constructor(args, opts) {

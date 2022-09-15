@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
-const JDLEnum = require('../../../jdl/models/jdl-enum');
+const JDLEnum = require('../../../src/jdl/models/jdl-enum');
 
 describe('JDLEnum', () => {
   describe('new', () => {

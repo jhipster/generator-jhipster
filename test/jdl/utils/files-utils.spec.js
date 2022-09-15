@@ -22,7 +22,7 @@
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
-const { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } = require('../../../jdl/utils/file-utils');
+const { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } = require('../../../src/jdl/utils/file-utils');
 
 describe('FileUtils', () => {
   describe('doesFileExist', () => {

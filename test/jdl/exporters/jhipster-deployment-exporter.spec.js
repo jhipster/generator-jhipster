@@ -23,9 +23,9 @@ const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
-const JHipsterDeploymentExporter = require('../../../jdl/exporters/jhipster-deployment-exporter');
-const JDLDeployment = require('../../../jdl/models/jdl-deployment');
-const { DeploymentTypes } = require('../../../jdl/jhipster/deployment-options');
+const JHipsterDeploymentExporter = require('../../../src/jdl/exporters/jhipster-deployment-exporter');
+const JDLDeployment = require('../../../src/jdl/models/jdl-deployment');
+const { DeploymentTypes } = require('../../../src/jdl/jhipster/deployment-options');
 
 const { DOCKERCOMPOSE, KUBERNETES } = DeploymentTypes;
 

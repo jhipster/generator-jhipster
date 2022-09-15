@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('expect');
-const { convertEnums } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/enum-converter');
+const { convertEnums } = require('../../../../src/jdl/converters/parsed-jdl-to-jdl-object/enum-converter');
 
 describe('EnumConverter', () => {
   describe('convertEnums', () => {

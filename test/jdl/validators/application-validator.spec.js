@@ -25,20 +25,20 @@ const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const { expect } = chai;
 
-const ApplicationValidator = require('../../../jdl/validators/application-validator');
+const ApplicationValidator = require('../../../src/jdl/validators/application-validator');
 
-const { OptionNames, OptionValues } = require('../../../jdl/jhipster/application-options');
-const { SPRING_WEBSOCKET } = require('../../../jdl/jhipster/websocket-types');
-const { MAVEN } = require('../../../jdl/jhipster/build-tool-types');
-const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../../jdl/jhipster/application-types');
-const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } = require('../../../jdl/jhipster/database-types');
-const { JWT } = require('../../../jdl/jhipster/authentication-types');
-const { READ_ONLY } = require('../../../jdl/jhipster/unary-options');
-const BinaryOptions = require('../../../jdl/jhipster/binary-options');
-const JDLApplication = require('../../../jdl/models/jdl-application');
-const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
-const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
-const logger = require('../../../jdl/utils/objects/logger');
+const { OptionNames, OptionValues } = require('../../../src/jdl/jhipster/application-options');
+const { SPRING_WEBSOCKET } = require('../../../src/jdl/jhipster/websocket-types');
+const { MAVEN } = require('../../../src/jdl/jhipster/build-tool-types');
+const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../../src/jdl/jhipster/application-types');
+const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } = require('../../../src/jdl/jhipster/database-types');
+const { JWT } = require('../../../src/jdl/jhipster/authentication-types');
+const { READ_ONLY } = require('../../../src/jdl/jhipster/unary-options');
+const BinaryOptions = require('../../../src/jdl/jhipster/binary-options');
+const JDLApplication = require('../../../src/jdl/models/jdl-application');
+const JDLUnaryOption = require('../../../src/jdl/models/jdl-unary-option');
+const JDLBinaryOption = require('../../../src/jdl/models/jdl-binary-option');
+const logger = require('../../../src/jdl/utils/objects/logger');
 
 describe('ApplicationValidator', () => {
   let validator;

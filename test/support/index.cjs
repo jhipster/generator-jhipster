@@ -3,8 +3,8 @@ const path = require('path');
 const sinon = require('sinon');
 const { existsSync } = require('fs');
 
-const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
-const { skipPrettierHelpers: helpers } = require('../utils/utils');
+const { GENERATOR_JHIPSTER } = require('../../src/generators/generator-constants');
+const { skipPrettierHelpers: helpers } = require('../../src/utils');
 const {
   BASE_PRIORITY_NAMES,
   BASE_ENTITY_PRIORITY_NAMES,

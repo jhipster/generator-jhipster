@@ -6,7 +6,7 @@ const sinon = require('sinon');
 const ChildProcess = require('child_process');
 const { expect } = require('expect');
 
-const constants = require('../generators/generator-constants');
+const constants = require('../src/generators/generator-constants');
 
 const expectedFiles = {
   monolith: [

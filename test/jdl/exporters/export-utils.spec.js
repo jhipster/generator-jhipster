@@ -21,7 +21,7 @@
 const { expect } = require('expect');
 const path = require('path');
 const { readFileSync, unlinkSync, writeFileSync } = require('fs');
-const { writeConfigFile } = require('../../../jdl/exporters/export-utils');
+const { writeConfigFile } = require('../../../src/jdl/exporters/export-utils');
 
 describe('ExportUtils', () => {
   describe('writeConfigFile', () => {

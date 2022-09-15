@@ -6,11 +6,11 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const Environment = require('yeoman-environment');
 
-const Base = require('../generators/generator-base');
+const Base = require('../src/generators/generator-base');
 const { testInTempDir, revertTempDir } = require('./utils/utils');
-const { parseLiquibaseChangelogDate } = require('../utils/liquibase');
-const { H2_MEMORY, H2_DISK, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = require('../jdl/jhipster/database-types');
-const { GENERATOR_COMMON } = require('../generators/generator-list');
+const { parseLiquibaseChangelogDate } = require('../src/utils/liquibase');
+const { H2_MEMORY, H2_DISK, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = require('../src/jdl/jhipster/database-types');
+const { GENERATOR_COMMON } = require('../src/generators/generator-list');
 
 const BaseGenerator = Base.prototype;
 

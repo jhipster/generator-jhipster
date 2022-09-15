@@ -6,7 +6,7 @@ const fse = require('fs-extra');
 const { expect } = require('expect');
 const packageJson = require('../package.json');
 const { prepareTempDir } = require('./utils/utils');
-const { escapeRegExp } = require('../generators/utils');
+const { escapeRegExp } = require('../src/generators/utils');
 
 describe('JHipster upgrade generator', function () {
   this.timeout(400000);

@@ -20,7 +20,7 @@
 const { expect: jestExpect } = require('expect');
 const fs = require('fs');
 const { expect } = require('chai');
-const FileReader = require('../../../jdl/readers/file-reader');
+const FileReader = require('../../../src/jdl/readers/file-reader');
 
 describe('FileReader', () => {
   describe('readFile', () => {

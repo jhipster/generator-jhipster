@@ -2,7 +2,7 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
 const { copyTemplateBlueprints } = require('./utils/utils');
-const EnvironmentBuilder = require('../cli/environment-builder');
+const EnvironmentBuilder = require('../src/cli/environment-builder');
 
 describe('JHipster generator', () => {
   context('Default configuration with', () => {

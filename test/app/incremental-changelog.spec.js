@@ -4,8 +4,8 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
 const expectedFiles = require('../utils/expected-files');
-const { SERVER_MAIN_RES_DIR } = require('../../generators/generator-constants');
-const { createImporterFromContent } = require('../../jdl/jdl-importer');
+const { SERVER_MAIN_RES_DIR } = require('../../src/generators/generator-constants');
+const { createImporterFromContent } = require('../../src/jdl/jdl-importer');
 
 const incrementalFiles = [
   `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,

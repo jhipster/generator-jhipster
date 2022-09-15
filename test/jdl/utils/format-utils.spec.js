@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const { formatComment } = require('../../../jdl/utils/format-utils');
+const { formatComment } = require('../../../src/jdl/utils/format-utils');
 
 describe('FormatUtils', () => {
   describe('formatComment', () => {

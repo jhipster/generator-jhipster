@@ -21,7 +21,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const { lowerFirst, camelCase, upperFirst } = require('../../../jdl/utils/string-utils');
+const { lowerFirst, camelCase, upperFirst } = require('../../../src/jdl/utils/string-utils');
 
 describe('StringUtils', () => {
   describe('camelCase', () => {

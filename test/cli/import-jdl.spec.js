@@ -3,7 +3,7 @@ const proxyquire = require('proxyquire');
 const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const expect = require('chai').expect;
-const utils = require('../../cli/utils');
+const utils = require('../../src/cli/utils');
 
 const { testInTempDir, revertTempDir } = require('../utils/utils');
 

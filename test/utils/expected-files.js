@@ -1,4 +1,4 @@
-const constants = require('../../generators/generator-constants');
+const constants = require('../../src/generators/generator-constants');
 
 const {
   TEST_DIR,

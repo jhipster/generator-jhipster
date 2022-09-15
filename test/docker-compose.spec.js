@@ -1,9 +1,9 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const { expect } = require('expect');
-const monitoringTypes = require('../jdl/jhipster/monitoring-types');
-const { MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
-const { PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
+const monitoringTypes = require('../src/jdl/jhipster/monitoring-types');
+const { MICROSERVICE, MONOLITH } = require('../src/jdl/jhipster/application-types');
+const { PROMETHEUS } = require('../src/jdl/jhipster/monitoring-types');
 const { createMockedConfig } = require('./support/mock-config.cjs');
 
 const NO_MONITORING = monitoringTypes.NO;

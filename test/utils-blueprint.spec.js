@@ -1,5 +1,5 @@
 const assert = require('yeoman-assert');
-const utils = require('../utils/blueprint');
+const utils = require('../src/utils/blueprint');
 
 describe('JHipster Blueprint Utils', () => {
   describe('::parseBluePrints', () => {

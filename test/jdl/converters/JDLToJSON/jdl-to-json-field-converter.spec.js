@@ -19,14 +19,24 @@
 
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
-const JDLObject = require('../../../../jdl/models/jdl-object');
-const JDLEntity = require('../../../../jdl/models/jdl-entity');
-const JDLField = require('../../../../jdl/models/jdl-field');
-const JDLEnum = require('../../../../jdl/models/jdl-enum');
-const JDLValidation = require('../../../../jdl/models/jdl-validation');
-const { CommonDBTypes } = require('../../../../jdl/jhipster/field-types');
-const { MINBYTES, PATTERN, MAXLENGTH, UNIQUE, REQUIRED, MAXBYTES, MINLENGTH, MIN, MAX } = require('../../../../jdl/jhipster/validations');
-const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-field-converter');
+const JDLObject = require('../../../../src/jdl/models/jdl-object');
+const JDLEntity = require('../../../../src/jdl/models/jdl-entity');
+const JDLField = require('../../../../src/jdl/models/jdl-field');
+const JDLEnum = require('../../../../src/jdl/models/jdl-enum');
+const JDLValidation = require('../../../../src/jdl/models/jdl-validation');
+const { CommonDBTypes } = require('../../../../src/jdl/jhipster/field-types');
+const {
+  MINBYTES,
+  PATTERN,
+  MAXLENGTH,
+  UNIQUE,
+  REQUIRED,
+  MAXBYTES,
+  MINLENGTH,
+  MIN,
+  MAX,
+} = require('../../../../src/jdl/jhipster/validations');
+const { convert } = require('../../../../src/jdl/converters/jdl-to-json/jdl-to-json-field-converter');
 
 describe('JDLToJSONFieldConverter', () => {
   describe('convert', () => {

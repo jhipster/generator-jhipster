@@ -21,7 +21,7 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const ApplicationTypes = require('../../../jdl/jhipster/application-types');
+const ApplicationTypes = require('../../../src/jdl/jhipster/application-types');
 
 describe('ApplicationTypes', () => {
   describe('exists', () => {

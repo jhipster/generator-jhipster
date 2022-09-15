@@ -2,8 +2,8 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
-const SpringServiceGenerator = require('../../generators/spring-service');
-const constants = require('../../generators/generator-constants');
+const SpringServiceGenerator = require('../../src/generators/spring-service');
+const constants = require('../../src/generators/generator-constants');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 

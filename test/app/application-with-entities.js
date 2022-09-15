@@ -1,7 +1,7 @@
 const assert = require('yeoman-assert');
 const { createEnv } = require('yeoman-environment');
 const { dryRunHelpers: helpers } = require('../utils/utils');
-const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
+const { CommonDBTypes } = require('../../src/jdl/jhipster/field-types');
 
 const { UUID } = CommonDBTypes;
 const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:client', 'jhipster:languages', 'jhipster:entities'];

@@ -1,9 +1,9 @@
 const { expect } = require('expect');
 const path = require('path');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
-const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
-const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
-const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
+const { OAUTH2 } = require('../../src/jdl/jhipster/authentication-types');
+const { MICROSERVICE } = require('../../src/jdl/jhipster/application-types');
+const { ANGULAR } = require('../../src/jdl/jhipster/client-framework-types');
 
 const commonOptions = { clientFramework: ANGULAR };
 

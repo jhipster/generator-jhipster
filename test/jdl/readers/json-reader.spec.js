@@ -22,8 +22,8 @@ const { renameSync } = require('fs');
 const { join } = require('path');
 const { expect } = require('chai');
 
-const JSONReader = require('../../../jdl/readers/json-reader');
-const { SKIP_CLIENT, SKIP_SERVER } = require('../../../jdl/jhipster/unary-options');
+const JSONReader = require('../../../src/jdl/readers/json-reader');
+const { SKIP_CLIENT, SKIP_SERVER } = require('../../../src/jdl/jhipster/unary-options');
 
 describe('JSONReader', () => {
   describe('parseFromDir', () => {

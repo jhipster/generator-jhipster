@@ -1,5 +1,5 @@
 const assert = require('yeoman-assert');
-const { requiredDefaultConfig, defaultConfig } = require('../generators/generator-defaults');
+const { requiredDefaultConfig, defaultConfig } = require('../src/generators/generator-defaults');
 
 const { skipPrettierHelpers } = require('./utils/utils');
 

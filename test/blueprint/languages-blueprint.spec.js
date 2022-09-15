@@ -3,7 +3,7 @@ const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
-const LanguagesGenerator = require('../../generators/languages');
+const LanguagesGenerator = require('../../src/generators/languages');
 
 const mockBlueprintSubGen = class extends LanguagesGenerator {
   constructor(args, opts) {

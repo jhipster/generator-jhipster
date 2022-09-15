@@ -21,20 +21,20 @@
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 
-const { MONOLITH } = require('../../../jdl/jhipster/application-types');
-const BinaryOptions = require('../../../jdl/jhipster/binary-options');
-const UnaryOptions = require('../../../jdl/jhipster/unary-options');
-const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
-const JDLObject = require('../../../jdl/models/jdl-object');
-const { createJDLApplication } = require('../../../jdl/models/jdl-application-factory');
-const JDLDeployment = require('../../../jdl/models/jdl-deployment');
-const JDLEntity = require('../../../jdl/models/jdl-entity');
-const JDLField = require('../../../jdl/models/jdl-field');
-const JDLValidation = require('../../../jdl/models/jdl-validation');
-const JDLEnum = require('../../../jdl/models/jdl-enum');
-const JDLRelationship = require('../../../jdl/models/jdl-relationship');
-const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
-const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
+const { MONOLITH } = require('../../../src/jdl/jhipster/application-types');
+const BinaryOptions = require('../../../src/jdl/jhipster/binary-options');
+const UnaryOptions = require('../../../src/jdl/jhipster/unary-options');
+const RelationshipTypes = require('../../../src/jdl/jhipster/relationship-types');
+const JDLObject = require('../../../src/jdl/models/jdl-object');
+const { createJDLApplication } = require('../../../src/jdl/models/jdl-application-factory');
+const JDLDeployment = require('../../../src/jdl/models/jdl-deployment');
+const JDLEntity = require('../../../src/jdl/models/jdl-entity');
+const JDLField = require('../../../src/jdl/models/jdl-field');
+const JDLValidation = require('../../../src/jdl/models/jdl-validation');
+const JDLEnum = require('../../../src/jdl/models/jdl-enum');
+const JDLRelationship = require('../../../src/jdl/models/jdl-relationship');
+const JDLUnaryOption = require('../../../src/jdl/models/jdl-unary-option');
+const JDLBinaryOption = require('../../../src/jdl/models/jdl-binary-option');
 
 describe('JDLObject', () => {
   describe('addApplication', () => {

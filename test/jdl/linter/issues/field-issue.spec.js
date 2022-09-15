@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const FieldIssue = require('../../../../jdl/linters/issues/field-issue');
+const FieldIssue = require('../../../../src/jdl/linters/issues/field-issue');
 
 describe('FieldIssue', () => {
   describe('new', () => {

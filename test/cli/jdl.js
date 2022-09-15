@@ -8,9 +8,9 @@ const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 const sinon = require('sinon');
 
 const { testInTempDir, revertTempDir } = require('../utils/utils');
-const { buildJHipster } = require('../../cli/program');
+const { buildJHipster } = require('../../src/cli/program');
 const packageJson = require('../../package.json');
-const cliUtils = require('../../cli/utils');
+const cliUtils = require('../../src/cli/utils');
 
 const { logger } = cliUtils;
 

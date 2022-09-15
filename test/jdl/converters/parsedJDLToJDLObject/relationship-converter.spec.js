@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('expect');
-const { convertRelationships } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/relationship-converter');
+const { convertRelationships } = require('../../../../src/jdl/converters/parsed-jdl-to-jdl-object/relationship-converter');
 
 describe('RelationshipConverter', () => {
   describe('convertRelationships', () => {

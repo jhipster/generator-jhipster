@@ -20,7 +20,7 @@
 /* eslint-disable no-new,no-unused-expressions */
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
-const JSONEntity = require('../../../jdl/jhipster/json-entity');
+const JSONEntity = require('../../../src/jdl/jhipster/json-entity');
 
 describe('JSONEntity', () => {
   describe('new', () => {

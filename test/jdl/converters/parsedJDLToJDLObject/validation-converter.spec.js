@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('expect');
-const { convertValidations } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/validation-converter');
+const { convertValidations } = require('../../../../src/jdl/converters/parsed-jdl-to-jdl-object/validation-converter');
 
 describe('ValidationConverter', () => {
   describe('convertValidations', () => {

@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const JDLField = require('../../../jdl/models/jdl-field');
-const FieldValidator = require('../../../jdl/validators/field-validator');
+const JDLField = require('../../../src/jdl/models/jdl-field');
+const FieldValidator = require('../../../src/jdl/validators/field-validator');
 
 describe('FieldValidator', () => {
   let validator;

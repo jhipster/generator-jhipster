@@ -3,10 +3,10 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const Generator = require('yeoman-generator');
 const expectedFiles = require('../utils/expected-files');
-const { MYSQL } = require('../../jdl/jhipster/database-types');
-const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { MYSQL } = require('../../src/jdl/jhipster/database-types');
+const { ANGULAR } = require('../../src/jdl/jhipster/client-framework-types');
+const { JWT } = require('../../src/jdl/jhipster/authentication-types');
+const { MAVEN } = require('../../src/jdl/jhipster/build-tool-types');
 
 const mockBlueprintSubGen = class extends Generator {
   constructor(args, opts) {

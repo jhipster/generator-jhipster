@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('expect');
-const { convertEntities } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/entity-converter');
+const { convertEntities } = require('../../../../src/jdl/converters/parsed-jdl-to-jdl-object/entity-converter');
 
 describe('EntityConverter', () => {
   describe('convertEntities', () => {

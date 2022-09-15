@@ -18,9 +18,9 @@
  */
 
 const { expect } = require('chai');
-const { tokens } = require('../../../jdl/parsing/lexer/lexer');
+const { tokens } = require('../../../src/jdl/parsing/lexer/lexer');
 
-const { getSyntacticAutoCompleteSuggestions, parse } = require('../../../jdl/parsing/api');
+const { getSyntacticAutoCompleteSuggestions, parse } = require('../../../src/jdl/parsing/api');
 
 describe('JDL DSL API', () => {
   context('when wanting an AST', () => {

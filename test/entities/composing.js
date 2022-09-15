@@ -2,8 +2,8 @@ const fse = require('fs-extra');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const { JHIPSTER_CONFIG_DIR } = require('../../generators/generator-constants');
-const { appDefaultConfig, serverDefaultConfig } = require('../../generators/generator-defaults');
+const { JHIPSTER_CONFIG_DIR } = require('../../src/generators/generator-constants');
+const { appDefaultConfig, serverDefaultConfig } = require('../../src/generators/generator-defaults');
 
 const mockedComposedGenerators = ['jhipster:entity-client', 'jhipster:entity-server', 'jhipster:database-changelog'];
 

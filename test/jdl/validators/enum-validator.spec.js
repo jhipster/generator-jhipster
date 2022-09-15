@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const JDLEnum = require('../../../jdl/models/jdl-enum');
-const EnumValidator = require('../../../jdl/validators/enum-validator');
+const JDLEnum = require('../../../src/jdl/models/jdl-enum');
+const EnumValidator = require('../../../src/jdl/validators/enum-validator');
 
 describe('EnumValidator', () => {
   let validator;

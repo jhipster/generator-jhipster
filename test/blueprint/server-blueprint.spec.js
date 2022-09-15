@@ -1,12 +1,12 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
-const ServerGenerator = require('../../generators/server');
-const EnvironmentBuilder = require('../../cli/environment-builder');
-const { MYSQL, SQL, H2_MEMORY } = require('../../jdl/jhipster/database-types');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { EHCACHE } = require('../../jdl/jhipster/cache-types');
+const ServerGenerator = require('../../src/generators/server');
+const EnvironmentBuilder = require('../../src/cli/environment-builder');
+const { MYSQL, SQL, H2_MEMORY } = require('../../src/jdl/jhipster/database-types');
+const { MAVEN } = require('../../src/jdl/jhipster/build-tool-types');
+const { JWT } = require('../../src/jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../../src/jdl/jhipster/cache-types');
 
 const mockBlueprintSubGen = class extends ServerGenerator {
   constructor(args, opts) {

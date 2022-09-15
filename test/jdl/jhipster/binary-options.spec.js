@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
-const BinaryOptions = require('../../../jdl/jhipster/binary-options');
+const BinaryOptions = require('../../../src/jdl/jhipster/binary-options');
 
 describe('BinaryOptions', () => {
   it('should match values', () => {

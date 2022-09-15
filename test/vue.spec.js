@@ -1,20 +1,20 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const constants = require('../generators/generator-constants');
+const constants = require('../src/generators/generator-constants');
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const CLIENT_SPEC_SRC_DIR = `${CLIENT_TEST_SRC_DIR}spec/`;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
-const { MONOLITH } = require('../jdl/jhipster/application-types');
-const { VUE } = require('../jdl/jhipster/client-framework-types');
-const { JWT, OAUTH2, SESSION } = require('../jdl/jhipster/authentication-types');
-const { EHCACHE } = require('../jdl/jhipster/cache-types');
-const { PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
-const { SQL, H2_DISK, POSTGRESQL } = require('../jdl/jhipster/database-types');
-const { MAVEN, GRADLE } = require('../jdl/jhipster/build-tool-types');
+const { MONOLITH } = require('../src/jdl/jhipster/application-types');
+const { VUE } = require('../src/jdl/jhipster/client-framework-types');
+const { JWT, OAUTH2, SESSION } = require('../src/jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../src/jdl/jhipster/cache-types');
+const { PROTRACTOR, CYPRESS } = require('../src/jdl/jhipster/test-framework-types');
+const { SQL, H2_DISK, POSTGRESQL } = require('../src/jdl/jhipster/database-types');
+const { MAVEN, GRADLE } = require('../src/jdl/jhipster/build-tool-types');
 
 const expectedFiles = {
   i18n: [

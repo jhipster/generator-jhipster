@@ -2,7 +2,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const helpers = require('yeoman-test');
 
-const { SERVER_MAIN_RES_DIR } = require('../../generators/generator-constants');
+const { SERVER_MAIN_RES_DIR } = require('../../src/generators/generator-constants');
 const { createMockedConfig } = require('../support/mock-config.cjs');
 
 describe('jhipster:entity database changelogs', () => {

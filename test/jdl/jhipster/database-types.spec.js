@@ -31,7 +31,7 @@ const {
   ORACLE,
   POSTGRESQL,
   SQL,
-} = require('../../../jdl/jhipster/database-types');
+} = require('../../../src/jdl/jhipster/database-types');
 
 describe('DatabaseTypes', () => {
   describe('isSql', () => {

@@ -22,15 +22,15 @@ const { expect } = require('chai');
 const { expect: jestExpect } = require('expect');
 
 const fs = require('fs');
-const JDLObject = require('../../../jdl/models/jdl-object');
-const JDLEntity = require('../../../jdl/models/jdl-entity');
-const JDLExporter = require('../../../jdl/exporters/jdl-exporter');
-const JDLApplication = require('../../../jdl/models/jdl-application');
+const JDLObject = require('../../../src/jdl/models/jdl-object');
+const JDLEntity = require('../../../src/jdl/models/jdl-entity');
+const JDLExporter = require('../../../src/jdl/exporters/jdl-exporter');
+const JDLApplication = require('../../../src/jdl/models/jdl-application');
 
 const {
   OptionNames: { CLIENT_FRAMEWORK },
-} = require('../../../jdl/jhipster/application-options');
-const { NO: NO_CLIENT_FRAMEWORK } = require('../../../jdl/jhipster/client-framework-types');
+} = require('../../../src/jdl/jhipster/application-options');
+const { NO: NO_CLIENT_FRAMEWORK } = require('../../../src/jdl/jhipster/client-framework-types');
 
 describe('JDLExporter', () => {
   describe('exportToJDL', () => {

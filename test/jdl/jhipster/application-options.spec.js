@@ -19,7 +19,7 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const { OptionNames, doesOptionExist, getTypeForOption, shouldTheValueBeQuoted } = require('../../../jdl/jhipster/application-options');
+const { OptionNames, doesOptionExist, getTypeForOption, shouldTheValueBeQuoted } = require('../../../src/jdl/jhipster/application-options');
 
 describe('ApplicationOptions', () => {
   describe('doesOptionExist', () => {

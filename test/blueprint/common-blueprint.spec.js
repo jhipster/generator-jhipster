@@ -2,7 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
-const CommonGenerator = require('../../generators/common');
+const CommonGenerator = require('../../src/generators/common');
 
 const mockBlueprintSubGen = class extends CommonGenerator {
   constructor(args, opts) {

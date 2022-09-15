@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const { areEntitiesEqual, merge } = require('../../../jdl/utils/object-utils');
+const { areEntitiesEqual, merge } = require('../../../src/jdl/utils/object-utils');
 
 describe('ObjectUtils', () => {
   describe('merge', () => {

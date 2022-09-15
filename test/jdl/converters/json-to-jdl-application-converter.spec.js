@@ -18,10 +18,10 @@
  */
 
 const { expect } = require('chai');
-const { createJDLApplication } = require('../../../jdl/models/jdl-application-factory');
-const { convertApplicationsToJDL } = require('../../../jdl/converters/json-to-jdl-application-converter');
-const JDLObject = require('../../../jdl/models/jdl-object');
-const { MONOLITH } = require('../../../jdl/jhipster/application-types');
+const { createJDLApplication } = require('../../../src/jdl/models/jdl-application-factory');
+const { convertApplicationsToJDL } = require('../../../src/jdl/converters/json-to-jdl-application-converter');
+const JDLObject = require('../../../src/jdl/models/jdl-object');
+const { MONOLITH } = require('../../../src/jdl/jhipster/application-types');
 
 describe('JSONToJDLApplicationConverter', () => {
   describe('convert', () => {

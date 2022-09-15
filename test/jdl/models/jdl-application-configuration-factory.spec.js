@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('expect');
-const { OptionNames } = require('../../../jdl/jhipster/application-options');
-const { createApplicationConfigurationFromObject } = require('../../../jdl/models/jdl-application-configuration-factory');
+const { OptionNames } = require('../../../src/jdl/jhipster/application-options');
+const { createApplicationConfigurationFromObject } = require('../../../src/jdl/models/jdl-application-configuration-factory');
 
 describe('JDLApplicationConfigurationFactory', () => {
   describe('createApplicationConfigurationFromObject', () => {

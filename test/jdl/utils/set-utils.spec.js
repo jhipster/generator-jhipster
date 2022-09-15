@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('expect');
-const { addAll, join } = require('../../../jdl/utils/set-utils');
+const { addAll, join } = require('../../../src/jdl/utils/set-utils');
 
 describe('SetUtils', () => {
   describe('addAll', () => {

@@ -4,9 +4,9 @@ const fse = require('fs-extra');
 
 const { skipPrettierHelpers: helpers } = require('./utils/utils');
 
-const constants = require('../generators/generator-constants');
+const constants = require('../src/generators/generator-constants');
 const expectedFiles = require('./utils/expected-files').entity;
-const { MapperTypes, ServiceTypes, PaginationTypes } = require('../jdl/jhipster/entity-options');
+const { MapperTypes, ServiceTypes, PaginationTypes } = require('../src/jdl/jhipster/entity-options');
 const { createMockedConfig } = require('./support/mock-config.cjs');
 
 const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;

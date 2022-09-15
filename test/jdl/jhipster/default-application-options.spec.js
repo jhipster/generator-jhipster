@@ -24,7 +24,7 @@ const {
   getConfigForGatewayApplication,
   getConfigForMicroserviceApplication,
   getDefaultConfigForNewApplication,
-} = require('../../../jdl/jhipster/default-application-options');
+} = require('../../../src/jdl/jhipster/default-application-options');
 
 describe('DefaultApplicationOptions', () => {
   describe('getConfigForMonolithApplication', () => {

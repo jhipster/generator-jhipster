@@ -1,12 +1,12 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const { MONOLITH } = require('../../jdl/jhipster/application-types');
-const { H2_DISK, MYSQL, SQL } = require('../../jdl/jhipster/database-types');
-const { EHCACHE } = require('../../jdl/jhipster/cache-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
-const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { MONOLITH } = require('../../src/jdl/jhipster/application-types');
+const { H2_DISK, MYSQL, SQL } = require('../../src/jdl/jhipster/database-types');
+const { EHCACHE } = require('../../src/jdl/jhipster/cache-types');
+const { JWT } = require('../../src/jdl/jhipster/authentication-types');
+const { CYPRESS } = require('../../src/jdl/jhipster/test-framework-types');
+const { ANGULAR } = require('../../src/jdl/jhipster/client-framework-types');
+const { MAVEN } = require('../../src/jdl/jhipster/build-tool-types');
 
 const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:client', 'jhipster:languages', 'jhipster:entity'];
 

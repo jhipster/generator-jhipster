@@ -18,18 +18,18 @@
  */
 
 const { expect } = require('chai');
-const ApplicationTypes = require('../../../jdl/jhipster/application-types');
-const FieldTypes = require('../../../jdl/jhipster/field-types');
-const UnaryOptions = require('../../../jdl/jhipster/unary-options');
-const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
-const JDLObject = require('../../../jdl/models/jdl-object');
-const { createJDLApplication } = require('../../../jdl/models/jdl-application-factory');
-const JDLEntity = require('../../../jdl/models/jdl-entity');
-const JDLField = require('../../../jdl/models/jdl-field');
-const JDLEnum = require('../../../jdl/models/jdl-enum');
-const JDLRelationship = require('../../../jdl/models/jdl-relationship');
-const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
-const { mergeJDLObjects } = require('../../../jdl/models/jdl-object-merger');
+const ApplicationTypes = require('../../../src/jdl/jhipster/application-types');
+const FieldTypes = require('../../../src/jdl/jhipster/field-types');
+const UnaryOptions = require('../../../src/jdl/jhipster/unary-options');
+const RelationshipTypes = require('../../../src/jdl/jhipster/relationship-types');
+const JDLObject = require('../../../src/jdl/models/jdl-object');
+const { createJDLApplication } = require('../../../src/jdl/models/jdl-application-factory');
+const JDLEntity = require('../../../src/jdl/models/jdl-entity');
+const JDLField = require('../../../src/jdl/models/jdl-field');
+const JDLEnum = require('../../../src/jdl/models/jdl-enum');
+const JDLRelationship = require('../../../src/jdl/models/jdl-relationship');
+const JDLUnaryOption = require('../../../src/jdl/models/jdl-unary-option');
+const { mergeJDLObjects } = require('../../../src/jdl/models/jdl-object-merger');
 
 describe('JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {

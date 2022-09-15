@@ -22,10 +22,10 @@ const fs = require('fs');
 const path = require('path');
 const { expect } = require('chai');
 
-const ApplicationTypes = require('../../../jdl/jhipster/application-types');
-const JDLReader = require('../../../jdl/readers/jdl-reader');
-const DocumentParser = require('../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
-const JDLExporter = require('../../../jdl/exporters/jdl-exporter');
+const ApplicationTypes = require('../../../src/jdl/jhipster/application-types');
+const JDLReader = require('../../../src/jdl/readers/jdl-reader');
+const DocumentParser = require('../../../src/jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
+const JDLExporter = require('../../../src/jdl/exporters/jdl-exporter');
 
 describe('integration tests', () => {
   context('when parsing and exporting a JDL', () => {

@@ -18,11 +18,11 @@
  */
 
 const { expect } = require('chai');
-const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../utils/entity');
-const { formatDateForChangelog } = require('../utils/liquibase');
-const { defaultConfig } = require('../generators/generator-defaults');
-const BaseGenerator = require('../generators/generator-base');
-const { prepareFieldForTemplates, getEnumValuesWithCustomValues } = require('../utils/field');
+const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../src/utils/entity');
+const { formatDateForChangelog } = require('../src/utils/liquibase');
+const { defaultConfig } = require('../src/generators/generator-defaults');
+const BaseGenerator = require('../src/generators/generator-base');
+const { prepareFieldForTemplates, getEnumValuesWithCustomValues } = require('../src/utils/field');
 
 describe('main utilities', () => {
   const defaultGenerator = { jhipsterConfig: defaultConfig };
