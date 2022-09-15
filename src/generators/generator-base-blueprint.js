@@ -21,7 +21,7 @@ const fs = require('fs');
 const path = require('path');
 const semver = require('semver');
 
-const packagejs = require('../package.json');
+const packagejs = require('../../package.json');
 const { packageNameToNamespace } = require('./utils');
 const BaseGenerator = require('./generator-base');
 const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../utils/blueprint');

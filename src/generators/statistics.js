@@ -22,7 +22,7 @@ const osLocale = require('os-locale');
 const axios = require('axios');
 const os = require('os');
 const Insight = require('insight');
-const packagejs = require('../package.json');
+const packagejs = require('../../package.json');
 
 const DO_NOT_ASK_LIMIT = 100;
 

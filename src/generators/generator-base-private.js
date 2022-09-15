@@ -27,7 +27,7 @@ const exec = require('child_process').exec;
 const https = require('https');
 
 const { reproducibleConfigForTests: projectNameReproducibleConfigForTests } = require('./project-name/config.cjs');
-const packagejs = require('../package.json');
+const packagejs = require('../../package.json');
 const jhipsterUtils = require('./utils');
 const { JAVA_COMPATIBLE_VERSIONS, SERVER_TEST_SRC_DIR, SUPPORTED_CLIENT_FRAMEWORKS } = require('./generator-constants');
 const { languageToJavaLanguage } = require('./utils');

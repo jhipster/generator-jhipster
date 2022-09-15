@@ -196,7 +196,7 @@ export default class extends BaseBlueprintGenerator {
         this.application = { ...defaultConfig(), ...this.config.getAll() };
       },
       async load() {
-        this.application.packagejs = JSON.parse(await readFile(new URL('../../package.json', import.meta.url)));
+        this.application.packagejs = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url)));
       },
     };
   }

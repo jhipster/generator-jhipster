@@ -33,7 +33,7 @@ const {
 const writeFiles = require('./files').writeFiles;
 const prettierConfigFiles = require('./files').prettierConfigFiles;
 const constants = require('../generator-constants');
-const packageJson = require('../../package.json');
+const packageJson = require('../../../package.json');
 
 module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {

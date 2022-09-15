@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const packagejs = require('../../package.json');
+const packagejs = require('../../../package.json');
 
 module.exports.logo = `${chalk.green('        ██╗')}${chalk.red(' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗')}
 ${chalk.green('        ██║')}${chalk.red(' ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗')}

@@ -33,7 +33,7 @@ const {
 
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
-const packagejs = require('../../package.json');
+const packagejs = require('../../../package.json');
 const statistics = require('../statistics');
 const { appDefaultConfig } = require('../generator-defaults');
 const { GENERATOR_APP } = require('../generator-list');

@@ -30,7 +30,7 @@ const normalize = require('normalize-path');
 const simpleGit = require('simple-git');
 
 const SharedData = require('../lib/support/shared-data.cjs');
-const packagejs = require('../package.json');
+const packagejs = require('../../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
