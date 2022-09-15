@@ -19,7 +19,7 @@
     "vue2-filters": "0.14.0"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "1.1.4",
+    "@rushstack/eslint-patch": "1.2.0",
     "@types/jest": "29.0.2",
     "@types/node": "16.11.59",
     "@types/sinon": "10.0.13",
