@@ -59,7 +59,6 @@ if [[ "$JHI_REPO" == *"/generator-jhipster" || "$JHI_GEN_BRANCH" == "local" ]]; 
 
 elif [[ "$JHI_GEN_BRANCH" == "release" ]]; then
     echo "*** generator-jhipster: use release version"
-    npm run build
     npm install -g generator-jhipster
 
 else
