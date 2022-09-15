@@ -1,5 +1,5 @@
 {
-  "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*", "test/**/*"],
+  "include": ["src", "test"],
   "exclude": ["**/*.spec.*"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
