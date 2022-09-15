@@ -19,7 +19,7 @@
 const { expect } = require('expect');
 const path = require('path');
 
-const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
+const { skipPrettierHelpers: helpers } = require('../../../test/utils/utils');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { requiredConfig, defaultConfig } = require('./config.cjs');

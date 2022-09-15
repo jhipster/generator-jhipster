@@ -21,7 +21,7 @@ const path = require('path');
 const { access } = require('fs/promises');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
-const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
+const { skipPrettierHelpers: helpers } = require('../../../test/utils/utils');
 const { defaultConfig, requiredConfig } = require('./config.cjs');
 const { GENERATOR_JHIPSTER } = require('../generator-constants');
 const { GENERATOR_INIT } = require('../generator-list');

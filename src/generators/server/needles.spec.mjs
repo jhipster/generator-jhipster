@@ -20,7 +20,7 @@ import { expect } from 'expect';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { skipPrettierHelpers as helpers } from '../../../test/utils/utils.mjs';
 import { insertContentIntoApplicationProperties } from './needles.cjs';
 
 const __filename = fileURLToPath(import.meta.url);
