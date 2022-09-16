@@ -62,14 +62,6 @@ management:
       enabled: false
 
 <%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-org:
-  neo4j:
-    migrations:
-      locations-to-scan:
-      packages-to-scan: <%= packageName %>.config.neo4j
-      installed-by: <%= baseName %>
-<%_ } _%>
 spring:
   devtools:
     restart:
@@ -190,7 +182,7 @@ spring:
     username: Administrator
     password: password
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql || databaseTypeNeo4j) { _%>
   liquibase:
   <%_ if (!skipFakeData) { _%>
     # Remove 'faker' if you do not want the sample data to be loaded automatically
@@ -198,7 +190,7 @@ spring:
     contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
 <%_ } _%>
 <%_ if (reactive) { _%>
-  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { _%>
+  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql || devDatabaseTypeNeo4j) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
   <%_ } else if (devDatabaseTypeOracle) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>

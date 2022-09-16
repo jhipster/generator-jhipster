@@ -81,7 +81,7 @@
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql || databaseTypeNeo4j) { _%>
         <profile.no-liquibase />
 <%_ } _%>
         <profile.api-docs />
@@ -93,14 +93,16 @@
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version><%= SPRING_BOOT_VERSION %></spring-boot.version>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql || databaseTypeNeo4j) { _%>
+  <%_ if (databaseTypeSql) { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <hibernate.version><%= HIBERNATE_VERSION %></hibernate.version>
+  <%_ } _%>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
-  <%_ if (!reactive) { _%>
+  <%_ if (!reactive && !databaseTypeNeo4j) { _%>
         <liquibase-hibernate5.version><%= LIQUIBASE_VERSION %></liquibase-hibernate5.version>
   <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
@@ -361,8 +363,15 @@
             <artifactId>spring-boot-starter-data-neo4j</artifactId>
         </dependency>
         <dependency>
-            <groupId>eu.michael-simons.neo4j</groupId>
-            <artifactId>neo4j-migrations-spring-boot-starter</artifactId>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase.ext</groupId>
+            <artifactId>liquibase-neo4j</artifactId>
+            <version>${liquibase.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -1411,7 +1420,7 @@
         </pluginManagement>
     </build>
     <profiles>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql || databaseTypeNeo4j) { _%>
         <profile>
             <id>no-liquibase</id>
             <properties>
@@ -1565,7 +1574,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev<%_ if (databaseTypeSql) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>dev<%_ if (databaseTypeSql || databaseTypeNeo4j) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
 <%_ } _%>

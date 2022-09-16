@@ -828,13 +828,12 @@ const expectedFiles = {
   ],
 
   neo4j: [
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/EmbeddedNeo4j.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/Neo4jTestContainer.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java`,
     `${SERVER_TEST_RES_DIR}testcontainers.properties`,
     `${SERVER_TEST_RES_DIR}META-INF/spring.factories`,
-    `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__admin.json`,
-    `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__user.json`,
     `${DOCKER_DIR}neo4j.yml`,
   ],
 

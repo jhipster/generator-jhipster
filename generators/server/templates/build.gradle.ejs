@@ -40,7 +40,7 @@ plugins {
 <%_ if (!skipClient) { _%>
     id "com.github.node-gradle.node"
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql || databaseTypeNeo4j) { _%>
     id "org.liquibase.gradle"
 <%_ } _%>
     id "org.sonarqube"
@@ -189,7 +189,7 @@ task cucumberTestReport(type: TestReport) {
 }
 
 <%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
+<%_ if ((databaseTypeSql || databaseTypeNeo4j) && !reactive) { _%>
 if (!project.hasProperty("runList")) {
     project.ext.runList = "main"
 }
@@ -250,6 +250,7 @@ configurations {
             // Inherited version from Spring Boot can't be used because of regressions:
             // To be removed as soon as spring-boot use the same version
             force 'org.liquibase:liquibase-core:<%= LIQUIBASE_VERSION %>'
+            force 'org.liquibase.ext:liquibase-neo4j:<%= LIQUIBASE_VERSION %>'
         }
     }
 }
@@ -350,7 +351,9 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
-    implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
+    implementation "org.liquibase:liquibase-core"
+    liquibaseRuntime "org.liquibase:liquibase-core"
+    liquibaseRuntime "org.liquibase.ext:liquibase-neo4j"
     testImplementation "org.testcontainers:neo4j"
 <%_ } _%>
 <%_ if (cacheProviderEhCache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
@@ -521,9 +524,9 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.junit.platform:junit-platform-console"
     testImplementation "org.testng:testng"
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql || databaseTypeNeo4j) { _%>
     liquibaseRuntime sourceSets.main.compileClasspath
-  <%_ if (!reactive) { _%>
+  <%_ if (!reactive && !databaseTypeNeo4j) { _%>
     liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibaseHibernate5Version}"
   <%_ } _%>
 <%_ } _%>

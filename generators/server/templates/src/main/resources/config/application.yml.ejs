@@ -96,7 +96,7 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ["configprops", "env", <% if (applicationTypeGateway && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", 'jhiopenapigroups', "logfile", "loggers", "prometheus", "threaddump"<% if (cacheManagerIsAvailable) { %>, "caches"<% } %><% if (databaseTypeSql) { %>, "liquibase"<% } %>]
+        include: ["configprops", "env", <% if (applicationTypeGateway && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", 'jhiopenapigroups', "logfile", "loggers", "prometheus", "threaddump"<% if (cacheManagerIsAvailable) { %>, "caches"<% } %><% if (databaseTypeSql || databaseTypeNeo4j) { %>, "liquibase"<% } %>]
   endpoint:
     health:
       show-details: when_authorized

@@ -57,10 +57,6 @@ org:
     driver:
       pool:
         metrics-enabled: true
-    migrations:
-      locations-to-scan:
-      packages-to-scan: <%= packageName %>.config.neo4j
-      installed-by: <%= baseName %>
 <%_ } _%>
 management:
   metrics:
@@ -171,7 +167,7 @@ spring:
   liquibase:
     contexts: prod
   <%_ if (reactive) { _%>
-    <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypePostgres || prodDatabaseTypeMssql) { _%>
+    <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypePostgres || prodDatabaseTypeMssql || prodDatabaseTypeNeo4j) { _%>
     url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     <%_ } else if (prodDatabaseTypeOracle) { _%>
     url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>

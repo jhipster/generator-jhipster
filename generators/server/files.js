@@ -104,25 +104,16 @@ const neo4jFiles = {
       templates: ['neo4j.yml'],
     },
   ],
-  serverResource: [
+  ...liquibaseFiles,
+  liquibase: [
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/config/neo4j/Neo4jMigrations.java',
-          renameTo: generator => `${generator.javaDir}config/neo4j/Neo4jMigrations.java`,
-        },
-        {
-          file: 'package/config/neo4j/package-info.java',
-          renameTo: generator => `${generator.javaDir}config/neo4j/package-info.java`,
+          file: 'package/config/LiquibaseConfiguration.java',
+          renameTo: generator => `${generator.javaDir}config/LiquibaseConfiguration.java`,
         },
       ],
-    },
-    {
-      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['config/neo4j/migrations/user__admin.json', 'config/neo4j/migrations/user__user.json'],
     },
   ],
   serverTestFw: [
@@ -1426,14 +1417,14 @@ const baseServerFiles = {
     {
       condition: generator =>
         (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice) ||
-        (!generator.skipUserManagement && generator.databaseTypeSql),
+        (!generator.skipUserManagement && (generator.databaseTypeSql || generator.databaseTypeNeo4j)),
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/data/user.csv'],
     },
     {
       condition: generator =>
         (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice && generator.databaseTypeSql) ||
-        (!generator.skipUserManagement && generator.databaseTypeSql),
+        (!generator.skipUserManagement && (generator.databaseTypeSql || generator.databaseTypeNeo4j)),
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/data/authority.csv', 'config/liquibase/data/user_authority.csv'],
     },

@@ -341,10 +341,7 @@ describe('JHipster generator', () => {
 
       it('creates expected files with "Neo4j"', () => {
         assert.file(expectedFiles.neo4j);
-      });
-      it("doesn't setup liquibase", () => {
-        assert.noFileContent('pom.xml', 'liquibase');
-        assert.noFile(expectedFiles.liquibase);
+        assert.file(expectedFiles.liquibase);
       });
       shouldBeV3DockerfileCompatible(NEO4J);
     });

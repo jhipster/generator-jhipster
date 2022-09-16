@@ -3166,6 +3166,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.devDatabaseTypeMariadb = dest.devDatabaseType === MARIADB;
     dest.devDatabaseTypeMssql = dest.devDatabaseType === MSSQL;
     dest.devDatabaseTypeMysql = dest.devDatabaseType === MYSQL;
+    dest.devDatabaseTypeNeo4j = dest.devDatabaseType === NEO4J;
     dest.devDatabaseTypeOracle = dest.devDatabaseType === ORACLE;
     dest.devDatabaseTypePostgres = dest.devDatabaseType === POSTGRESQL;
 

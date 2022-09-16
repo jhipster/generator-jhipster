@@ -59,6 +59,14 @@
     <property name="uuidType" value="uuid" dbms="mssql"/>
     <property name="datetimeType" value="datetime" dbms="mssql"/>
 <%_ } _%>
+<%_ if (devDatabaseTypeNeo4j || prodDatabaseTypeNeo4j) { _%>
+    <property name="now" value="datetime()" dbms="neo4j"/>
+    <property name="floatType" value="numeric" dbms="neo4j"/>
+    <property name="clobType" value="clob" dbms="neo4j"/>
+    <property name="blobType" value="blob" dbms="neo4j"/>
+    <property name="uuidType" value="string" dbms="neo4j"/>
+    <property name="datetimeType" value="date" dbms="neo4j"/>
+<%_ } _%>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
