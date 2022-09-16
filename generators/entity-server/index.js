@@ -96,8 +96,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _default() {
     return {
-      ...super._missingPreDefault(),
-
       loadConfigIntoGenerator() {
         utils.copyObjectProps(this, this.entity);
 
@@ -187,7 +185,6 @@ module.exports = class extends BaseBlueprintGenerator {
   _writing() {
     return {
       ...writeFiles(),
-      ...super._missingPostWriting(),
     };
   }
 

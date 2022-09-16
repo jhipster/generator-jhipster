@@ -14,8 +14,12 @@ const { EHCACHE } = require('../../jdl/jhipster/cache-types');
 
 const createMockBlueprint = function (parent, spy) {
   return class extends parent {
-    constructor(args, opts) {
-      super(args, { ...opts });
+    constructor(args, opts, features) {
+      super(args, opts, features);
+
+      if (!this.options.jhipsterContext) {
+        this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+      }
     }
 
     spy() {
@@ -25,41 +29,55 @@ const createMockBlueprint = function (parent, spy) {
 };
 
 const mockAppBlueprintSubGen = class extends AppGenerator {
-  constructor(args, opts) {
-    super(args, { ...opts });
+  constructor(args, opts, features) {
+    super(args, opts, features);
+
+    if (!this.options.jhipsterContext) {
+      this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+    }
   }
 
   get initializing() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._initializing();
   }
 
-  get writing() {
-    return super._writing();
-  }
-
   get prompting() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._prompting();
   }
 
   get configuring() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._configuring();
   }
 
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return super._preparing();
+  }
+
   get default() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._default();
   }
 
+  get postWriting() {
+    return super._postWriting();
+  }
+
   get install() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._install();
   }
 
+  get postInstall() {
+    return super._postInstall();
+  }
+
   get end() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._end();
   }
 };

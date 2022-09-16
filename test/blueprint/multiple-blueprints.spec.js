@@ -11,27 +11,39 @@ const { JWT } = require('../../jdl/jhipster/authentication-types');
 const { EHCACHE } = require('../../jdl/jhipster/cache-types');
 
 const mockClientBlueprintSubGen = class extends ClientGenerator {
-  constructor(args, opts) {
-    super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
+  constructor(args, opts, features) {
+    super(args, opts, features);
+
+    if (!this.options.jhipsterContext) {
+      this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+    }
   }
 
   get initializing() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._initializing();
   }
 
   get prompting() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._prompting();
   }
 
   get configuring() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._configuring();
   }
 
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return super._preparing();
+  }
+
   get default() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._default();
   }
 
@@ -48,25 +60,58 @@ const mockClientBlueprintSubGen = class extends ClientGenerator {
     };
   }
 
+  get postWriting() {
+    return super._postWriting();
+  }
+
   get install() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._install();
   }
 
+  get postInstall() {
+    return super._postInstall();
+  }
+
   get end() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._end();
   }
 };
 
 const mockServerBlueprintSubGen = class extends ServerGenerator {
-  constructor(args, opts) {
-    super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
+  constructor(args, opts, features) {
+    super(args, opts, features);
+
+    if (!this.options.jhipsterContext) {
+      this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
+    }
   }
 
   get initializing() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._initializing();
+  }
+
+  get prompting() {
+    return super._prompting();
+  }
+
+  get configuring() {
+    return super._configuring();
+  }
+
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return super._preparing();
+  }
+
+  get default() {
+    return super._default();
   }
 
   get writing() {
@@ -82,28 +127,19 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
     };
   }
 
-  get prompting() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
-    return super._prompting();
-  }
-
-  get configuring() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
-    return super._configuring();
-  }
-
-  get default() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
-    return super._default();
+  get postWriting() {
+    return super._postWriting();
   }
 
   get install() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._install();
   }
 
+  get postInstall() {
+    return super._postInstall();
+  }
+
   get end() {
-    // Here we are not overriding this phase and hence its being handled by JHipster
     return super._end();
   }
 };

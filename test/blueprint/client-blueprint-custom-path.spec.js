@@ -9,12 +9,15 @@ const { JWT } = require('../../jdl/jhipster/authentication-types');
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 
 const mockBlueprintSubGen = class extends ClientGenerator {
-  constructor(args, opts) {
-    super(args, {
-      fromBlueprint: true,
-      ...opts,
-      outputPathCustomizer: paths => (paths ? paths.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1') : undefined),
-    }); // fromBlueprint variable is important
+  constructor(args, opts, features) {
+    super(
+      args,
+      {
+        ...opts,
+        outputPathCustomizer: paths => (paths ? paths.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1') : undefined),
+      },
+      features
+    );
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
     if (!jhContext) {
       this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
@@ -33,6 +36,18 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     return super._configuring();
   }
 
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return super._preparing();
+  }
+
   get default() {
     return super._default();
   }
@@ -47,8 +62,16 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     return { ...phaseFromJHipster, ...customPhaseSteps };
   }
 
+  get postWriting() {
+    return super._postWriting();
+  }
+
   get install() {
     return super._install();
+  }
+
+  get postInstall() {
+    return super._postInstall();
   }
 
   get end() {
@@ -61,7 +84,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
 
   blueprintNames.forEach(blueprintName => {
     describe(`generate client with blueprint option '${blueprintName}'`, () => {
-      before(done => {
+      before(() =>
         helpers
           .run(path.join(__dirname, '../../generators/client'))
           .withOptions({
@@ -81,8 +104,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
             nativeLanguage: 'en',
             languages: ['en', 'fr'],
           })
-          .on('end', done);
-      });
+      );
 
       it('creates expected files from jhipster client generator', () => {
         assert.file(

@@ -69,8 +69,6 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _default() {
     return {
-      ...super._missingPreDefault(),
-
       async loadNativeLanguage() {
         await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
 
@@ -163,7 +161,6 @@ module.exports = class extends BaseBlueprintGenerator {
         }
       },
       ...writeFiles(),
-      ...super._missingPostWriting(),
     };
   }
 

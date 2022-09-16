@@ -25,6 +25,7 @@ const packagejs = require('../package.json');
 const { packageNameToNamespace } = require('./utils');
 const BaseGenerator = require('./generator-base');
 const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../utils/blueprint');
+const { PRIORITY_NAMES } = require('../lib/constants/priorities.cjs');
 
 /**
  * Base class for a generator that can be extended through a blueprint.
@@ -246,33 +247,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
-   * @private
-   * @deprecated
-   * Execute custom priorities if they are not declared
-   * Should be used by jhipster official generators only.
-   */
-  _missingPreDefault() {
-    let tasks = {};
-    if (this.sbsBlueprint) return tasks;
-    if (this._isPriorityMissing('composing', 'default')) {
-      tasks = { ...tasks, ...this._composing() };
-    }
-    if (this._isPriorityMissing('loading', 'default')) {
-      tasks = { ...tasks, ...this._loading() };
-    }
-    if (this._isPriorityMissing('preparing', 'default')) {
-      tasks = { ...tasks, ...this._preparing() };
-    }
-    if (this._isPriorityMissing('preparingFields', 'default')) {
-      tasks = { ...tasks, ...this._preparingFields() };
-    }
-    if (this._isPriorityMissing('preparingRelationships', 'default')) {
-      tasks = { ...tasks, ...this._preparingRelationships() };
-    }
-    return tasks;
-  }
-
-  /**
    * Priority API stub for blueprints.
    *
    * Default priority should used as misc customizations.
@@ -324,21 +298,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    */
   asWritingTaskGroup(taskGroup) {
     return taskGroup;
-  }
-
-  /**
-   * @private
-   * @deprecated
-   * Execute custom priorities if they are not declared
-   * Should be used by jhipster official generators only.
-   */
-  _missingPostWriting() {
-    let tasks = {};
-    if (this.sbsBlueprint) return tasks;
-    if (this._isPriorityMissing('postWriting', 'writing')) {
-      tasks = { ...tasks, ...this._postWriting() };
-    }
-    return tasks;
   }
 
   /**
@@ -450,31 +409,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
-   * @private
-   * @deprecated
-   * Detect if a priority is implemented in the super class but missing in current one.
-   * That indicates the blueprint was not updated with the custom priorities.
-   * @param {string} priorityName - Priority to be checked.
-   * @param {sring} destPriority - Priority that the task is related to for logging purpose.
-   * @return {boolean} true if the priority is missing.
-   */
-  _isPriorityMissing(priorityName, destPriority = 'related') {
-    const ownPrototype = Object.getPrototypeOf(this);
-    const parentPrototype = Object.getPrototypeOf(ownPrototype);
-    priorityName = `${this.features.taskPrefix || ''}${priorityName}`;
-    if (
-      parentPrototype !== JHipsterBaseBlueprintGenerator.prototype &&
-      !Object.getOwnPropertyDescriptor(ownPrototype, priorityName) &&
-      Object.getOwnPropertyDescriptor(parentPrototype, priorityName)
-    ) {
-      this.warning(`Priority ${priorityName} is missing for generator ${this.options.namespace}. Merging into ${destPriority} priority.`);
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @private
+   * @protected
    * Composes with blueprint generators, if any.
    * @param {String} subGen - sub generator
    * @param {Object} extraOptions - extra options to pass to blueprint generator
@@ -500,6 +435,27 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
         } else {
           // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
           this.delegateToBlueprint = true;
+          this.checkBlueprintImplementsPriorities(blueprintGenerator);
+        }
+      }
+    }
+  }
+
+  /**
+   * Check if the blueprint implements every priority implemented by the parent generator
+   * @param {BaseGenerator} blueprintGenerator
+   */
+  checkBlueprintImplementsPriorities(blueprintGenerator) {
+    const { taskPrefix: baseGeneratorTaskPrefix = '' } = this.features;
+    const { taskPrefix: blueprintTaskPrefix = '' } = blueprintGenerator.features;
+    // v8 remove deprecated priorities
+    const DEPRECATED_PRIORITIES = ['preparingFields', 'preparingRelationships', 'preConflicts'];
+    for (const priorityName of Object.values(PRIORITY_NAMES).filter(p => !DEPRECATED_PRIORITIES.includes(p))) {
+      const baseGeneratorPriorityName = `${baseGeneratorTaskPrefix}${priorityName}`;
+      if (baseGeneratorPriorityName in this) {
+        const blueprintPriorityName = `${blueprintTaskPrefix}${priorityName}`;
+        if (!Object.hasOwn(Object.getPrototypeOf(blueprintGenerator), blueprintPriorityName)) {
+          this.debug(`Priority ${blueprintPriorityName} not implemented at ${blueprintGenerator.options.namespace}.`);
         }
       }
     }

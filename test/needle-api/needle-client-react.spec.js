@@ -8,8 +8,8 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 const mockBlueprintSubGen = class extends ClientGenerator {
-  constructor(args, opts) {
-    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts, features) {
+    super(args, opts, features);
 
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
@@ -17,27 +17,10 @@ const mockBlueprintSubGen = class extends ClientGenerator {
       this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
-    this.configOptions = jhContext.configOptions || {};
-  }
-
-  get initializing() {
-    return super._initializing();
-  }
-
-  get prompting() {
-    return super._prompting();
-  }
-
-  get configuring() {
-    return super._configuring();
-  }
-
-  get default() {
-    return super._default();
+    this.sbsBlueprint = true;
   }
 
   get writing() {
-    const phaseFromJHipster = super._writing();
     const customPhaseSteps = {
       addAppCssStep() {
         // please change this to public API when it will be available see https://github.com/jhipster/generator-jhipster/issues/9234
@@ -60,7 +43,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         );
       },
     };
-    return { ...phaseFromJHipster, ...customPhaseSteps };
+    return { ...customPhaseSteps };
   }
 };
 

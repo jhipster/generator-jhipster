@@ -43,8 +43,6 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _default() {
     return {
-      ...super._missingPreDefault(),
-
       loadEntityIntoGenerator() {
         utils.copyObjectProps(this, this.entity);
       },
@@ -58,7 +56,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
   // Public API method used by the getter and also by Blueprints
   _writing() {
-    return { ...writeFiles(), ...super._missingPostWriting() };
+    return { ...writeFiles() };
   }
 
   get [WRITING_PRIORITY]() {

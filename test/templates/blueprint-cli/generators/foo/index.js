@@ -1,8 +1,8 @@
 const Generator = require('yeoman-generator');
 
 module.exports = class extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, opts, features) {
+    super(args, opts, features);
 
     this.option('foo-bar', {
       desc: 'Sample option',

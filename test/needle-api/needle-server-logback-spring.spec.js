@@ -9,40 +9,25 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const filePath = `${SERVER_MAIN_RES_DIR}logback-spring.xml`;
 
 const mockBlueprintSubGen = class extends ServerGenerator {
-  constructor(args, opts) {
-    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts, features) {
+    super(args, opts, features);
 
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
       this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
+
+    this.sbsBlueprint = true;
   }
 
-  get initializing() {
-    return super._initializing();
-  }
-
-  get prompting() {
-    return super._prompting();
-  }
-
-  get configuring() {
-    return super._configuring();
-  }
-
-  get default() {
-    return super._default();
-  }
-
-  get writing() {
-    const phaseFromJHipster = super._writing();
+  get postWriting() {
     const customPhaseSteps = {
       addlogStep() {
         this.addLoggerForLogbackSpring('org.test.logTest', 'OFF');
       },
     };
-    return { ...phaseFromJHipster, ...customPhaseSteps };
+    return { ...customPhaseSteps };
   }
 };
 
