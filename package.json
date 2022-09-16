@@ -45,11 +45,11 @@
     "./lib/": "./dist/lib/",
     "./utils/": "./dist/utils/",
     "./package.json": "./package.json",
-    "./esm/cli": "./dist/cli/index.mjs",
-    "./esm/generators/*": "./dist/generators/*/esm.mjs",
-    "./esm/generators": "./dist/lib/constants/generators.mjs",
-    "./esm/priorities": "./dist/lib/constants/priorities.mjs",
-    "./esm/support": "./dist/lib/support/index.cjs"
+    "./esm/cli": "./cli/index.mjs",
+    "./esm/generators/*": "./generators/*/esm.mjs",
+    "./esm/generators": "./lib/constants/generators.mjs",
+    "./esm/priorities": "./lib/constants/priorities.mjs",
+    "./esm/support": "./lib/support/index.cjs"
   },
   "main": "dist/lib/index.js",
   "bin": {
