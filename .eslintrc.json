@@ -3,8 +3,9 @@
     "node": true,
     "es2022": true
   },
-  "extends": ["airbnb-base", "plugin:prettier/recommended"],
-  "plugins": ["mocha", "prettier", "chai-friendly"],
+  "extends": ["airbnb-base", "plugin:prettier/recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["mocha", "prettier", "chai-friendly", "@typescript-eslint"],
   "settings": {
     "import/core-modules": ["generator-jhipster", "generator-jhipster/support"]
   },
@@ -22,6 +23,15 @@
       "files": ["**/*.spec.{c,m,}js", "test/**/*.{c,m,}js"],
       "env": {
         "mocha": true
+      }
+    },
+    {
+      "files": ["**/*.{c,m,}js", "**/*.{c,m,}js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-this-alias": "off"
       }
     }
   ],

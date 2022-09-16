@@ -36,14 +36,14 @@
   },
   "exports": {
     ".": {
-      "import": "./lib/index.mjs",
-      "default": "./lib/index.js"
+      "import": "./dist/lib/index.mjs",
+      "default": "./dist/lib/index.js"
     },
-    "./cli/": "./cli/",
-    "./generators/": "./generators/",
-    "./jdl/": "./jdl/",
-    "./lib/": "./lib/",
-    "./utils/": "./utils/",
+    "./cli/": "./dist/cli/",
+    "./generators/": "./dist/generators/",
+    "./jdl/": "./dist/jdl/",
+    "./lib/": "./dist/lib/",
+    "./utils/": "./dist/utils/",
     "./package.json": "./package.json",
     "./esm/cli": "./cli/index.mjs",
     "./esm/generators/*": "./generators/*/esm.mjs",
@@ -51,22 +51,21 @@
     "./esm/priorities": "./lib/constants/priorities.mjs",
     "./esm/support": "./lib/support/index.cjs"
   },
-  "main": "lib/index.js",
+  "main": "dist/lib/index.js",
   "bin": {
-    "jhipster": "cli/jhipster.js"
+    "jhipster": "dist/cli/jhipster.js"
   },
   "files": [
-    "cli",
-    "generators",
-    "jdl",
-    "lib",
-    "utils",
+    "dist",
     "!**/__*",
     "!**/*.snap",
     "!**/*.spec.?(c|m)js"
   ],
   "scripts": {
+    "build": "npm run compile && npm run copy-files",
+    "compile": "tsc",
     "completion": "tabtab install --name jhipster --auto",
+    "copy-files": "cpy 'generators/**' '!**/*.(js|ts|cjs|mjs|snap)' '!**/__*/*' dist/generators && cpy 'package.json' dist",
     "ejs-lint": "mocha test/ejslint.js",
     "ejslint": "ejslint",
     "eslint": "eslint . --ext .js,.cjs,.mjs",
@@ -75,6 +74,7 @@
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
     "lint": "npm run eslint && npm run ejs-lint",
     "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
+    "prepare": "npm run build",
     "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,json,md,yml,java}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,json,md,yml,java}\"",
     "pretest": "npm run lint",
@@ -90,6 +90,7 @@
     "chevrotain": "10.3.0",
     "commander": "9.4.0",
     "conf": "10.2.0",
+    "cpy-cli": "4.2.0",
     "debug": "4.3.4",
     "didyoumean": "1.2.2",
     "ejs": "3.1.8",
@@ -122,6 +123,8 @@
     "yeoman-generator": "5.7.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "5.35.1",
+    "@typescript-eslint/parser": "5.35.1",
     "chai": "4.3.6",
     "ejs-lint": "1.2.2",
     "eslint": "8.23.0",
@@ -141,6 +144,7 @@
     "sinon": "14.0.0",
     "sinon-chai": "3.7.0",
     "sort-keys": "4.2.0",
+    "typescript": "4.8.2",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "6.3.0"
   },
