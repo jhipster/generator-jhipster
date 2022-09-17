@@ -354,13 +354,26 @@ class EntityGenerator extends BaseBlueprintGenerator {
           }
         }
         if (
+          // Don't touch the configuration for microservice entities published at gateways
+          !(applicationTypeGateway && this.entityConfig.microserviceName) &&
           !application.searchEngineAny &&
-          ![undefined, false, 'no'].includes(this.entityConfig.searchEngine) &&
-          !(applicationTypeGateway && this.entityConfig.microserviceName)
+          ![undefined, false, 'no'].includes(this.entityConfig.searchEngine)
         ) {
           // Search engine can only be enabled at entity level and disabled at application level for gateways publishing a microservice entity
           this.entityConfig.searchEngine = false;
           this.warning('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
+        }
+      },
+      configureModelFiltering() {
+        const { databaseTypeSql, applicationTypeGateway, reactive } = this.application;
+        if (
+          // Don't touch the configuration for microservice entities published at gateways
+          !(applicationTypeGateway && this.entityConfig.microserviceName) &&
+          this.entityConfig.jpaMetamodelFiltering &&
+          (!databaseTypeSql || this.entityConfig.service === NO_SERVICE || reactive)
+        ) {
+          this.warning('Not compatible with jpaMetamodelFiltering, disabling');
+          this.entityConfig.jpaMetamodelFiltering = false;
         }
       },
       configureEntityTable() {
@@ -392,14 +405,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
           (this.application.applicationType !== GATEWAY || !this.entityConfig.microserviceName)
         ) {
           this.entityConfig.pagination = NO_PAGINATION;
-        }
-
-        if (
-          this.entityConfig.jpaMetamodelFiltering &&
-          (entity.databaseType !== SQL || this.entityConfig.service === NO_SERVICE || entity.reactive === true)
-        ) {
-          this.warning('Not compatible with jpaMetamodelFiltering, disabling');
-          this.entityConfig.jpaMetamodelFiltering = false;
         }
 
         // Validate root entity json content
