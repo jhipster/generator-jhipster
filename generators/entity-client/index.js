@@ -38,6 +38,7 @@ module.exports = class extends BaseBlueprintGenerator {
     super(args, options, features);
 
     this.entity = this.options.context;
+    this.application = this.options.application;
     this.jhipsterContext = this.options.jhipsterContext || this.options.context;
   }
 
@@ -51,8 +52,8 @@ module.exports = class extends BaseBlueprintGenerator {
   _preparing() {
     return {
       async prepareReact() {
-        if (!this.entity.clientFrameworkReact) return;
-        prepareReactEntity(this.entity);
+        if (!this.application.clientFrameworkReact) return;
+        prepareReactEntity(this.entity, this.application);
       },
     };
   }

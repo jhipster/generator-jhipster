@@ -140,7 +140,9 @@ Array [
         const entity = runResult.env.sharedOptions.sharedData.jhipster.sharedEntities.User;
         expect(filterEntity(entity)).toMatchInlineSnapshot(`
 Object {
+  "applicationType": "monolith",
   "authenticationType": "jwt",
+  "baseName": "jhipster",
   "blobFields": Array [],
   "builtIn": true,
   "builtInUser": true,
@@ -488,6 +490,7 @@ Object {
   "fieldsContainZonedDateTime": false,
   "fieldsIsReactAvField": false,
   "fluentMethods": true,
+  "frontendAppName": undefined,
   "generateFakeData": "[generateFakeData] function",
   "haveFieldWithJavadoc": false,
   "i18nAlertHeaderPrefix": "undefined.user",
@@ -563,7 +566,9 @@ Object {
         const entity = runResult.env.sharedOptions.sharedData.jhipster.sharedEntities.EntityA;
         expect(filterEntity(entity)).toMatchInlineSnapshot(`
 Object {
+  "applicationType": "monolith",
   "authenticationType": "jwt",
+  "baseName": "jhipster",
   "blobFields": Array [],
   "builtInUser": false,
   "changelogDate": "20220129025419",
@@ -630,7 +635,7 @@ Object {
       "fieldNameCapitalized": "Id",
       "fieldNameHumanized": "Id",
       "fieldNameUnderscored": "id",
-      "fieldTranslationKey": "undefined.entityA.id",
+      "fieldTranslationKey": "jhipsterApp.entityA.id",
       "fieldType": "UUID",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -707,10 +712,11 @@ Object {
   "fieldsContainZonedDateTime": false,
   "fieldsIsReactAvField": false,
   "fluentMethods": true,
+  "frontendAppName": "jhipsterApp",
   "generateFakeData": "[generateFakeData] function",
   "haveFieldWithJavadoc": false,
-  "i18nAlertHeaderPrefix": "undefined.entityA",
-  "i18nKeyPrefix": "undefined.entityA",
+  "i18nAlertHeaderPrefix": "jhipsterApp.entityA",
+  "i18nKeyPrefix": "jhipsterApp.entityA",
   "i18nToLoad": Array [],
   "jhiPrefix": "jhi",
   "jpaMetamodelFiltering": false,
@@ -838,7 +844,9 @@ Array [
         const entity = runResult.env.sharedOptions.sharedData.jhipster.sharedEntities.EntityA;
         expect(filterEntity(entity)).toMatchInlineSnapshot(`
 Object {
+  "applicationType": "monolith",
   "authenticationType": "jwt",
+  "baseName": "jhipster",
   "blobFields": Array [],
   "builtInUser": false,
   "changelogDate": "20220129025419",
@@ -905,7 +913,7 @@ Object {
       "fieldNameCapitalized": "Id",
       "fieldNameHumanized": "Id",
       "fieldNameUnderscored": "id",
-      "fieldTranslationKey": "undefined.entityA.id",
+      "fieldTranslationKey": "jhipsterApp.entityA.id",
       "fieldType": "UUID",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -982,10 +990,11 @@ Object {
   "fieldsContainZonedDateTime": false,
   "fieldsIsReactAvField": false,
   "fluentMethods": true,
+  "frontendAppName": "jhipsterApp",
   "generateFakeData": "[generateFakeData] function",
   "haveFieldWithJavadoc": false,
-  "i18nAlertHeaderPrefix": "undefined.entityA",
-  "i18nKeyPrefix": "undefined.entityA",
+  "i18nAlertHeaderPrefix": "jhipsterApp.entityA",
+  "i18nKeyPrefix": "jhipsterApp.entityA",
   "i18nToLoad": Array [],
   "jhiPrefix": "jhi",
   "jpaMetamodelFiltering": false,

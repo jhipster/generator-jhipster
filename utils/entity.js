@@ -497,22 +497,26 @@ function fieldToId(field) {
  */
 function loadRequiredConfigIntoEntity(entity, config) {
   _.defaults(entity, {
+    applicationType: config.applicationType,
     baseName: config.baseName,
     frontendAppName: config.frontendAppName,
-    databaseType: config.databaseType,
-    prodDatabaseType: config.prodDatabaseType,
-    skipUiGrouping: config.skipUiGrouping,
-    searchEngine: config.searchEngine,
-    jhiPrefix: config.jhiPrefix,
-    entitySuffix: config.entitySuffix,
-    dtoSuffix: config.dtoSuffix,
     authenticationType: config.authenticationType,
     reactive: config.reactive,
     microfrontend: config.microfrontend,
-    packageName: config.packageName,
-    packageFolder: config.packageFolder,
     // Workaround different paths
     clientFramework: config.clientFramework,
+
+    databaseType: config.databaseType,
+    prodDatabaseType: config.prodDatabaseType,
+
+    skipUiGrouping: config.skipUiGrouping,
+    searchEngine: config.searchEngine,
+
+    jhiPrefix: config.jhiPrefix,
+    entitySuffix: config.entitySuffix,
+    dtoSuffix: config.dtoSuffix,
+    packageName: config.packageName,
+    packageFolder: config.packageFolder,
   });
   if (config.applicationType === MICROSERVICE) {
     _.defaults(entity, {
@@ -786,8 +790,10 @@ function preparePostEntityClientDerivedProperties(entity) {
   }
 }
 
-function prepareReactEntity(entity) {
-  entity.entityReactState = entity.applicationTypeMonolith ? entity.entityInstance : `${entity.lowercaseBaseName}.${entity.entityInstance}`;
+function prepareReactEntity({ entity, application }) {
+  entity.entityReactState = application.applicationTypeMonolith
+    ? entity.entityInstance
+    : `${application.lowercaseBaseName}.${entity.entityInstance}`;
 }
 
 module.exports = {

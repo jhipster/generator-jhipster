@@ -564,20 +564,24 @@ class EntityGenerator extends BaseBlueprintGenerator {
       async composing() {
         if (this.options.skipWriting) return;
         const context = this.context;
+        const application = this.application;
         if (!context.skipServer) {
           await this.composeWithJHipster(GENERATOR_ENTITY_SERVER, this.arguments, {
             context,
+            application,
           });
         }
 
         if (!context.skipClient || this.application.applicationType === GATEWAY) {
           await this.composeWithJHipster(GENERATOR_ENTITY_CLIENT, this.arguments, {
             context,
+            application,
             skipInstall: this.options.skipInstall,
           });
           if (this.application.enableTranslation) {
             await this.composeWithJHipster(GENERATOR_ENTITY_I_18_N, this.arguments, {
               context,
+              application,
               skipInstall: this.options.skipInstall,
             });
           }

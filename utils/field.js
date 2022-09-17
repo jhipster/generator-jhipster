@@ -282,13 +282,6 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
     nullable: !(field.fieldValidate === true && field.fieldValidateRules.includes(REQUIRED)),
   });
   field.unique = field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE);
-  if (field.unique) {
-    field.uniqueConstraintName = generator.getUXConstraintName(
-      entityWithConfig.entityTableName,
-      field.columnName,
-      entityWithConfig.prodDatabaseType
-    );
-  }
   if (field.fieldValidate === true && field.fieldValidateRules.includes(MAXLENGTH)) {
     field.maxlength = field.fieldValidateRulesMaxlength || 255;
   }
@@ -475,7 +468,15 @@ function prepareServerFieldForTemplates(entityWithConfig, field, generator) {
       field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
     }
   }
+
   field.columnName = field.fieldNameAsDatabaseColumn;
+  if (field.unique) {
+    field.uniqueConstraintName = generator.getUXConstraintName(
+      entityWithConfig.entityTableName,
+      field.columnName,
+      entityWithConfig.prodDatabaseType
+    );
+  }
 
   if (field.fieldInJavaBeanMethod === undefined) {
     // Handle the specific case when the second letter is capitalized
