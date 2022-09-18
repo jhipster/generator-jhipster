@@ -19,7 +19,7 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const Rules = require('../../../jdl/linters/rules');
+const Rules = require('../../../jdl/linters/rules.ts');
 
 describe('Rules', () => {
   describe('getRules', () => {

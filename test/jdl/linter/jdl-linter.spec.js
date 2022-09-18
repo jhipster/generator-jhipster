@@ -23,7 +23,7 @@ const { jestExpect } = require('mocha-expect-snapshot');
 const { expect } = require('chai');
 const { writeFileSync, unlinkSync } = require('fs');
 const path = require('path');
-const { createJDLLinterFromFile, createJDLLinterFromContent } = require('../../../jdl/linters/jdl-linter');
+const { createJDLLinterFromFile, createJDLLinterFromContent } = require('../../../jdl/linters/jdl-linter.ts');
 
 describe('JDLLinter', () => {
   describe('createJDLLinterFromFile', () => {

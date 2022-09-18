@@ -17,18 +17,19 @@
  * limitations under the License.
  */
 
-const expect = require('chai').expect;
-const Issues = require('../../../../jdl/linters/issues/issues');
-const Rules = require('../../../../jdl/linters/rules');
-const RelationshipTypes = require('../../../../jdl/jhipster/relationship-types');
-const EntityIssue = require('../../../../jdl/linters/issues/entity-issue');
-const FieldIssue = require('../../../../jdl/linters/issues/field-issue');
-const EnumIssue = require('../../../../jdl/linters/issues/enum-issue');
-const RelationshipIssue = require('../../../../jdl/linters/issues/relationship-issue');
+import { expect } from 'chai';
+import Issues from '../../../../jdl/linters/issues/issues';
+import { rulesNames } from '../../../../jdl/linters/rules';
+import RelationshipTypes from '../../../../jdl/jhipster/relationship-types';
+import EntityIssue from '../../../../jdl/linters/issues/entity-issue';
+import FieldIssue from '../../../../jdl/linters/issues/field-issue';
+import EnumIssue from '../../../../jdl/linters/issues/enum-issue';
+import RelationshipIssue from '../../../../jdl/linters/issues/relationship-issue';
+import AbstractIssue from '../../../../jdl/linters/issues/abstract-issue';
 
 describe('Issues', () => {
   describe('getNumberOfIssues', () => {
-    let issues;
+    let issues: Issues;
 
     beforeEach(() => {
       issues = new Issues();
@@ -43,26 +44,26 @@ describe('Issues', () => {
       beforeEach(() => {
         issues.addEntityIssues([
           new EntityIssue({
-            ruleName: Rules.RuleNames.ENT_SHORTER_DECL,
+            ruleName: rulesNames.ENT_SHORTER_DECL,
             entityName: 'A',
           }),
         ]);
         issues.addEnumIssues([
           new EnumIssue({
-            ruleName: Rules.RuleNames.ENUM_DUPLICATED,
+            ruleName: rulesNames.ENUM_DUPLICATED,
             enumName: 'SuperEnum',
           }),
         ]);
         issues.addFieldIssues([
           new FieldIssue({
-            ruleName: Rules.RuleNames.FLD_DUPLICATED,
+            ruleName: rulesNames.FLD_DUPLICATED,
             fieldName: 'a',
             entityName: 'A',
           }),
         ]);
         issues.addRelationshipIssues([
           new RelationshipIssue({
-            ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
+            ruleName: rulesNames.REL_INDIVIDUAL_DECL,
             from: 'A',
             to: 'A',
             type: RelationshipTypes.ONE_TO_ONE,
@@ -76,7 +77,7 @@ describe('Issues', () => {
     });
   });
   describe('getNumberOfEntityIssues', () => {
-    let issues;
+    let issues: Issues;
 
     beforeEach(() => {
       issues = new Issues();
@@ -91,7 +92,7 @@ describe('Issues', () => {
       beforeEach(() => {
         issues.addEntityIssues([
           new EntityIssue({
-            ruleName: Rules.RuleNames.ENT_SHORTER_DECL,
+            ruleName: rulesNames.ENT_SHORTER_DECL,
             entityName: 'A',
           }),
         ]);
@@ -103,7 +104,7 @@ describe('Issues', () => {
     });
   });
   describe('getNumberOfEnumIssues', () => {
-    let issues;
+    let issues: Issues;
 
     beforeEach(() => {
       issues = new Issues();
@@ -118,7 +119,7 @@ describe('Issues', () => {
       beforeEach(() => {
         issues.addEnumIssues([
           new EnumIssue({
-            ruleName: Rules.RuleNames.ENUM_DUPLICATED,
+            ruleName: rulesNames.ENUM_DUPLICATED,
             enumName: 'SuperEnum',
           }),
         ]);
@@ -130,7 +131,7 @@ describe('Issues', () => {
     });
   });
   describe('getNumberOfFieldIssues', () => {
-    let issues;
+    let issues: Issues;
 
     beforeEach(() => {
       issues = new Issues();
@@ -145,7 +146,7 @@ describe('Issues', () => {
       beforeEach(() => {
         issues.addFieldIssues([
           new FieldIssue({
-            ruleName: Rules.RuleNames.FLD_DUPLICATED,
+            ruleName: rulesNames.FLD_DUPLICATED,
             fieldName: 'a',
             entityName: 'A',
           }),
@@ -158,7 +159,7 @@ describe('Issues', () => {
     });
   });
   describe('getNumberOfRelationshipIssues', () => {
-    let issues;
+    let issues: Issues;
 
     beforeEach(() => {
       issues = new Issues();
@@ -173,7 +174,7 @@ describe('Issues', () => {
       beforeEach(() => {
         issues.addRelationshipIssues([
           new RelationshipIssue({
-            ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
+            ruleName: rulesNames.REL_INDIVIDUAL_DECL,
             from: 'A',
             to: 'A',
             type: RelationshipTypes.ONE_TO_ONE,
@@ -187,7 +188,7 @@ describe('Issues', () => {
     });
   });
   describe('getIssues', () => {
-    let issues;
+    let issues: Issues;
 
     beforeEach(() => {
       issues = new Issues();
@@ -204,27 +205,27 @@ describe('Issues', () => {
       });
     });
     describe('when there are issues', () => {
-      let entityIssue;
-      let enumIssue;
-      let fieldIssue;
-      let relationshipIssue;
+      let entityIssue: EntityIssue;
+      let enumIssue: EnumIssue;
+      let fieldIssue: FieldIssue;
+      let relationshipIssue: RelationshipIssue;
 
       beforeEach(() => {
         entityIssue = new EntityIssue({
-          ruleName: Rules.RuleNames.ENT_SHORTER_DECL,
+          ruleName: rulesNames.ENT_SHORTER_DECL,
           entityName: 'A',
         });
         enumIssue = new EnumIssue({
-          ruleName: Rules.RuleNames.ENUM_DUPLICATED,
+          ruleName: rulesNames.ENUM_DUPLICATED,
           enumName: 'SuperEnum',
         });
         fieldIssue = new FieldIssue({
-          ruleName: Rules.RuleNames.FLD_DUPLICATED,
+          ruleName: rulesNames.FLD_DUPLICATED,
           fieldName: 'a',
           entityName: 'A',
         });
         relationshipIssue = new RelationshipIssue({
-          ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
+          ruleName: rulesNames.REL_INDIVIDUAL_DECL,
           from: 'A',
           to: 'A',
           type: RelationshipTypes.ONE_TO_ONE,
