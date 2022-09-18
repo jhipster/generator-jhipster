@@ -53,7 +53,8 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       async prepareReact() {
         if (!this.application.clientFrameworkReact) return;
-        prepareReactEntity(this.entity, this.application);
+        const { entity, application } = this;
+        prepareReactEntity({ entity, application });
       },
     };
   }
