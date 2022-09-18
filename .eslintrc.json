@@ -23,6 +23,9 @@
       "files": ["**/*.spec.{c,m,}{js,ts}", "test/**/*.{c,m,}{js,ts}"],
       "env": {
         "mocha": true
+      },
+      "rules": {
+        "@typescript-eslint/ban-ts-comment": "off"
       }
     },
     {
