@@ -242,6 +242,7 @@ function _derivedProperties(field) {
     fieldValidationMaxBytes: validationRules.includes(MAXBYTES),
   });
 }
+
 function prepareFieldForTemplates(entityWithConfig, field, generator) {
   prepareCommonFieldForTemplates(entityWithConfig, field, generator);
 
@@ -485,13 +486,6 @@ function prepareServerFieldForTemplates(entityWithConfig, field, generator) {
     field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
       ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
       : field.fieldValidateRulesPattern;
-  }
-
-  const primaryKey = entityWithConfig.primaryKey;
-  if (primaryKey && !primaryKey.composite && primaryKey.derivedFields) {
-    // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
-    const derivedFields = primaryKey.derivedFields;
-    entityWithConfig.fields.unshift(...derivedFields);
   }
 
   if (field.blobContentTypeText) {

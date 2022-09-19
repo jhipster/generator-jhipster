@@ -18,7 +18,8 @@
  */
 /* eslint-disable consistent-return */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+const { PREPARING_FIELDS_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
 
 const { entityDefaultConfig } = require('../generator-defaults');
 const { writeFiles, customizeFiles } = require('./files');
@@ -42,6 +43,26 @@ module.exports = class extends BaseBlueprintGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ENTITY_SERVER, { context: this.options.context });
     }
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _preparingFields() {
+    return {
+      processDerivedPrimaryKeyFields() {
+        const primaryKey = this.entity.primaryKey;
+        if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
+          return;
+        }
+        // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
+        const derivedFields = this.entity.primaryKey.derivedFields;
+        this.entity.fields.unshift(...derivedFields);
+      },
+    };
+  }
+
+  get [PREPARING_FIELDS_PRIORITY]() {
+    if (this.delegateToBlueprint) return {};
+    return this._preparingFields();
   }
 
   _default() {
