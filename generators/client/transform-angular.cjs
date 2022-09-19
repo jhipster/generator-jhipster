@@ -70,7 +70,7 @@ function replaceJSTranslation(generator, content, jsKey) {
  * @returns string with pageTitle replaced
  */
 function replacePageTitles(generator, content) {
-  return replaceJSTranslation(generator, content, 'pageTitle');
+  return replaceJSTranslation(generator, content, 'title');
 }
 
 /**
