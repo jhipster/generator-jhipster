@@ -388,19 +388,6 @@ function prepareClientFieldForTemplates(entityWithConfig, field, generator) {
 }
 
 function prepareServerFieldForTemplates(entityWithConfig, field, generator) {
-  const primaryKey = entityWithConfig.primaryKey;
-  if (primaryKey && !primaryKey.composite && primaryKey.derivedFields) {
-    // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
-    const derivedFields = primaryKey.derivedFields;
-    entityWithConfig.fields.unshift(...derivedFields);
-  }
-
-  if (field.blobContentTypeText) {
-    field.javaFieldType = 'String';
-  } else {
-    field.javaFieldType = field.fieldType;
-  }
-
   if (field.mapstructExpression) {
     assert.equal(
       entityWithConfig.dto,
@@ -498,6 +485,19 @@ function prepareServerFieldForTemplates(entityWithConfig, field, generator) {
     field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
       ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
       : field.fieldValidateRulesPattern;
+  }
+
+  const primaryKey = entityWithConfig.primaryKey;
+  if (primaryKey && !primaryKey.composite && primaryKey.derivedFields) {
+    // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
+    const derivedFields = primaryKey.derivedFields;
+    entityWithConfig.fields.unshift(...derivedFields);
+  }
+
+  if (field.blobContentTypeText) {
+    field.javaFieldType = 'String';
+  } else {
+    field.javaFieldType = field.fieldType;
   }
 }
 
