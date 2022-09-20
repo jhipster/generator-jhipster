@@ -158,8 +158,8 @@ pageTitle: 'activate.title2',
 `;
           expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
 "
-pageTitle: 'translated-value-activate.title1-0',
-pageTitle: 'translated-value-activate.title2-1',
+pageTitle: 'activate.title1',
+pageTitle: 'activate.title2',
 "
 `);
         });
@@ -175,8 +175,8 @@ pageTitle: 'activate.title2',
 `;
           expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
 "
-pageTitle: 'translated-value-activate.title1-0',
-pageTitle: 'translated-value-activate.title2-1',
+pageTitle: 'activate.title1',
+pageTitle: 'activate.title2',
 "
 `);
         });
