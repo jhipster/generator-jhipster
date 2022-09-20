@@ -3278,8 +3278,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Construct the entity's dto name by appending the dto suffix.
    * @param {String} name entity name
    */
-  asDto(name) {
-    return name + (this.dtoSuffix || this.jhipsterConfig.dtoSuffix || '');
+  asDto(name, application) {
+    return name + (application.dtoSuffix ?? '');
   }
 
   get needleApi() {

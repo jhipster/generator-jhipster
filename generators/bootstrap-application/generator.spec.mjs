@@ -140,6 +140,7 @@ Array [
         const entity = runResult.env.sharedOptions.sharedData.jhipster.sharedEntities.User;
         expect(filterEntity(entity)).toMatchInlineSnapshot(`
 Object {
+  "adminUserDto": "AdminUserDTO",
   "applicationType": "monolith",
   "authenticationType": "jwt",
   "baseName": "jhipster",
@@ -152,8 +153,8 @@ Object {
   "differentRelationships": Object {},
   "differentTypes": Array [],
   "dto": true,
-  "dtoClass": "User",
-  "dtoInstance": "user",
+  "dtoClass": "UserDTO",
+  "dtoInstance": "userDTO",
   "dtoMapstruct": false,
   "dtoSuffix": "DTO",
   "embedded": false,
@@ -183,7 +184,7 @@ Object {
   "entityServiceFileName": "user",
   "entityStateName": "user",
   "entitySuffix": "",
-  "entityTableName": "_user",
+  "entityTableName": "jhi_user",
   "entityTranslationKey": "user",
   "entityTranslationKeyMenu": "user",
   "entityUrl": "user",
@@ -549,8 +550,8 @@ Object {
   "relationships": Array [],
   "requiresPersistableImplementation": false,
   "resetFakerSeed": "[resetFakerSeed] function",
-  "restClass": "User",
-  "restInstance": "user",
+  "restClass": "UserDTO",
+  "restInstance": "userDTO",
   "saveUserSnapshot": false,
   "searchEngine": false,
   "service": "no",

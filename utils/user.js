@@ -30,7 +30,7 @@ module.exports = {
   createUserEntity,
 };
 
-function createUserEntity(customUserData = {}) {
+function createUserEntity(customUserData = {}, application) {
   const userEntityDefinition = this.readEntityJson('User');
   if (userEntityDefinition) {
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
@@ -45,15 +45,15 @@ function createUserEntity(customUserData = {}) {
   const user = {
     name: 'User',
     builtIn: true,
-    entityTableName: `${this.getTableName(this.jhipsterConfig.jhiPrefix)}_user`,
+    entityTableName: `${this.getTableName(application.jhiPrefix)}_user`,
     relationships: [],
     fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
     dto: true,
-    adminUserDto: this.asDto('AdminUser'),
+    adminUserDto: this.asDto('AdminUser', application),
     ...customUserData,
   };
 
-  loadRequiredConfigIntoEntity(user, this.jhipsterConfig);
+  loadRequiredConfigIntoEntity(user, application);
   // Fallback to defaults for test cases.
   loadRequiredConfigIntoEntity(user, this.jhipsterDefaults);
 

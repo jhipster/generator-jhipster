@@ -441,21 +441,18 @@ function writeFiles() {
 
     writeServerFiles() {
       const { application, entity } = this;
-      if (application.skipServer) return undefined;
+      if (entity.skipServer) return undefined;
 
       return this.writeFiles({
         sections: serverFiles,
-        rootTemplatesPath: this.reactive ? ['reactive', ''] : undefined,
-        context: { ...application, ...entity },
+        rootTemplatesPath: application.reactive ? ['reactive', ''] : undefined,
+        context: this,
       });
     },
 
-    writeEnumFiles() {
+    async writeEnumFiles() {
       const { application, entity } = this;
-      entity.fields.forEach(field => {
-        if (!field.fieldIsEnum) {
-          return;
-        }
+      for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
         const fieldType = field.fieldType;
         const enumInfo = {
           ...utils.getEnumInfo(field, entity.clientRootFolder),
@@ -463,20 +460,18 @@ function writeFiles() {
           packageName: application.packageName,
           entityAbsolutePackage: entity.entityAbsolutePackage || application.packageName,
         };
-        // eslint-disable-next-line no-console
         if (!application.skipServer) {
-          const pathToTemplateFile = `${this.fetchFromInstalledJHipster(
-            'entity-server/templates'
-          )}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`;
-          this.template(
-            pathToTemplateFile,
-            `${SERVER_MAIN_SRC_DIR}${entity.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
-            { ...application, ...entity },
-            {},
-            enumInfo
-          );
+          await this.writeFiles({
+            templates: [
+              {
+                sourceFile: `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
+                destinationFile: `${SERVER_MAIN_SRC_DIR}${entity.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
+              },
+            ],
+            context: enumInfo,
+          });
         }
-      });
+      }
     },
     ...writeEntityCouchbaseFiles(),
   };

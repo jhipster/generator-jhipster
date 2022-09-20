@@ -87,11 +87,12 @@ export default class extends BaseApplicationGenerator {
         if (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== OAUTH2) {
           return;
         }
-        if (this.sharedData.huser.persistClass) {
+        if (this.sharedData.hasEntity('User')) {
           throw new Error("Fail to bootstrap 'User', already exists.");
         }
 
-        this.sharedData.setEntity('User', createUserEntity.call(this));
+        const application = this._.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
+        this.sharedData.setEntity('User', createUserEntity.call(this, {}, application));
       },
     });
   }
@@ -224,8 +225,8 @@ export default class extends BaseApplicationGenerator {
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      preparingEachEntity({ entity }) {
-        prepareEntityForTemplates(entity, this);
+      preparingEachEntity({ application, entity }) {
+        prepareEntityForTemplates(entity, this, application);
       },
     });
   }
