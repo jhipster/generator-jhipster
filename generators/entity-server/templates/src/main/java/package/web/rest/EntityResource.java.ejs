@@ -140,7 +140,7 @@ public class <%= entityClass %>Resource {
 
   <%_ let entityName = entityInstance;
   if (clientRootFolder && !skipUiGrouping) {
-    entityName =this._.camelCase(`${clientRootFolder}${entityClass}`);
+    entityName = this._.camelCase(`${clientRootFolder}${entityClass}`);
   } _%>
     private static final String ENTITY_NAME = "<%= entityName %>";
 

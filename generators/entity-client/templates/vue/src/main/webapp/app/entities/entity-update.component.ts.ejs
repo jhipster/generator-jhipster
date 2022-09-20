@@ -155,7 +155,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   <%_ } _%>
 <%_ } _%>
   <%_ enumImports.forEach( (importedPath, importedType) => { _%>
-  public <%-this._.lowerFirst(importedType) %>Values : string[] = Object.keys(<%- importedType %>);
+  public <%- this._.lowerFirst(importedType) %>Values : string[] = Object.keys(<%- importedType %>);
   <%_ }); _%>
   public isSaving = false;
   public currentLanguage = '';

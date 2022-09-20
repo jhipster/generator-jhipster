@@ -69,7 +69,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     isSaving = false;
     <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
-    <%-this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
+    <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ }); _%>
 
 <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>

@@ -131,11 +131,11 @@ _%>
     }
   <%_ if (reference.field && reference.field.fieldWithContentType) { _%>
 
-    public String get<%= javaBeanCase(reference.name) %>ContentType() {
+    public String get<%= this.javaBeanCase(reference.name) %>ContentType() {
         return <%= reference.name %>ContentType;
     }
 
-    public void set<%= javaBeanCase(reference.name) %>ContentType(String <%= reference.name %>ContentType) {
+    public void set<%= this.javaBeanCase(reference.name) %>ContentType(String <%= reference.name %>ContentType) {
         this.<%= reference.name %>ContentType = <%= reference.name %>ContentType;
     }
   <%_ } _%>

@@ -50,7 +50,7 @@ _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
     <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
                         <option [ngValue]="null"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.null' | translate }}<% } %></option>
-                        <option *ngFor="let <%=this._.lowerFirst(fieldType) %> of <%-this._.lowerFirst(fieldType) %>Values" [value]="<%=this._.lowerFirst(fieldType) %>"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.' + <%=this._.lowerFirst(fieldType) %> | translate }}<% } else { %><%=this._.lowerFirst(fieldType) %><% } %></option>
+                        <option *ngFor="let <%= this._.lowerFirst(fieldType) %> of <%- this._.lowerFirst(fieldType) %>Values" [value]="<%= this._.lowerFirst(fieldType) %>"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.' + <%= this._.lowerFirst(fieldType) %> | translate }}<% } else { %><%= this._.lowerFirst(fieldType) %><% } %></option>
                     </select>
   <%_ } else { _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>

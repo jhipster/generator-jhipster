@@ -69,7 +69,7 @@ function writeEntityCouchbaseFiles() {
   return {
     cleanupCouchbaseFiles() {
       const { application, entity } = this;
-      if (!application.databaseTypeCouchbase) return;
+      if (entity.skipServer || !application.databaseTypeCouchbase) return;
 
       if (this.isJhipsterVersionLessThan('7.6.1')) {
         this.removeFile(
@@ -85,6 +85,7 @@ function writeEntityCouchbaseFiles() {
       await this.writeFiles({
         sections: entityCouchbaseFiles,
         rootTemplatesPath: 'couchbase',
+        context: { ...application, ...entity },
       });
     },
   };

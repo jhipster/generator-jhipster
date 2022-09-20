@@ -185,7 +185,7 @@ class PublicUserResourceIT {
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-        assertThat(foundUser.get<%= javaBeanCase(field.fieldName) %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
+        assertThat(foundUser.get<%= this.javaBeanCase(field.fieldName) %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
   <%_ } _%>
 <%_ } else { _%>
         restUserMockMvc.perform(get("/api/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")

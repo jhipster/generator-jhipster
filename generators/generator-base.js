@@ -2518,9 +2518,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         let useAsync = true;
         if (context.entityClass) {
           const basename = path.basename(sourceFileFrom);
-          if (context.configOptions && context.configOptions.sharedEntities) {
-            Object.values(context.configOptions.sharedEntities).forEach(entity => {
-              entity.resetFakerSeed(`${context.entityClass}-${basename}`);
+          const seed = `${context.entityClass}-${basename}`;
+          if (this.configOptions && this.configOptions.sharedEntities) {
+            Object.values(this.configOptions.sharedEntities).forEach(entity => {
+              entity.resetFakerSeed(seed);
             });
           } else if (context.resetFakerSeed) {
             context.resetFakerSeed(basename);

@@ -436,6 +436,7 @@ function writeFiles() {
   return {
     cleanupOldServerFiles() {
       const { application, entity } = this;
+      if (entity.skipServer) return;
       entityServerCleanup.cleanupOldFiles(this, { application, entity });
     },
 
@@ -452,6 +453,8 @@ function writeFiles() {
 
     async writeEnumFiles() {
       const { application, entity } = this;
+      if (entity.skipServer) return;
+
       for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
         const fieldType = field.fieldType;
         const enumInfo = {
@@ -460,17 +463,15 @@ function writeFiles() {
           packageName: application.packageName,
           entityAbsolutePackage: entity.entityAbsolutePackage || application.packageName,
         };
-        if (!application.skipServer) {
-          await this.writeFiles({
-            templates: [
-              {
-                sourceFile: `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
-                destinationFile: `${SERVER_MAIN_SRC_DIR}${entity.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
-              },
-            ],
-            context: enumInfo,
-          });
-        }
+        await this.writeFiles({
+          templates: [
+            {
+              sourceFile: `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
+              destinationFile: `${SERVER_MAIN_SRC_DIR}${entity.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
+            },
+          ],
+          context: enumInfo,
+        });
       }
     },
     ...writeEntityCouchbaseFiles(),
@@ -479,6 +480,7 @@ function writeFiles() {
 
 function customizeFiles() {
   const { application, entity } = this;
+  if (entity.skipServer) return;
   if (application.databaseType === SQL) {
     if ([EHCACHE, CAFFEINE, INFINISPAN, REDIS].includes(application.cacheProvider) && application.enableHibernateCache) {
       this.addEntityToCache(

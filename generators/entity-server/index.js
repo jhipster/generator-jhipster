@@ -71,9 +71,6 @@ module.exports = class extends BaseBlueprintGenerator {
       postProcessEntityDerivedFields() {
         preparePostEntityServerDerivedProperties(this.entity);
       },
-      loadConfigIntoGenerator() {
-        Object.assign(this, this.entity);
-      },
     };
   }
 
