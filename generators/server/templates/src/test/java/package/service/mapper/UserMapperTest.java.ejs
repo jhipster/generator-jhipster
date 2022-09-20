@@ -20,7 +20,7 @@ package <%= packageName %>.service.mapper;
 
 import <%= packageName %>.domain.<%= this.asEntity('User') %>;
 import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
-import <%= packageName %>.service.dto.<%= this.asDto('User') %>;
+import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
@@ -46,7 +46,7 @@ class UserMapperTest {
 <%_ if (databaseTypeCouchbase) { _%>
     private static final String DEFAULT_ID = DEFAULT_LOGIN;
 <%_ } else { _%>
-    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- getPrimaryKeyValue(user.primaryKey.type) %>;
+    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- this.getPrimaryKeyValue(user.primaryKey.type) %>;
 <%_ } _%>
 
     private UserMapper userMapper;
@@ -79,7 +79,7 @@ class UserMapperTest {
         users.add(user);
         users.add(null);
 
-        List<<%= this.asDto('User') %>> userDTOS = userMapper.usersToUserDTOs(users);
+        List<<%= user.dtoClass %>> userDTOS = userMapper.usersToUserDTOs(users);
 
         assertThat(userDTOS)
           .isNotEmpty()

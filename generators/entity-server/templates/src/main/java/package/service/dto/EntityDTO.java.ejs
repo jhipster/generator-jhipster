@@ -92,9 +92,9 @@ _%>
   <%_ if (field && field.blobContentTypeText) { _%>
     private String <%= reference.name %>;
   <%_ } else if (reference.collection && reference.relationship) { _%>
-    private Set<<%= this.asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.name %> = new HashSet<>();
+    private Set<<%= reference.relationship.otherEntity.dtoClass %>> <%= reference.name %> = new HashSet<>();
   <%_ } else if (reference.relationship) { _%>
-    private <%= this.asDto(reference.relationship.otherEntity.entityNameCapitalized) %> <%= reference.name %>;
+    private <%= reference.relationship.otherEntity.dtoClass %> <%= reference.name %>;
   <%_ } else { _%>
     private <%= reference.type %> <%= reference.name %>;
   <%_ } _%>
@@ -107,25 +107,25 @@ _%>
 
 <%_ for (reference of dtoReferences) { _%>
   <%_ if (reference.field && reference.field.blobContentTypeText) { _%>
-    public <%= buildJavaGetter(reference, 'String') %> {
+    public <%= this.buildJavaGetter(reference, 'String') %> {
   <%_ } else if (reference.collection && reference.relationship) { _%>
-    public <%- buildJavaGetter(reference, `Set<${ asDto(reference.relationship.otherEntity.entityNameCapitalized) }>` ) %> {
+    public <%- this.buildJavaGetter(reference, `Set<${ reference.relationship.otherEntity.dtoClass }>` ) %> {
   <%_ } else if (reference.relationship) { _%>
-    public <%= buildJavaGetter(reference, asDto(reference.relationship.otherEntity.entityNameCapitalized)) %> {
+    public <%= this.buildJavaGetter(reference, reference.relationship.otherEntity.dtoClass) %> {
   <%_ } else { _%>
-    public <%= buildJavaGetter(reference) %> {
+    public <%= this.buildJavaGetter(reference) %> {
   <%_ } _%>
         return <%= reference.name %>;
     }
 
   <%_ if (reference.field && reference.field.blobContentTypeText) { _%>
-    public void <%= buildJavaSetter(reference, `String ${reference.name}`) %> {
+    public void <%= this.buildJavaSetter(reference, `String ${reference.name}`) %> {
   <%_ } else if (reference.collection && reference.relationship) { _%>
-    public void <%- buildJavaSetter(reference, `Set<${ asDto(reference.relationship.otherEntity.entityNameCapitalized) }> ${reference.name}`) %> {
+    public void <%- this.buildJavaSetter(reference, `Set<${ reference.relationship.otherEntity.dtoClass }> ${reference.name}`) %> {
   <%_ } else if (reference.relationship) { _%>
-    public void <%= buildJavaSetter(reference, `${ asDto(reference.relationship.otherEntity.entityNameCapitalized) } ${reference.name}`) %> {
+    public void <%= this.buildJavaSetter(reference, `${ reference.relationship.otherEntity.dtoClass } ${reference.name}`) %> {
   <%_ } else { _%>
-    public void <%= buildJavaSetter(reference) %> {
+    public void <%= this.buildJavaSetter(reference) %> {
   <%_ } _%>
         this.<%= reference.name %> = <%= reference.name %>;
     }
@@ -177,7 +177,7 @@ _%>
         return "<%= dtoClass %>{" +
 <%_ for ([idx, reference] of dtoReferences.entries()) {
   const isQuoted = reference.field && !reference.field.fieldTypeNumeric _%>
-            "<%= idx === 0 ? '' : ', ' %><%= reference.name %>=<% if (isQuoted) { %>'<% } %>" + <%= buildJavaGet(reference) %> <% if (isQuoted) { %>+ "'" <% } %>+
+            "<%= idx === 0 ? '' : ', ' %><%= reference.name %>=<% if (isQuoted) { %>'<% } %>" + <%= this.buildJavaGet(reference) %> <% if (isQuoted) { %>+ "'" <% } %>+
 <%_ } _%>
             "}";
     }

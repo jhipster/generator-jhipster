@@ -1379,15 +1379,15 @@ _%>
   <%_ } _%>
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>)))
             .andExpect(status().isOk());
   <%_ } _%>
 
@@ -1597,7 +1597,7 @@ _%>
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
-            <%= this.asDto(entityClass) %> <%= this.asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= this.asEntity(entityInstance) %>);
+            <%= dtoClass %> <%= this.dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
 
   <%_ } _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
@@ -1636,7 +1636,7 @@ _%>
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
-            <%= this.asDto(entityClass) %> <%= this.asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= this.asEntity(entityInstance) %>);
+            <%= dtoClass %> <%= this.dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
@@ -1675,7 +1675,7 @@ _%>
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
-            <%= this.asDto(entityClass) %> <%= this.asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= this.asEntity(entityInstance) %>);
+            <%= dtoClass %> <%= this.dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException

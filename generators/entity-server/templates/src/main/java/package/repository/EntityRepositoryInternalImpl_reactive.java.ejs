@@ -107,7 +107,7 @@ class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%=
 <%_ relationships.forEach(function(rel) {
   if (rel.shouldWriteJoinTable) {
 _%>
-    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new EntityManager.LinkTable("<%= rel.joinTable.name %>", "<%= entity.entityTableName %>_<%= getColumnName(entity.primaryKey.name) %>", "<%= rel.joinColumnNames[0] %>");
+    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new EntityManager.LinkTable("<%= rel.joinTable.name %>", "<%= entity.entityTableName %>_<%= getColumnName(primaryKey.name) %>", "<%= rel.joinColumnNames[0] %>");
 <%_ }
 }); _%>
 

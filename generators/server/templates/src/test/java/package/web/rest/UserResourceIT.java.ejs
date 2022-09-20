@@ -128,7 +128,7 @@ class UserResourceIT {
 <%_ if (databaseTypeCouchbase) { _%>
     private static final String DEFAULT_ID = DEFAULT_LOGIN;
 <%_ } else { _%>
-    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- getPrimaryKeyValue(user.primaryKey.type) %>;
+    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- this.getPrimaryKeyValue(user.primaryKey.type) %>;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 
@@ -951,7 +951,7 @@ class UserResourceIT {
         <%= this.asEntity('User') %> user2 = new <%= this.asEntity('User') %>();
         user2.setId(user1.getId());
         assertThat(user1).isEqualTo(user2);
-        user2.setId(<%- getPrimaryKeyValue(user.primaryKey.type, databaseType, 2) %>);
+        user2.setId(<%- this.getPrimaryKeyValue(user.primaryKey.type, databaseType, 2) %>);
         assertThat(user1).isNotEqualTo(user2);
         user1.setId(null);
         assertThat(user1).isNotEqualTo(user2);

@@ -55,7 +55,7 @@ import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
-import <%= packageName %>.service.dto.<%= this.asDto('User') %>;
+import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
@@ -176,12 +176,12 @@ class PublicUserResourceIT {
 
         // Get all the users
 <%_ if (reactive) { _%>
-        <%= this.asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,desc")
+        <%= user.dtoClass %> foundUser = webTestClient.get().uri("/api/users?sort=id,desc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= this.asDto('User') %>.class).getResponseBody().blockFirst();
+            .returnResult(<%= user.dtoClass %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>

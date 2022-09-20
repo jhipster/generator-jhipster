@@ -40,7 +40,7 @@ import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.security.SecurityUtils;
 <%_ } _%>
 import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
-import <%= packageName %>.service.dto.<%= this.asDto('User') %>;
+import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 <%_ if (!authenticationTypeOauth2) { _%>
 
 import tech.jhipster.security.RandomUtil;
@@ -759,8 +759,8 @@ public class UserService {
     <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= this.asDto('User') %>> getAllPublicUsers(Pageable pageable) {
-        return userRepository.findAllBy<% if (!databaseTypeCouchbase) { %>IdNotNullAnd<% } %>ActivatedIsTrue(pageable).map(<%= this.asDto('User') %>::new);
+    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= user.dtoClass %>> getAllPublicUsers(Pageable pageable) {
+        return userRepository.findAllBy<% if (!databaseTypeCouchbase) { %>IdNotNullAnd<% } %>ActivatedIsTrue(pageable).map(<%= user.dtoClass %>::new);
     }
 
     <%_ if (reactive) { _%>
@@ -779,10 +779,10 @@ public class UserService {
             .collect(Collectors.toList())<% } %>;
     }
 
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= this.asDto('User') %>> getAllPublicUsers() {
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= user.dtoClass %>> getAllPublicUsers() {
         return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
             .filter(user -> user.isActivated())
-            .map(<%= this.asDto('User') %>::new)<% if (!reactive) { %>
+            .map(<%= user.dtoClass %>::new)<% if (!reactive) { %>
             .collect(Collectors.toList())<% } %>;
     }
   <%_ } _%>

@@ -38,7 +38,7 @@ import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.PasswordChangeDTO;
 import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
-import <%= packageName %>.service.dto.<%= this.asDto('User') %>;
+import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
