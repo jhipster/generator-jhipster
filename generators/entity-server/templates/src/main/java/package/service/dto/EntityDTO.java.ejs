@@ -66,7 +66,7 @@ import <%= `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoCl
  * A DTO for the {@link <%= entityAbsolutePackage %>.domain.<%= persistClass %>} entity.
  */
 <%_ if (typeof javadoc !== 'undefined') { _%>
-@Schema(description = "<%- formatAsApiDescription(javadoc) %>")
+@Schema(description = "<%- this.formatAsApiDescription(javadoc) %>")
 <%_ } _%>
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class <%= dtoClass %> implements Serializable {
@@ -74,7 +74,7 @@ public class <%= dtoClass %> implements Serializable {
 <%_ for (reference of dtoReferences) {
   if (typeof reference.doc !== 'undefined') {
 _%>
-<%- formatAsFieldJavadoc(reference.doc) %>
+<%- this.formatAsFieldJavadoc(reference.doc) %>
   <%_ }
   const field = reference.field;
   const required = field && field.fieldValidate && field.fieldValidationRequired;
@@ -84,7 +84,7 @@ _%>
     <%_ }
   } _%>
   <%_ if (reference.doc) { _%>
-    @Schema(description = "<%- formatAsApiDescription(reference.doc) %>"<% if (required) { %>, required = true<% } %>)
+    @Schema(description = "<%- this.formatAsApiDescription(reference.doc) %>"<% if (required) { %>, required = true<% } %>)
   <%_ } _%>
   <%_ if (field && field.fieldTypeBytes && databaseTypeSql) { _%>
     @Lob
