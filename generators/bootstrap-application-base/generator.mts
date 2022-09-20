@@ -133,6 +133,7 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
             throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
           }
           const entity = entityStorage.getAll();
+          entity.name = entity.name ?? entityName;
           this.sharedData.setEntity(entityName, entity);
 
           // Load field annotations

@@ -67,26 +67,27 @@ const entityCouchbaseFiles = {
 
 function writeEntityCouchbaseFiles() {
   return {
-    cleanupCouchbaseFiles() {
-      const { application, entity } = this;
-      if (entity.skipServer || !application.databaseTypeCouchbase) return;
-
-      if (this.isJhipsterVersionLessThan('7.6.1')) {
-        this.removeFile(
-          `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V${entity.changelogDate}__${entity.entityInstance.toLowerCase()}.fts`
-        );
+    cleanupCouchbaseEntityFiles({ application, entities }) {
+      if (!application.databaseTypeCouchbase) return;
+      for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
+        if (this.isJhipsterVersionLessThan('7.6.1')) {
+          this.removeFile(
+            `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V${entity.changelogDate}__${entity.entityInstance.toLowerCase()}.fts`
+          );
+        }
       }
     },
 
-    async writeEntityCouchbaseFiles() {
-      const { application, entity } = this;
-      if (entity.skipServer || !application.databaseTypeCouchbase) return;
+    async writeEntityCouchbaseFiles({ application, entities }) {
+      if (!application.databaseTypeCouchbase) return;
 
-      await this.writeFiles({
-        sections: entityCouchbaseFiles,
-        rootTemplatesPath: 'couchbase',
-        context: { ...application, ...entity },
-      });
+      for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
+        await this.writeFiles({
+          sections: entityCouchbaseFiles,
+          rootTemplatesPath: 'entity/couchbase',
+          context: { ...application, ...entity },
+        });
+      }
     },
   };
 }

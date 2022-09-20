@@ -19,14 +19,14 @@
 const _ = require('lodash');
 const chalk = require('chalk');
 const fs = require('fs');
-const entityServerCleanup = require('./cleanup');
+const entityServerCleanup = require('./entity-cleanup');
 const utils = require('../utils');
 const constants = require('../generator-constants');
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = require('../../jdl/jhipster/database-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { MapperTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
 const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = require('../../jdl/jhipster/cache-types');
-const { writeEntityCouchbaseFiles } = require('./files-couchbase');
+const { writeEntityCouchbaseFiles } = require('./entity-files-couchbase');
 
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
@@ -434,62 +434,61 @@ module.exports = {
 
 function writeFiles() {
   return {
-    cleanupOldServerFiles() {
-      const { application, entity } = this;
-      if (entity.skipServer) return;
-      entityServerCleanup.cleanupOldFiles(this, { application, entity });
+    cleanupOldServerFiles({ application, entities }) {
+      for (const entity of entities.filter(entity => !entity.skipServer)) {
+        entityServerCleanup.cleanupOldFiles.call(this, { application, entity });
+      }
     },
 
-    writeServerFiles() {
-      const { application, entity } = this;
-      if (entity.skipServer) return undefined;
-
-      return this.writeFiles({
-        sections: serverFiles,
-        rootTemplatesPath: application.reactive ? ['reactive', ''] : undefined,
-        context: { ...application, ...entity },
-      });
-    },
-
-    async writeEnumFiles() {
-      const { application, entity } = this;
-      if (entity.skipServer) return;
-
-      for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
-        const fieldType = field.fieldType;
-        const enumInfo = {
-          ...utils.getEnumInfo(field, entity.clientRootFolder),
-          frontendAppName: application.frontendAppName,
-          packageName: application.packageName,
-          entityAbsolutePackage: entity.entityAbsolutePackage || application.packageName,
-        };
+    async writeServerFiles({ application, entities }) {
+      for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
         await this.writeFiles({
-          templates: [
-            {
-              sourceFile: `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
-              destinationFile: `${SERVER_MAIN_SRC_DIR}${entity.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
-            },
-          ],
-          context: enumInfo,
+          sections: serverFiles,
+          rootTemplatesPath: application.reactive ? ['entity/reactive', 'entity'] : 'entity',
+          context: { ...application, ...entity },
         });
+      }
+    },
+
+    async writeEnumFiles({ application, entities }) {
+      for (const entity of entities.filter(entity => !entity.skipServer)) {
+        for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
+          const fieldType = field.fieldType;
+          const enumInfo = {
+            ...utils.getEnumInfo(field, entity.clientRootFolder),
+            frontendAppName: application.frontendAppName,
+            packageName: application.packageName,
+            entityAbsolutePackage: entity.entityAbsolutePackage || application.packageName,
+          };
+          await this.writeFiles({
+            templates: [
+              {
+                sourceFile: `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
+                destinationFile: `${SERVER_MAIN_SRC_DIR}${entity.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
+              },
+            ],
+            rootTemplatesPath: application.reactive ? ['entity/reactive', 'entity'] : 'entity',
+            context: enumInfo,
+          });
+        }
       }
     },
     ...writeEntityCouchbaseFiles(),
   };
 }
 
-function customizeFiles() {
-  const { application, entity } = this;
-  if (entity.skipServer) return;
+function customizeFiles({ application, entities }) {
   if (application.databaseType === SQL) {
-    if ([EHCACHE, CAFFEINE, INFINISPAN, REDIS].includes(application.cacheProvider) && application.enableHibernateCache) {
-      this.addEntityToCache(
-        entity.entityAbsoluteClass,
-        entity.relationships,
-        application.packageName,
-        application.packageFolder,
-        application.cacheProvider
-      );
+    for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+      if ([EHCACHE, CAFFEINE, INFINISPAN, REDIS].includes(application.cacheProvider) && application.enableHibernateCache) {
+        this.addEntityToCache(
+          entity.entityAbsoluteClass,
+          entity.relationships,
+          application.packageName,
+          application.packageFolder,
+          application.cacheProvider
+        );
+      }
     }
   }
 }

@@ -305,15 +305,6 @@ Object {
   "generators/entity-i18n/templates/template-file-entity-i18n.ejs": Object {
     "stateCleared": "modified",
   },
-  "generators/entity-server/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/entity-server/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/entity-server/templates/template-file-entity-server.ejs": Object {
-    "stateCleared": "modified",
-  },
   "generators/entity/generator.mjs": Object {
     "stateCleared": "modified",
   },

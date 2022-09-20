@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-const { existsSync } = require('fs');
-
 /* eslint-disable consistent-return */
+const { existsSync } = require('fs');
 const chalk = require('chalk');
 const os = require('os');
 const prompts = require('./prompts');
@@ -30,11 +29,11 @@ const {
   GENERATOR_SERVER,
   GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_DATABASE_CHANGELOG,
-  GENERATOR_ENTITY_SERVER,
 } = require('../generator-list');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const BaseApplicationGenerator = require('../base-application/generator.cjs');
 const { writeFiles } = require('./files');
+const { writeFiles: writeEntityFiles, customizeFiles } = require('./entity-files');
 const { packageJson: packagejs } = require('../../lib/index.js');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
@@ -563,16 +562,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
-      async composeEachEntity({ application, entities }) {
-        for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
-          const entityName = entity.name;
-          await this.composeWithJHipster(GENERATOR_ENTITY_SERVER, [entityName], {
-            skipDbChangelog: application.databaseTypeSql || this.options.skipDbChangelog,
-            context: entity,
-            application,
-          });
-        }
-      },
+      ...writeEntityFiles(),
 
       async databaseChangelog({ application, entities }) {
         if (!application.databaseTypeSql || this.options.skipDbChangelog) {
@@ -783,6 +773,16 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
   }
 
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({
+      customizeFiles,
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.asPostWritingEntitiesTaskGroup(this.delegateToBlueprint ? {} : this.postWritingEntities);
+  }
+
   get end() {
     return this.asEndTaskGroup({
       checkLocaleValue({ application }) {
@@ -864,6 +864,13 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
       config.prodDatabaseType = databaseType;
       config.enableHibernateCache = false;
     }
+  }
+
+  _generateSqlSafeName(name) {
+    if (isReservedTableName(name, SQL)) {
+      return `e_${name}`;
+    }
+    return name;
   }
 
   /**

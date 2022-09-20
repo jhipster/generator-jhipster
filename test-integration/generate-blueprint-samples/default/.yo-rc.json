@@ -145,26 +145,6 @@
         "sbs": false,
         "written": true
       },
-      "entity-server": {
-        "command": false,
-        "priorities": [
-          "initializing",
-          "prompting",
-          "configuring",
-          "composing",
-          "loading",
-          "preparing",
-          "preparingFields",
-          "preparingRelationships",
-          "default",
-          "writing",
-          "postWriting",
-          "install",
-          "end"
-        ],
-        "sbs": false,
-        "written": true
-      },
       "server": {
         "command": false,
         "priorities": [
@@ -198,8 +178,6 @@
       "entity",
       "entity-client",
       "entity-i18n",
-      "entity-i18n",
-      "entity-server",
       "server"
     ]
   }
