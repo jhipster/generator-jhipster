@@ -3065,6 +3065,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFrameworkVue = dest.clientFramework === VUE;
     dest.clientFrameworkNo = dest.clientFramework === CLIENT_FRAMEWORK_NO;
     dest.clientFrameworkAny = dest.clientFramework && dest.clientFramework !== CLIENT_FRAMEWORK_NO;
+    if (dest.microfrontend === undefined) {
+      if (dest.applicationTypeMicroservice) {
+        dest.microfrontend = dest.clientFrameworkAny;
+      } else if (dest.applicationTypeGateway) {
+        dest.microfrontend = dest.microfrontends.length > 0;
+      }
+    }
     dest.clientThemeNone = dest.clientTheme === 'none';
     dest.clientThemePrimary = dest.clientThemeVariant === 'primary';
     dest.clientThemeLight = dest.clientThemeVariant === 'light';
@@ -3195,6 +3202,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
+    dest.searchEngineAny = ![undefined, false, 'no'].includes(dest.searchEngine);
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {

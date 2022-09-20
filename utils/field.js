@@ -244,8 +244,20 @@ function _derivedProperties(field) {
 }
 
 function prepareFieldForTemplates(entityWithConfig, field, generator) {
+  prepareCommonFieldForTemplates(entityWithConfig, field, generator);
+
+  if (entityWithConfig.prodDatabaseType || entityWithConfig.databaseType) {
+    prepareServerFieldForTemplates(entityWithConfig, field, generator);
+  }
+
+  prepareClientFieldForTemplates(entityWithConfig, field, generator);
+  return field;
+}
+
+function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
   _.defaults(field, {
     propertyName: field.fieldName,
+    path: [field.fieldName],
     fieldNameCapitalized: _.upperFirst(field.fieldName),
     fieldNameUnderscored: _.snakeCase(field.fieldName),
     fieldNameHumanized: _.startCase(field.fieldName),
@@ -254,59 +266,11 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     entity: entityWithConfig,
   });
   const fieldType = field.fieldType;
-  if (field.mapstructExpression) {
-    assert.equal(
-      entityWithConfig.dto,
-      MAPSTRUCT,
-      `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`
-    );
-    // Remove from Entity.java and liquibase.
-    field.transient = true;
-    // Disable update form.
-    field.readonly = true;
-  }
-
-  if (field.id) {
-    if (field.autoGenerate === undefined) {
-      field.autoGenerate = !entityWithConfig.primaryKey.composite && [LONG, UUID].includes(field.fieldType);
-    }
-
-    if (!field.autoGenerate) {
-      field.liquibaseAutoIncrement = false;
-      field.jpaGeneratedValue = false;
-      field.autoGenerateByService = false;
-      field.autoGenerateByRepository = false;
-      field.requiresPersistableImplementation = true;
-    } else if (entityWithConfig.databaseType !== SQL) {
-      field.liquibaseAutoIncrement = false;
-      field.jpaGeneratedValue = false;
-      field.autoGenerateByService = field.fieldType === UUID;
-      field.autoGenerateByRepository = !field.autoGenerateByService;
-      field.requiresPersistableImplementation = false;
-      field.readonly = true;
-    } else if (entityWithConfig.reactive) {
-      field.liquibaseAutoIncrement = field.fieldType === LONG;
-      field.jpaGeneratedValue = false;
-      field.autoGenerateByService = !field.liquibaseAutoIncrement;
-      field.autoGenerateByRepository = !field.autoGenerateByService;
-      field.requiresPersistableImplementation = !field.liquibaseAutoIncrement;
-      field.readonly = true;
-    } else {
-      const defaultGenerationType = entityWithConfig.prodDatabaseType === MYSQL ? 'identity' : 'sequence';
-      field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === LONG ? defaultGenerationType : true;
-      field.autoGenerateByService = false;
-      field.autoGenerateByRepository = true;
-      field.requiresPersistableImplementation = false;
-      field.readonly = true;
-      if (field.jpaGeneratedValue === 'identity') {
-        field.liquibaseAutoIncrement = true;
-      }
-    }
-  }
 
   field.fieldIsEnum = !field.id && fieldIsEnum(fieldType);
   if (field.fieldIsEnum) {
     field.enumFileName = _.kebabCase(field.fieldType);
+    field.enumValues = getEnumValuesWithCustomValues(field.fieldValues);
   }
 
   field.fieldWithContentType = (fieldType === BYTES || fieldType === BYTE_BUFFER) && field.fieldTypeBlobContent !== TEXT;
@@ -314,29 +278,11 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     field.contentTypeFieldName = `${field.fieldName}ContentType`;
   }
 
-  if (entityWithConfig.prodDatabaseType) {
-    // TODO move to server generator.
-    prepareServerFieldForTemplates(entityWithConfig, field, generator);
-  }
-
-  prepareClientFieldForTemplates(entityWithConfig, field, generator);
-
-  if (field.fieldIsEnum) {
-    field.enumValues = getEnumValuesWithCustomValues(field.fieldValues);
-  }
-
   field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
   _.defaults(field, {
     nullable: !(field.fieldValidate === true && field.fieldValidateRules.includes(REQUIRED)),
   });
   field.unique = field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE);
-  if (field.unique) {
-    field.uniqueConstraintName = generator.getUXConstraintName(
-      entityWithConfig.entityTableName,
-      field.columnName,
-      entityWithConfig.prodDatabaseType
-    );
-  }
   if (field.fieldValidate === true && field.fieldValidateRules.includes(MAXLENGTH)) {
     field.maxlength = field.fieldValidateRulesMaxlength || 255;
   }
@@ -377,8 +323,8 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     }
     return data;
   };
-  field.path = [field.fieldName];
   field.relationshipsPath = [];
+
   field.reference = fieldToReference(entityWithConfig, field);
   _derivedProperties(field);
   return field;
@@ -443,6 +389,56 @@ function prepareClientFieldForTemplates(entityWithConfig, field, generator) {
 }
 
 function prepareServerFieldForTemplates(entityWithConfig, field, generator) {
+  if (field.mapstructExpression) {
+    assert.equal(
+      entityWithConfig.dto,
+      MAPSTRUCT,
+      `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`
+    );
+    // Remove from Entity.java and liquibase.
+    field.transient = true;
+    // Disable update form.
+    field.readonly = true;
+  }
+
+  if (field.id && entityWithConfig.primaryKey) {
+    if (field.autoGenerate === undefined) {
+      field.autoGenerate = !entityWithConfig.primaryKey.composite && [LONG, UUID].includes(field.fieldType);
+    }
+
+    if (!field.autoGenerate) {
+      field.liquibaseAutoIncrement = false;
+      field.jpaGeneratedValue = false;
+      field.autoGenerateByService = false;
+      field.autoGenerateByRepository = false;
+      field.requiresPersistableImplementation = true;
+    } else if (entityWithConfig.databaseType !== SQL) {
+      field.liquibaseAutoIncrement = false;
+      field.jpaGeneratedValue = false;
+      field.autoGenerateByService = field.fieldType === UUID;
+      field.autoGenerateByRepository = !field.autoGenerateByService;
+      field.requiresPersistableImplementation = false;
+      field.readonly = true;
+    } else if (entityWithConfig.reactive) {
+      field.liquibaseAutoIncrement = field.fieldType === LONG;
+      field.jpaGeneratedValue = false;
+      field.autoGenerateByService = !field.liquibaseAutoIncrement;
+      field.autoGenerateByRepository = !field.autoGenerateByService;
+      field.requiresPersistableImplementation = !field.liquibaseAutoIncrement;
+      field.readonly = true;
+    } else {
+      const defaultGenerationType = entityWithConfig.prodDatabaseType === MYSQL ? 'identity' : 'sequence';
+      field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === LONG ? defaultGenerationType : true;
+      field.autoGenerateByService = false;
+      field.autoGenerateByRepository = true;
+      field.requiresPersistableImplementation = false;
+      field.readonly = true;
+      if (field.jpaGeneratedValue === 'identity') {
+        field.liquibaseAutoIncrement = true;
+      }
+    }
+  }
+
   if (field.fieldNameAsDatabaseColumn === undefined) {
     const fieldNameUnderscored = _.snakeCase(field.fieldName);
     const jhiFieldNamePrefix = generator.getColumnName(entityWithConfig.jhiPrefix);
@@ -460,7 +456,15 @@ function prepareServerFieldForTemplates(entityWithConfig, field, generator) {
       field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
     }
   }
+
   field.columnName = field.fieldNameAsDatabaseColumn;
+  if (field.unique) {
+    field.uniqueConstraintName = generator.getUXConstraintName(
+      entityWithConfig.entityTableName,
+      field.columnName,
+      entityWithConfig.prodDatabaseType
+    );
+  }
 
   if (field.fieldInJavaBeanMethod === undefined) {
     // Handle the specific case when the second letter is capitalized
@@ -483,6 +487,12 @@ function prepareServerFieldForTemplates(entityWithConfig, field, generator) {
       ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
       : field.fieldValidateRulesPattern;
   }
+
+  if (field.blobContentTypeText) {
+    field.javaFieldType = 'String';
+  } else {
+    field.javaFieldType = field.fieldType;
+  }
 }
 
 function fieldToReference(entity, field, pathPrefix = []) {
@@ -501,4 +511,12 @@ function fieldToReference(entity, field, pathPrefix = []) {
   };
 }
 
-module.exports = { prepareFieldForTemplates, fieldIsEnum, getEnumValuesWithCustomValues, fieldToReference };
+module.exports = {
+  prepareFieldForTemplates,
+  prepareCommonFieldForTemplates,
+  prepareClientFieldForTemplates,
+  prepareServerFieldForTemplates,
+  fieldIsEnum,
+  getEnumValuesWithCustomValues,
+  fieldToReference,
+};
