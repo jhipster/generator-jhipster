@@ -200,9 +200,9 @@ _%>
     return (rel.relationshipManyToMany && rel.ownerSide);
    }).forEach(function(rel, idx) { _%>
     <%_ if (idx === 0) { _%>
-        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= this.asEntity(rel.otherEntityNameCapitalized) %>::get<%= rel.otherEntity.primaryKey.nameCapitalized %>)).then();
+        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= rel.otherEntity.persistClass %>::get<%= rel.otherEntity.primaryKey.nameCapitalized %>)).then();
     <%_ } else { _%>
-        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= this.asEntity(rel.otherEntityNameCapitalized) %>::get<%= rel.otherEntity.primaryKey.nameCapitalized %>)));
+        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= rel.otherEntity.persistClass %>::get<%= rel.otherEntity.primaryKey.nameCapitalized %>)));
     <%_ } _%>
   <%_ }); _%>
         return result.thenReturn(entity);

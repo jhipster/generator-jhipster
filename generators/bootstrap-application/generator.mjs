@@ -87,7 +87,7 @@ export default class extends BaseApplicationGenerator {
         if (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== OAUTH2) {
           return;
         }
-        if (this.sharedData.hasEntity('User')) {
+        if (this.sharedData.huser.persistClass) {
           throw new Error("Fail to bootstrap 'User', already exists.");
         }
 

@@ -19,7 +19,7 @@
 package <%= packageName %>.service.mapper;
 
 import <%= packageName %>.domain.<%= user.persistClass %>;
-import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.apache.commons.lang3.RandomStringUtils;
@@ -51,7 +51,7 @@ class UserMapperTest {
 
     private UserMapper userMapper;
     private <%= user.persistClass %> user;
-    private <%= this.asDto('AdminUser') %> userDto;
+    private <%= user.adminUserDto %> userDto;
 
     @BeforeEach
     public void init() {
@@ -70,7 +70,7 @@ class UserMapperTest {
 <%_ } _%>
         user.setLangKey("en");
 
-        userDto = new <%= this.asDto('AdminUser') %>(user);
+        userDto = new <%= user.adminUserDto %>(user);
     }
 
     @Test
@@ -88,7 +88,7 @@ class UserMapperTest {
 
     @Test
     void userDTOsToUsersShouldMapOnlyNonNullUsers() {
-        List<<%= this.asDto('AdminUser') %>> usersDto = new ArrayList<>();
+        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
         usersDto.add(null);
 
@@ -105,7 +105,7 @@ class UserMapperTest {
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
 
-        List<<%= this.asDto('AdminUser') %>> usersDto = new ArrayList<>();
+        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
         List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
@@ -127,7 +127,7 @@ class UserMapperTest {
     void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        List<<%= this.asDto('AdminUser') %>> usersDto = new ArrayList<>();
+        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
         List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);

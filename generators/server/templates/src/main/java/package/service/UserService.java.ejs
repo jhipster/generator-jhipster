@@ -39,7 +39,7 @@ import <%= packageName %>.security.AuthoritiesConstants;
   <%_ } _%>
 import <%= packageName %>.security.SecurityUtils;
 <%_ } _%>
-import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 <%_ if (!authenticationTypeOauth2) { _%>
 
@@ -258,7 +258,7 @@ public class UserService {
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<<%= user.persistClass %>><% } else { %><%= user.persistClass %><% } %> registerUser(<%= this.asDto('AdminUser') %> userDTO, String password) {
+    public <% if (reactive) { %>Mono<<%= user.persistClass %>><% } else { %><%= user.persistClass %><% } %> registerUser(<%= user.adminUserDto %> userDTO, String password) {
     <%_ if (reactive) { _%>
         return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase())
             .flatMap(existingUser -> {
@@ -401,7 +401,7 @@ public class UserService {
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<<%= user.persistClass %>><% } else { %><%= user.persistClass %><% } %> createUser(<%= this.asDto('AdminUser') %> userDTO) {
+    public <% if (reactive) { %>Mono<<%= user.persistClass %>><% } else { %><%= user.persistClass %><% } %> createUser(<%= user.adminUserDto %> userDTO) {
         <%= user.persistClass %> user = new <%= user.persistClass %>();
     <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -486,7 +486,7 @@ public class UserService {
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= this.asDto('AdminUser') %>> updateUser(<%= this.asDto('AdminUser') %> userDTO) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= user.adminUserDto %>> updateUser(<%= user.adminUserDto %> userDTO) {
     <%_ if (reactive) { _%>
         return userRepository.findById(userDTO.getId())
             .<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>flatMap<% } else { %>map<% } %>(user -> {
@@ -567,7 +567,7 @@ public class UserService {
                 return user;
             })
     <%_ } _%>
-            .map(<%= this.asDto('AdminUser') %>::new);
+            .map(<%= user.adminUserDto %>::new);
     }
 
     <%_ if (reactive) { _%>
@@ -752,8 +752,8 @@ public class UserService {
     @Transactional(readOnly = true)
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= this.asDto('AdminUser') %>> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll<% if (reactive) { %><% if (databaseTypeSql) { %>WithAuthorities<% } else { %>By<% if (!databaseTypeCouchbase) { %>IdNotNull<% }}} %>(pageable).map(<%= this.asDto('AdminUser') %>::new);
+    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= user.adminUserDto %>> getAllManagedUsers(Pageable pageable) {
+        return userRepository.findAll<% if (reactive) { %><% if (databaseTypeSql) { %>WithAuthorities<% } else { %>By<% if (!databaseTypeCouchbase) { %>IdNotNull<% }}} %>(pageable).map(<%= user.adminUserDto %>::new);
     }
 
     <%_ if (databaseTypeSql) { _%>
@@ -773,9 +773,9 @@ public class UserService {
     }
     <%_ } _%>
   <%_ } else { /* Cassandra */ _%>
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= this.asDto('AdminUser') %>> getAllManagedUsers() {
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= user.adminUserDto %>> getAllManagedUsers() {
         return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
-            .map(<%= this.asDto('AdminUser') %>::new)<% if (!reactive) { %>
+            .map(<%= user.adminUserDto %>::new)<% if (!reactive) { %>
             .collect(Collectors.toList())<% } %>;
     }
 
@@ -996,7 +996,7 @@ public class UserService {
   <%_ if (databaseTypeSql) { _%>
     @Transactional
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<%= this.asDto('AdminUser') %>><% } else { %><%= this.asDto('AdminUser') %><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+    public <% if (reactive) { %>Mono<<%= user.adminUserDto %>><% } else { %><%= user.adminUserDto %><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;
         if (authToken instanceof OAuth2AuthenticationToken) {
             attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
@@ -1005,7 +1005,7 @@ public class UserService {
         } else {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }
-        <%= databaseTypeNo ? asDto('AdminUser') : asEntity('User') %> user = getUser(attributes);
+        <%= databaseTypeNo ? user.adminUserDto : user.persistClass %> user = getUser(attributes);
         user.setAuthorities(authToken.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
@@ -1021,15 +1021,15 @@ public class UserService {
         return <% if (reactive) { %>Mono.just(user)<% } else { %>user<% } %>;
   <%_ } else { _%>
     <%_ if (reactive) { _%>
-        return syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new <%= this.asDto('AdminUser') %>(u)));
+        return syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new <%= user.adminUserDto %>(u)));
     <%_ } else { _%>
-        return new <%= this.asDto('AdminUser') %>(syncUserWithIdP(attributes, user));
+        return new <%= user.adminUserDto %>(syncUserWithIdP(attributes, user));
     <%_ } _%>
   <%_ } _%>
     }
 
-    private static <%= databaseTypeNo ? asDto('AdminUser') : asEntity('User') %> getUser(Map<String, Object> details) {
-        <%= databaseTypeNo ? asDto('AdminUser') : asEntity('User') %> user = new <%= databaseTypeNo ? asDto('AdminUser') : asEntity('User') %>();
+    private static <%= databaseTypeNo ? user.adminUserDto : user.persistClass %> getUser(Map<String, Object> details) {
+        <%= databaseTypeNo ? user.adminUserDto : user.persistClass %> user = new <%= databaseTypeNo ? user.adminUserDto : user.persistClass %>();
         Boolean activated = Boolean.TRUE;
         String sub = String.valueOf(details.get("sub"));
         String username = null;

@@ -70,7 +70,7 @@ for (relationship of relationships) { // import entities in required relationshi
   const isUsingMapsIdL1 = relationship.id;
   if (imported.indexOf(otherEntityNameCapitalized) === -1) {
     if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
-import <%= entityAbsolutePackage %>.domain.<%= this.asEntity(otherEntityNameCapitalized) %>;
+import <%= entityAbsolutePackage %>.domain.<%= relationship.otherEntity.persistClass %>;
 <%_
           imported.push(otherEntityNameCapitalized);
     }
@@ -515,7 +515,7 @@ if (field.fieldTypeString || field.blobContentTypeText) {
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>
-        <%= this.asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseTypeSql) { %>em<% } %>)<%= createEntityPostfix %>;
+        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseTypeSql) { %>em<% } %>)<%= createEntityPostfix %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
@@ -524,17 +524,17 @@ if (field.fieldTypeString || field.blobContentTypeText) {
         <%= otherEntityName %>.set<%= primaryKey.nameCapitalized %>("fixed-id-for-tests");
           <%_ } _%>
         <%_ } else { _%>
-        <%= this.asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>;
+        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
             <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
-        if (TestUtil.findAll(em, <%= this.asEntity(otherEntityNameCapitalized) %>.class).isEmpty()) {
+        if (TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%_ } _%>
             <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(em)<%= createEntityPostfix %>;
             em.persist(<%= otherEntityName %>);
             em.flush();
             <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
         } else {
-            <%= otherEntityName %> = TestUtil.findAll(em, <%= this.asEntity(otherEntityNameCapitalized) %>.class).get(0);
+            <%= otherEntityName %> = TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).get(0);
         }
             <%_ } _%>
           <%_ } else { _%>
@@ -733,7 +733,7 @@ _%>
       if (mapsIdUse) { _%>
         // Add a new parent entity
         <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
-        <%= this.asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql) { %>em<% } %>);
+        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql) { %>em<% } %>);
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
@@ -1171,18 +1171,18 @@ _%>
     void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
     <%_ if ((relationship.relationshipValidate && relationship.relationshipOneToOne) || relationship.id) { _%>
         // Get already existing entity
-        <%= this.asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= persistInstance %>.get<%= relationship.relationshipNameCapitalized %>();
+        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= persistInstance %>.get<%= relationship.relationshipNameCapitalized %>();
     <%_ } else { _%>
       <%_ if (databaseTypeSql && !reactive) { _%>
-        <%= this.asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %>;
-        if (TestUtil.findAll(em, <%= this.asEntity(relationship.otherEntityNameCapitalized) %>.class).isEmpty()) {
+        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
+        if (TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
             <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
         } else {
-            <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= this.asEntity(relationship.otherEntityNameCapitalized) %>.class).get(0);
+            <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).get(0);
         }
       <%_ } else { _%>
-        <%= this.asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
+        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
       <%_ } _%>
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();

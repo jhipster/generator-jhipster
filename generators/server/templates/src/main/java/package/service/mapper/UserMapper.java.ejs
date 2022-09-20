@@ -22,7 +22,7 @@ package <%= packageName %>.service.mapper;
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 import <%= packageName %>.domain.<%= user.persistClass %>;
-import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 
 import org.springframework.stereotype.Service;
@@ -54,25 +54,25 @@ public class UserMapper {
         return new <%= user.dtoClass %>(user);
     }
 
-    public List<<%= this.asDto('AdminUser') %>> usersToAdminUserDTOs(List<<%= user.persistClass %>> users) {
+    public List<<%= user.adminUserDto %>> usersToAdminUserDTOs(List<<%= user.persistClass %>> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToAdminUserDTO)
             .collect(Collectors.toList());
     }
 
-    public <%= this.asDto('AdminUser') %> userToAdminUserDTO(<%= user.persistClass %> user) {
-        return new <%= this.asDto('AdminUser') %>(user);
+    public <%= user.adminUserDto %> userToAdminUserDTO(<%= user.persistClass %> user) {
+        return new <%= user.adminUserDto %>(user);
     }
 
-    public List<<%= user.persistClass %>> userDTOsToUsers(List<<%= this.asDto('AdminUser') %>> userDTOs) {
+    public List<<%= user.persistClass %>> userDTOsToUsers(List<<%= user.adminUserDto %>> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
             .collect(Collectors.toList());
     }
 
-    public <%= user.persistClass %> userDTOToUser(<%= this.asDto('AdminUser') %> userDTO) {
+    public <%= user.persistClass %> userDTOToUser(<%= user.adminUserDto %> userDTO) {
         if (userDTO == null) {
             return null;
         } else {

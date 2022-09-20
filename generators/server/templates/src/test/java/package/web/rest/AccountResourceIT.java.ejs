@@ -37,7 +37,7 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.PasswordChangeDTO;
-import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
@@ -198,7 +198,7 @@ class AccountResourceIT {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
 
-        <%= this.asDto('AdminUser') %> user = new <%= this.asDto('AdminUser') %>();
+        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
         user.setLogin(TEST_USER_LOGIN);
         user.setFirstName("john");
         user.setLastName("doe");
@@ -647,7 +647,7 @@ class AccountResourceIT {
         assertThat(testUser4.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
         testUser4.get().setActivated(true);
-        userService.updateUser((new <%= this.asDto('AdminUser') %>(testUser4.get())))<% if (reactive) { %>.block()<% } %>;
+        userService.updateUser((new <%= user.adminUserDto %>(testUser4.get())))<% if (reactive) { %>.block()<% } %>;
 
         // Register 4th (already activated) user
 <%_ if (reactive) { _%>
@@ -773,7 +773,7 @@ class AccountResourceIT {
 <%_ } _%>
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        <%= this.asDto('AdminUser') %> userDTO = new <%= this.asDto('AdminUser') %>();
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
@@ -833,7 +833,7 @@ class AccountResourceIT {
 
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        <%= this.asDto('AdminUser') %> userDTO = new <%= this.asDto('AdminUser') %>();
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
@@ -899,7 +899,7 @@ class AccountResourceIT {
 
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
 
-        <%= this.asDto('AdminUser') %> userDTO = new <%= this.asDto('AdminUser') %>();
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
@@ -949,7 +949,7 @@ class AccountResourceIT {
 <%_ } _%>
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        <%= this.asDto('AdminUser') %> userDTO = new <%= this.asDto('AdminUser') %>();
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");

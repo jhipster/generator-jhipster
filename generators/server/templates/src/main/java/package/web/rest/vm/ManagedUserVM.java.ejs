@@ -18,15 +18,15 @@
 -%>
 package <%= packageName %>.web.rest.vm;
 
-import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 <%_ if (!authenticationTypeOauth2) { _%>
 import javax.validation.constraints.Size;
 <%_ } _%>
 
 /**
- * View Model extending the <%= this.asDto('AdminUser') %>, which is meant to be used in the user management UI.
+ * View Model extending the <%= user.adminUserDto %>, which is meant to be used in the user management UI.
  */
-public class ManagedUserVM extends <%= this.asDto('AdminUser') %> {
+public class ManagedUserVM extends <%= user.adminUserDto %> {
 <%_ if (!authenticationTypeOauth2) { _%>
 
     public static final int PASSWORD_MIN_LENGTH = 4;

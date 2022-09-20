@@ -49,6 +49,7 @@ function createUserEntity(customUserData = {}) {
     relationships: [],
     fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
     dto: true,
+    adminUserDto: this.asDto('AdminUser'),
     ...customUserData,
   };
 

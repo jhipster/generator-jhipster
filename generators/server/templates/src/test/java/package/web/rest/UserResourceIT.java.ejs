@@ -39,7 +39,7 @@ import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.repository.EntityManager;
 <%_ } _%>
@@ -502,12 +502,12 @@ class UserResourceIT {
 
         // Get all the users
   <%_ if (reactive) { _%>
-        <%= this.asDto('AdminUser') %> foundUser = webTestClient.get().uri("/api/admin/users?sort=id,desc")
+        <%= user.adminUserDto %> foundUser = webTestClient.get().uri("/api/admin/users?sort=id,desc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= this.asDto('AdminUser') %>.class).getResponseBody().blockFirst();
+            .returnResult(<%= user.adminUserDto %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -959,7 +959,7 @@ class UserResourceIT {
 
     @Test
     void testUserDTOtoUser() {
-        <%= this.asDto('AdminUser') %> userDTO = new <%= this.asDto('AdminUser') %>();
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
         userDTO.setId(DEFAULT_ID);
         userDTO.setLogin(DEFAULT_LOGIN);
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
@@ -1015,7 +1015,7 @@ class UserResourceIT {
         user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
 <%_ } _%>
 
-        <%= this.asDto('AdminUser') %> userDTO = userMapper.userToAdminUserDTO(user);
+        <%= user.adminUserDto %> userDTO = userMapper.userToAdminUserDTO(user);
 
         assertThat(userDTO.getId()).isEqualTo(DEFAULT_ID);
         assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);

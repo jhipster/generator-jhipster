@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
-public class <%= this.asDto('AdminUser') %> implements Serializable {
+public class <%= user.adminUserDto %> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private <%= user.primaryKey.type %> id;
@@ -84,11 +84,11 @@ public class <%= this.asDto('AdminUser') %> implements Serializable {
     private Set<String> authorities;
 
 <%_ if (!databaseTypeNo) { _%>
-    public <%= this.asDto('AdminUser') %>() {
+    public <%= user.adminUserDto %>() {
         // Empty constructor needed for Jackson.
     }
 
-    public <%= this.asDto('AdminUser') %>(<%= user.persistClass %> user) {
+    public <%= user.adminUserDto %>(<%= user.persistClass %> user) {
         this.id = user.getId();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
@@ -226,7 +226,7 @@ public class <%= this.asDto('AdminUser') %> implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= this.asDto('AdminUser') %>{" +
+        return "<%= user.adminUserDto %>{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
