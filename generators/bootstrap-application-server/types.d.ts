@@ -61,6 +61,13 @@ export type SpringBootApplication = ClientServerApplication &
     packageName: string;
     packageFolder: string;
 
+    srcMainJava: string;
+    srcMainResources: string;
+    srcMainWebapp: string;
+    srcTestJava: string;
+    srcTestResources: string;
+    srcTestJavascript: string;
+
     enableSwaggerCodegen: boolean;
     embeddableLaunchScript: boolean;
     prettierJava: boolean;

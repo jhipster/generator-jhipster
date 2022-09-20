@@ -47,7 +47,15 @@ const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl
 const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
 const { joinCallbacks } = require('../lib/support/base.cjs');
 
-const { JHIPSTER_CONFIG_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR } = constants;
+const {
+  JHIPSTER_CONFIG_DIR,
+  SERVER_MAIN_SRC_DIR,
+  SERVER_TEST_SRC_DIR,
+  SERVER_MAIN_RES_DIR,
+  SERVER_TEST_RES_DIR,
+  CLIENT_MAIN_SRC_DIR,
+  CLIENT_TEST_SRC_DIR,
+} = constants;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
@@ -3098,8 +3106,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Load server configs into dest.
    * all variables should be set to dest,
    * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
+   * @param {Object} config - config to load config from
+   * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
   loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.packageName = config.packageName;
@@ -3107,7 +3115,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serverPort = config.serverPort;
 
     dest.srcMainJava = SERVER_MAIN_SRC_DIR;
+    dest.srcMainResources = SERVER_MAIN_RES_DIR;
+    dest.srcMainWebapp = CLIENT_MAIN_SRC_DIR;
     dest.srcTestJava = SERVER_TEST_SRC_DIR;
+    dest.srcTestResources = SERVER_TEST_RES_DIR;
+    dest.srcTestJavascript = CLIENT_TEST_SRC_DIR;
 
     dest.buildTool = config.buildTool;
 
