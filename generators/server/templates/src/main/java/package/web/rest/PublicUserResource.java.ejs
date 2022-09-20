@@ -33,7 +33,7 @@ import org.springframework.data.domain.Sort;
 import java.util.Collections;
 <%_ } _%>
 import <%= packageName %>.service.UserService;
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.service.dto.<%= this.asDto('User') %>;
 
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 import tech.jhipster.web.util.PaginationUtil;
@@ -124,7 +124,7 @@ public class PublicUserResource {
     @GetMapping("/users")
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (reactive) { _%>
-    public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllPublicUsers(ServerHttpRequest request, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public Mono<ResponseEntity<Flux<<%= this.asDto('User') %>>>> getAllPublicUsers(ServerHttpRequest request, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all public User names");
     <%_ if (!authenticationTypeOauth2) { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
@@ -138,7 +138,7 @@ public class PublicUserResource {
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllPublicUsers(pageable)));
     }
   <%_ } else { _%>
-    public ResponseEntity<List<<%= asDto('User') %>>> getAllPublicUsers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<<%= this.asDto('User') %>>> getAllPublicUsers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all public User names");
     <%_ if (!authenticationTypeOauth2) { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
@@ -146,7 +146,7 @@ public class PublicUserResource {
         }
     <%_ } _%>
 
-        final Page<<%= asDto('User') %>> page = userService.getAllPublicUsers(pageable);
+        final Page<<%= this.asDto('User') %>> page = userService.getAllPublicUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -167,7 +167,7 @@ public class PublicUserResource {
     }
 
 <%_ } else { /* Cassandra */ _%>
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('User') %>> getAllPublicUsers() {
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= this.asDto('User') %>> getAllPublicUsers() {
         return userService.getAllPublicUsers();
     }
 
@@ -182,23 +182,23 @@ public class PublicUserResource {
      * @return the result of the search.
      */
     @GetMapping("/_search/users/{query}")
-    public <% if(reactive) { %>Mono<<% } %>List<<%= asDto('User') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
+    public <% if(reactive) { %>Mono<<% } %>List<<%= this.asDto('User') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
   <%_ if (searchEngineElasticsearch) { _%>
     <%_ if (reactive) { _%>
-        return userSearchRepository.search(query).map(<%= asDto('User') %>::new).collectList();
+        return userSearchRepository.search(query).map(<%= this.asDto('User') %>::new).collectList();
     <%_ } else { _%>
         return StreamSupport
             .stream(userSearchRepository.search(query).spliterator(), false)
-            .map(<%= asDto('User') %>::new)
+            .map(<%= this.asDto('User') %>::new)
             .collect(Collectors.toList());
     <%_ } _%>
   <%_ } else { _%>
      <%_ if (reactive) { _%>
-        return userRepository.search(query).map(<%= asDto('User') %>::new).collectList();
+        return userRepository.search(query).map(<%= this.asDto('User') %>::new).collectList();
      <%_ } else { _%>
         return StreamSupport
             .stream(userRepository.search(query).spliterator(), false)
-            .map(<%= asDto('User') %>::new)
+            .map(<%= this.asDto('User') %>::new)
             .collect(Collectors.toList());
      <%_ } _%>
   <%_ } _%>

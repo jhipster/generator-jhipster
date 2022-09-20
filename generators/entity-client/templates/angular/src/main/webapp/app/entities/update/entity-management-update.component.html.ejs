@@ -172,7 +172,7 @@ _%>
     <%_ } else if (!relationship.otherRelationship) { _%>
                         <option *ngIf="!editForm.get('<%= relationshipName %>')!.value" [ngValue]="null" selected></option>
     <%_ } else { _%>
-                        <option *ngIf="editForm.get([<%- buildAngularFormPath(relationship.reference) %>])!.value == null" [ngValue]="null" selected></option>
+                        <option *ngIf="editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.value == null" [ngValue]="null" selected></option>
     <%_ } _%>
                         <option [ngValue]="<%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <% if (!relationship.otherRelationship || relationship.relationshipManyToOne) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationshipFieldNamePlural %><% } %>Collection">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
@@ -187,10 +187,10 @@ _%>
                 </div>
   <%_ } _%>
   <%_ if (relationship.relationshipValidate && (relationship.relationshipManyToOne || ownerSide)) { _%>
-                <div *ngIf="editForm.get([<%- buildAngularFormPath(relationship.reference) %>])!.invalid && (editForm.get([<%- buildAngularFormPath(relationship.reference) %>])!.dirty || editForm.get([<%- buildAngularFormPath(relationship.reference) %>])!.touched)">
+                <div *ngIf="editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.invalid && (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.dirty || editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.touched)">
     <%_ if (relationshipRequired) { _%>
                     <small class="form-text text-danger"
-                           *ngIf="editForm.get([<%- buildAngularFormPath(relationship.reference) %>])?.errors?.required" <%= jhiPrefix %>Translate="entity.validation.required">
+                           *ngIf="editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])?.errors?.required" <%= jhiPrefix %>Translate="entity.validation.required">
                         <%- this._getClientTranslation('entity.validation.required') %>
                     </small>
     <%_ } _%>

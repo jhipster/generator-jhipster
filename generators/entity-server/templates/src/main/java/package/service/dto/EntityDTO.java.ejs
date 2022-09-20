@@ -92,9 +92,9 @@ _%>
   <%_ if (field && field.blobContentTypeText) { _%>
     private String <%= reference.name %>;
   <%_ } else if (reference.collection && reference.relationship) { _%>
-    private Set<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.name %> = new HashSet<>();
+    private Set<<%= this.asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.name %> = new HashSet<>();
   <%_ } else if (reference.relationship) { _%>
-    private <%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %> <%= reference.name %>;
+    private <%= this.asDto(reference.relationship.otherEntity.entityNameCapitalized) %> <%= reference.name %>;
   <%_ } else { _%>
     private <%= reference.type %> <%= reference.name %>;
   <%_ } _%>

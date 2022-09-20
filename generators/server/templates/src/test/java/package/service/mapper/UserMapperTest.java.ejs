@@ -18,9 +18,9 @@
 -%>
 package <%= packageName %>.service.mapper;
 
-import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= this.asDto('User') %>;
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
@@ -50,13 +50,13 @@ class UserMapperTest {
 <%_ } _%>
 
     private UserMapper userMapper;
-    private <%= asEntity('User') %> user;
-    private <%= asDto('AdminUser') %> userDto;
+    private <%= this.asEntity('User') %> user;
+    private <%= this.asDto('AdminUser') %> userDto;
 
     @BeforeEach
     public void init() {
         userMapper = new UserMapper();
-        user = new <%= asEntity('User') %>();
+        user = new <%= this.asEntity('User') %>();
         user.setLogin(DEFAULT_LOGIN);
 <%_ if (!authenticationTypeOauth2) { _%>
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
@@ -70,16 +70,16 @@ class UserMapperTest {
 <%_ } _%>
         user.setLangKey("en");
 
-        userDto = new <%= asDto('AdminUser') %>(user);
+        userDto = new <%= this.asDto('AdminUser') %>(user);
     }
 
     @Test
     void usersToUserDTOsShouldMapOnlyNonNullUsers() {
-        List<<%= asEntity('User') %>> users = new ArrayList<>();
+        List<<%= this.asEntity('User') %>> users = new ArrayList<>();
         users.add(user);
         users.add(null);
 
-        List<<%= asDto('User') %>> userDTOS = userMapper.usersToUserDTOs(users);
+        List<<%= this.asDto('User') %>> userDTOS = userMapper.usersToUserDTOs(users);
 
         assertThat(userDTOS)
           .isNotEmpty()
@@ -88,11 +88,11 @@ class UserMapperTest {
 
     @Test
     void userDTOsToUsersShouldMapOnlyNonNullUsers() {
-        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
+        List<<%= this.asDto('AdminUser') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
         usersDto.add(null);
 
-        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%= this.asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users)
           .isNotEmpty()
@@ -105,10 +105,10 @@ class UserMapperTest {
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
 
-        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
+        List<<%= this.asDto('AdminUser') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
-        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%= this.asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users)
           .isNotEmpty()
@@ -127,10 +127,10 @@ class UserMapperTest {
     void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
+        List<<%= this.asDto('AdminUser') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
-        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%= this.asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users)
           .isNotEmpty()
@@ -145,7 +145,7 @@ class UserMapperTest {
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
 
-        <%= asEntity('User') %> user = userMapper.userDTOToUser(userDto);
+        <%= this.asEntity('User') %> user = userMapper.userDTOToUser(userDto);
 
         assertThat(user).isNotNull();
         assertThat(user.getAuthorities()).isNotNull();
@@ -162,7 +162,7 @@ class UserMapperTest {
     void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        <%= asEntity('User') %> user = userMapper.userDTOToUser(userDto);
+        <%= this.asEntity('User') %> user = userMapper.userDTOToUser(userDto);
 
         assertThat(user).isNotNull();
         assertThat(user.getAuthorities()).isNotNull();

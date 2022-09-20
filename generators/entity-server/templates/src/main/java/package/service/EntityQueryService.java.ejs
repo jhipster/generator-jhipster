@@ -146,7 +146,7 @@ relationships.forEach((relationship) => {
   const metamodelFieldName = (relationship.relationshipManyToMany || relationship.relationshipOneToMany) ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
 if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
     specification = specification.and(buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
-        root -> root.join(<%= persistClass %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= asEntity(relationship.otherEntityNameCapitalized) %>_.<%= relationship.otherEntity.primaryKey.name %>)));
+        root -> root.join(<%= persistClass %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= this.asEntity(relationship.otherEntityNameCapitalized) %>_.<%= relationship.otherEntity.primaryKey.name %>)));
 }
 <%_ }); /* forEach */ _%>
         }

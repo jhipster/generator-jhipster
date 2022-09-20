@@ -2405,6 +2405,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @property {WriteFileTemplate[]} [templates] - templates to be writter
    * @property {EditFileCallback[]} [transform] - transforms (files processing) to be applied
    * @property {object} [context=this] - context to be used as template data
+   * @property {object} [renderOptions=this] - config passed to render methods
    * @property {string|string[]} [rootTemplatesPath] - path(s) to look for templates.
    *        Single absolute path or relative path(s) between the templates folder and template path.
    */
@@ -2523,7 +2524,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
 
         const renderOptions = {
-          ...options,
+          ...(options.renderOptions ?? {}),
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
         };

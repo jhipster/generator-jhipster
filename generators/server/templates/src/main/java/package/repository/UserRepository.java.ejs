@@ -21,7 +21,7 @@ package <%= packageName %>.repository;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= this.asEntity('User') %>;
 
 <%_ if (databaseTypeCassandra) { _%>
 import com.datastax.oss.driver.api.core.CqlIdentifier;
@@ -150,7 +150,7 @@ import java.util.UUID;
 import java.time.Instant;
 <%_ } _%>
 /**
- * Spring Data <% if (databaseTypeSql && !reactive) { %>JPA<% } else if (databaseTypeSql && reactive) { %>R2DBC<% } else if (databaseTypeMongodb) { %>MongoDB<% } else if (databaseTypeCouchbase) { %>Couchbase<% } else if (databaseTypeCassandra) { %>Cassandra<% } else if (databaseTypeNeo4j) { %>Neo4j<% } %> repository for the {@link <%= asEntity('User') %>} entity.
+ * Spring Data <% if (databaseTypeSql && !reactive) { %>JPA<% } else if (databaseTypeSql && reactive) { %>R2DBC<% } else if (databaseTypeMongodb) { %>MongoDB<% } else if (databaseTypeCouchbase) { %>Couchbase<% } else if (databaseTypeCassandra) { %>Cassandra<% } else if (databaseTypeNeo4j) { %>Neo4j<% } %> repository for the {@link <%= this.asEntity('User') %>} entity.
  */
 <%_
     let optionalOrMono = reactive ? 'Mono' : 'Optional';
@@ -159,7 +159,7 @@ import java.time.Instant;
 _%>
 <%_ if ((databaseTypeSql && !reactive) || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 @Repository
-public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive && !databaseTypeCouchbase) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeCouchbase) { %>JHipsterCouchbaseRepository<<%= asEntity('User') %>, String><% } %><% if (searchEngineCouchbase) { %>, CouchbaseSearchRepository<<%= asEntity('User') %>, String><% } %> {
+public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= this.asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive && !databaseTypeCouchbase) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= this.asEntity('User') %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= this.asEntity('User') %>, String><% } %><% if (databaseTypeCouchbase) { %>JHipsterCouchbaseRepository<<%= this.asEntity('User') %>, String><% } %><% if (searchEngineCouchbase) { %>, CouchbaseSearchRepository<<%= this.asEntity('User') %>, String><% } %> {
   <%_ if (cacheManagerIsAvailable) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
@@ -167,7 +167,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
-      <% if (databaseTypeCouchbase) { %>default <% } %><%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+      <% if (databaseTypeCouchbase) { %>default <% } %><%= optionalOrMono %><<%= this.asEntity('User') %>> findOneByActivationKey(String activationKey)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
         return findIdByActivationKey(activationKey)
             .map(User::getId)
             .flatMap(this::findById);
@@ -179,7 +179,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
 
-    <% if (databaseTypeCouchbase) { %>default <% } %><%= listOrFlux %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+    <% if (databaseTypeCouchbase) { %>default <% } %><%= listOrFlux %><<%= this.asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
         return findAllById(toIds(findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(dateTime)));
     }
 
@@ -189,7 +189,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
 
   <%_ if (!authenticationTypeOauth2) { _%>
-    <% if (databaseTypeCouchbase) { %>default <% } %><%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+    <% if (databaseTypeCouchbase) { %>default <% } %><%= optionalOrMono %><<%= this.asEntity('User') %>> findOneByResetKey(String resetKey)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
         return findIdByResetKey(resetKey)
             .map(User::getId)
             .flatMap(this::findById);
@@ -206,7 +206,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
       <%_ } _%>
     <%_ } _%>
-    <% if (databaseTypeCouchbase) { %>default <% } %><%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+    <% if (databaseTypeCouchbase) { %>default <% } %><%= optionalOrMono %><<%= this.asEntity('User') %>> findOneByEmailIgnoreCase(String email)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
         return findIdByEmailIgnoreCase(email)
             .map(User::getId)
             .flatMap(this::findById);
@@ -221,21 +221,21 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     <%_ if (cacheManagerIsAvailable) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
-    default <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login) {
+    default <%= optionalOrMono %><<%= this.asEntity('User') %>> findOneByLogin(String login) {
         return findById(login);
     }
   <%_ } else if (databaseTypeMongodb || databaseTypeNeo4j) { _%>
     <%_ if (cacheManagerIsAvailable) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
-    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login);
+    <%= optionalOrMono %><<%= this.asEntity('User') %>> findOneByLogin(String login);
   <%_ } else { _%>
-    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login);
+    <%= optionalOrMono %><<%= this.asEntity('User') %>> findOneByLogin(String login);
   <%_ } _%>
 
   <%_ if (databaseTypeNeo4j) { _%>
     <% if (!reactive) { %>// See https://github.com/neo4j/sdn-rx/issues/51<% } %>
-    <%= listOrFlux %><<%= asEntity('User') %>> findAll();
+    <%= listOrFlux %><<%= this.asEntity('User') %>> findAll();
 
   <%_ } _%>
   <%_ if (databaseTypeSql) { _%>
@@ -243,21 +243,21 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     <%_ if (cacheManagerIsAvailable) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
-    Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByLogin(String login);
+    Optional<<%= this.asEntity('User') %>> findOneWithAuthoritiesByLogin(String login);
 
     <%_ if (!authenticationTypeOauth2) { _%>
     @EntityGraph(attributePaths = "authorities")
       <%_ if (cacheManagerIsAvailable) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
       <%_ } _%>
-    Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
+    Optional<<%= this.asEntity('User') %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
     <%_ } _%>
   <%_ } _%>
 
   <% if (reactive) { %>
     <%_ if (!databaseTypeCouchbase) { _%>
-    Flux<<%= asEntity('User') %>>findAllByIdNotNull(Pageable pageable);
+    Flux<<%= this.asEntity('User') %>>findAllByIdNotNull(Pageable pageable);
     <%_ } _%>
 
     <%_ if (databaseTypeCouchbase) { _%>
@@ -268,7 +268,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     @Query(FIND_IDS_QUERY + " AND activated = true")
     Flux<User> findAllIdsByActivatedIsTrue(Pageable pageable);
     <%_ } else { _%>
-    Flux<<%= asEntity('User') %>>findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+    Flux<<%= this.asEntity('User') %>>findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <%_ } _%>
 
     Mono<Long> count();
@@ -282,29 +282,29 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     @Query(FIND_IDS_QUERY + " AND activated = true")
     Page<User> findAllIdsByActivatedIsTrue(Pageable pageable);
     <%_ } else { _%>
-    Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+    Page<<%= this.asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <%_ } _%>
   <% } %>
 }
 <%_ } else if (databaseTypeSql && reactive) { _%>
 @Repository
-public interface UserRepository extends R2dbcRepository<<%= asEntity('User') %>, <% if (authenticationTypeOauth2) { %>String<% } else { %>Long<% } %>>, UserRepositoryInternal {
+public interface UserRepository extends R2dbcRepository<<%= this.asEntity('User') %>, <% if (authenticationTypeOauth2) { %>String<% } else { %>Long<% } %>>, UserRepositoryInternal {
 
   <%_ if (!authenticationTypeOauth2) { _%>
-    Mono<<%= asEntity('User') %>> findOneByActivationKey(String activationKey);
+    Mono<<%= this.asEntity('User') %>> findOneByActivationKey(String activationKey);
 
-    Flux<<%= asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(LocalDateTime dateTime);
+    Flux<<%= this.asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(LocalDateTime dateTime);
 
-    Mono<<%= asEntity('User') %>> findOneByResetKey(String resetKey);
+    Mono<<%= this.asEntity('User') %>> findOneByResetKey(String resetKey);
 
-    Mono<<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email);
+    Mono<<%= this.asEntity('User') %>> findOneByEmailIgnoreCase(String email);
 
   <%_ } _%>
-    Mono<<%= asEntity('User') %>> findOneByLogin(String login);
+    Mono<<%= this.asEntity('User') %>> findOneByLogin(String login);
 
-    Flux<<%= asEntity('User') %>> findAllByIdNotNull(Pageable pageable);
+    Flux<<%= this.asEntity('User') %>> findAllByIdNotNull(Pageable pageable);
 
-    Flux<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+    Flux<<%= this.asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
 
     Mono<Long> count();
 
@@ -325,20 +325,20 @@ interface DeleteExtended<T> {
 }
 
   <%_ } _%>
-interface UserRepositoryInternal<% if (!authenticationTypeOauth2) { %> extends DeleteExtended<<%= asEntity('User') %>><% } %> {
+interface UserRepositoryInternal<% if (!authenticationTypeOauth2) { %> extends DeleteExtended<<%= this.asEntity('User') %>><% } %> {
 
-    Mono<<%= asEntity('User') %>> findOneWithAuthoritiesByLogin(String login);
+    Mono<<%= this.asEntity('User') %>> findOneWithAuthoritiesByLogin(String login);
 
   <%_ if (!authenticationTypeOauth2) { _%>
-    Mono<<%= asEntity('User') %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
+    Mono<<%= this.asEntity('User') %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
   <%_ } _%>
   <%_ if (authenticationTypeOauth2) { _%>
 
-    Mono<<%= asEntity('User') %>> create(<%= asEntity('User') %> user);
+    Mono<<%= this.asEntity('User') %>> create(<%= this.asEntity('User') %> user);
   <%_ } _%>
 
-    Flux<<%= asEntity('User') %>> findAllWithAuthorities(Pageable pageable);
+    Flux<<%= this.asEntity('User') %>> findAllWithAuthorities(Pageable pageable);
 }
 
 class UserRepositoryInternalImpl implements UserRepositoryInternal {
@@ -354,19 +354,19 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
     }
 
     @Override
-    public Mono<<%= asEntity('User') %>> findOneWithAuthoritiesByLogin(String login) {
+    public Mono<<%= this.asEntity('User') %>> findOneWithAuthoritiesByLogin(String login) {
         return findOneWithAuthoritiesBy("login", login);
     }
 
   <%_ if (!authenticationTypeOauth2) { _%>
     @Override
-    public Mono<<%= asEntity('User') %>> findOneWithAuthoritiesByEmailIgnoreCase(String email) {
+    public Mono<<%= this.asEntity('User') %>> findOneWithAuthoritiesByEmailIgnoreCase(String email) {
         return findOneWithAuthoritiesBy("email", email.toLowerCase());
     }
 
   <%_ } _%>
     @Override
-    public Flux<<%= asEntity('User') %>> findAllWithAuthorities(Pageable pageable) {
+    public Flux<<%= this.asEntity('User') %>> findAllWithAuthorities(Pageable pageable) {
         String property = pageable.getSort().stream().map(Sort.Order::getProperty).findFirst().orElse("id");
         String direction = String.valueOf(pageable.getSort().stream().map(Sort.Order::getDirection).findFirst().orElse(Sort.DEFAULT_DIRECTION));
         long page = pageable.getPageNumber();
@@ -376,7 +376,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             .sql("SELECT * FROM <%= jhiTablePrefix %>_user u LEFT JOIN <%= jhiTablePrefix %>_user_authority ua ON u.id=ua.user_id")
             .map(
                 (row, metadata) ->
-                    Tuples.of(r2dbcConverter.read(<%= asEntity('User') %>.class, row, metadata), Optional.ofNullable(row.get("authority_name", String.class)))
+                    Tuples.of(r2dbcConverter.read(<%= this.asEntity('User') %>.class, row, metadata), Optional.ofNullable(row.get("authority_name", String.class)))
             )
             .all()
             .groupBy(t -> t.getT1().getLogin())
@@ -388,28 +388,28 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
 
   <%_ if (!authenticationTypeOauth2) { _%>
     @Override
-    public Mono<Void> delete(<%= asEntity('User') %> user) {
+    public Mono<Void> delete(<%= this.asEntity('User') %> user) {
         return db.sql("DELETE FROM <%= jhiTablePrefix %>_user_authority WHERE user_id = :userId")
             .bind("userId", user.getId())
             .then()
-            .then(r2dbcEntityTemplate.delete(<%= asEntity('User') %>.class)
+            .then(r2dbcEntityTemplate.delete(<%= this.asEntity('User') %>.class)
                 .matching(query(where("id").is(user.getId()))).all()
                 .then());
     }
 
   <%_ } else { _%>
     @Override
-    public Mono<<%= asEntity('User') %>> create(<%= asEntity('User') %> user) {
-        return r2dbcEntityTemplate.insert(<%= asEntity('User') %>.class).using(user).defaultIfEmpty(user);
+    public Mono<<%= this.asEntity('User') %>> create(<%= this.asEntity('User') %> user) {
+        return r2dbcEntityTemplate.insert(<%= this.asEntity('User') %>.class).using(user).defaultIfEmpty(user);
     }
 
   <%_ } _%>
-    private Mono<<%= asEntity('User') %>> findOneWithAuthoritiesBy(String fieldName, Object fieldValue) {
+    private Mono<<%= this.asEntity('User') %>> findOneWithAuthoritiesBy(String fieldName, Object fieldValue) {
         return db.sql("SELECT * FROM <%= jhiTablePrefix %>_user u LEFT JOIN <%= jhiTablePrefix %>_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)
             .bind(fieldName, fieldValue)
             .map((row, metadata) ->
                 Tuples.of(
-                    r2dbcConverter.read(<%= asEntity('User') %>.class, row, metadata),
+                    r2dbcConverter.read(<%= this.asEntity('User') %>.class, row, metadata),
                     Optional.ofNullable(row.get("authority_name", String.class))
                 )
             )
@@ -419,7 +419,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             .map(l -> updateUserWithAuthorities(l.get(0).getT1(), l));
     }
 
-    private <%= asEntity('User') %> updateUserWithAuthorities(<%= asEntity('User') %> user, List<Tuple2<<%= asEntity('User') %>, Optional<String>>> tuples) {
+    private <%= this.asEntity('User') %> updateUserWithAuthorities(<%= this.asEntity('User') %> user, List<Tuple2<<%= this.asEntity('User') %>, Optional<String>>> tuples) {
         user.setAuthorities(
             tuples
                 .stream()
@@ -581,9 +581,9 @@ public class UserRepository {
         truncateByEmailStmt = session.prepare("TRUNCATE user_by_email")<% if (reactive) { %>.block()<% } %>;
     }
 
-    public <%= optionalOrMono %><<%= asEntity('User') %>> findById(String id) {
+    public <%= optionalOrMono %><<%= this.asEntity('User') %>> findById(String id) {
   <%_ if (reactive) { _%>
-        return cqlTemplate.selectOneById(id, <%= asEntity('User') %>.class)
+        return cqlTemplate.selectOneById(id, <%= this.asEntity('User') %>.class)
             .map(user -> {
                 if (user.getAuthorities() == null) {
                     user.setAuthorities(new HashSet<>());
@@ -595,12 +595,12 @@ public class UserRepository {
   <%_ } _%>
     }
 
-    public <%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey) {
+    public <%= optionalOrMono %><<%= this.asEntity('User') %>> findOneByActivationKey(String activationKey) {
         BoundStatement stmt = findOneByActivationKeyStmt.bind().setString("activation_key", activationKey);
         return findOneFromIndex(stmt);
     }
 
-    public <%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey) {
+    public <%= optionalOrMono %><<%= this.asEntity('User') %>> findOneByResetKey(String resetKey) {
         BoundStatement stmt = findOneByResetKeyStmt.bind().setString("reset_key", resetKey);
         return findOneFromIndex(stmt);
     }
@@ -608,7 +608,7 @@ public class UserRepository {
   <%_ if (cacheManagerIsAvailable) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
   <%_ } _%>
-    public <%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email) {
+    public <%= optionalOrMono %><<%= this.asEntity('User') %>> findOneByEmailIgnoreCase(String email) {
         BoundStatement stmt = findOneByEmailStmt.bind().setString("email", email.toLowerCase());
         return findOneFromIndex(stmt);
     }
@@ -616,14 +616,14 @@ public class UserRepository {
   <%_ if (cacheManagerIsAvailable) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
   <%_ } _%>
-    public <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login) {
+    public <%= optionalOrMono %><<%= this.asEntity('User') %>> findOneByLogin(String login) {
         BoundStatement stmt = findOneByLoginStmt.bind().setString("login", login);
         return findOneFromIndex(stmt);
     }
 
-    public <%= listOrFlux %><<%= asEntity('User') %>> findAll() {
+    public <%= listOrFlux %><<%= this.asEntity('User') %>> findAll() {
   <%_ if (reactive) { _%>
-        return cqlTemplate.select(findAllStmt.bind(), <%= asEntity('User') %>.class)
+        return cqlTemplate.select(findAllStmt.bind(), <%= this.asEntity('User') %>.class)
             .map(user -> {
                 if (user.getAuthorities() == null) {
                     user.setAuthorities(new HashSet<>());
@@ -635,8 +635,8 @@ public class UserRepository {
   <%_ } _%>
     }
 
-    public <% if (reactive) { %>Mono<<% } %><%= asEntity('User') %><% if (reactive) { %>><% } %> save(<%= asEntity('User') %> user) {
-        Set<ConstraintViolation<<%= asEntity('User') %>>> violations = validator.validate(user);
+    public <% if (reactive) { %>Mono<<% } %><%= this.asEntity('User') %><% if (reactive) { %>><% } %> save(<%= this.asEntity('User') %> user) {
+        Set<ConstraintViolation<<%= this.asEntity('User') %>>> violations = validator.validate(user);
         if (violations != null && !violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
@@ -696,7 +696,7 @@ public class UserRepository {
         return insert.build();
     }
   <%_ } else { /* !reactive */ _%>
-        <%= asEntity('User') %> oldUser = userDao.get(user.getId()).orElse(null);
+        <%= this.asEntity('User') %> oldUser = userDao.get(user.getId()).orElse(null);
         if (oldUser != null) {
             if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {
                 session.execute(deleteByActivationKeyStmt.bind().setString("activation_key", oldUser.getActivationKey()));
@@ -734,7 +734,7 @@ public class UserRepository {
     }
   <%_ } _%>
 
-    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> delete(<%= asEntity('User') %> user) {
+    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> delete(<%= this.asEntity('User') %> user) {
         BatchStatementBuilder batch = BatchStatement.builder(DefaultBatchType.LOGGED);
         batch.addStatement(<% if (reactive) { %>deleteByIdStmt.bind().setString("id", user.getId())<% } else { %>userDao.deleteQuery(user)<% } %>);
         if (!StringUtils.isEmpty(user.getActivationKey())) {
@@ -753,7 +753,7 @@ public class UserRepository {
     }
 
   <%_ if (reactive) { _%>
-    private Mono<<%= asEntity('User') %>> findOneFromIndex(BoundStatement stmt) {
+    private Mono<<%= this.asEntity('User') %>> findOneFromIndex(BoundStatement stmt) {
         return session.execute(stmt).flatMap(rs -> rs.rows().next())
             .map(row -> row.getString("id"))
             .flatMap(this::findById);
@@ -766,7 +766,7 @@ public class UserRepository {
             .then();
     }
   <%_ } else { _%>
-    private Optional<<%= asEntity('User') %>> findOneFromIndex(BoundStatement stmt) {
+    private Optional<<%= this.asEntity('User') %>> findOneFromIndex(BoundStatement stmt) {
         ResultSet rs = session.execute(stmt);
         return Optional
             .ofNullable(rs.one())

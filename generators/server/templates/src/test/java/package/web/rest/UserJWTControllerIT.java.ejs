@@ -23,7 +23,7 @@ import <%= packageName %>.IntegrationTest;
   <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
   <%_ } _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= this.asEntity('User') %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.web.rest.vm.LoginVM;
@@ -94,7 +94,7 @@ class UserJWTControllerIT {
     @Transactional
   <%_ } _%>
     void testAuthorize() throws Exception {
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
   <%_ } _%>
@@ -143,7 +143,7 @@ class UserJWTControllerIT {
     @Transactional
   <%_ } _%>
     void testAuthorizeWithRememberMe() throws Exception {
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
   <%_ } _%>

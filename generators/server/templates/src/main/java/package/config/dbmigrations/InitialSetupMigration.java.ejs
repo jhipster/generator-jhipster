@@ -19,7 +19,7 @@
 package <%= packageName %>.config.dbmigrations;
 
 import <%= packageName %>.domain.Authority;
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= this.asEntity('User') %>;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.config.Constants;
 
@@ -75,15 +75,15 @@ public class InitialSetupMigration {
 <%_ if (!authenticationTypeOauth2) { _%>
 
     private void addUsers(Authority userAuthority, Authority adminAuthority) {
-        <%= asEntity('User') %> user = createUser(userAuthority);
+        <%= this.asEntity('User') %> user = createUser(userAuthority);
         template.save(user);
-        <%= asEntity('User') %> admin = createAdmin(adminAuthority, userAuthority);
+        <%= this.asEntity('User') %> admin = createAdmin(adminAuthority, userAuthority);
         template.save(admin);
     }
 
 
-    private <%= asEntity('User') %> createUser(Authority userAuthority) {
-        <%= asEntity('User') %> userUser = new <%= asEntity('User') %>();
+    private <%= this.asEntity('User') %> createUser(Authority userAuthority) {
+        <%= this.asEntity('User') %> userUser = new <%= this.asEntity('User') %>();
         userUser.setId("user-2");
         userUser.setLogin("user");
         userUser.setPassword("$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K");
@@ -98,8 +98,8 @@ public class InitialSetupMigration {
         return userUser;
     }
 
-    private <%= asEntity('User') %> createAdmin(Authority adminAuthority, Authority userAuthority) {
-        <%= asEntity('User') %> adminUser = new <%= asEntity('User') %>();
+    private <%= this.asEntity('User') %> createAdmin(Authority adminAuthority, Authority userAuthority) {
+        <%= this.asEntity('User') %> adminUser = new <%= this.asEntity('User') %>();
         adminUser.setId("user-1");
         adminUser.setLogin("admin");
         adminUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");

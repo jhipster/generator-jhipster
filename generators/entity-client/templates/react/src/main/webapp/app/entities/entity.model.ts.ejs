@@ -20,7 +20,7 @@
 const variablesWithTypes = generateEntityClientFields(primaryKey, fields, relationships, dto, 'string', embedded);
 const typeImports = generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields.filter(field => !field.id), 'react');
-const enumImports = generateEntityClientEnumImports(fields.filter(field => !field.id));
+const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
 %>
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
 import dayjs from 'dayjs';

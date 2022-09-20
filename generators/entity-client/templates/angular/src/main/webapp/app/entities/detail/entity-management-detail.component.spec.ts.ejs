@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(primaryKey.type);
-const testEntity = generateTestEntityPrimaryKey(primaryKey, 0);
+const tsKeyId = this.generateTestEntityId(primaryKey.type);
+const testEntity = this.generateTestEntityPrimaryKey(primaryKey, 0);
 _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';

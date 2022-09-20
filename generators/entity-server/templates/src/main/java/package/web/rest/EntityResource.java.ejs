@@ -188,7 +188,7 @@ public class <%= entityClass %>Resource {
         <%= instanceName %>.set<%= field.fieldNameCapitalized %>(UUID.randomUUID());
     <%_ } _%>
   <%_ } _%>
-<%- include('/partials/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
+<%- include('/partials/save_template', {viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
   <%_ if (reactive) { _%>
             .map(result -> {
                 try {
@@ -321,7 +321,7 @@ public class <%= entityClass %>Resource {
     <% } %>
   <%_ } _%>
 
-            <%- include('../../common/patch_template', {asEntity, asDto, isService: false, viaService: viaService}); -%>
+            <%- include('../../common/patch_template', {isService: false, viaService: viaService}); -%>
   <%_ if (reactive) { _%>
             return result
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
@@ -362,7 +362,7 @@ public class <%= entityClass %>Resource {
 <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
     @Transactional(readOnly = true)
 <%_ } _%>
-<%- include('../../common/get_all_template', {asEntity, asDto, viaService}); -%>
+<%- include('../../common/get_all_template', {viaService}); -%>
 
 <%_ if (reactive && paginationNo) { _%>
     /**
@@ -394,7 +394,7 @@ public class <%= entityClass %>Resource {
     @Transactional(readOnly = true)
 <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> get<%= entityClass %>(@PathVariable <%= primaryKey.type %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false, implementsEagerLoadApis}); -%>
+        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService, returnDirectly:false, implementsEagerLoadApis}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
     }
 <%_ if (!readOnly) { _%>
@@ -439,6 +439,6 @@ public class <%= entityClass %>Resource {
   <%_ } _%>
      * @return the result of the search.
      */
-    @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {asEntity, asDto, viaService}); -%>
+    @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {viaService}); -%>
 <%_ } _%>
 }

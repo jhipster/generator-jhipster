@@ -22,7 +22,7 @@ import <%= packageName %>.IntegrationTest;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
 <%_ } _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= this.asEntity('User') %>;
 import <%= packageName %>.repository.UserRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -87,7 +87,7 @@ class DomainUserDetailsServiceIT {
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
 
 <%_ } _%>
-        <%= asEntity('User') %> userOne = new <%= asEntity('User') %>();
+        <%= this.asEntity('User') %> userOne = new <%= this.asEntity('User') %>();
 <%_ if (databaseTypeCassandra) { _%>
         userOne.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -103,7 +103,7 @@ class DomainUserDetailsServiceIT {
 <%_ } _%>
         userRepository.save(userOne)<% if (reactive) { %>.block()<% } %>;
 
-        <%= asEntity('User') %> userTwo = new <%= asEntity('User') %>();
+        <%= this.asEntity('User') %> userTwo = new <%= this.asEntity('User') %>();
 <%_ if (databaseTypeCassandra) { _%>
         userTwo.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -119,7 +119,7 @@ class DomainUserDetailsServiceIT {
 <%_ } _%>
         userRepository.save(userTwo)<% if (reactive) { %>.block()<% } %>;
 
-        <%= asEntity('User') %> userThree = new <%= asEntity('User') %>();
+        <%= this.asEntity('User') %> userThree = new <%= this.asEntity('User') %>();
 <%_ if (databaseTypeCassandra) { _%>
         userThree.setId(UUID.randomUUID().toString());
 <%_ } _%>

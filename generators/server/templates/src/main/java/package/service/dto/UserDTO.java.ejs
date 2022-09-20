@@ -19,7 +19,7 @@
 package <%= packageName %>.service.dto;
 
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= this.asEntity('User') %>;
 <%_ } _%>
 
 import java.io.Serializable;
@@ -30,7 +30,7 @@ import java.util.UUID;
 /**
  * A DTO representing a user, with only the public attributes.
  */
-public class <%= asDto('User') %> implements Serializable {
+public class <%= this.asDto('User') %> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private <%= user.primaryKey.type %> id;
@@ -42,11 +42,11 @@ public class <%= asDto('User') %> implements Serializable {
 <%_ } _%>
 
 <%_ if (!databaseTypeNo) { _%>
-    public <%= asDto('User') %>() {
+    public <%= this.asDto('User') %>() {
         // Empty constructor needed for Jackson.
     }
 
-    public <%= asDto('User') %>(<%= asEntity('User') %> user) {
+    public <%= this.asDto('User') %>(<%= this.asEntity('User') %> user) {
         this.id = user.getId();
         // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
@@ -84,7 +84,7 @@ public class <%= asDto('User') %> implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= asDto('User') %>{" +
+        return "<%= this.asDto('User') %>{" +
             "id='" + id + '\'' +
             ", login='" + login + '\'' +
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>

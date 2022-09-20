@@ -78,7 +78,7 @@ import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityMo
 <%_ } _%>
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
-<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>

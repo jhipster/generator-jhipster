@@ -21,9 +21,9 @@ package <%= packageName %>.service.mapper;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= this.asDto('User') %>;
 
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 /**
- * Mapper for the entity {@link <%= asEntity('User') %>} and its DTO called {@link <%= asDto('User') %>}.
+ * Mapper for the entity {@link <%= this.asEntity('User') %>} and its DTO called {@link <%= this.asDto('User') %>}.
  *
  * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
  * support is still in beta, and requires a manual step with an IDE.
@@ -43,40 +43,40 @@ import org.mapstruct.Named;
 @Service
 public class UserMapper {
 
-    public List<<%= asDto('User') %>> usersToUserDTOs(List<<%= asEntity('User') %>> users) {
+    public List<<%= this.asDto('User') %>> usersToUserDTOs(List<<%= this.asEntity('User') %>> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToUserDTO)
             .collect(Collectors.toList());
     }
 
-    public <%= asDto('User') %> userToUserDTO(<%= asEntity('User') %> user) {
-        return new <%= asDto('User') %>(user);
+    public <%= this.asDto('User') %> userToUserDTO(<%= this.asEntity('User') %> user) {
+        return new <%= this.asDto('User') %>(user);
     }
 
-    public List<<%= asDto('AdminUser') %>> usersToAdminUserDTOs(List<<%= asEntity('User') %>> users) {
+    public List<<%= this.asDto('AdminUser') %>> usersToAdminUserDTOs(List<<%= this.asEntity('User') %>> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToAdminUserDTO)
             .collect(Collectors.toList());
     }
 
-    public <%= asDto('AdminUser') %> userToAdminUserDTO(<%= asEntity('User') %> user) {
-        return new <%= asDto('AdminUser') %>(user);
+    public <%= this.asDto('AdminUser') %> userToAdminUserDTO(<%= this.asEntity('User') %> user) {
+        return new <%= this.asDto('AdminUser') %>(user);
     }
 
-    public List<<%= asEntity('User') %>> userDTOsToUsers(List<<%= asDto('AdminUser') %>> userDTOs) {
+    public List<<%= this.asEntity('User') %>> userDTOsToUsers(List<<%= this.asDto('AdminUser') %>> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
             .collect(Collectors.toList());
     }
 
-    public <%= asEntity('User') %> userDTOToUser(<%= asDto('AdminUser') %> userDTO) {
+    public <%= this.asEntity('User') %> userDTOToUser(<%= this.asDto('AdminUser') %> userDTO) {
         if (userDTO == null) {
             return null;
         } else {
-            <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+            <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
             user.setId(userDTO.getId());
             user.setLogin(userDTO.getLogin());
             user.setFirstName(userDTO.getFirstName());
@@ -130,11 +130,11 @@ public class UserMapper {
     }
 <%_ } _%>
 
-    public <%= asEntity('User') %> userFromId(<%= user.primaryKey.type %> id) {
+    public <%= this.asEntity('User') %> userFromId(<%= user.primaryKey.type %> id) {
         if (id == null) {
             return null;
         }
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
         user.setId(id);
         return user;
     }
@@ -142,11 +142,11 @@ public class UserMapper {
     @Named("id")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    public <%= asDto('User') %> toDtoId(<%= asEntity('User') %> user) {
+    public <%= this.asDto('User') %> toDtoId(<%= this.asEntity('User') %> user) {
         if (user == null) {
             return null;
         }
-        <%= asDto('User') %> userDto = new <%= asDto('User') %>();
+        <%= this.asDto('User') %> userDto = new <%= this.asDto('User') %>();
         userDto.setId(user.getId());
         return userDto;
     }
@@ -154,13 +154,13 @@ public class UserMapper {
     @Named("idSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    public Set<<%= asDto('User') %>> toDtoIdSet(Set<<%= asEntity('User') %>> users) {
+    public Set<<%= this.asDto('User') %>> toDtoIdSet(Set<<%= this.asEntity('User') %>> users) {
         if ( users == null ) {
             return Collections.emptySet();
         }
 
-        Set<<%= asDto('User') %>> userSet = new HashSet<>();
-        for ( <%= asEntity('User') %> userEntity : users ) {
+        Set<<%= this.asDto('User') %>> userSet = new HashSet<>();
+        for ( <%= this.asEntity('User') %> userEntity : users ) {
             userSet.add( this.toDtoId( userEntity ) );
         }
 
@@ -171,11 +171,11 @@ public class UserMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "login", source = "login")
-    public <%= asDto('User') %> toDtoLogin(<%= asEntity('User') %> user) {
+    public <%= this.asDto('User') %> toDtoLogin(<%= this.asEntity('User') %> user) {
         if (user == null) {
             return null;
         }
-        <%= asDto('User') %> userDto = new <%= asDto('User') %>();
+        <%= this.asDto('User') %> userDto = new <%= this.asDto('User') %>();
         userDto.setId(user.getId());
         userDto.setLogin(user.getLogin());
         return userDto;
@@ -185,13 +185,13 @@ public class UserMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "login", source = "login")
-    public Set<<%= asDto('User') %>> toDtoLoginSet(Set<<%= asEntity('User') %>> users) {
+    public Set<<%= this.asDto('User') %>> toDtoLoginSet(Set<<%= this.asEntity('User') %>> users) {
         if ( users == null ) {
             return Collections.emptySet();
         }
 
-        Set<<%= asDto('User') %>> userSet = new HashSet<>();
-        for ( <%= asEntity('User') %> userEntity : users ) {
+        Set<<%= this.asDto('User') %>> userSet = new HashSet<>();
+        for ( <%= this.asEntity('User') %> userEntity : users ) {
             userSet.add( this.toDtoLogin( userEntity ) );
         }
 
