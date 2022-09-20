@@ -151,15 +151,15 @@ describe('Angular transform', () => {
       describe('.route.ts files', () => {
         const extension = '.route.ts';
 
-        it('should replace pageTitle fields with translation values', () => {
+        it('should replace title fields with translation values', () => {
           const body = `
-pageTitle: 'activate.title1',
-pageTitle: 'activate.title2',
+title: 'activate.title1',
+title: 'activate.title2',
 `;
           expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
 "
-pageTitle: 'activate.title1',
-pageTitle: 'activate.title2',
+title: 'translated-value-activate.title1-0',
+title: 'translated-value-activate.title2-1',
 "
 `);
         });
@@ -168,15 +168,15 @@ pageTitle: 'activate.title2',
       describe('.module.ts files', () => {
         const extension = '.module.ts';
 
-        it('should replace pageTitle fields with translation values', () => {
+        it('should replace title fields with translation values', () => {
           const body = `
-pageTitle: 'activate.title1',
-pageTitle: 'activate.title2',
+title: 'activate.title1',
+title: 'activate.title2',
 `;
           expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
 "
-pageTitle: 'activate.title1',
-pageTitle: 'activate.title2',
+title: 'translated-value-activate.title1-0',
+title: 'translated-value-activate.title2-1',
 "
 `);
         });
