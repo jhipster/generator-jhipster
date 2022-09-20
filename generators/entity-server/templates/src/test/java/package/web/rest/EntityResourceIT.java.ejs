@@ -250,7 +250,7 @@ for (field of fieldsToTest) {
 const defaultValueName = 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase();
 const updatedValueName = 'UPDATED_' + field.fieldNameUnderscored.toUpperCase();
 const smallerValueName = 'SMALLER_' + field.fieldNameUnderscored.toUpperCase();
-const needsSmallerValueName = jpaMetamodelFiltering && isFilterableType(field.fieldType)
+const needsSmallerValueName = jpaMetamodelFiltering && this.isFilterableType(field.fieldType)
         && (field.fieldTypeNumeric || field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime);
 
 let defaultValue = 1;
@@ -1034,7 +1034,7 @@ _%>
     }
 
   <%_ fieldsToTest.forEach((searchBy) => { /* we can't filter by all the fields. */_%>
-    <%_ if (isFilterableType(searchBy.fieldType)) { _%>
+    <%_ if (this.isFilterableType(searchBy.fieldType)) { _%>
 
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
@@ -1597,7 +1597,7 @@ _%>
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
-            <%= dtoClass %> <%= this.dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+            <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
 
   <%_ } _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
@@ -1636,7 +1636,7 @@ _%>
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
-            <%= dtoClass %> <%= this.dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+            <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
@@ -1675,7 +1675,7 @@ _%>
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
-            <%= dtoClass %> <%= this.dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+            <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException

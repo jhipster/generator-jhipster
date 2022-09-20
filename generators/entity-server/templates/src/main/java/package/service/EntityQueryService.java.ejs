@@ -130,14 +130,14 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
                 specification = specification.and(distinct(criteria.getDistinct()));
             }
             if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
-                specification = specification.and(<%= getSpecificationBuilder(primaryKey.type) %>(criteria.get<%= primaryKey.nameCapitalized %>(), <%= persistClass %>_.<%= primaryKey.name %>));
+                specification = specification.and(<%= this.getSpecificationBuilder(primaryKey.type) %>(criteria.get<%= primaryKey.nameCapitalized %>(), <%= persistClass %>_.<%= primaryKey.name %>));
             }
 <%_
 fields.forEach((field) => {
   if (field.id || field.transient) return;
-  if (isFilterableType(field.fieldType)) { _%>
+  if (this.isFilterableType(field.fieldType)) { _%>
             if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
-                specification = specification.and(<%= getSpecificationBuilder(field.fieldType) %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= persistClass %>_.<%= field.fieldName %>));
+                specification = specification.and(<%= this.getSpecificationBuilder(field.fieldType) %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= persistClass %>_.<%= field.fieldName %>));
             }
   <%_ }
 });
