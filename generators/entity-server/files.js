@@ -446,7 +446,7 @@ function writeFiles() {
       return this.writeFiles({
         sections: serverFiles,
         rootTemplatesPath: application.reactive ? ['reactive', ''] : undefined,
-        context: this,
+        context: { ...application, ...entity },
       });
     },
 

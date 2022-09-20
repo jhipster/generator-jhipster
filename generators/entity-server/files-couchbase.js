@@ -68,17 +68,19 @@ const entityCouchbaseFiles = {
 function writeEntityCouchbaseFiles() {
   return {
     cleanupCouchbaseFiles() {
-      if (!this.databaseTypeCouchbase) return;
+      const { application, entity } = this;
+      if (!application.databaseTypeCouchbase) return;
 
       if (this.isJhipsterVersionLessThan('7.6.1')) {
         this.removeFile(
-          `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V${this.changelogDate}__${this.entityInstance.toLowerCase()}.fts`
+          `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V${entity.changelogDate}__${entity.entityInstance.toLowerCase()}.fts`
         );
       }
     },
 
     async writeEntityCouchbaseFiles() {
-      if (this.skipServer || !this.databaseTypeCouchbase) return;
+      const { application, entity } = this;
+      if (entity.skipServer || !application.databaseTypeCouchbase) return;
 
       await this.writeFiles({
         sections: entityCouchbaseFiles,

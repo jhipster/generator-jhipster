@@ -970,11 +970,11 @@ describe('JHipster generator for entity', () => {
         it('creates reproducible backend test', () => {
           assert.fileContent(
             `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
-            /DEFAULT_NUMBER_PATTERN_REQUIRED = "03126"/
+            /DEFAULT_NUMBER_PATTERN_REQUIRED = "68"/
           );
           assert.fileContent(
             `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
-            /UPDATED_NUMBER_PATTERN_REQUIRED = "557"/
+            /UPDATED_NUMBER_PATTERN_REQUIRED = "47"/
           );
         });
       });
