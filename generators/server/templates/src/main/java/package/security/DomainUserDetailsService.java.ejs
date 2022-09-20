@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.security;
 
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
@@ -87,7 +87,7 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
 
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, <%= this.asEntity('User') %> user) {
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, <%= user.persistClass %> user) {
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }

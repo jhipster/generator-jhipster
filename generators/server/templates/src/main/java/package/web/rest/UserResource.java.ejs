@@ -19,7 +19,7 @@
 package <%= packageName %>.web.rest;
 
 import <%= packageName %>.config.Constants;
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.MailService;
@@ -150,7 +150,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public <% if (reactive) { %>Mono<ResponseEntity<<%= this.asEntity('User') %>>><% } else { %>ResponseEntity<<%= this.asEntity('User') %>><% } %> createUser(@Valid @RequestBody <%= this.asDto('AdminUser') %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%= user.persistClass %>>><% } else { %>ResponseEntity<<%= user.persistClass %>><% } %> createUser(@Valid @RequestBody <%= this.asDto('AdminUser') %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
         log.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
@@ -189,7 +189,7 @@ public class UserResource {
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            <%= this.asEntity('User') %> newUser = userService.createUser(userDTO);
+            <%= user.persistClass %> newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
@@ -236,7 +236,7 @@ public class UserResource {
 <%_ } else { _%>
     public ResponseEntity<<%= this.asDto('AdminUser') %>> updateUser(@Valid @RequestBody <%= this.asDto('AdminUser') %> userDTO) {
         log.debug("REST request to update User : {}", userDTO);
-        Optional<<%= this.asEntity('User') %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<<%= user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }

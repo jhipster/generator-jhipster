@@ -846,7 +846,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- this.getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
@@ -888,7 +888,7 @@ _%>
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
   <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- this.getJavaValueGeneratorForType(field.fieldType) %>);
   <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -975,7 +975,7 @@ _%>
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
   <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- this.getJavaValueGeneratorForType(field.fieldType) %>);
   <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1345,7 +1345,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- this.getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1438,7 +1438,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- this.getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
         // Create the <%= entityClass %>
@@ -1478,7 +1478,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- this.getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
         // Create the <%= entityClass %>
@@ -1487,13 +1487,13 @@ _%>
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%- this.getJavaValueGeneratorForType(primaryKey.type) %>)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- this.getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1517,7 +1517,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- this.getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
         // Create the <%= entityClass %>
@@ -1564,13 +1564,13 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- this.getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
   <%_ const fieldsToIncludeInPartialPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => faker.datatype.boolean())); _%>
-<%- include('/partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
+<%- include('/partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, callBlock, callListBlock}); -%>
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1578,13 +1578,13 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- this.getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
   <% const fieldsToIncludeInFullPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => true)); %>
-<%- include('/partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInFullPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
+<%- include('/partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInFullPatchTest, saveMethod, callBlock, callListBlock}); -%>
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1593,7 +1593,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= this.asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- this.getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
@@ -1602,15 +1602,15 @@ _%>
   <%_ } _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
-        webTestClient.patch().uri(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>.get<%= primaryKey.nameCapitalized %>())
+        webTestClient.patch().uri(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType("application/merge-patch+json")
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
@@ -1632,7 +1632,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= this.asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- this.getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
@@ -1641,15 +1641,15 @@ _%>
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
-        webTestClient.patch().uri(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)
+        webTestClient.patch().uri(ENTITY_API_URL_ID, <%- this.getJavaValueGeneratorForType(primaryKey.type) %>)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- this.getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
@@ -1671,7 +1671,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
       int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= this.asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- this.getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
@@ -1682,13 +1682,13 @@ _%>
   <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isEqualTo(405);
   <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
   <%_ } _%>
 
@@ -1710,7 +1710,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- this.getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1760,7 +1760,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- this.getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= persistInstance %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;

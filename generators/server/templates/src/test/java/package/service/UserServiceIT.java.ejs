@@ -24,7 +24,7 @@ import <%= packageName %>.config.Constants;
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ } _%>
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 import <%= packageName %>.repository.PersistentTokenRepository;
@@ -183,7 +183,7 @@ class UserServiceIT {
 <%_ } _%>
     <%_ if (!databaseTypeNo) { _%>
 
-    private <%= this.asEntity('User') %> user;
+    private <%= user.persistClass %> user;
     <%_ } _%>
 
 <%_ if (authenticationTypeOauth2) { _%>
@@ -205,7 +205,7 @@ class UserServiceIT {
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
-        user = new <%= this.asEntity('User') %>();
+        user = new <%= user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
   <%_ } _%>
@@ -267,7 +267,7 @@ class UserServiceIT {
   <%_ } _%>
     void assertThatUserMustExistToResetPassword() {
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        Optional<<%= this.asEntity('User') %>> maybeUser = userService.requestPasswordReset("invalid.login@localhost")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> maybeUser = userService.requestPasswordReset("invalid.login@localhost")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isNotPresent();
 
         maybeUser = userService.requestPasswordReset(user.getEmail())<% if (reactive) { %>.blockOptional()<% } %>;
@@ -285,7 +285,7 @@ class UserServiceIT {
         user.setActivated(false);
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        Optional<<%= this.asEntity('User') %>> maybeUser = userService.requestPasswordReset(user.getLogin())<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> maybeUser = userService.requestPasswordReset(user.getLogin())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isNotPresent();
         userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
     }
@@ -302,7 +302,7 @@ class UserServiceIT {
         user.setResetKey(resetKey);
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        Optional<<%= this.asEntity('User') %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isNotPresent();
         userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
     }
@@ -318,7 +318,7 @@ class UserServiceIT {
         user.setResetKey("1234");
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        Optional<<%= this.asEntity('User') %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isNotPresent();
         userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
     }
@@ -336,7 +336,7 @@ class UserServiceIT {
         user.setResetKey(resetKey);
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        Optional<<%= this.asEntity('User') %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isPresent();
         assertThat(maybeUser.orElse(null).getResetDate()).isNull();
         assertThat(maybeUser.orElse(null).getResetKey()).isNull();
@@ -356,7 +356,7 @@ class UserServiceIT {
   <%_ } _%>
         user.setActivated(false);
         user.setActivationKey(RandomStringUtils.random(20));
-        <%= this.asEntity('User') %> dbUser = userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%= user.persistClass %> dbUser = userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (databaseTypeSql && reactive) { _%>
@@ -364,7 +364,7 @@ class UserServiceIT {
   <%_ } else { _%>
         Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
   <%_ } _%>
-        List<<%= this.asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
+        List<<%= user.persistClass %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(users).isNotEmpty();
         userService.removeNotActivatedUsers();
@@ -388,7 +388,7 @@ class UserServiceIT {
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)<% if (databaseTypeSql && reactive) { %>.atOffset(ZoneOffset.UTC)<% } %>));
   <%_ } _%>
         user.setActivated(false);
-        <%= this.asEntity('User') %> dbUser = userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%= user.persistClass %> dbUser = userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (databaseTypeSql && reactive) { _%>
@@ -396,11 +396,11 @@ class UserServiceIT {
   <%_ } else { _%>
         Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
   <%_ } _%>
-        List<<%= this.asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
+        List<<%= user.persistClass %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(users).isEmpty();
         userService.removeNotActivatedUsers();
-        Optional<<%= this.asEntity('User') %>> maybeDbUser = userRepository.findById(dbUser.getId())<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> maybeDbUser = userRepository.findById(dbUser.getId())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeDbUser).contains(dbUser);
   <%_ if (searchEngineElasticsearch) { _%>
 
@@ -411,7 +411,7 @@ class UserServiceIT {
 <%_ } _%>
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 
-    private void generateUserToken(<%= this.asEntity('User') %> user, String tokenSeries, LocalDate localDate) {
+    private void generateUserToken(<%= user.persistClass %> user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();
         token.setSeries(tokenSeries);<% if (databaseTypeCouchbase) { %>
         token.setLogin(user.getLogin());<% } else { %>

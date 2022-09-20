@@ -47,11 +47,9 @@ const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl
 const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
 const { joinCallbacks } = require('../lib/support/base.cjs');
 
-const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
+const { JHIPSTER_CONFIG_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR } = constants;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
-
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
@@ -2524,7 +2522,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
 
         const renderOptions = {
-          ...(options.renderOptions ?? {}),
+          ...(options?.renderOptions ?? {}),
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
         };
@@ -3107,6 +3105,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
+
+    dest.srcMainJava = SERVER_MAIN_SRC_DIR;
+    dest.srcTestJava = SERVER_TEST_SRC_DIR;
 
     dest.buildTool = config.buildTool;
 

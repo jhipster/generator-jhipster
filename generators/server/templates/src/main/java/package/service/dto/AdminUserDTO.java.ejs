@@ -22,7 +22,7 @@ import <%= packageName %>.config.Constants;
 <% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>
 import <%= packageName %>.domain.Authority;<% } %>
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ } _%>
 
 import java.io.Serializable;
@@ -88,7 +88,7 @@ public class <%= this.asDto('AdminUser') %> implements Serializable {
         // Empty constructor needed for Jackson.
     }
 
-    public <%= this.asDto('AdminUser') %>(<%= this.asEntity('User') %> user) {
+    public <%= this.asDto('AdminUser') %>(<%= user.persistClass %> user) {
         this.id = user.getId();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();

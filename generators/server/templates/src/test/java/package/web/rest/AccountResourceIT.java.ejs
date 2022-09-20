@@ -23,7 +23,7 @@ import <%= packageName %>.config.Constants;
 <%_ if (authenticationTypeSession && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import <%= packageName %>.repository.AuthorityRepository;
 <%_ } _%>
@@ -331,7 +331,7 @@ class AccountResourceIT {
             .expectStatus().isBadRequest();
 <%_ } _%>
 
-        Optional<<%= this.asEntity('User') %>> user = userRepository.findOneByEmailIgnoreCase("funky@example.com")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> user = userRepository.findOneByEmailIgnoreCase("funky@example.com")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(user).isEmpty();
     }
 
@@ -368,7 +368,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        Optional<<%= this.asEntity('User') %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(user).isEmpty();
     }
 
@@ -405,7 +405,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        Optional<<%= this.asEntity('User') %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(user).isEmpty();
     }
 
@@ -442,7 +442,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        Optional<<%= this.asEntity('User') %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(user).isEmpty();
     }
 
@@ -518,7 +518,7 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        Optional<<%= this.asEntity('User') %>> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(testUser).isPresent();
         testUser.get().setActivated(true);
         userRepository.save(testUser.get())<% if (reactive) { %>.block()<% } %>;
@@ -574,7 +574,7 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        Optional<<%= this.asEntity('User') %>> testUser1 = userRepository.findOneByLogin("test-register-duplicate-email")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> testUser1 = userRepository.findOneByLogin("test-register-duplicate-email")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(testUser1).isPresent();
 
         // Duplicate email, different login
@@ -606,10 +606,10 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        Optional<<%= this.asEntity('User') %>> testUser2 = userRepository.findOneByLogin("test-register-duplicate-email")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> testUser2 = userRepository.findOneByLogin("test-register-duplicate-email")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(testUser2).isEmpty();
 
-        Optional<<%= this.asEntity('User') %>> testUser3 = userRepository.findOneByLogin("test-register-duplicate-email-2")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> testUser3 = userRepository.findOneByLogin("test-register-duplicate-email-2")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(testUser3).isPresent();
 
         // Duplicate email - with uppercase email address
@@ -642,7 +642,7 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        Optional<<%= this.asEntity('User') %>> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(testUser4).isPresent();
         assertThat(testUser4.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
@@ -699,7 +699,7 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        Optional<<%= this.asEntity('User') %>> userDup = userRepository.findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin("badguy")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= user.persistClass %>> userDup = userRepository.findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin("badguy")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(userDup).isPresent();
         assertThat(userDup.get().getAuthorities()).hasSize(1)
             .containsExactly(<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>authorityRepository.findById(AuthoritiesConstants.USER).<% if (reactive) { %>block<% } else { %>get<% } %>()<% } %><% if (databaseTypeCassandra || databaseTypeCouchbase) { %>AuthoritiesConstants.USER<% } %>);
@@ -711,7 +711,7 @@ class AccountResourceIT {
 <%_ } _%>
     void testActivateAccount()<% if (!reactive) { %> throws Exception<% } %> {
         final String activationKey = "some activation key";
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -760,7 +760,7 @@ class AccountResourceIT {
 <%_ } _%>
     @WithMockUser("save-account")
     void testSaveAccount() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -800,7 +800,7 @@ class AccountResourceIT {
             .andExpect(status().isOk());
 <%_ } _%>
 
-        <%= this.asEntity('User') %> updatedUser = userRepository.findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin(user.getLogin())<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin(user.getLogin())<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(updatedUser.getFirstName()).isEqualTo(userDTO.getFirstName());
         assertThat(updatedUser.getLastName()).isEqualTo(userDTO.getLastName());
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
@@ -819,7 +819,7 @@ class AccountResourceIT {
 <%_ } _%>
     @WithMockUser("save-invalid-email")
     void testSaveInvalidEmail() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -872,7 +872,7 @@ class AccountResourceIT {
 <%_ } _%>
     @WithMockUser("save-existing-email")
     void testSaveExistingEmail() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -885,7 +885,7 @@ class AccountResourceIT {
 <%_ } _%>
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        <%= this.asEntity('User') %> anotherUser = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> anotherUser = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         anotherUser.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -926,7 +926,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%= this.asEntity('User') %> updatedUser = userRepository.findOneByLogin("save-existing-email")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("save-existing-email")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
     }
 
@@ -936,7 +936,7 @@ class AccountResourceIT {
 <%_ } _%>
     @WithMockUser("save-existing-email-and-login")
     void testSaveExistingEmailAndLogin() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -976,7 +976,7 @@ class AccountResourceIT {
             .andExpect(status().isOk());
 <%_ } _%>
 
-        <%= this.asEntity('User') %> updatedUser = userRepository.findOneByLogin("save-existing-email-and-login")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("save-existing-email-and-login")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
     }
 
@@ -986,7 +986,7 @@ class AccountResourceIT {
 <%_ } _%>
     @WithMockUser("change-password-wrong-existing-password")
     void testChangePasswordWrongExistingPassword() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -1014,7 +1014,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%= this.asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
         assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
     }
@@ -1025,7 +1025,7 @@ class AccountResourceIT {
 <%_ } _%>
     @WithMockUser("change-password")
     void testChangePassword() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -1053,7 +1053,7 @@ class AccountResourceIT {
             .andExpect(status().isOk());
 <%_ } _%>
 
-        <%= this.asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
     }
 
@@ -1063,7 +1063,7 @@ class AccountResourceIT {
 <%_ } _%>
     @WithMockUser("change-password-too-small")
     void testChangePasswordTooSmall() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -1093,7 +1093,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%= this.asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-too-small")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-too-small")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
@@ -1103,7 +1103,7 @@ class AccountResourceIT {
 <%_ } _%>
     @WithMockUser("change-password-too-long")
     void testChangePasswordTooLong() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -1133,7 +1133,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%= this.asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-too-long")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-too-long")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
@@ -1143,7 +1143,7 @@ class AccountResourceIT {
 <%_ } _%>
     @WithMockUser("change-password-empty")
     void testChangePasswordEmpty() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -1171,7 +1171,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%= this.asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-empty")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-empty")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 <%_ if (authenticationTypeSession && !reactive) { _%>
@@ -1182,7 +1182,7 @@ class AccountResourceIT {
   <%_ } _%>
     @WithMockUser("current-sessions")
     void testGetCurrentSessions() <% if (!reactive) { %>throws Exception <% } %>{
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
   <%_ } _%>
@@ -1227,7 +1227,7 @@ class AccountResourceIT {
   <%_ } _%>
     @WithMockUser("invalidate-session")
     void testInvalidateSession() <% if (!reactive) { %>throws Exception <% } %>{
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
   <%_ } _%>
@@ -1272,7 +1272,7 @@ class AccountResourceIT {
     @Transactional
 <%_ } _%>
     void testRequestPasswordReset()<% if (!reactive) { %> throws Exception<% } %> {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -1305,7 +1305,7 @@ class AccountResourceIT {
     @Transactional
 <%_ } _%>
     void testRequestPasswordResetUpperCaseEmail()<% if (!reactive) { %> throws Exception<% } %> {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -1355,7 +1355,7 @@ class AccountResourceIT {
     @Transactional
 <%_ } _%>
     void testFinishPasswordReset() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -1388,7 +1388,7 @@ class AccountResourceIT {
             .andExpect(status().isOk());
 <%_ } _%>
 
-        <%= this.asEntity('User') %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isTrue();
     }
 
@@ -1397,7 +1397,7 @@ class AccountResourceIT {
     @Transactional
 <%_ } _%>
     void testFinishPasswordResetTooSmall() throws Exception {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -1430,7 +1430,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%= this.asEntity('User') %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isFalse();
     }
 

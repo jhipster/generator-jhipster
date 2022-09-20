@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.repository.search;
 
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
 <%_ } else { _%>
@@ -43,7 +43,7 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 /**
  * Spring Data Elasticsearch repository for the User entity.
  */
-public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= this.asEntity('User') %>, <% if (databaseTypeSql && !authenticationTypeOauth2) { %>Long<% } %><% if ((databaseTypeCassandra || databaseTypeMongodb || databaseTypeNeo4j) || authenticationTypeOauth2) { %>String<% } %>>, UserSearchRepositoryInternal {
+public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= user.persistClass %>, <% if (databaseTypeSql && !authenticationTypeOauth2) { %>Long<% } %><% if ((databaseTypeCassandra || databaseTypeMongodb || databaseTypeNeo4j) || authenticationTypeOauth2) { %>String<% } %>>, UserSearchRepositoryInternal {
 }
 <%_ if (reactive) { _%>
 

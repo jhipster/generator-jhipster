@@ -19,7 +19,7 @@
 package <%= packageName %>.service.dto;
 
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ } _%>
 
 import java.io.Serializable;

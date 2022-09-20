@@ -21,7 +21,7 @@ package <%= packageName %>.service.mapper;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 import <%= packageName %>.service.dto.<%= this.asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 
@@ -54,29 +54,29 @@ public class UserMapper {
         return new <%= user.dtoClass %>(user);
     }
 
-    public List<<%= this.asDto('AdminUser') %>> usersToAdminUserDTOs(List<<%= this.asEntity('User') %>> users) {
+    public List<<%= this.asDto('AdminUser') %>> usersToAdminUserDTOs(List<<%= user.persistClass %>> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToAdminUserDTO)
             .collect(Collectors.toList());
     }
 
-    public <%= this.asDto('AdminUser') %> userToAdminUserDTO(<%= this.asEntity('User') %> user) {
+    public <%= this.asDto('AdminUser') %> userToAdminUserDTO(<%= user.persistClass %> user) {
         return new <%= this.asDto('AdminUser') %>(user);
     }
 
-    public List<<%= this.asEntity('User') %>> userDTOsToUsers(List<<%= this.asDto('AdminUser') %>> userDTOs) {
+    public List<<%= user.persistClass %>> userDTOsToUsers(List<<%= this.asDto('AdminUser') %>> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
             .collect(Collectors.toList());
     }
 
-    public <%= this.asEntity('User') %> userDTOToUser(<%= this.asDto('AdminUser') %> userDTO) {
+    public <%= user.persistClass %> userDTOToUser(<%= this.asDto('AdminUser') %> userDTO) {
         if (userDTO == null) {
             return null;
         } else {
-            <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+            <%= user.persistClass %> user = new <%= user.persistClass %>();
             user.setId(userDTO.getId());
             user.setLogin(userDTO.getLogin());
             user.setFirstName(userDTO.getFirstName());
@@ -130,11 +130,11 @@ public class UserMapper {
     }
 <%_ } _%>
 
-    public <%= this.asEntity('User') %> userFromId(<%= user.primaryKey.type %> id) {
+    public <%= user.persistClass %> userFromId(<%= user.primaryKey.type %> id) {
         if (id == null) {
             return null;
         }
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
         user.setId(id);
         return user;
     }

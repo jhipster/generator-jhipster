@@ -25,7 +25,7 @@ import <%= packageName %>.config.Constants;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
@@ -144,7 +144,7 @@ class PublicUserResourceIT {
     private MockMvc restUserMockMvc;
 <%_ } _%>
 
-    private <%= this.asEntity('User') %> user;
+    private <%= user.persistClass %> user;
 
 <%_ if (cacheManagerIsAvailable) { _%>
     @BeforeEach

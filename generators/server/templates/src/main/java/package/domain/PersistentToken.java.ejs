@@ -182,7 +182,7 @@ public class PersistentToken implements Serializable {
   <%_ if (databaseTypeNeo4j) { _%>
     @Relationship(value = "HAS_PERSISTENT_TOKEN", direction = Relationship.Direction.INCOMING)
   <%_ } _%>
-    private <%= this.asEntity('User') %> user;
+    private <%= user.persistClass %> user;
 <%_ } _%>
 
     public String getSeries() {
@@ -230,11 +230,11 @@ public class PersistentToken implements Serializable {
     }
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 
-    public <%= this.asEntity('User') %> getUser() {
+    public <%= user.persistClass %> getUser() {
         return user;
     }
 
-    public void setUser(<%= this.asEntity('User') %> user) {
+    public void setUser(<%= user.persistClass %> user) {
         this.user = user;
     }
 <%_ } else if (databaseTypeCassandra || databaseTypeCouchbase) { _%>

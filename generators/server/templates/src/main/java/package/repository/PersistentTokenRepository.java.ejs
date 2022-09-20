@@ -35,7 +35,7 @@ import com.datastax.oss.driver.api.mapper.annotations.Mapper;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
 <%_ } _%>
 import <%= packageName %>.domain.PersistentToken;
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ if (!databaseTypeCassandra) { _%>
 import java.time.LocalDate;
 <%_ } _%>
@@ -78,7 +78,7 @@ import java.util.Set;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 public interface PersistentTokenRepository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><PersistentToken, String> {
 
-    List<PersistentToken> findByUser(<%= this.asEntity('User') %> user);
+    List<PersistentToken> findByUser(<%= user.persistClass %> user);
 
     List<PersistentToken> findByTokenDateBefore(LocalDate localDate);
 
@@ -131,7 +131,7 @@ public class PersistentTokenRepository {
         return Optional.ofNullable(persistentTokenDao.get(presentedSeries));
     }
 
-    public List<PersistentToken> findByUser(<%= this.asEntity('User') %> user) {
+    public List<PersistentToken> findByUser(<%= user.persistClass %> user) {
         BoundStatementBuilder statementBuilder = findPersistentTokenSeriesByUserIdStmt.boundStatementBuilder();
         statementBuilder.setString("user_id", user.getId());
         ResultSet rs = session.execute(statementBuilder.build());

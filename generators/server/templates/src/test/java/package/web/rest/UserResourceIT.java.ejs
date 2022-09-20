@@ -30,7 +30,7 @@ import <%= packageName %>.config.Constants;
 <%_ if (!databaseTypeCassandra && !databaseTypeCouchbase) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.repository.AuthorityRepository;
 <%_ } _%>
@@ -196,7 +196,7 @@ class UserResourceIT {
     private MockMvc restUserMockMvc;
 <%_ } _%>
 
-    private <%= this.asEntity('User') %> user;
+    private <%= user.persistClass %> user;
 
 <%_ if (cacheManagerIsAvailable) { _%>
     @BeforeEach
@@ -219,8 +219,8 @@ class UserResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= this.asEntity('User') %> createEntity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
-        <%= this.asEntity('User') %> user = new <%= this.asEntity('User') %>();
+    public static <%= user.persistClass %> createEntity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra || (authenticationTypeOauth2 && !databaseTypeCouchbase)) { _%>
         user.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -249,7 +249,7 @@ class UserResourceIT {
     public static void deleteEntities(EntityManager em) {
         try {
             em.deleteAll("<%= jhiTablePrefix %>_user_authority").block();
-            em.deleteAll(<%= this.asEntity('User') %>.class).block();
+            em.deleteAll(<%= user.persistClass %>.class).block();
         } catch (Exception e) {
             // It can fail, if other entities are still referring this - it will be removed later.
         }
@@ -259,12 +259,12 @@ class UserResourceIT {
     /**
      * Setups the database with one user.
      */
-    public static <%= this.asEntity('User') %> initTestUser(UserRepository userRepository<% if (databaseTypeSql) { %>, EntityManager em<% } _%>) {
+    public static <%= user.persistClass %> initTestUser(UserRepository userRepository<% if (databaseTypeSql) { %>, EntityManager em<% } _%>) {
 <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities().block();
 <%_ } _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
-        <%= this.asEntity('User') %> user = createEntity(<% if (databaseTypeSql ) { %>em<% } _%>);
+        <%= user.persistClass %> user = createEntity(<% if (databaseTypeSql ) { %>em<% } _%>);
 <%_ if (databaseTypeSql) { _%>
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
@@ -317,7 +317,7 @@ class UserResourceIT {
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeCreate + 1);
-            <%= this.asEntity('User') %> testUser = users.get(users.size() - 1);
+            <%= user.persistClass %> testUser = users.get(users.size() - 1);
             assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
             assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
@@ -637,7 +637,7 @@ class UserResourceIT {
             .collectList().block()<% } %>.size();
 
         // Update the user
-        <%= this.asEntity('User') %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -676,7 +676,7 @@ class UserResourceIT {
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            <%= this.asEntity('User') %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
+            <%= user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
@@ -703,7 +703,7 @@ class UserResourceIT {
             .collectList().block()<% } %>.size();
 
         // Update the user
-        <%= this.asEntity('User') %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -742,7 +742,7 @@ class UserResourceIT {
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            <%= this.asEntity('User') %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
+            <%= user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
             assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
@@ -770,7 +770,7 @@ class UserResourceIT {
         userSearchRepository.save(user);
   <%_ } _%>
 
-        <%= this.asEntity('User') %> anotherUser = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> anotherUser = new <%= user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         anotherUser.setId(UUID.randomUUID().toString());
   <%_ } _%>
@@ -793,7 +793,7 @@ class UserResourceIT {
   <%_ } _%>
 
         // Update the user
-        <%= this.asEntity('User') %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -846,7 +846,7 @@ class UserResourceIT {
         userSearchRepository.save(user);
   <%_ } _%>
 
-        <%= this.asEntity('User') %> anotherUser = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> anotherUser = new <%= user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         anotherUser.setId(UUID.randomUUID().toString());
   <%_ } _%>
@@ -869,7 +869,7 @@ class UserResourceIT {
   <%_ } _%>
 
         // Update the user
-        <%= this.asEntity('User') %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -945,10 +945,10 @@ class UserResourceIT {
 
     @Test
     void testUserEquals() throws Exception {
-        TestUtil.equalsVerifier(<%= this.asEntity('User') %>.class);
-        <%= this.asEntity('User') %> user1 = new <%= this.asEntity('User') %>();
+        TestUtil.equalsVerifier(<%= user.persistClass %>.class);
+        <%= user.persistClass %> user1 = new <%= user.persistClass %>();
         user1.setId(DEFAULT_ID);
-        <%= this.asEntity('User') %> user2 = new <%= this.asEntity('User') %>();
+        <%= user.persistClass %> user2 = new <%= user.persistClass %>();
         user2.setId(user1.getId());
         assertThat(user1).isEqualTo(user2);
         user2.setId(<%- this.getPrimaryKeyValue(user.primaryKey.type, databaseType, 2) %>);
@@ -976,7 +976,7 @@ class UserResourceIT {
 <%_ } _%>
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        <%= this.asEntity('User') %> user = userMapper.userDTOToUser(userDTO);
+        <%= user.persistClass %> user = userMapper.userDTOToUser(userDTO);
         assertThat(user.getId()).isEqualTo(DEFAULT_ID);
         assertThat(user.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -1063,7 +1063,7 @@ class UserResourceIT {
     }
 <%_ } _%>
 
-    private void assertPersistedUsers(Consumer<List<<%= this.asEntity('User') %>>> userAssertion) {
+    private void assertPersistedUsers(Consumer<List<<%= user.persistClass %>>> userAssertion) {
 <%_ if (databaseTypeCouchbase) { _%>
         // The security filter chain clears the security context after remote calls
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());

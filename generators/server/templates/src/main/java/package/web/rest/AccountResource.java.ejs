@@ -222,7 +222,7 @@ import <%= packageName %>.domain.PersistentToken;
 import <%= packageName %>.repository.PersistentTokenRepository;
   <%_ } _%>
   <%_ if (!reactive) { _%>
-import <%= packageName %>.domain.<%= this.asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
   <%_ } _%>
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.security.SecurityUtils;
@@ -314,7 +314,7 @@ public class AccountResource {
             .doOnSuccess(mailService::sendActivationEmail)
             .then();
   <%_ } else { _%>
-        <%= this.asEntity('User') %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        <%= user.persistClass %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
   <%_ } _%>
     }
@@ -332,7 +332,7 @@ public class AccountResource {
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
             .then();
   <%_ } else { _%>
-        Optional<<%= this.asEntity('User') %>> user = userService.activateRegistration(key);
+        Optional<<%= user.persistClass %>> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
@@ -401,11 +401,11 @@ public class AccountResource {
   <%_ } else { _%>
     public void saveAccount(@Valid @RequestBody <%= this.asDto('AdminUser') %> userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
-        Optional<<%= this.asEntity('User') %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<<%= user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
-        Optional<<%= this.asEntity('User') %>> user = userRepository.findOneByLogin(userLogin);
+        Optional<<%= user.persistClass %>> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
@@ -499,7 +499,7 @@ public class AccountResource {
             .then();
   <%_ } else { _%>
     public void requestPasswordReset(@RequestBody String mail) {
-        Optional<<%= this.asEntity('User') %>> user = userService.requestPasswordReset(mail);
+        Optional<<%= user.persistClass %>> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
         } else {
@@ -527,7 +527,7 @@ public class AccountResource {
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this reset key")))
             .then();
   <%_ } else { _%>
-        Optional<<%= this.asEntity('User') %>> user =
+        Optional<<%= user.persistClass %>> user =
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
