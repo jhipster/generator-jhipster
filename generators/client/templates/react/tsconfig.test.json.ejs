@@ -24,10 +24,10 @@
     "paths": {
 <%_ if (microfrontend && applicationTypeGateway) { _%>
   <%_ for (const remote of microfrontends) { _%>
-      "@<%= remote.lowercaseBaseName %>/*": ["<%= CLIENT_MAIN_SRC_DIR %>microfrontends/*"],
+      "@<%= remote.lowercaseBaseName %>/*": ["<%= this.CLIENT_MAIN_SRC_DIR %>microfrontends/*"],
   <%_ } _%>
 <%_ } _%>
-      "app/*": ["<%= CLIENT_MAIN_SRC_DIR %>app/*"]
+      "app/*": ["<%= this.CLIENT_MAIN_SRC_DIR %>app/*"]
    },
     "types": ["jest", "webpack-env"]
   }
