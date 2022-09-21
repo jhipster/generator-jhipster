@@ -23,8 +23,8 @@ const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types'
 const commonPackageJson = require('./common/templates/package.json');
 
 // Version of Java
-const JAVA_VERSION = '11';
-const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17', '18'];
+const JAVA_VERSION = '17';
+const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19'];
 const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
 
 // Version of Node, NPM
@@ -279,16 +279,7 @@ const LANGUAGES = [
   {
     name: 'Indonesian',
     dispName: 'Bahasa Indonesia',
-    /*
-           JDK <17 ("Indonesian Locale does not comply with ISO 639")
-           The locale is set to "in" for Indonesia
-           See https://bugs.openjdk.java.net/browse/JDK-6457127
-           And https://github.com/jhipster/generator-jhipster/issues/9494
-           Java 17 supports 'id' locale, for compatibility with java 11, we will keep legacy 'in' value while we support java 11.
-           When running with java 17 users must set 'java.locale.useOldISOCodes=true' environment variable.
-           See https://bugs.openjdk.java.net/browse/JDK-8267069.
-        */
-    value: 'in',
+    value: 'id',
     localeId: 'id',
     dayjsLocaleId: 'id',
   },
