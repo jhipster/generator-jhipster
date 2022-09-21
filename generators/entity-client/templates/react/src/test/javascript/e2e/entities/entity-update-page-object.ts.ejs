@@ -40,7 +40,7 @@ for (let relationship of relationships) {
   }
 } _%>
 <%_ if (fieldsContainBlobOrImage) { _%>
-const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/logo-jhipster.png';
+const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= this.CLIENT_MAIN_SRC_DIR %>content/images/logo-jhipster.png';
 const absolutePath = path.resolve(__dirname, fileToUpload);
 <%_ } _%>
 export default class <%= entityClass %>UpdatePage {
