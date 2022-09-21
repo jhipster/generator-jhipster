@@ -2328,7 +2328,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         .map((block, blockIdx) => {
           const {
             blockSpecPath = `${blockIdx}`,
-            path: blockPathCallback = './',
+            path: blockPathValue = './',
             from: blockFromCallback,
             to: blockToCallback,
             condition: blockConditionCallback,
@@ -2341,8 +2341,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           if (condition !== undefined && !condition) {
             return undefined;
           }
-          const blockPath = resolveCallback(blockFromCallback, blockPathCallback);
-          const blockTo = resolveCallback(blockToCallback, blockPathCallback) || blockPath;
+          if (typeof blockPathValue === 'function') {
+            throw new Error(`Block path should be static for ${blockSpecPath}`);
+          }
+          const blockPath = resolveCallback(blockFromCallback, blockPathValue);
+          const blockTo = resolveCallback(blockToCallback, blockPath) || blockPath;
           return block.templates.map((fileSpec, fileIdx) => {
             const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
             assert(typeof fileSpec === 'object' || typeof fileSpec === 'string', `File must be an object or a string for ${fileSpecPath}`);
