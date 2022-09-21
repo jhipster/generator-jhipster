@@ -55,7 +55,7 @@
     "sinon": "14.0.0",
     "terser-webpack-plugin": "5.3.6",
     "ts-jest": "29.0.1",
-    "ts-loader": "9.4.0",
+    "ts-loader": "9.4.1",
     "eslint": "8.23.1",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-vue": "8.7.1",
