@@ -23,7 +23,7 @@ import { TranslateService } from "@ngx-translate/core";
 <%_ } _%>
 
 @Injectable()
-export class TemplatePageTitleStrategy extends TitleStrategy {
+export class AppPageTitleStrategy extends TitleStrategy {
 
   constructor(<%_ if (enableTranslation) { _%>private translateService: TranslateService<%_ } _%>) {
     super();

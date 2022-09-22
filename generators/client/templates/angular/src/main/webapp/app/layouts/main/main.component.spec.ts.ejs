@@ -35,7 +35,7 @@ import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-
 <%_ } _%>
 
 import { MainComponent } from './main.component';
-import { TemplatePageTitleStrategy } from 'app/template-page-title-strategy';
+import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 
 describe('MainComponent', () => {
   let comp: MainComponent;
@@ -65,7 +65,7 @@ describe('MainComponent', () => {
           FindLanguageFromKeyPipe,
 <%_ } _%>
           AccountService,
-          { provide: TitleStrategy, useClass: TemplatePageTitleStrategy },
+          { provide: TitleStrategy, useClass: AppPageTitleStrategy },
         ],
       })
         .overrideTemplate(MainComponent, '')

@@ -57,7 +57,7 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 <%_ } _%>
 import { ErrorComponent } from './layouts/error/error.component';
-import { TemplatePageTitleStrategy } from './template-page-title-strategy';
+import { AppPageTitleStrategy } from './app-page-title-strategy';
 
 @NgModule({
   imports: [
@@ -85,7 +85,7 @@ import { TemplatePageTitleStrategy } from './template-page-title-strategy';
     FindLanguageFromKeyPipe,
 <%_ } _%>
     httpInterceptorProviders,
-    { provide: TitleStrategy, useClass: TemplatePageTitleStrategy },
+    { provide: TitleStrategy, useClass: AppPageTitleStrategy },
   ],
   declarations: [
     MainComponent,

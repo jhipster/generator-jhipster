@@ -23,7 +23,7 @@ import dayjs from 'dayjs/esm';
 <%_ } _%>
 
 import { AccountService } from 'app/core/auth/account.service';
-import { TemplatePageTitleStrategy } from 'app/template-page-title-strategy';
+import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 import { Router } from '@angular/router';
 <%_ if (enableI18nRTL) { _%>
 import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
@@ -32,7 +32,7 @@ import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-
 @Component({
   selector: '<%= jhiPrefixDashed %>-main',
   templateUrl: './main.component.html',
-  providers: [TemplatePageTitleStrategy],
+  providers: [AppPageTitleStrategy],
 })
 export class MainComponent implements OnInit {
 <%_ if (enableTranslation) { _%>
@@ -41,7 +41,7 @@ export class MainComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private templatePageTitleStrategy: TemplatePageTitleStrategy,
+    private appPageTitleStrategy: AppPageTitleStrategy,
     private accountService: AccountService,
 <%_ if (enableI18nRTL) { _%>
     private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,
@@ -62,7 +62,7 @@ export class MainComponent implements OnInit {
 
 <%_ if (enableTranslation) { _%>
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
-      this.templatePageTitleStrategy.updateTitle(this.router.routerState.snapshot);
+      this.appPageTitleStrategy.updateTitle(this.router.routerState.snapshot);
       dayjs.locale(langChangeEvent.lang);
       this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
 
