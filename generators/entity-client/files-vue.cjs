@@ -16,13 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { replaceVueTranslations } = require('../client/transform-vue.cjs');
 const { CLIENT_TEST_SRC_DIR, VUE_DIR } = require('../generator-constants');
 
 const vueFiles = {
-  _: {
-    transform: [replaceVueTranslations],
-  },
   client: [
     {
       path: VUE_DIR,
