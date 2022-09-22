@@ -992,8 +992,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    *
    * @param {string} config - webpack config to be merged
    */
-  addWebpackConfig(config) {
-    this.needleApi.clientWebpack.addWebpackConfig(config);
+  addWebpackConfig(config, clientFramework) {
+    this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
   }
 
   /**

@@ -25,9 +25,6 @@ const { GATEWAY } = require('../../jdl/jhipster/application-types');
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, VUE_DIR } = constants;
 
 const vueFiles = {
-  _: {
-    transform: [replaceVueTranslations],
-  },
   common: [
     {
       templates: [
@@ -357,7 +354,8 @@ const vueFiles = {
 };
 
 function cleanup() {
-  if (!this.clientFrameworkVue) return;
+  const application = this.application;
+  if (!application.clientFrameworkVue) return;
 
   if (this.isJhipsterVersionLessThan('7.3.1')) {
     this.removeFile('webpack/env.js');
@@ -372,10 +370,15 @@ function cleanup() {
   }
 }
 
-function writeFiles() {
-  return this.writeFiles({
+async function writeFiles() {
+  const application = this.application;
+  if (!application.clientFrameworkVue) return;
+
+  await this.writeFiles({
     sections: vueFiles,
     rootTemplatesPath: 'vue',
+    transform: !application.enableTranslation ? [replaceVueTranslations] : undefined,
+    context: application,
   });
 }
 
