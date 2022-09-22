@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.service;
 
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 
 import tech.jhipster.config.JHipsterProperties;
 
@@ -90,7 +90,7 @@ public class MailService {
     }
 
     @Async
-    public void sendEmailFromTemplate(<%= asEntity('User') %> user, String templateName, String titleKey) {
+    public void sendEmailFromTemplate(<%= user.persistClass %> user, String templateName, String titleKey) {
         if (user.getEmail() == null) {
             log.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
@@ -106,19 +106,19 @@ public class MailService {
 <%_ if (!authenticationTypeOauth2) { _%>
 
     @Async
-    public void sendActivationEmail(<%= asEntity('User') %> user) {
+    public void sendActivationEmail(<%= user.persistClass %> user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
     }
 
     @Async
-    public void sendCreationEmail(<%= asEntity('User') %> user) {
+    public void sendCreationEmail(<%= user.persistClass %> user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
     }
 
     @Async
-    public void sendPasswordResetMail(<%= asEntity('User') %> user) {
+    public void sendPasswordResetMail(<%= user.persistClass %> user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }

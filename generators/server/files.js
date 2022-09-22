@@ -1408,7 +1408,7 @@ const baseServerFiles = {
       templates: [
         {
           file: 'package/domain/User.java',
-          renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`,
+          renameTo: generator => `${generator.javaDir}domain/${generator.user.persistClass}.java`,
         },
       ],
     },
@@ -1449,11 +1449,11 @@ const baseServerFiles = {
         },
         {
           file: 'package/service/dto/AdminUserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('AdminUser')}.java`,
+          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.adminUserDto}.java`,
         },
         {
           file: 'package/service/dto/UserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`,
+          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.dtoClass}.java`,
         },
       ],
     },
@@ -1587,11 +1587,11 @@ const baseServerFiles = {
         },
         {
           file: 'package/service/dto/AdminUserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('AdminUser')}.java`,
+          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.adminUserDto}.java`,
         },
         {
           file: 'package/service/dto/UserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`,
+          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.dtoClass}.java`,
         },
         {
           file: 'package/service/dto/PasswordChangeDTO.java',

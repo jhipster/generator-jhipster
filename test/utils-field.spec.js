@@ -30,7 +30,8 @@ describe('main utilities', () => {
 
   const defaultEntity = prepareEntityForTemplates(
     loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' }, defaultConfig),
-    defaultGenerator
+    defaultGenerator,
+    {}
   );
 
   describe('prepareFieldForTemplates', () => {

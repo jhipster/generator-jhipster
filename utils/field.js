@@ -100,7 +100,7 @@ const fakeStringTemplateForFieldName = columnName => {
  * @param {string} type csv, cypress, json-serializable, ts
  * @returns fake value
  */
-const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
+function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
   let data;
   if (field.fakerTemplate) {
     data = faker.faker(field.fakerTemplate);
@@ -116,6 +116,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
       data = generated;
     }
     if (data.length === 0) {
+      this.warning(`Generated value for pattern ${field.fieldValidateRulesPattern} is not valid.`);
       data = undefined;
     }
   } else if (field.fieldIsEnum) {
@@ -123,6 +124,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
       const enumValues = field.enumValues;
       data = enumValues[faker.datatype.number(enumValues.length - 1)].name;
     } else {
+      this.warning(`Enum ${field.fieldType} is not valid`);
       data = undefined;
     }
   } else if (field.fieldType === DURATION && type === 'cypress') {
@@ -162,6 +164,8 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     data = faker.datatype.uuid();
   } else if (field.fieldType === BOOLEAN) {
     data = faker.datatype.boolean();
+  } else {
+    this.warning(`Fake data for field ${field.fieldType} is not supported`);
   }
 
   if (field.fieldType === BYTES && type === 'json-serializable') {
@@ -197,7 +201,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
   }
 
   return data;
-};
+}
 
 function _derivedProperties(field) {
   const fieldType = field.fieldType;
@@ -297,13 +301,17 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
       generator.warning(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
       return undefined;
     }
-    return faker.createRandexp(field.fieldValidateRulesPattern);
+    const re = faker.createRandexp(field.fieldValidateRulesPattern);
+    if (!re) {
+      generator.warning(`Error creating generator for pattern ${field.fieldValidateRulesPattern}`);
+    }
+    return re;
   };
 
   field.uniqueValue = [];
 
   field.generateFakeData = (type = 'csv') => {
-    let data = generateFakeDataForField(field, faker, entityWithConfig.changelogDateForRecent, type);
+    let data = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
     // manage uniqueness
     if ((field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE)) || field.id) {
       let i = 0;
@@ -312,14 +320,16 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
           data = undefined;
           break;
         }
-        data = generateFakeDataForField(field, faker, entityWithConfig.changelogDateForRecent, type);
+        data = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
       }
-      if (data !== undefined) {
+      if (data === undefined) {
+        generator.warning(`Error generating a unique value field ${field.fieldName} and type ${field.fieldType}`);
+      } else {
         field.uniqueValue.push(data);
       }
     }
     if (data === undefined) {
-      generator.warning(`Error generating fake data for field ${field.fieldName}`);
+      generator.warning(`Error generating fake data for field ${entityWithConfig.name}.${field.fieldName}`);
     }
     return data;
   };

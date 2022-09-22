@@ -41,7 +41,7 @@ Object.keys(differentRelationships).forEach(key => {
   if (differentRelationships[key].some(rel => rel.reference.owned)) {
     const uniqueRel = differentRelationships[key][0];
     if (uniqueRel.otherEntityAngularName !== entityAngularName) {
-      if (isBuiltInUser(uniqueRel.otherEntityAngularName)) {
+      if (this.isBuiltInUser(uniqueRel.otherEntityAngularName)) {
 _%>
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
@@ -56,7 +56,7 @@ import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%=
   }
 });
 _%>
-<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
@@ -69,7 +69,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     isSaving = false;
     <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
-    <%- _.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
+    <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ }); _%>
 
 <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>

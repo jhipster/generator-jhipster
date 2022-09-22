@@ -19,7 +19,7 @@
 package <%= packageName %>.repository;
 
 import <%= packageName %>.domain.PersistentToken;
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 import org.springframework.data.couchbase.repository.CouchbaseRepository;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +38,7 @@ public interface PersistentTokenRepository extends CouchbaseRepository<Persisten
         deleteById(series);
     }
 
-    default List<PersistentToken> findByUser(<%= asEntity('User') %> user) {
+    default List<PersistentToken> findByUser(<%= user.persistClass %> user) {
         return findByLogin(user.getLogin());
     }
 

@@ -34,6 +34,7 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
+    this.application = this.options.application;
     this.entity = this.options.context || { ...entityDefaultConfig };
 
     this.jhipsterContext = this.options.jhipsterContext || this.options.context;
@@ -69,9 +70,6 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       postProcessEntityDerivedFields() {
         preparePostEntityServerDerivedProperties(this.entity);
-      },
-      loadConfigIntoGenerator() {
-        Object.assign(this, this.entity);
       },
     };
   }

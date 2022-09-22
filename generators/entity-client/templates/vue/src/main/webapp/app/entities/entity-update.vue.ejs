@@ -35,8 +35,8 @@ _%>
   <%_ if (field.fieldIsEnum) { _%>
                         <select class="form-control" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>>
     <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
-                            <option v-for="<%= _.lowerFirst(fieldType) %> in <%= _.lowerFirst(fieldType)%>Values" :key="<%= _.lowerFirst(fieldType) %>" v-bind:value="<%= _.lowerFirst(fieldType) %>" v-bind:label="$t('<%= enumPrefix %>.'+<%= _.lowerFirst(fieldType) %>)">{{ <%= _.lowerFirst(fieldType) %> }}</option>
-    
+                            <option v-for="<%= this._.lowerFirst(fieldType) %> in <%= this._.lowerFirst(fieldType)%>Values" :key="<%= this._.lowerFirst(fieldType) %>" v-bind:value="<%= this._.lowerFirst(fieldType) %>" v-bind:label="$t('<%= enumPrefix %>.'+<%= this._.lowerFirst(fieldType) %>)">{{ <%= this._.lowerFirst(fieldType) %> }}</option>
+
                         </select>
   <%_ } else { _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>

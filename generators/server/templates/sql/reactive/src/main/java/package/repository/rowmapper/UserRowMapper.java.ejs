@@ -24,15 +24,15 @@ import java.util.function.BiFunction;
 
 import org.springframework.stereotype.Service;
 
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 
 import io.r2dbc.spi.Row;
 
 /**
- * Converter between {@link Row} to {@link <%= asEntity('User') %>}, with proper type conversions.
+ * Converter between {@link Row} to {@link <%= user.persistClass %>}, with proper type conversions.
  */
 @Service
-public class UserRowMapper implements BiFunction<Row, String, <%= asEntity('User') %>> {
+public class UserRowMapper implements BiFunction<Row, String, <%= user.persistClass %>> {
     private final ColumnConverter converter;
     public UserRowMapper(ColumnConverter converter) {
         this.converter = converter;
@@ -40,11 +40,11 @@ public class UserRowMapper implements BiFunction<Row, String, <%= asEntity('User
 
     /**
      * Take a {@link Row} and a column prefix, and extract all the fields.
-     * @return the {@link <%= asEntity('User') %>} stored in the database.
+     * @return the {@link <%= user.persistClass %>} stored in the database.
      */
     @Override
-    public <%= asEntity('User') %> apply(Row row, String prefix) {
-        <%= asEntity('User') %> entity = new <%= asEntity('User') %>();
+    public <%= user.persistClass %> apply(Row row, String prefix) {
+        <%= user.persistClass %> entity = new <%= user.persistClass %>();
         entity.setId(row.get(prefix + "_id", <%= user.primaryKey.type %>.class));
         entity.setLogin(converter.fromRow(row, prefix + "_login", String.class));
 <%_ if (!authenticationTypeOauth2) { _%>

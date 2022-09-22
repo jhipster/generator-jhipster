@@ -97,7 +97,7 @@ import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlur
   <%_ } _%>
 <%_ }); _%>
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
@@ -125,7 +125,7 @@ export const <%= entityReactName %>Update = () => {
   const updating = useAppSelector(state => state.<%= entityReactState %>.updating);
   const updateSuccess = useAppSelector(state => state.<%= entityReactState %>.updateSuccess);
   <%_ enumImports.forEach( (importedPath, importedType) => { _%>
-  const <%- _.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
+  const <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
   <%_ }); _%>
 
   const handleClose = () => {
@@ -281,12 +281,12 @@ _%>
             type="select"
           >
           <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
-          {<%= _.lowerFirst(fieldType) %>Values.map(<%= _.lowerFirst(fieldType) %> => (
-              <option value={<%= _.lowerFirst(fieldType) %>} key={<%= _.lowerFirst(fieldType) %>}>
+          {<%= this._.lowerFirst(fieldType) %>Values.map(<%= this._.lowerFirst(fieldType) %> => (
+              <option value={<%= this._.lowerFirst(fieldType) %>} key={<%= this._.lowerFirst(fieldType) %>}>
       <%_ if (enableTranslation) { _%>
-                {translate("<%= enumPrefix %>."+<%= _.lowerFirst(fieldType) %>)}
+                {translate("<%= enumPrefix %>."+<%= this._.lowerFirst(fieldType) %>)}
       <%_ } else { _%>
-                {<%= _.lowerFirst(fieldType) %>}
+                {<%= this._.lowerFirst(fieldType) %>}
       <%_ } _%>
               </option>))}
           </ValidatedField>

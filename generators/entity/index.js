@@ -636,7 +636,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
       prepareEntityForTemplates() {
         const entity = this.context;
-        prepareEntityForTemplates(entity, this);
+        prepareEntityForTemplates(entity, this, this.application);
       },
 
       loadDomain() {

@@ -255,9 +255,10 @@ module.exports = class extends BaseGenerator {
     const changelogDateDate = this.jhipsterConfig.creationTimestamp ? new Date(this.jhipsterConfig.creationTimestamp) : new Date();
     const changelogDate = formatDateForChangelog(changelogDateDate);
 
-    const user = createUserEntity.call(this, { changelogDate });
+    const application = this._.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
+    const user = createUserEntity.call(this, { changelogDate }, application);
 
-    prepareEntityForTemplates(user, this);
+    prepareEntityForTemplates(user, this, application);
     prepareEntityServerForTemplates(user);
     prepareEntityPrimaryKeyForTemplates(user, this);
 
