@@ -703,8 +703,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         preparePostEntityCommonDerivedProperties(this.context);
         preparePostEntitiesCommonDerivedProperties(Object.values(this.configOptions.sharedEntities));
-
-        this._.defaults(this.context, this.application);
       },
 
       insight() {
