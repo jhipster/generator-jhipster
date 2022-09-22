@@ -18,10 +18,9 @@
  */
 /* eslint-disable consistent-return */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { DEFAULT_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+const { WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
 
 const writeFiles = require('./files').writeFiles;
-const utils = require('../utils');
 const { GENERATOR_ENTITY_I_18_N } = require('../generator-list');
 
 /* constants used throughout */
@@ -30,6 +29,7 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
+    this.application = this.options.application;
     this.entity = this.options.context;
     this.jhipsterContext = this.options.jhipsterContext || this.options.context;
   }
@@ -38,20 +38,6 @@ module.exports = class extends BaseBlueprintGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ENTITY_I_18_N, { context: this.options.context });
     }
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _default() {
-    return {
-      loadEntityIntoGenerator() {
-        utils.copyObjectProps(this, this.entity);
-      },
-    };
-  }
-
-  get [DEFAULT_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._default();
   }
 
   // Public API method used by the getter and also by Blueprints
