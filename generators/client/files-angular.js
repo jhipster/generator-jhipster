@@ -61,7 +61,7 @@ const files = {
     },
     {
       path: ANGULAR_DIR,
-      templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts'],
+      templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
     },
   ],
   microfrontend: [

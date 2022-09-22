@@ -24,6 +24,7 @@ import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import locale from '@angular/common/locales/<%= localeId %>';
 import { BrowserModule, Title } from '@angular/platform-browser';
+import { TitleStrategy } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
@@ -56,6 +57,7 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 <%_ } _%>
 import { ErrorComponent } from './layouts/error/error.component';
+import { AppPageTitleStrategy } from './app-page-title-strategy';
 
 @NgModule({
   imports: [
@@ -83,6 +85,7 @@ import { ErrorComponent } from './layouts/error/error.component';
     FindLanguageFromKeyPipe,
 <%_ } _%>
     httpInterceptorProviders,
+    { provide: TitleStrategy, useClass: AppPageTitleStrategy },
   ],
   declarations: [
     MainComponent,
