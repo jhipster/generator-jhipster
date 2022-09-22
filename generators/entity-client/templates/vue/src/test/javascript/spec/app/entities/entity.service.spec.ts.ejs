@@ -18,7 +18,7 @@
 -%>
 <%_
 const tsKeyId = this.generateTestEntityId(primaryKey.type);
-const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
+const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id), clientFramework);
 _%>
 /* tslint:disable max-line-length */
 import axios from 'axios';

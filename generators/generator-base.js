@@ -3101,6 +3101,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.enableTranslation = config.enableTranslation;
     dest.nativeLanguage = config.nativeLanguage;
     dest.languages = config.languages;
+    dest.enableI18nRTL = dest.languages && this.isI18nRTLSupportNecessary(dest.languages);
   }
 
   /**

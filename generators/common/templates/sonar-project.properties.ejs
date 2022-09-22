@@ -8,9 +8,9 @@ sonar.host.url=http://localhost:9001
 
 <%_ if (clientFrameworkAny) { _%>
   <%_ if (clientFrameworkAngular) { _%>
-sonar.test.inclusions=<%= TEST_DIR %>**/*.*, <%= CLIENT_MAIN_SRC_DIR %>app/**/*.spec.ts
+sonar.test.inclusions=<%= TEST_DIR %>**/*.*, <%= this.CLIENT_MAIN_SRC_DIR %>app/**/*.spec.ts
   <%_ } else if (clientFrameworkReact) { _%>
-sonar.test.inclusions=<%= TEST_DIR %>**/*.*, <%= CLIENT_MAIN_SRC_DIR %>app/**/*.spec.ts, <%= CLIENT_MAIN_SRC_DIR %>app/**/*.spec.tsx
+sonar.test.inclusions=<%= TEST_DIR %>**/*.*, <%= this.CLIENT_MAIN_SRC_DIR %>app/**/*.spec.ts, <%= this.CLIENT_MAIN_SRC_DIR %>app/**/*.spec.tsx
   <%_ } else { _%>
 sonar.test.inclusions=<%= TEST_DIR %>**/*.*
   <%_ } _%>
@@ -36,7 +36,7 @@ sonar.javascript.lcov.reportPaths=<%_ if (buildToolMaven) { _%>target<%_ } else 
 <%_ } _%>
 
 sonar.sourceEncoding=UTF-8
-sonar.exclusions=<%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*
+sonar.exclusions=<%= this.CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= this.CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*
 
 sonar.issue.ignore.multicriteria=<%_ if (!skipServer) { _%>S3437,<% if (authenticationTypeJwt) { %>S4502,<% } %>S4684,S5145,UndocumentedApi<%_ } _%>
 

@@ -75,7 +75,7 @@ Object.keys(differentRelationships).forEach(key => {
     const uniqueRel = differentRelationships[key][0];
     uniqueRelationFields.add(uniqueRel.otherEntityNamePlural);
     otherEntityActions.add({
-      action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
+      action: `get${this.upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
       instance: `${uniqueRel.otherEntityNamePlural}`,
       entity: uniqueRel.otherEntityAngularName,
       reducer: uniqueRel.otherEntity.builtInUser ? `userManagement.${uniqueRel.otherEntityNamePlural}` : `${uniqueRel.otherEntity.entityReactState}.entities`,
@@ -92,12 +92,12 @@ import { getUsers } from 'app/modules/administration/user-management/user-manage
       <%_ if (uniqueRel.otherEntityAngularName !== entityReactName) { _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
       <%_ } _%>
-import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
+import { getEntities as get<%= this.upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
     <%_ } _%>
   <%_ } _%>
 <%_ }); _%>
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-<%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
+<%_ const enumImports = this.generateEntityClientEnumImports(fields, clientFramework); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>

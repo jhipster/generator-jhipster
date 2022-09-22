@@ -20,7 +20,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
 <%_ if (searchEngine) { _%>
   public currentSearch = '';
 <%_ } _%>
-  private removeId: <%- getTypescriptKeyType(primaryKey) %> = null;
+  private removeId: <%- this.getTypescriptKeyType(primaryKey) %> = null;
 <%_ if (!paginationNo) { _%>
   public itemsPerPage = 20;
   public queryCount: number = null;

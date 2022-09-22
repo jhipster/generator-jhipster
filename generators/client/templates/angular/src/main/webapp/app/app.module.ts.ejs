@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-  const localeId = getLocaleId(nativeLanguage);
+  const localeId = this.getLocaleId(nativeLanguage);
 _%>
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
@@ -79,7 +79,7 @@ import { AppPageTitleStrategy } from './app-page-title-strategy';
 <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
     CookieService,
 <%_ } _%>
-    { provide: LOCALE_ID, useValue: '<%= skipLanguageForLocale(nativeLanguage) ? 'en' : localeId %>' },
+    { provide: LOCALE_ID, useValue: '<%= this.skipLanguageForLocale(nativeLanguage) ? 'en' : localeId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
 <%_ if (enableI18nRTL) { _%>
     FindLanguageFromKeyPipe,

@@ -57,7 +57,7 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ } _%>
     <%_ if (fieldsContainBlobOrImage) { _%>
     const fileNameToUpload = 'logo-jhipster.png';
-    const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/' + fileNameToUpload;
+    const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= this.CLIENT_MAIN_SRC_DIR %>content/images/' + fileNameToUpload;
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
     const username = process.env.E2E_USERNAME ?? 'admin';
