@@ -18,9 +18,9 @@
 -%>
 <%
 const variablesWithTypes = this.generateEntityClientFields(primaryKey, fields.filter(field => !field.id), relationships, dto, customDateType = 'Date', embedded);
-const typeImports = this.generateEntityClientImports(relationships, dto);
+const typeImports = this.generateEntityClientImports(relationships, dto, clientFramework);
 const defaultVariablesValues = this.generateEntityClientFieldDefaultValues(fields.filter(field => !field.id));
-const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
+const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id), clientFramework);
 %>
 <%_ typeImports.forEach( (importedPath, importedType) => {
   importedPath = importedPath.replace('core/user/user.model', 'shared/model/user.model');

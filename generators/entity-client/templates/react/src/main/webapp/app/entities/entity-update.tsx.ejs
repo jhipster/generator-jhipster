@@ -97,7 +97,7 @@ import { getEntities as get<%= this.upperFirstCamelCase(uniqueRel.otherEntityNam
   <%_ } _%>
 <%_ }); _%>
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-<%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
+<%_ const enumImports = this.generateEntityClientEnumImports(fields, clientFramework); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
