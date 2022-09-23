@@ -1090,7 +1090,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
-          java-version: 11
+          java-version: 17
       - name: Install node.js packages
         run: npm install
       - name: Run backend test
@@ -1177,7 +1177,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
-          java-version: 11
+          java-version: 17
       - name: Install node.js packages
         run: npm install
       - name: Install Snyk CLI
@@ -1341,7 +1341,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
-          java-version: 11
+          java-version: 17
       - name: Install node.js packages
         run: npm install
       - name: Run backend test
@@ -1422,7 +1422,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
-          java-version: 11
+          java-version: 17
       - name: Install node.js packages
         run: npm install
       - name: Install Snyk CLI
@@ -1608,7 +1608,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
-          java-version: 11
+          java-version: 17
       - name: Install node.js packages
         run: npm install
       - name: Run backend test
@@ -3517,7 +3517,7 @@ cache:
 env:
   global:
     - NODE_VERSION=16.17.0
-    - JHI_JDK=11
+    - JHI_JDK=17
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -3533,10 +3533,10 @@ before_install:
       sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
       java -version
     else
-      echo '*** Using OpenJDK 11 by default'
+      echo '*** Using OpenJDK 17 by default'
       sudo apt-get update -q
-      sudo apt-get install -y openjdk-11-jdk
-      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
+      sudo apt-get install -y openjdk-17-jdk
+      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
       java -version
     fi
   - java -version
@@ -3614,7 +3614,7 @@ cache:
 env:
   global:
     - NODE_VERSION=16.17.0
-    - JHI_JDK=11
+    - JHI_JDK=17
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -3631,10 +3631,10 @@ before_install:
       sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
       java -version
     else
-      echo '*** Using OpenJDK 11 by default'
+      echo '*** Using OpenJDK 17 by default'
       sudo apt-get update -q
-      sudo apt-get install -y openjdk-11-jdk
-      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
+      sudo apt-get install -y openjdk-17-jdk
+      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
       java -version
     fi
   - java -version
@@ -3712,7 +3712,7 @@ cache:
 env:
   global:
     - NODE_VERSION=16.17.0
-    - JHI_JDK=11
+    - JHI_JDK=17
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -3729,10 +3729,10 @@ before_install:
       sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
       java -version
     else
-      echo '*** Using OpenJDK 11 by default'
+      echo '*** Using OpenJDK 17 by default'
       sudo apt-get update -q
-      sudo apt-get install -y openjdk-11-jdk
-      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
+      sudo apt-get install -y openjdk-17-jdk
+      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
       java -version
     fi
   - java -version
