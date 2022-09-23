@@ -30,8 +30,8 @@ const {
   END_PRIORITY,
 } = require('../../lib/constants/priorities.cjs').compat;
 
-const prompts = require('./prompts');
-const { writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue');
+const prompts = require('./prompts.cjs');
+const { writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue.cjs');
 const constants = require('../generator-constants');
 const { GENERATOR_PAGE } = require('../generator-list');
 const { PROTRACTOR } = require('../../jdl/jhipster/test-framework-types');

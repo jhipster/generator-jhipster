@@ -7,11 +7,13 @@ const constants = require('../generators/generator-constants');
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
+const generator = require.resolve('../generators/spring-controller/index.mjs');
+
 describe('JHipster generator spring-controller', () => {
   describe('creates spring controller', () => {
     before(done => {
       helpers
-        .run(require.resolve('../generators/spring-controller'))
+        .run(generator)
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
         })
@@ -32,7 +34,7 @@ describe('JHipster generator spring-controller', () => {
   describe('creates spring controller with --default flag', () => {
     before(done => {
       helpers
-        .run(require.resolve('../generators/spring-controller'))
+        .run(generator)
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
         })
@@ -52,7 +54,7 @@ describe('JHipster generator spring-controller', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .run(require.resolve('../generators/spring-controller'))
+        .run(generator)
         .inTmpDir(dir => {
           const config = {
             ...fse.readJSONSync(path.join(__dirname, '../test/templates/default/.yo-rc.json'))[constants.GENERATOR_JHIPSTER],

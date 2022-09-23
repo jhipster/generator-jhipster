@@ -26,13 +26,13 @@ import chalk from 'chalk';
   });
 -&>
 <%_ if (!application.dynamic) { _%>
-import <%= generatorClass %>Generator from 'generator-jhipster/esm/generators/<%= jhipsterGenerator %>';
+import <%= generatorClass %>Generator from 'generator-jhipster/generators/<%= jhipsterGenerator %>';
 import {
   PRIORITY_PREFIX,
   <%_ for (const priority of priorities) { _%>
   <%= priority.constant %>,
   <%_ } _%>
-} from 'generator-jhipster/esm/priorities';
+} from 'generator-jhipster/priorities';
 <%_ } _%>
 
 <%_ if (application.dynamic) { _%>

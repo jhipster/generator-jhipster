@@ -36,9 +36,6 @@ describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
-  it('should be exported at package.json', async () => {
-    await expect((await import(`generator-jhipster/esm/generators/${generator}`)).default).toBe(Generator);
-  });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });
     expect(instance.features.bar).toBe(true);

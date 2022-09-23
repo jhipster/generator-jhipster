@@ -1593,7 +1593,11 @@ class JHipsterBaseGenerator extends PrivateBase {
         try {
           generator = require.resolve(`./${generator}/index.cjs`);
         } catch (e) {
-          throw new Error(`Generator ${generator} was not found`);
+          try {
+            generator = require.resolve(`./${generator}/index.mjs`);
+          } catch (e) {
+            throw new Error(`Generator ${generator} was not found`);
+          }
         }
       }
     }
