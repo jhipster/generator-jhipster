@@ -56,10 +56,10 @@ before_install:
       sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
       java -version
     else
-      echo '*** Using OpenJDK 11 by default'
+      echo '*** Using OpenJDK 17 by default'
       sudo apt-get update -q
-      sudo apt-get install -y openjdk-11-jdk
-      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
+      sudo apt-get install -y openjdk-17-jdk
+      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
       java -version
     fi
   - java -version

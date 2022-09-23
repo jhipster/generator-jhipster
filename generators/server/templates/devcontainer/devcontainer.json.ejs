@@ -5,10 +5,10 @@
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
-      // Update the VARIANT arg to pick a Java version: 11, 17
+      // Update the VARIANT arg to pick a Java version: 17,19
       // Append -bullseye or -buster to pin to an OS version.
       // Use the -bullseye variants on local arm64/Apple Silicon.
-      "VARIANT": "11",
+      "VARIANT": "17",
       // Options
       "INSTALL_MAVEN": "<%= buildToolMaven %>",
       "INSTALL_GRADLE": "<%= buildToolGradle %>",
@@ -20,7 +20,7 @@
   "settings": {
     "java.home": "/docker-java-home"
   },
-	
+
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
 <%_ if(clientFrameworkAngular) { _%>
