@@ -27,10 +27,11 @@ const testSamples = () =>
     name,
     {
       skipInstall: true,
-      localConfig: {
-        ...sample,
-        enableTranslation: true,
-        ...commonConfig,
+      applicationWithEntities: {
+        config: {
+          ...sample,
+          ...commonConfig,
+        },
       },
     },
   ]);
@@ -105,6 +106,8 @@ describe(`JHipster ${clientFramework} generator`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   testSamples().forEach(([name, sample]) => {
+    const sampleConfig = sample.applicationWithEntities.config;
+
     describe(name, () => {
       let runResult;
 
@@ -128,7 +131,7 @@ describe(`JHipster ${clientFramework} generator`, () => {
       });
 
       describe('skipJhipsterDependencies', () => {
-        const { skipJhipsterDependencies } = sample.localConfig;
+        const { skipJhipsterDependencies } = sampleConfig;
         const skipJhipsterDependenciesTitle = skipJhipsterDependencies
           ? 'should not add generator-jhipster to package.json'
           : 'should add generator-jhipster to package.json';
@@ -140,7 +143,8 @@ describe(`JHipster ${clientFramework} generator`, () => {
       });
 
       describe('withAdminUi', () => {
-        const generateAdminUi = sample.localConfig.applicationType !== 'microservice' && sample.localConfig.withAdminUi;
+        const { applicationType, withAdminUi } = sampleConfig;
+        const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 
         it(adminUiComponents, () => {
@@ -148,7 +152,7 @@ describe(`JHipster ${clientFramework} generator`, () => {
           assertion(clientAdminFiles);
         });
 
-        if (sample.localConfig.applicationType !== 'microservice') {
+        if (applicationType !== 'microservice') {
           const adminUiRoutingTitle = generateAdminUi ? 'should generate admin routing' : 'should not generate admin routing';
           it(adminUiRoutingTitle, () => {
             const assertion = (...args) =>

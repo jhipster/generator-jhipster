@@ -10,7 +10,7 @@ export { basicTests, testBlueprintSupport, testOptions };
 const { OAUTH2, JWT, SESSION } = AuthenticationTypes;
 const { MICROSERVICE, GATEWAY, MONOLITH } = ApplicationTypes;
 
-const fromMatrix = configMatrix => {
+export const fromMatrix = configMatrix => {
   const configEntries = Object.entries(configMatrix);
   const samples = configEntries.reduce((previousValue, currentValue) => {
     const [config, configValues] = currentValue;
@@ -25,8 +25,9 @@ const fromMatrix = configMatrix => {
     return previousValue
       .map(([previousName, previousConfig]) =>
         configValues.map(value => {
+          const title = typeof value === 'string' ? value : `${config}(${value})`;
           return [
-            `${previousName}${previousName.length === 0 ? '' : '-'}${value}`,
+            `${previousName}${previousName.length === 0 ? '' : '-'}${title}`,
             {
               ...previousConfig,
               [config]: value,
@@ -39,24 +40,43 @@ const fromMatrix = configMatrix => {
   return Object.fromEntries(samples);
 };
 
-const injectValues = (matrix, configMatrix) => {
+export const extendMatrix = (matrix, configMatrix) => {
   const configEntries = Object.entries(configMatrix);
+  const additionalMatrixTemp = configEntries.reduce(
+    (currentArray, [configName, configValues]) => {
+      const currentConfigObjects = configValues.map(configValue => ({ [configName]: configValue }));
+      return currentArray
+        .map(existingConfig => currentConfigObjects.map(currentObject => ({ ...existingConfig, ...currentObject })))
+        .flat();
+    },
+    [{}]
+  );
+  const additionalMatrix = [];
+  while (additionalMatrixTemp.length > 0) {
+    additionalMatrix.push(additionalMatrixTemp.shift());
+    if (additionalMatrixTemp.length > 0) {
+      additionalMatrix.push(additionalMatrixTemp.pop());
+    }
+  }
   return Object.fromEntries(
-    Object.entries(matrix).map(([matrixName, matrixConfig], idx) => {
-      for (const [configName, configValues] of configEntries) {
-        const configValue = configValues[idx % configValues.length];
-        const configTitle = typeof configValue === 'boolean' ? `${configName}(${configValue})` : configName;
+    Object.entries(matrix).map(([matrixName, matrixConfig], matrixIndex) => {
+      const newValues = additionalMatrix[matrixIndex % additionalMatrix.length];
+      Object.entries(newValues).forEach(([configName, configValue]) => {
+        const configTitle = typeof configValue === 'string' ? configName : `${configName}(${configValue})`;
         matrixName = `${matrixName}-${configTitle}`;
-        matrixConfig[configName] = configValue;
-      }
-      return [matrixName, matrixConfig];
+      });
+      return [matrixName, { ...matrixConfig, ...newValues }];
     })
   );
 };
 
+export const AuthenticationTypeMatrix = {
+  authenticationType: [OAUTH2, JWT, SESSION],
+};
+
 const CONFIG_MATRIX_MONOLITH = {
   applicationType: [MONOLITH],
-  authenticationType: [OAUTH2, JWT, SESSION],
+  ...AuthenticationTypeMatrix,
 };
 
 const CONFIG_MATRIX_MICROSERVICE_GATEWAY = {
@@ -70,8 +90,9 @@ const APPLICATION_MATRIX = {
 };
 
 const CLIENT_ADDITIONAL_CONFIG_MATRIX = {
-  withAdminUi: [true, false],
-  skipJhipsterDependencies: [true, false],
+  withAdminUi: [false, true],
+  skipJhipsterDependencies: [false, true],
+  enableTranslation: [false, true],
 };
 
-export const clientSamples = injectValues(APPLICATION_MATRIX, CLIENT_ADDITIONAL_CONFIG_MATRIX);
+export const clientSamples = extendMatrix(APPLICATION_MATRIX, CLIENT_ADDITIONAL_CONFIG_MATRIX);

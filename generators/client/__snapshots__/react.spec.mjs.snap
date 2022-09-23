@@ -1,6 +1,1637 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster react generator gateway-jwt-withAdminUi(true)-skipJhipsterDependencies(true) should match generated files snapshot 1`] = `
+exports[`JHipster react generator gateway-jwt-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "postcss.config.js": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/error-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/icon-loader.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/logger-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/notification-middleware.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/notification-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/translation.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/reducers.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/activate/activate.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/activate/activate.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/activate/activate.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password-reset/finish/password-reset-finish.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password-reset/init/password-reset-init.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password-reset/password-reset.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password/password.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password/password.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password/password.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/register/register.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/register/register.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/register/register.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/settings/settings.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/settings/settings.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/settings/settings.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/administration.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/docs/docs.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/docs/docs.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/home/home.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/home/home.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/login/login-modal.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/login/login.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/login/logout.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/setup-tests.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/DurationFormat.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/private-route.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/private-route.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/page-not-found.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/footer/footer.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/footer/footer.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header-components.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/account.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/account.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/admin.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/entities.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/locale.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/menu-components.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/menu-item.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/application-profile.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/application-profile.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/authentication.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/authentication.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/locale.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/locale.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/reducer.utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/date-utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/entity-utils.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/entity-utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/pagination.constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/typings.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.test.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/environment.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster react generator gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(false)-enableTranslation(true) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "postcss.config.js": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/error-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/icon-loader.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/logger-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/notification-middleware.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/notification-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/translation.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/reducers.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/administration.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/configuration/configuration.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/docs/docs.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/docs/docs.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/health/health-modal.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/health/health.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/logs/logs.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/metrics/metrics.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/home/home.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/home/home.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/login/login-redirect.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/login/logout.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/setup-tests.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/DurationFormat.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/private-route.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/private-route.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/page-not-found.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/footer/footer.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/footer/footer.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header-components.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/account.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/account.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/admin.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/entities.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/locale.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/menu-components.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/menu-item.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/application-profile.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/application-profile.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/authentication.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/authentication.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/locale.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/locale.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/reducer.utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/user-management.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/user-management.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/date-utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/entity-utils.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/entity-utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/pagination.constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/url-utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/typings.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.test.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/environment.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster react generator microservice-jwt-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(false) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "postcss.config.js": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/error-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/icon-loader.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/logger-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/notification-middleware.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/notification-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/reducers.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/main.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/activate/activate.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/activate/activate.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/activate/activate.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password-reset/finish/password-reset-finish.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password-reset/init/password-reset-init.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password-reset/password-reset.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password/password.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password/password.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password/password.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/register/register.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/register/register.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/register/register.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/settings/settings.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/settings/settings.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/settings/settings.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/administration.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/docs/docs.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/docs/docs.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/user-management/user-management.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/home/home.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/home/home.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/login/login-modal.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/login/login.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/login/logout.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/setup-tests.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/DurationFormat.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/private-route.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/private-route.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-loading.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/page-not-found.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/footer/footer.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/footer/footer.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header-components.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/account.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/account.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/admin.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/entities.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/menu-components.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/menu-item.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/application-profile.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/application-profile.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/authentication.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/authentication.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/reducer.utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/date-utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/entity-utils.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/entity-utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/pagination.constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/typings.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.test.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/environment.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.microfrontend.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster react generator microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(false) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "postcss.config.js": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/error-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/icon-loader.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/logger-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/notification-middleware.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/notification-middleware.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/reducers.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/main.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/administration.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/docs/docs.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/docs/docs.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/home/home.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/home/home.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/login/login-redirect.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/login/logout.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/setup-tests.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/DurationFormat.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/private-route.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/private-route.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-boundary.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/error-loading.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/error/page-not-found.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/footer/footer.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/footer/footer.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header-components.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/header/header.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/account.spec.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/account.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/admin.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/entities.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/menu-components.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/menus/menu-item.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/application-profile.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/application-profile.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/authentication.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/authentication.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/reducer.utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/user-management.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/user-management.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/date-utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/entity-utils.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/entity-utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/pagination.constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/url-utils.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/typings.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.test.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/environment.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.microfrontend.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster react generator monolith-jwt-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -452,7 +2083,7 @@ Object {
 }
 `;
 
-exports[`JHipster react generator gateway-oauth2-withAdminUi(false)-skipJhipsterDependencies(false) should match generated files snapshot 1`] = `
+exports[`JHipster react generator monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -542,9 +2173,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/store.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/translation.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/menu.tsx": Object {
@@ -649,9 +2277,6 @@ Object {
   "src/main/webapp/app/shared/layout/menus/index.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/layout/menus/locale.tsx": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/shared/layout/menus/menu-components.tsx": Object {
     "stateCleared": "modified",
   },
@@ -680,12 +2305,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/index.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/locale.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/locale.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/reducer.utils.ts": Object {
@@ -826,1662 +2445,7 @@ Object {
 }
 `;
 
-exports[`JHipster react generator microservice-jwt-withAdminUi(true)-skipJhipsterDependencies(true) should match generated files snapshot 1`] = `
-Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".eslintignore": Object {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
-  ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
-    "stateCleared": "modified",
-  },
-  "jest.conf.js": Object {
-    "stateCleared": "modified",
-  },
-  "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/404.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/WEB-INF/web.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/_bootstrap-variables.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/axios-interceptor.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/axios-interceptor.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/constants.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/dayjs.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/error-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/icon-loader.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/logger-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/notification-middleware.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/notification-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/store.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/translation.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/menu.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/reducers.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/main.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/activate/activate.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/activate/activate.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/activate/activate.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/finish/password-reset-finish.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/init/password-reset-init.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/password-reset.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/administration.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/docs/docs.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/docs/docs.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-delete-dialog.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-detail.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-update.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/home/home.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/home/home.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/login/login-modal.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/login/login.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/login/logout.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/setup-tests.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/DurationFormat.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/auth/private-route.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/auth/private-route.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-loading.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/page-not-found.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header-components.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/account.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/account.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/admin.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/entities.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/index.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/locale.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/menu-components.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/menu-item.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/model/user.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/application-profile.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/application-profile.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/authentication.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/authentication.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/index.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/locale.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/locale.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/reducer.utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/date-utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/entity-utils.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/entity-utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/pagination.constants.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/typings.d.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/css/loading.css": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/logo-jhipster.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/favicon.ico": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/index.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/manifest.webapp": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/robots.txt": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/index.html": Object {
-    "stateCleared": "modified",
-  },
-  "tsconfig.json": Object {
-    "stateCleared": "modified",
-  },
-  "tsconfig.test.json": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/environment.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/logo-jhipster.png": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/utils.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": Object {
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`JHipster react generator microservice-oauth2-withAdminUi(false)-skipJhipsterDependencies(false) should match generated files snapshot 1`] = `
-Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".eslintignore": Object {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
-  ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
-    "stateCleared": "modified",
-  },
-  "jest.conf.js": Object {
-    "stateCleared": "modified",
-  },
-  "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/404.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/WEB-INF/web.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/_bootstrap-variables.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/axios-interceptor.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/axios-interceptor.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/constants.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/dayjs.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/error-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/icon-loader.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/logger-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/notification-middleware.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/notification-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/store.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/translation.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/menu.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/reducers.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/main.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/administration.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/docs/docs.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/docs/docs.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/home/home.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/home/home.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/login/login-redirect.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/login/logout.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/setup-tests.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/DurationFormat.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/auth/private-route.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/auth/private-route.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-loading.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/page-not-found.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header-components.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/account.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/account.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/admin.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/entities.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/index.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/locale.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/menu-components.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/menu-item.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/model/user.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/application-profile.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/application-profile.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/authentication.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/authentication.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/index.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/locale.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/locale.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/reducer.utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/user-management.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/user-management.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/date-utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/entity-utils.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/entity-utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/pagination.constants.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/url-utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/typings.d.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/css/loading.css": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/logo-jhipster.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/favicon.ico": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/index.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/manifest.webapp": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/robots.txt": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/index.html": Object {
-    "stateCleared": "modified",
-  },
-  "tsconfig.json": Object {
-    "stateCleared": "modified",
-  },
-  "tsconfig.test.json": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/environment.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/logo-jhipster.png": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/utils.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": Object {
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`JHipster react generator monolith-jwt-withAdminUi(false)-skipJhipsterDependencies(false) should match generated files snapshot 1`] = `
-Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".eslintignore": Object {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
-  ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
-    "stateCleared": "modified",
-  },
-  "jest.conf.js": Object {
-    "stateCleared": "modified",
-  },
-  "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/404.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/WEB-INF/web.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/_bootstrap-variables.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/axios-interceptor.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/axios-interceptor.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/constants.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/dayjs.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/error-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/icon-loader.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/logger-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/notification-middleware.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/notification-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/store.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/translation.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/menu.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/reducers.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/activate/activate.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/activate/activate.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/activate/activate.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/finish/password-reset-finish.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/init/password-reset-init.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/password-reset.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/administration.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/docs/docs.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/docs/docs.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-delete-dialog.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-detail.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-update.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/home/home.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/home/home.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/login/login-modal.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/login/login.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/login/logout.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/setup-tests.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/DurationFormat.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/auth/private-route.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/auth/private-route.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/page-not-found.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header-components.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/account.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/account.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/admin.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/entities.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/index.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/locale.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/menu-components.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/menu-item.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/model/user.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/application-profile.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/application-profile.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/authentication.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/authentication.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/index.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/locale.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/locale.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/reducer.utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/date-utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/entity-utils.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/entity-utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/pagination.constants.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/typings.d.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/css/loading.css": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/logo-jhipster.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/favicon.ico": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/index.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/manifest.webapp": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/robots.txt": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/index.html": Object {
-    "stateCleared": "modified",
-  },
-  "tsconfig.json": Object {
-    "stateCleared": "modified",
-  },
-  "tsconfig.test.json": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/environment.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/logo-jhipster.png": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/utils.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": Object {
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`JHipster react generator monolith-oauth2-withAdminUi(true)-skipJhipsterDependencies(true) should match generated files snapshot 1`] = `
-Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".eslintignore": Object {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
-  ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
-    "stateCleared": "modified",
-  },
-  "jest.conf.js": Object {
-    "stateCleared": "modified",
-  },
-  "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/404.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/WEB-INF/web.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/_bootstrap-variables.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/axios-interceptor.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/axios-interceptor.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/constants.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/dayjs.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/error-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/icon-loader.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/logger-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/notification-middleware.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/notification-middleware.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/store.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/translation.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/menu.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/reducers.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/administration.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/configuration/configuration.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/docs/docs.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/docs/docs.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/health/health-modal.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/health/health.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/logs/logs.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/metrics/metrics.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/home/home.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/home/home.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/login/login-redirect.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/login/logout.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/setup-tests.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/DurationFormat.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/auth/private-route.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/auth/private-route.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/error-boundary.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/error/page-not-found.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header-components.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/header/header.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/account.spec.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/account.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/admin.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/entities.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/index.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/locale.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/menu-components.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/menus/menu-item.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/model/user.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/application-profile.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/application-profile.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/authentication.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/authentication.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/index.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/locale.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/locale.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/reducer.utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/user-management.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/reducers/user-management.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/date-utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/entity-utils.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/entity-utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/pagination.constants.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/util/url-utils.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/typings.d.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/css/loading.css": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/images/logo-jhipster.png": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/favicon.ico": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/index.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/manifest.webapp": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/robots.txt": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/index.html": Object {
-    "stateCleared": "modified",
-  },
-  "tsconfig.json": Object {
-    "stateCleared": "modified",
-  },
-  "tsconfig.test.json": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/environment.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/logo-jhipster.png": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/utils.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": Object {
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`JHipster react generator monolith-session-withAdminUi(true)-skipJhipsterDependencies(true) should match generated files snapshot 1`] = `
+exports[`JHipster react generator monolith-session-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -2648,28 +2612,13 @@ Object {
   "src/main/webapp/app/modules/administration/administration.reducer.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/modules/administration/configuration/configuration.tsx": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/modules/administration/docs/docs.scss": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/docs/docs.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/modules/administration/health/health-modal.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/health/health.tsx": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/modules/administration/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/logs/logs.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/metrics/metrics.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/user-management/index.tsx": Object {
