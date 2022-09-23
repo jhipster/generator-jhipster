@@ -69,7 +69,7 @@ spring:
   <%_ } _%>
   jpa:
   <%_ if (devDatabaseTypePostgres) { _%>
-    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   <%_ } _%>
     open-in-view: false
     hibernate:

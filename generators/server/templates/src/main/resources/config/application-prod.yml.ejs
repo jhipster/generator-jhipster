@@ -138,7 +138,7 @@ spring:
   <%_ } _%>
   jpa:
   <%_ if (prodDatabaseTypePostgres) { _%>
-    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb || databaseTypeCassandra || (searchEngineElasticsearch && reactive)) { _%>

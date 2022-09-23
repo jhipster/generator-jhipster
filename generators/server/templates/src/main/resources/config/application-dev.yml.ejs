@@ -162,7 +162,7 @@ spring:
 <%_ if (databaseTypeSql && !reactive) { _%>
   jpa:
   <%_ if (devDatabaseTypePostgres) { _%>
-    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb || databaseTypeCassandra || (searchEngineElasticsearch && reactive)) { _%>
