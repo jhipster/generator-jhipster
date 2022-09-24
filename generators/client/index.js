@@ -260,6 +260,12 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
   // Public API method used by the getter and also by Blueprints
   _preparing() {
     return this.asPreparingTaskGroup({
+      microservice({ application }) {
+        if (this.applicationTypeMicroservice) {
+          this.withAdminUi = false;
+        }
+      },
+
       prepareForTemplates({ application }) {
         this.enableI18nRTL = false;
         if (this.languages !== undefined) {

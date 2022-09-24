@@ -1,0 +1,2955 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster vue generator gateway-jwt-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".postcssrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/account.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/change-password/change-password.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/change-password/change-password.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login-form/login-form.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login-form/login-form.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/settings/settings.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/settings/settings.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-edit.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-edit.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-view.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-view.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/declarations.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/locale/translation.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/main.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/account.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/admin.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/entities.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/pages.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config-bootstrap-vue.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/formatter.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/account-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/translation-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/data/data-utils.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/filters.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/security/authority.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sorts.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shims-vue.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/global.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/vendor.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/account.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/activate/activate.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/change-password/change-password.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/login-form/login-form.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/register/register.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/reset-password/finish/reset-password-finish.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/reset-password/init/reset-password-init.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/settings/settings.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management-edit.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management-view.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/error/error.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/home/home.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/alert/alert.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/formatter.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/data/data-utils.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.spec.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/vue.utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster vue generator gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(false)-enableTranslation(true) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".postcssrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/account.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health-modal.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health-modal.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics-modal.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics-modal.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/declarations.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/locale/translation.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/main.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/admin.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/entities.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/pages.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config-bootstrap-vue.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/formatter.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/account-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/translation-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/data/data-utils.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/filters.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/security/authority.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sorts.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shims-vue.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/global.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/vendor.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/account.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/login.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/configuration/configuration.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/health/health-modal.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/health/health.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/health/health.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/logs/logs.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/metrics/metrics-modal.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/metrics/metrics.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/error/error.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/home/home.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/alert/alert.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/formatter.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/data/data-utils.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.spec.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/vue.utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster vue generator microservice-jwt-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(false) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".postcssrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/account.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/change-password/change-password.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/change-password/change-password.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login-form/login-form.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login-form/login-form.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/settings/settings.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/settings/settings.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-edit.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-edit.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-view.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-view.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/declarations.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/main.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/account.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/admin.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/entities.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/pages.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config-bootstrap-vue.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/account-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/data/data-utils.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/filters.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/security/authority.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sorts.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shims-vue.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/global.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/vendor.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/account.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/activate/activate.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/change-password/change-password.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/login-form/login-form.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/register/register.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/reset-password/finish/reset-password-finish.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/reset-password/init/reset-password-init.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/settings/settings.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management-edit.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management-view.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/error/error.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/home/home.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/entities-menu.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/microfrontends/entities-menu.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/microfrontends/entities-menu.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/microfrontends/entities-router.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/alert/alert.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/data/data-utils.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.spec.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/vue.utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.microfrontend.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster vue generator microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(false) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".postcssrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/account.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/declarations.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/main.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/admin.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/entities.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/pages.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config-bootstrap-vue.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/account-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/data/data-utils.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/filters.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/security/authority.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sorts.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shims-vue.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/global.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/vendor.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/account.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/login.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/error/error.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/home/home.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/entities-menu.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/microfrontends/entities-menu.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/microfrontends/entities-menu.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/microfrontends/entities-router.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/alert/alert.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/data/data-utils.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.spec.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/vue.utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.microfrontend.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster vue generator monolith-jwt-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".postcssrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/account.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/change-password/change-password.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/change-password/change-password.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login-form/login-form.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login-form/login-form.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/settings/settings.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/settings/settings.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health-modal.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health-modal.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics-modal.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics-modal.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-edit.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-edit.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-view.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-view.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/declarations.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/locale/translation.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/main.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/account.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/admin.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/entities.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/pages.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config-bootstrap-vue.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/formatter.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/account-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/translation-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/data/data-utils.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/filters.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/security/authority.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sorts.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shims-vue.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/global.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/vendor.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/account.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/activate/activate.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/change-password/change-password.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/login-form/login-form.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/register/register.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/reset-password/finish/reset-password-finish.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/reset-password/init/reset-password-init.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/settings/settings.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/configuration/configuration.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/health/health-modal.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/health/health.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/health/health.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/logs/logs.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/metrics/metrics-modal.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/metrics/metrics.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management-edit.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management-view.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/error/error.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/home/home.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/alert/alert.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/formatter.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/data/data-utils.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.spec.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/vue.utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster vue generator monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".postcssrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/account.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/declarations.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/main.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/admin.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/entities.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/pages.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config-bootstrap-vue.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/account-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/data/data-utils.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/filters.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/security/authority.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sorts.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shims-vue.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/global.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/vendor.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/account.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/login.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/error/error.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/home/home.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/alert/alert.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/data/data-utils.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.spec.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/vue.utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster vue generator monolith-session-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(true) should match generated files snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".postcssrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/account.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/change-password/change-password.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/change-password/change-password.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login-form/login-form.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login-form/login-form.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/login.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/sessions/sessions.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/sessions/sessions.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/settings/settings.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/settings/settings.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-edit.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-edit.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-view.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management-view.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/user-management/user-management.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/error/error.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/home/home.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/ribbon/ribbon.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/declarations.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities-menu.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entities.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/locale/translation.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/main.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/account.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/admin.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/entities.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/pages.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/axios-interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config-bootstrap-vue.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/formatter.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/account-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/translation-store.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/data/data-utils.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/filters.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/security/authority.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sorts.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shims-vue.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/global.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/vendor.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/account.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/activate/activate.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/change-password/change-password.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/login-form/login-form.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/login.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/register/register.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/reset-password/finish/reset-password-finish.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/reset-password/init/reset-password-init.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/sessions/sessions.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/account/settings/settings.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management-edit.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management-view.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/admin/user-management/user-management.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/error/error.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/home/home.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/alert/alert.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/axios-interceptor.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/config/formatter.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/data/data-utils.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/shared/sort/sorts.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.spec.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/config.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/vue.utils.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.common.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.prod.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
