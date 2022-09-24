@@ -7,3 +7,4 @@ test/jdl/**/.jhipster/**
 **/jdl-core.min.js
 **/generated-serialized-grammar.js
 test/fixtures/**
+dist

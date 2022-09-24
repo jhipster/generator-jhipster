@@ -232,8 +232,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _default() {
     return {
-      ...super._missingPreDefault(),
-
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_LANGUAGES);
       },
@@ -264,8 +262,6 @@ module.exports = class extends BaseBlueprintGenerator {
           statistics.sendSubGenEvent('languages/language', language);
         });
       },
-
-      ...super._missingPostWriting(),
     };
   }
 
@@ -298,8 +294,6 @@ module.exports = class extends BaseBlueprintGenerator {
           this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
         }
       },
-
-      ...super._missingPostWriting(),
     };
   }
 

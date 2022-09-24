@@ -222,12 +222,12 @@ public class CacheConfiguration {
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
     <%_ if (enableHibernateCache) { _%>
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName());
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName());
             createCache(cm, <%= packageName %>.domain.Authority.class.getName());
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".authorities");
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName() + ".authorities");
       <%_ if (authenticationTypeSession) { _%>
             createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName());
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens");
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName() + ".persistentTokens");
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
@@ -785,12 +785,12 @@ public class CacheConfiguration {
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
     <%_ if (enableHibernateCache) { _%>
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName(), jcacheConfiguration);
             createCache(cm, <%= packageName %>.domain.Authority.class.getName(), jcacheConfiguration);
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName() + ".authorities", jcacheConfiguration);
       <%_ if (authenticationTypeSession) { _%>
             createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName(), jcacheConfiguration);
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName() + ".persistentTokens", jcacheConfiguration);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>

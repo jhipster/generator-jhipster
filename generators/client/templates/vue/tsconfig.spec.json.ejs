@@ -23,7 +23,7 @@
 <%_ if (microfrontend && applicationTypeGateway) { _%>
     "paths": {
   <%_ for (const remote of microfrontends) { _%>
-      "@<%= remote.lowercaseBaseName %>/*": ["<%= CLIENT_TEST_SRC_DIR %>spec/app/microfrontends/*"],
+      "@<%= remote.lowercaseBaseName %>/*": ["<%= this.CLIENT_TEST_SRC_DIR %>spec/app/microfrontends/*"],
   <%_ } _%>
       "@/*": ["*"]
     },
@@ -31,7 +31,7 @@
     "types": ["jest", "node"]
   },
   "include": [
-    "<%= CLIENT_MAIN_SRC_DIR %>app",
-    "<%= CLIENT_TEST_SRC_DIR %>spec"
+    "<%= this.CLIENT_MAIN_SRC_DIR %>app",
+    "<%= this.CLIENT_TEST_SRC_DIR %>spec"
   ]
 }

@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const BaseApplicationGenerator = require('../generator-base-application.cjs');
 const {
   INITIALIZING_PRIORITY,
   PROMPTING_PRIORITY,
@@ -58,7 +58,11 @@ const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
 const TYPE_STRING = CommonDBTypes.STRING;
 const TYPE_UUID = CommonDBTypes.UUID;
 
-module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
+/**
+ * @class
+ * @extends {BaseApplicationGenerator<import('../bootstrap-application-client/types').ClientApplication>}
+ */
+module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -96,9 +100,8 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     }
   }
 
-  // Public API method used by the getter and also by Blueprints
   _initializing() {
-    return {
+    return this.asInitialingTaskGroup({
       validateFromCli() {
         this.checkInvocationFromCLI();
       },
@@ -120,33 +123,29 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           this.printJHipsterLogo();
         }
       },
-    };
+    });
   }
 
   get [INITIALIZING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.asInitialingTaskGroup(this.delegateToBlueprint ? {} : this._initializing());
   }
 
-  // Public API method used by the getter and also by Blueprints
   _prompting() {
-    return {
+    return this.asPromptingTaskGroup({
       askForModuleName: prompts.askForModuleName,
       askForClient: prompts.askForClient,
       askForAdminUi: prompts.askForAdminUi,
       askForClientTheme: prompts.askForClientTheme,
       askForClientThemeVariant: prompts.askForClientThemeVariant,
-    };
+    });
   }
 
   get [PROMPTING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this._prompting());
   }
 
-  // Public API method used by the getter and also by Blueprints
   _configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
       configureGlobal() {
         // Make constants available in templates
         this.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
@@ -178,17 +177,15 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
       saveConfig() {
         this.setConfigDefaults(clientDefaultConfig);
       },
-    };
+    });
   }
 
   get [CONFIGURING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.asConfiguringTaskGroup(this.delegateToBlueprint ? {} : this._configuring());
   }
 
-  // Public API method used by the getter and also by Blueprints
   _composing() {
-    return {
+    return this.asComposingTaskGroup({
       async composeCommon() {
         await this.composeWithJHipster(GENERATOR_COMMON, true);
       },
@@ -203,17 +200,15 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
 
         await this.composeWithJHipster(GENERATOR_LANGUAGES, true);
       },
-    };
+    });
   }
 
   get [COMPOSING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._composing();
+    return this.asComposingTaskGroup(this.delegateToBlueprint ? {} : this._composing());
   }
 
-  // Public API method used by the getter and also by Blueprints
   _loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadSharedConfig() {
         this.loadAppConfig();
         this.loadDerivedAppConfig();
@@ -255,18 +250,23 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', clientFramewok, 'package.json'))
         );
       },
-    };
+    });
   }
 
   get [LOADING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.asLoadingTaskGroup(this.delegateToBlueprint ? {} : this._loading());
   }
 
   // Public API method used by the getter and also by Blueprints
   _preparing() {
-    return {
-      prepareForTemplates() {
+    return this.asPreparingTaskGroup({
+      microservice({ application }) {
+        if (this.applicationTypeMicroservice) {
+          this.withAdminUi = false;
+        }
+      },
+
+      prepareForTemplates({ application }) {
         this.enableI18nRTL = false;
         if (this.languages !== undefined) {
           this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
@@ -295,19 +295,16 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.loadTranslationConfig(undefined, context);
         await this._loadClientTranslations(context);
       },
-    };
+    });
   }
 
   get [PREPARING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._preparing();
+    return this.asPreparingTaskGroup(this.delegateToBlueprint ? {} : this._preparing());
   }
 
   // Public API method used by the getter and also by Blueprints
   _default() {
-    return {
-      ...super._missingPreDefault(),
-
+    return this.asDefaultTaskGroup({
       loadUserManagementEntities() {
         if (!this.configOptions.sharedEntities || !this.configOptions.sharedEntities.User) return;
         // Make user entity available to templates.
@@ -334,17 +331,16 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           },
         });
       },
-    };
+    });
   }
 
   get [DEFAULT_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._default();
+    return this.asDefaultTaskGroup(this.delegateToBlueprint ? {} : this._default());
   }
 
   // Public API method used by the getter and also by Blueprints
   _writing() {
-    return {
+    return this.asWritingTaskGroup({
       cleanupReact,
       cleanupVue,
       cleanupAngular,
@@ -366,19 +362,15 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         if (this.skipClient) return;
         return writeCommonFiles.call(this);
       },
-
-      ...super._missingPostWriting(),
-    };
+    });
   }
 
   get [WRITING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this._writing());
   }
 
-  // Public API method used by the getter and also by Blueprints
   _postWriting() {
-    return {
+    return this.asPostWritingTaskGroup({
       packageJsonScripts() {
         if (this.skipClient) return;
         const packageJsonStorage = this.createStorage('package.json');
@@ -412,17 +404,16 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           throw new Error(`Client framework ${this.clientFramework} doesn't support microfrontends`);
         }
       },
-    };
+    });
   }
 
   get [POST_WRITING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._postWriting();
+    return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this._postWriting());
   }
 
   // Public API method used by the getter and also by Blueprints
   _end() {
-    return {
+    return this.asEndTaskGroup({
       end() {
         if (this.skipClient) return;
         this.log(chalk.green.bold('\nClient application generated successfully.\n'));
@@ -434,12 +425,11 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           this.spawnCommandSync(this.clientPackageManager, ['run', 'clean-www']);
         }
       },
-    };
+    });
   }
 
   get [END_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.asEndTaskGroup(this.delegateToBlueprint ? {} : this._end());
   }
 
   /**

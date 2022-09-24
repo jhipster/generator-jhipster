@@ -19,7 +19,7 @@
 import assert from 'assert';
 import lodash from 'lodash';
 
-import BaseEntityGenerator from '../generator-base-entities.cjs';
+import BaseApplicationGenerator from '../generator-base-application.cjs';
 import {
   PRIORITY_PREFIX,
   LOADING_PRIORITY,
@@ -60,7 +60,11 @@ const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validati
 const { SUPPORTED_VALIDATION_RULES } = constants;
 const { stringify } = utils;
 
-export default class extends BaseEntityGenerator {
+/**
+ * @class
+ * @extends {BaseApplicationGenerator<import('./types').BaseApplication>}
+ */
+export default class extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', taskPrefix: PRIORITY_PREFIX, ...features });
 
@@ -71,7 +75,7 @@ export default class extends BaseEntityGenerator {
   }
 
   get loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadApplication({ application }) {
         this.loadAppConfig(undefined, application);
         this.loadClientConfig(undefined, application);
@@ -87,9 +91,10 @@ export default class extends BaseEntityGenerator {
           throw new Error("Fail to bootstrap 'User', already exists.");
         }
 
-        this.sharedData.setEntity('User', createUserEntity.call(this));
+        const application = this._.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
+        this.sharedData.setEntity('User', createUserEntity.call(this, {}, application));
       },
-    };
+    });
   }
 
   get [LOADING_PRIORITY]() {
@@ -97,14 +102,14 @@ export default class extends BaseEntityGenerator {
   }
 
   get preparing() {
-    return {
+    return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
         this.loadDerivedAppConfig(application);
         this.loadDerivedClientConfig(application);
         this.loadDerivedServerConfig(application);
         this.loadDerivedPlatformConfig(application);
       },
-    };
+    });
   }
 
   get [PREPARING_PRIORITY]() {
@@ -112,7 +117,7 @@ export default class extends BaseEntityGenerator {
   }
 
   get configuringEachEntity() {
-    return {
+    return this.asConfiguringEachEntityTaskGroup({
       configureEntity({ entityStorage, entityConfig }) {
         entityStorage.defaults({ fields: [], relationships: [] });
 
@@ -193,7 +198,7 @@ export default class extends BaseEntityGenerator {
         });
         entityStorage.save();
       },
-    };
+    });
   }
 
   get [CONFIGURING_EACH_ENTITY_PRIORITY]() {
@@ -201,7 +206,7 @@ export default class extends BaseEntityGenerator {
   }
 
   get loadingEachEntity() {
-    return {
+    return this.asLoadingEachEntityTaskGroup({
       loadingEntities({ application, entityName, entityStorage }) {
         // if already loaded, let the entity generator to initialize entities.
         if (this.sharedData.hasEntity(entityName)) {
@@ -211,7 +216,7 @@ export default class extends BaseEntityGenerator {
         this.sharedData.setEntity(entityName, entity);
         loadRequiredConfigIntoEntity(entity, application);
       },
-    };
+    });
   }
 
   get [LOADING_EACH_ENTITY_PRIORITY]() {
@@ -219,11 +224,11 @@ export default class extends BaseEntityGenerator {
   }
 
   get preparingEachEntity() {
-    return {
-      preparingEachEntity({ entity }) {
-        prepareEntityForTemplates(entity, this);
+    return this.asPreparingEachEntityTaskGroup({
+      preparingEachEntity({ application, entity }) {
+        prepareEntityForTemplates(entity, this, application);
       },
-    };
+    });
   }
 
   get [PREPARING_EACH_ENTITY_PRIORITY]() {
@@ -231,7 +236,7 @@ export default class extends BaseEntityGenerator {
   }
 
   get preparingEachEntityField() {
-    return {
+    return this.asPreparingEachEntityFieldTaskGroup({
       loadAnnotations({ entity, field }) {
         if (field.options) {
           Object.assign(field, field.options);
@@ -248,7 +253,7 @@ export default class extends BaseEntityGenerator {
       prepareFieldsForTemplates({ entity, field }) {
         prepareFieldForTemplates(entity, field, this);
       },
-    };
+    });
   }
 
   get [PREPARING_EACH_ENTITY_FIELD_PRIORITY]() {
@@ -256,7 +261,7 @@ export default class extends BaseEntityGenerator {
   }
 
   get preparingEachEntityRelationship() {
-    return {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationship({ entity, relationship, entityName }) {
         const { otherEntityName, options } = relationship;
         if (options) {
@@ -268,7 +273,7 @@ export default class extends BaseEntityGenerator {
       prepareRelationshipsForTemplates({ entity, relationship }) {
         prepareRelationshipForTemplates(entity, relationship, this);
       },
-    };
+    });
   }
 
   get [PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY]() {
@@ -276,7 +281,7 @@ export default class extends BaseEntityGenerator {
   }
 
   get postPreparingEachEntity() {
-    return {
+    return this.asPostPreparingEachEntityTaskGroup({
       processEntityPrimaryKeysDerivedProperties({ entity }) {
         if (!entity.primaryKey) return;
         derivedPrimaryKeyProperties(entity.primaryKey);
@@ -345,7 +350,7 @@ export default class extends BaseEntityGenerator {
         entity.differentTypes = Object.keys(relationshipsByType);
         entity.differentRelationships = relationshipsByType;
       },
-    };
+    });
   }
 
   get [POST_PREPARING_EACH_ENTITY_PRIORITY]() {

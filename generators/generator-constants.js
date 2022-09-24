@@ -36,7 +36,7 @@ const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 const JHIPSTER_DEPENDENCIES_VERSION = '7.9.4-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.7.3';
-const LIQUIBASE_VERSION = '4.15.0';
+const LIQUIBASE_VERSION = '4.16.0';
 // TODO v8: Remove this constant
 const LIQUIBASE_DTD_VERSION = 'latest';
 const HIBERNATE_VERSION = '5.6.10.Final';
@@ -47,7 +47,7 @@ const JIB_VERSION = '3.2.1';
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 // const DOCKER_JHIPSTER_REGISTRY = 'ghcr.io/jhipster/jhipster-registry:main';
-const DOCKER_JHIPSTER_REGISTRY_VERSION = 'v7.3.0';
+const DOCKER_JHIPSTER_REGISTRY_VERSION = 'v7.4.0';
 const DOCKER_JHIPSTER_REGISTRY = `jhipster/jhipster-registry:${DOCKER_JHIPSTER_REGISTRY_VERSION}`;
 const DOCKER_JHIPSTER_CONTROL_CENTER_VERSION = 'v0.5.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = `jhipster/jhipster-control-center:${DOCKER_JHIPSTER_CONTROL_CENTER_VERSION}`;

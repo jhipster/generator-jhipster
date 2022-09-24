@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 const _ = require('lodash');
 const pluralize = require('pluralize');
 const path = require('path');
 
+const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
+const { hibernateSnakeCase } = require('./db');
 const { createFaker } = require('./faker');
 const { parseLiquibaseChangelogDate } = require('./liquibase');
 const { entityDefaultConfig } = require('../generators/generator-defaults');
@@ -29,8 +30,10 @@ const { fieldToReference } = require('./field');
 const { PaginationTypes, ServiceTypes } = require('../jdl/jhipster/entity-options');
 const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
-const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
+const { OAUTH2, SESSION } = require('../jdl/jhipster/authentication-types');
 const { CommonDBTypes } = require('../jdl/jhipster/field-types');
+const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
+const constants = require('../generators/generator-constants');
 
 const { BOOLEAN, LONG, STRING, UUID } = CommonDBTypes;
 const { NO: NO_DTO, MAPSTRUCT } = MapperTypes;
@@ -39,6 +42,25 @@ const { SERVICE_IMPL } = ServiceTypes;
 const NO_SERVICE = ServiceTypes.NO;
 const NO_PAGINATION = PaginationTypes.NO;
 const NO_MAPPER = MapperTypes.NO;
+
+const fieldTypes = require('../jdl/jhipster/field-types');
+const { POSTGRESQL, MYSQL, MARIADB, CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = require('../jdl/jhipster/database-types');
+
+const {
+  INTEGER: TYPE_INTEGER,
+  LONG: TYPE_LONG,
+  BIG_DECIMAL: TYPE_BIG_DECIMAL,
+  FLOAT: TYPE_FLOAT,
+  DOUBLE: TYPE_DOUBLE,
+  INSTANT,
+  ZONED_DATE_TIME,
+  DURATION,
+  LOCAL_DATE,
+  BIG_DECIMAL,
+} = fieldTypes.CommonDBTypes;
+
+const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
+const { IMAGE, TEXT } = fieldTypes.BlobTypes;
 
 const BASE_TEMPLATE_DATA = {
   primaryKey: undefined,
@@ -110,7 +132,7 @@ function _derivedProperties(entityWithConfig) {
   });
 }
 
-function prepareEntityForTemplates(entityWithConfig, generator) {
+function prepareEntityForTemplates(entityWithConfig, generator, application) {
   const entityName = _.upperFirst(entityWithConfig.name);
   _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
@@ -128,6 +150,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   }
 
   entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
+  entityWithConfig.microserviceAppName = '';
   if (generator.jhipsterConfig.applicationType === GATEWAY && entityWithConfig.useMicroserviceJson) {
     if (!entityWithConfig.microserviceName) {
       throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
@@ -149,8 +172,8 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
   if (dto) {
     _.defaults(entityWithConfig, {
-      dtoClass: generator.asDto(entityWithConfig.entityClass),
-      dtoInstance: generator.asDto(entityWithConfig.entityInstance),
+      dtoClass: generator.asDto(entityWithConfig.entityClass, application),
+      dtoInstance: generator.asDto(entityWithConfig.entityInstance, application),
     });
   }
 
@@ -245,7 +268,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   return entityWithConfig;
 }
 
-function prepareEntityServerDomainForTemplates(entity) {
+function prepareEntityServerForTemplates(entity) {
   const { entityPackage, packageName, packageFolder, persistClass } = entity;
   let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder } = entity;
   if (entityPackage) {
@@ -255,6 +278,12 @@ function prepareEntityServerDomainForTemplates(entity) {
   entity.entityAbsolutePackage = entityAbsolutePackage;
   entity.entityAbsoluteFolder = entityAbsoluteFolder;
   entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
+
+  if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType) && entity.jhiPrefix) {
+    entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;
+  } else {
+    entity.entityInstanceDbSafe = entity.entityInstance;
+  }
 }
 
 function derivedPrimaryKeyProperties(primaryKey) {
@@ -468,18 +497,26 @@ function fieldToId(field) {
  */
 function loadRequiredConfigIntoEntity(entity, config) {
   _.defaults(entity, {
-    databaseType: config.databaseType,
-    prodDatabaseType: config.prodDatabaseType,
-    skipUiGrouping: config.skipUiGrouping,
-    searchEngine: config.searchEngine,
-    jhiPrefix: config.jhiPrefix,
+    applicationType: config.applicationType,
+    baseName: config.baseName,
+    frontendAppName: config.frontendAppName,
     authenticationType: config.authenticationType,
     reactive: config.reactive,
     microfrontend: config.microfrontend,
-    packageName: config.packageName,
-    packageFolder: config.packageFolder,
     // Workaround different paths
     clientFramework: config.clientFramework,
+
+    databaseType: config.databaseType,
+    prodDatabaseType: config.prodDatabaseType,
+
+    skipUiGrouping: config.skipUiGrouping,
+    searchEngine: config.searchEngine,
+
+    jhiPrefix: config.jhiPrefix,
+    entitySuffix: config.entitySuffix,
+    dtoSuffix: config.dtoSuffix,
+    packageName: config.packageName,
+    packageFolder: config.packageFolder,
   });
   if (config.applicationType === MICROSERVICE) {
     _.defaults(entity, {
@@ -489,10 +526,286 @@ function loadRequiredConfigIntoEntity(entity, config) {
   return entity;
 }
 
+function loadRequiredConfigDerivedProperties(entity) {
+  entity.jhiTablePrefix = hibernateSnakeCase(entity.jhiPrefix);
+  entity.searchEngineCouchbase = entity.searchEngine === COUCHBASE;
+  entity.searchEngineElasticsearch = entity.searchEngine === ELASTICSEARCH;
+  entity.searchEngineAny = ![undefined, false, 'no'].includes(entity.searchEngine);
+}
+
+function preparePostEntityCommonDerivedProperties(entity) {
+  entity.relationships.forEach(relationship => {
+    // Load in-memory data for root
+    if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
+      entity.fieldsContainOwnerManyToMany = true;
+    } else if (relationship.relationshipType === 'one-to-one' && !relationship.ownerSide) {
+      entity.fieldsContainNoOwnerOneToOne = true;
+    } else if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide) {
+      entity.fieldsContainOwnerOneToOne = true;
+    } else if (relationship.relationshipType === 'one-to-many') {
+      entity.fieldsContainOneToMany = true;
+    } else if (relationship.relationshipType === 'many-to-one') {
+      entity.fieldsContainManyToOne = true;
+    }
+    if (relationship.otherEntityIsEmbedded) {
+      entity.fieldsContainEmbedded = true;
+    }
+    if (relationship.relationshipValidate) {
+      entity.validation = true;
+    }
+
+    const entityType = relationship.otherEntityNameCapitalized;
+    if (!entity.differentTypes.includes(entityType)) {
+      entity.differentTypes.push(entityType);
+    }
+    if (!entity.differentRelationships[entityType]) {
+      entity.differentRelationships[entityType] = [];
+    }
+    if (!relationship.otherEntityIsEmbedded) {
+      entity.differentRelationships[entityType].push(relationship);
+    }
+  });
+
+  entity.fields.forEach(field => {
+    const fieldType = field.fieldType;
+    if (![INSTANT, ZONED_DATE_TIME, BOOLEAN].includes(fieldType)) {
+      entity.fieldsIsReactAvField = true;
+    }
+
+    if (field.javadoc) {
+      entity.haveFieldWithJavadoc = true;
+    }
+
+    if (field.fieldIsEnum) {
+      entity.i18nToLoad.push(field.enumInstance);
+    }
+
+    if (fieldType === ZONED_DATE_TIME) {
+      entity.fieldsContainZonedDateTime = true;
+      entity.fieldsContainTimed = true;
+      entity.fieldsContainDate = true;
+    } else if (fieldType === INSTANT) {
+      entity.fieldsContainInstant = true;
+      entity.fieldsContainTimed = true;
+      entity.fieldsContainDate = true;
+    } else if (fieldType === DURATION) {
+      entity.fieldsContainDuration = true;
+    } else if (fieldType === LOCAL_DATE) {
+      entity.fieldsContainLocalDate = true;
+      entity.fieldsContainDate = true;
+    } else if (fieldType === BIG_DECIMAL) {
+      entity.fieldsContainBigDecimal = true;
+    } else if (fieldType === UUID) {
+      entity.fieldsContainUUID = true;
+    } else if (fieldType === BYTES || fieldType === BYTE_BUFFER) {
+      entity.blobFields.push(field);
+      entity.fieldsContainBlob = true;
+      if (field.fieldTypeBlobContent === IMAGE) {
+        entity.fieldsContainImageBlob = true;
+      }
+      if (field.fieldTypeBlobContent !== TEXT) {
+        entity.fieldsContainBlobOrImage = true;
+      } else {
+        entity.fieldsContainTextBlob = true;
+      }
+    }
+
+    if (Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
+      entity.validation = true;
+    }
+  });
+
+  entity.allReferences = [
+    ...entity.fields.map(field => field.reference),
+    ...entity.relationships.map(relationship => relationship.reference),
+  ];
+
+  entity.otherEntities = _.uniq(entity.relationships.map(rel => rel.otherEntity));
+
+  entity.updatableEntity =
+    entity.fields.some(field => !field.id && !field.transient) ||
+    entity.relationships.some(relationship => !relationship.id && relationship.ownerSide);
+
+  entity.allReferences
+    .filter(reference => reference.relationship && reference.relationship.relatedField)
+    .forEach(reference => {
+      reference.relatedReference = reference.relationship.relatedField.reference;
+    });
+
+  entity.relationships.forEach(relationship => {
+    relationship.relationshipCollection = ['one-to-many', 'many-to-many'].includes(relationship.relationshipType);
+    relationship.relationshipReferenceField = relationship.relationshipCollection
+      ? relationship.relationshipFieldNamePlural
+      : relationship.relationshipFieldName;
+  });
+  entity.entityContainsCollectionField = entity.relationships.some(relationship => relationship.relationshipCollection);
+
+  if (entity.primaryKey) {
+    derivedPrimaryKeyProperties(entity.primaryKey);
+    entity.requiresPersistableImplementation =
+      entity.requiresPersistableImplementation || entity.fields.some(field => field.requiresPersistableImplementation);
+  }
+
+  const types = entity.relationships
+    .filter(rel => rel.otherEntity.primaryKey)
+    .map(rel => rel.otherEntity.primaryKey.fields.map(f => f.fieldType))
+    .flat();
+  entity.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
+  entity.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
+
+  entity.relationships.forEach(relationship => {
+    if (!relationship.otherEntity.primaryKey) {
+      relationship.bagRelationship = false;
+      relationship.relationshipEagerLoad = false;
+      return;
+    }
+    relationship.bagRelationship = relationship.ownerSide && relationship.collection;
+    if (relationship.relationshipEagerLoad === undefined) {
+      relationship.relationshipEagerLoad =
+        relationship.bagRelationship ||
+        entity.eagerLoad ||
+        // Fetch relationships if otherEntityField differs otherwise the id is enough
+        (relationship.ownerSide && relationship.otherEntity.primaryKey.name !== relationship.otherEntityField);
+    }
+  });
+  entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
+  entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
+  entity.implementsEagerLoadApis = // Cassandra doesn't provides *WithEagerReationships apis
+    ![CASSANDRA, COUCHBASE, NEO4J].includes(entity.databaseType) &&
+    // Only sql and mongodb provides *WithEagerReationships apis for imperative implementation
+    (entity.reactive || [SQL, MONGODB].includes(entity.databaseType)) &&
+    entity.relationshipsContainEagerLoad;
+  entity.eagerRelations = entity.relationships.filter(rel => rel.relationshipEagerLoad);
+  entity.regularEagerRelations = entity.eagerRelations.filter(rel => rel.id !== true);
+
+  entity.reactiveEagerRelations = entity.relationships.filter(
+    rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)
+  );
+  entity.reactiveRegularEagerRelations = entity.reactiveEagerRelations.filter(rel => rel.id !== true);
+}
+
+function preparePostEntitiesCommonDerivedProperties(entities) {
+  for (const entity of entities.filter(entity => !entity.dtoReferences)) {
+    entity.dtoReferences = [
+      ...entity.fields.map(field => field.reference),
+      ...entity.relationships
+        .map(relationship => relationship.reference)
+        .filter(reference => reference.owned || reference.relationship.otherEntity.embedded),
+    ];
+    entity.otherReferences = entity.otherRelationships.map(relationship => relationship.reference);
+  }
+
+  for (const entity of entities.filter(entity => !entity.otherDtoReferences)) {
+    // Get all required back references for dto.
+    entity.otherDtoReferences = entity.otherReferences.filter(reference => reference.entity.dtoReferences.includes(reference));
+  }
+}
+
+function preparePostEntityServerDerivedProperties(entity) {
+  const { databaseType, authenticationType, reactive } = entity;
+  entity.testsNeedCsrf = [OAUTH2, SESSION].includes(authenticationType);
+  entity.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[databaseType];
+  let springDataDatabase;
+  if (entity.databaseType !== SQL) {
+    springDataDatabase = entity.officialDatabaseType;
+    if (reactive) {
+      springDataDatabase += ' reactive';
+    }
+  } else {
+    springDataDatabase = reactive ? 'R2DBC' : 'JPA';
+  }
+  entity.springDataDescription = `Spring Data ${springDataDatabase}`;
+
+  // Blueprints may disable cypress relationships by setting to false.
+  entity.cypressBootstrapEntities = true;
+
+  // Reactive with some r2dbc databases doesn't allow insertion without data.
+  entity.workaroundEntityCannotBeEmpty = entity.reactive && [POSTGRESQL, MYSQL, MARIADB].includes(entity.prodDatabaseType);
+  // Reactive with MariaDB doesn't allow null value at Instant fields.
+  entity.workaroundInstantReactiveMariaDB = entity.reactive && entity.prodDatabaseType === MARIADB;
+
+  entity.relationships
+    .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
+    .forEach(relationship => {
+      relationship.ignoreOtherSideProperty =
+        !relationship.embedded && !!relationship.otherEntity && relationship.otherEntity.relationships.length > 0;
+    });
+  entity.relationshipsContainOtherSideIgnore = entity.relationships.some(relationship => relationship.ignoreOtherSideProperty);
+
+  entity.importApiModelProperty =
+    entity.relationships.some(relationship => relationship.javadoc) || entity.fields.some(field => field.javadoc);
+
+  entity.uniqueEnums = {};
+
+  entity.fields.forEach(field => {
+    if (
+      field.fieldIsEnum &&
+      (!entity.uniqueEnums[field.fieldType] || (entity.uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))
+    ) {
+      entity.uniqueEnums[field.fieldType] = field.fieldType;
+    }
+  });
+  if (entity.primaryKey && entity.primaryKey.derived) {
+    entity.isUsingMapsId = true;
+    entity.mapsIdAssoc = entity.relationships.find(rel => rel.id);
+    entity.hasOauthUser = entity.mapsIdAssoc.otherEntityName === 'user' && entity.authenticationType === OAUTH2;
+  } else {
+    entity.isUsingMapsId = false;
+    entity.mapsIdAssoc = null;
+    entity.hasOauthUser = false;
+  }
+  entity.reactiveOtherEntities = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity));
+  entity.reactiveUniqueEntityTypes = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntityNameCapitalized));
+  entity.reactiveUniqueEntityTypes.add(entity.entityClass);
+  if (entity.databaseType === 'sql') {
+    for (const relationship of entity.relationships) {
+      if (!relationship.otherEntity.embedded) {
+        relationship.joinColumnNames = relationship.otherEntity.primaryKey.fields.map(
+          otherField => `${relationship.columnNamePrefix}${otherField.columnName}`
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Find key type for Typescript
+ *
+ * @param {string | object} primaryKey - primary key definition
+ * @returns {string} primary key type in Typescript
+ */
+function getTypescriptKeyType(primaryKey) {
+  if (typeof primaryKey === 'object') {
+    primaryKey = primaryKey.type;
+  }
+  if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(primaryKey)) {
+    return 'number';
+  }
+  return 'string';
+}
+
+function preparePostEntityClientDerivedProperties(entity) {
+  if (entity.primaryKey) {
+    entity.tsKeyType = getTypescriptKeyType(entity.primaryKey.type);
+  }
+}
+
+function prepareReactEntity({ entity, application }) {
+  entity.entityReactState = application.applicationTypeMonolith
+    ? entity.entityInstance
+    : `${application.lowercaseBaseName}.${entity.entityInstance}`;
+}
+
 module.exports = {
   prepareEntityForTemplates,
-  prepareEntityServerDomainForTemplates,
+  prepareEntityServerForTemplates,
   prepareEntityPrimaryKeyForTemplates,
+  preparePostEntityCommonDerivedProperties,
+  preparePostEntitiesCommonDerivedProperties,
+  preparePostEntityServerDerivedProperties,
+  preparePostEntityClientDerivedProperties,
+  prepareReactEntity,
   loadRequiredConfigIntoEntity,
+  loadRequiredConfigDerivedProperties,
   derivedPrimaryKeyProperties,
 };

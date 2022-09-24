@@ -20,15 +20,25 @@ const BaseBlueprintGenerator = require('./generator-base-blueprint');
 const { CUSTOM_PRIORITIES_ENTITIES, PRIORITY_NAMES, QUEUES } = require('../lib/constants/priorities.cjs');
 
 const {
+  LOADING,
+  PREPARING,
+
   CONFIGURING_EACH_ENTITY,
   LOADING_EACH_ENTITY,
   PREPARING_EACH_ENTITY,
+  PREPARING_FIELDS,
   PREPARING_EACH_ENTITY_FIELD,
+  PREPARING_RELATIONSHIPS,
   PREPARING_EACH_ENTITY_RELATIONSHIP,
   POST_PREPARING_EACH_ENTITY,
   DEFAULT,
+  WRITING,
+  POST_WRITING,
   WRITING_ENTITIES,
   POST_WRITING_ENTITIES,
+  PRE_CONFLICTS,
+  INSTALL,
+  END,
 } = PRIORITY_NAMES;
 
 const {
@@ -46,7 +56,8 @@ const {
  * This is the base class for a generator that generates entities.
  *
  * @class
- * @extends {BaseBlueprintGenerator}
+ * @template ApplicationType
+ * @extends {BaseBlueprintGenerator<ApplicationType>}
  */
 class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -65,55 +76,298 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
     });
   }
 
-  get configuringEachEntity() {
-    return this._configuringEachEntity();
-  }
-
-  _configuringEachEntity() {
-    return {};
-  }
-
+  /**
+   * Priority API stub for blueprints.
+   */
   get preparingEachEntity() {
-    return this._preparingEachEntity();
+    return this.asPreparingEachEntityTaskGroup({});
   }
 
-  _preparingEachEntity() {
-    return {};
+  /**
+   * Priority API stub for blueprints.
+   *
+   * Configuring each entity should configure entities.
+   */
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({});
   }
 
+  /**
+   * Priority API stub for blueprints.
+   */
   get preparingEachEntityField() {
-    return this._preparingEachEntityField();
+    return this.asPreparingEachEntityFieldTaskGroup({});
   }
 
-  _preparingEachEntityField() {
-    return {};
-  }
-
+  /**
+   * Priority API stub for blueprints.
+   */
   get preparingEachEntityRelationship() {
-    return this._preparingEachEntityRelationship();
+    return this.asPreparingEachEntityRelationshipTaskGroup({});
   }
 
-  _preparingEachEntityRelationship() {
-    return {};
+  /**
+   * Priority API stub for blueprints.
+   */
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({});
   }
 
-  get writingEachEntity() {
-    return this._writingEachEntity();
+  /**
+   * Priority API stub for blueprints.
+   */
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({});
   }
 
-  _writingEachEntity() {
-    return {};
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').InitializingTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').InitializingTaskGroup<this>}
+   */
+  asInitialingTaskGroup(taskGroup) {
+    return taskGroup;
   }
 
-  getDataArgForPriority(priorityName) {
-    const dataArg = super.getDataArgForPriority(priorityName);
-    if (priorityName === WRITING_ENTITIES || priorityName === POST_WRITING_ENTITIES || priorityName === DEFAULT) {
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').ConfiguringTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').ConfiguringTaskGroup<this>}
+   */
+  asConfiguringTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PromptingTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').PromptingTaskGroup<this>}
+   */
+  asPromptingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').ComposingTaskGroup<this>} taskGroup
+   * @returns {import('../types/tasks').ComposingTaskGroup<this>}
+   */
+  asComposingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').LoadingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').LoadingTaskGroup<this, ApplicationType>}
+   */
+  asLoadingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PreparingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PreparingTaskGroup<this, ApplicationType>}
+   */
+  asPreparingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').ConfiguringEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').ConfiguringEachEntityTaskGroup<this, ApplicationType>}
+   */
+  asConfiguringEachEntityTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').LoadingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').LoadingEachEntityTaskGroup<this, ApplicationType>}
+   */
+  asLoadingEachEntityTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PreparingEachEntityTaskGroup<this, ApplicationType>}
+   */
+  asPreparingEachEntityTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PreparingEachEntityFieldTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PreparingEachEntityFieldTaskGroup<this, ApplicationType>}
+   */
+  asPreparingEachEntityFieldTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>}
+   */
+  asPreparingEachEntityRelationshipTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PostPreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PostPreparingEachEntityTaskGroup<this, ApplicationType>}
+   */
+  asPostPreparingEachEntityTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').DefaultTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').DefaultTaskGroup<this, ApplicationType>}
+   */
+  asDefaultTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').WritingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').WritingTaskGroup<this, ApplicationType>}
+   */
+  asWritingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').WritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').WritingEntitiesTaskGroup<this, ApplicationType>}
+   */
+  asWritingEntitiesTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PostWritingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PostWritingTaskGroup<this, ApplicationType>}
+   */
+  asPostWritingTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PostWritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PostWritingEntitiesTaskGroup<this, ApplicationType>}
+   */
+  asPostWritingEntitiesTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').InstallTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').InstallTaskGroup<this, ApplicationType>}
+   */
+  asInstallTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').PostInstallTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').PostInstallTaskGroup<this, ApplicationType>}
+   */
+  asPostInstallTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('../types/tasks').EndTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../types/tasks').EndTaskGroup<this, ApplicationType>}
+   */
+  asEndTaskGroup(taskGroup) {
+    return taskGroup;
+  }
+
+  /**
+   * @protected
+   */
+  getArgsForPriority(priorityName) {
+    return [this.getTaskFirstArgForPriority(priorityName)];
+  }
+
+  /**
+   * @protected
+   */
+  getTaskFirstArgForPriority(priorityName) {
+    if (
+      ![
+        LOADING,
+        PREPARING,
+
+        CONFIGURING_EACH_ENTITY,
+        LOADING_EACH_ENTITY,
+        PREPARING_EACH_ENTITY,
+        PREPARING_FIELDS,
+        PREPARING_EACH_ENTITY_FIELD,
+        PREPARING_RELATIONSHIPS,
+        PREPARING_EACH_ENTITY_RELATIONSHIP,
+        POST_PREPARING_EACH_ENTITY,
+
+        DEFAULT,
+        WRITING,
+        WRITING_ENTITIES,
+        POST_WRITING,
+        POST_WRITING_ENTITIES,
+        PRE_CONFLICTS,
+        INSTALL,
+        END,
+      ].includes(priorityName)
+    ) {
+      throw new Error(`${priorityName} data not available`);
+    }
+    if (!this.jhipsterConfig.baseName) {
+      throw new Error(`${this.jhipsterConfig.baseName} application not available`);
+    }
+    if ([WRITING_ENTITIES, POST_WRITING_ENTITIES, DEFAULT].includes(priorityName)) {
       return {
-        ...dataArg,
+        application: this.sharedData.getApplication(),
         ...this.getEntitiesDataToWrite(),
       };
     }
-    return dataArg;
+
+    return { application: this.sharedData.getApplication() };
   }
 
   /**
@@ -236,7 +490,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(CONFIGURING_EACH_ENTITY), entityName, entityStorage, entityConfig }],
+              args: [{ ...this.getTaskFirstArgForPriority(CONFIGURING_EACH_ENTITY), entityName, entityStorage, entityConfig }],
             });
           });
         });
@@ -255,7 +509,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(LOADING_EACH_ENTITY), entityName, entityStorage }],
+              args: [{ ...this.getTaskFirstArgForPriority(LOADING_EACH_ENTITY), entityName, entityStorage }],
             });
           });
         });
@@ -274,7 +528,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(PREPARING_EACH_ENTITY), description, ...data }],
+              args: [{ ...this.getTaskFirstArgForPriority(PREPARING_EACH_ENTITY), description, ...data }],
             });
           });
         });
@@ -292,7 +546,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(PREPARING_EACH_ENTITY_FIELD), description, ...data }],
+              args: [{ ...this.getTaskFirstArgForPriority(PREPARING_EACH_ENTITY_FIELD), description, ...data }],
             });
           });
         });
@@ -310,7 +564,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP), description, ...data }],
+              args: [{ ...this.getTaskFirstArgForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP), description, ...data }],
             });
           });
         });
@@ -328,7 +582,7 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getDataArgForPriority(POST_PREPARING_EACH_ENTITY), description, ...data }],
+              args: [{ ...this.getTaskFirstArgForPriority(POST_PREPARING_EACH_ENTITY), description, ...data }],
             });
           });
         });

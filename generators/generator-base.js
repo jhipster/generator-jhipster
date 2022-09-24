@@ -44,38 +44,20 @@ const defaultApplicationOptions = require('../jdl/jhipster/default-application-o
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { databaseData } = require('./sql-constants');
 const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
-const {
-  PRIORITY_NAMES: {
-    LOADING,
-    PREPARING,
-
-    CONFIGURING_EACH_ENTITY,
-    LOADING_EACH_ENTITY,
-    PREPARING_EACH_ENTITY,
-    PREPARING_FIELDS,
-    PREPARING_EACH_ENTITY_FIELD,
-    PREPARING_RELATIONSHIPS,
-    PREPARING_EACH_ENTITY_RELATIONSHIP,
-    POST_PREPARING_EACH_ENTITY,
-
-    DEFAULT,
-    WRITING,
-    WRITING_ENTITIES,
-    POST_WRITING,
-    POST_WRITING_ENTITIES,
-    PRE_CONFLICTS,
-    INSTALL,
-    END,
-  },
-} = require('../lib/constants/priorities.cjs');
 const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
 const { joinCallbacks } = require('../lib/support/base.cjs');
 
-const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
+const {
+  JHIPSTER_CONFIG_DIR,
+  SERVER_MAIN_SRC_DIR,
+  SERVER_TEST_SRC_DIR,
+  SERVER_MAIN_RES_DIR,
+  SERVER_TEST_RES_DIR,
+  CLIENT_MAIN_SRC_DIR,
+  CLIENT_TEST_SRC_DIR,
+} = constants;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
-
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
@@ -2429,6 +2411,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @property {WriteFileTemplate[]} [templates] - templates to be writter
    * @property {EditFileCallback[]} [transform] - transforms (files processing) to be applied
    * @property {object} [context=this] - context to be used as template data
+   * @property {object} [renderOptions=this] - config passed to render methods
    * @property {string|string[]} [rootTemplatesPath] - path(s) to look for templates.
    *        Single absolute path or relative path(s) between the templates folder and template path.
    */
@@ -2535,9 +2518,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         let useAsync = true;
         if (context.entityClass) {
           const basename = path.basename(sourceFileFrom);
-          if (context.configOptions && context.configOptions.sharedEntities) {
-            Object.values(context.configOptions.sharedEntities).forEach(entity => {
-              entity.resetFakerSeed(`${context.entityClass}-${basename}`);
+          const seed = `${context.entityClass}-${basename}`;
+          if (this.configOptions && this.configOptions.sharedEntities) {
+            Object.values(this.configOptions.sharedEntities).forEach(entity => {
+              entity.resetFakerSeed(seed);
             });
           } else if (context.resetFakerSeed) {
             context.resetFakerSeed(basename);
@@ -2547,7 +2531,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
 
         const renderOptions = {
-          ...options,
+          ...(options?.renderOptions ?? {}),
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
         };
@@ -3037,7 +3021,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.lowercaseBaseName = dest.baseName.toLowerCase();
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
-      dest.projectDescription = dest.projectDescription || `Description for ${this.baseName}`;
+      dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
       dest.endpointPrefix = !dest.applicationType || dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
     }
 
@@ -3089,6 +3073,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFrameworkVue = dest.clientFramework === VUE;
     dest.clientFrameworkNo = dest.clientFramework === CLIENT_FRAMEWORK_NO;
     dest.clientFrameworkAny = dest.clientFramework && dest.clientFramework !== CLIENT_FRAMEWORK_NO;
+    if (dest.microfrontend === undefined) {
+      if (dest.applicationTypeMicroservice) {
+        dest.microfrontend = dest.clientFrameworkAny;
+      } else if (dest.applicationTypeGateway) {
+        dest.microfrontend = dest.microfrontends.length > 0;
+      }
+    }
     dest.clientThemeNone = dest.clientTheme === 'none';
     dest.clientThemePrimary = dest.clientThemeVariant === 'primary';
     dest.clientThemeLight = dest.clientThemeVariant === 'light';
@@ -3110,19 +3101,27 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.enableTranslation = config.enableTranslation;
     dest.nativeLanguage = config.nativeLanguage;
     dest.languages = config.languages;
+    dest.enableI18nRTL = dest.languages && this.isI18nRTLSupportNecessary(dest.languages);
   }
 
   /**
    * Load server configs into dest.
    * all variables should be set to dest,
    * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
+   * @param {Object} config - config to load config from
+   * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
   loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
+
+    dest.srcMainJava = SERVER_MAIN_SRC_DIR;
+    dest.srcMainResources = SERVER_MAIN_RES_DIR;
+    dest.srcMainWebapp = CLIENT_MAIN_SRC_DIR;
+    dest.srcTestJava = SERVER_TEST_SRC_DIR;
+    dest.srcTestResources = SERVER_TEST_RES_DIR;
+    dest.srcTestJavascript = CLIENT_TEST_SRC_DIR;
 
     dest.buildTool = config.buildTool;
 
@@ -3219,6 +3218,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
+    dest.searchEngineAny = ![undefined, false, 'no'].includes(dest.searchEngine);
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
@@ -3280,8 +3280,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Construct the entity's dto name by appending the dto suffix.
    * @param {String} name entity name
    */
-  asDto(name) {
-    return name + (this.dtoSuffix || this.jhipsterConfig.dtoSuffix || '');
+  asDto(name, application) {
+    return name + (application.dtoSuffix ?? '');
   }
 
   get needleApi() {
@@ -3456,49 +3456,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * @private
+   * @protected
    */
   getArgsForPriority(priorityName) {
-    if (this.features.priorityArgs) {
-      return [this.getDataArgForPriority(priorityName)];
-    }
     return this.args;
-  }
-
-  /**
-   * @private
-   */
-  getDataArgForPriority(priorityName) {
-    if (
-      ![
-        LOADING,
-        PREPARING,
-
-        CONFIGURING_EACH_ENTITY,
-        LOADING_EACH_ENTITY,
-        PREPARING_EACH_ENTITY,
-        PREPARING_FIELDS,
-        PREPARING_EACH_ENTITY_FIELD,
-        PREPARING_RELATIONSHIPS,
-        PREPARING_EACH_ENTITY_RELATIONSHIP,
-        POST_PREPARING_EACH_ENTITY,
-
-        DEFAULT,
-        WRITING,
-        WRITING_ENTITIES,
-        POST_WRITING,
-        POST_WRITING_ENTITIES,
-        PRE_CONFLICTS,
-        INSTALL,
-        END,
-      ].includes(priorityName)
-    ) {
-      throw new Error(`${priorityName} data not available`);
-    }
-    if (!this.jhipsterConfig.baseName) {
-      return {};
-    }
-    return { application: this.sharedData.getApplication() };
   }
 
   /**

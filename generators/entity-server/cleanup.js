@@ -20,19 +20,22 @@
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  *
- * @param {any} generator - reference to generator
- * @param {string} javaDir - Java directory
- * @param {string} testDir - Java tests directory
+ * @param {Object} generator - reference to generator
+ * @param {Object} application
+ * @param {Object} entity
  */
-function cleanupOldFiles(generator, javaDir, testDir) {
+function cleanupOldFiles(
+  generator,
+  { application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch }, entity: { entityClass, entityAbsoluteFolder } }
+) {
   if (generator.isJhipsterVersionLessThan('7.6.1')) {
-    if (generator.searchEngineElasticsearch) {
-      generator.removeFile(`${javaDir}/repository/search/SortToFieldSortBuilderConverter.java`);
+    if (searchEngineElasticsearch) {
+      generator.removeFile(`${srcMainJava}${packageFolder}/repository/search/SortToFieldSortBuilderConverter.java`);
     }
   }
   if (generator.isJhipsterVersionLessThan('7.7.1')) {
-    generator.removeFile(`${javaDir}/repository/search/SortToSortBuilderListConverter.java`);
-    generator.removeFile(`${testDir}/repository/search/${generator.entityClass}SearchRepositoryMockConfiguration.java`);
+    generator.removeFile(`${srcMainJava}${packageFolder}/repository/search/SortToSortBuilderListConverter.java`);
+    generator.removeFile(`${srcTestJava}${entityAbsoluteFolder}/repository/search/${entityClass}SearchRepositoryMockConfiguration.java`);
   }
 }
 

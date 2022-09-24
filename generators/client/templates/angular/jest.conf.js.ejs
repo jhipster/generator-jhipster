@@ -38,7 +38,7 @@ module.exports = {
     ['jest-junit', { outputDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }],
     ['jest-sonar', { outputDirectory: './<%= BUILD_DIR %>test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
   ],
-  testMatch: ['<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/**/@(*.)@(spec.ts)'],
+  testMatch: ['<rootDir>/<%= this.CLIENT_MAIN_SRC_DIR %>app/**/@(*.)@(spec.ts)'],
   testEnvironmentOptions: {
     url: 'https://jhipster.tech',
   },

@@ -58,19 +58,20 @@ module.exports = {
 function writeFiles() {
   return {
     async writeEnumFiles() {
-      if (this.skipClient || !this.enableTranslation) return;
-      const { clientSrcDir, packageName, frontendAppName } = this;
+      const { application, entity } = this;
+      if (entity.skipClient || !application.enableTranslation) return;
+      const { clientSrcDir, packageName, frontendAppName } = application;
       await Promise.all(
-        this.fields
+        entity.fields
           .map(field => {
             if (!field.fieldIsEnum) return undefined;
             // Copy for each
-            const languages = this.languages || this.getAllInstalledLanguages();
+            const languages = application.languages || this.getAllInstalledLanguages();
             return languages.map(lang =>
               this.writeFiles({
                 sections: enumClientI18nFiles,
                 context: {
-                  ...utils.getEnumInfo(field, this.clientRootFolder),
+                  ...utils.getEnumInfo(field, entity.clientRootFolder),
                   lang,
                   frontendAppName,
                   packageName,
@@ -84,14 +85,15 @@ function writeFiles() {
     },
 
     async writeClientFiles() {
-      if (this.skipClient || !this.enableTranslation) return;
+      const { application, entity } = this;
+      if (entity.skipClient || !application.enableTranslation) return;
 
       // Copy each
-      const { clientSrcDir, frontendAppName, languages = this.getAllInstalledLanguages() } = this;
+      const { clientSrcDir, frontendAppName, languages = this.getAllInstalledLanguages() } = application;
       await Promise.all(
         languages.map(async lang => {
-          await this.writeFiles({ sections: entityClientI18nFiles, context: { ...this.entity, clientSrcDir, frontendAppName, lang } });
-          this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClassHumanized || startCase(this.entityClass), lang);
+          await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
+          this.addEntityTranslationKey(entity.entityTranslationKeyMenu, entity.entityClassHumanized || startCase(entity.entityClass), lang);
         })
       );
     },

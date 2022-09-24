@@ -9,8 +9,8 @@ const { JWT } = require('../../jdl/jhipster/authentication-types');
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 
 const mockBlueprintSubGen = class extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, opts, features) {
+    super(args, opts, features);
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
     if (!jhContext) {
       this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");

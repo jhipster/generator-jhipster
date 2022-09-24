@@ -23,7 +23,7 @@ module.exports = class extends needleBase {
     super(generator);
 
     this.CLIENT_MAIN_SRC_DIR = generator.CLIENT_MAIN_SRC_DIR;
-    this.clientFramework = generator.clientFramework;
+    this.clientFramework = generator.clientFramework || generator.jhipsterConfig.clientFramework;
 
     if (!this.CLIENT_MAIN_SRC_DIR) {
       generator.error('Client destination folder is missing');

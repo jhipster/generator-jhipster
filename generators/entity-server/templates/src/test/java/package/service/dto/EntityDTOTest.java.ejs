@@ -25,8 +25,8 @@ import <%= packageName %>.web.rest.TestUtil;
 let id1;
 let id2;
 if (!embedded) {
-    id1 = getPrimaryKeyValue(primaryKey.type, databaseType, '1');
-    id2 = getPrimaryKeyValue(primaryKey.type, databaseType, '2');
+    id1 = this.getPrimaryKeyValue(primaryKey.type, databaseType, '1');
+    id2 = this.getPrimaryKeyValue(primaryKey.type, databaseType, '2');
 } %>
 <%_ if (primaryKey && primaryKey.hasUUID) { _%>
 import java.util.UUID;

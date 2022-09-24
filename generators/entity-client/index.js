@@ -27,18 +27,18 @@ const { writeFiles, addToMenu } = require('./files');
 const { entityClientI18nFiles } = require('../entity-i18n/files');
 const { clientI18nFiles } = require('../languages/files');
 
-const utils = require('../utils');
 const {
   SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
-const { POSTGRESQL, MARIADB, MYSQL } = require('../../jdl/jhipster/database-types');
+const { preparePostEntityClientDerivedProperties, prepareReactEntity } = require('../../utils/entity');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
     this.entity = this.options.context;
+    this.application = this.options.application;
     this.jhipsterContext = this.options.jhipsterContext || this.options.context;
   }
 
@@ -52,11 +52,9 @@ module.exports = class extends BaseBlueprintGenerator {
   _preparing() {
     return {
       async prepareReact() {
-        const entity = this.entity;
-        if (!entity.clientFrameworkReact) return;
-        entity.entityReactState = entity.applicationTypeMonolith
-          ? entity.entityInstance
-          : `${entity.lowercaseBaseName}.${entity.entityInstance}`;
+        if (!this.application.clientFrameworkReact) return;
+        const { entity, application } = this;
+        prepareReactEntity({ entity, application });
       },
     };
   }
@@ -69,8 +67,6 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _default() {
     return {
-      ...super._missingPreDefault(),
-
       async loadNativeLanguage() {
         await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
 
@@ -85,25 +81,12 @@ module.exports = class extends BaseBlueprintGenerator {
         await this._loadClientTranslations(context);
       },
 
+      postPrepareEntityClient() {
+        preparePostEntityClientDerivedProperties(this.entity);
+      },
+
       loadConfigIntoGenerator() {
-        utils.copyObjectProps(this, this.entity);
-      },
-
-      setup() {
-        if (!this.embedded) {
-          this.tsKeyType = this.getTypescriptKeyType(this.primaryKey.type);
-        }
-      },
-
-      setupCypress() {
-        // Blueprints may disable cypress relationships by setting to false.
-        this.cypressBootstrapEntities = true;
-
-        const entity = this.entity;
-        // Reactive with some r2dbc databases doesn't allow insertion without data.
-        this.workaroundEntityCannotBeEmpty = entity.reactive && [POSTGRESQL, MYSQL, MARIADB].includes(entity.prodDatabaseType);
-        // Reactive with MariaDB doesn't allow null value at Instant fields.
-        this.workaroundInstantReactiveMariaDB = entity.reactive && entity.prodDatabaseType === MARIADB;
+        Object.assign(this, this.entity);
       },
     };
   }
@@ -163,7 +146,6 @@ module.exports = class extends BaseBlueprintGenerator {
         }
       },
       ...writeFiles(),
-      ...super._missingPostWriting(),
     };
   }
 

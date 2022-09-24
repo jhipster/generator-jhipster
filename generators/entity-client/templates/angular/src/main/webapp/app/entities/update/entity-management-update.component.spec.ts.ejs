@@ -17,13 +17,13 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(primaryKey.type);
+const tsKeyId = this.generateTestEntityId(primaryKey.type);
 const allRelationshipsByEntityNeedingOptions = Object
   .values(differentRelationships)
   .map(relationships => relationships.filter(rel => rel.ownerSide))
   .filter(relationships => relationships.length > 0);
-const testEntityPrimaryKey0 = generateTestEntityPrimaryKey(primaryKey, 0);
-const testEntityPrimaryKey1 = generateTestEntityPrimaryKey(primaryKey, 1);
+const testEntityPrimaryKey0 = this.generateTestEntityPrimaryKey(primaryKey, 0);
+const testEntityPrimaryKey1 = this.generateTestEntityPrimaryKey(primaryKey, 1);
 _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
@@ -38,7 +38,7 @@ import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions.filter(relationships => relationships[0].otherEntity.entityAngularName !== entityAngularName)) { _%>
   <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity; _%>
-  <%_ if (isBuiltInUser(otherEntity.entityAngularName)) { _%>
+  <%_ if (this.isBuiltInUser(otherEntity.entityAngularName)) { _%>
 
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
@@ -101,14 +101,14 @@ describe('<%= entityAngularName %> Management Update Component', () => {
     <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
       <%_ const reference = relationship.reference _%>
       <%_ if (relationship.collection) { _%>
-                const <%= reference.name %> : I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
+                const <%= reference.name %> : I<%= otherEntity.entityAngularName %>[] = [<%- this.generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
       <%_ } else { _%>
-                const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
+                const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- this.generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
       <%_ } _%>
                 <%= entityInstance %>.<%= reference.name %> = <%= reference.name %>;
     <%_ } _%>
 
-                const <%= otherEntity.entityInstance %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
+                const <%= otherEntity.entityInstance %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- this.generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
                 jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= otherEntity.entityInstance %>Collection })));
                 const additional<%= otherEntity.entityAngularNamePlural %> = [
     <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
@@ -136,10 +136,10 @@ describe('<%= entityAngularName %> Management Update Component', () => {
     <%_ const reference = relationship.reference _%>
         it('Should call <%= reference.name %> query and add missing value', () => {
                 const <%= entityInstance %> : I<%= entityAngularName %> = <%- testEntityPrimaryKey1 %>;
-                const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
+                const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- this.generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
                 <%= entityInstance %>.<%= reference.name %> = <%= reference.name %>;
 
-                const <%= reference.name %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
+                const <%= reference.name %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- this.generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
                 jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= reference.name %>Collection })));
                 const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [<%= reference.name %>, ...<%= reference.name %>Collection];
                 jest.spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
@@ -159,7 +159,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
   <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
     <%_ const otherEntity = relationship.otherEntity _%>
-            const <%= relationship.relationshipName %>: I<%= otherEntity.entityAngularName %> = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
+            const <%= relationship.relationshipName %>: I<%= otherEntity.entityAngularName %> = <%- this.generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
             <%= entityInstance %>.<%= relationship.reference.name %> = <%= relationship.collection ? `[${relationship.relationshipName}]` : relationship.relationshipName %>;
   <%_ } _%>
 <%_ } _%>

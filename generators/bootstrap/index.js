@@ -38,11 +38,7 @@ const { MultiStepTransform } = require('../../utils/multi-step-transform');
 const { GENERATOR_UPGRADE } = require('../generator-list');
 const { prettierTransform, generatedAnnotationTransform } = require('../generator-transforms');
 const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
-const {
-  prepareEntityForTemplates,
-  prepareEntityServerDomainForTemplates,
-  prepareEntityPrimaryKeyForTemplates,
-} = require('../../utils/entity');
+const { prepareEntityForTemplates, prepareEntityServerForTemplates, prepareEntityPrimaryKeyForTemplates } = require('../../utils/entity');
 const { prepareFieldForTemplates } = require('../../utils/field');
 const { createUserEntity } = require('../../utils/user');
 const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
@@ -259,10 +255,11 @@ module.exports = class extends BaseGenerator {
     const changelogDateDate = this.jhipsterConfig.creationTimestamp ? new Date(this.jhipsterConfig.creationTimestamp) : new Date();
     const changelogDate = formatDateForChangelog(changelogDateDate);
 
-    const user = createUserEntity.call(this, { changelogDate });
+    const application = this._.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
+    const user = createUserEntity.call(this, { changelogDate }, application);
 
-    prepareEntityForTemplates(user, this);
-    prepareEntityServerDomainForTemplates(user);
+    prepareEntityForTemplates(user, this, application);
+    prepareEntityServerForTemplates(user);
     prepareEntityPrimaryKeyForTemplates(user, this);
 
     user.fields.forEach(field => {

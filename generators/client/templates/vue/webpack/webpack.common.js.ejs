@@ -37,7 +37,7 @@ module.exports = async (env, options) => {
       },
 <%_ } _%>
       entry: {
-        app: './<%= CLIENT_MAIN_SRC_DIR %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
+        app: './<%= this.CLIENT_MAIN_SRC_DIR %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
       },
       output: {
         path: resolve('<%= DIST_DIR %>'),
@@ -46,7 +46,7 @@ module.exports = async (env, options) => {
         extensions: ['.ts', '.js', '.vue', '.json'],
         alias: {
           vue$: 'vue/dist/vue.esm.js',
-          '@': resolve('<%= CLIENT_MAIN_SRC_DIR %>app'),
+          '@': resolve('<%= this.CLIENT_MAIN_SRC_DIR %>app'),
         },
       },
       devServer: {
@@ -159,15 +159,15 @@ module.exports = async (env, options) => {
               from: require.resolve('axios/dist/axios.min.js'),
               to: 'swagger-ui/',
             },
-            { from: './<%= CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
-            { from: './<%= CLIENT_MAIN_SRC_DIR %>content/', to: 'content/' },
-            { from: './<%= CLIENT_MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
+            { from: './<%= this.CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
+            { from: './<%= this.CLIENT_MAIN_SRC_DIR %>content/', to: 'content/' },
+            { from: './<%= this.CLIENT_MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
             {
-              from: './<%= CLIENT_MAIN_SRC_DIR %>manifest.webapp',
+              from: './<%= this.CLIENT_MAIN_SRC_DIR %>manifest.webapp',
               to: 'manifest.webapp',
             },
             // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-            { from: './<%= CLIENT_MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' },
+            { from: './<%= this.CLIENT_MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' },
           ],
         })<% if (enableTranslation) { %>,
         new MergeJsonWebpackPlugin({

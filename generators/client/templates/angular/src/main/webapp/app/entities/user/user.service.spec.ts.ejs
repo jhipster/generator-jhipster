@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(user.primaryKey.type);
-const testEntityPrimaryKey0 = generateTestEntityPrimaryKey(user.primaryKey, 0);
-const testEntityPrimaryKey1 = generateTestEntityPrimaryKey(user.primaryKey, 1);
+const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
+const testEntityPrimaryKey0 = this.generateTestEntityPrimaryKey(user.primaryKey, 0);
+const testEntityPrimaryKey1 = this.generateTestEntityPrimaryKey(user.primaryKey, 1);
 _%>
 import { TestBed } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -100,7 +100,7 @@ describe('User Service', () => {
       });
 
       it('should add only unique User to an array', () => {
-        const userArray: IUser[] = [<%- testEntityPrimaryKey0 %>, <%- testEntityPrimaryKey1 %>, <%- generateTestEntityPrimaryKey(user.primaryKey) %>];
+        const userArray: IUser[] = [<%- testEntityPrimaryKey0 %>, <%- testEntityPrimaryKey1 %>, <%- this.generateTestEntityPrimaryKey(user.primaryKey) %>];
         const userCollection: IUser[] = [<%- testEntityPrimaryKey1 %>];
         expectedResult = service.addUserToCollectionIfMissing(userCollection, ...userArray);
         expect(expectedResult).toHaveLength(3);

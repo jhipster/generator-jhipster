@@ -17,13 +17,14 @@
  limitations under the License.
 -%>
 <%_
-  const localeId = getLocaleId(nativeLanguage);
+  const localeId = this.getLocaleId(nativeLanguage);
 _%>
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import locale from '@angular/common/locales/<%= localeId %>';
 import { BrowserModule, Title } from '@angular/platform-browser';
+import { TitleStrategy } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
@@ -56,6 +57,7 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 <%_ } _%>
 import { ErrorComponent } from './layouts/error/error.component';
+import { AppPageTitleStrategy } from './app-page-title-strategy';
 
 @NgModule({
   imports: [
@@ -77,12 +79,13 @@ import { ErrorComponent } from './layouts/error/error.component';
 <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
     CookieService,
 <%_ } _%>
-    { provide: LOCALE_ID, useValue: '<%= skipLanguageForLocale(nativeLanguage) ? 'en' : localeId %>' },
+    { provide: LOCALE_ID, useValue: '<%= this.skipLanguageForLocale(nativeLanguage) ? 'en' : localeId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
 <%_ if (enableI18nRTL) { _%>
     FindLanguageFromKeyPipe,
 <%_ } _%>
     httpInterceptorProviders,
+    { provide: TitleStrategy, useClass: AppPageTitleStrategy },
   ],
   declarations: [
     MainComponent,

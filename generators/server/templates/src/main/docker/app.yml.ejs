@@ -77,17 +77,25 @@ _%>
 <%_ if (databaseTypeCassandra) { _%>
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
 <%_ } _%>
-<%_ if (applicationTypeGateway) { _%>
-<%_ if (authenticationTypeOauth2) { _%>
-      - JHIPSTER_SLEEP=80 # gives time for microservices, dependencies to boot before the gateway, the entire stack will be ready to accept incoming requests.
-<%_ } else { _%>
-      - JHIPSTER_SLEEP=60 # gives time for microservices to boot before the gateway, the entire stack will be ready to accept incoming requests.
-<%_ } _%>
-<%_ } else if (applicationTypeMicroservice && authenticationTypeOauth2) { _%>
-      - JHIPSTER_SLEEP=60 # gives time for other services to boot before the application
-<%_ } else { _%>
-      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
-<%_ } _%>
+<%_
+  let jhipsterSleep = 30;
+  let jhipsterSleepComment = 'database, other services';
+  if (serviceDiscoveryAny) {
+    jhipsterSleep += 10;
+    jhipsterSleepComment = `${jhipsterSleepComment}, serviceDiscovery`;
+  }
+  if (authenticationTypeOauth2) {
+    jhipsterSleep += 20;
+    jhipsterSleepComment = `${jhipsterSleepComment}, keycloak`;
+  }
+  if (applicationTypeGateway) {
+    jhipsterSleep += 20;
+    jhipsterSleepComment = `gives time for microservices, ${jhipsterSleepComment} to boot before the gateway, the entire stack will be ready to accept incoming requests.`;
+  } else {
+    jhipsterSleepComment = `gives time for ${jhipsterSleepComment} to boot before the application.`;
+  }
+_%>
+      - JHIPSTER_SLEEP=<%= jhipsterSleep %> # <%= jhipsterSleepComment %>
 <%_ if (searchEngineElasticsearch) { _%>
       - SPRING_ELASTICSEARCH_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
 <%_ } _%>
@@ -294,7 +302,11 @@ _%>
     # When run with the "prod" Spring profile, it will read the configuration from a Git repository
     # See https://www.jhipster.tech/jhipster-registry/#spring-cloud-config
     environment:
+<%_ if (authenticationTypeOauth2) { _%>
+      - JHIPSTER_SLEEP=40
+<%_ } else { _%>
       - JHIPSTER_SLEEP=20
+<%_ } _%>
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationTypeOauth2) { %>,oauth2<% } %>
       - SPRING_SECURITY_USER_PASSWORD=admin

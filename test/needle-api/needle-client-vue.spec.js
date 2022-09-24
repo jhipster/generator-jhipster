@@ -9,36 +9,16 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 const mockBlueprintSubGen = class extends ClientGenerator {
-  constructor(args, opts) {
-    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts, features) {
+    super(args, opts, features);
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
     if (!jhContext) {
       this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
     }
-  }
-
-  get initializing() {
-    return super._initializing();
-  }
-
-  get prompting() {
-    return super._prompting();
-  }
-
-  get configuring() {
-    return super._configuring();
-  }
-
-  get default() {
-    return super._default();
-  }
-
-  get writing() {
-    return super._writing();
+    this.sbsBlueprint = true;
   }
 
   get postWriting() {
-    const phaseFromJHipster = super._postWriting();
     const customPhaseSteps = {
       async composeEntitiesClient() {
         await this.composeWithJHipster('entities-client');
@@ -59,15 +39,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         );
       },
     };
-    return { ...phaseFromJHipster, ...customPhaseSteps };
-  }
-
-  get install() {
-    return super._install();
-  }
-
-  get end() {
-    return super._end();
+    return { ...customPhaseSteps };
   }
 };
 

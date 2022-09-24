@@ -46,15 +46,15 @@ import <%= packageName %>.config.KafkaSseProducer;
 
 @RestController
 @RequestMapping("/api/<%= dasherizedBaseName %>-kafka")
-public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
+public class <%= this.upperFirstCamelCase(baseName) %>KafkaResource {
 
-    private final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCase(baseName) %>KafkaResource.class);
+    private final Logger log = LoggerFactory.getLogger(<%= this.upperFirstCamelCase(baseName) %>KafkaResource.class);
     private final MessageChannel output;
 
     // TODO implement state of the art emitter repository to become 12 factor
     private Map<String, SseEmitter> emitters = new HashMap<>();
 
-    public <%= upperFirstCamelCase(baseName) %>KafkaResource(@Qualifier(KafkaSseProducer.CHANNELNAME) MessageChannel output) {
+    public <%= this.upperFirstCamelCase(baseName) %>KafkaResource(@Qualifier(KafkaSseProducer.CHANNELNAME) MessageChannel output) {
         this.output = output;
     }
 

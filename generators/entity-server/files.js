@@ -360,7 +360,7 @@ const dtoFiles = {
       templates: [
         {
           file: 'package/service/dto/EntityDTO.java',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/service/dto/${generator.asDto(generator.entityClass)}.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/dto/${generator.dtoClass}.java`,
         },
         {
           file: 'package/service/mapper/BaseEntityMapper.java',
@@ -380,7 +380,7 @@ const dtoFiles = {
       templates: [
         {
           file: 'package/service/dto/EntityDTOTest.java',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/service/dto/${generator.asDto(generator.entityClass)}Test.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/dto/${generator.dtoClass}Test.java`,
         },
       ],
     },
@@ -434,60 +434,62 @@ module.exports = {
 
 function writeFiles() {
   return {
-    setUp() {
-      this.javaDir = `${this.packageFolder}/`;
-      this.testDir = `${this.packageFolder}/`;
-    },
-
     cleanupOldServerFiles() {
-      entityServerCleanup.cleanupOldFiles(this, `${SERVER_MAIN_SRC_DIR}${this.javaDir}`, `${SERVER_TEST_SRC_DIR}${this.testDir}`);
+      const { application, entity } = this;
+      if (entity.skipServer) return;
+      entityServerCleanup.cleanupOldFiles(this, { application, entity });
     },
 
     writeServerFiles() {
-      if (this.skipServer) return undefined;
+      const { application, entity } = this;
+      if (entity.skipServer) return undefined;
 
-      // write server side files
-      if (this.reactive) {
-        return this.writeFilesToDisk(serverFiles, ['reactive', '']);
-      }
-      return this.writeFilesToDisk(serverFiles);
+      return this.writeFiles({
+        sections: serverFiles,
+        rootTemplatesPath: application.reactive ? ['reactive', ''] : undefined,
+        context: { ...application, ...entity },
+      });
     },
 
-    writeEnumFiles() {
-      this.fields.forEach(field => {
-        if (!field.fieldIsEnum) {
-          return;
-        }
+    async writeEnumFiles() {
+      const { application, entity } = this;
+      if (entity.skipServer) return;
+
+      for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
         const fieldType = field.fieldType;
         const enumInfo = {
-          ...utils.getEnumInfo(field, this.clientRootFolder),
-          frontendAppName: this.frontendAppName,
-          packageName: this.packageName,
-          entityAbsolutePackage: this.entityAbsolutePackage || this.packageName,
+          ...utils.getEnumInfo(field, entity.clientRootFolder),
+          frontendAppName: application.frontendAppName,
+          packageName: application.packageName,
+          entityAbsolutePackage: entity.entityAbsolutePackage || application.packageName,
         };
-        // eslint-disable-next-line no-console
-        if (!this.skipServer) {
-          const pathToTemplateFile = `${this.fetchFromInstalledJHipster(
-            'entity-server/templates'
-          )}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`;
-          this.template(
-            pathToTemplateFile,
-            `${SERVER_MAIN_SRC_DIR}${this.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
-            this,
-            {},
-            enumInfo
-          );
-        }
-      });
+        await this.writeFiles({
+          templates: [
+            {
+              sourceFile: `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
+              destinationFile: `${SERVER_MAIN_SRC_DIR}${entity.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
+            },
+          ],
+          context: enumInfo,
+        });
+      }
     },
     ...writeEntityCouchbaseFiles(),
   };
 }
 
 function customizeFiles() {
-  if (this.databaseType === SQL) {
-    if ([EHCACHE, CAFFEINE, INFINISPAN, REDIS].includes(this.cacheProvider) && this.enableHibernateCache) {
-      this.addEntityToCache(this.entityAbsoluteClass, this.relationships, this.packageName, this.packageFolder, this.cacheProvider);
+  const { application, entity } = this;
+  if (entity.skipServer) return;
+  if (application.databaseType === SQL) {
+    if ([EHCACHE, CAFFEINE, INFINISPAN, REDIS].includes(application.cacheProvider) && application.enableHibernateCache) {
+      this.addEntityToCache(
+        entity.entityAbsoluteClass,
+        entity.relationships,
+        application.packageName,
+        application.packageFolder,
+        application.cacheProvider
+      );
     }
   }
 }

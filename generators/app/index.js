@@ -513,8 +513,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
   _default() {
     return {
-      ...super._missingPreDefault(),
-
       insight() {
         const yorc = {
           ..._.omit(this.jhipsterConfig, [JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY]),
@@ -536,8 +534,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         cleanup.cleanupOldFiles(this);
         cleanup.upgradeFiles(this);
       },
-
-      ...super._missingPostWriting(),
     };
   }
 

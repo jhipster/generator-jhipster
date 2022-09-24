@@ -4,34 +4,19 @@ const helpers = require('yeoman-test');
 const ServerGenerator = require('../../generators/server');
 
 const mockBlueprintSubGen = class extends ServerGenerator {
-  constructor(args, opts) {
-    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts, features) {
+    super(args, opts, features);
 
     const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
     if (!jhContext) {
       this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
-  }
 
-  get initializing() {
-    return super._initializing();
-  }
-
-  get prompting() {
-    return super._prompting();
-  }
-
-  get configuring() {
-    return super._configuring();
-  }
-
-  get default() {
-    return super._default();
+    this.sbsBlueprint = true;
   }
 
   get writing() {
-    const phaseFromJHipster = super._writing();
     const customPhaseSteps = {
       mavenStep() {
         this.addMavenDependencyManagement(
@@ -101,7 +86,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         this.addMavenProfile('profileId', '            <other>other</other>');
       },
     };
-    return { ...phaseFromJHipster, ...customPhaseSteps };
+    return { ...customPhaseSteps };
   }
 };
 

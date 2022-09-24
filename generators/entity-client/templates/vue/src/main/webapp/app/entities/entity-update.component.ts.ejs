@@ -78,7 +78,7 @@ import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityMo
 <%_ } _%>
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
-<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ const enumImports = this.generateEntityClientEnumImports(fields, clientFramework); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
@@ -155,7 +155,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   <%_ } _%>
 <%_ } _%>
   <%_ enumImports.forEach( (importedPath, importedType) => { _%>
-  public <%- _.lowerFirst(importedType) %>Values : string[] = Object.keys(<%- importedType %>);
+  public <%- this._.lowerFirst(importedType) %>Values : string[] = Object.keys(<%- importedType %>);
   <%_ }); _%>
   public isSaving = false;
   public currentLanguage = '';

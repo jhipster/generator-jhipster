@@ -22,7 +22,7 @@ import <%= packageName %>.config.Constants;
 <% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>
 import <%= packageName %>.domain.Authority;<% } %>
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ } _%>
 
 import java.io.Serializable;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
-public class <%= asDto('AdminUser') %> implements Serializable {
+public class <%= user.adminUserDto %> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private <%= user.primaryKey.type %> id;
@@ -84,11 +84,11 @@ public class <%= asDto('AdminUser') %> implements Serializable {
     private Set<String> authorities;
 
 <%_ if (!databaseTypeNo) { _%>
-    public <%= asDto('AdminUser') %>() {
+    public <%= user.adminUserDto %>() {
         // Empty constructor needed for Jackson.
     }
 
-    public <%= asDto('AdminUser') %>(<%= asEntity('User') %> user) {
+    public <%= user.adminUserDto %>(<%= user.persistClass %> user) {
         this.id = user.getId();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
@@ -226,7 +226,7 @@ public class <%= asDto('AdminUser') %> implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= asDto('AdminUser') %>{" +
+        return "<%= user.adminUserDto %>{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +

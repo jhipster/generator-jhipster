@@ -95,7 +95,7 @@ return merge(
       {
         test: /\.tsx?$/,
         use: getTsLoaderRule(options.env),
-        include: [utils.root('./<%= CLIENT_MAIN_SRC_DIR %>app')],
+        include: [utils.root('./<%= this.CLIENT_MAIN_SRC_DIR %>app')],
         exclude: [utils.root('node_modules')]
       }
       /*
@@ -158,7 +158,7 @@ return merge(
       ],
     }),
     new HtmlWebpackPlugin({
-      template: './<%= CLIENT_MAIN_SRC_DIR %>index.html',
+      template: './<%= this.CLIENT_MAIN_SRC_DIR %>index.html',
       chunksSortMode: 'auto',
       inject: 'body',
       base: '/',

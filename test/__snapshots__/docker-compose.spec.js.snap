@@ -103,7 +103,7 @@ eureka:
       - BUCKET=mscouchbase
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -227,7 +227,7 @@ eureka:
     image: cassandra:3.11.13
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -398,7 +398,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -556,7 +556,7 @@ eureka:
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -731,7 +731,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -848,7 +848,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -965,7 +965,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1108,7 +1108,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1315,7 +1315,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1474,7 +1474,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1575,7 +1575,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1674,7 +1674,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.3.0
+    image: jhipster/jhipster-registry:v7.4.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"

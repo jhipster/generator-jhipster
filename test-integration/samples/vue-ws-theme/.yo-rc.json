@@ -26,7 +26,7 @@
     "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
-    "prodDatabaseType": "postgresql",
+    "prodDatabaseType": "mariadb",
     "reactive": false,
     "searchEngine": false,
     "serverPort": "8080",

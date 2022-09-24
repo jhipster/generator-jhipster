@@ -20,6 +20,35 @@ const databaseTypes = require('../jdl/jhipster/database-types');
 
 const { H2_DISK, H2_MEMORY, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 
+const H2_PROD_DATABASE_MODE = {
+  [MYSQL]: ';MODE=MYSQL',
+  [MARIADB]: ';MODE=LEGACY',
+};
+
+const h2GetProdDatabaseData = (databaseType, { extraOptions = '' }, { prodDatabaseType, buildDirectory, itests, localDirectory }) => {
+  const data = {};
+  if (H2_DISK === databaseType) {
+    if (!localDirectory && !buildDirectory) {
+      throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
+    }
+    if (localDirectory) {
+      localDirectory = `${localDirectory}/`;
+    } else {
+      localDirectory = `${buildDirectory}h2db/${itests ? 'testdb/' : 'db/'}`;
+    }
+  }
+
+  if (itests && H2_MEMORY === databaseType) {
+    data.port = ':12344';
+  }
+
+  return {
+    ...data,
+    localDirectory,
+    extraOptions: `${extraOptions}${H2_PROD_DATABASE_MODE[prodDatabaseType] || ''}`,
+  };
+};
+
 const databaseData = {
   [MSSQL]: {
     protocolSuffix: 'sqlserver://',
@@ -68,15 +97,14 @@ const databaseData = {
   },
   [H2_DISK]: {
     protocolSuffix: 'h2:file:',
-    useDirectory: true,
-    extraOptions: ';DB_CLOSE_DELAY=-1;MODE=LEGACY',
+    getData: options => h2GetProdDatabaseData(H2_DISK, { extraOptions: ';DB_CLOSE_DELAY=-1' }, options),
     r2dbc: {
       protocolSuffix: 'h2:file://',
     },
   },
   [H2_MEMORY]: {
     protocolSuffix: 'h2:mem:',
-    extraOptions: ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=LEGACY',
+    getData: options => h2GetProdDatabaseData(H2_MEMORY, { extraOptions: ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE' }, options),
     r2dbc: {
       protocolSuffix: 'h2:mem:///',
     },
