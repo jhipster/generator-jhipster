@@ -119,7 +119,7 @@
     "then-request": "6.0.2",
     "uuid": "9.0.0",
     "winston": "3.8.2",
-    "yeoman-environment": "3.10.0",
+    "yeoman-environment": "3.11.0",
     "yeoman-generator": "5.7.0"
   },
   "devDependencies": {
