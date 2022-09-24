@@ -36,10 +36,11 @@
   },
   "exports": {
     ".": "./dist/lib/index.mjs",
-    "./cli": "./cli/index.mjs",
+    "./cli": "./dist/cli/index.mjs",
     "./package.json": "./package.json",
-    "./generators": "./lib/constants/generators.mjs",
+    "./generators": "./dist/lib/constants/generators.mjs",
     "./generators/*": "./dist/generators/*/index.mjs",
+    "./priorities": "./dist/lib/constants/priorities.mjs",
     "./jdl/": "./dist/jdl/"
   },
   "main": "dist/lib/index.mjs",
