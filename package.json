@@ -123,7 +123,7 @@
     "yeoman-generator": "5.7.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "5.37.0",
+    "@typescript-eslint/eslint-plugin": "5.38.0",
     "@typescript-eslint/parser": "5.38.0",
     "chai": "4.3.6",
     "ejs-lint": "1.2.2",
