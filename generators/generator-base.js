@@ -532,8 +532,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addElementTranslationKey(key, value, language) {
-    this.needleApi.clientI18n.addElementTranslationKey(key, value, language);
+  addElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    this.needleApi.clientI18n.addElementTranslationKey(key, value, language, webappSrcDir);
   }
 
   /**
@@ -543,8 +543,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addAdminElementTranslationKey(key, value, language) {
-    this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language);
+  addAdminElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language, webappSrcDir);
   }
 
   /**
@@ -554,8 +554,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addEntityTranslationKey(key, value, language) {
-    this.needleApi.clientI18n.addEntityTranslationKey(key, value, language);
+  addEntityTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
   }
 
   /**
@@ -565,8 +565,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value or object with multiple key and translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addGlobalTranslationKey(key, value, language) {
-    const fullPath = `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
+  addGlobalTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    const fullPath = `${webappSrcDir}i18n/${language}/global.json`;
     try {
       jhipsterUtils.rewriteJSONFile(
         fullPath,
@@ -593,10 +593,10 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} method - The method to be run with provided key and value from above
    * @param {string} enableTranslation - specify if i18n is enabled
    */
-  addTranslationKeyToAllLanguages(key, value, method, enableTranslation) {
+  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
     if (enableTranslation) {
       this.getAllInstalledLanguages().forEach(language => {
-        this[method](key, value, language);
+        this[method](key, value, language, webappSrcDir);
       });
     }
   }

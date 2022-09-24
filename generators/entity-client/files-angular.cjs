@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 const constants = require('../generator-constants');
+const { replaceAngularTranslations } = require('../client/transform-angular.cjs');
+const { addEnumerationFiles } = require('./files');
 
 /* Constants use throughout */
 const { CLIENT_TEST_SRC_DIR, ANGULAR_DIR } = constants;
@@ -160,6 +162,98 @@ const angularFiles = {
   ],
 };
 
+/**
+ * @this {import('./index.js')}
+ * @returns
+ */
+async function writeAngularFiles() {
+  const { entity, application } = this;
+  if (!application.clientFrameworkAngular) return;
+  if (entity.skipClient) return;
+
+  await addEnumerationFiles.call(this, { application, entity }, ANGULAR_DIR);
+
+  await this.writeFiles({
+    sections: angularFiles,
+    rootTemplatesPath: 'angular',
+    transform: !application.enableTranslation ? [replaceAngularTranslations] : undefined,
+    context: { ...application, ...entity },
+  });
+
+  if (!entity.embedded) {
+    const { clientFramework, enableTranslation } = application;
+    const {
+      entityInstance,
+      entityClass,
+      entityAngularName,
+      entityFolderName,
+      entityFileName,
+      entityUrl,
+      microserviceName,
+      readOnly,
+      entityClassPlural,
+      i18nKeyPrefix,
+      pageTitle = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityClassPlural,
+    } = entity;
+
+    this.addEntityToModule(
+      entityInstance,
+      entityClass,
+      entityAngularName,
+      entityFolderName,
+      entityFileName,
+      entityUrl,
+      clientFramework,
+      microserviceName,
+      readOnly,
+      pageTitle
+    );
+    this.addEntityToMenu(
+      entity.entityPage,
+      application.enableTranslation,
+      application.clientFramework,
+      entity.entityTranslationKeyMenu,
+      entity.entityClassHumanized
+    );
+  }
+}
+
+function cleanupAngular() {
+  const { entity, application } = this;
+  const { entityFolderName, entityFileName } = entity;
+  if (!application.clientFrameworkAngular) return;
+
+  if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}.route.ts`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}.component.ts`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}.component.html`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-detail.component.ts`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-detail.component.html`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.ts`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.html`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-update.component.ts`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-update.component.html`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/${this.entityModelFileName}.model.ts`);
+    entity.fields.forEach(field => {
+      if (field.fieldIsEnum === true) {
+        const { enumFileName } = field;
+        this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/enumerations/${enumFileName}.model.ts`);
+      }
+    });
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-routing-resolve.service.ts`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-routing.module.ts`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}.service.ts`);
+    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
+    this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);
+    this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.component.spec.ts`);
+    this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.spec.ts`);
+    this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${entityFolderName}/${entityFileName}-update.component.spec.ts`);
+    this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
+  }
+}
+
 module.exports = {
   angularFiles,
+  writeAngularFiles,
+  cleanupAngular,
 };

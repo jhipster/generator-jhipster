@@ -32,17 +32,23 @@ const cypressEntityFiles = {
 };
 
 function cleanupCypressEntityFiles() {
-  if (!this.cypressTests) return;
-  this.cypressFolder = `${this.CLIENT_TEST_SRC_DIR}cypress/`;
+  const { entity, application } = this;
+  if (!application.cypressTests) return;
+  application.cypressFolder = `${this.CLIENT_TEST_SRC_DIR}cypress/`;
   if (this.isJhipsterVersionLessThan('7.8.2')) {
-    this.removeFile(`${this.cypressFolder}integration/entity/${this.entityFileName}.spec.ts`);
+    this.removeFile(`${application.cypressFolder}integration/entity/${entity.entityFileName}.spec.ts`);
   }
 }
 
 function writeCypressEntityFiles() {
-  if (this.skipClient || !this.cypressTests) return undefined;
-  this.cypressFolder = `${this.CLIENT_TEST_SRC_DIR}cypress/`;
-  return this.writeFiles({ sections: cypressEntityFiles, rootTemplatesPath: 'cypress' });
+  const { entity, application } = this;
+  if (entity.skipClient || !application.cypressTests) return undefined;
+  application.cypressFolder = `${this.CLIENT_TEST_SRC_DIR}cypress/`;
+  return this.writeFiles({
+    sections: cypressEntityFiles,
+    rootTemplatesPath: 'cypress',
+    context: { ...application, ...entity },
+  });
 }
 
 module.exports = {

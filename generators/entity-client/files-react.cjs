@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 const { CLIENT_TEST_SRC_DIR, REACT_DIR } = require('../generator-constants');
+const { replaceReactTranslations } = require('../client/transform-react.cjs');
+const { addEnumerationFiles } = require('./files');
 
 const reactFiles = {
   client: [
@@ -104,6 +106,70 @@ const reactFiles = {
   ],
 };
 
+async function writeReactFiles() {
+  const { entity, application } = this;
+  if (!application.clientFrameworkReact) return;
+  if (entity.skipClient) return;
+
+  await addEnumerationFiles.call(this, { application, entity }, REACT_DIR);
+
+  await this.writeFiles({
+    sections: reactFiles,
+    rootTemplatesPath: 'react',
+    transform: !application.enableTranslation ? [replaceReactTranslations] : undefined,
+    context: { ...application, ...entity },
+  });
+
+  if (!entity.embedded) {
+    const { clientFramework, enableTranslation } = application;
+    const {
+      entityInstance,
+      entityClass,
+      entityAngularName,
+      entityFolderName,
+      entityFileName,
+      entityUrl,
+      microserviceName,
+      readOnly,
+      entityClassPlural,
+      i18nKeyPrefix,
+      pageTitle = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityClassPlural,
+    } = entity;
+
+    this.addEntityToModule(
+      entityInstance,
+      entityClass,
+      entityAngularName,
+      entityFolderName,
+      entityFileName,
+      entityUrl,
+      clientFramework,
+      microserviceName,
+      readOnly,
+      pageTitle
+    );
+    this.addEntityToMenu(
+      entity.entityPage,
+      application.enableTranslation,
+      application.clientFramework,
+      entity.entityTranslationKeyMenu,
+      entity.entityClassHumanized
+    );
+  }
+}
+
+function cleanupReact() {
+  const { entity, application } = this;
+  const { entityFolderName, entityFileName } = entity;
+  if (application.clientFrameworkReact) return;
+
+  if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+    this.removeFile(`${this.CLIENT_TEST_SRC_DIR}spec/app/entities/${entityFolderName}/${entityFileName}-reducer.spec.ts`);
+  }
+}
+
 module.exports = {
   reactFiles,
+  writeReactFiles,
+  cleanupReact,
 };
