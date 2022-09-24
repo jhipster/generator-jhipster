@@ -213,7 +213,8 @@ async function writeAngularFiles() {
       application.enableTranslation,
       application.clientFramework,
       entity.entityTranslationKeyMenu,
-      entity.entityClassHumanized
+      entity.entityClassHumanized,
+      application.jhiPrefix
     );
   }
 }
