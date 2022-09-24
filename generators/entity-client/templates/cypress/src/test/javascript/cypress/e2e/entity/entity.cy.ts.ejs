@@ -308,7 +308,7 @@ describe('<%= entityClass %> e2e test', () => {
     const fieldIsEnum = field.fieldIsEnum;
     const fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
     if (fieldValue === undefined) {
-        warning(`Error generating a value for field ${fieldName}`);
+        this.warning(`Error generating a value for field ${fieldName}`);
         return;
     }
   _%>
