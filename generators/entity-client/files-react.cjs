@@ -121,37 +121,17 @@ async function writeReactFiles() {
   });
 
   if (!entity.embedded) {
-    const { clientFramework, enableTranslation } = application;
-    const {
-      entityInstance,
-      entityClass,
-      entityAngularName,
-      entityFolderName,
-      entityFileName,
-      entityUrl,
-      microserviceName,
-      readOnly,
-      entityClassPlural,
-      i18nKeyPrefix,
-      pageTitle = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityClassPlural,
-    } = entity;
+    const { entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName } = entity;
 
-    this.addEntityToModule(
-      entityInstance,
-      entityClass,
-      entityAngularName,
-      entityFolderName,
-      entityFileName,
-      entityUrl,
-      clientFramework,
-      microserviceName,
-      readOnly,
-      pageTitle
-    );
-    this.addEntityToMenu(
+    const { CLIENT_MAIN_SRC_DIR } = this;
+    const { applicationTypeMicroservice } = application;
+    this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, {
+      applicationTypeMicroservice,
+      CLIENT_MAIN_SRC_DIR,
+    });
+    this.needleApi.clientReact.addEntityToMenu(
       entity.entityPage,
       application.enableTranslation,
-      application.clientFramework,
       entity.entityTranslationKeyMenu,
       entity.entityClassHumanized
     );
