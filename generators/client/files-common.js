@@ -75,8 +75,13 @@ const files = {
   ],
 };
 
-function writeFiles() {
-  return this.writeFilesToDisk(files, 'common');
+async function writeFiles() {
+  const application = this.application;
+  await this.writeFiles({
+    sections: files,
+    rootTemplatesPath: 'common',
+    context: application,
+  });
 }
 
 module.exports = {

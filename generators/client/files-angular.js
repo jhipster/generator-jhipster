@@ -25,9 +25,6 @@ const { GATEWAY } = require('../../jdl/jhipster/application-types');
 const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
 
 const files = {
-  _: {
-    transform: [replaceAngularTranslations],
-  },
   common: [
     {
       templates: [
@@ -497,10 +494,11 @@ const files = {
 };
 
 function cleanup() {
-  if (!this.clientFrameworkAngular) return;
+  const application = this.application;
+  if (!application.clientFrameworkAngular) return;
 
   if (this.isJhipsterVersionLessThan('7.6.1')) {
-    this.removeFile(`${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`);
+    this.removeFile(`${application.CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`);
   }
 }
 
@@ -510,9 +508,14 @@ module.exports = {
   files,
 };
 
-function writeFiles() {
-  return this.writeFiles({
+async function writeFiles() {
+  const application = this.application;
+  if (!application.clientFrameworkAngular) return;
+
+  await this.writeFiles({
     sections: files,
     rootTemplatesPath: 'angular',
+    transform: !application.enableTranslation ? [replaceAngularTranslations] : undefined,
+    context: application,
   });
 }

@@ -16,13 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { replaceReactTranslations } = require('../client/transform-react.cjs');
 const { CLIENT_TEST_SRC_DIR, REACT_DIR } = require('../generator-constants');
 
 const reactFiles = {
-  _: {
-    transform: [replaceReactTranslations],
-  },
   client: [
     {
       condition: generator => !generator.embedded,

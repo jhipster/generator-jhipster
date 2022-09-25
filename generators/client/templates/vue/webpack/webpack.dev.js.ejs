@@ -46,7 +46,7 @@ module.exports = (env, options) => {
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: `http://localhost:${options.watch ? '<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%= devServerPort %>'}`,
+          target: `http://localhost:${options.watch ? '<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%= devServerPort %>'}`,
           ws: true,
         },
         socket: {

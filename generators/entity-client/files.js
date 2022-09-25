@@ -19,8 +19,11 @@
 const utils = require('../utils');
 const constants = require('../generator-constants');
 const { angularFiles } = require('./files-angular.cjs');
+const { replaceAngularTranslations } = require('../client/transform-angular.cjs');
 const { reactFiles } = require('./files-react.cjs');
+const { replaceReactTranslations } = require('../client/transform-react.cjs');
 const { vueFiles } = require('./files-vue.cjs');
+const { replaceVueTranslations } = require('../client/transform-vue.cjs');
 const { cleanupCypressEntityFiles, writeCypressEntityFiles, cypressEntityFiles: commonFiles } = require('./files-cypress.cjs');
 
 /* Constants use throughout */
@@ -88,25 +91,33 @@ function writeFiles() {
       let files;
       let clientMainSrcDir;
       let templatesDir;
+      let transform;
 
       if (this.clientFramework === ANGULAR) {
         files = angularFiles;
         clientMainSrcDir = ANGULAR_DIR;
         templatesDir = CLIENT_NG2_TEMPLATES_DIR;
+        transform = replaceAngularTranslations;
       } else if (this.clientFramework === REACT) {
         files = reactFiles;
         clientMainSrcDir = REACT_DIR;
         templatesDir = CLIENT_REACT_TEMPLATES_DIR;
+        transform = replaceReactTranslations;
       } else if (this.clientFramework === VUE) {
         files = vueFiles;
         clientMainSrcDir = VUE_DIR;
         templatesDir = CLIENT_VUE_TEMPLATES_DIR;
+        transform = replaceVueTranslations;
       }
 
       addEnumerationFiles(this, clientMainSrcDir);
       if (!files) return undefined;
 
-      return this.writeFiles({ sections: files, rootTemplatesPath: templatesDir });
+      return this.writeFiles({
+        sections: files,
+        rootTemplatesPath: templatesDir,
+        transform: !this.enableTranslation ? [transform] : undefined,
+      });
     },
 
     cleanupCypressEntityFiles,

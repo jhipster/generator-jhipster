@@ -16,16 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { replaceAngularTranslations } = require('../client/transform-angular.cjs');
 const constants = require('../generator-constants');
 
 /* Constants use throughout */
 const { CLIENT_TEST_SRC_DIR, ANGULAR_DIR } = constants;
 
 const angularFiles = {
-  _: {
-    transform: [replaceAngularTranslations],
-  },
   client: [
     {
       path: ANGULAR_DIR,

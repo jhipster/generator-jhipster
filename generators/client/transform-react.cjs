@@ -105,7 +105,7 @@ const replaceTranslationKeysWithText = (generator, body, regexp, { keyPattern, i
  * @this {import('../generator-base.js')}
  */
 function replaceReactTranslations(body, filePath) {
-  if (this.enableTranslation || !this._getClientTranslation) {
+  if (!this._getClientTranslation) {
     return body;
   }
   if (/\.tsx$/.test(filePath)) {
