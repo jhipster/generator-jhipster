@@ -125,7 +125,6 @@ const fakeFiles = {
       templates: [
         {
           file: 'config/liquibase/fake-data/blob/hipster.png',
-          method: 'copy',
           noEjs: true,
         },
       ],
@@ -133,7 +132,7 @@ const fakeFiles = {
     {
       condition: generator => generator.entity.fieldsContainTextBlob === true,
       path: SERVER_MAIN_RES_DIR,
-      templates: [{ file: 'config/liquibase/fake-data/blob/hipster.txt', method: 'copy' }],
+      templates: [{ file: 'config/liquibase/fake-data/blob/hipster.txt' }],
     },
   ],
 };
