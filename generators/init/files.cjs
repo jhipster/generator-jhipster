@@ -48,7 +48,6 @@ module.exports.commitHooksFiles = {
         '.lintstagedrc.cjs',
         {
           file: '.husky/pre-commit',
-          method: 'copy',
           noEjs: true,
         },
       ],
