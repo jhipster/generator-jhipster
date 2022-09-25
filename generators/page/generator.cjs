@@ -31,13 +31,19 @@ const {
 } = require('../../lib/constants/priorities.cjs').compat;
 
 const prompts = require('./prompts.cjs');
-const { writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue.cjs');
+const { customizeFiles: customizeVueFiles, vueFiles } = require('./files-vue.cjs');
 const constants = require('../generator-constants');
 const { GENERATOR_PAGE } = require('../generator-list');
 const { PROTRACTOR } = require('../../jdl/jhipster/test-framework-types');
 
 const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
+/**
+ * Base class for a generator that can be extended through a blueprint.
+ *
+ * @class
+ * @extends {BaseBlueprintGenerator}
+ */
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
@@ -148,15 +154,18 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   _writing() {
-    return {
+    return this.asWritingTaskGroup({
       writeClientPageFiles() {
         if (this.skipClient) return;
         if (![VUE].includes(this.clientFramework)) {
           throw new Error(`The page sub-generator is not supported for client ${this.clientFramework}`);
         }
-        writeVueFiles.call(this);
+        return this.writeFiles({
+          sections: vueFiles,
+          rootTemplatesPath: ['vue'],
+        });
       },
-    };
+    });
   }
 
   get [WRITING_PRIORITY]() {

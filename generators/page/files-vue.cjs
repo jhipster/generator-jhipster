@@ -22,7 +22,6 @@ const utils = require('../utils');
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const VUE_DIR = 'src/main/webapp/app/';
-const CLIENT_VUE_TEMPLATES_DIR = 'vue';
 
 const vueFiles = {
   client: [
@@ -83,14 +82,9 @@ const vueFiles = {
 };
 
 module.exports = {
-  writeFiles,
+  vueFiles,
   customizeFiles,
 };
-
-function writeFiles() {
-  // write client side files for Vue
-  return this.writeFilesToDisk(vueFiles, CLIENT_VUE_TEMPLATES_DIR);
-}
 
 function customizeFiles() {
   // Add page paths to routing system
