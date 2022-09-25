@@ -150,11 +150,11 @@ objects:
 <%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgres) { _%>
             - name: SPRING_DATASOURCE_URL
   <%_ if (app.prodDatabaseTypeMysql) { _%>
-              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: app.baseName.toLowerCase() }) %>
+              value: <%- this.getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: app.baseName.toLowerCase() }) %>
   <%_ } else if (app.prodDatabaseTypeMariadb) { _%>
-              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}`, databaseName: app.baseName.toLowerCase() }) %>
+              value: <%- this.getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}`, databaseName: app.baseName.toLowerCase() }) %>
   <%_ } else if (app.prodDatabaseTypePostgres) { _%>
-              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: '${APPLICATION_NAME}' }) %>
+              value: <%- this.getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: '${APPLICATION_NAME}' }) %>
   <%_ } _%>
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
