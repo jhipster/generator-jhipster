@@ -283,7 +283,7 @@ dependencies {
     implementation group: "tech.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
         exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
-    implementation "javax.annotation:javax.annotation-api"
+    implementation "jakarta.annotation:jakarta.annotation-api"
 <%_ // This is useful for major Spring Boot migration
 if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"

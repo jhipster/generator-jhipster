@@ -3525,21 +3525,11 @@ env:
     - CYPRESS_ENABLE_RECORD: false
 before_install:
   - |
-    if [[ $JHI_JDK = '17' ]]; then
-      echo '*** Using OpenJDK 17'
-      sudo add-apt-repository ppa:openjdk-r/ppa -y
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-17-jdk -y
-      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-      java -version
-    else
-      echo '*** Using OpenJDK 17 by default'
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-17-jdk
-      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-      java -version
-    fi
-  - java -version
+    echo '*** Using OpenJDK 17 by default'
+    sudo apt-get update -q
+    sudo apt-get install -y openjdk-17-jdk
+    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - nvm install $NODE_VERSION
@@ -3623,21 +3613,11 @@ env:
     - CYPRESS_ENABLE_RECORD: false
 before_install:
   - |
-    if [[ $JHI_JDK = '17' ]]; then
-      echo '*** Using OpenJDK 17'
-      sudo add-apt-repository ppa:openjdk-r/ppa -y
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-17-jdk -y
-      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-      java -version
-    else
-      echo '*** Using OpenJDK 17 by default'
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-17-jdk
-      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-      java -version
-    fi
-  - java -version
+    echo '*** Using OpenJDK 17 by default'
+    sudo apt-get update -q
+    sudo apt-get install -y openjdk-17-jdk
+    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - nvm install $NODE_VERSION
@@ -3721,21 +3701,11 @@ env:
     - CYPRESS_ENABLE_RECORD: true
 before_install:
   - |
-    if [[ $JHI_JDK = '17' ]]; then
-      echo '*** Using OpenJDK 17'
-      sudo add-apt-repository ppa:openjdk-r/ppa -y
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-17-jdk -y
-      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-      java -version
-    else
-      echo '*** Using OpenJDK 17 by default'
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-17-jdk
-      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-      java -version
-    fi
-  - java -version
+    echo '*** Using OpenJDK 17 by default'
+    sudo apt-get update -q
+    sudo apt-get install -y openjdk-17-jdk
+    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - nvm install $NODE_VERSION
