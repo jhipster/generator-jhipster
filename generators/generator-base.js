@@ -43,7 +43,6 @@ const defaultApplicationOptions = require('../jdl/jhipster/default-application-o
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { databaseData } = require('./sql-constants');
 const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
-const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
 const { joinCallbacks } = require('../lib/support/base.cjs');
 
 const {
@@ -1211,15 +1210,6 @@ class JHipsterBaseGenerator extends PrivateBase {
    */
   addGradlePluginManagementRepository(url, username, password) {
     this.needleApi.serverGradle.addPluginManagementRepository(url, username, password);
-  }
-
-  /**
-   * Insert content into ApplicationProperties class
-   * @param {import("./server/needles.cjs").ApplicationPropertiesNeedles} needlesContent
-   * @returns {string} ApplicationProperties contents
-   */
-  insertContentIntoApplicationProperties(needlesContent) {
-    return insertContentIntoApplicationProperties(this, needlesContent);
   }
 
   /**
