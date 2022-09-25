@@ -50,7 +50,7 @@ describe('<%= entityClass %> e2e test', () => {
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityPage %>(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  <% if (skipCreateTest) { %>// <% } %>const <%= entityInstance %>Sample = <%- JSON.stringify(generateTestEntity(sampleFields.map(field => field.reference))) %>;
+  <% if (skipCreateTest) { %>// <% } %>const <%= entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields.map(field => field.reference))) %>;
 
   let <%= entityInstance %>;
 <%_ for (otherEntity of requiredOtherEntities) { _%>
@@ -71,7 +71,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/<%= baseApi + otherEntity.entityApiUrl %>',
-      body: <%- JSON.stringify(generateTestEntity(otherEntity.fields.filter(f => !f.autoGenerate).map(field => field.reference))) %>,
+      body: <%- JSON.stringify(this.generateTestEntity(otherEntity.fields.filter(f => !f.autoGenerate).map(field => field.reference))) %>,
     }).then(({ body }) => {
       <%= otherEntity.entityInstance %> = body;
     });

@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 const { CLIENT_TEST_SRC_DIR, VUE_DIR } = require('../generator-constants');
+const { replaceVueTranslations } = require('../client/transform-vue.cjs');
+const { addEnumerationFiles } = require('./files');
 
 const vueFiles = {
   client: [
@@ -131,6 +133,59 @@ const vueFiles = {
   ],
 };
 
+async function writeVueFiles() {
+  const { entity, application } = this;
+  if (!application.clientFrameworkVue) return;
+  if (entity.skipClient) return;
+
+  await addEnumerationFiles.call(this, { application, entity }, VUE_DIR);
+
+  await this.writeFiles({
+    sections: vueFiles,
+    rootTemplatesPath: 'vue',
+    transform: !application.enableTranslation ? [replaceVueTranslations] : undefined,
+    context: { ...application, ...entity },
+  });
+
+  if (!entity.embedded) {
+    const { clientFramework, enableTranslation } = application;
+    const {
+      entityInstance,
+      entityClass,
+      entityAngularName,
+      entityFolderName,
+      entityFileName,
+      entityUrl,
+      microserviceName,
+      readOnly,
+      entityClassPlural,
+      i18nKeyPrefix,
+      pageTitle = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityClassPlural,
+    } = entity;
+
+    this.addEntityToModule(
+      entityInstance,
+      entityClass,
+      entityAngularName,
+      entityFolderName,
+      entityFileName,
+      entityUrl,
+      clientFramework,
+      microserviceName,
+      readOnly,
+      pageTitle
+    );
+    this.addEntityToMenu(
+      entity.entityPage,
+      application.enableTranslation,
+      application.clientFramework,
+      entity.entityTranslationKeyMenu,
+      entity.entityClassHumanized
+    );
+  }
+}
+
 module.exports = {
   vueFiles,
+  writeVueFiles,
 };

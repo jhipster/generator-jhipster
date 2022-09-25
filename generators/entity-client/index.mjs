@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 export { default } from './index.js';
-export { angularFiles, reactFiles, vueFiles, commonFiles } from './files.js';
+export { addEnumerationFiles } from './files.js';
