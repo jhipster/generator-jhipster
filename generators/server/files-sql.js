@@ -158,11 +158,11 @@ const mysqlFiles = {
     },
     {
       path: SERVER_TEST_RES_DIR,
-      templates: [{ file: 'testcontainers/mysql/my.cnf', method: 'copy', noEjs: true }],
+      templates: [{ file: 'testcontainers/mysql/my.cnf', noEjs: true }],
     },
     {
       path: DOCKER_DIR,
-      templates: [{ file: 'config/mysql/my.cnf', method: 'copy', noEjs: true }],
+      templates: [{ file: 'config/mysql/my.cnf', noEjs: true }],
     },
   ],
 };
@@ -180,11 +180,11 @@ const mariadbFiles = {
     },
     {
       path: SERVER_TEST_RES_DIR,
-      templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
+      templates: [{ file: 'testcontainers/mariadb/my.cnf', noEjs: true }],
     },
     {
       path: DOCKER_DIR,
-      templates: [{ file: 'config/mariadb/my.cnf', method: 'copy', noEjs: true }],
+      templates: [{ file: 'config/mariadb/my.cnf', noEjs: true }],
     },
   ],
 };
@@ -230,11 +230,13 @@ const serverFiles = mergeSections(
 function writeSqlFiles() {
   return {
     async writeSqlFiles() {
-      if (!this.databaseTypeSql) return;
+      const { application } = this;
+      if (!application.databaseTypeSql) return;
 
       await this.writeFiles({
         sections: serverFiles,
         rootTemplatesPath: ['sql/reactive', 'sql/common'],
+        context: application,
       });
     },
   };

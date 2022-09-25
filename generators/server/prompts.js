@@ -307,27 +307,27 @@ function askForServerSideOpts() {
   ];
 
   return this.prompt(prompts).then(answers => {
-    this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = answers.serviceDiscoveryType;
+    this.jhipsterConfig.serviceDiscoveryType = answers.serviceDiscoveryType;
     if (this.jhipsterConfig.applicationType === GATEWAY) {
-      this.reactive = this.jhipsterConfig.reactive = answers.reactive = true;
+      this.jhipsterConfig.reactive = answers.reactive = true;
     } else {
-      this.reactive = this.jhipsterConfig.reactive = answers.reactive;
+      this.jhipsterConfig.reactive = answers.reactive;
     }
-    this.authenticationType = this.jhipsterConfig.authenticationType = answers.authenticationType;
+    this.jhipsterConfig.authenticationType = answers.authenticationType;
 
-    this.packageName = this.jhipsterConfig.packageName = answers.packageName;
-    this.serverPort = this.jhipsterConfig.serverPort = answers.serverPort || '8080';
-    this.cacheProvider = this.jhipsterConfig.cacheProvider = !answers.reactive ? answers.cacheProvider : NO_CACHE_PROVIDER;
-    this.enableHibernateCache = this.jhipsterConfig.enableHibernateCache = !!answers.enableHibernateCache;
+    this.jhipsterConfig.packageName = answers.packageName;
+    this.jhipsterConfig.serverPort = answers.serverPort || '8080';
+    this.jhipsterConfig.cacheProvider = !answers.reactive ? answers.cacheProvider : NO_CACHE_PROVIDER;
+    this.jhipsterConfig.enableHibernateCache = !!answers.enableHibernateCache;
 
     const { databaseType } = answers;
-    this.databaseType = this.jhipsterConfig.databaseType = databaseType;
-    this.devDatabaseType = this.jhipsterConfig.devDatabaseType = answers.devDatabaseType || databaseType;
-    this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType = answers.prodDatabaseType || databaseType;
-    this.searchEngine = this.jhipsterConfig.searchEngine = answers.searchEngine;
-    this.buildTool = this.jhipsterConfig.buildTool = answers.buildTool;
-    this.enableGradleEnterprise = this.jhipsterConfig.enableGradleEnterprise = answers.enableGradleEnterprise;
-    this.gradleEnterpriseHost = this.jhipsterConfig.gradleEnterpriseHost = answers.gradleEnterpriseHost;
+    this.jhipsterConfig.databaseType = databaseType;
+    this.jhipsterConfig.devDatabaseType = answers.devDatabaseType || databaseType;
+    this.jhipsterConfig.prodDatabaseType = answers.prodDatabaseType || databaseType;
+    this.jhipsterConfig.searchEngine = answers.searchEngine;
+    this.jhipsterConfig.buildTool = answers.buildTool;
+    this.jhipsterConfig.enableGradleEnterprise = answers.enableGradleEnterprise;
+    this.jhipsterConfig.gradleEnterpriseHost = answers.gradleEnterpriseHost;
   });
 }
 
@@ -379,20 +379,14 @@ function askForOptionalItems() {
 
   if (choices.length > 0) {
     return this.prompt(PROMPTS).then(answers => {
-      this.serverSideOptions = this.jhipsterConfig.serverSideOptions = answers.serverSideOptions;
-      this.websocket = this.jhipsterConfig.websocket = this.getOptionFromArray(answers.serverSideOptions, 'websocket');
-      this.searchEngine = this.jhipsterConfig.searchEngine = this.getOptionFromArray(answers.serverSideOptions, 'searchEngine');
-      this.messageBroker = this.jhipsterConfig.messageBroker = this.getOptionFromArray(answers.serverSideOptions, 'messageBroker');
-      this.enableSwaggerCodegen = this.jhipsterConfig.enableSwaggerCodegen = this.getOptionFromArray(
-        answers.serverSideOptions,
-        'enableSwaggerCodegen'
-      );
+      this.jhipsterConfig.serverSideOptions = answers.serverSideOptions;
+      this.jhipsterConfig.websocket = this.getOptionFromArray(answers.serverSideOptions, 'websocket');
+      this.jhipsterConfig.searchEngine = this.getOptionFromArray(answers.serverSideOptions, 'searchEngine');
+      this.jhipsterConfig.messageBroker = this.getOptionFromArray(answers.serverSideOptions, 'messageBroker');
+      this.jhipsterConfig.enableSwaggerCodegen = this.getOptionFromArray(answers.serverSideOptions, 'enableSwaggerCodegen');
       // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
       if (!this.jhipsterConfig.serviceDiscoveryType) {
-        this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = this.getOptionFromArray(
-          answers.serverSideOptions,
-          'serviceDiscoveryType'
-        );
+        this.jhipsterConfig.serviceDiscoveryType = this.getOptionFromArray(answers.serverSideOptions, 'serviceDiscoveryType');
       }
     });
   }

@@ -28,7 +28,7 @@ const { createBaseNeedle } = require('../../lib/support/needles.cjs');
 /**
  * Insert content into ApplicationProperties class
  * @example
- * insertContentIntoApplicationProperties(generator, {
+ * insertContentIntoApplicationProperties(generator, application, {
  *   property: 'private final bar = new Bar();',
  *   proppertyGetter: `
  * public getBar() {
@@ -55,10 +55,11 @@ const { createBaseNeedle } = require('../../lib/support/needles.cjs');
  *   });
  * );
  * @param {import('../generator-base.js')} [generator]
+ * @param {any} context
  * @param {ApplicationPropertiesNeedles} needles
  * @returns {import('../../generators/generator-base.js').CascatedEditFileCallback | import('../../generators/generator-base.js').EditFileCallback}
  */
-const insertContentIntoApplicationProperties = (generator, needles) => {
+const insertContentIntoApplicationProperties = (generator, data, needles) => {
   if (!needles) {
     needles = generator;
     generator = null;
@@ -67,7 +68,7 @@ const insertContentIntoApplicationProperties = (generator, needles) => {
   return createBaseNeedle(
     {
       generator,
-      filePath: generator ? `${generator.SERVER_MAIN_SRC_DIR}${generator.javaDir}config/ApplicationProperties.java` : undefined,
+      filePath: generator ? `${data.SERVER_MAIN_SRC_DIR}${data.javaDir}config/ApplicationProperties.java` : undefined,
       needlesPrefix: 'application-properties',
     },
     needles

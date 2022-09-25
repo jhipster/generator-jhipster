@@ -3006,6 +3006,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
       dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
       dest.lowercaseBaseName = dest.baseName.toLowerCase();
+      dest.upperFirstCamelCaseBaseName = this.upperFirstCamelCase(dest.baseName);
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
       dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
@@ -3115,6 +3116,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseType = config.databaseType;
     dest.devDatabaseType = config.devDatabaseType;
     dest.prodDatabaseType = config.prodDatabaseType;
+    dest.incrementalChangelog = config.incrementalChangelog;
     dest.reactive = config.reactive;
     dest.searchEngine = config.searchEngine;
     dest.cacheProvider = config.cacheProvider;
