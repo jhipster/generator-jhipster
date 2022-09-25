@@ -20,19 +20,7 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 
-const BaseApplicationGenerator = require('../generator-base-application.cjs');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  COMPOSING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-  DEFAULT_PRIORITY,
-  WRITING_PRIORITY,
-  POST_WRITING_PRIORITY,
-  END_PRIORITY,
-} = require('../../lib/constants/priorities.cjs').compat;
+const BaseApplicationGenerator = require('../base-application/generator.cjs');
 
 const prompts = require('./prompts');
 const { cleanup: cleanupAngular, writeFiles: writeAngularFiles } = require('./files-angular');
@@ -101,7 +89,7 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     }
   }
 
-  _initializing() {
+  get initializing() {
     return this.asInitialingTaskGroup({
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -120,11 +108,11 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [INITIALIZING_PRIORITY]() {
-    return this.asInitialingTaskGroup(this.delegateToBlueprint ? {} : this._initializing());
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.asInitialingTaskGroup(this.delegateToBlueprint ? {} : this.initializing);
   }
 
-  _prompting() {
+  get prompting() {
     return this.asPromptingTaskGroup({
       askForModuleName: prompts.askForModuleName,
       askForClient: prompts.askForClient,
@@ -134,11 +122,11 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [PROMPTING_PRIORITY]() {
-    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this._prompting());
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this.prompting);
   }
 
-  _configuring() {
+  get configuring() {
     return this.asConfiguringTaskGroup({
       configureGlobal() {
         // Make constants available in templates
@@ -174,11 +162,11 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [CONFIGURING_PRIORITY]() {
-    return this.asConfiguringTaskGroup(this.delegateToBlueprint ? {} : this._configuring());
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.asConfiguringTaskGroup(this.delegateToBlueprint ? {} : this.configuring);
   }
 
-  _composing() {
+  get composing() {
     return this.asComposingTaskGroup({
       async composeCommon() {
         await this.composeWithJHipster(GENERATOR_COMMON, true);
@@ -197,11 +185,11 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [COMPOSING_PRIORITY]() {
-    return this.asComposingTaskGroup(this.delegateToBlueprint ? {} : this._composing());
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.asComposingTaskGroup(this.delegateToBlueprint ? {} : this.composing);
   }
 
-  _loading() {
+  get loading() {
     return this.asLoadingTaskGroup({
       loadSharedConfig() {
         const application = this.application;
@@ -234,12 +222,12 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [LOADING_PRIORITY]() {
-    return this.asLoadingTaskGroup(this.delegateToBlueprint ? {} : this._loading());
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.asLoadingTaskGroup(this.delegateToBlueprint ? {} : this.loading);
   }
 
   // Public API method used by the getter and also by Blueprints
-  _preparing() {
+  get preparing() {
     return this.asPreparingTaskGroup({
       microservice() {
         const application = this.application;
@@ -274,12 +262,12 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [PREPARING_PRIORITY]() {
-    return this.asPreparingTaskGroup(this.delegateToBlueprint ? {} : this._preparing());
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.asPreparingTaskGroup(this.delegateToBlueprint ? {} : this.preparing);
   }
 
   // Public API method used by the getter and also by Blueprints
-  _default() {
+  get default() {
     return this.asDefaultTaskGroup({
       loadUserManagementEntities() {
         if (!this.configOptions.sharedEntities || !this.configOptions.sharedEntities.User) return;
@@ -312,12 +300,12 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [DEFAULT_PRIORITY]() {
-    return this.asDefaultTaskGroup(this.delegateToBlueprint ? {} : this._default());
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.asDefaultTaskGroup(this.delegateToBlueprint ? {} : this.default);
   }
 
   // Public API method used by the getter and also by Blueprints
-  _writing() {
+  get writing() {
     return this.asWritingTaskGroup({
       cleanupAngular,
       writeAngularFiles,
@@ -329,11 +317,11 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [WRITING_PRIORITY]() {
-    return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this._writing());
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this.writing);
   }
 
-  _postWriting() {
+  get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts() {
         const application = this.application;
@@ -375,12 +363,12 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [POST_WRITING_PRIORITY]() {
-    return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this._postWriting());
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
   }
 
   // Public API method used by the getter and also by Blueprints
-  _end() {
+  get end() {
     return this.asEndTaskGroup({
       end() {
         const application = this.application;
@@ -393,8 +381,8 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [END_PRIORITY]() {
-    return this.asEndTaskGroup(this.delegateToBlueprint ? {} : this._end());
+  get [BaseApplicationGenerator.END]() {
+    return this.asEndTaskGroup(this.delegateToBlueprint ? {} : this.end);
   }
 
   /**

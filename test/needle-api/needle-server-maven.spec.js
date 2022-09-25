@@ -16,7 +16,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
     this.sbsBlueprint = true;
   }
 
-  get writing() {
+  get [ServerGenerator.WRITING]() {
     const customPhaseSteps = {
       mavenStep() {
         this.addMavenDependencyManagement(

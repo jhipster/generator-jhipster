@@ -19,7 +19,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     this.sbsBlueprint = true;
   }
 
-  get postWriting() {
+  get [ClientGenerator.POST_WRITING]() {
     const customPhaseSteps = {
       addExternalResourcesToRootStep() {
         this.addExternalResourcesToRoot('<link rel="stylesheet" href="content/css/my.css">', 'Comment added by JHipster API');

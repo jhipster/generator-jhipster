@@ -16,9 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseGenerator = require('../generator-base');
-
-/*
- * Register generator-base at yeoman-environment
- */
-module.exports = BaseGenerator;
+export { default } from './generator.cjs';

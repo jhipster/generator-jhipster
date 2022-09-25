@@ -29,7 +29,6 @@ const os = require('os');
 const normalize = require('normalize-path');
 const simpleGit = require('simple-git');
 
-const SharedData = require('../lib/support/shared-data.cjs');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -204,23 +203,6 @@ class JHipsterBaseGenerator extends PrivateBase {
    */
   getPossibleDependencies() {
     return [];
-  }
-
-  /**
-   * Shared Data
-   */
-  get sharedData() {
-    if (!this._sharedData) {
-      const { baseName } = this.jhipsterConfig;
-      if (!baseName) {
-        throw new Error('baseName is required');
-      }
-      if (!this.options.sharedData[baseName]) {
-        this.options.sharedData[baseName] = {};
-      }
-      this._sharedData = new SharedData(this.options.sharedData[baseName]);
-    }
-    return this._sharedData;
   }
 
   /**
@@ -1593,7 +1575,11 @@ class JHipsterBaseGenerator extends PrivateBase {
         try {
           generator = require.resolve(`./${generator}/index.cjs`);
         } catch (e) {
-          throw new Error(`Generator ${generator} was not found`);
+          try {
+            generator = require.resolve(`./${generator}/index.mjs`);
+          } catch (e) {
+            throw new Error(`Generator ${generator} was not found`);
+          }
         }
       }
     }

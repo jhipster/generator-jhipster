@@ -22,7 +22,7 @@ const path = require('path');
 const cliUtils = require('./utils');
 const packageJson = require('../package.json');
 
-const { logger } = cliUtils;
+const { logger, toString } = cliUtils;
 
 const downloadFile = (url, filename) => {
   return new Promise((resolve, reject) => {

@@ -2,7 +2,7 @@ import yeomanTest from 'yeoman-test';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 // eslint-disable-next-line import/no-unresolved
-import { EnvironmentBuilder } from 'generator-jhipster/esm/cli';
+import { EnvironmentBuilder } from 'generator-jhipster/cli';
 
 const { createHelpers } = yeomanTest;
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');

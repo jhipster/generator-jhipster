@@ -16,4 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './index.js';
+
+/*
+ * Register generator-base at yeoman-environment
+ */
+export { default } from './generator.cjs';

@@ -25,7 +25,7 @@ const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, LOADING_PRIORITY, DEFAULT_PRI
   require('../../lib/constants/priorities.cjs').compat;
 
 const constants = require('../generator-constants');
-const prompts = require('./prompts');
+const prompts = require('./prompts.cjs');
 const statistics = require('../statistics');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const cacheProviders = require('../../jdl/jhipster/cache-types');
