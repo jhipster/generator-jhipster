@@ -124,7 +124,7 @@ _%>
   <%_ } _%>
 <%_ } _%>
 
-<%_ const idNames = primaryKey ? [...primaryKey.fields.map(f => f.propertyName)] : [] _%>
+<%_ const idNames = primaryKey ? (primaryKey.composite ? Array.from(new Set(primaryKey.fields.map(f => f.path[0]))) : [primaryKey.name]) : [] _%>
     @Override
     public boolean equals(Object o) {
         if (this == o) {

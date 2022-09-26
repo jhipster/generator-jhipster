@@ -67,6 +67,7 @@ type ClientAddedEntityProperties = {
   tsSampleWithFullData?: string;
   tsSampleWithNewData?: string;
   tsPrimaryKeySamples?: string[];
+  tsPrimaryKeyRouteParamsSamples?: string[];
 
   entityAngularJSSuffix: string;
 };
