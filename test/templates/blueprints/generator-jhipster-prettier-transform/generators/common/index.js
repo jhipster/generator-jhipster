@@ -1,5 +1,5 @@
 module.exports = {
-    createGenerator: env => class extends env.requireGenerator('jhipster:common') {
+    createGenerator: async env => class extends (await env.requireGenerator('jhipster:common')) {
         constructor(args, opts, features) {
             super(args, opts, features);
             this.sbsBlueprint = true;

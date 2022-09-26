@@ -16,7 +16,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
     this.sbsBlueprint = true;
   }
 
-  get writing() {
+  get [ServerGenerator.POST_WRITING]() {
     const customPhaseSteps = {
       gradleStep() {
         this.addGradleProperty('name', 'value');

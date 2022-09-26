@@ -44,7 +44,12 @@ const { prepareFieldForTemplates } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
 
-/* eslint-disable consistent-return */
+/**
+ * Base class for a generator that can be extended through a blueprint.
+ *
+ * @class
+ * @extends {BaseBlueprintGenerator}
+ */
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
@@ -314,9 +319,9 @@ module.exports = class extends BaseBlueprintGenerator {
   _writeLiquibaseFiles() {
     const promises = [];
     // Write initial liquibase files
-    promises.push(this.writeFilesToDisk(addEntityFiles, this, false, this.sourceRoot()));
+    promises.push(this.writeFiles({ sections: addEntityFiles }));
     if (!this.skipFakeData) {
-      promises.push(this.writeFilesToDisk(fakeFiles, this, false, this.sourceRoot()));
+      promises.push(this.writeFiles({ sections: fakeFiles }));
     }
 
     return Promise.all(promises);
@@ -357,17 +362,17 @@ module.exports = class extends BaseBlueprintGenerator {
     );
 
     const promises = [];
-    promises.push(this.writeFilesToDisk(updateEntityFiles, this, false, this.sourceRoot()));
+    promises.push(this.writeFiles({ sections: updateEntityFiles }));
 
     if (!this.skipFakeData && (this.addedFields.length > 0 || this.shouldWriteAnyRelationship)) {
       this.fields = this.addedFields;
       this.relationships = this.addedRelationships;
-      promises.push(this.writeFilesToDisk(fakeFiles, this, false, this.sourceRoot()));
-      promises.push(this.writeFilesToDisk(updateMigrateFiles, this, false, this.sourceRoot()));
+      promises.push(this.writeFiles({ sections: fakeFiles }));
+      promises.push(this.writeFiles({ sections: updateMigrateFiles }));
     }
 
     if (this.hasFieldConstraint || this.shouldWriteAnyRelationship) {
-      promises.push(this.writeFilesToDisk(updateConstraintsFiles, this, false, this.sourceRoot()));
+      promises.push(this.writeFiles({ sections: updateConstraintsFiles }));
     }
     return Promise.all(promises);
   }

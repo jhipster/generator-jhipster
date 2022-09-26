@@ -21,10 +21,6 @@ import { expect } from 'expect';
 describe('Public api', () => {
   it('generator-jhipster/generators should match snapshot', async () => {
     // eslint-disable-next-line import/no-unresolved
-    expect(await import('generator-jhipster/esm/generators')).toMatchSnapshot();
-  });
-  it('generator-jhipster/priorities should match snapshot', async () => {
-    // eslint-disable-next-line import/no-unresolved
-    expect(await import('generator-jhipster/esm/priorities')).toMatchSnapshot();
+    expect(await import('generator-jhipster/generators')).toMatchSnapshot();
   });
 });

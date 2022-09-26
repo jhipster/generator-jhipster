@@ -1,4 +1,4 @@
-const createGenerator = env => class extends env.requireGenerator('jhipster:app') {
+const createGenerator = async env => class extends (await env.requireGenerator('jhipster:app')) {
     constructor(args, opts, features) {
         super(args, opts, { taskPrefix: '>', ...features });
 

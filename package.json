@@ -35,23 +35,15 @@
     "url": "https://github.com/jdubois"
   },
   "exports": {
-    ".": {
-      "import": "./dist/lib/index.mjs",
-      "default": "./dist/lib/index.js"
-    },
-    "./cli/": "./dist/cli/",
-    "./generators/": "./dist/generators/",
-    "./jdl/": "./dist/jdl/",
-    "./lib/": "./dist/lib/",
-    "./utils/": "./dist/utils/",
+    ".": "./dist/lib/index.mjs",
+    "./cli": "./dist/cli/index.mjs",
     "./package.json": "./package.json",
-    "./esm/cli": "./cli/index.mjs",
-    "./esm/generators/*": "./generators/*/esm.mjs",
-    "./esm/generators": "./lib/constants/generators.mjs",
-    "./esm/priorities": "./lib/constants/priorities.mjs",
-    "./esm/support": "./lib/support/index.cjs"
+    "./generators": "./dist/lib/constants/generators.mjs",
+    "./generators/*": "./dist/generators/*/index.mjs",
+    "./priorities": "./dist/lib/constants/priorities.mjs",
+    "./jdl/": "./dist/jdl/"
   },
-  "main": "dist/lib/index.js",
+  "main": "dist/lib/index.mjs",
   "bin": {
     "jhipster": "dist/cli/jhipster.js"
   },

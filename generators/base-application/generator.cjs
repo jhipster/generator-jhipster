@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseBlueprintGenerator = require('./generator-base-blueprint');
-const { CUSTOM_PRIORITIES_ENTITIES, PRIORITY_NAMES, QUEUES } = require('../lib/constants/priorities.cjs');
+const BaseBlueprintGenerator = require('../base/generator.cjs');
+const { CUSTOM_PRIORITIES_ENTITIES, PRIORITY_NAMES, QUEUES, PRIORITY_PREFIX } = require('../../lib/constants/priorities.cjs');
+const SharedData = require('../../lib/support/shared-data.cjs');
 
 const {
   LOADING,
   PREPARING,
-
   CONFIGURING_EACH_ENTITY,
   LOADING_EACH_ENTITY,
   PREPARING_EACH_ENTITY,
@@ -52,6 +52,8 @@ const {
   POST_WRITING_ENTITIES_QUEUE,
 } = QUEUES;
 
+const asPriority = BaseBlueprintGenerator.asPriority;
+
 /**
  * This is the base class for a generator that generates entities.
  *
@@ -59,9 +61,27 @@ const {
  * @template ApplicationType
  * @extends {BaseBlueprintGenerator<ApplicationType>}
  */
-class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
+class BaseApplicationGenerator extends BaseBlueprintGenerator {
+  static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
+
+  static LOADING_EACH_ENTITY = asPriority(LOADING_EACH_ENTITY);
+
+  static PREPARING_EACH_ENTITY = asPriority(PREPARING_EACH_ENTITY);
+
+  static PREPARING_EACH_ENTITY_FIELD = asPriority(PREPARING_EACH_ENTITY_FIELD);
+
+  static PREPARING_EACH_ENTITY_RELATIONSHIP = asPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
+
+  static POST_PREPARING_EACH_ENTITY = asPriority(POST_PREPARING_EACH_ENTITY);
+
+  static WRITING_ENTITIES = asPriority(WRITING_ENTITIES);
+
+  static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
+
+  #sharedData;
+
   constructor(args, options, features) {
-    super(args, options, { priorityArgs: true, ...features });
+    super(args, options, { priorityArgs: true, taskPrefix: PRIORITY_PREFIX, ...features });
 
     if (this.options.help) {
       return;
@@ -123,8 +143,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').InitializingTaskGroup<this>} taskGroup
-   * @returns {import('../types/tasks').InitializingTaskGroup<this>}
+   * @param {import('../../types/tasks').InitializingTaskGroup<this>} taskGroup
+   * @returns {import('../../types/tasks').InitializingTaskGroup<this>}
    */
   asInitialingTaskGroup(taskGroup) {
     return taskGroup;
@@ -133,8 +153,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').ConfiguringTaskGroup<this>} taskGroup
-   * @returns {import('../types/tasks').ConfiguringTaskGroup<this>}
+   * @param {import('../../types/tasks').ConfiguringTaskGroup<this>} taskGroup
+   * @returns {import('../../types/tasks').ConfiguringTaskGroup<this>}
    */
   asConfiguringTaskGroup(taskGroup) {
     return taskGroup;
@@ -143,8 +163,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').PromptingTaskGroup<this>} taskGroup
-   * @returns {import('../types/tasks').PromptingTaskGroup<this>}
+   * @param {import('../../types/tasks').PromptingTaskGroup<this>} taskGroup
+   * @returns {import('../../types/tasks').PromptingTaskGroup<this>}
    */
   asPromptingTaskGroup(taskGroup) {
     return taskGroup;
@@ -153,8 +173,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').ComposingTaskGroup<this>} taskGroup
-   * @returns {import('../types/tasks').ComposingTaskGroup<this>}
+   * @param {import('../../types/tasks').ComposingTaskGroup<this>} taskGroup
+   * @returns {import('../../types/tasks').ComposingTaskGroup<this>}
    */
   asComposingTaskGroup(taskGroup) {
     return taskGroup;
@@ -163,8 +183,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').LoadingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').LoadingTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').LoadingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').LoadingTaskGroup<this, ApplicationType>}
    */
   asLoadingTaskGroup(taskGroup) {
     return taskGroup;
@@ -173,8 +193,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').PreparingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').PreparingTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').PreparingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').PreparingTaskGroup<this, ApplicationType>}
    */
   asPreparingTaskGroup(taskGroup) {
     return taskGroup;
@@ -183,8 +203,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').ConfiguringEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').ConfiguringEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').ConfiguringEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').ConfiguringEachEntityTaskGroup<this, ApplicationType>}
    */
   asConfiguringEachEntityTaskGroup(taskGroup) {
     return taskGroup;
@@ -193,8 +213,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').LoadingEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').LoadingEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').LoadingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').LoadingEachEntityTaskGroup<this, ApplicationType>}
    */
   asLoadingEachEntityTaskGroup(taskGroup) {
     return taskGroup;
@@ -203,8 +223,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').PreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').PreparingEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').PreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').PreparingEachEntityTaskGroup<this, ApplicationType>}
    */
   asPreparingEachEntityTaskGroup(taskGroup) {
     return taskGroup;
@@ -213,8 +233,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').PreparingEachEntityFieldTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').PreparingEachEntityFieldTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').PreparingEachEntityFieldTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').PreparingEachEntityFieldTaskGroup<this, ApplicationType>}
    */
   asPreparingEachEntityFieldTaskGroup(taskGroup) {
     return taskGroup;
@@ -223,8 +243,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>}
    */
   asPreparingEachEntityRelationshipTaskGroup(taskGroup) {
     return taskGroup;
@@ -233,8 +253,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').PostPreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').PostPreparingEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').PostPreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').PostPreparingEachEntityTaskGroup<this, ApplicationType>}
    */
   asPostPreparingEachEntityTaskGroup(taskGroup) {
     return taskGroup;
@@ -243,8 +263,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').DefaultTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').DefaultTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').DefaultTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').DefaultTaskGroup<this, ApplicationType>}
    */
   asDefaultTaskGroup(taskGroup) {
     return taskGroup;
@@ -253,8 +273,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').WritingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').WritingTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').WritingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').WritingTaskGroup<this, ApplicationType>}
    */
   asWritingTaskGroup(taskGroup) {
     return taskGroup;
@@ -263,8 +283,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').WritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').WritingEntitiesTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').WritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').WritingEntitiesTaskGroup<this, ApplicationType>}
    */
   asWritingEntitiesTaskGroup(taskGroup) {
     return taskGroup;
@@ -273,8 +293,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').PostWritingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').PostWritingTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').PostWritingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').PostWritingTaskGroup<this, ApplicationType>}
    */
   asPostWritingTaskGroup(taskGroup) {
     return taskGroup;
@@ -283,8 +303,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').PostWritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').PostWritingEntitiesTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').PostWritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').PostWritingEntitiesTaskGroup<this, ApplicationType>}
    */
   asPostWritingEntitiesTaskGroup(taskGroup) {
     return taskGroup;
@@ -293,8 +313,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').InstallTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').InstallTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').InstallTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').InstallTaskGroup<this, ApplicationType>}
    */
   asInstallTaskGroup(taskGroup) {
     return taskGroup;
@@ -303,8 +323,8 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').PostInstallTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').PostInstallTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').PostInstallTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').PostInstallTaskGroup<this, ApplicationType>}
    */
   asPostInstallTaskGroup(taskGroup) {
     return taskGroup;
@@ -313,11 +333,28 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../types/tasks').EndTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../types/tasks').EndTaskGroup<this, ApplicationType>}
+   * @param {import('../../types/tasks').EndTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('../../types/tasks').EndTaskGroup<this, ApplicationType>}
    */
   asEndTaskGroup(taskGroup) {
     return taskGroup;
+  }
+
+  /**
+   * Shared Data
+   */
+  get sharedData() {
+    if (!this.#sharedData) {
+      const { baseName } = this.jhipsterConfig;
+      if (!baseName) {
+        throw new Error('baseName is required');
+      }
+      if (!this.options.sharedData[baseName]) {
+        this.options.sharedData[baseName] = {};
+      }
+      this.#sharedData = new SharedData(this.options.sharedData[baseName]);
+    }
+    return this.#sharedData;
   }
 
   /**
@@ -623,4 +660,4 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   }
 }
 
-module.exports = JHipsterBaseEntitiesGenerator;
+module.exports = BaseApplicationGenerator;

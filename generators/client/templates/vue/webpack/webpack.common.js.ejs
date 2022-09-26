@@ -71,7 +71,7 @@ module.exports = async (env, options) => {
 <%_ } _%>
               '/auth'
             ],
-            target: 'http://localhost:<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+            target: 'http://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
             secure: false,
           },
 <%_ if (communicationSpringWebsocket) { _%>
@@ -79,7 +79,7 @@ module.exports = async (env, options) => {
             context: [
               '/websocket'
             ],
-            target: 'ws://localhost:<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+            target: 'ws://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
             ws: true
           }
 <%_ } _%>

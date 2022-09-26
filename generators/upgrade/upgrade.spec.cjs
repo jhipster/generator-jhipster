@@ -4,9 +4,9 @@ const helpers = require('yeoman-test');
 const shelljs = require('shelljs');
 const fse = require('fs-extra');
 const { expect } = require('expect');
-const packageJson = require('../package.json');
-const { prepareTempDir } = require('./utils/utils');
-const { escapeRegExp } = require('../generators/utils');
+const packageJson = require('../../package.json');
+const { prepareTempDir } = require('../../test/utils/utils');
+const { escapeRegExp } = require('../utils');
 
 describe('JHipster upgrade generator', function () {
   this.timeout(400000);
@@ -16,7 +16,7 @@ describe('JHipster upgrade generator', function () {
     before(async () => {
       cleanup = prepareTempDir();
       await helpers
-        .create(path.join(__dirname, '../generators/app'), { tmpdir: false })
+        .create(path.join(__dirname, '../app'), { tmpdir: false })
         .withOptions({
           baseName: 'upgradeTest',
           skipInstall: true,
@@ -31,7 +31,7 @@ describe('JHipster upgrade generator', function () {
         .run()
         .then(() => {
           return helpers
-            .create(path.join(__dirname, '../generators/upgrade'), { tmpdir: false })
+            .create(path.join(__dirname, './index.mjs'), { tmpdir: false })
             .withOptions({
               fromCli: true,
               force: true,

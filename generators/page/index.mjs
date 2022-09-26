@@ -16,5 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './index.js';
-export { angularFiles, reactFiles, vueFiles, commonFiles } from './files.js';
+export { default } from './generator.cjs';

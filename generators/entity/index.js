@@ -577,7 +577,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
           });
         }
 
-        if (!context.skipClient || this.application.applicationType === GATEWAY) {
+        let { skipClient } = context;
+        if (this.application.applicationType === MICROSERVICE && !this.application.clientFrameworkAny) {
+          // If microservices, write entity client only if microfrontend
+          skipClient = true;
+        }
+
+        if (!skipClient || this.application.applicationType === GATEWAY) {
           await this.composeWithJHipster(GENERATOR_ENTITY_CLIENT, this.arguments, {
             context,
             application,
@@ -703,8 +709,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         preparePostEntityCommonDerivedProperties(this.context);
         preparePostEntitiesCommonDerivedProperties(Object.values(this.configOptions.sharedEntities));
-
-        this._.defaults(this.context, this.application);
       },
 
       insight() {

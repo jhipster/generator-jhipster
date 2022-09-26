@@ -69,10 +69,7 @@ Object {
       "path": "src/main/docker/",
       "templates": Array [
         "consul.yml",
-        Object {
-          "file": "config/git2consul.json",
-          "method": "copy",
-        },
+        "config/git2consul.json",
         Object {
           "file": "config/consul-config/application.yml",
           "renameTo": [Function],
@@ -208,17 +205,14 @@ Object {
         "gradle/zipkin.gradle",
         Object {
           "file": "gradlew",
-          "method": "copy",
           "noEjs": true,
         },
         Object {
           "file": "gradlew.bat",
-          "method": "copy",
           "noEjs": true,
         },
         Object {
           "file": "gradle/wrapper/gradle-wrapper.jar",
-          "method": "copy",
           "noEjs": true,
         },
         "gradle/wrapper/gradle-wrapper.properties",
@@ -235,27 +229,22 @@ Object {
       "templates": Array [
         Object {
           "file": "mvnw",
-          "method": "copy",
           "noEjs": true,
         },
         Object {
           "file": "mvnw.cmd",
-          "method": "copy",
           "noEjs": true,
         },
         Object {
           "file": ".mvn/jvm.config",
-          "method": "copy",
           "noEjs": true,
         },
         Object {
           "file": ".mvn/wrapper/maven-wrapper.jar",
-          "method": "copy",
           "noEjs": true,
         },
         Object {
           "file": ".mvn/wrapper/maven-wrapper.properties",
-          "method": "copy",
           "noEjs": true,
         },
         Object {
@@ -271,12 +260,10 @@ Object {
       "templates": Array [
         Object {
           "file": "npmw",
-          "method": "copy",
           "noEjs": true,
         },
         Object {
           "file": "npmw.cmd",
-          "method": "copy",
           "noEjs": true,
         },
       ],
@@ -1508,7 +1495,6 @@ Object {
       "templates": Array [
         Object {
           "file": "banner-react.txt",
-          "method": "copy",
           "noEjs": true,
           "renameTo": [Function],
         },
@@ -1520,7 +1506,6 @@ Object {
       "templates": Array [
         Object {
           "file": "banner-vue.txt",
-          "method": "copy",
           "noEjs": true,
           "renameTo": [Function],
         },
@@ -1532,7 +1517,6 @@ Object {
       "templates": Array [
         Object {
           "file": "banner.txt",
-          "method": "copy",
           "noEjs": true,
         },
       ],
@@ -1547,10 +1531,7 @@ Object {
     Object {
       "path": "src/main/resources/",
       "templates": Array [
-        Object {
-          "file": "templates/error.html",
-          "method": "copy",
-        },
+        "templates/error.html",
         "logback-spring.xml",
         "config/application.yml",
         "config/application-dev.yml",
@@ -1640,10 +1621,7 @@ Object {
         "config/cql/create-keyspace-prod.cql",
         "config/cql/create-keyspace.cql",
         "config/cql/drop-keyspace.cql",
-        Object {
-          "file": "config/cql/changelog/README.md",
-          "method": "copy",
-        },
+        "config/cql/changelog/README.md",
       ],
     },
     Object {

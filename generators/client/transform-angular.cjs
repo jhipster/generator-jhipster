@@ -96,9 +96,6 @@ function replaceErrorMessage(generator, content) {
  * @this {import('../generator-base.js')}
  */
 function replaceAngularTranslations(content, filePath) {
-  if (this.enableTranslation) {
-    return content;
-  }
   if (/\.html$/.test(filePath)) {
     content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
     content = replacePlaceholders(this, content);

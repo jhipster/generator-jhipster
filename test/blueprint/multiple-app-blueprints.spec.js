@@ -15,14 +15,14 @@ const { EHCACHE } = require('../../jdl/jhipster/cache-types');
 const createMockBlueprint = function (parent, spy) {
   return class extends parent {
     constructor(args, opts, features) {
-      super(args, opts, features);
+      super(args, opts, { taskPrefix: '>', ...features });
 
       if (!this.options.jhipsterContext) {
         this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
       }
     }
 
-    spy() {
+    ['>spy']() {
       spy();
     }
   };

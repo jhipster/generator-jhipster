@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { runJHipster, done, logger } from 'generator-jhipster/esm/cli';
+import { runJHipster, done, logger } from 'generator-jhipster/cli';
 import { readFile } from 'fs/promises';
 import { fileURLToPath } from 'url';
 import { dirname, basename } from 'path';

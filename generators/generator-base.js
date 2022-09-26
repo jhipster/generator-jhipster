@@ -29,7 +29,6 @@ const os = require('os');
 const normalize = require('normalize-path');
 const simpleGit = require('simple-git');
 
-const SharedData = require('../lib/support/shared-data.cjs');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -44,7 +43,6 @@ const defaultApplicationOptions = require('../jdl/jhipster/default-application-o
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { databaseData } = require('./sql-constants');
 const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
-const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
 const { joinCallbacks } = require('../lib/support/base.cjs');
 
 const {
@@ -204,23 +202,6 @@ class JHipsterBaseGenerator extends PrivateBase {
    */
   getPossibleDependencies() {
     return [];
-  }
-
-  /**
-   * Shared Data
-   */
-  get sharedData() {
-    if (!this._sharedData) {
-      const { baseName } = this.jhipsterConfig;
-      if (!baseName) {
-        throw new Error('baseName is required');
-      }
-      if (!this.options.sharedData[baseName]) {
-        this.options.sharedData[baseName] = {};
-      }
-      this._sharedData = new SharedData(this.options.sharedData[baseName]);
-    }
-    return this._sharedData;
   }
 
   /**
@@ -453,7 +434,8 @@ class JHipsterBaseGenerator extends PrivateBase {
     enableTranslation,
     clientFramework = this.clientFramework,
     entityTranslationKeyMenu = _.camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName)
+    entityTranslationValue = _.startCase(routerName),
+    jhiPrefix = this.jhiPrefix
   ) {
     if (clientFramework === ANGULAR) {
       this.needleApi.clientAngular.addEntityToMenu(
@@ -461,7 +443,7 @@ class JHipsterBaseGenerator extends PrivateBase {
         enableTranslation,
         entityTranslationKeyMenu,
         entityTranslationValue,
-        this.jhiPrefix
+        jhiPrefix
       );
     } else if (clientFramework === REACT) {
       this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
@@ -550,8 +532,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addElementTranslationKey(key, value, language) {
-    this.needleApi.clientI18n.addElementTranslationKey(key, value, language);
+  addElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    this.needleApi.clientI18n.addElementTranslationKey(key, value, language, webappSrcDir);
   }
 
   /**
@@ -561,8 +543,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addAdminElementTranslationKey(key, value, language) {
-    this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language);
+  addAdminElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language, webappSrcDir);
   }
 
   /**
@@ -572,8 +554,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addEntityTranslationKey(key, value, language) {
-    this.needleApi.clientI18n.addEntityTranslationKey(key, value, language);
+  addEntityTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
   }
 
   /**
@@ -583,8 +565,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value or object with multiple key and translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addGlobalTranslationKey(key, value, language) {
-    const fullPath = `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
+  addGlobalTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    const fullPath = `${webappSrcDir}i18n/${language}/global.json`;
     try {
       jhipsterUtils.rewriteJSONFile(
         fullPath,
@@ -611,10 +593,10 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} method - The method to be run with provided key and value from above
    * @param {string} enableTranslation - specify if i18n is enabled
    */
-  addTranslationKeyToAllLanguages(key, value, method, enableTranslation) {
+  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
     if (enableTranslation) {
       this.getAllInstalledLanguages().forEach(language => {
-        this[method](key, value, language);
+        this[method](key, value, language, webappSrcDir);
       });
     }
   }
@@ -992,8 +974,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    *
    * @param {string} config - webpack config to be merged
    */
-  addWebpackConfig(config) {
-    this.needleApi.clientWebpack.addWebpackConfig(config);
+  addWebpackConfig(config, clientFramework) {
+    this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
   }
 
   /**
@@ -1228,15 +1210,6 @@ class JHipsterBaseGenerator extends PrivateBase {
    */
   addGradlePluginManagementRepository(url, username, password) {
     this.needleApi.serverGradle.addPluginManagementRepository(url, username, password);
-  }
-
-  /**
-   * Insert content into ApplicationProperties class
-   * @param {import("./server/needles.cjs").ApplicationPropertiesNeedles} needlesContent
-   * @returns {string} ApplicationProperties contents
-   */
-  insertContentIntoApplicationProperties(needlesContent) {
-    return insertContentIntoApplicationProperties(this, needlesContent);
   }
 
   /**
@@ -1593,7 +1566,11 @@ class JHipsterBaseGenerator extends PrivateBase {
         try {
           generator = require.resolve(`./${generator}/index.cjs`);
         } catch (e) {
-          throw new Error(`Generator ${generator} was not found`);
+          try {
+            generator = require.resolve(`./${generator}/index.mjs`);
+          } catch (e) {
+            throw new Error(`Generator ${generator} was not found`);
+          }
         }
       }
     }
@@ -2208,165 +2185,6 @@ class JHipsterBaseGenerator extends PrivateBase {
       stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
       buildCmd,
     };
-  }
-
-  /**
-   * write the given files using provided config.
-   *
-   * @param {object} files - files to write
-   * @param {object} [generator = this] - the generator instance to use
-   * @param {boolean} [returnFiles = false] - weather to return the generated file list or to write them
-   * @param {string|string[]} [rootTemplatesPath] - path(s) to look for templates.
-   *        Single absolute path or relative path(s) between the templates folder and template path.
-   * @return {string[]|Promise<string>} Filenames, promise when returnFiles is false
-   */
-  writeFilesToDisk(files, generator = this, returnFiles = false, rootTemplatesPath) {
-    if (typeof generator === 'string' || Array.isArray(generator)) {
-      rootTemplatesPath = generator;
-      generator = this;
-    } else if (typeof generator === 'boolean') {
-      rootTemplatesPath = returnFiles;
-      returnFiles = generator;
-      generator = this;
-    } else if (typeof returnFiles === 'string' || Array.isArray(returnFiles)) {
-      rootTemplatesPath = returnFiles;
-      returnFiles = false;
-    }
-    const _this = generator || this;
-    const filesOut = [];
-    const startTime = new Date();
-
-    /* Build lookup order first has preference.
-     * Example
-     * rootTemplatesPath = ['reactive', 'common']
-     * jhipsterTemplatesFolders = ['/.../generator-jhispter-blueprint/server/templates', '/.../generator-jhispter/server/templates']
-     *
-     * /.../generator-jhispter-blueprint/server/templates/reactive/templatePath
-     * /.../generator-jhispter-blueprint/server/templates/common/templatePath
-     * /.../generator-jhispter/server/templates/reactive/templatePath
-     * /.../generator-jhispter/server/templates/common/templatePath
-     */
-    let rootTemplatesAbsolutePath;
-    if (!rootTemplatesPath) {
-      rootTemplatesAbsolutePath = _this.jhipsterTemplatesFolders;
-    } else if (typeof rootTemplatesPath === 'string' && path.isAbsolute(rootTemplatesPath)) {
-      rootTemplatesAbsolutePath = rootTemplatesPath;
-    } else {
-      rootTemplatesPath = Array.isArray(rootTemplatesPath) ? rootTemplatesPath : [rootTemplatesPath];
-      rootTemplatesAbsolutePath = _this.jhipsterTemplatesFolders
-        .map(templateFolder =>
-          rootTemplatesPath.map(relativePath => (relativePath ? path.join(templateFolder, relativePath) : templateFolder))
-        )
-        .flat();
-    }
-
-    const writeTasks = Object.values(files).map(blockTemplates => {
-      return blockTemplates.map(blockTemplate => {
-        if (!blockTemplate.condition || blockTemplate.condition(_this)) {
-          const blockPath = blockTemplate.path || '';
-          return blockTemplate.templates.map(templateObj => {
-            let templatePath = blockPath;
-            let method = 'template';
-            let useTemplate = false;
-            let options = {};
-            let templatePathTo;
-            if (typeof templateObj === 'string') {
-              templatePath += templateObj;
-            } else {
-              if (typeof templateObj.file === 'string') {
-                templatePath += templateObj.file;
-              } else if (typeof templateObj.file === 'function') {
-                templatePath += templateObj.file(_this);
-              }
-              method = templateObj.method ? templateObj.method : method;
-              useTemplate = templateObj.template ? templateObj.template : useTemplate;
-              options = templateObj.options ? { ...templateObj.options } : options;
-            }
-            if (templateObj && templateObj.renameTo) {
-              templatePathTo = blockPath + templateObj.renameTo(_this);
-            } else {
-              // remove the .ejs suffix
-              templatePathTo = templatePath.replace('.ejs', '');
-            }
-
-            if (_this.destinationPath) {
-              templatePathTo = _this.destinationPath(templatePathTo);
-            }
-
-            if (templateObj.override !== undefined && _this.fs && _this.fs.exists(templatePathTo)) {
-              if (typeof templateObj.override === 'function') {
-                if (!templateObj.override(_this)) {
-                  this.debug(`skipping file ${templatePathTo}`);
-                  return Promise.resolve(templatePathTo);
-                }
-              } else if (!templateObj.override) {
-                this.debug(`skipping file ${templatePathTo}`);
-                return Promise.resolve(templatePathTo);
-              }
-            }
-
-            filesOut.push(templatePathTo);
-            if (!returnFiles) {
-              const ejs =
-                !templateObj.noEjs &&
-                !templatePath.endsWith('.png') &&
-                !templatePath.endsWith('.jpg') &&
-                !templatePath.endsWith('.gif') &&
-                !templatePath.endsWith('.svg') &&
-                !templatePath.endsWith('.ico');
-
-              let templatePathFrom;
-              if (Array.isArray(rootTemplatesAbsolutePath)) {
-                // Look for existing templates
-                const existingTemplates = rootTemplatesAbsolutePath
-                  .map(rootPath => _this.templatePath(rootPath, templatePath))
-                  .filter(templateFile => fs.existsSync(ejs ? `${templateFile}.ejs` : templateFile));
-
-                if (existingTemplates.length > 1) {
-                  const moreThanOneMessage = `Multiples templates were found for file ${templatePath}, using the first
-templates: ${JSON.stringify(existingTemplates, null, 2)}`;
-                  if (existingTemplates.length > 2) {
-                    generator.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
-                  } else {
-                    generator.debug(moreThanOneMessage);
-                  }
-                }
-                templatePathFrom = existingTemplates.shift();
-
-                if (templatePathFrom === undefined) {
-                  throw new Error(`Template file ${templatePath} was not found at ${rootTemplatesAbsolutePath}`);
-                }
-              } else if (rootTemplatesAbsolutePath) {
-                templatePathFrom = generator.templatePath(rootTemplatesAbsolutePath, templatePath);
-              } else {
-                templatePathFrom = generator.templatePath(templatePath);
-              }
-              if (ejs) {
-                templatePathFrom = `${templatePathFrom}.ejs`;
-              }
-              // Set root for ejs to lookup for partials.
-              options.root = rootTemplatesAbsolutePath;
-
-              // if (method === 'template')
-              let maybePromise = _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
-              maybePromise = maybePromise && maybePromise.then ? maybePromise : Promise.resolve(templatePathTo);
-              return maybePromise;
-            }
-            return undefined;
-          });
-        }
-        return undefined;
-      });
-    });
-    this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
-    return returnFiles
-      ? filesOut
-      : Promise.all(
-          writeTasks
-            .flat()
-            .flat()
-            .filter(filename => filename)
-        );
   }
 
   /**
@@ -3019,6 +2837,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
       dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
       dest.lowercaseBaseName = dest.baseName.toLowerCase();
+      dest.upperFirstCamelCaseBaseName = this.upperFirstCamelCase(dest.baseName);
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
       dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
@@ -3128,6 +2947,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseType = config.databaseType;
     dest.devDatabaseType = config.devDatabaseType;
     dest.prodDatabaseType = config.prodDatabaseType;
+    dest.incrementalChangelog = config.incrementalChangelog;
     dest.reactive = config.reactive;
     dest.searchEngine = config.searchEngine;
     dest.cacheProvider = config.cacheProvider;

@@ -85,7 +85,7 @@ spec:
 <%_ } _%>
 <%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb) { _%>
             - name: SPRING_DATASOURCE_URL
-              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
+              value: <%- this.getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
 <%_ } _%>
 <%_ if (app.prodDatabaseTypeMariadb) { _%>
             - name: SPRING_DATASOURCE_PASSWORD
@@ -96,7 +96,7 @@ spec:
 <%_ } _%>
 <%_ if (app.prodDatabaseTypePostgres) { _%>
             - name: SPRING_DATASOURCE_URL
-              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName }) %>
+              value: <%- this.getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName }) %>
             - name: SPRING_DATASOURCE_USERNAME
               value: <%= app.baseName %>
             - name: SPRING_DATASOURCE_PASSWORD

@@ -164,7 +164,9 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
       },
       writePrettierConfig() {
         // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
-        return this.writeFilesToDisk(prettierConfigFiles);
+        return this.writeFiles({
+          sections: prettierConfigFiles,
+        });
       },
       ...writeFiles(),
     };

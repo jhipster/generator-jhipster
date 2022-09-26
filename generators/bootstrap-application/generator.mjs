@@ -19,18 +19,7 @@
 import assert from 'assert';
 import lodash from 'lodash';
 
-import BaseApplicationGenerator from '../generator-base-application.cjs';
-import {
-  PRIORITY_PREFIX,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-  CONFIGURING_EACH_ENTITY_PRIORITY,
-  LOADING_EACH_ENTITY_PRIORITY,
-  PREPARING_EACH_ENTITY_PRIORITY,
-  PREPARING_EACH_ENTITY_FIELD_PRIORITY,
-  PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY,
-  POST_PREPARING_EACH_ENTITY_PRIORITY,
-} from '../../lib/constants/priorities.mjs';
+import BaseApplicationGenerator from '../base-application/generator.cjs';
 
 import validations from '../../jdl/jhipster/validations.js';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
@@ -62,11 +51,11 @@ const { stringify } = utils;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('./types').BaseApplication>}
+ * @extends {BaseApplicationGenerator<import('./types.js').BaseApplication>}
  */
 export default class extends BaseApplicationGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', taskPrefix: PRIORITY_PREFIX, ...features });
+    super(args, options, { unique: 'namespace', ...features });
 
     if (this.options.help) return;
 
@@ -97,7 +86,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [LOADING_PRIORITY]() {
+  get [BaseApplicationGenerator.LOADING]() {
     return this.loading;
   }
 
@@ -112,7 +101,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [PREPARING_PRIORITY]() {
+  get [BaseApplicationGenerator.PREPARING]() {
     return this.preparing;
   }
 
@@ -201,7 +190,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [CONFIGURING_EACH_ENTITY_PRIORITY]() {
+  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.configuringEachEntity;
   }
 
@@ -219,7 +208,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [LOADING_EACH_ENTITY_PRIORITY]() {
+  get [BaseApplicationGenerator.LOADING_EACH_ENTITY]() {
     return this.loadingEachEntity;
   }
 
@@ -231,7 +220,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [PREPARING_EACH_ENTITY_PRIORITY]() {
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.preparingEachEntity;
   }
 
@@ -256,7 +245,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [PREPARING_EACH_ENTITY_FIELD_PRIORITY]() {
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.preparingEachEntityField;
   }
 
@@ -276,7 +265,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY]() {
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.preparingEachEntityRelationship;
   }
 
@@ -353,7 +342,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [POST_PREPARING_EACH_ENTITY_PRIORITY]() {
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
     return this.postPreparingEachEntity;
   }
 }

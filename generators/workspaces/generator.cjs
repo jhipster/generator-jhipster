@@ -29,6 +29,12 @@ const {
 } = require('../../jdl/jhipster/deployment-options');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
+/**
+ * Base class for a generator that can be extended through a blueprint.
+ *
+ * @class
+ * @extends {BaseBlueprintGenerator}
+ */
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
@@ -160,23 +166,14 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   _writing() {
-    return {
+    return this.asWritingTaskGroup({
       async writeTemplates() {
         if (!this.generateWorkspaces) return;
-        await this.writeFilesToDisk(
-          {
-            base: [
-              {
-                templates: ['.gitignore'],
-              },
-            ],
-          },
-          this,
-          false,
-          this.fetchFromInstalledJHipster('workspaces/templates')
-        );
+        await this.writeFiles({
+          templates: ['.gitignore'],
+        });
       },
-    };
+    });
   }
 
   get [WRITING_PRIORITY]() {

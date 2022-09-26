@@ -28,28 +28,28 @@ const files = {
     {
       path: CLIENT_MAIN_SRC_DIR,
       templates: [
-        { file: 'content/images/jhipster_family_member_0.svg', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_0_head-192.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_0_head-256.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_0_head-384.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_0_head-512.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_1.svg', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_1_head-192.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_1_head-256.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_1_head-384.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_1_head-512.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_2.svg', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_2_head-192.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_2_head-256.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_2_head-384.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_2_head-512.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_3.svg', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_3_head-192.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_3_head-256.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_3_head-384.png', method: 'copy' },
-        { file: 'content/images/jhipster_family_member_3_head-512.png', method: 'copy' },
-        { file: 'content/images/logo-jhipster.png', method: 'copy' },
-        { file: 'favicon.ico', method: 'copy' },
+        { file: 'content/images/jhipster_family_member_0.svg' },
+        { file: 'content/images/jhipster_family_member_0_head-192.png' },
+        { file: 'content/images/jhipster_family_member_0_head-256.png' },
+        { file: 'content/images/jhipster_family_member_0_head-384.png' },
+        { file: 'content/images/jhipster_family_member_0_head-512.png' },
+        { file: 'content/images/jhipster_family_member_1.svg' },
+        { file: 'content/images/jhipster_family_member_1_head-192.png' },
+        { file: 'content/images/jhipster_family_member_1_head-256.png' },
+        { file: 'content/images/jhipster_family_member_1_head-384.png' },
+        { file: 'content/images/jhipster_family_member_1_head-512.png' },
+        { file: 'content/images/jhipster_family_member_2.svg' },
+        { file: 'content/images/jhipster_family_member_2_head-192.png' },
+        { file: 'content/images/jhipster_family_member_2_head-256.png' },
+        { file: 'content/images/jhipster_family_member_2_head-384.png' },
+        { file: 'content/images/jhipster_family_member_2_head-512.png' },
+        { file: 'content/images/jhipster_family_member_3.svg' },
+        { file: 'content/images/jhipster_family_member_3_head-192.png' },
+        { file: 'content/images/jhipster_family_member_3_head-256.png' },
+        { file: 'content/images/jhipster_family_member_3_head-384.png' },
+        { file: 'content/images/jhipster_family_member_3_head-512.png' },
+        { file: 'content/images/logo-jhipster.png' },
+        { file: 'favicon.ico', noEjs: true },
         'content/css/loading.css',
         'WEB-INF/web.xml',
         'robots.txt',
@@ -70,13 +70,18 @@ const files = {
   swagger: [
     {
       path: CLIENT_MAIN_SRC_DIR,
-      templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
+      templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif' }],
     },
   ],
 };
 
-function writeFiles() {
-  return this.writeFilesToDisk(files, 'common');
+async function writeFiles() {
+  const application = this.application;
+  await this.writeFiles({
+    sections: files,
+    rootTemplatesPath: 'common',
+    context: application,
+  });
 }
 
 module.exports = {

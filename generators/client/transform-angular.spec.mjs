@@ -24,35 +24,15 @@ import { replaceAngularTranslations } from './transform-angular.cjs';
 describe('Angular transform', () => {
   describe('replaceAngularTranslations', () => {
     let generator;
-    let enableTranslation;
 
     beforeEach(() => {
       let value = 0;
       generator = {
         _getClientTranslation: jest.fn().mockImplementation(key => `translated-value-${key}-${value++}`),
-        enableTranslation,
       };
     });
 
-    describe('with translation enabled', () => {
-      before(() => {
-        enableTranslation = true;
-      });
-
-      it('should return the original body', () => {
-        const body = `
-<h1 jhiTranslate="activate.title">activate.title</h1>
-<h1 [translateValues]="{ max: 50 }">translate-values1</h1>
-`;
-        expect(replaceAngularTranslations.call(generator, body)).toBe(body);
-      });
-    });
-
-    describe('with translation enabled', () => {
-      before(() => {
-        enableTranslation = false;
-      });
-
+    describe('with translation disabled', () => {
       describe('.html files', () => {
         const extension = '.html';
 
