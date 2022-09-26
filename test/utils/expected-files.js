@@ -1,15 +1,7 @@
 const constants = require('../../generators/generator-constants');
 
-const {
-  TEST_DIR,
-  CLIENT_MAIN_SRC_DIR,
-  CLIENT_TEST_SRC_DIR,
-  SERVER_MAIN_SRC_DIR,
-  SERVER_MAIN_RES_DIR,
-  SERVER_TEST_SRC_DIR,
-  SERVER_TEST_RES_DIR,
-  DOCKER_DIR,
-} = constants;
+const { TEST_DIR, CLIENT_MAIN_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, DOCKER_DIR } =
+  constants;
 
 const expectedFiles = {
   entity: {
@@ -817,27 +809,6 @@ const expectedFiles = {
   ],
 
   consul: [`${DOCKER_DIR}central-server-config/application.yml`, `${DOCKER_DIR}consul.yml`, `${DOCKER_DIR}config/git2consul.json`],
-
-  cypress: [
-    'cypress.config.ts',
-    `${CLIENT_TEST_SRC_DIR}cypress/plugins/index.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/e2e/administration/administration.cy.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/support/navbar.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/support/index.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/tsconfig.json`,
-  ],
-
-  cypressNoOAuth2: [`${CLIENT_TEST_SRC_DIR}cypress/e2e/account/login-page.cy.ts`],
-
-  cypressWithDatabaseAndNoOAuth2: [
-    `${CLIENT_TEST_SRC_DIR}cypress/e2e/account/register-page.cy.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/e2e/account/settings-page.cy.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/e2e/account/password-page.cy.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/e2e/account/reset-password-page.cy.ts`,
-  ],
-
-  cypressWithOauth2: [`${CLIENT_TEST_SRC_DIR}cypress/support/oauth2.ts`],
 };
 
 module.exports = expectedFiles;

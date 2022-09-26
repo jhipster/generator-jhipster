@@ -25,7 +25,6 @@ const { PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } = require('../.
 const { writeAngularFiles, cleanupAngular } = require('./files-angular.cjs');
 const { writeReactFiles, cleanupReact } = require('./files-react.cjs');
 const { writeVueFiles } = require('./files-vue.cjs');
-const { cleanupCypressEntityFiles, writeCypressEntityFiles } = require('./files-cypress.cjs');
 const { entityClientI18nFiles } = require('../entity-i18n/files');
 const { clientI18nFiles } = require('../languages/files');
 
@@ -94,8 +93,6 @@ module.exports = class extends BaseBlueprintGenerator {
       writeReactFiles,
       cleanupReact,
       writeVueFiles,
-      cleanupCypressEntityFiles,
-      writeCypressEntityFiles,
     };
   }
 

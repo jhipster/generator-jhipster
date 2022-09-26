@@ -48,8 +48,8 @@ export default async (on: Cypress.PluginEvents, config: Cypress.PluginConfigOpti
 <%_ if (cypressAudit) { _%>
   on('task', {
     lighthouse: lighthouse((lighthouseReport) => {
-      !existsSync('<%= BUILD_DIR %>cypress') && mkdirSync('<%= BUILD_DIR %>cypress', { recursive: true });
-      writeFileSync('<%= BUILD_DIR %>cypress/lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html'));
+      !existsSync('<%= cypressTemporaryDir %>') && mkdirSync('<%= cypressTemporaryDir %>', { recursive: true });
+      writeFileSync('<%= cypressTemporaryDir %>lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html'));
     }),
     pa11y: pa11y(),
   });
