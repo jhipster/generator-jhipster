@@ -33,13 +33,8 @@ import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/in
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { Application as SpringBootApplication } from '../../spring-boot/types.ts';
 import type { Application as SpringDataRelationalApplication } from '../../spring-data/generators/relational/types.ts';
-import { mutateEntity } from '../entity.ts';
-import type {
-  Application as BaseApplicationApplication,
-  Entity as BaseApplicationEntity,
-  Field as BaseApplicationField,
-  PrimaryKey,
-} from '../types.ts';
+import { type Field, mutateEntity } from '../entity.ts';
+import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity, PrimaryKey } from '../types.ts';
 
 import { createFaker } from './faker.ts';
 import { fieldIsEnum } from './field-utils.ts';
@@ -47,7 +42,7 @@ import { fieldIsEnum } from './field-utils.ts';
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { CommonDBTypes } = fieldTypes;
 
-const { BOOLEAN, LONG, STRING, UUID, INTEGER } = CommonDBTypes;
+const { LONG, STRING, UUID, INTEGER } = CommonDBTypes;
 
 const { CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
 
@@ -240,6 +235,14 @@ export function prepareEntityPrimaryKeyForTemplates(
               }
               return [relationship.relationshipName, field.fieldName];
             },
+            get nameDotted() {
+              return (this as Field).derivedPath ? (this as Field).derivedPath!.join('.') : (this as Field).fieldName;
+            },
+            get nameDottedAsserted() {
+              return (this as Field).derivedPath
+                ? `${(this as Field).derivedPath!.join('!.')}!`
+                : `${(this as Field).fieldName}!`;
+            },
             get path() {
               return [relationship.relationshipName, ...field.path!];
             },
@@ -255,6 +258,9 @@ export function prepareEntityPrimaryKeyForTemplates(
               return idCount === 1
                 ? (field as FieldAll).columnName
                 : `${hibernateSnakeCase(relationship.relationshipName)}_${(field as FieldAll).columnName}`;
+            },
+            get relationshipsPath() {
+              return [relationship, ...(field as any).relationshipsPath];
             },
           }));
         },
@@ -300,9 +306,6 @@ export function prepareEntityPrimaryKeyForTemplates(
       get composite() {
         return relationshipId.otherEntity.primaryKey!.composite;
       },
-      get ids() {
-        return this.fields.map(field => fieldToId(field));
-      },
     };
   } else {
     const composite = enableCompositeId ? idCount > 1 : false;
@@ -310,7 +313,7 @@ export function prepareEntityPrimaryKeyForTemplates(
     let primaryKeyType: string;
     if (composite) {
       primaryKeyName = 'id';
-      primaryKeyType = `${(entityWithConfig as EntityAll).entityClass}Id`;
+      primaryKeyType = `${(entityWithConfig as EntityAll).name}Id`;
     } else {
       const idField = idFields[0];
       // Allow ids type to be empty and fallback to default type for the database.
@@ -319,6 +322,13 @@ export function prepareEntityPrimaryKeyForTemplates(
       }
       primaryKeyName = idField.fieldName;
       primaryKeyType = idField.fieldType;
+    }
+
+    // Initialize relationshipsPath, nameDotted, and nameDottedAsserted for own fields (non-derived primary key fields)
+    for (const field of idFields) {
+      (field as any).relationshipsPath = [];
+      (field as any).nameDotted = field.fieldName;
+      (field as any).nameDottedAsserted = `${field.fieldName}!`;
     }
 
     entityWithConfig.primaryKey = {
@@ -343,39 +353,9 @@ export function prepareEntityPrimaryKeyForTemplates(
       get derivedFields() {
         return this.relationships.map(rel => rel.derivedPrimaryKey!.derivedFields).flat();
       },
-      get ids() {
-        return this.fields.map(field => fieldToId(field));
-      },
     };
   }
   return entityWithConfig;
-}
-
-function fieldToId(field: BaseApplicationField): any {
-  return {
-    field,
-    get name() {
-      return field.fieldName;
-    },
-    get nameCapitalized() {
-      return field.fieldNameCapitalized;
-    },
-    get nameDotted() {
-      return field.derivedPath ? field.derivedPath.join('.') : field.fieldName;
-    },
-    get nameDottedAsserted() {
-      return field.derivedPath ? `${field.derivedPath.join('!.')}!` : `${field.fieldName}!`;
-    },
-    get setter() {
-      return `set${this.nameCapitalized}`;
-    },
-    get getter() {
-      return (field.fieldType === BOOLEAN ? 'is' : 'get') + this.nameCapitalized;
-    },
-    get autoGenerate() {
-      return !!field.autoGenerate;
-    },
-  };
 }
 
 /**

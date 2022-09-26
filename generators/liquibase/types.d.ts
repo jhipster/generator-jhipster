@@ -39,6 +39,7 @@ export type Source = LiquibaseSourceType & JavaSource;
 
 export type DatabaseProperty = {
   columnName?: string;
+  columnNamePrefix?: string;
   columnRequired?: boolean;
   nullable?: boolean;
 };

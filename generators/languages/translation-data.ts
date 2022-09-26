@@ -38,7 +38,7 @@ export const createTranslationsFilter = ({
     !fallbackLanguage || nativeLanguage === fallbackLanguage
       ? `**/${clientI18nDir}${nativeLanguage}/*.json`
       : `**/${clientI18nDir}{${nativeLanguage},${fallbackLanguage}}/*.json`;
-  const minimatch = new Minimatch(pattern);
+  const minimatch = new Minimatch(pattern, { dot: true });
   return (filePath: string): boolean => minimatch.match(filePath);
 };
 
@@ -71,7 +71,7 @@ export default class TranslationData {
     fallbackLanguage?: string;
   }) {
     const filter = createTranslationsFileFilter({ clientI18nDir, nativeLanguage, fallbackLanguage });
-    const minimatchNative = new Minimatch(`**/${clientI18nDir}${nativeLanguage}/*.json`);
+    const minimatchNative = new Minimatch(`**/${clientI18nDir}${nativeLanguage}/*.json`, { dot: true });
     return transform(file => {
       if (filter(file) && file.contents) {
         const contents = JSON.parse(file.contents.toString());

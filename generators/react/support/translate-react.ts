@@ -120,7 +120,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
     return body;
   };
 
-const minimatch = new Minimatch('**/*.tsx');
+const minimatch = new Minimatch('**/*.tsx', { dot: true });
 export const isTranslatedReactFile = (file: MemFsEditorFile) => minimatch.match(file.path);
 
 const translateReactFilesTransform = (getWebappTranslation: GetWebappTranslationCallback) => {

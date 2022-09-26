@@ -36,14 +36,16 @@ import org.hibernate.type.SqlTypes;
 <%_ for (const field of fields) { -%>
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
   <%_ if (field.id) { _%>
+    <%_ if (primaryKey.fields.length === 1) { _%>
     @Id
-    <%_ if (field.jpaGeneratedValue === 'identity') { _%>
+        <%_ if (field.jpaGeneratedValue === 'identity') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    <%_ } else if (field.jpaGeneratedValue === 'sequence') { _%>
+        <%_ } else if (field.jpaGeneratedValue === 'sequence') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator"<% if (field.liquibaseCustomSequenceGenerator) { %>, sequenceName = "<%- field.jpaSequenceGeneratorName %>"<% } %>)
-    <%_ } else if (field.jpaGeneratedValue) { _%>
+        <%_ } else if (field.jpaGeneratedValue) { _%>
     @GeneratedValue
+        <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_ if (field.fieldIsEnum) { _%>
@@ -70,6 +72,9 @@ import org.hibernate.type.SqlTypes;
     <%_ if (field.fieldValidationUnique) { %>
       , unique = true
     <%_ } _%>
+    <%_ if (field.id && primaryKey.fields.length > 1) { _%>
+        , insertable = false, updatable = false
+    <%_ } _%>
   )
   <%_ } _%>
 <&_ } -&>
@@ -93,6 +98,13 @@ import org.hibernate.type.SqlTypes;
       <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
     @NotNull
       <%_ } _%>
+      <%_ if (relationship.id && !reactive) { _%>
+        <%_ if (relationship.otherEntity.primaryKey.fields.length === 1) { _%>
+    @JoinColumn(insertable = false, updatable = false)
+        <%_ } else { _%>
+    @JoinColumns({<%- relationship.otherEntity.primaryKey.fields.map(field => '@JoinColumn(name = "' + relationship.columnNamePrefix + field.columnName + '", referencedColumnName = "' + field.columnName + '", insertable = false, updatable = false)').join(', ') %>})
+        <%_ } _%>
+    <%_ } _%>
   <%_ } else if (relationship.relationshipManyToMany) { -%>
     @ManyToMany(fetch = FetchType.LAZY<% if (!relationship.ownerSide) { %>, mappedBy = "<%= relationship.otherRelationship.propertyName %>"<% } %>)
       <%_ if (relationship.ownerSide) { _%>
@@ -102,12 +114,12 @@ import org.hibernate.type.SqlTypes;
     @JoinTable(name = "<%= relationship.joinTable.name %>",
                joinColumns = <%= primaryKey.fields.length > 1 ? '{' : '' %>
                    <%_ primaryKey.fields.forEach((field, idx) => { _%>
-                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${entityTableName}_${field.columnName}` %>")
+                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${entityTableName}_${field.columnName}` %>", referencedColumnName = "<%= field.columnName %>")
                    <%_ }); _%>
                <%= primaryKey.fields.length > 1 ? '}' : '' %>,
                inverseJoinColumns = <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '{' : '' %>
                    <%_ relationship.otherEntity.primaryKey.fields.forEach((field, idx) => { _%>
-                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${relationship.columnName}_${field.columnName}` %>"))
+                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${relationship.columnName}_${field.columnName}` %>", referencedColumnName = "<%= field.columnName %>"))
                    <%_ }); _%>
                <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
       <%_ } _%>
@@ -126,7 +138,10 @@ import org.hibernate.type.SqlTypes;
         <%_ } _%>
         <%_ if (relationship.id) { %>
     @MapsId
-    @JoinColumn(name = "<%= relationship.otherEntity.primaryKey.fields[0].columnName %>")
+          <% if (relationship.otherEntity.primaryKey.composite) { %>@JoinColumns({<% } %>
+            <%- relationship.otherEntity.primaryKey.fields.map(field => '@JoinColumn(name = "' + relationship.columnNamePrefix + field.columnName + '", referencedColumnName = "' + field.columnName + '"' + (relationship.otherEntity.primaryKey.composite ? '' : ', insertable = false, updatable = false') + ")").join(', ') %>
+          <% if (relationship.otherEntity.primaryKey.composite) { %>})<% } else { %>
+          <%_ } _%>
         <%_ } else { _%>
     @JoinColumn(unique = true)
         <%_ } _%>

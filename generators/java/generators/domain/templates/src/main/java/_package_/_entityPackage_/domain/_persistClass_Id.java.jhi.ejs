@@ -1,0 +1,93 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%=packageName%>.domain;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.metamodel.StaticMetamodel;
+<%_ if (anyPropertyHasValidation) { _%>
+import jakarta.validation.constraints.*;
+<%_ } _%>
+import java.util.Objects;
+<%_ if (primaryKey.fields.some(field => field.fieldType === 'UUID')) { _%>
+import java.util.UUID;
+<%_ } _%>
+
+@Embeddable
+@StaticMetamodel(<%= entityClass %>Id.class)
+public class <%= entityClass %>Id implements java.io.Serializable {
+<%_
+primaryKey.fields.forEach(field => { _%>
+
+    <%_ if (field.fieldIsEnum) { _%>
+    @Enumerated(EnumType.STRING)
+    <%_ } _%>
+    <%_ if (field.fieldValidate) { _%>
+    <%- include('/_global_partials_entity_/field_validators', {field, reactive}); -%>
+    <%_ } _%>
+    @Column(name = "<%= field.columnName %>"<% if (field.fieldValidate) { %><% if (field.fieldValidationMaxLength) { %>, length = <%= field.fieldValidateRulesMaxlength %><% } %><% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.unique) { %>, unique = true<% } %><% } %>)
+    private <%= field.fieldType %> <%= field.fieldName %>;
+<%_ }) _%>
+
+    public <%= entityClass %>Id(){}
+
+    public <%= entityClass %>Id(<%= primaryKey.fields.map(field => field.fieldType + ' ' + field.fieldName).join(', ') %>){
+<%_ primaryKey.fields.forEach(field => { _%>
+        this.<%= field.fieldName %> = <%= field.fieldName %>;
+<%_ }) _%>
+    }
+<%_ primaryKey.fields.forEach(field => { _%>
+
+    public <%= field.fieldType %> get<%= field.fieldNameCapitalized %>(){
+        return this.<%= field.fieldName %>;
+    }
+
+    public void set<%= field.fieldNameCapitalized %>(<%= field.fieldType %> <%= field.fieldName %>){
+        this.<%= field.fieldName %> = <%= field.fieldName %>;
+    }
+<%_ }) _%>
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof <%= entityClass %>Id)) {
+            return false;
+        }
+
+        <%= entityClass %>Id <%= entityInstance %>Id = (<%= entityClass %>Id) o;
+        return <%- primaryKey.fields.map(f => `Objects.equals(${f.fieldName}, ${entityInstance}Id.${f.fieldName})`).join('\n            && ') %>;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(<%= primaryKey.fields.map(f => f.fieldName).join(', ')%>);
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "<%= entityClass %>Id{" +
+            <%_ primaryKey.fields.forEach(field => {
+                const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(field.fieldType.toLowerCase()); _%>
+            ", <%= field.fieldName %>=<% if (! isNumeric) {%>'<% } %>" + get<%= field.fieldNameCapitalized %>() <% if (! isNumeric) { %>+ "'" <% } %>+
+            <%_ }) _%>
+            "}";
+    }
+}

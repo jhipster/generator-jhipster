@@ -116,6 +116,7 @@ export const postgresqlReservedKeywords = [
   'WHERE',
   'WINDOW',
   'WITH',
+  'VALUE',
 ];
 
 export const isReservedPostgresqlKeyword = (keyword: string) => postgresqlReservedKeywords.includes(keyword.toUpperCase());

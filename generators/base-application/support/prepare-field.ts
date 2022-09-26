@@ -175,7 +175,11 @@ function generateFakeDataForField(
       }
     }
   } else if (field.fieldTypeBinary && field.fieldTypeBlobContent !== TEXT) {
-    data = '../fake-data/blob/hipster.png';
+    if (type === 'ts') {
+      data = 'QQ==';
+    } else {
+      data = '../fake-data/blob/hipster.png';
+    }
   } else if (field.fieldTypeBinary && field.fieldTypeBlobContent === TEXT) {
     data = '../fake-data/blob/hipster.txt';
   } else if (field.fieldType === STRING) {

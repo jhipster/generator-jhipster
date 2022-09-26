@@ -26,6 +26,12 @@ export const entityServerFiles = asWriteEntityFilesSection({
       templates: ['_entityPackage_/domain/_persistClass_.java.jhi'],
     }),
   ],
+  modelCompositeId: [
+    javaMainPackageTemplatesBlock({
+      condition: ctx => ctx.primaryKey?.composite,
+      templates: ['_entityPackage_/domain/_persistClass_Id.java.jhi'],
+    }),
+  ],
   modelTestFiles: [
     javaTestPackageTemplatesBlock({
       condition: ctx => ctx.entityDomainLayer,
