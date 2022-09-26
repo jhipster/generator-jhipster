@@ -43,7 +43,6 @@ const defaultApplicationOptions = require('../jdl/jhipster/default-application-o
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { databaseData } = require('./sql-constants');
 const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
-const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
 const { joinCallbacks } = require('../lib/support/base.cjs');
 
 const {
@@ -1214,15 +1213,6 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * Insert content into ApplicationProperties class
-   * @param {import("./server/needles.cjs").ApplicationPropertiesNeedles} needlesContent
-   * @returns {string} ApplicationProperties contents
-   */
-  insertContentIntoApplicationProperties(needlesContent) {
-    return insertContentIntoApplicationProperties(this, needlesContent);
-  }
-
-  /**
    * Generate a date to be used by Liquibase changelogs.
    *
    * @param {Boolean} [reproducible=true] - Set true if the changelog date can be reproducible.
@@ -2198,165 +2188,6 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * write the given files using provided config.
-   *
-   * @param {object} files - files to write
-   * @param {object} [generator = this] - the generator instance to use
-   * @param {boolean} [returnFiles = false] - weather to return the generated file list or to write them
-   * @param {string|string[]} [rootTemplatesPath] - path(s) to look for templates.
-   *        Single absolute path or relative path(s) between the templates folder and template path.
-   * @return {string[]|Promise<string>} Filenames, promise when returnFiles is false
-   */
-  writeFilesToDisk(files, generator = this, returnFiles = false, rootTemplatesPath) {
-    if (typeof generator === 'string' || Array.isArray(generator)) {
-      rootTemplatesPath = generator;
-      generator = this;
-    } else if (typeof generator === 'boolean') {
-      rootTemplatesPath = returnFiles;
-      returnFiles = generator;
-      generator = this;
-    } else if (typeof returnFiles === 'string' || Array.isArray(returnFiles)) {
-      rootTemplatesPath = returnFiles;
-      returnFiles = false;
-    }
-    const _this = generator || this;
-    const filesOut = [];
-    const startTime = new Date();
-
-    /* Build lookup order first has preference.
-     * Example
-     * rootTemplatesPath = ['reactive', 'common']
-     * jhipsterTemplatesFolders = ['/.../generator-jhispter-blueprint/server/templates', '/.../generator-jhispter/server/templates']
-     *
-     * /.../generator-jhispter-blueprint/server/templates/reactive/templatePath
-     * /.../generator-jhispter-blueprint/server/templates/common/templatePath
-     * /.../generator-jhispter/server/templates/reactive/templatePath
-     * /.../generator-jhispter/server/templates/common/templatePath
-     */
-    let rootTemplatesAbsolutePath;
-    if (!rootTemplatesPath) {
-      rootTemplatesAbsolutePath = _this.jhipsterTemplatesFolders;
-    } else if (typeof rootTemplatesPath === 'string' && path.isAbsolute(rootTemplatesPath)) {
-      rootTemplatesAbsolutePath = rootTemplatesPath;
-    } else {
-      rootTemplatesPath = Array.isArray(rootTemplatesPath) ? rootTemplatesPath : [rootTemplatesPath];
-      rootTemplatesAbsolutePath = _this.jhipsterTemplatesFolders
-        .map(templateFolder =>
-          rootTemplatesPath.map(relativePath => (relativePath ? path.join(templateFolder, relativePath) : templateFolder))
-        )
-        .flat();
-    }
-
-    const writeTasks = Object.values(files).map(blockTemplates => {
-      return blockTemplates.map(blockTemplate => {
-        if (!blockTemplate.condition || blockTemplate.condition(_this)) {
-          const blockPath = blockTemplate.path || '';
-          return blockTemplate.templates.map(templateObj => {
-            let templatePath = blockPath;
-            let method = 'template';
-            let useTemplate = false;
-            let options = {};
-            let templatePathTo;
-            if (typeof templateObj === 'string') {
-              templatePath += templateObj;
-            } else {
-              if (typeof templateObj.file === 'string') {
-                templatePath += templateObj.file;
-              } else if (typeof templateObj.file === 'function') {
-                templatePath += templateObj.file(_this);
-              }
-              method = templateObj.method ? templateObj.method : method;
-              useTemplate = templateObj.template ? templateObj.template : useTemplate;
-              options = templateObj.options ? { ...templateObj.options } : options;
-            }
-            if (templateObj && templateObj.renameTo) {
-              templatePathTo = blockPath + templateObj.renameTo(_this);
-            } else {
-              // remove the .ejs suffix
-              templatePathTo = templatePath.replace('.ejs', '');
-            }
-
-            if (_this.destinationPath) {
-              templatePathTo = _this.destinationPath(templatePathTo);
-            }
-
-            if (templateObj.override !== undefined && _this.fs && _this.fs.exists(templatePathTo)) {
-              if (typeof templateObj.override === 'function') {
-                if (!templateObj.override(_this)) {
-                  this.debug(`skipping file ${templatePathTo}`);
-                  return Promise.resolve(templatePathTo);
-                }
-              } else if (!templateObj.override) {
-                this.debug(`skipping file ${templatePathTo}`);
-                return Promise.resolve(templatePathTo);
-              }
-            }
-
-            filesOut.push(templatePathTo);
-            if (!returnFiles) {
-              const ejs =
-                !templateObj.noEjs &&
-                !templatePath.endsWith('.png') &&
-                !templatePath.endsWith('.jpg') &&
-                !templatePath.endsWith('.gif') &&
-                !templatePath.endsWith('.svg') &&
-                !templatePath.endsWith('.ico');
-
-              let templatePathFrom;
-              if (Array.isArray(rootTemplatesAbsolutePath)) {
-                // Look for existing templates
-                const existingTemplates = rootTemplatesAbsolutePath
-                  .map(rootPath => _this.templatePath(rootPath, templatePath))
-                  .filter(templateFile => fs.existsSync(ejs ? `${templateFile}.ejs` : templateFile));
-
-                if (existingTemplates.length > 1) {
-                  const moreThanOneMessage = `Multiples templates were found for file ${templatePath}, using the first
-templates: ${JSON.stringify(existingTemplates, null, 2)}`;
-                  if (existingTemplates.length > 2) {
-                    generator.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
-                  } else {
-                    generator.debug(moreThanOneMessage);
-                  }
-                }
-                templatePathFrom = existingTemplates.shift();
-
-                if (templatePathFrom === undefined) {
-                  throw new Error(`Template file ${templatePath} was not found at ${rootTemplatesAbsolutePath}`);
-                }
-              } else if (rootTemplatesAbsolutePath) {
-                templatePathFrom = generator.templatePath(rootTemplatesAbsolutePath, templatePath);
-              } else {
-                templatePathFrom = generator.templatePath(templatePath);
-              }
-              if (ejs) {
-                templatePathFrom = `${templatePathFrom}.ejs`;
-              }
-              // Set root for ejs to lookup for partials.
-              options.root = rootTemplatesAbsolutePath;
-
-              // if (method === 'template')
-              let maybePromise = _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
-              maybePromise = maybePromise && maybePromise.then ? maybePromise : Promise.resolve(templatePathTo);
-              return maybePromise;
-            }
-            return undefined;
-          });
-        }
-        return undefined;
-      });
-    });
-    this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
-    return returnFiles
-      ? filesOut
-      : Promise.all(
-          writeTasks
-            .flat()
-            .flat()
-            .filter(filename => filename)
-        );
-  }
-
-  /**
    * Block of files to written.
    *
    * @typedef {object} WriteFileBlock
@@ -3006,6 +2837,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
       dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
       dest.lowercaseBaseName = dest.baseName.toLowerCase();
+      dest.upperFirstCamelCaseBaseName = this.upperFirstCamelCase(dest.baseName);
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
       dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
@@ -3115,6 +2947,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseType = config.databaseType;
     dest.devDatabaseType = config.devDatabaseType;
     dest.prodDatabaseType = config.prodDatabaseType;
+    dest.incrementalChangelog = config.incrementalChangelog;
     dest.reactive = config.reactive;
     dest.searchEngine = config.searchEngine;
     dest.cacheProvider = config.cacheProvider;

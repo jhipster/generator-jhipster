@@ -36,7 +36,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
   get [ServerGenerator.POST_WRITING]() {
     const customPhaseSteps = {
       writeTestFiles() {
-        return this.writeFilesToDisk(serverFiles, this, false);
+        return this.writeFiles({ sections: serverFiles });
       },
       addChangelogStep() {
         this.addChangelogToLiquibase('aNewChangeLog');
