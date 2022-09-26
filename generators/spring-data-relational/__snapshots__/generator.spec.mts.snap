@@ -3802,6 +3802,9 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(false)-maven-enableTr
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -4332,6 +4335,9 @@ exports[`generator - sql microservice-jwt-mssql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -4870,6 +4876,9 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -5413,6 +5422,9 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -5937,6 +5949,9 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -6481,6 +6496,9 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -7132,6 +7150,9 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -7770,6 +7791,9 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -8418,6 +8442,9 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -9061,6 +9088,9 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(false)-maven-en
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -9690,6 +9720,9 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -10408,6 +10441,9 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -11131,6 +11167,9 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -11843,6 +11882,9 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -12553,6 +12595,9 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -13276,6 +13321,9 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/OAuth2Configuration.java": {
     "stateCleared": "modified",
   },
@@ -13980,6 +14028,9 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/OAuth2Configuration.java": {
@@ -14692,6 +14743,9 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/OAuth2Configuration.java": {
@@ -15409,6 +15463,9 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/OAuth2Configuration.java": {
     "stateCleared": "modified",
   },
@@ -16107,6 +16164,9 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/OAuth2Configuration.java": {
@@ -16818,6 +16878,9 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -17471,6 +17534,9 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -18128,6 +18194,9 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -18783,6 +18852,9 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -19430,6 +19502,9 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {

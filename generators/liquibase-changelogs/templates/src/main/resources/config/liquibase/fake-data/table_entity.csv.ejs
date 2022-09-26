@@ -28,16 +28,9 @@ for (field of fieldsToGenerate) {
     header.push(field.columnName + '_content_type');
   }
 }
-for (relationship of relationships) {
-  const { relationshipType, joinColumnNames } = relationship;
-  if (
-    (relationshipType === "many-to-one"
-      || (relationshipType === "one-to-one" && relationship.ownerSide === true
-         && (relationship.id == null || relationship.id === false))
-    ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
-  ) {
-    header.push(joinColumnNames[0]);
-  }
+const relationshipsToGenerate = [...relationships.filter(r => r.id && entity.primaryKey.composite), ...relationships.filter(r => !r.id && r.relationshipRequired &&  (r.relationshipManyToOne || (r.relationshipOneToOne && r.ownerSide)))];
+for (relationship of relationshipsToGenerate) {
+  header.push(...relationship.joinColumnNames);
 }
 table.push(header);
 
@@ -64,22 +57,16 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
     }
   }
 
-  for (relationship of relationships) {
-    const relationshipType = relationship.relationshipType;
-    if (
-      (relationshipType === "many-to-one"
-        || (relationshipType === "one-to-one" && relationship.ownerSide === true
-           && (relationship.id == null || relationship.id === false))
-      ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
-    ) {
-      const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
-      let relationshipRow = lineNb;
-      if (relationship.otherEntity.fakeDataCount > 0 && relationshipRow >= relationship.otherEntity.fakeDataCount && !relationship.unique) {
-        relationshipRow = entity.faker.number.int({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
-      }
-      if (relationshipRow < relationship.otherEntity.fakeDataCount) {
-        line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);
-      }
+  for (relationship of relationshipsToGenerate) {
+    let relationshipRow = lineNb;
+    if (relationship.otherEntity.fakeDataCount > 0 && relationshipRow >= relationship.otherEntity.fakeDataCount && !relationship.unique) {
+      relationshipRow = entity.faker.number.int({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
+    }
+    if (relationshipRow < relationship.otherEntity.fakeDataCount) {
+      relationship.otherEntity.primaryKey.fields.forEach(field => {
+        const otherLiquibaseFakeData = field.entity.liquibaseFakeData;
+        line.push(otherLiquibaseFakeData[relationshipRow][field.propertyName]);
+      })
     }
   }
   if (line.length === header.length) {

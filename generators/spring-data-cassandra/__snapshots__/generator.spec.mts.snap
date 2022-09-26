@@ -963,6 +963,9 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1640,6 +1643,9 @@ exports[`generator - cassandra microservice-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -2370,6 +2376,9 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -3201,6 +3210,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/OAuth2Configuration.java": {
     "stateCleared": "modified",
   },
@@ -4010,6 +4022,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {

@@ -51,7 +51,8 @@ export default function prepareField(entityWithConfig, field, generator) {
 
   if (field.id && entityWithConfig.primaryKey) {
     if (field.autoGenerate === undefined) {
-      field.autoGenerate = !entityWithConfig.primaryKey.composite && [LONG, UUID].includes(field.fieldType);
+      field.autoGenerate =
+        !entityWithConfig.primaryKey.composite && entityWithConfig.databaseType === SQL && [LONG, UUID].includes(field.fieldType);
     }
 
     if (!field.autoGenerate) {

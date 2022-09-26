@@ -31,8 +31,8 @@ fields.filter(field => !field.transient).forEach((field) => {
       fieldInJavaBeanMethod: field.fieldInJavaBeanMethod });
   }
 });
-effectiveRelationships.forEach((relationship) => {
-const relationshipType = relationship.otherEntity.primaryKey.type;
+effectiveRelationships.forEach((relationship) => { relationship.otherEntity.primaryKey.fields.forEach(field => {
+const relationshipType = field.fieldType;
 const referenceFilterType = '' + relationshipType + 'Filter';
 // user has a String PK when using OAuth, so change relationships accordingly
 let oauthAwareReferenceFilterType = referenceFilterType;
@@ -40,10 +40,10 @@ if (relationship.otherEntityUser && authenticationTypeOauth2) {
   oauthAwareReferenceFilterType = 'StringFilter';
 }
 filterVariables.push({ filterType : oauthAwareReferenceFilterType,
-  name: relationship.relationshipFieldName + 'Id',
+  name: relationship.relationshipFieldName + field.fieldNameCapitalized,
   type: relationshipType,
-  fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id' });
-});
+  fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + field.fieldNameCapitalized });
+})});
 _%>
 /**
  * Criteria class for the {@link <%= entityAbsolutePackage %>.domain.<%= persistClass %>} entity. This class is used

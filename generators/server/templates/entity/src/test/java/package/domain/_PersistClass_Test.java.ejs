@@ -27,16 +27,25 @@ import java.util.UUID;
 
 class <%= persistClass %>Test {
 
+<%_
+function computeValue(entityNbr = 1) {
+    if (primaryKey.composite) {
+        return `new ${primaryKey.type}(${primaryKey.fields.map(field => this.getPrimaryKeyValue(field.fieldType, databaseType, entityNbr)).join(', ')})`;
+    } else {
+        return this.getPrimaryKeyValue(primaryKey.fields[0].fieldType, databaseType, entityNbr)
+    }
+}
+_%>
     @Test
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= persistClass %>.class);
 <%_if (!embedded) { _%>
         <%= persistClass %> <%= persistInstance %>1 = new <%= persistClass %>();
-        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeString) { %>"id1"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
+        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(<%- computeValue.bind(this)(1) %>);
         <%= persistClass %> <%= persistInstance %>2 = new <%= persistClass %>();
         <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>1.get<%= primaryKey.nameCapitalized %>());
         assertThat(<%= persistInstance %>1).isEqualTo(<%= persistInstance %>2);
-        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeLong) { %>2L<% } else if (primaryKey.typeString) { %>"id2"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
+        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<%- computeValue.bind(this)(2) %>);
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
         <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(null);
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);

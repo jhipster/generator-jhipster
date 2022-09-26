@@ -125,6 +125,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/java/com/mycompany/myapp/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },

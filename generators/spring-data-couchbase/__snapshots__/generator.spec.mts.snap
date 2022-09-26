@@ -1002,6 +1002,9 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1679,6 +1682,9 @@ exports[`generator - couchbase microservice-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -2454,6 +2460,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -3309,6 +3318,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/OAuth2Configuration.java": {
     "stateCleared": "modified",
   },
@@ -4157,6 +4169,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/MatrixVariableConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {

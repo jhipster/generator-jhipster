@@ -116,4 +116,5 @@ export default [
   'WHERE',
   'WINDOW',
   'WITH',
+  'VALUE',
 ];

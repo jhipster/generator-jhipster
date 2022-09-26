@@ -103,6 +103,61 @@ export const generateTestEntityId = (primaryKey, index = 0, wrapped = true) => {
   return value;
 };
 
+const generateTypescriptTestEntityObject = (references, additionalFields = {}) => {
+  const relationships = references.filter(r => r.relationship).map(r => r.relationship);
+  const result = {};
+  relationships.forEach(relationship => {
+    result[relationship.relationshipName] = generateTypescriptTestEntityObject(
+      [...relationship.otherEntity.fields.filter(f => f.id), ...relationship.otherEntity.relationships.filter(r => r.id)].map(
+        f => f.reference
+      )
+    );
+  });
+  return Object.assign(
+    result,
+    additionalFields,
+    ...references
+      .filter(r => !r.relationship)
+      .map(reference => {
+        if (reference.field) {
+          const field = reference.field;
+          const { fieldTypeTimed, fieldTypeLocalDate, fieldWithContentType, fieldName, contentTypeFieldName } = field;
+          const fakeData = field.generateFakeData('ts');
+          if (fieldWithContentType) {
+            return { [fieldName]: fakeData, [contentTypeFieldName]: "'unknown'" };
+          }
+          if (fieldTypeTimed || fieldTypeLocalDate) {
+            return { [fieldName]: `dayjs(${fakeData})` };
+          }
+          return { [fieldName]: fakeData };
+        }
+        return { [reference.name]: generateTestEntityId(reference.type, 'random', false) };
+      })
+  );
+};
+
+/**
+ * This is different from JSON.stringify as it handle values a string content
+ */
+const jsonToString = json => {
+  return `{
+  ${[...Object.entries(json)]
+    .map(([key, value]) => `${key}: ${value && typeof value === 'object' ? jsonToString(value) : value}`)
+    .join(',\n  ')}
+}`;
+};
+
+/**
+ * Generate a test entity, according to the references
+ *
+ * @param references
+ * @param additionalFields
+ * @return {String} test sample
+ */
+export const generateTypescriptTestEntity = (references, additionalFields = {}) => {
+  return jsonToString(generateTypescriptTestEntityObject(references, additionalFields));
+};
+
 /**
  * @private
  * Generate a test entity, according to the type
@@ -130,43 +185,6 @@ export const generateTestEntity = (references, index = 'random') => {
     })
     .flat();
   return Object.fromEntries(entries);
-};
-
-/**
- * Generate a test entity, according to the references
- *
- * @param references
- * @param additionalFields
- * @return {String} test sample
- */
-export const generateTypescriptTestEntity = (references, additionalFields = {}) => {
-  const entries = references
-    .map(reference => {
-      if (reference.field) {
-        const field = reference.field;
-        const { fieldIsEnum, fieldTypeTimed, fieldTypeLocalDate, fieldWithContentType, fieldName, contentTypeFieldName } = field;
-
-        const fakeData = field.generateFakeData('ts');
-        if (fieldWithContentType) {
-          return [
-            [fieldName, fakeData],
-            [contentTypeFieldName, "'unknown'"],
-          ];
-        }
-        if (fieldIsEnum) {
-          return [[fieldName, fakeData]];
-        }
-        if (fieldTypeTimed || fieldTypeLocalDate) {
-          return [[fieldName, `dayjs(${fakeData})`]];
-        }
-        return [[fieldName, fakeData]];
-      }
-      return [[reference.name, generateTestEntityId(reference.type, 'random', false)]];
-    })
-    .flat();
-  return `{
-  ${[...entries, ...Object.entries(additionalFields)].map(([key, value]) => `${key}: ${value}`).join(',\n  ')}
-}`;
 };
 /**
  * Generate a test entity for the PK references (when the PK is a composite key)
