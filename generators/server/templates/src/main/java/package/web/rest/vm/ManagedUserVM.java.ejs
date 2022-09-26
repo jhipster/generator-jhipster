@@ -20,7 +20,7 @@ package <%= packageName %>.web.rest.vm;
 
 import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 <%_ if (!authenticationTypeOauth2) { _%>
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 <%_ } _%>
 
 /**

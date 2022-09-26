@@ -103,7 +103,7 @@
   <%_ if (!reactive) { _%>
         <liquibase-hibernate5.version><%= LIQUIBASE_VERSION %></liquibase-hibernate5.version>
   <%_ } _%>
-        <validation-api.version>2.0.1.Final</validation-api.version>
+        <validation-api.version>3.0.2.Final</validation-api.version>
   <%_ if (reactive) { _%>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
   <%_ } _%>
@@ -1762,8 +1762,8 @@
                                     <version>${spring-boot.version}</version>
                                 </dependency>
                                 <dependency>
-                                    <groupId>javax.validation</groupId>
-                                    <artifactId>validation-api</artifactId>
+                                    <groupId>jakarta.validation</groupId>
+                                    <artifactId>jakarta.validation-api</artifactId>
                                     <version>${validation-api.version}</version>
                                 </dependency>
   <%_ if (devDatabaseTypePostgres) { _%>
@@ -1947,8 +1947,8 @@
                                     <version>${spring-boot.version}</version>
                                 </dependency>
                                 <dependency>
-                                    <groupId>javax.validation</groupId>
-                                    <artifactId>validation-api</artifactId>
+                                    <groupId>jakarta.validation</groupId>
+                                    <artifactId>jakarta.validation-api</artifactId>
                                     <version>${validation-api.version}</version>
                                 </dependency>
   <%_ if (prodDatabaseTypePostgres) { _%>

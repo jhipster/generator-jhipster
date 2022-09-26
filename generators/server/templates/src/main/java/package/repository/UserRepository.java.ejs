@@ -116,9 +116,9 @@ import reactor.util.function.Tuples;
 <%_ } _%>
 
 <%_ if (databaseTypeCassandra) { _%>
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import java.util.List;
