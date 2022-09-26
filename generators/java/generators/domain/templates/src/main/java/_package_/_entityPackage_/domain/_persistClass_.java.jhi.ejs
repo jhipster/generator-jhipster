@@ -109,13 +109,13 @@ public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Se
     private static final long serialVersionUID = 1L;
 
 <%_ if (!embedded && primaryKey.composite) { _%>
-    @Id
+    @EmbeddedId
     private <%= primaryKey.type %> <%= primaryKey.name %>;
 
 <%_ } _%>
 <&- fragments.classStaticFieldsSection() -&>
 <&- fragments.classFieldsSection() -&>
-<%_ for (const field of fields.filter(field => !field.javaInherited && !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
+<%_ for (const field of fields.filter(field => !field.javaInherited && !field.transient && (embedded || !(field.id && primaryKey.composite && primaryKey.fields.length === 1)))) { _%>
 <&- fragments.field<%- field.fieldNameCapitalized %>CustomDeclarationSection() -&>
 <&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomDeclarationSection()) { -&>
   <%_ if (field.fieldJavadoc) { _%>
@@ -183,7 +183,24 @@ for (relationship of relationships) {
 <%_ } _%>
 <&- fragments.classAdditionalRelationshipsSection() -&>
     // jhipster-needle-entity-add-field - JHipster will add fields here
-<%_ for (const field of fields.filter(field => !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
+<%_ if (!embedded && primaryKey.composite) { _%>
+
+  public <%= primaryKey.type %> get<%= primaryKey.nameCapitalized %>() {
+        return this.<%= primaryKey.name %>;
+    }
+  <%_ if (fluentMethods) { _%>
+
+    public <%= persistClass %> <%= primaryKey.name %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
+        this.set<%= primaryKey.nameCapitalized %>(<%= primaryKey.name %>);
+        return this;
+    }
+  <%_ } _%>
+
+    public void set<%= primaryKey.nameCapitalized %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
+        this.<%= primaryKey.name %> = <%= primaryKey.name %>;
+    }
+<%_ } _%>
+<%_ for (const field of fields.filter(field => !field.transient && (embedded || !(field.id && primaryKey.composite && primaryKey.fields.length === 1)))) { _%>
 <&- fragments.field<%- field.fieldNameCapitalized %>CustomMethodsSection() -&>
 <&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomMethodsSection()) { -&>
 
