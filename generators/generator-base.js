@@ -87,20 +87,6 @@ const NO_WEBSOCKET = websocketTypes.FALSE;
 const isWin32 = os.platform() === 'win32';
 
 /**
- * @callback EditFileCallback
- * @param {JHipsterBaseGenerator} this
- * @param {string} content
- * @param {string} filePath
- * @returns {CascatedEditFileCallback} callback for cascated edit
- */
-
-/**
- * @callback CascatedEditFileCallback
- * @param {...EditFileCallback} callbacks
- * @returns {CascatedEditFileCallback} callback for cascated edit
- */
-
-/**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
  * The public API methods can be directly utilized as well using commonJS require.
@@ -108,11 +94,16 @@ const isWin32 = os.platform() === 'win32';
  * The method signatures in public API should not be changed without a major version change
  *
  * @class
- * @extends {import('yeoman-generator')}
+ * @extends {PrivateBase}
  * @property {import('yeoman-generator/lib/util/storage')} config - Storage for config.
- * @property {object} jhipsterConfig - Proxy object for config.
  */
 class JHipsterBaseGenerator extends PrivateBase {
+  /** @type {Record<string, any>} */
+  jhipsterConfig;
+
+  /** @type {Record<string, any>} */
+  dependabotPackageJson;
+
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -1593,7 +1584,7 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {String} generator - jhipster generator.
    * @param {String[]} [args] - arguments to pass
    * @param {Object} [options] - options to pass
-   * @return {Object} the composed generator
+   * @return {Promise<any>} the composed generator
    */
   dependsOnJHipster(generator, args, options) {
     return this.composeWithJHipster(generator, args, options, { immediately: true });
@@ -2188,56 +2179,10 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * Block of files to written.
-   *
-   * @typedef {object} WriteFileBlock
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [from] - relative path were sources are placed
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [to=from] - relative path were the files should be written, fallbacks to from/path
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [path] - same as from
-   * @property {string | function(this: JHipsterBaseGenerator, any, string): string} [renameTo] - generate destinationFile based on sourceFile
-   * @property {boolean | function(this: JHipsterBaseGenerator, any): boolean} [condition=true] - condition to enable to write the block
-   * @property {EditFileCallback[]} transform - transforms (files processing) to be applied
-   */
-
-  /**
-   * Template file to be written.
-   *
-   * @typedef {object} WriteFileTemplate
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [sourceFile] - source file
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [destinationFile] - destination file
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [file] - deprecated, use sourceFile instead
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [renameTo] - deprecated, use destinationFile insted
-   * @property {EditFileCallback[]} [transform] - transforms (files processing) to be applied
-   * @property {boolean} [binary] - binary files skips ejs render, ejs extension and file transform
-   * @property {object} [options] - ejs options. Refer to https://ejs.co/#docs
-   */
-
-  /**
-   * Sections of blocks to be writter.
-   *
-   * @typedef {Record<string, WriteFileBlock> & { _: {
-   *   transform: EditFileCallback[]
-   * } }} WriteFileSection
-   */
-
-  /**
-   * Template options to be passed to ejs renderFile.
-   *
-   * @typedef {object} WriteFileOptions
-   * @property {WriteFileSection} [sections] - sections to be writter
-   * @property {WriteFileBlock[]} [blocks] - block to be writter
-   * @property {WriteFileTemplate[]} [templates] - templates to be writter
-   * @property {EditFileCallback[]} [transform] - transforms (files processing) to be applied
-   * @property {object} [context=this] - context to be used as template data
-   * @property {object} [renderOptions=this] - config passed to render methods
-   * @property {string|string[]} [rootTemplatesPath] - path(s) to look for templates.
-   *        Single absolute path or relative path(s) between the templates folder and template path.
-   */
-
-  /**
    * write the given files using provided options.
    *
-   * @param {WriteFileOptions} options
+   * @template DataType
+   * @param {import('./base/api.js').WriteFileOptions<this, DataType>} options
    * @return {Promise<string[]>}
    */
   async writeFiles(options) {
@@ -2335,15 +2280,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       } else {
         let useAsync = true;
         if (context.entityClass) {
+          if (!context.baseName) {
+            throw new Error('baseName is require at templates context');
+          }
           const basename = path.basename(sourceFileFrom);
           const seed = `${context.entityClass}-${basename}`;
-          if (this.configOptions && this.configOptions.sharedEntities) {
-            Object.values(this.configOptions.sharedEntities).forEach(entity => {
-              entity.resetFakerSeed(seed);
-            });
-          } else if (context.resetFakerSeed) {
-            context.resetFakerSeed(basename);
-          }
+          Object.values(this.configOptions?.sharedEntities ?? {}).forEach(entity => {
+            entity.resetFakerSeed(seed);
+          });
+          Object.values(this.options.sharedData.applications?.[context.baseName]?.sharedEntities ?? {}).forEach(entity => {
+            entity.resetFakerSeed(seed);
+          });
           // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
           useAsync = false;
         }
@@ -2804,8 +2751,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.projectDescription = config.projectDescription;
 
     dest.testFrameworks = config.testFrameworks || [];
-    dest.cypressCoverage = config.cypressCoverage;
-    dest.cypressAudit = config.cypressAudit === undefined ? true : config.cypressAudit;
 
     dest.remotes = Object.entries(config.applications || {}).map(([baseName, config]) => ({ baseName, ...config })) || [];
 
@@ -2819,11 +2764,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.jwtSecretKey = config.jwtSecretKey;
   }
 
+  /**
+   * @param {Object} dest - destination context to use default is context
+   */
   loadDerivedMicroserviceAppConfig(dest = this) {
     dest.jhiPrefixCapitalized = _.upperFirst(dest.jhiPrefix);
     dest.jhiPrefixDashed = _.kebabCase(dest.jhiPrefix);
   }
 
+  /**
+   * @param {Object} dest - destination context to use default is context
+   */
   loadDerivedAppConfig(dest = this) {
     this.loadDerivedMicroserviceAppConfig(dest);
     dest.applicationTypeGateway = dest.applicationType === GATEWAY;
@@ -2886,6 +2837,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientSrcDir = config.clientSrcDir || this.CLIENT_MAIN_SRC_DIR;
   }
 
+  /**
+   * @param {Object} dest - destination context to use default is context
+   */
   loadDerivedClientConfig(dest = this) {
     dest.clientFrameworkAngular = dest.clientFramework === ANGULAR;
     dest.clientFrameworkReact = dest.clientFramework === REACT;
@@ -2952,6 +2906,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.searchEngine = config.searchEngine;
     dest.cacheProvider = config.cacheProvider;
     dest.enableHibernateCache = config.enableHibernateCache;
+    dest.serviceDiscoveryType = config.serviceDiscoveryType;
 
     dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
     dest.messageBroker = config.messageBroker;
@@ -2969,6 +2924,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     this.loadDerivedServerConfig(dest);
   }
 
+  /**
+   * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
+   */
   loadDerivedServerConfig(dest = this) {
     if (!dest.packageFolder) {
       dest.packageFolder = dest.packageName.replace(/\./g, '/');
@@ -3039,14 +2997,26 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
     dest.searchEngineAny = ![undefined, false, 'no'].includes(dest.searchEngine);
+
+    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
+    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
+    dest.serviceDiscoveryAny = ![undefined, false, 'no'].includes(dest.serviceDiscoveryType);
   }
 
+  /**
+   * @param {Object} config - config to load config from
+   * @param {import('./bootstrap-application-base/types.js').PlatformApplication} dest - destination context to use default is context
+   */
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
     dest.monitoring = config.monitoring;
     this.loadDerivedPlatformConfig(dest);
   }
 
+  /**
+   * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
+   * @param {import('./bootstrap-application-base/types.js').PlatformApplication} dest - destination context to use default is context
+   */
   loadDerivedPlatformConfig(dest = this) {
     dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
     dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
@@ -3073,6 +3043,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Get all the generator configuration from the .yo-rc.json file
    * @param {string} entityName - Name of the entity to load.
    * @param {boolean} create - Create storage if doesn't exists.
+   * @returns {import('yeoman-generator/lib/util/storage')}
    */
   getEntityConfig(entityName, create = false) {
     const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
@@ -3296,8 +3267,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * Edit file content
    * @param {string} file
-   * @param {...EditFileCallback} transformCallbacks
-   * @returns {CascatedEditFileCallback}
+   * @param {...import('./base/api.js').EditFileCallback} transformCallbacks
+   * @returns {import('./base/api.js').CascatedEditFileCallback}
    */
   editFile(file, ...transformCallbacks) {
     let filePath = this.destinationPath(file);

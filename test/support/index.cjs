@@ -172,6 +172,9 @@ const testBlueprintSupport = (generatorName, options = {}) => {
     generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.js`);
   }
   if (!existsSync(generatorPath)) {
+    generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.mts`);
+  }
+  if (!existsSync(generatorPath)) {
     generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.mjs`);
   }
   const addSpies = generator => {

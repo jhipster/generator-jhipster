@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseBlueprintGenerator = require('../base/generator.cjs');
+const BaseGenerator = require('../base/generator.cjs');
 const { CUSTOM_PRIORITIES_ENTITIES, PRIORITY_NAMES, QUEUES, PRIORITY_PREFIX } = require('../../lib/constants/priorities.cjs');
 const SharedData = require('../../lib/support/shared-data.cjs');
 
@@ -24,7 +24,7 @@ const {
   LOADING,
   PREPARING,
   CONFIGURING_EACH_ENTITY,
-  LOADING_EACH_ENTITY,
+  LOADING_ENTITIES,
   PREPARING_EACH_ENTITY,
   PREPARING_FIELDS,
   PREPARING_EACH_ENTITY_FIELD,
@@ -43,7 +43,7 @@ const {
 
 const {
   CONFIGURING_EACH_ENTITY_QUEUE,
-  LOADING_EACH_ENTITY_QUEUE,
+  LOADING_ENTITIES_QUEUE,
   PREPARING_EACH_ENTITY_QUEUE,
   PREPARING_EACH_ENTITY_FIELD_QUEUE,
   PREPARING_EACH_ENTITY_RELATIONSHIP_QUEUE,
@@ -52,19 +52,19 @@ const {
   POST_WRITING_ENTITIES_QUEUE,
 } = QUEUES;
 
-const asPriority = BaseBlueprintGenerator.asPriority;
+const asPriority = BaseGenerator.asPriority;
 
 /**
  * This is the base class for a generator that generates entities.
  *
  * @class
  * @template ApplicationType
- * @extends {BaseBlueprintGenerator<ApplicationType>}
+ * @extends {BaseGenerator}
  */
-class BaseApplicationGenerator extends BaseBlueprintGenerator {
+class BaseApplicationGenerator extends BaseGenerator {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
-  static LOADING_EACH_ENTITY = asPriority(LOADING_EACH_ENTITY);
+  static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
 
   static PREPARING_EACH_ENTITY = asPriority(PREPARING_EACH_ENTITY);
 
@@ -97,7 +97,21 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   }
 
   /**
-   * Priority API stub for blueprints.
+   * @returns {import('./tasks.js').LoadingTaskGroup<this, ApplicationType>}
+   */
+  get loading() {
+    return {};
+  }
+
+  /**
+   * @returns {import('./tasks.js').WritingTaskGroup<this, ApplicationType>}
+   */
+  get writing() {
+    return this.asWritingTaskGroup(this._writing());
+  }
+
+  /**
+   * @returns {import('./tasks.js').PreparingEachEntityTaskGroup<this, ApplicationType>}
    */
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({});
@@ -129,6 +143,13 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Priority API stub for blueprints.
    */
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({});
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   */
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({});
   }
@@ -143,8 +164,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').InitializingTaskGroup<this>} taskGroup
-   * @returns {import('../../types/tasks').InitializingTaskGroup<this>}
+   * @param {import('./tasks.js').InitializingTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').InitializingTaskGroup<this>}
    */
   asInitialingTaskGroup(taskGroup) {
     return taskGroup;
@@ -153,8 +174,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').ConfiguringTaskGroup<this>} taskGroup
-   * @returns {import('../../types/tasks').ConfiguringTaskGroup<this>}
+   * @param {import('./tasks.js').ConfiguringTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').ConfiguringTaskGroup<this>}
    */
   asConfiguringTaskGroup(taskGroup) {
     return taskGroup;
@@ -163,8 +184,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').PromptingTaskGroup<this>} taskGroup
-   * @returns {import('../../types/tasks').PromptingTaskGroup<this>}
+   * @param {import('./tasks.js').PromptingTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').PromptingTaskGroup<this>}
    */
   asPromptingTaskGroup(taskGroup) {
     return taskGroup;
@@ -173,8 +194,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').ComposingTaskGroup<this>} taskGroup
-   * @returns {import('../../types/tasks').ComposingTaskGroup<this>}
+   * @param {import('./tasks.js').ComposingTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').ComposingTaskGroup<this>}
    */
   asComposingTaskGroup(taskGroup) {
     return taskGroup;
@@ -183,8 +204,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').LoadingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').LoadingTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').LoadingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').LoadingTaskGroup<this, ApplicationType>}
    */
   asLoadingTaskGroup(taskGroup) {
     return taskGroup;
@@ -193,8 +214,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').PreparingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').PreparingTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').PreparingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').PreparingTaskGroup<this, ApplicationType>}
    */
   asPreparingTaskGroup(taskGroup) {
     return taskGroup;
@@ -203,8 +224,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').ConfiguringEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').ConfiguringEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').ConfiguringEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').ConfiguringEachEntityTaskGroup<this, ApplicationType>}
    */
   asConfiguringEachEntityTaskGroup(taskGroup) {
     return taskGroup;
@@ -213,18 +234,18 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').LoadingEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').LoadingEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').LoadingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').LoadingEntitiesTaskGroup<this, ApplicationType>}
    */
-  asLoadingEachEntityTaskGroup(taskGroup) {
+  asLoadingEntitiesTaskGroup(taskGroup) {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').PreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').PreparingEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').PreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').PreparingEachEntityTaskGroup<this, ApplicationType>}
    */
   asPreparingEachEntityTaskGroup(taskGroup) {
     return taskGroup;
@@ -233,8 +254,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').PreparingEachEntityFieldTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').PreparingEachEntityFieldTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').PreparingEachEntityFieldTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').PreparingEachEntityFieldTaskGroup<this, ApplicationType>}
    */
   asPreparingEachEntityFieldTaskGroup(taskGroup) {
     return taskGroup;
@@ -243,8 +264,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>}
    */
   asPreparingEachEntityRelationshipTaskGroup(taskGroup) {
     return taskGroup;
@@ -253,8 +274,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').PostPreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').PostPreparingEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').PostPreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').PostPreparingEachEntityTaskGroup<this, ApplicationType>}
    */
   asPostPreparingEachEntityTaskGroup(taskGroup) {
     return taskGroup;
@@ -263,8 +284,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').DefaultTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').DefaultTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').DefaultTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').DefaultTaskGroup<this, ApplicationType>}
    */
   asDefaultTaskGroup(taskGroup) {
     return taskGroup;
@@ -273,8 +294,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').WritingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').WritingTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').WritingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').WritingTaskGroup<this, ApplicationType>} taskGroup
    */
   asWritingTaskGroup(taskGroup) {
     return taskGroup;
@@ -283,8 +304,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').WritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').WritingEntitiesTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').WritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').WritingEntitiesTaskGroup<this, ApplicationType>}
    */
   asWritingEntitiesTaskGroup(taskGroup) {
     return taskGroup;
@@ -293,8 +314,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').PostWritingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').PostWritingTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').PostWritingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').PostWritingTaskGroup<this, ApplicationType>}
    */
   asPostWritingTaskGroup(taskGroup) {
     return taskGroup;
@@ -303,8 +324,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').PostWritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').PostWritingEntitiesTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').PostWritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').PostWritingEntitiesTaskGroup<this, ApplicationType>}
    */
   asPostWritingEntitiesTaskGroup(taskGroup) {
     return taskGroup;
@@ -313,8 +334,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').InstallTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').InstallTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').InstallTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').InstallTaskGroup<this, ApplicationType>}
    */
   asInstallTaskGroup(taskGroup) {
     return taskGroup;
@@ -323,8 +344,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').PostInstallTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').PostInstallTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').PostInstallTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').PostInstallTaskGroup<this, ApplicationType>}
    */
   asPostInstallTaskGroup(taskGroup) {
     return taskGroup;
@@ -333,8 +354,8 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('../../types/tasks').EndTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('../../types/tasks').EndTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.js').EndTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.js').EndTaskGroup<this, ApplicationType>}
    */
   asEndTaskGroup(taskGroup) {
     return taskGroup;
@@ -349,10 +370,14 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
       if (!baseName) {
         throw new Error('baseName is required');
       }
-      if (!this.options.sharedData[baseName]) {
-        this.options.sharedData[baseName] = {};
+      if (this.options.sharedData.applications === undefined) {
+        this.options.sharedData.applications = {};
       }
-      this.#sharedData = new SharedData(this.options.sharedData[baseName]);
+      const sharedApplications = this.options.sharedData.applications;
+      if (!sharedApplications[baseName]) {
+        sharedApplications[baseName] = {};
+      }
+      this.#sharedData = new SharedData(sharedApplications[baseName]);
     }
     return this.#sharedData;
   }
@@ -374,7 +399,7 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
         PREPARING,
 
         CONFIGURING_EACH_ENTITY,
-        LOADING_EACH_ENTITY,
+        LOADING_ENTITIES,
         PREPARING_EACH_ENTITY,
         PREPARING_FIELDS,
         PREPARING_EACH_ENTITY_FIELD,
@@ -395,16 +420,23 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
       throw new Error(`${priorityName} data not available`);
     }
     if (!this.jhipsterConfig.baseName) {
-      throw new Error(`${this.jhipsterConfig.baseName} application not available`);
+      throw new Error(`BaseName (${this.jhipsterConfig.baseName}) application not available for priotity ${priorityName}`);
+    }
+    const application = this.sharedData.getApplication();
+    if (LOADING_ENTITIES === priorityName) {
+      return {
+        application,
+        entitiesToLoad: this.getEntitiesDataToLoad(),
+      };
     }
     if ([WRITING_ENTITIES, POST_WRITING_ENTITIES, DEFAULT].includes(priorityName)) {
       return {
-        application: this.sharedData.getApplication(),
+        application,
         ...this.getEntitiesDataToWrite(),
       };
     }
 
-    return { application: this.sharedData.getApplication() };
+    return { application };
   }
 
   /**
@@ -535,19 +567,17 @@ class BaseApplicationGenerator extends BaseBlueprintGenerator {
     });
 
     this.queueTask({
-      queueName: LOADING_EACH_ENTITY_QUEUE,
-      taskName: 'queueLoadingEachEntity',
+      queueName: LOADING_ENTITIES_QUEUE,
+      taskName: 'queueLoadingEntities',
       cancellable: true,
       method: () => {
-        this.debug(`Queueing entity tasks ${LOADING_EACH_ENTITY}`);
-        const tasks = this.extractTasksFromPriority(LOADING_EACH_ENTITY, { skip: false });
-        this.getEntitiesDataToLoad().forEach(({ entityName, entityStorage }) => {
-          this.debug(`Queueing entity tasks ${LOADING_EACH_ENTITY} for ${entityName}`);
-          tasks.forEach(task => {
-            this.queueTask({
-              ...task,
-              args: [{ ...this.getTaskFirstArgForPriority(LOADING_EACH_ENTITY), entityName, entityStorage }],
-            });
+        this.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
+        const tasks = this.extractTasksFromPriority(LOADING_ENTITIES, { skip: false });
+        this.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
+        tasks.forEach(task => {
+          this.queueTask({
+            ...task,
+            args: [this.getTaskFirstArgForPriority(LOADING_ENTITIES)],
           });
         });
       },

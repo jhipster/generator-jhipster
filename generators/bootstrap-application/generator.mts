@@ -23,18 +23,15 @@ import BaseApplicationGenerator from '../base-application/generator.cjs';
 
 import validations from '../../jdl/jhipster/validations.js';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
-import authenticationType from '../../jdl/jhipster/authentication-types.js';
 import constants from '../generator-constants.js';
 import utils from '../../utils/index.js';
 import entityUtils from '../../utils/entity.js';
 import fieldUtils from '../../utils/field.js';
-import relationshipUtils from '../../utils/relationship.js';
-import { createUserEntity } from '../../utils/user.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
-const { sortedUniq, intersection, upperFirst } = lodash;
-const { prepareFieldForTemplates, fieldIsEnum } = fieldUtils;
-const { prepareRelationshipForTemplates } = relationshipUtils;
-const { OAUTH2 } = authenticationType;
+import type { ClientServerApplication } from './types.js';
+
+const { sortedUniq, intersection } = lodash;
 
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
 
@@ -42,8 +39,13 @@ const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TI
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = BlobTypes;
 
-const { prepareEntityForTemplates, prepareEntityPrimaryKeyForTemplates, derivedPrimaryKeyProperties, loadRequiredConfigIntoEntity } =
-  entityUtils;
+const {
+  derivedPrimaryKeyProperties,
+  preparePostEntitiesCommonDerivedProperties,
+  preparePostEntityCommonDerivedProperties,
+  preparePostEntityServerDerivedProperties,
+} = entityUtils;
+const { fieldIsEnum } = fieldUtils;
 
 const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations;
 const { SUPPORTED_VALIDATION_RULES } = constants;
@@ -51,10 +53,10 @@ const { stringify } = utils;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('./types.js').BaseApplication>}
+ * @extends {BaseApplicationGenerator<ClientServerApplication>}
  */
-export default class extends BaseApplicationGenerator {
-  constructor(args, options, features) {
+export default class extends BaseApplicationGenerator<ClientServerApplication> {
+  constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
     if (this.options.help) return;
@@ -63,40 +65,17 @@ export default class extends BaseApplicationGenerator {
     this.loadRuntimeOptions();
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loadApplication({ application }) {
-        this.loadAppConfig(undefined, application);
-        this.loadClientConfig(undefined, application);
-        this.loadServerConfig(undefined, application);
-        this.loadTranslationConfig(undefined, application);
-        this.loadPlatformConfig(undefined, application);
-      },
-      loadUser() {
-        if (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== OAUTH2) {
-          return;
-        }
-        if (this.sharedData.hasEntity('User')) {
-          throw new Error("Fail to bootstrap 'User', already exists.");
-        }
-
-        const application = this._.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
-        this.sharedData.setEntity('User', createUserEntity.call(this, {}, application));
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.loading;
+  async _postConstruct() {
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT);
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
   }
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareApplication({ application }) {
-        this.loadDerivedAppConfig(application);
-        this.loadDerivedClientConfig(application);
-        this.loadDerivedServerConfig(application);
-        this.loadDerivedPlatformConfig(application);
+      preparing({ application }) {
+        if (application.authenticationType === 'oauth2' || application.databaseType === 'no') {
+          application.skipUserManagement = true;
+        }
       },
     });
   }
@@ -107,15 +86,8 @@ export default class extends BaseApplicationGenerator {
 
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
-      configureEntity({ entityStorage, entityConfig }) {
-        entityStorage.defaults({ fields: [], relationships: [] });
-
-        if (entityConfig.changelogDate === undefined) {
-          entityConfig.changelogDate = this.dateFormatForLiquibase();
-        }
-      },
       configureFields({ entityName, entityConfig }) {
-        entityConfig.fields.forEach(field => {
+        entityConfig.fields.forEach((field: any) => {
           const { fieldName, fieldType, fieldValidateRules } = field;
 
           assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
@@ -167,7 +139,7 @@ export default class extends BaseApplicationGenerator {
       },
       configureRelationships({ entityName, entityStorage, entityConfig }) {
         // Validate entity json relationship content
-        entityConfig.relationships.forEach(relationship => {
+        entityConfig.relationships.forEach((relationship: any) => {
           const { otherEntityName, relationshipType } = relationship;
 
           assert(otherEntityName, `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
@@ -194,75 +166,8 @@ export default class extends BaseApplicationGenerator {
     return this.configuringEachEntity;
   }
 
-  get loadingEachEntity() {
-    return this.asLoadingEachEntityTaskGroup({
-      loadingEntities({ application, entityName, entityStorage }) {
-        // if already loaded, let the entity generator to initialize entities.
-        if (this.sharedData.hasEntity(entityName)) {
-          throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
-        }
-        const entity = entityStorage.getAll();
-        this.sharedData.setEntity(entityName, entity);
-        loadRequiredConfigIntoEntity(entity, application);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING_EACH_ENTITY]() {
-    return this.loadingEachEntity;
-  }
-
-  get preparingEachEntity() {
-    return this.asPreparingEachEntityTaskGroup({
-      preparingEachEntity({ application, entity }) {
-        prepareEntityForTemplates(entity, this, application);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.preparingEachEntity;
-  }
-
-  get preparingEachEntityField() {
-    return this.asPreparingEachEntityFieldTaskGroup({
-      loadAnnotations({ entity, field }) {
-        if (field.options) {
-          Object.assign(field, field.options);
-        }
-      },
-
-      // If primaryKey doesn't exist, create it.
-      preparePrimaryKey({ entity }) {
-        if (!entity.embedded && !entity.primaryKey) {
-          prepareEntityPrimaryKeyForTemplates(entity, this);
-        }
-      },
-
-      prepareFieldsForTemplates({ entity, field }) {
-        prepareFieldForTemplates(entity, field, this);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.preparingEachEntityField;
-  }
-
   get preparingEachEntityRelationship() {
-    return this.asPreparingEachEntityRelationshipTaskGroup({
-      prepareRelationship({ entity, relationship, entityName }) {
-        const { otherEntityName, options } = relationship;
-        if (options) {
-          Object.assign(relationship, options);
-        }
-        relationship.otherEntity = this.sharedData.getEntity(upperFirst(otherEntityName));
-      },
-
-      prepareRelationshipsForTemplates({ entity, relationship }) {
-        prepareRelationshipForTemplates(entity, relationship, this);
-      },
-    });
+    return this.asPreparingEachEntityRelationshipTaskGroup({});
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
@@ -276,7 +181,11 @@ export default class extends BaseApplicationGenerator {
         derivedPrimaryKeyProperties(entity.primaryKey);
       },
 
-      prepareEntityFieldsDerivedProperties({ entity }) {
+      prepareEntityDerivedProperties({ entity }) {
+        preparePostEntityCommonDerivedProperties(entity);
+        if (!entity.skipServer) {
+          preparePostEntityServerDerivedProperties(entity);
+        }
         const { fields } = entity;
         const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
@@ -299,8 +208,9 @@ export default class extends BaseApplicationGenerator {
 
         entity.fieldsContainBlob = intersection(fieldsType, [BYTES, BYTE_BUFFER]).length > 0;
         if (entity.fieldsContainBlob) {
-          entity.blobFields = fields.filter(({ fieldType }) => [BYTES, BYTE_BUFFER].includes(fieldType));
-          const blobFieldsContentType = sortedUniq(entity.blobFields.map(({ fieldTypeBlobContent }) => fieldTypeBlobContent));
+          const blobFields = fields.filter(({ fieldType }) => [BYTES, BYTE_BUFFER].includes(fieldType));
+          entity.blobFields = blobFields;
+          const blobFieldsContentType = sortedUniq(blobFields.map(({ fieldTypeBlobContent }) => fieldTypeBlobContent));
           entity.fieldsContainImageBlob = blobFieldsContentType.includes(IMAGE);
           entity.fieldsContainBlobOrImage = blobFieldsContentType.some(fieldTypeBlobContent => fieldTypeBlobContent !== TEXT);
           entity.fieldsContainTextBlob = blobFieldsContentType.includes(TEXT);
@@ -327,7 +237,7 @@ export default class extends BaseApplicationGenerator {
 
         const relationshipsByType = relationships
           .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
-          .reduce((relationshipsByType, [type, relationship]) => {
+          .reduce((relationshipsByType: any, [type, relationship]) => {
             if (!relationshipsByType[type]) {
               relationshipsByType[type] = [relationship];
             } else {
@@ -344,5 +254,17 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
     return this.postPreparingEachEntity;
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      postPreparingEntities({ entities }) {
+        preparePostEntitiesCommonDerivedProperties(entities);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.default;
   }
 }

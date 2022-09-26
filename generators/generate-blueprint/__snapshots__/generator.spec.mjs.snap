@@ -119,6 +119,42 @@ Object {
   "generators/base/templates/template-file-base.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/bootstrap-application-base/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-base/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-base/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-base/templates/template-file-bootstrap-application-base.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-client/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-client/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-client/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-client/templates/template-file-bootstrap-application-client.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-server/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-server/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-server/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application-server/templates/template-file-bootstrap-application-server.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/bootstrap-application/generator.mjs": Object {
     "stateCleared": "modified",
   },
