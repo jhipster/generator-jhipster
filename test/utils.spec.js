@@ -1,7 +1,7 @@
 const assert = require('yeoman-assert');
 const path = require('path');
 const sinon = require('sinon');
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const { writeFileSync } = require('fs');
 
 const utils = require('../generators/utils');

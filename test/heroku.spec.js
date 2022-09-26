@@ -4,7 +4,7 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const sinon = require('sinon');
 const ChildProcess = require('child_process');
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 
 const constants = require('../generators/generator-constants');
 

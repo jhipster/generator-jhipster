@@ -1,4 +1,4 @@
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const path = require('path');
 const sinon = require('sinon');
 const { existsSync } = require('fs');

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const { convertEnums } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/enum-converter');
 
 describe('EnumConverter', () => {

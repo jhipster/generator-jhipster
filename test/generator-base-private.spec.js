@@ -1,6 +1,6 @@
 const path = require('path');
 const expect = require('chai').expect;
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 // using base generator which extends the private base
 const BaseGeneratorPrivate = require('../generators/generator-base-private').prototype;
 const BaseGenerator = require('../generators/generator-base').prototype; // TODO remove in favor of a cleaner architecture

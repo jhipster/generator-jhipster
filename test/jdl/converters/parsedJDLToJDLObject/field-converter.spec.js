@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const { convertField } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/field-converter');
 
 describe('FieldConverter', () => {

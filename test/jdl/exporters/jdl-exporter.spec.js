@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 
 const fs = require('fs');
 const JDLObject = require('../../../jdl/models/jdl-object');

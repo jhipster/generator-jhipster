@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const UnaryOptions = require('../../../../jdl/jhipster/unary-options');
 const BinaryOptions = require('../../../../jdl/jhipster/binary-options');
 const { convertOptions } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/option-converter');

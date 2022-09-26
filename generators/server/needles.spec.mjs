@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect } from 'expect';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
