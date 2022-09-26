@@ -431,7 +431,7 @@
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -1009,7 +1009,7 @@
 <%_ if (databaseTypeSql) { _%>
                             <!-- For JPA static metamodel generation -->
                             <path>
-                                <groupId>org.hibernate</groupId>
+                                <groupId>org.hibernate.orm</groupId>
                                 <artifactId>hibernate-jpamodelgen</artifactId>
                                 <version>${hibernate.version}</version>
                             </path>
@@ -2100,7 +2100,7 @@
                 </dependency>
 <%_ if (databaseTypeSql) { _%>
                 <dependency>
-                    <groupId>org.hibernate</groupId>
+                    <groupId>org.hibernate.orm</groupId>
                     <artifactId>hibernate-jpamodelgen</artifactId>
                 </dependency>
 <%_ } _%>
