@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 <%_ } else { _%>
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 <%_ } _%>
 
 import java.security.Principal;
@@ -123,7 +123,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import java.security.Principal;
   <%_ } else { _%>
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
   <%_ } _%>
 
 import java.util.Set;
@@ -245,7 +245,7 @@ import reactor.core.publisher.Mono;
   <%_ } _%>
 
   <%_ if (!reactive) { _%>
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
   <%_ } _%>
 import javax.validation.Valid;
   <%_ if (authenticationTypeSession && !reactive) { _%>

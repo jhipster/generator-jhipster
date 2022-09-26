@@ -153,7 +153,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 <%_ } _%>
 <%_ if (fieldsContainBigDecimal) { _%>
 import java.math.BigDecimal;

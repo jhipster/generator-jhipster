@@ -60,10 +60,10 @@ import org.zalando.problem.violations.ConstraintViolationProblem;
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 <%_ if (!reactive) { _%>
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 <%_ } _%>
 import java.net.URI;
 import java.util.Arrays;
@@ -267,6 +267,6 @@ _%>
     private boolean containsPackageName(String message) {
 
         // This list is for sure not complete
-        return StringUtils.containsAny(message, "org.", "java.", "net.", "javax.", "com.", "io.", "de.", "<%= packageName %>");
+        return StringUtils.containsAny(message, "org.", "java.", "net.", "jakarta.", "javax.", "com.", "io.", "de.", "<%= packageName %>");
     }
 }

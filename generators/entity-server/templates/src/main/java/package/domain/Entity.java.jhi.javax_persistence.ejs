@@ -21,7 +21,7 @@
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
 <&_ if (fragment.importSection) { -&>
-import javax.persistence.*;
+import jakarta.persistence.*;
 <%_ if ((databaseTypePostgres && fieldsContainTextBlob) || (fieldsContainUUID && (databaseTypeMysql || databaseTypeMariadb))) { _%>
 import org.hibernate.annotations.Type;
 <%_ } _%>

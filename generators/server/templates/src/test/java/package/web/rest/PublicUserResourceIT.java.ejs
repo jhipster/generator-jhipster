@@ -68,7 +68,7 @@ import reactor.core.publisher.Mono;
 <%_ } _%>
 
 <%_ if (databaseTypeSql && !reactive) { _%>
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 <%_ } _%>
 <%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
 import java.util.stream.Collectors;
