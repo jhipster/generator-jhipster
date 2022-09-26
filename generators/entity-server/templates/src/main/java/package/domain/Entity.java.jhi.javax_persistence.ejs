@@ -50,9 +50,6 @@ import org.hibernate.annotations.Type;
   <%_ } _%>
   <%_ if (field.fieldTypeBytes) { _%>
     @Lob
-    <%_ if (databaseTypePostgres && field.blobContentTypeText) { _%>
-    @Type(type = "org.hibernate.type.TextType")
-    <%_ } _%>
   <%_ } _%>
   <%_ if (field.fieldTypeTemporal || field.fieldTypeDuration) { _%>
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
