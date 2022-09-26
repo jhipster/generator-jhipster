@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2025 the original author or authors from the JHipster project.
+ Copyright 2012-2025 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,33 +21,50 @@ package <%= entityAbsolutePackage %>.service.dto;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import <%= packageName %>.web.rest.TestUtil;
-<%_
-let id1;
-let id2;
-if (!embedded) {
-    id1 = primaryKey.javaSampleValues[0];
-    id2 = primaryKey.javaSampleValues[1];
-} %>
 <%_ if (primaryKey && primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
+<%_
+const initDTO = (dtoEntity, entityNbr) => {
+_%>
+    <%= dtoEntity.dtoClass %> <%= dtoEntity.dtoInstance %><%= entityNbr %> = new <%= dtoEntity.dtoClass %>();
+    <%_ dtoEntity.fields.filter(f => f.id).forEach(f => { _%>
+    <%= dtoEntity.dtoInstance + entityNbr %>.set<%= f.fieldNameCapitalized %>(<%- getPrimaryKeyValue(f.fieldType, databaseType, entityNbr) %>);
+    <%_ }) _%>
+    <%_ dtoEntity.relationships.filter(r => r.id && !(r.relationshipType === 'one-to-one' && !dtoEntity.primaryKey.composite)).forEach(r => { _%>
+    <%- initDTO(r.otherEntity, entityNbr); _%>
+    <%= dtoEntity.dtoInstance + entityNbr %>.set<%= r.relationshipNameCapitalized %>(<%= r.otherEntity.dtoInstance + entityNbr %>);
+    <%_ })
+}
+const entity = { dtoClass, dtoInstance, fields, relationships, primaryKey }
+_%>
 
 class <%= dtoClass %>Test {
 
     @Test
     void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= dtoClass %>.class);
-<%_if (!embedded) { _%>
-        <%= dtoClass %> <%= dtoInstance %>1 = new <%= dtoClass %>();
-        <%= dtoInstance %>1.set<%= primaryKey.nameCapitalized %>(<%- id1 %>);
-        <%= dtoClass %> <%= dtoInstance %>2 = new <%= dtoClass %>();
+        <%_ if (!embedded) { _%>
+        <%- initDTO(entity, 1); _%>
+        <%- initDTO(entity, 2); _%>
         assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
-        <%= dtoInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= dtoInstance %>1.get<%= primaryKey.nameCapitalized %>());
-        assertThat(<%= dtoInstance %>1).isEqualTo(<%= dtoInstance %>2);
-        <%= dtoInstance %>2.set<%= primaryKey.nameCapitalized %>(<%- id2 %>);
-        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
-        <%= dtoInstance %>1.set<%= primaryKey.nameCapitalized %>(null);
-        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
-<%_ } _%>
+        <%= dtoClass %> <%= dtoInstance %>3 = new <%= dtoClass %>();
+        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>3);
+<%_ fields.filter(f => f.id).forEach(f => { _%>
+        <%= dtoInstance %>3.set<%= f.fieldNameCapitalized %>(<%= dtoInstance %>1.get<%= f.fieldNameCapitalized %>());
+<%_ }) _%>
+<%_ relationships.filter(r => r.id && !(r.relationshipType === 'one-to-one' && !primaryKey.composite)).forEach(r => { _%>
+        <%= dtoInstance %>3.set<%= r.relationshipNameCapitalized %>(<%= r.otherEntity.dtoInstance %>1);
+<%_ }) _%>
+        assertThat(<%= dtoInstance %>1).isEqualTo(<%= dtoInstance %>3);
+        <%= dtoClass %> <%= dtoInstance %>4 = new <%= dtoClass %>();
+<%_ fields.filter(f => f.id).forEach(f => { _%>
+        <%= dtoInstance %>4.set<%= f.fieldNameCapitalized %>(null);
+<%_ }) _%>
+<%_ relationships.filter(r => r.id && !(r.relationshipType === 'one-to-one' && !primaryKey.composite)).forEach(r => { _%>
+        <%= dtoInstance %>4.set<%= r.relationshipNameCapitalized %>(null);
+<%_ }) _%>
+        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>4);
+        <%_ } _%>
     }
 }

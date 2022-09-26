@@ -21,37 +21,45 @@ package <%= entityAbsolutePackage %>.domain;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import <%= packageName %>.web.rest.TestUtil;
-<%_ if (fields.some(field => field.fieldTypeString) || fields.some(field => field.fieldTypeUUID)) { _%>
+<%_ const allFields = [...fields, ...(primaryKey.composite ? primaryKey.fields : [])]; _%>
+<%_ if (allFields.some(field => field.fieldTypeString) || allFields.some(field => field.fieldTypeUUID)) { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (fields.some(field => field.fieldTypeLong || field.fieldTypeInteger)) { _%>
+<%_ if (allFields.some(field => field.fieldTypeLong || field.fieldTypeInteger)) { _%>
 import java.util.Random;
 <%_ } _%>
-<%_ if (fields.some(field => field.fieldTypeLong)) { _%>
+<%_ if (allFields.some(field => field.fieldTypeLong)) { _%>
 import java.util.concurrent.atomic.AtomicLong;
 <%_ } _%>
-<%_ if (fields.some(field => field.fieldTypeInteger)) { _%>
+<%_ if (allFields.some(field => field.fieldTypeInteger)) { _%>
 import java.util.concurrent.atomic.AtomicInteger;
 <%_ } _%>
 
-<%_ const sampleFields = fields.filter(field => !field.mapstructExpression && (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID)); _%>
+<%_
+const allSampleFields = fields.filter(field => !field.mapstructExpression && (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID));
+// For composite keys, exclude ID fields from direct field setting (they go into the composite ID)
+const sampleFields = primaryKey.composite ? allSampleFields.filter(field => !field.id) : allSampleFields;
+_%>
 public class <%= persistClass %>TestSamples {
 
-<%_ if (fields.some(field => field.fieldTypeLong || field.fieldTypeInteger)) { _%>
+<%_ if (allFields.some(field => field.fieldTypeLong || field.fieldTypeInteger)) { _%>
     private static final Random random = new Random();
 <%_ } _%>
-<%_ if (fields.some(field => field.fieldTypeLong)) { _%>
+<%_ if (allFields.some(field => field.fieldTypeLong)) { _%>
     private static final AtomicLong longCount = new AtomicLong(random.nextInt() + ( 2L * Integer.MAX_VALUE ));
 <%_ } _%>
-<%_ if (fields.some(field => field.fieldTypeInteger)) { _%>
+<%_ if (allFields.some(field => field.fieldTypeInteger)) { _%>
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + ( 2 * Short.MAX_VALUE ));
 <%_ } _%>
 
     public static <%= persistClass %> get<%= persistClass %>Sample1() {
 <%_ if (fluentMethods) { _%>
-        return new <%= persistClass %>()<% sampleFields.forEach(field => { %>.<%- field.fieldName %>(<%- field.javaValueSample1 %>)<% }) %>;
+        return new <%= persistClass %>()<% if (primaryKey.composite) { %>.<%- primaryKey.name %>(new <%= primaryKey.type %>(<%- primaryKey.fields.map(f => f.javaValueSample1).join(', ') %>))<% } %><% sampleFields.forEach(field => { %>.<%- field.fieldName %>(<%- field.javaValueSample1 %>)<% }) %>;
 <%_ } else { _%>
         <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
+  <%_ if (primaryKey.composite) { _%>
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(new <%= primaryKey.type %>(<%- primaryKey.fields.map(f => f.javaValueSample1).join(', ') %>));
+  <%_ } _%>
   <%_ for (const field of sampleFields) { _%>
         <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.javaValueSample1 %>);
   <%_ } _%>
@@ -61,9 +69,12 @@ public class <%= persistClass %>TestSamples {
 
     public static <%= persistClass %> get<%= persistClass %>Sample2() {
 <%_ if (fluentMethods) { _%>
-        return new <%= persistClass %>()<% sampleFields.forEach(field => { %>.<%- field.fieldName %>(<%- field.javaValueSample2 %>)<% }) %>;
+        return new <%= persistClass %>()<% if (primaryKey.composite) { %>.<%- primaryKey.name %>(new <%= primaryKey.type %>(<%- primaryKey.fields.map(f => f.javaValueSample2).join(', ') %>))<% } %><% sampleFields.forEach(field => { %>.<%- field.fieldName %>(<%- field.javaValueSample2 %>)<% }) %>;
 <%_ } else { _%>
         <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
+  <%_ if (primaryKey.composite) { _%>
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(new <%= primaryKey.type %>(<%- primaryKey.fields.map(f => f.javaValueSample2).join(', ') %>));
+  <%_ } _%>
   <%_ for (const field of sampleFields) { _%>
         <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.javaValueSample2 %>);
   <%_ } _%>
@@ -73,9 +84,12 @@ public class <%= persistClass %>TestSamples {
 
     public static <%= persistClass %> get<%= persistClass %>RandomSampleGenerator() {
 <%_ if (fluentMethods) { _%>
-        return new <%= persistClass %>()<% sampleFields.forEach(field => { %>.<%- field.fieldName %>(<%- field.javaValueGenerator %>)<% }) %>;
+        return new <%= persistClass %>()<% if (primaryKey.composite) { %>.<%- primaryKey.name %>(new <%= primaryKey.type %>(<%- primaryKey.fields.map(f => f.javaValueGenerator).join(', ') %>))<% } %><% sampleFields.forEach(field => { %>.<%- field.fieldName %>(<%- field.javaValueGenerator %>)<% }) %>;
 <%_ } else { _%>
         <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
+  <%_ if (primaryKey.composite) { _%>
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(new <%= primaryKey.type %>(<%- primaryKey.fields.map(f => f.javaValueGenerator).join(', ') %>));
+  <%_ } _%>
   <%_ for (const field of sampleFields) { _%>
         <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.javaValueGenerator %>);
   <%_ } _%>

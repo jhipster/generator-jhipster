@@ -28,7 +28,8 @@ for (field of fieldsToGenerate) {
     header.push(field.columnName + '_content_type');
   }
 }
-for (relationship of relationships.filter(relationship => relationship.liquibaseGenerateFakeData)) {
+const relationshipsToGenerate = [...relationships.filter(r => r.id && entity.primaryKey.composite), ...relationships.filter(r => !r.id && r.relationshipRequired &&  (r.relationshipManyToOne || (r.relationshipOneToOne && r.ownerSide)))];
+for (relationship of relationshipsToGenerate) {
   const { joinColumnNames } = relationship;
   header.push(joinColumnNames[0]);
 }
@@ -57,7 +58,7 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
     }
   }
 
-  for (relationship of relationships.filter(relationship => relationship.liquibaseGenerateFakeData)) {
+for (relationship of relationshipsToGenerate) {
     const relationshipType = relationship.relationshipType;
     const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
     let relationshipRow = lineNb;
@@ -65,7 +66,10 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
       relationshipRow = entity.faker.number.int({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
     }
     if (relationshipRow < relationship.otherEntity.fakeDataCount) {
-      line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);
+      relationship.otherEntity.primaryKey.fields.forEach(field => {
+        const otherLiquibaseFakeData = field.entity.liquibaseFakeData;
+        line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);
+      })
     }
   }
   if (line.length === header.length) {

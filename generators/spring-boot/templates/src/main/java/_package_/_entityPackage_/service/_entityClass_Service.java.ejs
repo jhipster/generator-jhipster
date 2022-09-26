@@ -54,6 +54,9 @@ import java.util.Optional;
 <%_ if (primaryKey.typeUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
+<%_ if (primaryKey.composite) { _%>
+import <%=packageName%>.domain.<%=primaryKey.type%>;
+<%_ } _%>
 
 /**
  * Service Interface for managing {@link <%= entityAbsoluteClass %>}.

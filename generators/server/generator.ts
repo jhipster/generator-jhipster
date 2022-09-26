@@ -280,18 +280,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
 
   /** @inheritdoc */
   get default() {
-    return this.asDefaultTaskGroup({
-      checkCompositeIds({ entities }) {
-        const entitiesWithCompositeIds = entities.filter(entity => entity.primaryKey?.composite);
-        if (entitiesWithCompositeIds.length > 0) {
-          throw new Error(
-            `Composite id is not supported. Defined in ${entitiesWithCompositeIds.map(
-              entity => `${entity.name} (${entity.primaryKey!.fields.map(field => field.fieldName)})`,
-            )}`,
-          );
-        }
-      },
-    });
+    return this.asDefaultTaskGroup({});
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
