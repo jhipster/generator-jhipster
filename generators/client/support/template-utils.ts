@@ -104,8 +104,13 @@ export const generateEntityClientEnumImports = (fields: BaseApplicationField[], 
  */
 
 export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: 0 | 1 | 'random' = 0, wrapped = true): string | number => {
-  if (index === 'random' && typeof primaryKey === 'object') {
-    return primaryKey.fields[0]!.generateFakeData!('ts');
+  if (typeof primaryKey === 'object') {
+    return primaryKey.fields!.map(f => {
+      if (index === 'random') {
+        return f.generateFakeData!('ts');
+      }
+      return generateTestEntityId(f.fieldType as FieldType, index, wrapped);
+    }).join(', ');
   }
 
   assert(index === 0 || index === 1, 'index must be 0 or 1');
@@ -126,32 +131,67 @@ export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: 
 };
 
 /**
- * Generate a test entity, according to the type
+ * Generate a test entity, according to the type.
+ * Handles derived fields by building nested structures using path.
  */
-export const generateTsTestEntityForFields = (fields: ClientField[]): Record<string, string | number | boolean> => {
-  const entries = fields
-    .map(field => {
-      const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate } = field;
-      const fakeData = field.generateFakeData!('ts');
-      if (fieldWithContentType) {
-        return [
-          [field.propertyName, fakeData],
-          [contentTypeFieldName, "'unknown'"],
-        ];
-      }
-      if (fieldTypeTimed || fieldTypeLocalDate) {
-        return [[field.propertyName, `dayjs(${fakeData})`]];
-      }
-      return [[field.propertyName, fakeData]];
-    })
-    .flat();
-  return Object.fromEntries(entries);
+export const generateTsTestEntityForFields = (fields: ClientField[], index?: 0 | 1): Record<string, any> => {
+  const result: Record<string, any> = {};
+
+  for (const field of fields) {
+    const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate } = field;
+    let fakeData: any = index !== undefined ? generateTestEntityId(field.fieldType as FieldType, index, true) : field.generateFakeData!('ts');
+
+    if (fieldTypeTimed || fieldTypeLocalDate) {
+      fakeData = `dayjs(${fakeData})`;
+    }
+
+    // Use path for nested structure (maintains proper nesting for composite keys),
+    // otherwise use propertyName
+    const path = field.path ?? [field.propertyName];
+
+    // Build nested structure
+    let current = result;
+    for (let i = 0; i < path.length - 1; i++) {
+      current[path[i]] ??= {};
+      current = current[path[i]];
+    }
+    current[path[path.length - 1]] = fakeData;
+
+    if (fieldWithContentType) {
+      result[contentTypeFieldName!] = "'unknown'";
+    }
+  }
+
+  return result;
 };
 
+/**
+ * Generate flat route params for primary key fields (uses fieldName, not derivedPath).
+ */
+export const generateTsTestPrimaryKeyRouteParams = (fields: ClientField[], index: 0 | 1): Record<string, any> => {
+  const result: Record<string, any> = {};
+  for (const field of fields) {
+    result[field.fieldName] = generateTestEntityId(field.fieldType as FieldType, index, true);
+  }
+  return result;
+};
+
+/**
+ * Recursively stringifies an object for TypeScript code.
+ */
 export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: string } = {}): string => {
   const entries = Object.entries(data);
   const { sep = entries.length > 1 ? '\n  ' : '' } = options;
-  return `{${sep}${entries.map(([key, value]) => `${key}: ${value}`).join(`,${sep}`)}${sep.trim()}}`;
+
+  const stringifyValue = (value: any): string => {
+    if (typeof value === 'object' && value !== null) {
+      // Nested object - stringify recursively without separator
+      return stringifyTsEntity(value, { sep: '' });
+    }
+    return String(value);
+  };
+
+  return `{${sep}${entries.map(([key, value]) => `${key}: ${stringifyValue(value)}`).join(`,${sep}`)}${sep.trim()}}`;
 };
 
 /**

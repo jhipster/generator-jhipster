@@ -331,7 +331,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
   };
 };
 
-const minimatch = new Minimatch('**/*{.html,.ts}');
+const minimatch = new Minimatch('**/*{.html,.ts}', { dot: true });
 export const isTranslatedAngularFile = (file: MemFsEditorFile) => minimatch.match(file.path);
 
 export const translateAngularFilesTransform = (getWebappTranslation: GetWebappTranslationCallback, opts: ReplacerOptions | boolean) => {

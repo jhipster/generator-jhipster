@@ -60,6 +60,6 @@ package ${packageName};
   });
 };
 
-export const matchMainJavaFiles = (srcMainJava: string) => new Minimatch(`**/${srcMainJava}/**/*.java`);
+export const matchMainJavaFiles = (srcMainJava: string) => new Minimatch(`**/${srcMainJava}/**/*.java`, { dot: true });
 
 export default packageInfoTransform;

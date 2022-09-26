@@ -27,7 +27,7 @@ import type CoreGenerator from '../../base-core/index.ts';
 
 import type prettierWorker from './prettier-worker.ts';
 
-const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
+const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}', { dot: true });
 export const isPrettierConfigFilePath = (filePath: string) => minimatch.match(filePath);
 
 const supportsTsFiles = parseInt(process.versions.node.split('.')[0]) >= 22;

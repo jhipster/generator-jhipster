@@ -132,11 +132,18 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
                 ,
                 <%= field.fieldJavaBuildSpecification %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= persistClass %>_.<%= field.fieldName %>)
 <%_ } _%>
-<%_ for (const relationship of relationships) { _%>
+<%_ for (const relationship of relationships) {
+    const metamodelFieldName = relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName;
+    for (const field of relationship.otherEntity.primaryKey.fields) {
+        const fieldAccessor = relationship.otherEntity.primaryKey.composite
+            ? `.get(${relationship.otherEntity.persistClass}_.${relationship.otherEntity.primaryKey.name}).get(${relationship.otherEntity.primaryKey.type}_.${field.fieldName})`
+            : `.get(${relationship.otherEntity.persistClass}_.${field.fieldName})`;
+_%>
                 ,
-                buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
-                    root -> root.join(<%= persistClass %>_.<%= relationship.propertyName %>, JoinType.LEFT).get(<%= relationship.otherEntity.persistClass %>_.<%= relationship.otherEntity.primaryKey.name %>))
-<%_ } _%>
+                buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %><%= field.fieldNameCapitalized %>(),
+                    root -> root.join(<%= persistClass %>_.<%= metamodelFieldName %>, JoinType.LEFT)<%- fieldAccessor %>)
+<%_ }
+} _%>
             );
         }
         return specification;

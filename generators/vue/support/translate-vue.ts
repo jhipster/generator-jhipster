@@ -173,7 +173,7 @@ export function replaceTranslations({
   });
 }
 
-const minimatch = new Minimatch('**/*.{vue,ts}');
+const minimatch = new Minimatch('**/*.{vue,ts}', { dot: true });
 export const isTranslatedVueFile = (file: MemFsEditorFile) => minimatch.match(file.path);
 
 function translateVueFilesTransform(

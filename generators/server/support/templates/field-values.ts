@@ -68,5 +68,8 @@ export const getPrimaryKeyValue = (primaryKey: PrimaryKey | string, databaseType
   if (primaryKeyType === UUID) {
     return getJavaValueGeneratorForType(primaryKeyType);
   }
+  if (primaryKeyType === INTEGER) {
+    return `${defaultValue}`;
+  }
   return `${defaultValue}L`;
 }

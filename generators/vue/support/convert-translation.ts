@@ -24,7 +24,7 @@ export function convertVueTranslations(body: string) {
 }
 
 const convertTranslationsSupport = ({ clientI18nDir }: { clientI18nDir: string }) => {
-  const minimatch = new Minimatch(`**/${clientI18nDir}**/*.json`);
+  const minimatch = new Minimatch(`**/${clientI18nDir}**/*.json`, { dot: true });
   const isTranslationFile = (file: { path: string }) => minimatch.match(file.path);
   const transform = passthrough(file => {
     if (isTranslationFile(file)) {

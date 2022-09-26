@@ -133,7 +133,7 @@ export default class BaseGenerator<
       if (this.fromBlueprint) {
         if (storeBlueprintVersion && !this.options.reproducibleTests) {
           try {
-            const blueprintPackageJson = JSON.parse(readFileSync(this._meta!.packagePath!, 'utf8'));
+            const blueprintPackageJson = JSON.parse(readFileSync(path.join(this._meta!.packagePath!, 'package.json'), 'utf8'));
             this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
           } catch {
             this.log(`Could not retrieve version of blueprint '${this.options.namespace}'`);
