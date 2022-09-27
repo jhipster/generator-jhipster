@@ -46,7 +46,7 @@ module.exports = class extends needleClientBase {
     entityName,
     entityFolderName,
     entityFileName,
-    { applicationTypeMicroservice, CLIENT_MAIN_SRC_DIR } = {}
+    { applicationTypeMicroservice, CLIENT_MAIN_SRC_DIR } = this
   ) {
     const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/routes.tsx`;
     const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
