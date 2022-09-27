@@ -1551,18 +1551,16 @@ class JHipsterBaseGenerator extends PrivateBase {
       generator = namespace;
     } else {
       // Keep test compatibily were jhipster lookup does not run.
-      try {
-        generator = require.resolve(`./${generator}`);
-      } catch (e) {
+      const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
         try {
-          generator = require.resolve(`./${generator}/index.cjs`);
+          generator = require.resolve(`./${generator}${extension}`);
+          return true;
         } catch (e) {
-          try {
-            generator = require.resolve(`./${generator}/index.mjs`);
-          } catch (e) {
-            throw new Error(`Generator ${generator} was not found`);
-          }
+          return false;
         }
+      });
+      if (!found) {
+        throw new Error(`Generator ${generator} was not found`);
       }
     }
 
