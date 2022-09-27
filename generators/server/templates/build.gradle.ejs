@@ -322,7 +322,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (cacheProviderRedis) { _%>
     implementation "org.redisson:redisson"
   <%_ if (enableHibernateCache) { _%>
-    implementation "org.hibernate:hibernate-jcache"
+    implementation "org.hibernate.orm:hibernate-jcache"
   <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka || databaseTypeSql) { _%>
@@ -364,7 +364,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (cacheProviderEhCache) { _%>
     implementation "org.ehcache:ehcache"
   <%_ if (enableHibernateCache) { _%>
-    implementation "org.hibernate:hibernate-jcache"
+    implementation "org.hibernate.orm:hibernate-jcache"
   <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
@@ -374,12 +374,12 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.github.ben-manes.caffeine:jcache:${caffeineVersion}"
     implementation "com.typesafe:config:${typesafeConfigVersion}"
   <%_ if (enableHibernateCache) { _%>
-    implementation "org.hibernate:hibernate-jcache"
+    implementation "org.hibernate.orm:hibernate-jcache"
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
     annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
-    implementation "org.hibernate:hibernate-core"
+    implementation "org.hibernate.orm:hibernate-core"
     implementation "org.hibernate.validator:hibernate-validator"
     implementation "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase:liquibase-core"
