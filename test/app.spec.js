@@ -20,7 +20,7 @@ const { EHCACHE, HAZELCAST } = require('../jdl/jhipster/cache-types');
 const cacheProviders = require('../jdl/jhipster/cache-types');
 const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { JWT } = require('../jdl/jhipster/authentication-types');
-const { CUCUMBER, PROTRACTOR } = require('../jdl/jhipster/test-framework-types');
+const { CUCUMBER } = require('../jdl/jhipster/test-framework-types');
 const { ANGULAR, REACT } = require('../jdl/jhipster/client-framework-types');
 const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
 
@@ -1216,40 +1216,6 @@ describe('JHipster generator', () => {
   });
 
   context('Testing options', () => {
-    describe('Protractor tests', () => {
-      let runResult;
-      before(async () => {
-        runResult = await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
-          baseName: 'jhipster',
-          packageName: 'com.mycompany.myapp',
-          packageFolder: 'com/mycompany/myapp',
-          clientFramework: ANGULAR,
-          serverPort: '8080',
-          authenticationType: JWT,
-          serviceDiscoveryType: false,
-          cacheProvider: EHCACHE,
-          enableHibernateCache: true,
-          websocket: false,
-          databaseType: SQL,
-          devDatabaseType: H2_DISK,
-          prodDatabaseType: POSTGRESQL,
-          searchEngine: false,
-          buildTool: MAVEN,
-          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-          applicationType: 'monolith',
-          testFrameworks: [PROTRACTOR],
-          jhiPrefix: 'jhi',
-          enableTranslation: true,
-          nativeLanguage: 'en',
-          languages: ['en'],
-        });
-      });
-
-      it('creates expected files with Protractor enabled', () => {
-        expect(runResult.getStateSnapshot()).toMatchSnapshot();
-      });
-    });
-
     describe('Cucumber tests', () => {
       let runResult;
       before(async () => {

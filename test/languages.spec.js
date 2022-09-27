@@ -14,7 +14,6 @@ const createClientProject = options =>
       fromCli: true,
       skipInstall: true,
       defaults: true,
-      testFrameworks: ['protractor'],
       ...options,
     })
     .run();

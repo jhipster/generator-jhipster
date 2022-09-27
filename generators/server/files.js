@@ -260,12 +260,12 @@ const baseServerFiles = {
       templates: ['kafka.yml'],
     },
     {
-      condition: generator => !!generator.serviceDiscoveryType,
+      condition: generator => generator.serviceDiscoveryAny,
       path: DOCKER_DIR,
       templates: [{ file: 'config/README.md', renameTo: () => 'central-server-config/README.md' }],
     },
     {
-      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryConsul,
+      condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryConsul,
       path: DOCKER_DIR,
       templates: [
         'consul.yml',
@@ -274,7 +274,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryEureka,
+      condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryEureka,
       path: DOCKER_DIR,
       templates: [
         'jhipster-registry.yml',
@@ -299,7 +299,7 @@ const baseServerFiles = {
       templates: ['keycloak.yml', { file: 'config/realm-config/jhipster-realm.json', renameTo: () => 'realm-config/jhipster-realm.json' }],
     },
     {
-      condition: generator => generator.serviceDiscoveryType || generator.applicationTypeGateway || generator.applicationTypeMicroservice,
+      condition: generator => generator.serviceDiscoveryAny || generator.applicationTypeGateway || generator.applicationTypeMicroservice,
       path: DOCKER_DIR,
       templates: ['zipkin.yml'],
     },
@@ -641,7 +641,7 @@ const baseServerFiles = {
   ],
   serverJavaGateway: [
     {
-      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryType,
+      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         { file: 'package/web/rest/vm/RouteVM.java', renameTo: generator => `${generator.javaDir}web/rest/vm/RouteVM.java` },
@@ -686,7 +686,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryType && generator.reactive,
+      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny && generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -696,7 +696,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryType && generator.reactive,
+      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny && generator.reactive,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -754,7 +754,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && generator.applicationTypeGateway && !generator.serviceDiscoveryType,
+      condition: generator => !generator.reactive && generator.applicationTypeGateway && !generator.serviceDiscoveryAny,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -771,7 +771,7 @@ const baseServerFiles = {
   ],
   serverMicroserviceAndGateway: [
     {
-      condition: generator => generator.serviceDiscoveryType,
+      condition: generator => generator.serviceDiscoveryAny,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/bootstrap.yml', 'config/bootstrap-prod.yml'],
     },
@@ -782,7 +782,7 @@ const baseServerFiles = {
       templates: [{ file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` }],
     },
     {
-      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryEureka,
+      condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryEureka,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1309,7 +1309,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.serviceDiscoveryType,
+      condition: generator => generator.serviceDiscoveryAny,
       path: SERVER_TEST_RES_DIR,
       templates: ['config/bootstrap.yml'],
     },

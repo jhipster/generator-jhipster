@@ -36,7 +36,7 @@ function writeFiles() {
     },
 
     writeRegistryFiles() {
-      if (this.serviceDiscoveryType) {
+      if (this.serviceDiscoveryAny) {
         this.template('central-server-config/application.yml.ejs', 'central-server-config/application.yml');
       }
     },
