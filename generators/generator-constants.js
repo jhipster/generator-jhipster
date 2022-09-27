@@ -39,10 +39,10 @@ const SPRING_BOOT_VERSION = '3.0.0-M5';
 const LIQUIBASE_VERSION = '4.16.0';
 // TODO v8: Remove this constant
 const LIQUIBASE_DTD_VERSION = 'latest';
-const HIBERNATE_VERSION = '5.6.10.Final';
+const HIBERNATE_VERSION = '6.1.3.Final';
 const JACOCO_VERSION = '0.8.8';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.3';
-const JIB_VERSION = '3.2.1';
+const JIB_VERSION = '3.3.0';
 
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
