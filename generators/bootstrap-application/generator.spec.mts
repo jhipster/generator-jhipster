@@ -154,7 +154,8 @@ Array [
       it('should prepare User', () => {
         const entity = runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities.User;
         expect(entity).toMatchInlineSnapshot(
-expectedEntity(entity), `
+          expectedEntity(entity),
+          `
 Object {
   "adminUserDto": "AdminUserDTO",
   "allReferences": Any<Array>,
@@ -628,12 +629,14 @@ Object {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`);
+`
+        );
       });
       it('should prepare EntityA', () => {
         const entity = runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities.EntityA;
         expect(entity).toMatchInlineSnapshot(
-expectedEntity(entity), `
+          expectedEntity(entity),
+          `
 Object {
   "allReferences": Any<Array>,
   "applicationType": "monolith",
@@ -894,7 +897,8 @@ Object {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`);
+`
+        );
       });
     });
 
@@ -955,7 +959,8 @@ Array [
       it('should prepare EntityA', () => {
         const entity = runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities.EntityA;
         expect(entity).toMatchInlineSnapshot(
-expectedEntity(entity), `
+          expectedEntity(entity),
+          `
 Object {
   "allReferences": Any<Array>,
   "applicationType": "monolith",
@@ -1216,7 +1221,8 @@ Object {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`);
+`
+        );
       });
     });
   });
