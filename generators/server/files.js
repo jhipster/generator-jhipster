@@ -1824,29 +1824,29 @@ const serverFiles = mergeSections(
 
 function writeFiles() {
   return {
-    setUp() {
-      this.application.javaDir = `${this.application.packageFolder}/`;
-      this.application.testDir = `${this.application.packageFolder}/`;
+    setUp({ application }) {
+      application.javaDir = `${application.packageFolder}/`;
+      application.testDir = `${application.packageFolder}/`;
 
       this.generateKeyStore();
     },
 
-    cleanupOldServerFiles() {
+    cleanupOldServerFiles({ application }) {
       serverCleanup.cleanupOldServerFiles(
         this,
-        `${SERVER_MAIN_SRC_DIR}${this.application.javaDir}`,
-        `${SERVER_TEST_SRC_DIR}${this.application.testDir}`,
+        `${SERVER_MAIN_SRC_DIR}${application.javaDir}`,
+        `${SERVER_TEST_SRC_DIR}${application.testDir}`,
         SERVER_MAIN_RES_DIR,
         SERVER_TEST_RES_DIR
       );
     },
 
-    writeFiles() {
+    writeFiles({ application }) {
       const recreateInitialChangelog = this.configOptions.recreateInitialChangelog;
       return this.writeFiles({
         sections: serverFiles,
         context: {
-          ...this.application,
+          ...application,
           recreateInitialChangelog,
         },
       });

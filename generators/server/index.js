@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 const os = require('os');
 const prompts = require('./prompts');
-const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER } = require('../generator-list');
+const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const BaseApplicationGenerator = require('../base-application/generator.cjs');
 const { writeFiles } = require('./files');
@@ -74,6 +74,8 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   }
 
   async _postConstruct() {
+    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SERVER);
     }
@@ -115,94 +117,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         }
       },
 
-      loadEnvironmentVariables() {
-        this.application = {};
-
-        if (process.env.JHI_BOM_VERSION) {
-          this.application.jhiBomVersion = process.env.JHI_BOM_VERSION;
-          this.info(`Using JHipster BOM version ${process.env.JHI_BOM_VERSION}`);
-        }
-
-        this.application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
-        if (this.application.defaultPackaging === 'war') {
-          this.info(`Using ${this.application.defaultPackaging} as default packaging`);
-        }
-
-        const JHI_PROFILE = process.env.JHI_PROFILE;
-        this.application.defaultEnvironment = (JHI_PROFILE || '').includes('dev') ? 'dev' : 'prod';
-        if (JHI_PROFILE) {
-          this.info(`Using ${this.application.defaultEnvironment} as default profile`);
-        }
-      },
-
-      setupServerconsts() {
-        // Make constants available in templates
-        this.application.MAIN_DIR = constants.MAIN_DIR;
-        this.application.TEST_DIR = constants.TEST_DIR;
-        this.application.DOCKER_DIR = constants.DOCKER_DIR;
-        this.application.LOGIN_REGEX = constants.LOGIN_REGEX;
-        this.application.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
-        this.application.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-        this.application.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-        this.application.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
-        this.application.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
-
-        this.application.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-        this.application.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
-        this.application.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
-        this.application.DOCKER_MYSQL = constants.DOCKER_MYSQL;
-        this.application.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-        this.application.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
-        this.application.DOCKER_MONGODB = constants.DOCKER_MONGODB;
-        this.application.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
-        this.application.DOCKER_MSSQL = constants.DOCKER_MSSQL;
-        this.application.DOCKER_NEO4J = constants.DOCKER_NEO4J;
-        this.application.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
-        this.application.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
-        this.application.DOCKER_REDIS = constants.DOCKER_REDIS;
-        this.application.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-        this.application.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
-        this.application.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
-        this.application.ELASTICSEARCH_VERSION = constants.ELASTICSEARCH_VERSION;
-        this.application.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
-        this.application.DOCKER_KEYCLOAK_VERSION = constants.DOCKER_KEYCLOAK_VERSION;
-        this.application.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-        this.application.KAFKA_VERSION = constants.KAFKA_VERSION;
-        this.application.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-        this.application.DOCKER_SONAR = constants.DOCKER_SONAR;
-        this.application.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-        this.application.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-        this.application.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
-        this.application.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-        this.application.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-        this.application.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
-        this.application.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
-
-        this.application.JAVA_VERSION = constants.JAVA_VERSION;
-        this.application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
-        this.application.GRADLE_VERSION = constants.GRADLE_VERSION;
-
-        this.application.NODE_VERSION = constants.NODE_VERSION;
-        this.application.NPM_VERSION = constants.NPM_VERSION;
-
-        this.application.JHIPSTER_DEPENDENCIES_VERSION = this.application.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
-        this.application.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
-        this.application.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
-        // TODO v8: Remove this constant
-        this.application.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
-        this.application.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
-        this.application.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
-        this.application.JACOCO_VERSION = constants.JACOCO_VERSION;
-        this.application.JIB_VERSION = constants.JIB_VERSION;
-
-        this.application.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-        this.application.VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
-        this.application.REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-
-        this.packagejs = packagejs;
-        this.application.jhipsterPackageJson = packagejs;
-      },
-
       setupRequiredConfig() {
         if (!this.jhipsterConfig.applicationType) {
           this.jhipsterConfig.applicationType = defaultConfig.applicationType;
@@ -241,13 +155,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
       askForModuleName: prompts.askForModuleName,
       askForServerSideOpts: prompts.askForServerSideOpts,
       askForOptionalItems: prompts.askForOptionalItems,
-
-      setSharedConfigOptions() {
-        // Make dist dir available in templates
-        this.application.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool);
-        this.application.CLIENT_DIST_DIR =
-          this.getResourceBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool) + constants.CLIENT_DIST_DIR;
-      },
     });
   }
 
@@ -298,49 +205,122 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     return this.asComposingTaskGroup(this.delegateToBlueprint ? {} : this.composing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loadSharedConfig() {
-        const application = this.application;
-        this.loadAppConfig(undefined, application);
-        this.loadDerivedAppConfig(application);
-        this.loadClientConfig(undefined, application);
-        this.loadDerivedClientConfig(application);
-        this.loadServerConfig(undefined, application);
-        this.loadPlatformConfig(undefined, application);
-        this.loadTranslationConfig(undefined, application);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.asLoadingTaskGroup(this.delegateToBlueprint ? {} : this.loading);
-  }
-
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareForTemplates() {
+      loadEnvironmentVariables({ application }) {
+        if (process.env.JHI_BOM_VERSION) {
+          application.jhiBomVersion = process.env.JHI_BOM_VERSION;
+          this.info(`Using JHipster BOM version ${process.env.JHI_BOM_VERSION}`);
+        }
+
+        application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
+        if (application.defaultPackaging === 'war') {
+          this.info(`Using ${application.defaultPackaging} as default packaging`);
+        }
+
+        const JHI_PROFILE = process.env.JHI_PROFILE;
+        application.defaultEnvironment = (JHI_PROFILE || '').includes('dev') ? 'dev' : 'prod';
+        if (JHI_PROFILE) {
+          this.info(`Using ${application.defaultEnvironment} as default profile`);
+        }
+      },
+
+      setupServerconsts({ application }) {
+        // Make constants available in templates
+        application.MAIN_DIR = constants.MAIN_DIR;
+        application.TEST_DIR = constants.TEST_DIR;
+        application.DOCKER_DIR = constants.DOCKER_DIR;
+        application.LOGIN_REGEX = constants.LOGIN_REGEX;
+        application.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
+        application.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+        application.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+        application.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+        application.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
+
+        application.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+        application.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
+        application.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
+        application.DOCKER_MYSQL = constants.DOCKER_MYSQL;
+        application.DOCKER_MARIADB = constants.DOCKER_MARIADB;
+        application.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
+        application.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+        application.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
+        application.DOCKER_MSSQL = constants.DOCKER_MSSQL;
+        application.DOCKER_NEO4J = constants.DOCKER_NEO4J;
+        application.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
+        application.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
+        application.DOCKER_REDIS = constants.DOCKER_REDIS;
+        application.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
+        application.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
+        application.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
+        application.ELASTICSEARCH_VERSION = constants.ELASTICSEARCH_VERSION;
+        application.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
+        application.DOCKER_KEYCLOAK_VERSION = constants.DOCKER_KEYCLOAK_VERSION;
+        application.DOCKER_KAFKA = constants.DOCKER_KAFKA;
+        application.KAFKA_VERSION = constants.KAFKA_VERSION;
+        application.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
+        application.DOCKER_SONAR = constants.DOCKER_SONAR;
+        application.DOCKER_CONSUL = constants.DOCKER_CONSUL;
+        application.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
+        application.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
+        application.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
+        application.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
+        application.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
+        application.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
+
+        application.JAVA_VERSION = constants.JAVA_VERSION;
+        application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
+        application.GRADLE_VERSION = constants.GRADLE_VERSION;
+
+        application.NODE_VERSION = constants.NODE_VERSION;
+        application.NPM_VERSION = constants.NPM_VERSION;
+
+        application.JHIPSTER_DEPENDENCIES_VERSION = application.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
+        application.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
+        application.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
+        // TODO v8: Remove this constant
+        application.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
+        application.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
+        application.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
+        application.JACOCO_VERSION = constants.JACOCO_VERSION;
+        application.JIB_VERSION = constants.JIB_VERSION;
+
+        application.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+        application.VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+        application.REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+
+        this.packagejs = packagejs;
+        application.jhipsterPackageJson = packagejs;
+      },
+
+      setSharedConfigOptions({ application }) {
+        // Make dist dir available in templates
+        application.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool);
+        application.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool) + constants.CLIENT_DIST_DIR;
+      },
+
+      prepareForTemplates({ application }) {
         // Application name modified, using each technology's conventions
-        this.application.frontendAppName = this.getFrontendAppName(this.application.baseName);
-        this.application.mainClass = this.getMainClassName(this.application.baseName);
-        this.application.cacheManagerIsAvailable = [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(
-          this.application.cacheProvider
+        application.frontendAppName = this.getFrontendAppName(application.baseName);
+        application.mainClass = this.getMainClassName(application.baseName);
+        application.cacheManagerIsAvailable = [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(
+          application.cacheProvider
         );
-        this.application.testsNeedCsrf = [OAUTH2, SESSION].includes(this.application.authenticationType);
+        application.testsNeedCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
 
-        this.application.jhiTablePrefix = this.getTableName(this.application.jhiPrefix);
+        application.jhiTablePrefix = this.getTableName(application.jhiPrefix);
 
-        this.application.mainJavaDir = SERVER_MAIN_SRC_DIR;
-        this.application.mainJavaPackageDir = `${SERVER_MAIN_SRC_DIR}${this.application.packageFolder}/`;
-        this.application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
-        this.application.testJavaDir = SERVER_TEST_SRC_DIR;
-        this.application.testJavaPackageDir = `${SERVER_TEST_SRC_DIR}${this.application.packageFolder}/`;
-        this.application.testResourceDir = SERVER_TEST_RES_DIR;
-        this.application.srcMainDir = MAIN_DIR;
-        this.application.srcTestDir = TEST_DIR;
+        application.mainJavaDir = SERVER_MAIN_SRC_DIR;
+        application.mainJavaPackageDir = `${SERVER_MAIN_SRC_DIR}${application.packageFolder}/`;
+        application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
+        application.testJavaDir = SERVER_TEST_SRC_DIR;
+        application.testJavaPackageDir = `${SERVER_TEST_SRC_DIR}${application.packageFolder}/`;
+        application.testResourceDir = SERVER_TEST_RES_DIR;
+        application.srcMainDir = MAIN_DIR;
+        application.srcTestDir = TEST_DIR;
 
-        this.application.builtInUser = this.isUsingBuiltInUser();
-        this.application.builtInAuthority = this.isUsingBuiltInAuthority();
+        application.builtInUser = this.isUsingBuiltInUser();
+        application.builtInAuthority = this.isUsingBuiltInAuthority();
       },
     });
   }
@@ -352,18 +332,11 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   /** @inheritdoc */
   get default() {
     return this.asDefaultTaskGroup({
-      loadUserManagementEntities() {
-        // TODO v8 move to preparingEntities priority.
+      loadDomains({ application }) {
         if (!this.configOptions.sharedEntities) return;
-        // Make user entity available to templates.
-        this.application.user = this.configOptions.sharedEntities.User;
-      },
-
-      loadDomains() {
-        if (!this.configOptions.sharedEntities) return;
-        this.application.domains = [
+        application.domains = [
           ...new Set([
-            this.application.packageName,
+            application.packageName,
             ...Object.values(this.configOptions.sharedEntities)
               .map(entity => entity.entityAbsolutePackage)
               .filter(packageName => packageName),
@@ -371,22 +344,22 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         ];
       },
 
-      insight() {
+      insight({ application }) {
         statistics.sendSubGenEvent('generator', GENERATOR_SERVER, {
           app: {
-            authenticationType: this.application.authenticationType,
-            cacheProvider: this.application.cacheProvider,
-            enableHibernateCache: this.application.enableHibernateCache,
-            websocket: this.application.websocket,
-            databaseType: this.application.databaseType,
-            devDatabaseType: this.application.devDatabaseType,
-            prodDatabaseType: this.application.prodDatabaseType,
-            searchEngine: this.application.searchEngine,
-            messageBroker: this.application.messageBroker,
-            serviceDiscoveryType: this.application.serviceDiscoveryType,
-            buildTool: this.application.buildTool,
-            enableSwaggerCodegen: this.application.enableSwaggerCodegen,
-            enableGradleEnterprise: this.application.enableGradleEnterprise,
+            authenticationType: application.authenticationType,
+            cacheProvider: application.cacheProvider,
+            enableHibernateCache: application.enableHibernateCache,
+            websocket: application.websocket,
+            databaseType: application.databaseType,
+            devDatabaseType: application.devDatabaseType,
+            prodDatabaseType: application.prodDatabaseType,
+            searchEngine: application.searchEngine,
+            messageBroker: application.messageBroker,
+            serviceDiscoveryType: application.serviceDiscoveryType,
+            buildTool: application.buildTool,
+            enableSwaggerCodegen: application.enableSwaggerCodegen,
+            enableGradleEnterprise: application.enableGradleEnterprise,
           },
         });
       },
@@ -400,6 +373,9 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   /** @inheritdoc */
   get writing() {
     return this.asWritingTaskGroup({
+      resetFakeDataSeed() {
+        this.resetEntitiesFakeData('server');
+      },
       ...writeFiles(),
     });
   }
@@ -410,16 +386,16 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      packageJsonScripts() {
+      packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
-        packageJsonConfigStorage.backend_port = this.application.gatewayServerPort || this.application.serverPort;
-        packageJsonConfigStorage.packaging = this.application.defaultPackaging;
-        packageJsonConfigStorage.default_environment = this.application.defaultEnvironment;
+        packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
+        packageJsonConfigStorage.packaging = application.defaultPackaging;
+        packageJsonConfigStorage.default_environment = application.defaultEnvironment;
       },
-      packageJsonDockerScripts() {
+      packageJsonDockerScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const { databaseType, prodDatabaseType } = this.jhipsterConfig;
-        const { databaseTypeSql, prodDatabaseTypeMysql, authenticationTypeOauth2, applicationTypeMicroservice } = this.application;
+        const { databaseTypeSql, prodDatabaseTypeMysql, authenticationTypeOauth2, applicationTypeMicroservice } = application;
         const dockerAwaitScripts = [];
         if (databaseTypeSql) {
           if (prodDatabaseTypeMysql) {
@@ -430,7 +406,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
           if (prodDatabaseType === NO_DATABASE || prodDatabaseType === ORACLE) {
             scriptsStorage.set(
               'docker:db:up',
-              `echo "Docker for db ${prodDatabaseType} not configured for application ${this.application.baseName}"`
+              `echo "Docker for db ${prodDatabaseType} not configured for application ${application.baseName}"`
             );
           } else {
             scriptsStorage.set({
@@ -464,7 +440,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
           } else {
             scriptsStorage.set(
               'docker:db:up',
-              `echo "Docker for db ${databaseType} not configured for application ${this.application.baseName}"`
+              `echo "Docker for db ${databaseType} not configured for application ${application.baseName}"`
             );
           }
         }
@@ -507,7 +483,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
           }
         });
         scriptsStorage.set({
-          'docker:app:up': `docker compose -f ${this.application.DOCKER_DIR}app.yml up -d`,
+          'docker:app:up': `docker compose -f ${application.DOCKER_DIR}app.yml up -d`,
           'docker:others:await': dockerAwaitScripts.join(' && '),
           'predocker:others:up': dockerBuild.join(' && '),
           'docker:others:up': dockerOthersUp.join(' && '),
@@ -576,11 +552,11 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
           'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=e2e,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
-      packageJsonE2eScripts() {
+      packageJsonE2eScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
         if (scriptsStorage.get('e2e')) {
-          const applicationWaitTimeout = WAIT_TIMEOUT * (this.application.applicationTypeGateway ? 2 : 1);
+          const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
           scriptsStorage.set({
             'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"`,
             'pree2e:headless': 'npm run ci:server:await',
@@ -599,19 +575,19 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
 
   get end() {
     return this.asEndTaskGroup({
-      checkLocaleValue() {
-        if (this.application.languages && this.application.languages.includes('in')) {
+      checkLocaleValue({ application }) {
+        if (application.languages && application.languages.includes('in')) {
           this.warning(
             "For jdk 17 compatibility 'in' locale value should set 'java.locale.useOldISOCodes=true' environment variable. Refer to https://bugs.openjdk.java.net/browse/JDK-8267069"
           );
         }
       },
 
-      end() {
+      end({ application }) {
         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
         let executable = 'mvnw';
-        if (this.application.buildTool === GRADLE) {
+        if (application.buildTool === GRADLE) {
           executable = 'gradlew';
         }
         let logMsgComment = '';

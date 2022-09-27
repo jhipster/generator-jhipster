@@ -229,8 +229,7 @@ const serverFiles = mergeSections(
 
 function writeSqlFiles() {
   return {
-    async writeSqlFiles() {
-      const { application } = this;
+    async writeSqlFiles({ application }) {
       if (!application.databaseTypeSql) return;
 
       await this.writeFiles({

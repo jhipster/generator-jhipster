@@ -42,15 +42,15 @@ describe(`JHipster ${generator} needles`, () => {
 
     describe('using insertContentIntoApplicationProperties needle', () => {
       it('with a non existing needle', () => {
-        expect(() => insertContentIntoApplicationProperties(runResult.generator, runResult.generator.application, { foo: 'foo' })).toThrow(
+        const application = runResult.generator.sharedData.getApplication();
+        expect(() => insertContentIntoApplicationProperties(runResult.generator, application, { foo: 'foo' })).toThrow(
           /Missing required jhipster-needle application-properties-foo not found at/
         );
       });
 
       it('without a needle', () => {
-        expect(() => insertContentIntoApplicationProperties(runResult.generator, runResult.generator.application, {})).toThrow(
-          /At least 1 needle is required/
-        );
+        const application = runResult.generator.sharedData.getApplication();
+        expect(() => insertContentIntoApplicationProperties(runResult.generator, application, {})).toThrow(/At least 1 needle is required/);
       });
 
       describe('when applied', () => {
@@ -71,7 +71,8 @@ describe(`JHipster ${generator} needles`, () => {
         let snapshot;
 
         before(() => {
-          insertContentIntoApplicationProperties(runResult.generator, runResult.generator.application, {
+          const application = runResult.generator.sharedData.getApplication();
+          insertContentIntoApplicationProperties(runResult.generator, application, {
             property,
             propertyGetter,
             propertyClass,
@@ -121,7 +122,8 @@ public class ApplicationProperties {
         });
 
         it('should not be add the content at second call', () => {
-          insertContentIntoApplicationProperties(runResult.generator, runResult.generator.application, {
+          const application = runResult.generator.sharedData.getApplication();
+          insertContentIntoApplicationProperties(runResult.generator, application, {
             property,
             propertyGetter,
             propertyClass,
@@ -130,14 +132,16 @@ public class ApplicationProperties {
         });
 
         it('should not be add new content with prettier differences', () => {
-          insertContentIntoApplicationProperties(runResult.generator, runResult.generator.application, {
+          const application = runResult.generator.sharedData.getApplication();
+          insertContentIntoApplicationProperties(runResult.generator, application, {
             property: '  private   Foo   foo;',
           });
           expect(runResult.getSnapshot(file => fileRegexp.test(file.path))).toEqual(snapshot);
         });
 
         it('should not be add new content with prettier differences and new lines', () => {
-          insertContentIntoApplicationProperties(runResult.generator, runResult.generator.application, {
+          const application = runResult.generator.sharedData.getApplication();
+          insertContentIntoApplicationProperties(runResult.generator, application, {
             property: `  private Foo getFoo() {
 
         return foo;
