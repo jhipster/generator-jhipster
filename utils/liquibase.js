@@ -38,11 +38,11 @@ function parseLiquibaseChangelogDate(changelogDate) {
   if (!changelogDate || changelogDate.length !== 14) {
     throw new Error(`${changelogDate} is not a valid changelogDate.`);
   }
-  const formatedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(
+  const formattedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(
     6,
     8
   )}T${changelogDate.substring(8, 10)}:${changelogDate.substring(10, 12)}:${changelogDate.substring(12, 14)}+00:00`;
-  return new Date(Date.parse(formatedDate));
+  return new Date(Date.parse(formattedDate));
 }
 
 function formatDateForChangelog(now) {
@@ -55,26 +55,32 @@ function formatDateForChangelog(now) {
     now.getUTCSeconds()
   );
   const year = `${nowUTC.getFullYear()}`;
+
   let month = `${nowUTC.getMonth() + 1}`;
   if (month.length === 1) {
     month = `0${month}`;
   }
+
   let day = `${nowUTC.getDate()}`;
   if (day.length === 1) {
     day = `0${day}`;
   }
+
   let hour = `${nowUTC.getHours()}`;
   if (hour.length === 1) {
     hour = `0${hour}`;
   }
+
   let minute = `${nowUTC.getMinutes()}`;
   if (minute.length === 1) {
     minute = `0${minute}`;
   }
+
   let second = `${nowUTC.getSeconds()}`;
   if (second.length === 1) {
     second = `0${second}`;
   }
+
   return `${year}${month}${day}${hour}${minute}${second}`;
 }
 
