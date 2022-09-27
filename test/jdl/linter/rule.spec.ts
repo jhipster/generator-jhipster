@@ -17,26 +17,29 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const Rule = require('../../../jdl/linters/rule.ts');
-const { INFO, ERROR } = require('../../../jdl/linters/rule-levels.ts');
+import { expect } from 'chai';
+import Rule from '../../../jdl/linters/rule';
+import { INFO, ERROR } from '../../../jdl/linters/rule-levels';
 
 describe('Rule', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
       it('should fail', () => {
+        // @ts-ignore
         expect(() => new Rule()).to.throw(/^A rule must at least have a name\.$/);
       });
     });
     context('when not passing any name', () => {
       it('should fail', () => {
+        // @ts-ignore
         expect(() => new Rule({})).to.throw(/^A rule must at least have a name\.$/);
       });
     });
     context('when not passing a level', () => {
-      let rule;
+      let rule: Rule;
 
       before(() => {
+        // @ts-ignore
         rule = new Rule({ name: 'Toto' });
       });
 
@@ -46,17 +49,21 @@ describe('Rule', () => {
     });
   });
   describe('compareTo', () => {
-    let rule;
-    let otherRule;
+    let rule: Rule;
+    let otherRule: Rule;
 
     beforeEach(() => {
+      // @ts-ignore
       rule = new Rule({ name: 'Toto' });
+
+      // @ts-ignore
       otherRule = new Rule({ name: 'Tata' });
     });
 
     context('when comparing to no rule', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-ignore
           rule.compareTo();
         }).to.throw(/^A rule has to be passed so as to be compared\.$/);
       });
