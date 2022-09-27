@@ -23,7 +23,7 @@ import FieldIssue from './issues/field-issue';
 export type FieldDeclaration = {
   children: {
     NAME: any[];
-    type: any[]
+    type: any[];
   };
 };
 
