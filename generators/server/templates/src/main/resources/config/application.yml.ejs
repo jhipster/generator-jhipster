@@ -118,10 +118,9 @@ management:
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
-  metrics:
-    export:
-      # Prometheus is the default metrics backend
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
         step: 60
     enable:
