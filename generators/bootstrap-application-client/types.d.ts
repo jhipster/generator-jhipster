@@ -16,4 +16,5 @@ export type ClientApplication = Application &
   CommonClientServerApplication &
   ClientFrameworkApplication & {
     withAdminUi: boolean;
+    webappLoginRegExp: string;
   };

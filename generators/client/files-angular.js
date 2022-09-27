@@ -493,8 +493,7 @@ const files = {
   ],
 };
 
-function cleanup() {
-  const application = this.application;
+function cleanup({ application }) {
   if (!application.clientFrameworkAngular) return;
 
   if (this.isJhipsterVersionLessThan('7.6.1')) {
@@ -508,8 +507,7 @@ module.exports = {
   files,
 };
 
-async function writeFiles() {
-  const application = this.application;
+async function writeFiles({ application }) {
   if (!application.clientFrameworkAngular) return;
 
   await this.writeFiles({
