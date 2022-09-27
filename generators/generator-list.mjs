@@ -29,8 +29,6 @@ export const GENERATOR_BOOTSTRAP_APPLICATION_BASE = 'bootstrap-application-base'
 export const GENERATOR_BOOTSTRAP_APPLICATION_CLIENT = 'bootstrap-application-client';
 export const GENERATOR_BOOTSTRAP_APPLICATION_SERVER = 'bootstrap-application-server';
 export const GENERATOR_CI_CD = 'ci-cd';
-/* @deprecated */
-export const GENERATOR_CICD = 'ci-cd';
 export const GENERATOR_CLIENT = 'client';
 export const GENERATOR_CLOUDFOUNDRY = 'cloudfoundry';
 export const GENERATOR_COMMON = 'common';
@@ -43,8 +41,6 @@ export const GENERATOR_ENTITIES_CLIENT = 'entities-client';
 export const GENERATOR_ENTITY = 'entity';
 export const GENERATOR_ENTITY_CLIENT = 'entity-client';
 export const GENERATOR_ENTITY_I_18_N = 'entity-i18n';
-/* @deprecated */
-export const GENERATOR_ENTITY_I18N = 'entity-i18n';
 export const GENERATOR_ENTITY_SERVER = 'entity-server';
 export const GENERATOR_EXPORT_JDL = 'export-jdl';
 export const GENERATOR_GAE = 'gae';
