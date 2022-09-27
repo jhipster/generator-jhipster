@@ -36,7 +36,7 @@ const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 const JHIPSTER_DEPENDENCIES_VERSION = '7.9.4-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '3.0.0-M5';
-const LIQUIBASE_VERSION = '4.16.0';
+const LIQUIBASE_VERSION = '4.16.1';
 // TODO v8: Remove this constant
 const LIQUIBASE_DTD_VERSION = 'latest';
 const HIBERNATE_VERSION = '6.1.3.Final';
