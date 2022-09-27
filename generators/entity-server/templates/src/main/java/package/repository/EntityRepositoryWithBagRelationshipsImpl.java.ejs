@@ -30,7 +30,6 @@ import java.util.stream.IntStream;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-import org.hibernate.annotations.QueryHints;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -75,7 +74,6 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
                 <%= persistClass %>.class
             )
             .setParameter("<%= entityInstance %>", result)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getSingleResult();
     }
 
@@ -89,7 +87,6 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
                 <%= persistClass %>.class
             )
             .setParameter("<%= entityInstancePlural %>", <%= entityInstancePlural %>)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getResultList();
         Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.get<%= primaryKey.nameCapitalized %>()), order.get(o2.get<%= primaryKey.nameCapitalized %>())));
         return result;
