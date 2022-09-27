@@ -29,9 +29,9 @@ public class ClientForwardController {
      * @return forward to client {@code index.html}.
      */
 <%_ if (communicationSpringWebsocket) { _%>
-    @GetMapping(value = {"/{path:[^\\.]*}", "/{path:^(?!websocket).*}/**/{path:[^\\.]*}"})
+    @GetMapping(value = {"/{path:[^\\.]*}", "/{path:^(?!websocket).*}/*/{path:[^\\.]*}"})
 <%_ } else { _%>
-    @GetMapping(value = "/**/{path:[^\\.]*}")
+    @GetMapping(value = {"/{path:[^\\.]*}", "/*/{path:[^\\.]*}"})
 <%_ } _%>
     public String forward() {
         return "forward:/";
