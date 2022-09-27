@@ -12,7 +12,7 @@ export type WriteFileTemplate<Generator, DataType> =
       destinationFile?: (this: Generator, destinationFile: DataType) => string | string;
       /** @deprecated, use sourceFile instead */
       file?: ((this: Generator, data: DataType) => string) | string;
-      /** @deprecated, use destinationFile insted */
+      /** @deprecated, use destinationFile instead */
       renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
       /** transforms (files processing) to be applied */
       transform?: (() => string)[];
@@ -60,11 +60,11 @@ export type WriteFileOptions<Generator, DataType> = {
       sections: WriteFileSection<Generator, DataType>;
     }
   | {
-      /** templates to be writter */
+      /** templates to be written */
       templates: WriteFileTemplate<Generator, DataType>;
     }
   | {
-      /** blocks to be writter */
+      /** blocks to be written */
       blocks: WriteFileBlock<Generator, DataType>;
     }
 );
