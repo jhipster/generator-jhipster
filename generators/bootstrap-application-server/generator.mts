@@ -23,7 +23,13 @@ import constants from '../generator-constants.js';
 import entityUtils from '../../utils/entity.js';
 import type { SpringBootApplication } from './types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.js';
+import AuthentitcationTypes from '../../jdl/jhipster/authentication-types.js';
+import FieldTypes from '../../jdl/jhipster/field-types.js';
 
+const {
+  CommonDBTypes: { LONG: TYPE_LONG },
+} = FieldTypes;
+const { OAUTH2 } = AuthentitcationTypes;
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } = constants;
 const {
   loadRequiredConfigIntoEntity,
@@ -161,6 +167,21 @@ export default class extends BaseApplicationGenerator<SpringBootApplication> {
         // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
         const derivedFields = entity.primaryKey.derivedFields;
         entity.fields.unshift(...derivedFields);
+      },
+      prepareUser({ entity }) {
+        if (entity.builtIn && entity.name === 'User') {
+          const oauth2 = entity.authenticationType === OAUTH2;
+          const userIdType = entity.primaryKey.type;
+          const liquibaseFakeData = oauth2
+            ? []
+            : [
+                { id: userIdType === TYPE_LONG ? 1 : entity.primaryKey.fields[0].generateFakeData() },
+                { id: userIdType === TYPE_LONG ? 2 : entity.primaryKey.fields[0].generateFakeData() },
+              ];
+          entity.liquibaseFakeData = liquibaseFakeData;
+          entity.fakeDataCount = liquibaseFakeData.length;
+          this.configOptions.sharedLiquibaseFakeData.User = liquibaseFakeData;
+        }
       },
     });
   }
