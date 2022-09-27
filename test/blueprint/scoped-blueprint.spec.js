@@ -1,4 +1,4 @@
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');

@@ -306,7 +306,6 @@ export default class extends BaseBlueprintGenerator {
             'eslint-plugin-import': `${packagejs.devDependencies['eslint-plugin-import']}`,
             'eslint-plugin-mocha': `${packagejs.devDependencies['eslint-plugin-mocha']}`,
             'eslint-plugin-prettier': `${packagejs.devDependencies['eslint-plugin-prettier']}`,
-            expect: `${packagejs.devDependencies.expect}`,
             mocha: `${packagejs.devDependencies.mocha}`,
             'mocha-expect-snapshot': `${packagejs.devDependencies['mocha-expect-snapshot']}`,
             prettier: `${packagejs.dependencies.prettier}`,

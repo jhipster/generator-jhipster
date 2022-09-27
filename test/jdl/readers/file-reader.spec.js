@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const fs = require('fs');
 const { expect } = require('chai');
 const FileReader = require('../../../jdl/readers/file-reader');

@@ -19,7 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const { expect } = require('chai');
 const { parseFromContent } = require('../../../jdl/readers/jdl-reader');
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../../jdl/jhipster/relationship-types');

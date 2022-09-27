@@ -1,6 +1,6 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const monitoringTypes = require('../jdl/jhipster/monitoring-types');
 const { MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
