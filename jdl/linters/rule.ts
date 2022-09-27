@@ -19,14 +19,18 @@
 
 import { RuleLevel, INFO } from './rule-levels';
 
-const merge = require('../utils/object-utils').merge;
+import objectUtils = require('../utils/object-utils');
+
+const { merge } = objectUtils;
 
 /**
  * Represents a rule for the linters.
  */
 export default class Rule {
   name: any;
+
   level: RuleLevel;
+
   comment: any;
 
   /**
@@ -40,7 +44,7 @@ export default class Rule {
     if (!args || !args.name) {
       throw new Error('A rule must at least have a name.');
     }
-    const merged = merge(defaults(), args);
+    const merged = merge(defaults(), args) as any;
     this.name = merged.name;
     this.level = merged.level;
     this.comment = merged.comment;
