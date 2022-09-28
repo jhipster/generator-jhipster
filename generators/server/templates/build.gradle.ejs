@@ -296,7 +296,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
   <%_ if (reactive) { _%>
     implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
   <%_ } else { _%>
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5-jakarta"
   <%_ } _%>
 <%_ } _%>
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
