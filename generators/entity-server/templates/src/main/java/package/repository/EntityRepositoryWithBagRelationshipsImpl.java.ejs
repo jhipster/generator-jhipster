@@ -83,7 +83,7 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
             .forEach(index -> order.put(<%= entityInstancePlural %>.get(index).get<%= primaryKey.nameCapitalized %>(), index));
         List<<%= persistClass %>> result = entityManager
             .createQuery(
-                "select distinct <%= entityInstance %> from <%= persistClass %> <%= entityInstance %> left join fetch <%= entityInstance %>.<%= relationship.relationshipFieldNamePlural %> where <%= entityInstance %> in :<%= entityInstancePlural %>",
+                "select <%= entityInstance %> from <%= persistClass %> <%= entityInstance %> left join fetch <%= entityInstance %>.<%= relationship.relationshipFieldNamePlural %> where <%= entityInstance %> in :<%= entityInstancePlural %>",
                 <%= persistClass %>.class
             )
             .setParameter("<%= entityInstancePlural %>", <%= entityInstancePlural %>)
