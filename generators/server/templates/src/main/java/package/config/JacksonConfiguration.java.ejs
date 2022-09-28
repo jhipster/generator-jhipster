@@ -19,7 +19,7 @@
 package <%= packageName %>.config;
 
 <%_ if (databaseTypeSql && !reactive) { _%>
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import com.fasterxml.jackson.datatype.hibernate5.jakarta.Hibernate5JakartaModule;
 <%_ } _%>
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -51,8 +51,8 @@ public class JacksonConfiguration {
      * Support for Hibernate types in Jackson.
      */
     @Bean
-    public Hibernate5Module hibernate5Module() {
-        return new Hibernate5Module();
+    public Hibernate5JakartaModule hibernate5Module() {
+        return new Hibernate5JakartaModule();
     }
 <%_ } _%>
 
