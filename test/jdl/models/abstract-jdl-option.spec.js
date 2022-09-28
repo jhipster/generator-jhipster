@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 

@@ -1,6 +1,6 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 
 const { createMockedConfig } = require('./support/mock-config.cjs');
 

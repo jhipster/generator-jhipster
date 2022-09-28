@@ -1,4 +1,4 @@
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const path = require('path');
 const sinon = require('sinon');
 const { existsSync } = require('fs');
@@ -170,6 +170,9 @@ const testBlueprintSupport = (generatorName, options = {}) => {
   let generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.cjs`);
   if (!existsSync(generatorPath)) {
     generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.js`);
+  }
+  if (!existsSync(generatorPath)) {
+    generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.mts`);
   }
   if (!existsSync(generatorPath)) {
     generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.mjs`);

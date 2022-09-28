@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 const path = require('path');
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const { mkdirSync, writeFileSync } = require('fs');
 
 const { skipPrettierHelpers: helpers } = require('../utils/utils');

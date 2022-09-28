@@ -1,18 +1,4 @@
-export type BaseApplication = {
-  jhipsterVersion: string;
-  baseName: string;
-  capitalizedBaseName: string;
-  dasherizedBaseName: string;
-  humanizedBaseName: string;
+import type { ClientApplication } from '../bootstrap-application-client/types';
+import type { SpringBootApplication } from '../bootstrap-application-server/types';
 
-  projectVersion: string;
-  projectDescription: string;
-
-  jhiPrefix: string;
-  entitySuffix: string;
-  dtoSuffix: string;
-
-  skipCommitHook: boolean;
-  skipJhipsterDependencies: boolean;
-  skipUserManagement: boolean;
-};
+export type ClientServerApplication = ClientApplication & SpringBootApplication;

@@ -20,7 +20,7 @@ package <%= packageName %>.service;
 
 import <%= packageName %>.config.Constants;
 import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 import tech.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -143,7 +143,7 @@ class MailServiceIT {
 
     @Test
     void testSendEmailFromTemplate() throws Exception {
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -160,7 +160,7 @@ class MailServiceIT {
 
     @Test
     void testSendActivationEmail() throws Exception {
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -175,7 +175,7 @@ class MailServiceIT {
 
     @Test
     void testCreationEmail() throws Exception {
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -190,7 +190,7 @@ class MailServiceIT {
 
     @Test
     void testSendPasswordResetMail() throws Exception {
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -216,7 +216,7 @@ class MailServiceIT {
 
     @Test
     void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         for (String langKey : languages) {

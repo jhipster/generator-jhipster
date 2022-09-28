@@ -25,9 +25,6 @@ const constants = require('../generator-constants');
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
 
 const files = {
-  _: {
-    transform: [replaceReactTranslations],
-  },
   common: [
     {
       templates: [
@@ -344,29 +341,35 @@ module.exports = {
 };
 
 function cleanup() {
-  if (!this.clientFrameworkReact) return;
+  const application = this.application;
+  if (!application.clientFrameworkReact) return;
 
-  if (this.isJhipsterVersionLessThan('7.4.0') && this.enableI18nRTL) {
-    this.removeFile(`${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`);
+  if (this.isJhipsterVersionLessThan('7.4.0') && application.enableI18nRTL) {
+    this.removeFile(`${application.CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`);
   }
   if (this.isJhipsterVersionLessThan('7.4.1')) {
     this.removeFile('.npmrc');
   }
   if (this.isJhipsterVersionLessThan('7.7.1')) {
-    this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`);
+    this.removeFile(`${application.CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`);
   }
   if (this.isJhipsterVersionLessThan('7.8.2')) {
-    this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/error/error-boundary-route.tsx`);
-    this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/error/error-boundary-route.spec.tsx`);
+    this.removeFile(`${application.CLIENT_MAIN_SRC_DIR}app/shared/error/error-boundary-route.tsx`);
+    this.removeFile(`${application.CLIENT_MAIN_SRC_DIR}app/shared/error/error-boundary-route.spec.tsx`);
   }
   if (this.isJhipsterVersionLessThan('7.9.3')) {
-    this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/config/translation-middleware.ts`);
+    this.removeFile(`${application.CLIENT_MAIN_SRC_DIR}app/config/translation-middleware.ts`);
   }
 }
 
-function writeFiles() {
-  return this.writeFiles({
+async function writeFiles() {
+  const application = this.application;
+  if (!application.clientFrameworkReact) return;
+
+  await this.writeFiles({
     sections: files,
     rootTemplatesPath: 'react',
+    transform: !application.enableTranslation ? [replaceReactTranslations] : undefined,
+    context: application,
   });
 }

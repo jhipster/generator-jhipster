@@ -110,19 +110,19 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
   <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: root
     password:
   <%_ } else if (prodDatabaseTypePostgres) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: <%= baseName %>
     password:
   <%_ } else if (prodDatabaseTypeMssql) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: SA
     password: yourStrong(!)Password
   <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
     username: system
     password: oracle
   <%_ } _%>
@@ -172,9 +172,9 @@ spring:
     contexts: prod
   <%_ if (reactive) { _%>
     <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypePostgres || prodDatabaseTypeMssql) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
@@ -188,19 +188,19 @@ spring:
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
   <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
-    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: root
     password:
   <%_ } else if (prodDatabaseTypePostgres) { _%>
-    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: <%= baseName %>
     password:
   <%_ } else if (prodDatabaseTypeMssql) { _%>
-    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: SA
     password: yourStrong(!)Password
   <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
     username: system
     password: oracle
   <%_ } _%>

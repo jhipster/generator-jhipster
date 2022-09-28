@@ -29,7 +29,6 @@ const os = require('os');
 const normalize = require('normalize-path');
 const simpleGit = require('simple-git');
 
-const SharedData = require('../lib/support/shared-data.cjs');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -44,14 +43,19 @@ const defaultApplicationOptions = require('../jdl/jhipster/default-application-o
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { databaseData } = require('./sql-constants');
 const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
-const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
 const { joinCallbacks } = require('../lib/support/base.cjs');
 
-const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
+const {
+  JHIPSTER_CONFIG_DIR,
+  SERVER_MAIN_SRC_DIR,
+  SERVER_TEST_SRC_DIR,
+  SERVER_MAIN_RES_DIR,
+  SERVER_TEST_RES_DIR,
+  CLIENT_MAIN_SRC_DIR,
+  CLIENT_TEST_SRC_DIR,
+} = constants;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
-
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
@@ -83,20 +87,6 @@ const NO_WEBSOCKET = websocketTypes.FALSE;
 const isWin32 = os.platform() === 'win32';
 
 /**
- * @callback EditFileCallback
- * @param {JHipsterBaseGenerator} this
- * @param {string} content
- * @param {string} filePath
- * @returns {CascatedEditFileCallback} callback for cascated edit
- */
-
-/**
- * @callback CascatedEditFileCallback
- * @param {...EditFileCallback} callbacks
- * @returns {CascatedEditFileCallback} callback for cascated edit
- */
-
-/**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
  * The public API methods can be directly utilized as well using commonJS require.
@@ -104,11 +94,16 @@ const isWin32 = os.platform() === 'win32';
  * The method signatures in public API should not be changed without a major version change
  *
  * @class
- * @extends {import('yeoman-generator')}
+ * @extends {PrivateBase}
  * @property {import('yeoman-generator/lib/util/storage')} config - Storage for config.
- * @property {object} jhipsterConfig - Proxy object for config.
  */
 class JHipsterBaseGenerator extends PrivateBase {
+  /** @type {Record<string, any>} */
+  jhipsterConfig;
+
+  /** @type {Record<string, any>} */
+  dependabotPackageJson;
+
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -198,23 +193,6 @@ class JHipsterBaseGenerator extends PrivateBase {
    */
   getPossibleDependencies() {
     return [];
-  }
-
-  /**
-   * Shared Data
-   */
-  get sharedData() {
-    if (!this._sharedData) {
-      const { baseName } = this.jhipsterConfig;
-      if (!baseName) {
-        throw new Error('baseName is required');
-      }
-      if (!this.options.sharedData[baseName]) {
-        this.options.sharedData[baseName] = {};
-      }
-      this._sharedData = new SharedData(this.options.sharedData[baseName]);
-    }
-    return this._sharedData;
   }
 
   /**
@@ -447,7 +425,8 @@ class JHipsterBaseGenerator extends PrivateBase {
     enableTranslation,
     clientFramework = this.clientFramework,
     entityTranslationKeyMenu = _.camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName)
+    entityTranslationValue = _.startCase(routerName),
+    jhiPrefix = this.jhiPrefix
   ) {
     if (clientFramework === ANGULAR) {
       this.needleApi.clientAngular.addEntityToMenu(
@@ -455,7 +434,7 @@ class JHipsterBaseGenerator extends PrivateBase {
         enableTranslation,
         entityTranslationKeyMenu,
         entityTranslationValue,
-        this.jhiPrefix
+        jhiPrefix
       );
     } else if (clientFramework === REACT) {
       this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
@@ -544,8 +523,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addElementTranslationKey(key, value, language) {
-    this.needleApi.clientI18n.addElementTranslationKey(key, value, language);
+  addElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    this.needleApi.clientI18n.addElementTranslationKey(key, value, language, webappSrcDir);
   }
 
   /**
@@ -555,8 +534,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addAdminElementTranslationKey(key, value, language) {
-    this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language);
+  addAdminElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language, webappSrcDir);
   }
 
   /**
@@ -566,8 +545,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addEntityTranslationKey(key, value, language) {
-    this.needleApi.clientI18n.addEntityTranslationKey(key, value, language);
+  addEntityTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
   }
 
   /**
@@ -577,8 +556,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value or object with multiple key and translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addGlobalTranslationKey(key, value, language) {
-    const fullPath = `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
+  addGlobalTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+    const fullPath = `${webappSrcDir}i18n/${language}/global.json`;
     try {
       jhipsterUtils.rewriteJSONFile(
         fullPath,
@@ -605,10 +584,10 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} method - The method to be run with provided key and value from above
    * @param {string} enableTranslation - specify if i18n is enabled
    */
-  addTranslationKeyToAllLanguages(key, value, method, enableTranslation) {
+  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
     if (enableTranslation) {
       this.getAllInstalledLanguages().forEach(language => {
-        this[method](key, value, language);
+        this[method](key, value, language, webappSrcDir);
       });
     }
   }
@@ -986,8 +965,8 @@ class JHipsterBaseGenerator extends PrivateBase {
    *
    * @param {string} config - webpack config to be merged
    */
-  addWebpackConfig(config) {
-    this.needleApi.clientWebpack.addWebpackConfig(config);
+  addWebpackConfig(config, clientFramework) {
+    this.needleApi.clientWebpack.addWebpackConfig(config, clientFramework);
   }
 
   /**
@@ -1222,15 +1201,6 @@ class JHipsterBaseGenerator extends PrivateBase {
    */
   addGradlePluginManagementRepository(url, username, password) {
     this.needleApi.serverGradle.addPluginManagementRepository(url, username, password);
-  }
-
-  /**
-   * Insert content into ApplicationProperties class
-   * @param {import("./server/needles.cjs").ApplicationPropertiesNeedles} needlesContent
-   * @returns {string} ApplicationProperties contents
-   */
-  insertContentIntoApplicationProperties(needlesContent) {
-    return insertContentIntoApplicationProperties(this, needlesContent);
   }
 
   /**
@@ -1581,14 +1551,16 @@ class JHipsterBaseGenerator extends PrivateBase {
       generator = namespace;
     } else {
       // Keep test compatibily were jhipster lookup does not run.
-      try {
-        generator = require.resolve(`./${generator}`);
-      } catch (e) {
+      const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
         try {
-          generator = require.resolve(`./${generator}/index.cjs`);
+          generator = require.resolve(`./${generator}${extension}`);
+          return true;
         } catch (e) {
-          throw new Error(`Generator ${generator} was not found`);
+          return false;
         }
+      });
+      if (!found) {
+        throw new Error(`Generator ${generator} was not found`);
       }
     }
 
@@ -1610,7 +1582,7 @@ class JHipsterBaseGenerator extends PrivateBase {
    * @param {String} generator - jhipster generator.
    * @param {String[]} [args] - arguments to pass
    * @param {Object} [options] - options to pass
-   * @return {Object} the composed generator
+   * @return {Promise<any>} the composed generator
    */
   dependsOnJHipster(generator, args, options) {
     return this.composeWithJHipster(generator, args, options, { immediately: true });
@@ -2205,214 +2177,10 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * write the given files using provided config.
-   *
-   * @param {object} files - files to write
-   * @param {object} [generator = this] - the generator instance to use
-   * @param {boolean} [returnFiles = false] - weather to return the generated file list or to write them
-   * @param {string|string[]} [rootTemplatesPath] - path(s) to look for templates.
-   *        Single absolute path or relative path(s) between the templates folder and template path.
-   * @return {string[]|Promise<string>} Filenames, promise when returnFiles is false
-   */
-  writeFilesToDisk(files, generator = this, returnFiles = false, rootTemplatesPath) {
-    if (typeof generator === 'string' || Array.isArray(generator)) {
-      rootTemplatesPath = generator;
-      generator = this;
-    } else if (typeof generator === 'boolean') {
-      rootTemplatesPath = returnFiles;
-      returnFiles = generator;
-      generator = this;
-    } else if (typeof returnFiles === 'string' || Array.isArray(returnFiles)) {
-      rootTemplatesPath = returnFiles;
-      returnFiles = false;
-    }
-    const _this = generator || this;
-    const filesOut = [];
-    const startTime = new Date();
-
-    /* Build lookup order first has preference.
-     * Example
-     * rootTemplatesPath = ['reactive', 'common']
-     * jhipsterTemplatesFolders = ['/.../generator-jhispter-blueprint/server/templates', '/.../generator-jhispter/server/templates']
-     *
-     * /.../generator-jhispter-blueprint/server/templates/reactive/templatePath
-     * /.../generator-jhispter-blueprint/server/templates/common/templatePath
-     * /.../generator-jhispter/server/templates/reactive/templatePath
-     * /.../generator-jhispter/server/templates/common/templatePath
-     */
-    let rootTemplatesAbsolutePath;
-    if (!rootTemplatesPath) {
-      rootTemplatesAbsolutePath = _this.jhipsterTemplatesFolders;
-    } else if (typeof rootTemplatesPath === 'string' && path.isAbsolute(rootTemplatesPath)) {
-      rootTemplatesAbsolutePath = rootTemplatesPath;
-    } else {
-      rootTemplatesPath = Array.isArray(rootTemplatesPath) ? rootTemplatesPath : [rootTemplatesPath];
-      rootTemplatesAbsolutePath = _this.jhipsterTemplatesFolders
-        .map(templateFolder =>
-          rootTemplatesPath.map(relativePath => (relativePath ? path.join(templateFolder, relativePath) : templateFolder))
-        )
-        .flat();
-    }
-
-    const writeTasks = Object.values(files).map(blockTemplates => {
-      return blockTemplates.map(blockTemplate => {
-        if (!blockTemplate.condition || blockTemplate.condition(_this)) {
-          const blockPath = blockTemplate.path || '';
-          return blockTemplate.templates.map(templateObj => {
-            let templatePath = blockPath;
-            let method = 'template';
-            let useTemplate = false;
-            let options = {};
-            let templatePathTo;
-            if (typeof templateObj === 'string') {
-              templatePath += templateObj;
-            } else {
-              if (typeof templateObj.file === 'string') {
-                templatePath += templateObj.file;
-              } else if (typeof templateObj.file === 'function') {
-                templatePath += templateObj.file(_this);
-              }
-              method = templateObj.method ? templateObj.method : method;
-              useTemplate = templateObj.template ? templateObj.template : useTemplate;
-              options = templateObj.options ? { ...templateObj.options } : options;
-            }
-            if (templateObj && templateObj.renameTo) {
-              templatePathTo = blockPath + templateObj.renameTo(_this);
-            } else {
-              // remove the .ejs suffix
-              templatePathTo = templatePath.replace('.ejs', '');
-            }
-
-            if (_this.destinationPath) {
-              templatePathTo = _this.destinationPath(templatePathTo);
-            }
-
-            if (templateObj.override !== undefined && _this.fs && _this.fs.exists(templatePathTo)) {
-              if (typeof templateObj.override === 'function') {
-                if (!templateObj.override(_this)) {
-                  this.debug(`skipping file ${templatePathTo}`);
-                  return Promise.resolve(templatePathTo);
-                }
-              } else if (!templateObj.override) {
-                this.debug(`skipping file ${templatePathTo}`);
-                return Promise.resolve(templatePathTo);
-              }
-            }
-
-            filesOut.push(templatePathTo);
-            if (!returnFiles) {
-              const ejs =
-                !templateObj.noEjs &&
-                !templatePath.endsWith('.png') &&
-                !templatePath.endsWith('.jpg') &&
-                !templatePath.endsWith('.gif') &&
-                !templatePath.endsWith('.svg') &&
-                !templatePath.endsWith('.ico');
-
-              let templatePathFrom;
-              if (Array.isArray(rootTemplatesAbsolutePath)) {
-                // Look for existing templates
-                const existingTemplates = rootTemplatesAbsolutePath
-                  .map(rootPath => _this.templatePath(rootPath, templatePath))
-                  .filter(templateFile => fs.existsSync(ejs ? `${templateFile}.ejs` : templateFile));
-
-                if (existingTemplates.length > 1) {
-                  const moreThanOneMessage = `Multiples templates were found for file ${templatePath}, using the first
-templates: ${JSON.stringify(existingTemplates, null, 2)}`;
-                  if (existingTemplates.length > 2) {
-                    generator.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
-                  } else {
-                    generator.debug(moreThanOneMessage);
-                  }
-                }
-                templatePathFrom = existingTemplates.shift();
-
-                if (templatePathFrom === undefined) {
-                  throw new Error(`Template file ${templatePath} was not found at ${rootTemplatesAbsolutePath}`);
-                }
-              } else if (rootTemplatesAbsolutePath) {
-                templatePathFrom = generator.templatePath(rootTemplatesAbsolutePath, templatePath);
-              } else {
-                templatePathFrom = generator.templatePath(templatePath);
-              }
-              if (ejs) {
-                templatePathFrom = `${templatePathFrom}.ejs`;
-              }
-              // Set root for ejs to lookup for partials.
-              options.root = rootTemplatesAbsolutePath;
-
-              // if (method === 'template')
-              let maybePromise = _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
-              maybePromise = maybePromise && maybePromise.then ? maybePromise : Promise.resolve(templatePathTo);
-              return maybePromise;
-            }
-            return undefined;
-          });
-        }
-        return undefined;
-      });
-    });
-    this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
-    return returnFiles
-      ? filesOut
-      : Promise.all(
-          writeTasks
-            .flat()
-            .flat()
-            .filter(filename => filename)
-        );
-  }
-
-  /**
-   * Block of files to written.
-   *
-   * @typedef {object} WriteFileBlock
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [from] - relative path were sources are placed
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [to=from] - relative path were the files should be written, fallbacks to from/path
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [path] - same as from
-   * @property {string | function(this: JHipsterBaseGenerator, any, string): string} [renameTo] - generate destinationFile based on sourceFile
-   * @property {boolean | function(this: JHipsterBaseGenerator, any): boolean} [condition=true] - condition to enable to write the block
-   * @property {EditFileCallback[]} transform - transforms (files processing) to be applied
-   */
-
-  /**
-   * Template file to be written.
-   *
-   * @typedef {object} WriteFileTemplate
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [sourceFile] - source file
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [destinationFile] - destination file
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [file] - deprecated, use sourceFile instead
-   * @property {string | function(this: JHipsterBaseGenerator, any): string} [renameTo] - deprecated, use destinationFile insted
-   * @property {EditFileCallback[]} [transform] - transforms (files processing) to be applied
-   * @property {boolean} [binary] - binary files skips ejs render, ejs extension and file transform
-   * @property {object} [options] - ejs options. Refer to https://ejs.co/#docs
-   */
-
-  /**
-   * Sections of blocks to be writter.
-   *
-   * @typedef {Record<string, WriteFileBlock> & { _: {
-   *   transform: EditFileCallback[]
-   * } }} WriteFileSection
-   */
-
-  /**
-   * Template options to be passed to ejs renderFile.
-   *
-   * @typedef {object} WriteFileOptions
-   * @property {WriteFileSection} [sections] - sections to be writter
-   * @property {WriteFileBlock[]} [blocks] - block to be writter
-   * @property {WriteFileTemplate[]} [templates] - templates to be writter
-   * @property {EditFileCallback[]} [transform] - transforms (files processing) to be applied
-   * @property {object} [context=this] - context to be used as template data
-   * @property {string|string[]} [rootTemplatesPath] - path(s) to look for templates.
-   *        Single absolute path or relative path(s) between the templates folder and template path.
-   */
-
-  /**
    * write the given files using provided options.
    *
-   * @param {WriteFileOptions} options
+   * @template DataType
+   * @param {import('./base/api.js').WriteFileOptions<this, DataType>} options
    * @return {Promise<string[]>}
    */
   async writeFiles(options) {
@@ -2510,20 +2278,23 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       } else {
         let useAsync = true;
         if (context.entityClass) {
-          const basename = path.basename(sourceFileFrom);
-          if (context.configOptions && context.configOptions.sharedEntities) {
-            Object.values(context.configOptions.sharedEntities).forEach(entity => {
-              entity.resetFakerSeed(`${context.entityClass}-${basename}`);
-            });
-          } else if (context.resetFakerSeed) {
-            context.resetFakerSeed(basename);
+          if (!context.baseName) {
+            throw new Error('baseName is require at templates context');
           }
+          const basename = path.basename(sourceFileFrom);
+          const seed = `${context.entityClass}-${basename}`;
+          Object.values(this.configOptions?.sharedEntities ?? {}).forEach(entity => {
+            entity.resetFakerSeed(seed);
+          });
+          Object.values(this.options.sharedData.applications?.[context.baseName]?.sharedEntities ?? {}).forEach(entity => {
+            entity.resetFakerSeed(seed);
+          });
           // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
           useAsync = false;
         }
 
         const renderOptions = {
-          ...options,
+          ...(options?.renderOptions ?? {}),
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
         };
@@ -2978,8 +2749,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.projectDescription = config.projectDescription;
 
     dest.testFrameworks = config.testFrameworks || [];
-    dest.cypressCoverage = config.cypressCoverage;
-    dest.cypressAudit = config.cypressAudit === undefined ? true : config.cypressAudit;
 
     dest.remotes = Object.entries(config.applications || {}).map(([baseName, config]) => ({ baseName, ...config })) || [];
 
@@ -2993,11 +2762,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.jwtSecretKey = config.jwtSecretKey;
   }
 
+  /**
+   * @param {Object} dest - destination context to use default is context
+   */
   loadDerivedMicroserviceAppConfig(dest = this) {
     dest.jhiPrefixCapitalized = _.upperFirst(dest.jhiPrefix);
     dest.jhiPrefixDashed = _.kebabCase(dest.jhiPrefix);
   }
 
+  /**
+   * @param {Object} dest - destination context to use default is context
+   */
   loadDerivedAppConfig(dest = this) {
     this.loadDerivedMicroserviceAppConfig(dest);
     dest.applicationTypeGateway = dest.applicationType === GATEWAY;
@@ -3011,9 +2786,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
       dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
       dest.lowercaseBaseName = dest.baseName.toLowerCase();
+      dest.upperFirstCamelCaseBaseName = this.upperFirstCamelCase(dest.baseName);
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
-      dest.projectDescription = dest.projectDescription || `Description for ${this.baseName}`;
+      dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
       dest.endpointPrefix = !dest.applicationType || dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
     }
 
@@ -3059,6 +2835,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientSrcDir = config.clientSrcDir || this.CLIENT_MAIN_SRC_DIR;
   }
 
+  /**
+   * @param {Object} dest - destination context to use default is context
+   */
   loadDerivedClientConfig(dest = this) {
     dest.clientFrameworkAngular = dest.clientFramework === ANGULAR;
     dest.clientFrameworkReact = dest.clientFramework === REACT;
@@ -3093,29 +2872,39 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.enableTranslation = config.enableTranslation;
     dest.nativeLanguage = config.nativeLanguage;
     dest.languages = config.languages;
+    dest.enableI18nRTL = dest.languages && this.isI18nRTLSupportNecessary(dest.languages);
   }
 
   /**
    * Load server configs into dest.
    * all variables should be set to dest,
    * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
+   * @param {Object} config - config to load config from
+   * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
   loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
 
+    dest.srcMainJava = SERVER_MAIN_SRC_DIR;
+    dest.srcMainResources = SERVER_MAIN_RES_DIR;
+    dest.srcMainWebapp = CLIENT_MAIN_SRC_DIR;
+    dest.srcTestJava = SERVER_TEST_SRC_DIR;
+    dest.srcTestResources = SERVER_TEST_RES_DIR;
+    dest.srcTestJavascript = CLIENT_TEST_SRC_DIR;
+
     dest.buildTool = config.buildTool;
 
     dest.databaseType = config.databaseType;
     dest.devDatabaseType = config.devDatabaseType;
     dest.prodDatabaseType = config.prodDatabaseType;
+    dest.incrementalChangelog = config.incrementalChangelog;
     dest.reactive = config.reactive;
     dest.searchEngine = config.searchEngine;
     dest.cacheProvider = config.cacheProvider;
     dest.enableHibernateCache = config.enableHibernateCache;
+    dest.serviceDiscoveryType = config.serviceDiscoveryType;
 
     dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
     dest.messageBroker = config.messageBroker;
@@ -3133,6 +2922,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     this.loadDerivedServerConfig(dest);
   }
 
+  /**
+   * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
+   */
   loadDerivedServerConfig(dest = this) {
     if (!dest.packageFolder) {
       dest.packageFolder = dest.packageName.replace(/\./g, '/');
@@ -3203,14 +2995,26 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
     dest.searchEngineAny = ![undefined, false, 'no'].includes(dest.searchEngine);
+
+    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
+    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
+    dest.serviceDiscoveryAny = ![undefined, false, 'no'].includes(dest.serviceDiscoveryType);
   }
 
+  /**
+   * @param {Object} config - config to load config from
+   * @param {import('./bootstrap-application-base/types.js').PlatformApplication} dest - destination context to use default is context
+   */
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
     dest.monitoring = config.monitoring;
     this.loadDerivedPlatformConfig(dest);
   }
 
+  /**
+   * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
+   * @param {import('./bootstrap-application-base/types.js').PlatformApplication} dest - destination context to use default is context
+   */
   loadDerivedPlatformConfig(dest = this) {
     dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
     dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
@@ -3237,6 +3041,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Get all the generator configuration from the .yo-rc.json file
    * @param {string} entityName - Name of the entity to load.
    * @param {boolean} create - Create storage if doesn't exists.
+   * @returns {import('yeoman-generator/lib/util/storage')}
    */
   getEntityConfig(entityName, create = false) {
     const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
@@ -3264,8 +3069,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Construct the entity's dto name by appending the dto suffix.
    * @param {String} name entity name
    */
-  asDto(name) {
-    return name + (this.dtoSuffix || this.jhipsterConfig.dtoSuffix || '');
+  asDto(name, application) {
+    return name + (application.dtoSuffix ?? '');
   }
 
   get needleApi() {
@@ -3460,8 +3265,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * Edit file content
    * @param {string} file
-   * @param {...EditFileCallback} transformCallbacks
-   * @returns {CascatedEditFileCallback}
+   * @param {...import('./base/api.js').EditFileCallback} transformCallbacks
+   * @returns {import('./base/api.js').CascatedEditFileCallback}
    */
   editFile(file, ...transformCallbacks) {
     let filePath = this.destinationPath(file);

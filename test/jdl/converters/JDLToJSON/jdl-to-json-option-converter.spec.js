@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');

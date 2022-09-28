@@ -40,13 +40,13 @@ const liquibaseFiles = {
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
-          override: generator => !generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog,
+          override: generator => !generator.incrementalChangelog || generator.recreateInitialChangelog,
           file: 'config/liquibase/changelog/initial_schema.xml',
           renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
           options: { interpolate: INTERPOLATE_REGEX },
         },
         {
-          override: generator => !generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog,
+          override: generator => !generator.incrementalChangelog || generator.recreateInitialChangelog,
           file: 'config/liquibase/master.xml',
         },
       ],
@@ -166,7 +166,7 @@ const cassandraFiles = {
         'config/cql/create-keyspace-prod.cql',
         'config/cql/create-keyspace.cql',
         'config/cql/drop-keyspace.cql',
-        { file: 'config/cql/changelog/README.md', method: 'copy' },
+        'config/cql/changelog/README.md',
       ],
     },
     {
@@ -269,7 +269,7 @@ const baseServerFiles = {
       path: DOCKER_DIR,
       templates: [
         'consul.yml',
-        { file: 'config/git2consul.json', method: 'copy' },
+        'config/git2consul.json',
         { file: 'config/consul-config/application.yml', renameTo: () => 'central-server-config/application.yml' },
       ],
     },
@@ -324,9 +324,9 @@ const baseServerFiles = {
         { file: 'gradle/profile_prod.gradle', options: { interpolate: INTERPOLATE_REGEX } },
         'gradle/war.gradle',
         'gradle/zipkin.gradle',
-        { file: 'gradlew', method: 'copy', noEjs: true },
-        { file: 'gradlew.bat', method: 'copy', noEjs: true },
-        { file: 'gradle/wrapper/gradle-wrapper.jar', method: 'copy', noEjs: true },
+        { file: 'gradlew', noEjs: true },
+        { file: 'gradlew.bat', noEjs: true },
+        { file: 'gradle/wrapper/gradle-wrapper.jar', noEjs: true },
         'gradle/wrapper/gradle-wrapper.properties',
       ],
     },
@@ -337,19 +337,19 @@ const baseServerFiles = {
     {
       condition: generator => generator.buildToolMaven,
       templates: [
-        { file: 'mvnw', method: 'copy', noEjs: true },
-        { file: 'mvnw.cmd', method: 'copy', noEjs: true },
-        { file: '.mvn/jvm.config', method: 'copy', noEjs: true },
-        { file: '.mvn/wrapper/maven-wrapper.jar', method: 'copy', noEjs: true },
-        { file: '.mvn/wrapper/maven-wrapper.properties', method: 'copy', noEjs: true },
+        { file: 'mvnw', noEjs: true },
+        { file: 'mvnw.cmd', noEjs: true },
+        { file: '.mvn/jvm.config', noEjs: true },
+        { file: '.mvn/wrapper/maven-wrapper.jar', noEjs: true },
+        { file: '.mvn/wrapper/maven-wrapper.properties', noEjs: true },
         { file: 'pom.xml', options: { interpolate: INTERPOLATE_REGEX } },
       ],
     },
     {
       condition: generator => !generator.skipClient,
       templates: [
-        { file: 'npmw', method: 'copy', noEjs: true },
-        { file: 'npmw.cmd', method: 'copy', noEjs: true },
+        { file: 'npmw', noEjs: true },
+        { file: 'npmw.cmd', noEjs: true },
       ],
     },
   ],
@@ -360,7 +360,6 @@ const baseServerFiles = {
       templates: [
         {
           file: 'banner-react.txt',
-          method: 'copy',
           noEjs: true,
           renameTo: () => 'banner.txt',
         },
@@ -372,7 +371,6 @@ const baseServerFiles = {
       templates: [
         {
           file: 'banner-vue.txt',
-          method: 'copy',
           noEjs: true,
           renameTo: () => 'banner.txt',
         },
@@ -381,7 +379,7 @@ const baseServerFiles = {
     {
       condition: generator => !generator.clientFrameworkReact && !generator.clientFrameworkVue,
       path: SERVER_MAIN_RES_DIR,
-      templates: [{ file: 'banner.txt', method: 'copy', noEjs: true }],
+      templates: [{ file: 'banner.txt', noEjs: true }],
     },
     {
       condition: generator => !!generator.enableSwaggerCodegen,
@@ -392,7 +390,7 @@ const baseServerFiles = {
       path: SERVER_MAIN_RES_DIR,
       templates: [
         // Thymeleaf templates
-        { file: 'templates/error.html', method: 'copy' },
+        'templates/error.html',
         'logback-spring.xml',
         'config/application.yml',
         'config/application-dev.yml',
@@ -1154,7 +1152,7 @@ const baseServerFiles = {
       templates: [
         {
           file: 'package/web/rest/KafkaResource_reactive.java',
-          renameTo: generator => `${generator.javaDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResource.java`,
+          renameTo: generator => `${generator.javaDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResource.java`,
         },
       ],
     },
@@ -1164,7 +1162,7 @@ const baseServerFiles = {
       templates: [
         {
           file: 'package/web/rest/KafkaResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResource.java`,
+          renameTo: generator => `${generator.javaDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResource.java`,
         },
       ],
     },
@@ -1386,7 +1384,7 @@ const baseServerFiles = {
       templates: [
         {
           file: 'package/web/rest/KafkaResourceIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
+          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResourceIT.java`,
         },
       ],
     },
@@ -1396,24 +1394,24 @@ const baseServerFiles = {
       templates: [
         {
           file: 'package/web/rest/KafkaResourceIT_reactive.java',
-          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
+          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResourceIT.java`,
         },
       ],
     },
   ],
   serverJavaUserManagement: [
     {
-      condition: generator => generator.isUsingBuiltInUser(),
+      condition: generator => generator.builtInUser,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
           file: 'package/domain/User.java',
-          renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`,
+          renameTo: generator => `${generator.javaDir}domain/${generator.user.persistClass}.java`,
         },
       ],
     },
     {
-      condition: generator => generator.isUsingBuiltInAuthority(),
+      condition: generator => generator.builtInAuthority,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
@@ -1449,11 +1447,11 @@ const baseServerFiles = {
         },
         {
           file: 'package/service/dto/AdminUserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('AdminUser')}.java`,
+          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.adminUserDto}.java`,
         },
         {
           file: 'package/service/dto/UserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`,
+          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.dtoClass}.java`,
         },
       ],
     },
@@ -1587,11 +1585,11 @@ const baseServerFiles = {
         },
         {
           file: 'package/service/dto/AdminUserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('AdminUser')}.java`,
+          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.adminUserDto}.java`,
         },
         {
           file: 'package/service/dto/UserDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`,
+          renameTo: generator => `${generator.javaDir}service/dto/${generator.user.dtoClass}.java`,
         },
         {
           file: 'package/service/dto/PasswordChangeDTO.java',
@@ -1827,8 +1825,8 @@ const serverFiles = mergeSections(
 function writeFiles() {
   return {
     setUp() {
-      this.javaDir = `${this.packageFolder}/`;
-      this.testDir = `${this.packageFolder}/`;
+      this.application.javaDir = `${this.application.packageFolder}/`;
+      this.application.testDir = `${this.application.packageFolder}/`;
 
       this.generateKeyStore();
     },
@@ -1836,15 +1834,22 @@ function writeFiles() {
     cleanupOldServerFiles() {
       serverCleanup.cleanupOldServerFiles(
         this,
-        `${SERVER_MAIN_SRC_DIR}${this.javaDir}`,
-        `${SERVER_TEST_SRC_DIR}${this.testDir}`,
+        `${SERVER_MAIN_SRC_DIR}${this.application.javaDir}`,
+        `${SERVER_TEST_SRC_DIR}${this.application.testDir}`,
         SERVER_MAIN_RES_DIR,
         SERVER_TEST_RES_DIR
       );
     },
 
     writeFiles() {
-      return this.writeFilesToDisk(serverFiles);
+      const recreateInitialChangelog = this.configOptions.recreateInitialChangelog;
+      return this.writeFiles({
+        sections: serverFiles,
+        context: {
+          ...this.application,
+          recreateInitialChangelog,
+        },
+      });
     },
     ...writeCouchbaseFiles(),
     ...writeSqlFiles(),

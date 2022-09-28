@@ -70,7 +70,7 @@ function replaceJSTranslation(generator, content, jsKey) {
  * @returns string with pageTitle replaced
  */
 function replacePageTitles(generator, content) {
-  return replaceJSTranslation(generator, content, 'pageTitle');
+  return replaceJSTranslation(generator, content, 'title');
 }
 
 /**
@@ -96,9 +96,6 @@ function replaceErrorMessage(generator, content) {
  * @this {import('../generator-base.js')}
  */
 function replaceAngularTranslations(content, filePath) {
-  if (this.enableTranslation) {
-    return content;
-  }
   if (/\.html$/.test(filePath)) {
     content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
     content = replacePlaceholders(this, content);

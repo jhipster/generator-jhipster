@@ -18,113 +18,39 @@
  */
 const utils = require('../utils');
 const constants = require('../generator-constants');
-const { angularFiles } = require('./files-angular.cjs');
-const { reactFiles } = require('./files-react.cjs');
-const { vueFiles } = require('./files-vue.cjs');
-const { cleanupCypressEntityFiles, writeCypressEntityFiles, cypressEntityFiles: commonFiles } = require('./files-cypress.cjs');
 
 /* Constants use throughout */
-const { ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
-const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
+const { ANGULAR } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 const CLIENT_COMMON_TEMPLATES_DIR = 'common';
-const CLIENT_NG2_TEMPLATES_DIR = 'angular';
-const CLIENT_REACT_TEMPLATES_DIR = 'react';
-const CLIENT_VUE_TEMPLATES_DIR = 'vue';
 
 module.exports = {
-  writeFiles,
-  addToMenu,
-  angularFiles,
-  reactFiles,
-  vueFiles,
-  commonFiles,
+  addEnumerationFiles,
 };
 
-function addEnumerationFiles(generator, clientFolder) {
-  generator.fields.forEach(field => {
+async function addEnumerationFiles({ application, entity }, clientFolder) {
+  for (const field of entity.fields) {
     if (field.fieldIsEnum === true) {
       const { enumFileName } = field;
       const enumInfo = {
-        ...utils.getEnumInfo(field, generator.clientRootFolder),
-        frontendAppName: generator.frontendAppName,
-        packageName: generator.packageName,
+        ...utils.getEnumInfo(field, entity.clientRootFolder),
+        frontendAppName: application.frontendAppName,
+        packageName: application.packageName,
       };
-      if (!generator.skipClient) {
-        const modelPath = generator.clientFramework === ANGULAR ? 'entities' : 'shared/model';
-        const destinationFile = generator.destinationPath(`${clientFolder}${modelPath}/enumerations/${enumFileName}.model.ts`);
-        generator.template(
-          `${generator.fetchFromInstalledJHipster(
-            `entity-client/templates/${CLIENT_COMMON_TEMPLATES_DIR}`
-          )}/${clientFolder}entities/enumerations/enum.model.ts.ejs`,
-          destinationFile,
-          generator,
-          {},
-          enumInfo
-        );
+      if (!entity.skipClient) {
+        const modelPath = application.clientFramework === ANGULAR ? 'entities' : 'shared/model';
+        const destinationFile = this.destinationPath(`${clientFolder}${modelPath}/enumerations/${enumFileName}.model.ts`);
+        await this.writeFiles({
+          templates: [
+            {
+              sourceFile: `${clientFolder}entities/enumerations/enum.model.ts`,
+              destinationFile,
+            },
+          ],
+          rootTemplatesPath: [CLIENT_COMMON_TEMPLATES_DIR],
+          context: enumInfo,
+        });
       }
     }
-  });
-}
-
-function addSampleRegexTestingStrings(generator) {
-  generator.fields.forEach(field => {
-    if (field.fieldValidateRulesPattern !== undefined) {
-      const randExp = field.createRandexp();
-      field.fieldValidateSampleString = randExp.gen();
-      field.fieldValidateModifiedString = randExp.gen();
-    }
-  });
-}
-
-function writeFiles() {
-  return {
-    writeClientFiles() {
-      if (this.skipClient) return undefined;
-      if (this.protractorTests) {
-        addSampleRegexTestingStrings(this);
-      }
-
-      let files;
-      let clientMainSrcDir;
-      let templatesDir;
-
-      if (this.clientFramework === ANGULAR) {
-        files = angularFiles;
-        clientMainSrcDir = ANGULAR_DIR;
-        templatesDir = CLIENT_NG2_TEMPLATES_DIR;
-      } else if (this.clientFramework === REACT) {
-        files = reactFiles;
-        clientMainSrcDir = REACT_DIR;
-        templatesDir = CLIENT_REACT_TEMPLATES_DIR;
-      } else if (this.clientFramework === VUE) {
-        files = vueFiles;
-        clientMainSrcDir = VUE_DIR;
-        templatesDir = CLIENT_VUE_TEMPLATES_DIR;
-      }
-
-      addEnumerationFiles(this, clientMainSrcDir);
-      if (!files) return undefined;
-
-      return this.writeFiles({ sections: files, rootTemplatesPath: templatesDir });
-    },
-
-    cleanupCypressEntityFiles,
-    writeCypressEntityFiles,
-  };
-}
-
-function addToMenu() {
-  if (this.skipClient) return;
-
-  if (!this.embedded) {
-    this.addEntityToModule();
-    this.addEntityToMenu(
-      this.entityPage,
-      this.enableTranslation,
-      this.clientFramework,
-      this.entityTranslationKeyMenu,
-      this.entityClassHumanized
-    );
   }
 }

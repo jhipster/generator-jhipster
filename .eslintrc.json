@@ -14,9 +14,9 @@
   },
   "overrides": [
     {
-      "files": ["**/*.mjs"],
+      "files": ["**/*.{c,m,}{js,ts}"],
       "rules": {
-        "import/extensions": [0, { "pattern": { "{c,m,}js": "always" } }]
+        "import/extensions": [0, { "pattern": { "{c,m,}{js,ts}": "always" } }]
       }
     },
     {

@@ -21,7 +21,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
     this.sbsBlueprint = true;
   }
 
-  get postWriting() {
+  get [ServerGenerator.POST_WRITING]() {
     return {
       ehCacheStep() {
         if (this.jhipsterConfig.cacheProvider === 'ehcache') {

@@ -19,7 +19,7 @@
 package <%= packageName %>.service.dto;
 
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ } _%>
 
 import java.io.Serializable;
@@ -30,7 +30,7 @@ import java.util.UUID;
 /**
  * A DTO representing a user, with only the public attributes.
  */
-public class <%= asDto('User') %> implements Serializable {
+public class <%= user.dtoClass %> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private <%= user.primaryKey.type %> id;
@@ -42,16 +42,16 @@ public class <%= asDto('User') %> implements Serializable {
 <%_ } _%>
 
 <%_ if (!databaseTypeNo) { _%>
-    public <%= asDto('User') %>() {
+    public <%= user.dtoClass %>() {
         // Empty constructor needed for Jackson.
     }
 
-    public <%= asDto('User') %>(<%= asEntity('User') %> user) {
+    public <%= user.dtoClass %>(<%= user.persistClass %> user) {
         this.id = user.getId();
         // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-        this.<%= field.fieldName %> = user.get<%= javaBeanCase(field.fieldName) %>();
+        this.<%= field.fieldName %> = user.get<%= this.javaBeanCase(field.fieldName) %>();
   <%_ } _%>
     }
 
@@ -73,10 +73,10 @@ public class <%= asDto('User') %> implements Serializable {
     }
 
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-    public String get<%= javaBeanCase(field.fieldName) %>() {
+    public String get<%= this.javaBeanCase(field.fieldName) %>() {
         return <%= field.fieldName %>;
     }
-    public void set<%= javaBeanCase(field.fieldName) %>(String <%= field.fieldName %>) {
+    public void set<%= this.javaBeanCase(field.fieldName) %>(String <%= field.fieldName %>) {
         this.<%= field.fieldName %> = <%= field.fieldName %>;
     }
 <%_ } _%>
@@ -84,7 +84,7 @@ public class <%= asDto('User') %> implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= asDto('User') %>{" +
+        return "<%= user.dtoClass %>{" +
             "id='" + id + '\'' +
             ", login='" + login + '\'' +
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { expect } from 'expect';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { helpers, lookups } from '#test-utils';
 
@@ -36,6 +36,7 @@ describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipst
         .withOptions({
           reproducible: true,
           defaults: true,
+          baseName: 'jhipster',
 <%_ if (!customGenerator) { _%>
           blueprint: '<%= application.baseName %>',
 <%_ } _%>

@@ -1,8 +1,19 @@
-import type { Application } from '../../types/tasks';
-import type { ClientServerApplication } from '../bootstrap-application-client-server/types';
+import { OptionalGenericDerivedProperty } from '../base/application';
+import type { Application } from '../base-application/tasks.js';
+import type { CommonClientServerApplication } from '../bootstrap-application-base/types';
+
+type ClientFrameworkType = 'no' | 'angular' | 'react' | 'vue';
+
+declare const CLIENT_FRAMEWORK = 'clientFramework';
+
+type ClientFramework = {
+  [CLIENT_FRAMEWORK]: ClientFrameworkType;
+};
+
+type ClientFrameworkApplication = OptionalGenericDerivedProperty<ClientFramework, ClientFramework[typeof CLIENT_FRAMEWORK]>;
 
 export type ClientApplication = Application &
-  ClientServerApplication & {
-    clientFramework: string;
+  CommonClientServerApplication &
+  ClientFrameworkApplication & {
     withAdminUi: boolean;
   };

@@ -24,8 +24,6 @@ import { SessionsComponent } from './sessions.component';
 export const sessionsRoute: Route = {
   path: 'sessions',
   component: SessionsComponent,
-  data: {
-    pageTitle: 'global.menu.account.sessions',
-  },
+  title: 'global.menu.account.sessions',
   canActivate: [UserRouteAccessService],
 };

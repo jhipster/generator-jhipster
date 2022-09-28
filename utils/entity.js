@@ -132,7 +132,7 @@ function _derivedProperties(entityWithConfig) {
   });
 }
 
-function prepareEntityForTemplates(entityWithConfig, generator) {
+function prepareEntityForTemplates(entityWithConfig, generator, application) {
   const entityName = _.upperFirst(entityWithConfig.name);
   _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
@@ -172,8 +172,8 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
   if (dto) {
     _.defaults(entityWithConfig, {
-      dtoClass: generator.asDto(entityWithConfig.entityClass),
-      dtoInstance: generator.asDto(entityWithConfig.entityInstance),
+      dtoClass: generator.asDto(entityWithConfig.entityClass, application),
+      dtoInstance: generator.asDto(entityWithConfig.entityInstance, application),
     });
   }
 

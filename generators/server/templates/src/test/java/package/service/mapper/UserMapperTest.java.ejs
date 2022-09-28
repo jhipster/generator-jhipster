@@ -18,9 +18,9 @@
 -%>
 package <%= packageName %>.service.mapper;
 
-import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
+import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
@@ -46,17 +46,17 @@ class UserMapperTest {
 <%_ if (databaseTypeCouchbase) { _%>
     private static final String DEFAULT_ID = DEFAULT_LOGIN;
 <%_ } else { _%>
-    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- getPrimaryKeyValue(user.primaryKey.type) %>;
+    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- this.getPrimaryKeyValue(user.primaryKey.type) %>;
 <%_ } _%>
 
     private UserMapper userMapper;
-    private <%= asEntity('User') %> user;
-    private <%= asDto('AdminUser') %> userDto;
+    private <%= user.persistClass %> user;
+    private <%= user.adminUserDto %> userDto;
 
     @BeforeEach
     public void init() {
         userMapper = new UserMapper();
-        user = new <%= asEntity('User') %>();
+        user = new <%= user.persistClass %>();
         user.setLogin(DEFAULT_LOGIN);
 <%_ if (!authenticationTypeOauth2) { _%>
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
@@ -70,16 +70,16 @@ class UserMapperTest {
 <%_ } _%>
         user.setLangKey("en");
 
-        userDto = new <%= asDto('AdminUser') %>(user);
+        userDto = new <%= user.adminUserDto %>(user);
     }
 
     @Test
     void usersToUserDTOsShouldMapOnlyNonNullUsers() {
-        List<<%= asEntity('User') %>> users = new ArrayList<>();
+        List<<%= user.persistClass %>> users = new ArrayList<>();
         users.add(user);
         users.add(null);
 
-        List<<%= asDto('User') %>> userDTOS = userMapper.usersToUserDTOs(users);
+        List<<%= user.dtoClass %>> userDTOS = userMapper.usersToUserDTOs(users);
 
         assertThat(userDTOS)
           .isNotEmpty()
@@ -88,11 +88,11 @@ class UserMapperTest {
 
     @Test
     void userDTOsToUsersShouldMapOnlyNonNullUsers() {
-        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
+        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
         usersDto.add(null);
 
-        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users)
           .isNotEmpty()
@@ -105,10 +105,10 @@ class UserMapperTest {
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
 
-        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
+        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
-        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users)
           .isNotEmpty()
@@ -127,10 +127,10 @@ class UserMapperTest {
     void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
+        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
-        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users)
           .isNotEmpty()
@@ -145,7 +145,7 @@ class UserMapperTest {
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
 
-        <%= asEntity('User') %> user = userMapper.userDTOToUser(userDto);
+        <%= user.persistClass %> user = userMapper.userDTOToUser(userDto);
 
         assertThat(user).isNotNull();
         assertThat(user.getAuthorities()).isNotNull();
@@ -162,7 +162,7 @@ class UserMapperTest {
     void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        <%= asEntity('User') %> user = userMapper.userDTOToUser(userDto);
+        <%= user.persistClass %> user = userMapper.userDTOToUser(userDto);
 
         assertThat(user).isNotNull();
         assertThat(user.getAuthorities()).isNotNull();

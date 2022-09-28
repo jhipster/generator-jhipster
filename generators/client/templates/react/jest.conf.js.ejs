@@ -14,10 +14,10 @@ module.exports = {
   },
   cacheDirectory: '<rootDir>/<%= BUILD_DIR %>jest-cache',
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
-  testMatch: ['<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/**/@(*.)@(spec.ts?(x))'],
+  testMatch: ['<rootDir>/<%= this.CLIENT_MAIN_SRC_DIR %>app/**/@(*.)@(spec.ts?(x))'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   coveragePathIgnorePatterns: [
-    '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>'
+    '<rootDir>/<%= this.CLIENT_TEST_SRC_DIR %>'
   ],
   moduleNameMapper: mapTypescriptAliasToJestAlias({
     '\\.(css|scss)$': 'identity-obj-proxy'
@@ -30,7 +30,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/'
   ],
-  setupFiles: ['<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/setup-tests.ts'],
+  setupFiles: ['<rootDir>/<%= this.CLIENT_MAIN_SRC_DIR %>app/setup-tests.ts'],
   globals: {
 <%_ if (enableTranslation) { _%>
     I18N_HASH: 'generated_hash',

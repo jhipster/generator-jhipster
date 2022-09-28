@@ -47,7 +47,7 @@ const JIB_VERSION = '3.3.0';
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 // const DOCKER_JHIPSTER_REGISTRY = 'ghcr.io/jhipster/jhipster-registry:main';
-const DOCKER_JHIPSTER_REGISTRY_VERSION = 'v7.3.0';
+const DOCKER_JHIPSTER_REGISTRY_VERSION = 'v7.4.0';
 const DOCKER_JHIPSTER_REGISTRY = `jhipster/jhipster-registry:${DOCKER_JHIPSTER_REGISTRY_VERSION}`;
 const DOCKER_JHIPSTER_CONTROL_CENTER_VERSION = 'v0.5.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = `jhipster/jhipster-control-center:${DOCKER_JHIPSTER_CONTROL_CENTER_VERSION}`;

@@ -21,7 +21,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
     this.sbsBlueprint = true;
   }
 
-  get postWriting() {
+  get [ServerGenerator.POST_WRITING]() {
     const customPhaseSteps = {
       addlogStep() {
         this.addLoggerForLogbackSpring('org.test.logTest', 'OFF');

@@ -53,8 +53,8 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 <%_ } -%>
 
 <%_ for (const relationship of relationships) { -%>
-  <%_ const relationshipForwardReference = "HAS_" + _.toUpper(_.snakeCase(relationship.relationshipName)); %>
-  <%_ const relationshipBackReference = "HAS_" + _.toUpper(_.snakeCase(relationship.otherEntityRelationshipName)); %>
+  <%_ const relationshipForwardReference = "HAS_" + this._.toUpper(this._.snakeCase(relationship.relationshipName)); %>
+  <%_ const relationshipBackReference = "HAS_" + this._.toUpper(this._.snakeCase(relationship.otherEntityRelationshipName)); %>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
     <%_ if (relationship.ownerSide) { _%>
     @Relationship(value = "<%= relationshipBackReference %>", direction = Relationship.Direction.INCOMING)

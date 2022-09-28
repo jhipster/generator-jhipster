@@ -31,8 +31,8 @@ const { DefinePlugin } = require('webpack');
 <%_ } _%>
 <%_ if (applicationTypeMicroservice) { _%>
         exposes: {
-          './entities-menu': './<%= CLIENT_MAIN_SRC_DIR %>app/entities/menu',
-          './entities-routes': './<%= CLIENT_MAIN_SRC_DIR %>app/entities/routes',
+          './entities-menu': './<%= this.CLIENT_MAIN_SRC_DIR %>app/entities/menu',
+          './entities-routes': './<%= this.CLIENT_MAIN_SRC_DIR %>app/entities/routes',
         },
 <%_ } _%>
         shared: {
@@ -92,7 +92,7 @@ const { DefinePlugin } = require('webpack');
 <&_ if (fragment.pluginsSection) { -&>
 <%_ if (applicationTypeMicroservice) { _%>
       new DefinePlugin({
-        <%= _.upperCase(baseName) %>_I18N_RESOURCES_PREFIX: JSON.stringify(''),
+        <%= this._.upperCase(baseName) %>_I18N_RESOURCES_PREFIX: JSON.stringify(''),
       }),
 <%_ } _%>
 <&_ } -&>

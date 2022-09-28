@@ -20,7 +20,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const { expect } = require('chai');
 const { convertToJDL, convertSingleContentToJDL } = require('../../../jdl/converters/json-to-jdl-converter');
 

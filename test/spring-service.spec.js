@@ -6,11 +6,13 @@ const constants = require('../generators/generator-constants');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
+const generator = require.resolve('../generators/spring-service/index.mjs');
+
 describe('JHipster generator service', () => {
   describe('creates service without interface', () => {
     before(done => {
       helpers
-        .run(require.resolve('../generators/spring-service'))
+        .run(generator)
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
         })
@@ -33,7 +35,7 @@ describe('JHipster generator service', () => {
   describe('creates service with interface', () => {
     before(done => {
       helpers
-        .run(require.resolve('../generators/spring-service'))
+        .run(generator)
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
         })
@@ -55,7 +57,7 @@ describe('JHipster generator service', () => {
   describe('creates service with --default flag', () => {
     before(done => {
       helpers
-        .run(require.resolve('../generators/spring-service'))
+        .run(generator)
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
         })

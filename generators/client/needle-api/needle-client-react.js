@@ -40,9 +40,16 @@ module.exports = class extends needleClientBase {
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
-  addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName) {
-    const indexModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/routes.tsx`;
-    const indexReducerPath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
+  addEntityToModule(
+    entityInstance,
+    entityClass,
+    entityName,
+    entityFolderName,
+    entityFileName,
+    { applicationTypeMicroservice, CLIENT_MAIN_SRC_DIR } = this
+  ) {
+    const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/routes.tsx`;
+    const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
 
     const errorMessage = path =>
       `${chalk.yellow('Reference to ') + entityInstance + entityClass + entityFolderName + entityFileName} ${chalk.yellow(
@@ -60,9 +67,7 @@ module.exports = class extends needleClientBase {
       indexModulePath,
       'jhipster-needle-add-route-path',
       this.generator.stripMargin(
-        `|<Route path="${
-          this.generator.microfrontend && this.generator.applicationTypeMicroservice ? '/' : ''
-        }${entityFileName}/*" element={<${entityName} />} />`
+        `|<Route path="${applicationTypeMicroservice ? '/' : ''}${entityFileName}/*" element={<${entityName} />} />`
       )
     );
     this.addBlockContentToFile(indexAddRoutePathRewriteFileModel, errorMessage(indexModulePath));

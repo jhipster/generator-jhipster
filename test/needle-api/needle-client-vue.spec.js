@@ -18,7 +18,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     this.sbsBlueprint = true;
   }
 
-  get postWriting() {
+  get [ClientGenerator.POST_WRITING]() {
     const customPhaseSteps = {
       async composeEntitiesClient() {
         await this.composeWithJHipster('entities-client');

@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
-const GeneratorBaseEntity = require('../generator-base-application.cjs');
+const GeneratorBaseEntity = require('../base-application/generator.cjs');
 const {
   INITIALIZING_PRIORITY,
   PROMPTING_PRIORITY,

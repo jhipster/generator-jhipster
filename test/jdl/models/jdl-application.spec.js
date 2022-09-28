@@ -18,7 +18,7 @@
  */
 /* eslint-disable no-unused-expressions */
 
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const { expect } = require('chai');
 const { OptionNames } = require('../../../jdl/jhipster/application-options');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');

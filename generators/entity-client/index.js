@@ -20,16 +20,14 @@
 const _ = require('lodash');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
-  require('../../lib/constants/priorities.cjs').compat;
+const { PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
 
-const { writeFiles, addToMenu } = require('./files');
+const { writeAngularFiles, cleanupAngular } = require('./files-angular.cjs');
+const { writeReactFiles, cleanupReact } = require('./files-react.cjs');
+const { writeVueFiles } = require('./files-vue.cjs');
 const { entityClientI18nFiles } = require('../entity-i18n/files');
 const { clientI18nFiles } = require('../languages/files');
 
-const {
-  SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
-} = require('../generator-constants');
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
 const { preparePostEntityClientDerivedProperties, prepareReactEntity } = require('../../utils/entity');
 
@@ -52,8 +50,8 @@ module.exports = class extends BaseBlueprintGenerator {
   _preparing() {
     return {
       async prepareReact() {
-        if (!this.application.clientFrameworkReact) return;
         const { entity, application } = this;
+        if (!application.clientFrameworkReact) return;
         prepareReactEntity({ entity, application });
       },
     };
@@ -68,25 +66,16 @@ module.exports = class extends BaseBlueprintGenerator {
   _default() {
     return {
       async loadNativeLanguage() {
-        await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
+        const { entity, application } = this;
+        await this._loadEntityClientTranslations(entity, application);
 
-        const context = {};
-        this.loadAppConfig(undefined, context);
-        this.loadDerivedAppConfig(context);
-        this.loadClientConfig(undefined, context);
-        this.loadDerivedClientConfig(context);
-        this.loadServerConfig(undefined, context);
-        this.loadPlatformConfig(undefined, context);
-        this.loadTranslationConfig(undefined, context);
+        const context = { ...this.application };
         await this._loadClientTranslations(context);
       },
 
       postPrepareEntityClient() {
-        preparePostEntityClientDerivedProperties(this.entity);
-      },
-
-      loadConfigIntoGenerator() {
-        Object.assign(this, this.entity);
+        const { entity } = this;
+        preparePostEntityClientDerivedProperties(entity);
       },
     };
   }
@@ -99,74 +88,17 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _writing() {
     return {
-      cleanup() {
-        if (this.isJhipsterVersionLessThan('7.0.0-beta.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.route.ts`);
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.component.ts`);
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.component.html`);
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-detail.component.ts`);
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-detail.component.html`);
-          this.removeFile(
-            `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-delete-dialog.component.ts`
-          );
-          this.removeFile(
-            `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-delete-dialog.component.html`
-          );
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.ts`);
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.html`);
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/${this.entityModelFileName}.model.ts`);
-          this.fields.forEach(field => {
-            if (field.fieldIsEnum === true) {
-              const { enumFileName } = field;
-              this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/enumerations/${enumFileName}.model.ts`);
-            }
-          });
-          this.removeFile(
-            `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-routing-resolve.service.ts`
-          );
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-routing.module.ts`);
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.service.ts`);
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.service.spec.ts`);
-          this.removeFile(
-            `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.component.spec.ts`
-          );
-          this.removeFile(
-            `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}-detail.component.spec.ts`
-          );
-          this.removeFile(
-            `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}-delete-dialog.component.spec.ts`
-          );
-          this.removeFile(
-            `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.spec.ts`
-          );
-          this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.service.spec.ts`);
-        }
-        if (this.isJhipsterVersionLessThan('7.0.0-beta.1') && this.jhipsterConfig.clientFramework === REACT) {
-          this.removeFile(`${this.CLIENT_TEST_SRC_DIR}spec/app/entities/${this.entityFolderName}/${this.entityFileName}-reducer.spec.ts`);
-        }
-      },
-      ...writeFiles(),
+      writeAngularFiles,
+      cleanupAngular,
+      writeReactFiles,
+      cleanupReact,
+      writeVueFiles,
     };
   }
 
   get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _postWriting() {
-    return {
-      addToMenu() {
-        if (this.skipClient) return undefined;
-        return addToMenu.call(this);
-      },
-    };
-  }
-
-  get [POST_WRITING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._postWriting();
   }
 
   /**

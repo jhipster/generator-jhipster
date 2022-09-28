@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const { expect } = require('chai');
 const { writeFileSync, unlinkSync } = require('fs');
 const path = require('path');

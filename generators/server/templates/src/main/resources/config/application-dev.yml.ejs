@@ -122,23 +122,23 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
   <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: root
     password:
   <%_ } else if (devDatabaseTypePostgres) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: <%= baseName %>
     password:
   <%_ } else if (devDatabaseTypeOracle) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
     username: system
     password: oracle
   <%_ } else if (devDatabaseTypeMssql) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: SA
     password: yourStrong(!)Password
   <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
     username: <%= baseName %>
     password:
   <%_ } _%>
@@ -199,11 +199,11 @@ spring:
 <%_ } _%>
 <%_ if (reactive) { _%>
   <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
   <%_ } else if (devDatabaseTypeOracle) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
   <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>
@@ -218,23 +218,23 @@ spring:
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
   <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: root
     password:
   <%_ } else if (devDatabaseTypePostgres) { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: <%= baseName %>
     password:
   <%_ } else if (devDatabaseTypeOracle) { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
     username: system
     password: oracle
   <%_ } else if (devDatabaseTypeMssql) { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: SA
     password: yourStrong(!)Password
   <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
+    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
     username: <%= baseName %>
     password:
   <%_ } _%>

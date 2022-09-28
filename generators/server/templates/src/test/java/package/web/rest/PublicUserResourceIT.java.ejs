@@ -25,7 +25,7 @@ import <%= packageName %>.config.Constants;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
@@ -55,7 +55,7 @@ import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
@@ -144,7 +144,7 @@ class PublicUserResourceIT {
     private MockMvc restUserMockMvc;
 <%_ } _%>
 
-    private <%= asEntity('User') %> user;
+    private <%= user.persistClass %> user;
 
 <%_ if (cacheManagerIsAvailable) { _%>
     @BeforeEach
@@ -176,16 +176,16 @@ class PublicUserResourceIT {
 
         // Get all the users
 <%_ if (reactive) { _%>
-        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,desc")
+        <%= user.dtoClass %> foundUser = webTestClient.get().uri("/api/users?sort=id,desc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
+            .returnResult(<%= user.dtoClass %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-        assertThat(foundUser.get<%= javaBeanCase(field.fieldName) %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
+        assertThat(foundUser.get<%= this.javaBeanCase(field.fieldName) %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
   <%_ } _%>
 <%_ } else { _%>
         restUserMockMvc.perform(get("/api/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")

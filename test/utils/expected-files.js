@@ -1,15 +1,7 @@
 const constants = require('../../generators/generator-constants');
 
-const {
-  TEST_DIR,
-  CLIENT_MAIN_SRC_DIR,
-  CLIENT_TEST_SRC_DIR,
-  SERVER_MAIN_SRC_DIR,
-  SERVER_MAIN_RES_DIR,
-  SERVER_TEST_SRC_DIR,
-  SERVER_TEST_RES_DIR,
-  DOCKER_DIR,
-} = constants;
+const { TEST_DIR, CLIENT_MAIN_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, DOCKER_DIR } =
+  constants;
 
 const expectedFiles = {
   entity: {
@@ -413,6 +405,7 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}app/app-routing.module.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/app.constants.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/app-page-title-strategy.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/config/uib-pagination.config.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/interceptor/auth-expired.interceptor.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/interceptor/error-handler.interceptor.ts`,
@@ -554,70 +547,6 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
     `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,
     `${CLIENT_MAIN_SRC_DIR}WEB-INF/web.xml`,
-  ],
-
-  clientAdminAngular: [
-    `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.route.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.module.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.service.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.model.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/modal/health-modal.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/modal/health-modal.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.route.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.module.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.service.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.model.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/logs/log.model.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.route.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.module.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.service.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/jvm-memory/jvm-memory.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/jvm-memory/jvm-memory.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/jvm-threads/jvm-threads.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/jvm-threads/jvm-threads.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-cache/metrics-cache.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-cache/metrics-cache.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-request/metrics-request.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-request/metrics-request.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-system/metrics-system.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-system/metrics-system.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.component.html`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.component.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.route.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.module.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.service.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.model.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.spec.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.service.spec.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/modal/health-modal.component.spec.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.component.spec.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.service.spec.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.component.spec.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.service.spec.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.component.spec.ts`,
-    `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.service.spec.ts`,
-  ],
-
-  clientAdminReact: [
-    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/configuration/configuration.tsx`,
-    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/health/health.tsx`,
-    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/health/health-modal.tsx`,
-    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/metrics/metrics.tsx`,
-    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/logs/logs.tsx`,
   ],
 
   i18n: [
@@ -880,27 +809,6 @@ const expectedFiles = {
   ],
 
   consul: [`${DOCKER_DIR}central-server-config/application.yml`, `${DOCKER_DIR}consul.yml`, `${DOCKER_DIR}config/git2consul.json`],
-
-  cypress: [
-    'cypress.config.ts',
-    `${CLIENT_TEST_SRC_DIR}cypress/plugins/index.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/e2e/administration/administration.cy.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/support/navbar.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/support/index.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/tsconfig.json`,
-  ],
-
-  cypressNoOAuth2: [`${CLIENT_TEST_SRC_DIR}cypress/e2e/account/login-page.cy.ts`],
-
-  cypressWithDatabaseAndNoOAuth2: [
-    `${CLIENT_TEST_SRC_DIR}cypress/e2e/account/register-page.cy.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/e2e/account/settings-page.cy.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/e2e/account/password-page.cy.ts`,
-    `${CLIENT_TEST_SRC_DIR}cypress/e2e/account/reset-password-page.cy.ts`,
-  ],
-
-  cypressWithOauth2: [`${CLIENT_TEST_SRC_DIR}cypress/support/oauth2.ts`],
 };
 
 module.exports = expectedFiles;

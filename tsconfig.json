@@ -1,5 +1,5 @@
 {
-  "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*", "test/**/*"],
+  "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*"],
   "exclude": ["**/*.spec.*"],
   "compilerOptions": {
     /* Language and Environment */

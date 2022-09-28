@@ -47,7 +47,7 @@ import <%= packageName %>.config.KafkaSseProducer;
 @AutoConfigureMockMvc
 @WithMockUser
 @EmbeddedKafka
-class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
+class <%= this.upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
     @Autowired
     private WebTestClient client;

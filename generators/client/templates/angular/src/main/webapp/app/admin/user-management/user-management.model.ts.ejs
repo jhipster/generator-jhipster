@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-  const idType = getTypescriptKeyType(user.primaryKey.type);
+  const idType = this.getTypescriptKeyType(user.primaryKey.type);
 _%>
 export interface IUser {
   id: <%= idType %> | null;
