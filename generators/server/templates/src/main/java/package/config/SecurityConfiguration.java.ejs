@@ -182,7 +182,7 @@ public class SecurityConfiguration {
                 .accessDeniedHandler(problemSupport)*/
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (!skipUserManagement) { _%>
-        //.and()
+        .and()
             .rememberMe()
             .rememberMeServices(rememberMeServices)
             .rememberMeParameter("remember-me")
@@ -201,7 +201,7 @@ public class SecurityConfiguration {
             .permitAll()
 <%_ } _%>
 <%_ if (!skipClient) { _%>
-        .and()
+        //.and()
             .headers()
                 .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
             .and()
