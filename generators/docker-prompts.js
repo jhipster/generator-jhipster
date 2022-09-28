@@ -240,7 +240,7 @@ async function askForServiceDiscovery() {
 
   const serviceDiscoveryEnabledApps = [];
   this.appConfigs.forEach((appConfig, index) => {
-    if (appConfig.serviceDiscoveryType) {
+    if (appConfig.serviceDiscoveryAny) {
       serviceDiscoveryEnabledApps.push({
         baseName: appConfig.baseName,
         serviceDiscoveryType: appConfig.serviceDiscoveryType,

@@ -3219,7 +3219,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {Object} [options] - Object containing options.
+   * @param {import('./base/api').JHipsterOptions} [options] - Object containing options.
    */
   jhipsterOptions(options = {}) {
     options = _.cloneDeep(options);

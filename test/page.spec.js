@@ -19,7 +19,6 @@ const createClientProject = options =>
       skipInstall: true,
       defaults: true,
       skipServer: true, // We don't need server for this test
-      testFrameworks: ['protractor'],
       ...options,
     })
     .run();
@@ -53,11 +52,9 @@ describe('Page subgenerator', () => {
           `${CLIENT_MAIN_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.component.ts`,
           `${CLIENT_SPEC_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.component.spec.ts`,
           `${CLIENT_SPEC_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.service.spec.ts`,
-          `${CLIENT_TEST_SRC_DIR}e2e/pages/${pageFolderName}/${pageFolderName}.page-object.ts`,
-          `${CLIENT_TEST_SRC_DIR}e2e/pages/${pageFolderName}/${pageFolderName}.spec.ts`,
         ]);
       });
-      it('adds page path, service and protractor config', () => {
+      it('adds page path, service', () => {
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
           `const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
@@ -68,7 +65,6 @@ describe('Page subgenerator', () => {
           `import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
         );
         runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}/app/main.ts`, `${pageInstance}Service: () => new ${pageName}Service(),`);
-        runResult.assertFileContent(`${CLIENT_TEST_SRC_DIR}/protractor.conf.js`, "'./e2e/pages/**/*.spec.ts',");
       });
     };
 

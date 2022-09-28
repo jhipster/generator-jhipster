@@ -59,7 +59,7 @@ function writeFiles() {
             this.template(`${kubernetesSubgenPath}/ingress.yml.ejs`, `${appOut}/templates/${appName}-ingress.yml`);
           }
         }
-        if (!this.app.serviceDiscoveryType && this.app.authenticationType === JWT) {
+        if (!this.app.serviceDiscoveryAny && this.app.authenticationType === JWT) {
           this.template(`${kubernetesSubgenPath}/secret/jwt-secret.yml.ejs`, `${appOut}/templates/jwt-secret.yml`);
         }
         if (this.app.prodDatabaseTypeCouchbase) {

@@ -47,7 +47,7 @@ describe('account', () => {
 <%_ if (enableTranslation) { _%>
     const expect1 = 'home.title';
 <%_ } else { _%>
-    const expect1 = 'Welcome, <%= backendName %> Hipster!';
+    const expect1 = 'Welcome, <%= backendType %> Hipster!';
 <%_ } _%>
     const value1 = await element(by.css('h1 > span')).<%- elementGetter %>;
     expect(value1).to.eq(expect1);

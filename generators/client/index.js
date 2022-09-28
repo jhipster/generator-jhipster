@@ -42,6 +42,7 @@ const databaseTypes = require('../../jdl/jhipster/database-types');
 
 const NO_DATABASE = databaseTypes.NO;
 const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
+const { GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list');
 
 const TYPE_STRING = CommonDBTypes.STRING;
 const TYPE_UUID = CommonDBTypes.UUID;
@@ -80,10 +81,11 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
     this.loadRuntimeOptions();
 
     this.existingProject = !!this.jhipsterConfig.clientFramework;
-    this.application = {};
   }
 
   async _postConstruct() {
+    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLIENT);
     }
@@ -128,13 +130,6 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      configureGlobal() {
-        // Make constants available in templates
-        this.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
-        this.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
-        this.packagejs = packagejs;
-      },
-
       configureDevServerPort() {
         this.devServerBasePort = this.jhipsterConfig.clientFramework === ANGULAR ? 4200 : 9060;
 
@@ -191,29 +186,26 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadSharedConfig() {
-        const application = this.application;
-        this.loadAppConfig(undefined, application);
-        this.loadDerivedAppConfig(application);
-        this.loadClientConfig(undefined, application);
-        this.loadDerivedClientConfig(application);
-        this.loadServerConfig(undefined, application);
-        this.loadPlatformConfig(undefined, application);
-        this.loadTranslationConfig(undefined, application);
+      configureGlobal({ application }) {
+        // Make constants available in templates
+        application.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
+        application.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
+        this.packagejs = packagejs;
+      },
 
-        application.backendName = this.configOptions.backendName;
+      loadSharedConfig({ application }) {
         // TODO v8 rename to nodePackageManager;
         application.clientPackageManager = 'npm';
       },
 
-      loadPackageJson() {
+      loadPackageJson({ application }) {
         // Load common client package.json into packageJson
         _.merge(
           this.dependabotPackageJson,
           this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json'))
         );
         // Load client package.json into packageJson
-        const clientFramewok = this.application.clientFramework;
+        const clientFramewok = application.clientFramework;
         _.merge(
           this.dependabotPackageJson,
           this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', clientFramewok, 'package.json'))
@@ -229,23 +221,20 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return this.asPreparingTaskGroup({
-      microservice() {
-        const application = this.application;
+      microservice({ application }) {
         if (application.applicationTypeMicroservice) {
           application.withAdminUi = false;
         }
       },
 
-      prepareForTemplates() {
-        const application = this.application;
-
+      prepareForTemplates({ application }) {
         // Make dist dir available in templates
         application.BUILD_DIR = this.getBuildDirectoryForBuildTool(application.buildTool);
 
         application.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(application.buildTool) + constants.CLIENT_DIST_DIR;
         application.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
         application.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
-        application.LOGIN_REGEX = constants.LOGIN_REGEX_JS;
+        application.webappLoginRegExp = constants.LOGIN_REGEX_JS;
         application.NODE_VERSION = constants.NODE_VERSION;
 
         if (application.authenticationType === OAUTH2 || application.databaseType === NO_DATABASE) {
@@ -253,8 +242,7 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
         }
       },
 
-      async loadNativeLanguage() {
-        const application = this.application;
+      async loadNativeLanguage({ application }) {
         if (!application.baseName) return;
         const context = { ...application };
         await this._loadClientTranslations(context);
@@ -269,25 +257,19 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
   // Public API method used by the getter and also by Blueprints
   get default() {
     return this.asDefaultTaskGroup({
-      loadUserManagementEntities() {
-        if (!this.configOptions.sharedEntities || !this.configOptions.sharedEntities.User) return;
-        // Make user entity available to templates.
-        const application = this.application;
-        application.user = this.configOptions.sharedEntities.User;
-        application.userPrimaryKeyTypeString = application.user.primaryKey.type === TYPE_STRING;
-        application.userPrimaryKeyTypeUUID = application.user.primaryKey.type === TYPE_UUID;
+      loadUserManagementEntities({ application }) {
+        if (application.user) {
+          application.userPrimaryKeyTypeString = application.user.primaryKey.type === TYPE_STRING;
+          application.userPrimaryKeyTypeUUID = application.user.primaryKey.type === TYPE_UUID;
+        }
       },
 
       loadEntities() {
-        if (!this.configOptions.sharedEntities) {
-          this.localEntities = [];
-          return;
-        }
-        this.localEntities = Object.values(this.configOptions.sharedEntities).filter(entity => !entity.builtIn && !entity.skipClient);
+        const entities = this.sharedData.getEntities().map(({ entity }) => entity);
+        this.localEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
       },
 
-      insight() {
-        const application = this.application;
+      insight({ application }) {
         statistics.sendSubGenEvent('generator', GENERATOR_CLIENT, {
           app: {
             clientFramework: application.clientFramework,
@@ -307,6 +289,9 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return this.asWritingTaskGroup({
+      webappFakeDataSeed({ application: { clientFramework } }) {
+        this.resetEntitiesFakeData(clientFramework);
+      },
       cleanupAngular,
       writeAngularFiles,
       cleanupReact,
@@ -323,8 +308,7 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      packageJsonScripts() {
-        const application = this.application;
+      packageJsonScripts({ application }) {
         const packageJsonStorage = this.createStorage('package.json');
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
 
@@ -345,8 +329,7 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
         }
       },
 
-      microfrontend() {
-        const application = this.application;
+      microfrontend({ application }) {
         if (!application.microfrontend) return;
         if (application.clientFrameworkAngular) {
           const conditional = application.applicationTypeMicroservice ? "targetOptions.target === 'serve' ? {} : " : '';
@@ -370,8 +353,7 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
   // Public API method used by the getter and also by Blueprints
   get end() {
     return this.asEndTaskGroup({
-      end() {
-        const application = this.application;
+      end({ application }) {
         this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
         const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${application.clientPackageManager} start`)}\n`;

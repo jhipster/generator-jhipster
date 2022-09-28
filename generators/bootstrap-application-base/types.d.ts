@@ -16,7 +16,6 @@ export type BaseApplication = {
 
   skipCommitHook: boolean;
   skipJhipsterDependencies: boolean;
-  skipUserManagement: boolean;
 
   nodePackageManager: string;
   nodeDestinationVersion: string;
@@ -43,21 +42,34 @@ type MonolithApplication = GenericDerivedProperty<ApplicationType, 'monolith'>;
 /* ApplicationType End */
 
 /* AuthenticationType Start */
+type UserManagement =
+  | {
+      skipUserManagement: true;
+    }
+  | {
+      skipUserManagement: false;
+      user: any;
+    };
+
 type AuthenticationType = {
   authenticationType: 'jwt' | 'oauth2' | 'session';
 };
 
-type JwtApplication = GenericDerivedProperty<AuthenticationType, 'jwt'> & {
-  jwtSecretKey: string;
-};
+type JwtApplication = UserManagement &
+  GenericDerivedProperty<AuthenticationType, 'jwt'> & {
+    jwtSecretKey: string;
+  };
 
 type Oauth2Application = GenericDerivedProperty<AuthenticationType, 'oauth2'> & {
   jwtSecretKey: string;
+  skipUserManagement: false;
+  user: any;
 };
 
-type SessionApplication = GenericDerivedProperty<AuthenticationType, 'session'> & {
-  rememberMeKey: string;
-};
+type SessionApplication = UserManagement &
+  GenericDerivedProperty<AuthenticationType, 'session'> & {
+    rememberMeKey: string;
+  };
 /* AuthenticationType End */
 
 type QuirksApplication = {
@@ -71,6 +83,7 @@ export type CommonClientServerApplication = BaseApplication &
     clientSrcDir: string;
     clientTestDir?: string;
     clientDistDir?: string;
+    backendType?: string;
     serverPort: number;
     devServerPort: number;
     pages: string[];
