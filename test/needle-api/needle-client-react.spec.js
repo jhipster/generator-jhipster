@@ -48,8 +48,10 @@ const mockBlueprintSubGen = class extends ClientGenerator {
 };
 
 describe('needle API React: JHipster client generator with blueprint', () => {
-  before(done => {
-    helpers
+  let result;
+
+  before(async () => {
+    result = await helpers
       .run(path.join(__dirname, '../../generators/client'))
       .withOptions({
         fromCli: true,
@@ -67,12 +69,11 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         enableTranslation: true,
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
-      })
-      .on('end', done);
+      });
   });
 
   it('Assert entity is added to menu', () => {
-    assert.fileContent(
+    result.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`,
       '<MenuItem icon="asterisk" to="/routerName">\n        Router Name\n      </MenuItem>'
     );

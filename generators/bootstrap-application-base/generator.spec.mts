@@ -18,27 +18,65 @@
  */
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import lodash from 'lodash';
-import { basename, dirname } from 'path';
+import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import testSupport from '../../test/support/index.cjs';
-import Generator from './index.js';
+import Generator from './index.mjs';
+import { dryRunHelpers as helpers } from '../../test/utils/utils.mjs';
 
 const { snakeCase } = lodash;
-const { testBlueprintSupport } = testSupport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const generatorPath = join(__dirname, 'index.mts');
 const generator = basename(__dirname);
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
+  it('generator-list esm exports constant matches folder name', async () => {
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+  });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
-  describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('with', () => {
+    describe('default config', () => {
+      let runResult;
+      before(async () => {
+        runResult = await helpers.run(generatorPath).withOptions({
+          defaults: true,
+          creationTimestamp: '2000-01-01',
+          applicationWithEntities: {
+            config: {
+              baseName: 'jhipster',
+            },
+            entities: [],
+          },
+        });
+      });
+
+      it('should succeed', () => {
+        expect(runResult.getSnapshot()).toMatchInlineSnapshot(`
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"baseName\\": \\"jhipster\\",
+    \\"creationTimestamp\\": 946684800000,
+    \\"entities\\": []
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`);
+      });
+    });
+  });
 });

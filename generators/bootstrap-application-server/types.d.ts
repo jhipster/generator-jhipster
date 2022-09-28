@@ -1,5 +1,5 @@
-import type { OptionalGenericDerivedProperty, GenericDerivedProperty } from '../../types/application';
-import type { ClientServerApplication } from '../bootstrap-application-client-server/types';
+import type { OptionalGenericDerivedProperty, GenericDerivedProperty } from '../base/application';
+import type { CommonClientServerApplication } from '../bootstrap-application-base/types';
 
 declare const CACHE_PROVIDER = 'cacheProvider';
 
@@ -53,7 +53,7 @@ type SearchEngine = {
   searchEngine: string;
 };
 
-export type SpringBootApplication = ClientServerApplication &
+export type SpringBootApplication = CommonClientServerApplication &
   (ImperativeApplication | ReactiveApplication) &
   BuildToolApplication &
   SearchEngine &
@@ -67,6 +67,8 @@ export type SpringBootApplication = ClientServerApplication &
     srcTestJava: string;
     srcTestResources: string;
     srcTestJavascript: string;
+
+    buildDir: string;
 
     enableSwaggerCodegen: boolean;
     embeddableLaunchScript: boolean;

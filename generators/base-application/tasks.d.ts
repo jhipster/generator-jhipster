@@ -1,9 +1,6 @@
+import { NoArgTaskGroup, GenericTaskGroup } from '../base/tasks.js';
+
 export type Application = Record<string, any>;
-
-type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => Promise<void>;
-type GenericTaskGroup<ThisType, Arg1Type> = Record<string, GenericTask<ThisType, Arg1Type>>;
-
-export type BasicTaskGroup<ThisType> = GenericTaskGroup<ThisType, undefined>;
 
 type ApplicationTaskParam<ApplicationType> = { application: ApplicationType };
 type ApplicationTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, ApplicationTaskParam<ApplicationType>>;
@@ -20,8 +17,34 @@ type ConfiguringEachEntityTaskGroup<ThisType, ApplicationType> = GenericTaskGrou
   ConfiguringEachEntityTaskParam<ApplicationType>
 >;
 
+type LoadingEntitiesTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType> & {
+  entitiesToLoad: {
+    entityName: string;
+    /** Entity storage */
+    entityStorage: import('yeoman-generator/lib/util/storage');
+    /** Proxy object for the entitystorage */
+    entityConfig: Record<string, any>;
+  }[];
+};
+type LoadingEntitiesTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, LoadingEntitiesTaskParam<ApplicationType>>;
+
+type Field = {
+  fieldName: string;
+  fieldType: string;
+  fieldTypeBlobContent: string;
+} & Record<string, any>;
+
+type Relationship = {
+  relationshipName: string;
+} & Record<string, any>;
+
+type Entity = {
+  fields: Field[];
+  relationships: Relationship[];
+} & Record<string, any>;
+
 type EachEntityTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType> & {
-  entity: Record<string, any>;
+  entity: Entity;
   entityName: string;
   description: string;
 };
@@ -29,7 +52,7 @@ type EachEntityTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType
 type EachEntityTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, EachEntityTaskParam<ApplicationType>>;
 
 type PreparingEachEntityFieldTaskParam<ApplicationType> = EachEntityTaskParam<ApplicationType> & {
-  field: Record<string, any>;
+  field: Field;
   fieldName: string;
 };
 type PreparingEachEntityFieldTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<
@@ -38,7 +61,7 @@ type PreparingEachEntityFieldTaskGroup<ThisType, ApplicationType> = GenericTaskG
 >;
 
 type PreparingEachEntityRelationshipTaskParam<ApplicationType> = EachEntityTaskParam<ApplicationType> & {
-  relationship: Record<string, any>;
+  relationship: Relationship;
   relationshipName: string;
 };
 type PreparingEachEntityRelationshipTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<
@@ -46,24 +69,24 @@ type PreparingEachEntityRelationshipTaskGroup<ThisType, ApplicationType> = Gener
   PreparingEachEntityRelationshipTaskParam<ApplicationType>
 >;
 
-type EntitiesTaskParam<ApplicationType> = EachEntityTaskParam<ApplicationType> & { entities: Record<string, any>[] };
+type EntitiesTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType> & { entities: Entity[] };
 
 type EntitiesTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, EntitiesTaskParam<ApplicationType>>;
 
 export {
-  BasicTaskGroup as InitializingTaskGroup,
-  BasicTaskGroup as PromptingTaskGroup,
-  BasicTaskGroup as ConfiguringTaskGroup,
-  BasicTaskGroup as ComposingTaskGroup,
+  NoArgTaskGroup as InitializingTaskGroup,
+  NoArgTaskGroup as PromptingTaskGroup,
+  NoArgTaskGroup as ConfiguringTaskGroup,
+  NoArgTaskGroup as ComposingTaskGroup,
   ApplicationTaskGroup as LoadingTaskGroup,
   ApplicationTaskGroup as PreparingTaskGroup,
   ConfiguringEachEntityTaskGroup,
-  EachEntityTaskGroup as LoadingEachEntityTaskGroup,
+  LoadingEntitiesTaskGroup,
   EachEntityTaskGroup as PreparingEachEntityTaskGroup,
   PreparingEachEntityFieldTaskGroup,
   PreparingEachEntityRelationshipTaskGroup,
   EachEntityTaskGroup as PostPreparingEachEntityTaskGroup,
-  ApplicationTaskGroup as DefaultTaskGroup,
+  EntitiesTaskGroup as DefaultTaskGroup,
   ApplicationTaskGroup as WritingTaskGroup,
   EntitiesTaskGroup as WritingEntitiesTaskGroup,
   ApplicationTaskGroup as PostWritingTaskGroup,

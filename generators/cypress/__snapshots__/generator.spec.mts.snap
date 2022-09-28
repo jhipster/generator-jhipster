@@ -1,0 +1,397 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster cypress generator jwt-cypressAudit(false)-clientFramework-withAdminUi(false)-cypressCoverage(true) should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/EntityA.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "angular.json": Object {
+    "stateCleared": "modified",
+  },
+  "cypress.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/.eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/login-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/password-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/register-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/reset-password-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/settings-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/administration/administration.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/entity/entity-a.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/fixtures/integration-test.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/plugins/global.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/plugins/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/commands.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/entity.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/management.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/navbar.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster cypress generator jwt-cypressAudit(true)-clientFramework-withAdminUi(true)-cypressCoverage(false) should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/EntityA.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "cypress-audits.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "cypress.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/.eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/login-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/password-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/register-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/reset-password-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/settings-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/administration/administration.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/entity/entity-a.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/lighthouse.audits.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/fixtures/integration-test.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/plugins/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/commands.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/entity.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/management.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/navbar.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster cypress generator oauth2-cypressAudit(false)-clientFramework-withAdminUi(false)-cypressCoverage(false) should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/EntityA.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "cypress.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/.eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/administration/administration.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/entity/entity-a.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/fixtures/integration-test.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/plugins/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/commands.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/entity.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/management.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/navbar.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/oauth2.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster cypress generator oauth2-cypressAudit(true)-clientFramework-withAdminUi(true)-cypressCoverage(true) should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/EntityA.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "cypress-audits.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "cypress.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/.eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/administration/administration.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/entity/entity-a.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/lighthouse.audits.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/fixtures/integration-test.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/plugins/global.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/plugins/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/commands.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/entity.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/management.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/navbar.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/oauth2.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster cypress generator session-cypressAudit(false)-clientFramework-withAdminUi(true)-cypressCoverage(false) should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/EntityA.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "cypress.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/.eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/login-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/password-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/register-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/reset-password-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/settings-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/administration/administration.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/entity/entity-a.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/fixtures/integration-test.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/plugins/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/commands.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/entity.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/management.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/navbar.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster cypress generator session-cypressAudit(true)-clientFramework-withAdminUi(false)-cypressCoverage(true) should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/EntityA.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "cypress-audits.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "cypress.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/.eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/login-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/password-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/register-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/reset-password-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/account/settings-page.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/administration/administration.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/entity/entity-a.cy.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/lighthouse.audits.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/fixtures/integration-test.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/plugins/global.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/plugins/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/commands.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/entity.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/management.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/navbar.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;

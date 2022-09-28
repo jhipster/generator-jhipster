@@ -27,9 +27,10 @@ const Generators = {
   GENERATOR_BASE_APPLICATION: 'base-application',
   GENERATOR_BOOTSTRAP: 'bootstrap',
   GENERATOR_BOOTSTRAP_APPLICATION: 'bootstrap-application',
+  GENERATOR_BOOTSTRAP_APPLICATION_BASE: 'bootstrap-application-base',
+  GENERATOR_BOOTSTRAP_APPLICATION_CLIENT: 'bootstrap-application-client',
+  GENERATOR_BOOTSTRAP_APPLICATION_SERVER: 'bootstrap-application-server',
   GENERATOR_CI_CD: 'ci-cd',
-  /* @deprecated */
-  GENERATOR_CICD: 'ci-cd',
   GENERATOR_CLIENT: 'client',
   GENERATOR_CLOUDFOUNDRY: 'cloudfoundry',
   GENERATOR_COMMON: 'common',
@@ -42,8 +43,6 @@ const Generators = {
   GENERATOR_ENTITY: 'entity',
   GENERATOR_ENTITY_CLIENT: 'entity-client',
   GENERATOR_ENTITY_I_18_N: 'entity-i18n',
-  /* @deprecated */
-  GENERATOR_ENTITY_I18N: 'entity-i18n',
   GENERATOR_ENTITY_SERVER: 'entity-server',
   GENERATOR_EXPORT_JDL: 'export-jdl',
   GENERATOR_GAE: 'gae',

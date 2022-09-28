@@ -16,25 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import constants from '../generator-constants.js';
 
-/**
- * The default is to use a file path string. It implies use of the template method.
- * For any other config an object { file:.., method:.., template:.. } can be used
- */
+import type { WriteFileSection } from '../base/api.js';
+import type CypressGenerator from './generator.mjs';
+import type { CypressApplication } from './types.js';
 
-const faker = require('@faker-js/faker');
+const { CLIENT_TEST_SRC_DIR } = constants;
+const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 
-const { stringHashCode } = require('../utils');
-
-const cypressFiles = {
+export const cypressFiles: WriteFileSection<CypressGenerator, CypressApplication> = {
   common: [
     {
-      templates: ['cypress.config.ts'],
+      templates: ['cypress.config.ts', 'README.md.jhi.cypress'],
     },
   ],
   clientTestFw: [
     {
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: [
         '.eslintrc.json',
         'fixtures/integration-test.png',
@@ -50,12 +50,14 @@ const cypressFiles = {
     },
     {
       condition: generator => !generator.authenticationTypeOauth2,
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: ['e2e/account/login-page.cy.ts'],
     },
     {
-      condition: generator => !generator.authenticationTypeOauth2 && !generator.databaseTypeNo && !generator.applicationTypeMicroservice,
-      path: generator => generator.cypressFolder,
+      condition: generator => !generator.skipUserManagement,
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: [
         'e2e/account/register-page.cy.ts',
         'e2e/account/settings-page.cy.ts',
@@ -65,14 +67,16 @@ const cypressFiles = {
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: ['support/oauth2.ts'],
     },
   ],
   audit: [
     {
       condition: generator => generator.cypressAudit,
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: ['e2e/lighthouse.audits.ts'],
     },
     {
@@ -83,23 +87,20 @@ const cypressFiles = {
   coverage: [
     {
       condition: generator => generator.cypressCoverage,
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: ['plugins/global.d.ts'],
     },
   ],
 };
 
-module.exports = {
-  writeFiles,
-  files: cypressFiles,
-};
-
-function writeFiles() {
-  return {
-    writeFiles() {
-      faker.seed(stringHashCode(this.jhipsterConfig.baseName || 'jhipsterSample'));
-      this.faker = faker;
-      return this.writeFiles({ sections: cypressFiles });
+export const cypressEntityFiles: WriteFileSection<CypressGenerator, CypressApplication> = {
+  testsCypress: [
+    {
+      condition: ctx => !ctx.builtIn && !ctx.embedded,
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: ctx => `${ctx.cypressDir}e2e/entity/${ctx.entityFileName}.cy.ts`,
+      templates: ['e2e/entity/_entity_.cy.ts'],
     },
-  };
-}
+  ],
+};

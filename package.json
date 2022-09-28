@@ -40,7 +40,6 @@
     "./package.json": "./package.json",
     "./generators": "./dist/lib/constants/generators.mjs",
     "./generators/*": "./dist/generators/*/index.mjs",
-    "./priorities": "./dist/lib/constants/priorities.mjs",
     "./jdl/": "./dist/jdl/"
   },
   "main": "dist/lib/index.mjs",
@@ -67,15 +66,18 @@
     "lint": "npm run eslint && npm run ejs-lint",
     "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
     "prepare": "npm run build",
-    "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,json,md,yml,java}\"",
-    "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,json,md,yml,java}\"",
+    "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
+    "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
     "pretest": "npm run lint",
     "test": "mocha test generators --no-insight --forbid-only --parallel --max-old-space-size=4096",
     "update-snapshot": "mocha --no-insight --no-parallel --updateSnapshot --",
-    "update-snapshots": "npm run update-snapshot -- test generators"
+    "update-snapshots": "npm run update-snapshot -- test generators",
+    "watch": "tsc --watch"
   },
   "dependencies": {
     "@faker-js/faker": "5.5.3",
+    "@types/lodash": "4.14.185",
+    "@types/yeoman-generator": "5.2.11",
     "aws-sdk": "2.1223.0",
     "axios": "0.27.2",
     "chalk": "4.1.2",
@@ -111,14 +113,17 @@
     "then-request": "6.0.2",
     "uuid": "9.0.0",
     "winston": "3.8.2",
-    "yeoman-environment": "3.11.0",
+    "yeoman-environment": "3.11.1",
     "yeoman-generator": "5.7.0"
   },
   "devDependencies": {
+    "@esbuild-kit/esm-loader": "2.4.2",
+    "@types/mocha": "9.1.1",
     "@typescript-eslint/eslint-plugin": "5.38.0",
     "@typescript-eslint/parser": "5.38.0",
     "chai": "4.3.6",
     "ejs-lint": "1.2.2",
+    "esbuild": "0.15.9",
     "eslint": "8.24.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",

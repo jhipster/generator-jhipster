@@ -72,8 +72,10 @@ const { MAVEN } = require('../jdl/jhipster/build-tool-types');
  * as these can have breaking changes without a major version bump
  *
  * The method signatures in private API can be changed without a major version change.
+ * @class
+ * @extends {Generator}
  */
-module.exports = class JHipsterBasePrivateGenerator extends Generator {
+module.exports = class PrivateBase extends Generator {
   constructor(args, options, features) {
     super(args, options, features);
     // expose lodash to templates

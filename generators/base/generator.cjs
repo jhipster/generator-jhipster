@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseGeneratorBlueprint = require('../generator-base-blueprint.js');
+const JHipsterBaseBlueprintGenerator = require('../generator-base-blueprint.js');
 
 const { PRIORITY_NAMES, PRIORITY_PREFIX } = require('../../lib/constants/priorities.cjs');
 
@@ -29,10 +29,9 @@ const asPriority = priorityName => `${PRIORITY_PREFIX}${priorityName}`;
  * This is the base class for a generator for every generator.
  *
  * @class
- * @template ApplicationType
- * @extends {BaseBlueprintGenerator<ApplicationType>}
+ * @extends {JHipsterBaseBlueprintGenerator}
  */
-class BaseGenerator extends BaseGeneratorBlueprint {
+class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -61,6 +60,16 @@ class BaseGenerator extends BaseGeneratorBlueprint {
 
   constructor(args, options, features) {
     super(args, options, { taskPrefix: PRIORITY_PREFIX, ...features });
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   *
+   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   */
+  get [JHipsterBaseBlueprintGenerator.INITIALIZING]() {
+    return {};
   }
 }
 

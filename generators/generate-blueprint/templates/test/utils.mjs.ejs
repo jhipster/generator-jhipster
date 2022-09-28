@@ -14,4 +14,7 @@ export function createTestHelpers(options = {}) {
 
 export const helpers = createTestHelpers();
 
-export const lookups = { packagePaths: [packageRoot, jhipsterPath], lookups: ['generators'] };
+export const lookups = [
+  { packagePaths: [jhipsterPath], lookups: ['dist/generators'] },
+  { packagePaths: [packageRoot], lookups: ['generators'] },
+];
