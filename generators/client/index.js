@@ -194,14 +194,6 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
       },
 
       loadSharedConfig({ application }) {
-        this.loadAppConfig(undefined, application);
-        this.loadDerivedAppConfig(application);
-        this.loadClientConfig(undefined, application);
-        this.loadDerivedClientConfig(application);
-        this.loadServerConfig(undefined, application);
-        this.loadPlatformConfig(undefined, application);
-        this.loadTranslationConfig(undefined, application);
-
         // TODO v8 rename to nodePackageManager;
         application.clientPackageManager = 'npm';
       },
