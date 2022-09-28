@@ -386,7 +386,7 @@ describe('Vue applications', () => {
       assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
     });
     it('uses default JHipster theme', () => {
-      assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import `node_modules/bootswatch/dist/');
+      assert.noFileContent('src/main/webapp/content/scss/vendor.scss', "@import 'node_modules/bootswatch/dist/'");
     });
   });
   describe('noi18n with OAuth2 Maven', () => {
@@ -440,7 +440,7 @@ describe('Vue applications', () => {
       assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
     });
     it('uses default JHipster theme', () => {
-      assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import `node_modules/bootswatch/dist/');
+      assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import 'node_modules/bootswatch/dist/');
     });
   });
   describe('Elasticsearch and Protractor', () => {
@@ -497,7 +497,7 @@ describe('Vue applications', () => {
       assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
     });
     it('uses default JHipster theme', () => {
-      assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import `node_modules/bootswatch/dist/');
+      assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import 'node_modules/bootswatch/dist/');
     });
   });
   describe('Websocket', () => {
@@ -555,7 +555,7 @@ describe('Vue applications', () => {
       assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
     });
     it('uses default JHipster theme', () => {
-      assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import `node_modules/bootswatch/dist/');
+      assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import 'node_modules/bootswatch/dist/');
     });
   });
   describe('OAuth2', () => {
@@ -610,7 +610,7 @@ describe('Vue applications', () => {
       assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
     });
     it('uses default JHipster theme', () => {
-      assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import `node_modules/bootswatch/dist/');
+      assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import 'node_modules/bootswatch/dist/');
     });
   });
   describe('Client theme', () => {
@@ -660,8 +660,8 @@ describe('Vue applications', () => {
       assert.fileContent('.prettierrc', 'tabWidth: 2');
     });
     it('uses correct theme from bootswatch', () => {
-      assert.fileContent('src/main/webapp/content/scss/vendor.scss', "@import `node_modules/bootswatch/dist/lux/variables';");
-      assert.fileContent('src/main/webapp/content/scss/vendor.scss', "@import `node_modules/bootswatch/dist/lux/bootswatch';");
+      assert.fileContent('src/main/webapp/content/scss/vendor.scss', "@import 'node_modules/bootswatch/dist/lux/variables';");
+      assert.fileContent('src/main/webapp/content/scss/vendor.scss', "@import 'node_modules/bootswatch/dist/lux/bootswatch';");
     });
   });
 
