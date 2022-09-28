@@ -56,6 +56,7 @@ export default class extends BaseApplicationGenerator<SpringBootApplication> {
       loadApplication({ application }) {
         this.loadServerConfig(undefined, application);
 
+        application.backendType = 'Java';
         application.temporaryDir = application.buildTool === 'gradle' ? 'build/' : 'target/';
         application.buildDir = `${application.temporaryDir}${application.buildTool === 'gradle' ? 'resources/main/' : 'classes/'}`;
         application.clientSrcDir = CLIENT_MAIN_SRC_DIR;
