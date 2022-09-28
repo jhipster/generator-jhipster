@@ -383,6 +383,18 @@ class BaseApplicationGenerator extends BaseGenerator {
   }
 
   /**
+   * Reset entities fake data seed.
+   * @param {string} seed
+   */
+  resetEntitiesFakeData(seed) {
+    seed = `${this.sharedData.getApplication().baseName}-${seed}`;
+    this.debug(`Reseting entities seed with '${seed}'`);
+    this.sharedData.getEntities().forEach(({ entity }) => {
+      entity.resetFakerSeed(seed);
+    });
+  }
+
+  /**
    * @protected
    */
   getArgsForPriority(priorityName) {
