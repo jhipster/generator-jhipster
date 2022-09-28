@@ -169,7 +169,7 @@ jhipster:
       enabled: false
       host: localhost
       port: 5000
-      queue-size: 512
+      ring-buffer-size: 512
 <%_ if (authenticationTypeJwt) { _%>
   security:
     authentication:
