@@ -35,6 +35,14 @@ module.exports = class CommonGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
+    this.jhipsterOptions({
+      prettierTabWidth: {
+        desc: 'Default tab width for prettier',
+        type: Number,
+        scope: 'storage',
+      },
+    });
+
     if (this.options.help) {
       return;
     }
@@ -48,20 +56,6 @@ module.exports = class CommonGenerator extends BaseApplicationGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_COMMON);
     }
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get initializing() {
-    return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-    };
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -103,6 +97,10 @@ module.exports = class CommonGenerator extends BaseApplicationGenerator {
 
         // Load common package.json into packageJson
         _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
+      },
+
+      loadConfig({ application }) {
+        application.prettierTabWidth = this.jhipsterConfig.prettierTabWidth || 2;
       },
     };
   }

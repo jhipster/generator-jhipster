@@ -21,7 +21,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { skipPrettierHelpers as helpers, basicHelpers } from '../../test/utils/utils.mjs';
 import testSupport from '../../test/support/index.cjs';
 import Generator from './index.js';
 
@@ -62,6 +62,31 @@ describe(`JHipster ${generator} generator`, () => {
 
       it('should succeed', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+    });
+    describe('Custom prettier', () => {
+      let runResult;
+
+      before(async () => {
+        runResult = await basicHelpers.run(generatorFile).withOptions({
+          prettierTabWidth: 10,
+          skipInstall: true,
+          defaults: true,
+          applicationWithEntities: {
+            config: {
+              baseName: 'jhipster',
+            },
+            entities: [],
+          },
+        });
+      });
+
+      it('writes custom .prettierrc', () => {
+        runResult.assertFileContent('.prettierrc', /tabWidth: 10/);
+      });
+
+      it('uses custom prettier formatting to java file', () => {
+        runResult.assertFileContent('.lintstagedrc.js', / {10}'{/);
       });
     });
   });
