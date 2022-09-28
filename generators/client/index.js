@@ -202,7 +202,6 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
         this.loadPlatformConfig(undefined, application);
         this.loadTranslationConfig(undefined, application);
 
-        application.backendName = this.configOptions.backendName;
         // TODO v8 rename to nodePackageManager;
         application.clientPackageManager = 'npm';
       },
