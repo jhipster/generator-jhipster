@@ -18,12 +18,12 @@
 -%>
 // Override Boostrap variables
 <%_ if (!clientThemeNone) { _%>
-@import "~bootswatch/dist/<%= clientTheme %>/variables";
+@import 'node_modules/bootswatch/dist/<%= clientTheme %>/variables';
 <%_ } _%>
 // Import Bootstrap source files from node_modules
-@import "~bootstrap/scss/bootstrap";
+@import 'node_modules/bootstrap/scss/bootstrap';
 <%_ if (!clientThemeNone) { _%>
-@import "~bootswatch/dist/<%= clientTheme %>/bootswatch";
+@import 'node_modules/bootswatch/dist/<%= clientTheme %>/bootswatch';
 <%_ } _%>
 body {
 <%_ if (clientThemeNone) { _%>
