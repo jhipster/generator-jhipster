@@ -28,7 +28,7 @@ import tech.jhipster.security.*;
 <%_ } _%>
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Configuration;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
@@ -92,9 +92,10 @@ import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Import(SecurityProblemSupport.class)
+// @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
@@ -115,9 +116,9 @@ public class SecurityConfiguration {
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
     <%_ } _%>
-    private final SecurityProblemSupport problemSupport;
+    // private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (authenticationTypeSession && !skipUserManagement) { %>RememberMeServices rememberMeServices, <% } if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (!applicationTypeMicroservice) { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (authenticationTypeSession && !skipUserManagement) { %>RememberMeServices rememberMeServices, <% } if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (!applicationTypeMicroservice) { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties) {
 <%_ if (authenticationTypeSession && !skipUserManagement) { _%>
         this.rememberMeServices = rememberMeServices;
 <%_ } _%>
@@ -127,7 +128,7 @@ public class SecurityConfiguration {
 <%_ if (!applicationTypeMicroservice) { _%>
         this.corsFilter = corsFilter;
 <%_ } _%>
-        this.problemSupport = problemSupport;
+        // this.problemSupport = problemSupport;
         this.jHipsterProperties = jHipsterProperties;
     }
 <%_ if (authenticationTypeSession) { _%>
