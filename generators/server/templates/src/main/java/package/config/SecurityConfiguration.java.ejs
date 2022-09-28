@@ -177,12 +177,12 @@ public class SecurityConfiguration {
             .addFilterBefore(corsFilter, CsrfFilter.class)
   <%_ } _%>
 <%_ } _%>
-            .exceptionHandling()
+        /*.exceptionHandling()
                 .authenticationEntryPoint(problemSupport)
-                .accessDeniedHandler(problemSupport)
+                .accessDeniedHandler(problemSupport)*/
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (!skipUserManagement) { _%>
-        .and()
+        //.and()
             .rememberMe()
             .rememberMeServices(rememberMeServices)
             .rememberMeParameter("remember-me")
