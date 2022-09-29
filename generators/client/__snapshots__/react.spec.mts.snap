@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster react generator gateway-jwt-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
+exports[`JHipster react generator gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -107,54 +107,6 @@ Object {
   "src/main/webapp/app/index.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/modules/account/activate/activate.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/activate/activate.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/activate/activate.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/finish/password-reset-finish.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/init/password-reset-init.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/password-reset.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.tsx": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -168,27 +120,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-delete-dialog.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-detail.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-update.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/home/home.scss": Object {
@@ -826,7 +757,7 @@ Object {
 }
 `;
 
-exports[`JHipster react generator microservice-jwt-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(false) should match generated files snapshot 1`] = `
+exports[`JHipster react generator microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(false) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -1631,7 +1562,7 @@ Object {
 }
 `;
 
-exports[`JHipster react generator monolith-jwt-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
+exports[`JHipster react generator monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -2445,7 +2376,7 @@ Object {
 }
 `;
 
-exports[`JHipster react generator monolith-session-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(true) should match generated files snapshot 1`] = `
+exports[`JHipster react generator monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -2552,60 +2483,6 @@ Object {
   "src/main/webapp/app/index.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/modules/account/activate/activate.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/activate/activate.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/activate/activate.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/finish/password-reset-finish.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/init/password-reset-init.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password-reset/password-reset.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/password/password.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/register/register.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/sessions/sessions.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/sessions/sessions.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/account/settings/settings.tsx": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -2619,27 +2496,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-delete-dialog.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-detail.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management-update.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/user-management/user-management.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/home/home.scss": Object {

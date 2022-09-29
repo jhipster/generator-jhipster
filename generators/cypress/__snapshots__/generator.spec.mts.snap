@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster cypress generator jwt-cypressAudit(false)-clientFramework-withAdminUi(false)-cypressCoverage(true) should match generated files snapshot 1`] = `
+exports[`JHipster cypress generator jwt-cypressAudit(false)-angular-withAdminUi(false)-cypressCoverage(true) should match generated files snapshot 1`] = `
 Object {
   ".jhipster/EntityA.json": Object {
     "stateCleared": "modified",
@@ -71,7 +71,7 @@ Object {
 }
 `;
 
-exports[`JHipster cypress generator jwt-cypressAudit(true)-clientFramework-withAdminUi(true)-cypressCoverage(false) should match generated files snapshot 1`] = `
+exports[`JHipster cypress generator jwt-cypressAudit(true)-vue-withAdminUi(true)-cypressCoverage(false) should match generated files snapshot 1`] = `
 Object {
   ".jhipster/EntityA.json": Object {
     "stateCleared": "modified",
@@ -142,7 +142,7 @@ Object {
 }
 `;
 
-exports[`JHipster cypress generator oauth2-cypressAudit(false)-clientFramework-withAdminUi(false)-cypressCoverage(false) should match generated files snapshot 1`] = `
+exports[`JHipster cypress generator oauth2-cypressAudit(false)-angular-withAdminUi(false)-cypressCoverage(false) should match generated files snapshot 1`] = `
 Object {
   ".jhipster/EntityA.json": Object {
     "stateCleared": "modified",
@@ -195,7 +195,7 @@ Object {
 }
 `;
 
-exports[`JHipster cypress generator oauth2-cypressAudit(true)-clientFramework-withAdminUi(true)-cypressCoverage(true) should match generated files snapshot 1`] = `
+exports[`JHipster cypress generator oauth2-cypressAudit(true)-vue-withAdminUi(true)-cypressCoverage(true) should match generated files snapshot 1`] = `
 Object {
   ".jhipster/EntityA.json": Object {
     "stateCleared": "modified",
@@ -257,7 +257,7 @@ Object {
 }
 `;
 
-exports[`JHipster cypress generator session-cypressAudit(false)-clientFramework-withAdminUi(true)-cypressCoverage(false) should match generated files snapshot 1`] = `
+exports[`JHipster cypress generator session-cypressAudit(false)-angular-withAdminUi(true)-cypressCoverage(false) should match generated files snapshot 1`] = `
 Object {
   ".jhipster/EntityA.json": Object {
     "stateCleared": "modified",
@@ -322,7 +322,7 @@ Object {
 }
 `;
 
-exports[`JHipster cypress generator session-cypressAudit(true)-clientFramework-withAdminUi(false)-cypressCoverage(true) should match generated files snapshot 1`] = `
+exports[`JHipster cypress generator session-cypressAudit(true)-vue-withAdminUi(false)-cypressCoverage(true) should match generated files snapshot 1`] = `
 Object {
   ".jhipster/EntityA.json": Object {
     "stateCleared": "modified",

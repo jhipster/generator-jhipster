@@ -78,6 +78,7 @@ class BaseApplicationGenerator extends BaseGenerator {
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
+  /** @type {SharedData<ApplicationType>} */
   #sharedData;
 
   constructor(args, options, features) {
@@ -363,6 +364,7 @@ class BaseApplicationGenerator extends BaseGenerator {
 
   /**
    * Shared Data
+   * @type {SharedData<ApplicationType>}
    */
   get sharedData() {
     if (!this.#sharedData) {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster vue generator gateway-jwt-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
+exports[`JHipster vue generator gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -53,21 +53,6 @@ Object {
   "src/main/webapp/app/account/account.service.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/account/activate/activate.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/change-password/change-password.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/change-password/change-password.vue": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/account/login-form/login-form.component.ts": Object {
     "stateCleared": "modified",
   },
@@ -77,58 +62,10 @@ Object {
   "src/main/webapp/app/account/login.service.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/account/register/register.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/reset-password/init/reset-password-init.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/reset-password/init/reset-password-init.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.vue": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/docs/docs.component.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-edit.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-edit.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-view.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-view.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.vue": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.component.ts": Object {
@@ -183,9 +120,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entities.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/locale/translation.service.ts": Object {
@@ -362,34 +296,7 @@ Object {
   "src/test/javascript/spec/app/account/account.service.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "src/test/javascript/spec/app/account/activate/activate.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/change-password/change-password.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/test/javascript/spec/app/account/login-form/login-form.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/register/register.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/reset-password/finish/reset-password-finish.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/reset-password/init/reset-password-init.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/settings/settings.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/admin/user-management/user-management-edit.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/admin/user-management/user-management-view.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/admin/user-management/user-management.component.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/test/javascript/spec/app/core/error/error.component.spec.ts": Object {
@@ -856,7 +763,7 @@ Object {
 }
 `;
 
-exports[`JHipster vue generator microservice-jwt-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(false) should match generated files snapshot 1`] = `
+exports[`JHipster vue generator microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(false) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -1655,7 +1562,7 @@ Object {
 }
 `;
 
-exports[`JHipster vue generator monolith-jwt-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
+exports[`JHipster vue generator monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -2499,7 +2406,7 @@ Object {
 }
 `;
 
-exports[`JHipster vue generator monolith-session-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(true) should match generated files snapshot 1`] = `
+exports[`JHipster vue generator monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -2552,21 +2459,6 @@ Object {
   "src/main/webapp/app/account/account.service.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/account/activate/activate.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/change-password/change-password.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/change-password/change-password.vue": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/account/login-form/login-form.component.ts": Object {
     "stateCleared": "modified",
   },
@@ -2576,64 +2468,16 @@ Object {
   "src/main/webapp/app/account/login.service.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/account/register/register.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/reset-password/init/reset-password-init.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/reset-password/init/reset-password-init.vue": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/account/sessions/sessions.component.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/sessions/sessions.vue": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/account/settings/settings.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.vue": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/docs/docs.component.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-edit.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-edit.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-view.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-view.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.vue": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.component.ts": Object {
@@ -2688,9 +2532,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entities.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/locale/translation.service.ts": Object {
@@ -2867,40 +2708,7 @@ Object {
   "src/test/javascript/spec/app/account/account.service.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "src/test/javascript/spec/app/account/activate/activate.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/change-password/change-password.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/test/javascript/spec/app/account/login-form/login-form.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/login.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/register/register.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/reset-password/finish/reset-password-finish.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/reset-password/init/reset-password-init.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/sessions/sessions.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/account/settings/settings.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/admin/user-management/user-management-edit.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/admin/user-management/user-management-view.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/spec/app/admin/user-management/user-management.component.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/test/javascript/spec/app/core/error/error.component.spec.ts": Object {

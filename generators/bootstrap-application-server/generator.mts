@@ -42,7 +42,7 @@ const {
  * @class
  * @extends {BaseApplicationGenerator<SpringBootApplication>}
  */
-export default class extends BaseApplicationGenerator<SpringBootApplication> {
+export default class BoostrapApplicationServer extends BaseApplicationGenerator<SpringBootApplication> {
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
   }

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster angular generator gateway-jwt-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
+exports[`JHipster angular generator gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
@@ -59,129 +59,6 @@ Object {
   "src/main/webapp/WEB-INF/web.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/account/account.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/account.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.route.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/admin-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -198,57 +75,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/delete/user-management-delete-dialog.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/delete/user-management-delete-dialog.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/delete/user-management-delete-dialog.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/detail/user-management-detail.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/detail/user-management-detail.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/detail/user-management-detail.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/list/user-management.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/list/user-management.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/list/user-management.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/service/user-management.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/service/user-management.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/update/user-management-update.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/update/user-management-update.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/update/user-management-update.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.route.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app-page-title-strategy.ts": Object {
@@ -378,15 +204,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/home/home.component.html": Object {
@@ -1378,7 +1195,7 @@ Object {
 }
 `;
 
-exports[`JHipster angular generator microservice-jwt-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(false) should match generated files snapshot 1`] = `
+exports[`JHipster angular generator microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(true)-enableTranslation(false) should match generated files snapshot 1`] = `
 Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
@@ -2525,7 +2342,7 @@ Object {
 }
 `;
 
-exports[`JHipster angular generator monolith-jwt-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
+exports[`JHipster angular generator monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
@@ -3882,7 +3699,7 @@ Object {
 }
 `;
 
-exports[`JHipster angular generator monolith-session-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(true) should match generated files snapshot 1`] = `
+exports[`JHipster angular generator monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(true) should match generated files snapshot 1`] = `
 Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
@@ -3941,147 +3758,6 @@ Object {
   "src/main/webapp/WEB-INF/web.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/account/account.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/account.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/activate/activate.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/finish/password-reset-finish.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password-reset/init/password-reset-init.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/password/password.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/register/register.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/session.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/sessions.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/sessions.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/sessions.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/sessions.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/sessions.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/settings/settings.route.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/admin-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -4098,57 +3774,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.route.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/delete/user-management-delete-dialog.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/delete/user-management-delete-dialog.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/delete/user-management-delete-dialog.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/detail/user-management-detail.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/detail/user-management-detail.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/detail/user-management-detail.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/list/user-management.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/list/user-management.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/list/user-management.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/service/user-management.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/service/user-management.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/update/user-management-update.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/update/user-management-update.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/update/user-management-update.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.route.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app-page-title-strategy.ts": Object {
@@ -4272,15 +3897,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/home/home.component.html": Object {
