@@ -30,7 +30,7 @@ const prettierTransform = function (options, generator, transformOptions = {}) {
   if (typeof transformOptions === 'boolean') {
     transformOptions = { ignoreErrors: transformOptions };
   }
-  const { ignoreErrors = false, extensions = generator.getPrettierExtensions() } = transformOptions;
+  const { ignoreErrors = false, extensions } = transformOptions;
   return patternSpy(
     async file => {
       if (isFileStateDeleted(file)) {

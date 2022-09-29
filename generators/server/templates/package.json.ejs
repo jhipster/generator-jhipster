@@ -43,7 +43,7 @@
     "default_environment": "prod"
   },
   "scripts": {
-    "prettier:check": "prettier --check \"{,src/**/,.blueprint/**/}*.{<%= this.getPrettierExtensions() %>}\"",
-    "prettier:format": "prettier --write \"{,src/**/,.blueprint/**/}*.{<%= this.getPrettierExtensions() %>}\""
+    "prettier:check": "prettier --check \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\""
   }
 }

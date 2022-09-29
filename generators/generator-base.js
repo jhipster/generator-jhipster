@@ -42,7 +42,7 @@ const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { databaseData } = require('./sql-constants');
-const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
+const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
 const { joinCallbacks } = require('../lib/support/base.cjs');
 
 const {
@@ -301,23 +301,6 @@ class JHipsterBaseGenerator extends PrivateBase {
       return outputPath;
     }
     return outputPathCustomizer.call(this, outputPath);
-  }
-
-  getPrettierExtensions() {
-    let prettierExtensions = 'md,json,yml,html';
-    if (!this.skipClient && !this.jhipsterConfig.skipClient) {
-      prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
-      if (this.jhipsterConfig.clientFramework === VUE) {
-        prettierExtensions = `${prettierExtensions},vue`;
-      }
-      if (this.jhipsterConfig.clientFramework === SVELTE) {
-        prettierExtensions = `${prettierExtensions},svelte`;
-      }
-    }
-    if (!this.skipServer && !this.jhipsterConfig.skipServer) {
-      prettierExtensions = `${prettierExtensions},java`;
-    }
-    return prettierExtensions;
   }
 
   /**

@@ -2,7 +2,7 @@ import { OptionalGenericDerivedProperty } from '../base/application';
 import type { Application } from '../base-application/tasks.js';
 import type { CommonClientServerApplication } from '../bootstrap-application-base/types';
 
-type ClientFrameworkType = 'no' | 'angular' | 'react' | 'vue';
+type ClientFrameworkType = 'no' | 'angular' | 'react' | 'vue' | 'svelte';
 
 declare const CLIENT_FRAMEWORK = 'clientFramework';
 
