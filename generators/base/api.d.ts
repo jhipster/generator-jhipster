@@ -39,11 +39,7 @@ export type WriteFileBlock<Generator, DataType> = {
   templates: WriteFileTemplate<Generator, DataType>[];
 };
 
-export type WriteFileSection<Generator, DataType> = Record<string, WriteFileBlock<Generator, DataType>[]> & {
-  _?: {
-    transform?: EditFileCallback<Generator>[];
-  };
-};
+export type WriteFileSection<Generator, DataType> = Record<string, WriteFileBlock<Generator, DataType>[]>;
 
 export type WriteFileOptions<Generator, DataType> = {
   /** transforms (files processing) to be applied */

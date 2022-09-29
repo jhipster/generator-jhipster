@@ -22,7 +22,7 @@ const { ANGULAR: clientFramework } = ClientFrameworkTypes;
 const { CLIENT_MAIN_SRC_DIR } = constants;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const testSamples = () =>
+const samplesBuilder = () =>
   Object.entries(clientSamples).map(([name, sample]) => [
     name,
     {
@@ -36,61 +36,63 @@ const testSamples = () =>
     },
   ]);
 
-const clientAdminFiles = [
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.route.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.module.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.service.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.model.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/modal/health-modal.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/modal/health-modal.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.route.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.module.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.service.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.model.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/logs/log.model.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.route.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.module.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.service.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/jvm-memory/jvm-memory.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/jvm-memory/jvm-memory.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/jvm-threads/jvm-threads.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/jvm-threads/jvm-threads.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-cache/metrics-cache.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-cache/metrics-cache.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-request/metrics-request.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-request/metrics-request.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-system/metrics-system.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/blocks/metrics-system/metrics-system.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.component.html`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.route.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.module.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.service.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.model.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.spec.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.service.spec.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/modal/health-modal.component.spec.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.component.spec.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.service.spec.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.component.spec.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.service.spec.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.component.spec.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.service.spec.ts`,
+const clientAdminFiles = clientSrcDir => [
+  `${clientSrcDir}app/admin/configuration/configuration.component.html`,
+  `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
+  `${clientSrcDir}app/admin/configuration/configuration.route.ts`,
+  `${clientSrcDir}app/admin/configuration/configuration.module.ts`,
+  `${clientSrcDir}app/admin/configuration/configuration.service.ts`,
+  `${clientSrcDir}app/admin/configuration/configuration.model.ts`,
+  `${clientSrcDir}app/admin/health/modal/health-modal.component.html`,
+  `${clientSrcDir}app/admin/health/modal/health-modal.component.ts`,
+  `${clientSrcDir}app/admin/health/health.component.html`,
+  `${clientSrcDir}app/admin/health/health.component.ts`,
+  `${clientSrcDir}app/admin/health/health.route.ts`,
+  `${clientSrcDir}app/admin/health/health.module.ts`,
+  `${clientSrcDir}app/admin/health/health.service.ts`,
+  `${clientSrcDir}app/admin/health/health.model.ts`,
+  `${clientSrcDir}app/admin/logs/log.model.ts`,
+  `${clientSrcDir}app/admin/logs/logs.component.html`,
+  `${clientSrcDir}app/admin/logs/logs.component.ts`,
+  `${clientSrcDir}app/admin/logs/logs.route.ts`,
+  `${clientSrcDir}app/admin/logs/logs.module.ts`,
+  `${clientSrcDir}app/admin/logs/logs.service.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.component.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.component.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.component.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.component.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.component.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.component.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.component.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.component.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.component.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.component.html`,
+  `${clientSrcDir}app/admin/metrics/metrics.component.html`,
+  `${clientSrcDir}app/admin/metrics/metrics.component.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics.route.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics.module.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics.service.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics.model.ts`,
+  `${clientSrcDir}app/admin/configuration/configuration.component.spec.ts`,
+  `${clientSrcDir}app/admin/configuration/configuration.service.spec.ts`,
+  `${clientSrcDir}app/admin/health/modal/health-modal.component.spec.ts`,
+  `${clientSrcDir}app/admin/health/health.component.spec.ts`,
+  `${clientSrcDir}app/admin/health/health.service.spec.ts`,
+  `${clientSrcDir}app/admin/logs/logs.component.spec.ts`,
+  `${clientSrcDir}app/admin/logs/logs.service.spec.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics.component.spec.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics.service.spec.ts`,
 ];
+
+const testSamples = samplesBuilder();
 
 describe(`JHipster ${clientFramework} generator`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -102,7 +104,11 @@ describe(`JHipster ${clientFramework} generator`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  testSamples().forEach(([name, sample]) => {
+  it('samples matrix should match snapshot', () => {
+    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+  });
+
+  testSamples.forEach(([name, sample]) => {
     const sampleConfig = sample.applicationWithEntities.config;
 
     describe(name, () => {
@@ -140,13 +146,13 @@ describe(`JHipster ${clientFramework} generator`, () => {
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi } = sampleConfig;
+        const { applicationType, withAdminUi, clientSrcDir = CLIENT_MAIN_SRC_DIR } = sampleConfig;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 
         it(adminUiComponents, () => {
           const assertion = (...args) => (generateAdminUi ? runResult.assertFile(...args) : runResult.assertNoFile(...args));
-          assertion(clientAdminFiles);
+          assertion(clientAdminFiles(clientSrcDir));
         });
 
         if (applicationType !== 'microservice') {
@@ -155,7 +161,7 @@ describe(`JHipster ${clientFramework} generator`, () => {
             const assertion = (...args) =>
               generateAdminUi ? runResult.assertFileContent(...args) : runResult.assertNoFileContent(...args);
             assertion(
-              `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
+              `${clientSrcDir}app/admin/admin-routing.module.ts`,
               `
       {
         path: 'configuration',

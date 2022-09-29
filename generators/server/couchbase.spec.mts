@@ -24,7 +24,7 @@ const couchbaseSamples = extendMatrix(serverSamples, {
   searchEngine: ['no', 'couchbase'],
 });
 
-const testSamples = (): [string, any][] =>
+const samplesBuilder = (): [string, any][] =>
   Object.entries(couchbaseSamples).map(([name, sample]) => [
     name,
     {
@@ -39,6 +39,8 @@ const testSamples = (): [string, any][] =>
     },
   ]);
 
+const testSamples = samplesBuilder();
+
 describe(`JHipster ${databaseType} generator`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -49,7 +51,11 @@ describe(`JHipster ${databaseType} generator`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  testSamples().forEach(([name, sample]) => {
+  it('samples matrix should match snapshot', () => {
+    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+  });
+
+  testSamples.forEach(([name, sample]) => {
     const sampleConfig = sample.applicationWithEntities.config;
     const { authenticationType } = sampleConfig;
 

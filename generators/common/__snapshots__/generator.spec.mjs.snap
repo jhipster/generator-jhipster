@@ -410,7 +410,7 @@ overrides:
   "README.md": Object {
     "contents": "# jhipster
 
-This application was generated using JHipster 7.9.3, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.9.3](https://www.jhipster.tech/documentation-archive/v7.9.3).
+This application was generated using JHipster , you can find documentation and help at [https://www.jhipster.tech/documentation-archive/vundefined](https://www.jhipster.tech/documentation-archive/vundefined).
 
 ## Project Structure
 
@@ -556,13 +556,13 @@ To configure CI for your project, run the ci-cd sub-generator (\`jhipster ci-cd\
 
 
 [JHipster Homepage and latest documentation]: https://www.jhipster.tech
-[JHipster 7.9.3 archive]: https://www.jhipster.tech/documentation-archive/v7.9.3
-[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v7.9.3/development/
-[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v7.9.3/docker-compose
-[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v7.9.3/production/
-[Running tests page]: https://www.jhipster.tech/documentation-archive/v7.9.3/running-tests/
-[Code quality page]: https://www.jhipster.tech/documentation-archive/v7.9.3/code-quality/
-[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v7.9.3/setting-up-ci/
+[JHipster  archive]: https://www.jhipster.tech/documentation-archive/vundefined
+[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/vundefined/development/
+[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/vundefined/docker-compose
+[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/vundefined/production/
+[Running tests page]: https://www.jhipster.tech/documentation-archive/vundefined/running-tests/
+[Code quality page]: https://www.jhipster.tech/documentation-archive/vundefined/code-quality/
+[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/vundefined/setting-up-ci/
 
 [Node.js]: https://nodejs.org/
 [NPM]: https://www.npmjs.com/

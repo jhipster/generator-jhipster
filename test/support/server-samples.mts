@@ -27,6 +27,12 @@ export const buildServerMatrix = (matrix = {}) => {
     entitySuffix: ['Entity', ''],
     dtoSuffix: ['DTO', 'Rest'],
     skipCommitHook: [false, true],
+    testFrameworks: [[], ['gatling'], ['cucumber']],
+    serverSideOptions: [[], ['enableSwaggerCodegen:true']],
+  });
+
+  serverMatrix = extendFilteredMatrix(serverMatrix, sample => !sample.reactive, {
+    websocket: [false, true],
   });
 
   serverMatrix = extendFilteredMatrix(serverMatrix, sample => sample.authenticationType !== 'oauth2', {

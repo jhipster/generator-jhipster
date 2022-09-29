@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster mongodb generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -17,16 +17,10 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".prettierignore": Object {
@@ -203,7 +197,7 @@ Object {
   "src/main/java/com/package/domain/Authority.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/UserEntity.java": Object {
+  "src/main/java/com/package/domain/User.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/package-info.java": Object {
@@ -476,7 +470,7 @@ Object {
 }
 `;
 
-exports[`JHipster mongodb generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(true)-consul should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -493,10 +487,16 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": Object {
@@ -670,7 +670,7 @@ Object {
   "src/main/java/tech/jhipster/domain/Authority.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/User.java": Object {
+  "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/package-info.java": Object {
@@ -835,6 +835,15 @@ Object {
   "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
@@ -895,13 +904,16 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/tech/jhipster/cucumber/gitkeep": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster mongodb generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -1092,7 +1104,7 @@ Object {
   "src/main/java/tech/jhipster/domain/Authority.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/User.java": Object {
+  "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/package-info.java": Object {
@@ -1287,6 +1299,15 @@ Object {
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": Object {
     "stateCleared": "modified",
   },
@@ -1353,6 +1374,9 @@ Object {
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/tech/jhipster/cucumber/gitkeep": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/templates/mail/activationEmail.html": Object {
     "stateCleared": "modified",
   },
@@ -1371,7 +1395,7 @@ Object {
 }
 `;
 
-exports[`JHipster mongodb generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-skipUserManagement(true)-eureka should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -1736,7 +1760,7 @@ Object {
 }
 `;
 
-exports[`JHipster mongodb generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-eureka should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -1753,10 +1777,16 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": Object {
@@ -1984,10 +2014,10 @@ Object {
   "src/main/java/tech/jhipster/service/UserService.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/AdminUserRest.java": Object {
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/UserRest.java": Object {
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
@@ -2063,6 +2093,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/IntegrationTest.java": Object {
@@ -2155,7 +2191,7 @@ Object {
 }
 `;
 
-exports[`JHipster mongodb generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-consul should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -2172,16 +2208,10 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".prettierignore": Object {
@@ -2406,10 +2436,10 @@ Object {
   "src/main/java/com/package/service/UserService.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AdminUserDTO.java": Object {
+  "src/main/java/com/package/service/dto/AdminUserRest.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/UserDTO.java": Object {
+  "src/main/java/com/package/service/dto/UserRest.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/dto/package-info.java": Object {
@@ -2485,6 +2515,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/IntegrationTest.java": Object {
@@ -2568,7 +2604,7 @@ Object {
 }
 `;
 
-exports[`JHipster mongodb generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-skipUserManagement(false)-consul should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -2585,10 +2621,16 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": Object {
@@ -3053,7 +3095,7 @@ Object {
 }
 `;
 
-exports[`JHipster mongodb generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-skipUserManagement(true)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -3070,16 +3112,10 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".prettierignore": Object {
@@ -3355,6 +3391,15 @@ Object {
   "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/cucumber/CucumberIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/management/SecurityMetersServiceTests.java": Object {
     "stateCleared": "modified",
   },
@@ -3394,6 +3439,9 @@ Object {
   "src/test/resources/META-INF/spring.factories": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/com/package/cucumber/gitkeep": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
@@ -3409,7 +3457,7 @@ Object {
 }
 `;
 
-exports[`JHipster mongodb generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -3825,7 +3873,7 @@ Object {
 }
 `;
 
-exports[`JHipster mongodb generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-eureka should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -4202,6 +4250,15 @@ Object {
   "src/test/java/com/package/config/TestSecurityConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/cucumber/CucumberIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
@@ -4247,6 +4304,9 @@ Object {
   "src/test/resources/META-INF/spring.factories": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/com/package/cucumber/gitkeep": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
@@ -4265,7 +4325,7 @@ Object {
 }
 `;
 
-exports[`JHipster mongodb generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -4504,13 +4564,13 @@ Object {
   "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/AdminUserRest.java": Object {
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/UserRest.java": Object {
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
@@ -4604,6 +4664,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/IntegrationTest.java": Object {
@@ -4708,7 +4774,7 @@ Object {
 }
 `;
 
-exports[`JHipster mongodb generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-skipUserManagement(true)-consul should match generated files snapshot 1`] = `
+exports[`JHipster mongodb generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -4986,6 +5052,12 @@ Object {
   "src/main/resources/templates/error.html": Object {
     "stateCleared": "modified",
   },
+  "src/test/gatling/conf/gatling.conf": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
@@ -5048,6 +5120,639 @@ Object {
   },
   "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster mongodb generator samples matrix should match snapshot 1`] = `
+Object {
+  "gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "gateway",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "mongodb",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": true,
+        "skipUserManagement": false,
+        "testFrameworks": Array [],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "gateway",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "mongodb",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": false,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+        "websocket": true,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "mongodb",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "mongodb",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": Array [],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "mongodb",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": false,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+        "websocket": true,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "mongodb",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": true,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "mongodb",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": Array [],
+        "websocket": true,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "mongodb",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "mongodb",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "testFrameworks": Array [],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "mongodb",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": true,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "session",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "mongodb",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "session",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "mongodb",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
   },
 }
 `;

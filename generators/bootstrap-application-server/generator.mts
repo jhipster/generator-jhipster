@@ -59,8 +59,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         application.backendType = 'Java';
         application.temporaryDir = application.buildTool === 'gradle' ? 'build/' : 'target/';
         application.buildDir = `${application.temporaryDir}${application.buildTool === 'gradle' ? 'resources/main/' : 'classes/'}`;
-        application.clientSrcDir = CLIENT_MAIN_SRC_DIR;
-        application.clientTestDir = CLIENT_TEST_SRC_DIR;
         application.clientDistDir = `${application.buildDir}${constants.CLIENT_DIST_DIR}`;
 
         // TODO v8 drop the following variables

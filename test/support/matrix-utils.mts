@@ -1,3 +1,10 @@
+const appendTitle = (title, config, value) => {
+  if (Array.isArray(value)) value = value[0];
+  if (value === undefined) return title;
+  const newTitle = typeof value === 'string' && value !== 'no' ? value : `${config}(${value})`;
+  return `${title}${title.length === 0 ? '' : '-'}${newTitle}`;
+};
+
 export const fromMatrix = configMatrix => {
   const configEntries = Object.entries(configMatrix);
   const samples = configEntries.reduce((previousValue, currentValue) => {
@@ -13,9 +20,8 @@ export const fromMatrix = configMatrix => {
     return previousValue
       .map(([previousName, previousConfig]) =>
         configValues.map(value => {
-          const title = typeof value === 'string' ? value : `${config}(${value})`;
           return [
-            `${previousName}${previousName.length === 0 ? '' : '-'}${title}`,
+            appendTitle(previousName, config, value),
             {
               ...previousConfig,
               [config]: value,
@@ -49,13 +55,19 @@ const applyExtendedMatrix = (matrixEntries, configMatrix) => {
   matrixEntries.forEach((entry, matrixIndex) => {
     let matrixName = entry[0];
     const matrixConfig = entry[1];
-    const newValues = additionalMatrix[matrixIndex % additionalMatrix.length];
+    let newValues = additionalMatrix[matrixIndex % additionalMatrix.length];
+    console.log(newValues);
     Object.entries(newValues).forEach(([configName, configValue]) => {
-      const configTitle = typeof configValue === 'string' && configValue !== 'no' ? configValue : `${configName}(${configValue})`;
-      matrixName = `${matrixName}-${configTitle}`;
+      if (typeof configValue === 'object' && !Array.isArray(configValue)) {
+        const additionalValues = configValue.additional;
+        configValue = configValue.value;
+        newValues = { ...newValues, ...additionalValues, [configName]: configValue };
+      }
+      matrixName = appendTitle(matrixName, configName, configValue);
     });
     entry.splice(0, entry.length);
     entry.push(matrixName, Object.assign(matrixConfig, newValues));
+    console.log(matrixConfig);
   });
   return matrixEntries;
 };

@@ -196,24 +196,6 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
-   */
-  get CLIENT_MAIN_SRC_DIR() {
-    this._CLIENT_MAIN_SRC_DIR =
-      this._CLIENT_MAIN_SRC_DIR || this.applyOutputPathCustomizer(constants.CLIENT_MAIN_SRC_DIR) || constants.CLIENT_MAIN_SRC_DIR;
-    return this._CLIENT_MAIN_SRC_DIR;
-  }
-
-  /**
-   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
-   */
-  get CLIENT_TEST_SRC_DIR() {
-    this._CLIENT_TEST_SRC_DIR =
-      this._CLIENT_TEST_SRC_DIR || this.applyOutputPathCustomizer(constants.CLIENT_TEST_SRC_DIR) || constants.CLIENT_TEST_SRC_DIR;
-    return this._CLIENT_TEST_SRC_DIR;
-  }
-
-  /**
    * Verify if the entity is a built-in Entity.
    * @param {String} entityName - Entity name to verify.
    * @return {boolean} true if the entity is built-in.
@@ -2242,6 +2224,10 @@ class JHipsterBaseGenerator extends PrivateBase {
       } else {
         destinationFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
       }
+      // TODO v8 drop
+      if (typeof context.customizeDestination === 'function') {
+        destinationFile = context.customizeDestination(context, destinationFile);
+      }
 
       let sourceFileFrom;
       if (Array.isArray(rootTemplatesAbsolutePath)) {
@@ -2832,7 +2818,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientThemeVariant = config.clientThemeVariant;
     dest.devServerPort = config.devServerPort;
 
-    dest.clientSrcDir = config.clientSrcDir || this.CLIENT_MAIN_SRC_DIR;
+    dest.clientSrcDir = config.clientSrcDir || CLIENT_MAIN_SRC_DIR;
+    dest.clientTestDir = config.clientTestDir || CLIENT_TEST_SRC_DIR;
   }
 
   /**

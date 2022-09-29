@@ -22,7 +22,7 @@ const { REACT: clientFramework } = ClientFrameworkTypes;
 const { CLIENT_MAIN_SRC_DIR } = constants;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const testSamples = () =>
+const samplesBuilder = () =>
   Object.entries(clientSamples).map(([name, sample]) => [
     name,
     {
@@ -36,13 +36,15 @@ const testSamples = () =>
     },
   ]);
 
-const clientAdminFiles = [
-  `${CLIENT_MAIN_SRC_DIR}app/modules/administration/configuration/configuration.tsx`,
-  `${CLIENT_MAIN_SRC_DIR}app/modules/administration/health/health.tsx`,
-  `${CLIENT_MAIN_SRC_DIR}app/modules/administration/health/health-modal.tsx`,
-  `${CLIENT_MAIN_SRC_DIR}app/modules/administration/metrics/metrics.tsx`,
-  `${CLIENT_MAIN_SRC_DIR}app/modules/administration/logs/logs.tsx`,
+const clientAdminFiles = clientSrcDir => [
+  `${clientSrcDir}app/modules/administration/configuration/configuration.tsx`,
+  `${clientSrcDir}app/modules/administration/health/health.tsx`,
+  `${clientSrcDir}app/modules/administration/health/health-modal.tsx`,
+  `${clientSrcDir}app/modules/administration/metrics/metrics.tsx`,
+  `${clientSrcDir}app/modules/administration/logs/logs.tsx`,
 ];
+
+const testSamples = samplesBuilder();
 
 describe(`JHipster ${clientFramework} generator`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -54,7 +56,11 @@ describe(`JHipster ${clientFramework} generator`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  testSamples().forEach(([name, sample]) => {
+  it('samples matrix should match snapshot', () => {
+    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+  });
+
+  testSamples.forEach(([name, sample]) => {
     const sampleConfig = sample.applicationWithEntities.config;
 
     describe(name, () => {
@@ -92,13 +98,13 @@ describe(`JHipster ${clientFramework} generator`, () => {
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi } = sampleConfig;
+        const { applicationType, withAdminUi, clientSrcDir = CLIENT_MAIN_SRC_DIR } = sampleConfig;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 
         it(adminUiComponents, () => {
           const assertion = (...args) => (generateAdminUi ? runResult.assertFile(...args) : runResult.assertNoFile(...args));
-          assertion(clientAdminFiles);
+          assertion(clientAdminFiles(clientSrcDir));
         });
 
         if (applicationType !== 'microservice') {
@@ -107,7 +113,7 @@ describe(`JHipster ${clientFramework} generator`, () => {
 
           it(adminUiRoutingTitle, () => {
             assertion(
-              `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
+              `${clientSrcDir}app/modules/administration/administration.reducer.ts`,
               'logs: {\n' +
                 '    loggers: [] as any[]\n' +
                 '  },\n' +
@@ -121,7 +127,7 @@ describe(`JHipster ${clientFramework} generator`, () => {
             );
 
             assertion(
-              `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/admin.tsx`,
+              `${clientSrcDir}app/shared/layout/menus/admin.tsx`,
               '    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>\n' +
                 '    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>\n' +
                 '    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>\n' +
