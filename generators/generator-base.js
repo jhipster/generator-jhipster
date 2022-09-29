@@ -196,6 +196,22 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @deprecated
+   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
+   */
+  get CLIENT_MAIN_SRC_DIR() {
+    return CLIENT_MAIN_SRC_DIR;
+  }
+
+  /**
+   * @deprecated
+   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
+   */
+  get CLIENT_TEST_SRC_DIR() {
+    return CLIENT_TEST_SRC_DIR;
+  }
+
+  /**
    * Verify if the entity is a built-in Entity.
    * @param {String} entityName - Entity name to verify.
    * @return {boolean} true if the entity is built-in.
