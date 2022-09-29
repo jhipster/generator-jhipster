@@ -70,10 +70,10 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
     <%= persistClass %> fetch<%= relationship.relationshipNameCapitalizedPlural %>(<%= persistClass %> result) {
         return entityManager
             .createQuery(
-                "select <%= entityInstance %> from <%= persistClass %> <%= entityInstance %> left join fetch <%= entityInstance %>.<%= relationship.relationshipFieldNamePlural %> where <%= entityInstance %>.<%= primaryKey.name %> = :<%= entityInstance %>",
+                "select <%= entityInstance %> from <%= persistClass %> <%= entityInstance %> left join fetch <%= entityInstance %>.<%= relationship.relationshipFieldNamePlural %> where <%= entityInstance %>.<%= primaryKey.name %> = :<%= primaryKey.name %>",
                 <%= persistClass %>.class
             )
-            .setParameter("<%= entityInstance %>", result.getId())
+            .setParameter("<%= primaryKey.name %>", result.getId())
             .getSingleResult();
     }
 
