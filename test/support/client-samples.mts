@@ -13,7 +13,7 @@ const CLIENT_ADDITIONAL_CONFIG_MATRIX = {
   websocket: [false, true],
 };
 
-const buildClientSamples = () => {
+export const buildClientSamples = () => {
   let clientMatrix = {
     ...fromMatrix(MatrixMonolith),
     ...fromMatrix(MatrixMicroserviceGateway),

@@ -56,7 +56,6 @@ const applyExtendedMatrix = (matrixEntries, configMatrix) => {
     let matrixName = entry[0];
     const matrixConfig = entry[1];
     let newValues = additionalMatrix[matrixIndex % additionalMatrix.length];
-    console.log(newValues);
     Object.entries(newValues).forEach(([configName, configValue]) => {
       if (typeof configValue === 'object' && !Array.isArray(configValue)) {
         const additionalValues = configValue.additional;
@@ -67,7 +66,6 @@ const applyExtendedMatrix = (matrixEntries, configMatrix) => {
     });
     entry.splice(0, entry.length);
     entry.push(matrixName, Object.assign(matrixConfig, newValues));
-    console.log(matrixConfig);
   });
   return matrixEntries;
 };

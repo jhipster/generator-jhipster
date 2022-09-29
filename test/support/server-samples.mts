@@ -1,6 +1,7 @@
 import { MatrixMonolith, MatrixMicroservice, MatrixGateway } from './application-samples.mjs';
 import { fromMatrix, extendMatrix, extendFilteredMatrix } from './matrix-utils.mjs';
 
+// eslint-disable-next-line import/prefer-default-export
 export const buildServerMatrix = (matrix = {}) => {
   let serverMatrix = {
     ...fromMatrix({
@@ -49,6 +50,3 @@ export const buildServerMatrix = (matrix = {}) => {
 
   return serverMatrix;
 };
-
-// eslint-disable-next-line import/prefer-default-export
-export const serverSamples = buildServerMatrix();

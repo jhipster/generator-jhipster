@@ -3,7 +3,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport, serverSamples, entitiesSimple as entities } from '../../test/support/index.mjs';
+import { testBlueprintSupport, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
 import Generator from './index.js';
 import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
 
@@ -21,7 +21,7 @@ const { NEO4J: databaseType } = DatabaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 
 const samplesBuilder = (): [string, any][] =>
-  Object.entries(serverSamples).map(([name, sample]) => [
+  Object.entries(buildServerMatrix()).map(([name, sample]) => [
     name,
     {
       defaults: true,

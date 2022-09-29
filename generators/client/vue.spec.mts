@@ -3,7 +3,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport, clientSamples } from '../../test/support/index.mjs';
+import { testBlueprintSupport, buildClientSamples } from '../../test/support/index.mjs';
 import Generator from './index.js';
 import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
 
@@ -23,7 +23,7 @@ const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } = constants;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
 
 const samplesBuilder = () =>
-  Object.entries(clientSamples).map(([name, sample]) => [
+  Object.entries(buildClientSamples()).map(([name, sample]) => [
     name,
     {
       skipInstall: true,
