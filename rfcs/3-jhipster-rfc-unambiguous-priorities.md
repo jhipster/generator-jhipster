@@ -33,10 +33,10 @@ Priorities will be implemented using constants as name, declaring it like `get [
 JHipster uses Yeoman's traditional priorities:
 
 ```js
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     return {
       initializingTask() {
-        this._sayHello();
+        this.sayHello();
       }
     }
   }
