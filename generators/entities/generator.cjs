@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { INITIALIZING_PRIORITY, COMPOSING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } =
-  require('../../lib/constants/priorities.cjs').compat;
+const { COMPOSING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
 const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
 const { SQL } = require('../../jdl/jhipster/database-types');
 const { GENERATOR_ENTITIES, GENERATOR_ENTITIES_CLIENT, GENERATOR_ENTITY, GENERATOR_DATABASE_CHANGELOG } = require('../generator-list');
@@ -78,6 +77,9 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   async _postConstruct() {
+    this.loadStoredAppOptions();
+    this.loadRuntimeOptions();
+
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ENTITIES);
     }
@@ -113,20 +115,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.options.regenerate = true;
       }
     }
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _initializing() {
-    return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-    };
-  }
-
-  get [INITIALIZING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._initializing();
   }
 
   // Public API method used by the getter and also by Blueprints
