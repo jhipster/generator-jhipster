@@ -19,7 +19,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import { getRule, rulesNames } from '../../../jdl/linters/rules';
+import { getRule, rules, rulesNames } from '../../../jdl/linters/rules';
 
 describe('Rules', () => {
   describe('getRules', () => {
@@ -39,7 +39,7 @@ describe('Rules', () => {
       (Object.keys(rulesNames) as Array<keyof typeof rulesNames>).forEach(ruleName => {
         context(`for rule name ${ruleName}`, () => {
           it('should return the corresponding rule', () => {
-            expect(getRule(ruleName)).to.deep.equal(rulesNames[ruleName]);
+            expect(getRule(ruleName)).to.deep.equal(rules[ruleName]);
           });
         });
       });
