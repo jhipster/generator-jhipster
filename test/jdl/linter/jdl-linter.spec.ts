@@ -19,21 +19,26 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 
-const { jestExpect } = require('mocha-expect-snapshot');
-const { expect } = require('chai');
-const { writeFileSync, unlinkSync } = require('fs');
-const path = require('path');
-const { createJDLLinterFromFile, createJDLLinterFromContent } = require('../../../jdl/linters/jdl-linter.ts');
+import { jestExpect } from 'mocha-expect-snapshot';
+import { expect } from 'chai';
+import { writeFileSync, unlinkSync } from 'fs';
+import path from 'path';
+import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from '../../../jdl/linters/jdl-linter';
+import Issues from '../../../jdl/linters/issues/issues';
+import EntityIssue from '../../../jdl/linters/issues/entity-issue';
+import EnumIssue from '../../../jdl/linters/issues/enum-issue';
+import relationshipIssue from '../../../jdl/linters/issues/relationship-issue';
 
 describe('JDLLinter', () => {
   describe('createJDLLinterFromFile', () => {
     context('when not passing a file', () => {
       it('should fail', () => {
+        // @ts-ignore
         expect(() => createJDLLinterFromFile(undefined)).to.throw(/^A JDL file must be passed to create a new JDL linter\.$/);
       });
     });
     context('when passing a file', () => {
-      let path;
+      let path: string;
 
       before(() => {
         path = 'test.jdl';
@@ -52,6 +57,7 @@ describe('JDLLinter', () => {
   describe('createJDLLinterFromContent', () => {
     context('when not passing a content', () => {
       it('should fail', () => {
+        // @ts-ignore
         expect(() => createJDLLinterFromContent(undefined)).to.throw(/^A JDL content must be passed to create a new JDL linter\.$/);
       });
     });
@@ -63,9 +69,9 @@ describe('JDLLinter', () => {
   });
   describe('check', () => {
     context('when checking for useless entity braces', () => {
-      let linter;
-      let issue;
-      let reportedIssues;
+      let linter: JDLLinter;
+      let issue: any;
+      let reportedIssues: Issues;
 
       before(() => {
         linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'useless_entity_curly_braces.jdl'));
@@ -80,11 +86,11 @@ describe('JDLLinter', () => {
       });
     });
     context('when checking for useless table names', () => {
-      let linter;
-      let issueForB;
-      let issueForToto;
-      let issueForSuperToto;
-      let reportedIssues;
+      let linter: { check: any };
+      let issueForB: { ruleName: any };
+      let issueForToto: { ruleName: any };
+      let issueForSuperToto: { ruleName: any };
+      let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
 
       before(() => {
         linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'useless_table_names.jdl'));
@@ -104,10 +110,10 @@ describe('JDLLinter', () => {
     });
     context('when checking for duplicated', () => {
       context('entities', () => {
-        let linter;
-        let reportedIssues;
-        let issueForA;
-        let issueForB;
+        let linter: { check: any };
+        let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
+        let issueForA: { ruleName: any };
+        let issueForB: { ruleName: any };
 
         before(() => {
           linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'duplicate_entities.jdl'));
@@ -124,10 +130,10 @@ describe('JDLLinter', () => {
         });
       });
       context('fields', () => {
-        let linter;
-        let reportedIssues;
-        let issueForAa;
-        let issueForBb;
+        let linter: { check: any };
+        let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
+        let issueForAa: { ruleName: any };
+        let issueForBb: { ruleName: any };
 
         before(() => {
           linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'duplicate_fields.jdl'));
@@ -144,9 +150,9 @@ describe('JDLLinter', () => {
         });
       });
       context('enums', () => {
-        let linter;
-        let reportedIssues;
-        let issueForA;
+        let linter: { check: any };
+        let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
+        let issueForA: { ruleName: any };
 
         before(() => {
           linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'duplicate_enums.jdl'));
@@ -162,10 +168,10 @@ describe('JDLLinter', () => {
       });
     });
     context('when checking for unused enums', () => {
-      let linter;
-      let reportedIssues;
-      let issueFor2;
-      let issueFor3;
+      let linter: JDLLinter;
+      let reportedIssues: Issues;
+      let issueFor2: EnumIssue;
+      let issueFor3: EnumIssue;
 
       before(() => {
         linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'unused_enums.jdl'));
@@ -182,11 +188,11 @@ describe('JDLLinter', () => {
       });
     });
     context('when checking for collapsible relationships', () => {
-      let linter;
-      let reportedIssues;
-      let issueForAToB;
-      let issueForBToC;
-      let issueForAToC;
+      let linter: { check: any };
+      let reportedIssues: Issues;
+      let issueForAToB: relationshipIssue;
+      let issueForBToC: relationshipIssue;
+      let issueForAToC: relationshipIssue;
 
       before(() => {
         linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'ungrouped_relationships.jdl'));

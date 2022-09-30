@@ -25,6 +25,10 @@ import { checkFields } from './field-linter';
 import { checkEnums } from './enum-linter';
 import { checkRelationships } from './relationship-linter';
 
+export type JDLLinter = {
+  check: () => Issues;
+};
+
 /**
  * Creates a new JDL linters from a JDL string content.
  * @param jdlString - the JDL string content to lint.
@@ -44,7 +48,7 @@ export function createJDLLinterFromContent(jdlString: string) {
  * @return {Object} the JDL linters.
  * @throws {Error} if the JDL file isn't passed.
  */
-export function createJDLLinterFromFile(file: string) {
+export function createJDLLinterFromFile(file: string): JDLLinter {
   if (!file) {
     throw new Error('A JDL file must be passed to create a new JDL linter.');
   }
