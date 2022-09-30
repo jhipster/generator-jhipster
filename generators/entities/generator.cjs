@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { COMPOSING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+const { COMPOSING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
 const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
 const { SQL } = require('../../jdl/jhipster/database-types');
-const { GENERATOR_ENTITIES, GENERATOR_ENTITIES_CLIENT, GENERATOR_ENTITY, GENERATOR_DATABASE_CHANGELOG } = require('../generator-list');
+const { GENERATOR_ENTITIES, GENERATOR_ENTITY, GENERATOR_DATABASE_CHANGELOG } = require('../generator-list');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -157,42 +157,5 @@ module.exports = class extends BaseBlueprintGenerator {
   get [COMPOSING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._composing();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _default() {
-    return {
-      async composeEntitiesClient() {
-        if (this.options.skipWriting || this.options.entities.length !== this.jhipsterConfig.entities.length) return;
-        const clientEntities = this.getExistingEntityNames()
-          .map(entityName => {
-            const entity = this.configOptions.sharedEntities[entityName];
-            if (entity === undefined) {
-              throw new Error(`${entityName} shared entity data not found`);
-            }
-            return entity;
-          })
-          .filter(entity => !entity.skipClient);
-        if (clientEntities.length === 0) return;
-        await this.composeWithJHipster(GENERATOR_ENTITIES_CLIENT, clientEntities, {
-          skipInstall: this.options.skipInstall,
-        });
-      },
-    };
-  }
-
-  get [DEFAULT_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._default();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _writing() {
-    return {};
-  }
-
-  get [WRITING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._writing();
   }
 };

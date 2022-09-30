@@ -275,18 +275,6 @@ Object {
   "generators/docker-compose/templates/template-file-docker-compose.ejs": Object {
     "stateCleared": "modified",
   },
-  "generators/entities-client/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/entities-client/generator.spec.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/entities-client/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/entities-client/templates/template-file-entities-client.ejs": Object {
-    "stateCleared": "modified",
-  },
   "generators/entities/generator.mjs": Object {
     "stateCleared": "modified",
   },

@@ -18,15 +18,13 @@
  */
 /* eslint-disable consistent-return */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { PREPARING_FIELDS_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
-  require('../../lib/constants/priorities.cjs').compat;
+const { WRITING_PRIORITY, POST_WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
 
 const { entityDefaultConfig } = require('../generator-defaults');
 const { writeFiles, customizeFiles } = require('./files');
 const { GENERATOR_ENTITY_SERVER } = require('../generator-list');
 const { SQL } = require('../../jdl/jhipster/database-types');
 const { isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
-const { preparePostEntityServerDerivedProperties } = require('../../utils/entity');
 
 /* constants used throughout */
 
@@ -44,39 +42,6 @@ module.exports = class extends BaseBlueprintGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ENTITY_SERVER, { context: this.options.context });
     }
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _preparingFields() {
-    return {
-      processDerivedPrimaryKeyFields() {
-        const primaryKey = this.entity.primaryKey;
-        if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
-          return;
-        }
-        // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
-        const derivedFields = this.entity.primaryKey.derivedFields;
-        this.entity.fields.unshift(...derivedFields);
-      },
-    };
-  }
-
-  get [PREPARING_FIELDS_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._preparingFields();
-  }
-
-  _default() {
-    return {
-      postProcessEntityDerivedFields() {
-        preparePostEntityServerDerivedProperties(this.entity);
-      },
-    };
-  }
-
-  get [DEFAULT_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._default();
   }
 
   // Public API method used by the getter and also by Blueprints
