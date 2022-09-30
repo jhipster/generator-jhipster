@@ -18,8 +18,8 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { expect } = require('chai');
-const { formatComment } = require('../../../jdl/utils/format-utils');
+import { expect } from 'chai';
+import formatComment from '../../../jdl/utils/format-utils';
 
 describe('FormatUtils', () => {
   describe('formatComment', () => {
@@ -86,6 +86,6 @@ describe('FormatUtils', () => {
   });
 });
 
-function buildTestTitle(comment) {
+function buildTestTitle(comment: string) {
   return `'${comment}'`;
 }

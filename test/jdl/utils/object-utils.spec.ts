@@ -18,13 +18,13 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { expect } = require('chai');
-const { areEntitiesEqual, merge } = require('../../../jdl/utils/object-utils');
+import { expect } from 'chai';
+import { areEntitiesEqual, merge } from '../../../jdl/utils/object-utils';
 
 describe('ObjectUtils', () => {
   describe('merge', () => {
     context('when merging a nil object with a not-empty one', () => {
-      let merged;
+      let merged: any;
 
       before(() => {
         merged = merge(null, { a: 1 });
@@ -35,7 +35,7 @@ describe('ObjectUtils', () => {
       });
     });
     context('when merging a not-empty object with a nil one', () => {
-      let merged;
+      let merged: {} | { a: number };
 
       before(() => {
         merged = merge({}, { a: 1 });
@@ -46,7 +46,7 @@ describe('ObjectUtils', () => {
       });
     });
     context('when merging two not-empty objects', () => {
-      let merged;
+      let merged: { a: number; b: number } | { b: number; c: number };
 
       before(() => {
         const object1 = {
@@ -68,7 +68,7 @@ describe('ObjectUtils', () => {
   describe('areEntitiesEqual', () => {
     context('when comparing two equal objects', () => {
       context('as they are empty', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstEmptyObject = {
@@ -87,7 +87,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they have no fields, but only relationships', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -124,7 +124,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they have fields but no relationships', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -163,7 +163,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('they have both fields and relationships', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -218,7 +218,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('when one attribute in the object is missing from the other', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -242,7 +242,7 @@ describe('ObjectUtils', () => {
     });
     context('when comparing two unequal objects', () => {
       context('as one of them is not empty', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -270,7 +270,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as both of them have different fields', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -307,7 +307,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as both of them have different relationships', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -354,7 +354,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not possess the same number of fields', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -392,7 +392,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not have the same number of keys in fields', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -440,7 +440,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not possess the same number of relationships', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -490,7 +490,7 @@ describe('ObjectUtils', () => {
           expect(result).to.be.false;
         });
         context('as they do not have the same number of fields in a relationship', () => {
-          let result;
+          let result: boolean;
 
           before(() => {
             const firstObject = {
@@ -539,7 +539,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not have the options', () => {
-        const firstObject = {
+        const firstObject: any = {
           fields: [{ id: 1, theAnswer: 42 }],
           relationships: [{ id: 1, anotherField: 44 }],
           dto: 'no',
@@ -548,7 +548,7 @@ describe('ObjectUtils', () => {
           searchEngine: 'no',
           jpaMetamodelFiltering: 'no',
         };
-        const secondObject = {
+        const secondObject: any = {
           fields: [{ id: 1, theAnswer: 42 }],
           relationships: [{ id: 1, anotherField: 44 }],
           dto: 'no',
@@ -634,7 +634,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not have the same table name', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -697,7 +697,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not have the same comments', () => {
-        let result;
+        let result: boolean;
 
         before(() => {
           const firstObject = {
@@ -760,8 +760,29 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not have the same number of attributes', () => {
-        let firstObject;
-        let secondObject;
+        let firstObject: {
+          javadoc: string;
+          fields: (
+            | { id: number; theAnswer: number; notTheAnswer?: undefined }
+            | { id: number; notTheAnswer: number; theAnswer?: undefined }
+          )[];
+          relationships: { id: number; anotherField: number }[];
+          dto: string;
+          pagination: string;
+          service: string;
+        };
+        let secondObject: {
+          javadoc: string;
+          fields: (
+            | { id: number; theAnswer: number; notTheAnswer?: undefined }
+            | { id: number; notTheAnswer: number; theAnswer?: undefined }
+          )[];
+          relationships: { id: number; anotherField: number }[];
+          dto: string;
+          pagination: string;
+          service: string;
+          custom: boolean;
+        };
 
         before(() => {
           firstObject = {

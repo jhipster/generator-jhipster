@@ -17,11 +17,6 @@
  * limitations under the License.
  */
 
-module.exports = {
-  merge,
-  areEntitiesEqual,
-};
-
 /**
  * Merge two objects.
  * The order is important here: o1.merge(o2) means that the keys values of o2
@@ -32,7 +27,7 @@ module.exports = {
  * @returns {Object} the object result of the merge
  */
 // TODO move it to a JHipsterEntityEqualityChecker file or inside the JSONEntity
-function merge(object1, object2) {
+export function merge<A, B>(object1: A, object2: B) {
   if (!object1 || Object.keys(object1).length === 0) {
     return object2;
   }
@@ -45,7 +40,7 @@ function merge(object1, object2) {
   };
 }
 
-function removeEntriesWithUndefinedValue(entity) {
+function removeEntriesWithUndefinedValue(entity: any) {
   Object.keys(entity).forEach(key => {
     if (entity[key] === undefined) {
       delete entity[key];
@@ -53,7 +48,7 @@ function removeEntriesWithUndefinedValue(entity) {
   });
 }
 
-function areEntitiesEqual(firstEntity, secondEntity) {
+export function areEntitiesEqual(firstEntity: any, secondEntity: any) {
   removeEntriesWithUndefinedValue(firstEntity);
   removeEntriesWithUndefinedValue(secondEntity);
   if (
@@ -72,7 +67,7 @@ function areEntitiesEqual(firstEntity, secondEntity) {
   );
 }
 
-function areFieldsEqual(firstFields, secondFields) {
+function areFieldsEqual(firstFields: any[], secondFields: any[]) {
   return firstFields.every((field, index) => {
     if (Object.keys(field).length !== Object.keys(secondFields[index]).length) {
       return false;
@@ -87,7 +82,7 @@ function areFieldsEqual(firstFields, secondFields) {
   });
 }
 
-function areRelationshipsEqual(firstRelationships, secondRelationships) {
+function areRelationshipsEqual(firstRelationships: any[], secondRelationships: any[]) {
   return firstRelationships.every((relationship, index) => {
     if (Object.keys(relationship).length !== Object.keys(secondRelationships[index]).length) {
       return false;
@@ -97,7 +92,7 @@ function areRelationshipsEqual(firstRelationships, secondRelationships) {
   });
 }
 
-function areOptionsTheSame(firstEntity, secondEntity) {
+function areOptionsTheSame(firstEntity: any, secondEntity: any) {
   if (firstEntity.jpaMetamodelFiltering === 'no') {
     firstEntity.jpaMetamodelFiltering = false;
   }

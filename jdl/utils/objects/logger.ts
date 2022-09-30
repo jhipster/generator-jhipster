@@ -17,15 +17,14 @@
  * limitations under the License.
  */
 
-const {
-  transports: { Console },
-  format: { printf, combine },
-  createLogger,
-} = require('winston');
+import { transports, format, createLogger } from 'winston';
+
+const { Console } = transports;
+const { printf, combine } = format;
 
 const myFormat = printf(info => `${info.level}: ${info.message}`);
 
-module.exports = createLogger({
+export default createLogger({
   transports: [new Console()],
   format: combine(myFormat),
   handleExceptions: true,

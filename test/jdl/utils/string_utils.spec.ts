@@ -19,9 +19,9 @@
 
 /* define global expect */
 /* eslint-disable no-new, no-unused-expressions */
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-const { lowerFirst, camelCase, upperFirst } = require('../../../jdl/utils/string-utils');
+import { lowerFirst, camelCase, upperFirst } from '../../../jdl/utils/string-utils';
 
 describe('StringUtils', () => {
   describe('camelCase', () => {
@@ -88,6 +88,7 @@ describe('StringUtils', () => {
       context('as it is nil', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-ignore
             camelCase();
           }).to.throw(/^The passed string cannot be nil\.$/);
         });
@@ -103,6 +104,7 @@ describe('StringUtils', () => {
     context('when passing a nil string', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-ignore
           lowerFirst();
         }).to.throw(/^The passed string cannot be nil.$/);
       });
@@ -122,6 +124,7 @@ describe('StringUtils', () => {
     context('when passing a nil string', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-ignore
           upperFirst();
         }).to.throw(/^The passed string cannot be nil\.$/);
       });

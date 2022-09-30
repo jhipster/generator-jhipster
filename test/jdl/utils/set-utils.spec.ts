@@ -17,21 +17,23 @@
  * limitations under the License.
  */
 
-const { jestExpect: expect } = require('mocha-expect-snapshot');
-const { addAll, join } = require('../../../jdl/utils/set-utils');
+import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { addAll, join } from '../../../jdl/utils/set-utils';
 
 describe('SetUtils', () => {
   describe('addAll', () => {
     context('when not passing a set', () => {
       it('should fail', () => {
+        // @ts-ignore
         expect(() => addAll()).toThrow(/^A Set must be passed so as to insert elements\.$/);
       });
     });
     context('when not passing elements', () => {
-      let set;
+      let set: Set<unknown>;
 
       before(() => {
         set = new Set([1, 2, 3]);
+        // @ts-ignore
         addAll(set);
       });
 
@@ -46,7 +48,7 @@ Set {
       });
     });
     context('when passing an empty list as elements', () => {
-      let set;
+      let set: Set<any>;
 
       before(() => {
         set = new Set([1, 2, 3]);
@@ -64,7 +66,7 @@ Set {
       });
     });
     context('when passing elements', () => {
-      let set;
+      let set: Set<number>;
 
       before(() => {
         set = new Set([1, 2, 3]);
@@ -86,11 +88,12 @@ Set {
   describe('join', () => {
     context('when not passing a set', () => {
       it('should fail', () => {
+        // @ts-ignore
         expect(() => join()).toThrow(/^A Set must be passed so as to join elements\.$/);
       });
     });
     context('when not passing the separator', () => {
-      let result;
+      let result: string;
 
       before(() => {
         const set = new Set();
@@ -105,7 +108,7 @@ Set {
     });
     context('when passing a separator', () => {
       it('should use it', () => {
-        let result;
+        let result: string;
 
         before(() => {
           const set = new Set();

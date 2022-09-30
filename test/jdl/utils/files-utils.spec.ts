@@ -19,16 +19,17 @@
 
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
-const fs = require('fs');
-const path = require('path');
-const { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } = require('../../../jdl/utils/file-utils');
+import { expect } from 'chai';
+import fs from 'fs';
+import path from 'path';
+import { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } from '../../../jdl/utils/file-utils';
 
 describe('FileUtils', () => {
   describe('doesFileExist', () => {
     context('when checking a file path', () => {
       context('with a nil file path', () => {
         it('should return false', () => {
+          // @ts-ignore
           expect(doesFileExist()).to.be.false;
         });
       });
@@ -48,6 +49,7 @@ describe('FileUtils', () => {
     context('when checking a directory path', () => {
       context('with a nil directory path', () => {
         it('return false', () => {
+          // @ts-ignore
           expect(doesDirectoryExist()).to.be.false;
         });
       });
@@ -67,6 +69,7 @@ describe('FileUtils', () => {
     context('when not passing a directory', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-ignore
           createFolderIfItDoesNotExist();
         }).to.throw(/^A directory must be passed to be created\.$/);
       });

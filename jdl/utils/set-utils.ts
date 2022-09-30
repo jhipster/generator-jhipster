@@ -17,10 +17,20 @@
  * limitations under the License.
  */
 
-module.exports = {
-  deduplicate,
-};
+export function addAll<T>(set: Set<T>, elements: T[]) {
+  if (!set) {
+    throw new Error('A Set must be passed so as to insert elements.');
+  }
+  if (!elements || elements.length === 0) {
+    return set;
+  }
+  elements.forEach(element => set.add(element));
+  return set;
+}
 
-function deduplicate(array = []) {
-  return Array.from(new Set(array));
+export function join(set: Set<unknown>, separator = ',') {
+  if (!set) {
+    throw new Error('A Set must be passed so as to join elements.');
+  }
+  return Array.from(set).join(separator);
 }

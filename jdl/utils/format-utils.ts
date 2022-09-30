@@ -17,16 +17,12 @@
  * limitations under the License.
  */
 
-module.exports = {
-  formatComment,
-};
-
 /**
  * formats a comment
- * @param {String} comment string.
- * @returns {String} formatted comment string
+ * @param comment string.
+ * @returns formatted comment string
  */
-function formatComment(comment) {
+export default function formatComment(comment: string): string | undefined {
   if (!comment) {
     return undefined;
   }

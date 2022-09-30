@@ -17,13 +17,7 @@
  * limitations under the License.
  */
 
-module.exports = {
-  camelCase,
-  upperFirst,
-  lowerFirst,
-};
-
-function camelCase(string) {
+export function camelCase(string: string): string {
   checkStringIsValid(string);
   if (string === '') {
     return string;
@@ -32,7 +26,7 @@ function camelCase(string) {
   return `${firstLetter.toLowerCase()}${rest.join('')}`;
 }
 
-function upperFirst(string) {
+export function upperFirst(string: string): string {
   checkStringIsValid(string);
   if (string === '') {
     return string;
@@ -41,7 +35,7 @@ function upperFirst(string) {
   return `${firstLetter.toUpperCase()}${rest.join('')}`;
 }
 
-function lowerFirst(string) {
+export function lowerFirst(string: string): string {
   checkStringIsValid(string);
   if (string === '') {
     return string;
@@ -50,7 +44,7 @@ function lowerFirst(string) {
   return `${firstLetter.toLowerCase()}${rest.join('')}`;
 }
 
-function checkStringIsValid(string) {
+function checkStringIsValid(string: string) {
   if (string === undefined || string === null) {
     throw new Error('The passed string cannot be nil.');
   }

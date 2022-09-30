@@ -17,13 +17,14 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const { deduplicate } = require('../../../jdl/utils/array-utils');
+import { expect } from 'chai';
+import deduplicate from '../../../jdl/utils/array-utils';
 
 describe('ArrayUtils', () => {
   describe('deduplicate', () => {
     context('when not passing an array', () => {
       it('should return an empty array', () => {
+        // @ts-ignore
         expect(deduplicate()).to.deep.equal([]);
       });
     });
