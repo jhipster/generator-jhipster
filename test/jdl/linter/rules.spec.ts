@@ -18,26 +18,28 @@
  */
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
-const Rules = require('../../../jdl/linters/rules.ts');
+import { expect } from 'chai';
+import { getRule, rulesNames } from '../../../jdl/linters/rules';
 
 describe('Rules', () => {
   describe('getRules', () => {
     context('when not passing a rule name', () => {
       it('should fail', () => {
-        expect(() => Rules.getRule(undefined)).to.throw(/^A rule name has to be passed to get a rule\.$/);
+        // @ts-ignore
+        expect(() => getRule(undefined)).to.throw(/^A rule name has to be passed to get a rule\.$/);
       });
     });
     context('when passing a rule name', () => {
       context('of an absent rule', () => {
         it('should return undefined', () => {
-          expect(Rules.getRule('toto')).to.be.undefined;
+          // @ts-ignore
+          expect(getRule('toto')).to.be.undefined;
         });
       });
-      Object.keys(Rules.RuleNames).forEach(ruleName => {
+      (Object.keys(rulesNames) as Array<keyof typeof rulesNames>).forEach(ruleName => {
         context(`for rule name ${ruleName}`, () => {
           it('should return the corresponding rule', () => {
-            expect(Rules.getRule(ruleName)).to.deep.equal(Rules[ruleName]);
+            expect(getRule(ruleName)).to.deep.equal(rulesNames[ruleName]);
           });
         });
       });
