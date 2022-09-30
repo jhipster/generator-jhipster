@@ -17,33 +17,34 @@
  * limitations under the License.
  */
 
-const { jestExpect } = require('mocha-expect-snapshot');
-const fs = require('fs');
-const { expect } = require('chai');
-const FileReader = require('../../../jdl/readers/file-reader');
+import { jestExpect } from 'mocha-expect-snapshot';
+import fs from 'fs';
+import { expect } from 'chai';
+import { readFile, readFiles } from '../../../jdl/readers/file-reader';
 
 describe('FileReader', () => {
   describe('readFile', () => {
     context('when passing a nil path', () => {
       it('should fail', () => {
         expect(() => {
-          FileReader.readFile(null);
+          // @ts-ignore
+          readFile(null);
         }).to.throw(/^The passed file must not be nil to be read\.$/);
       });
     });
     context('when passing a directory', () => {
       it('should fail', () => {
         expect(() => {
-          FileReader.readFile('.');
+          readFile('.');
         }).to.throw(/^The passed file '.' must exist and must not be a directory to be read\.$/);
       });
     });
     context('when passing a valid text file', () => {
-      let content;
+      let content: string;
 
       before(() => {
         fs.writeFileSync('./myFile.txt', 'Hello World');
-        content = FileReader.readFile('./myFile.txt');
+        content = readFile('./myFile.txt');
       });
 
       after(() => {
@@ -59,24 +60,25 @@ describe('FileReader', () => {
     context('when passing a nil iterable', () => {
       it('should fail', () => {
         expect(() => {
-          FileReader.readFiles(null);
+          // @ts-ignore
+          readFiles(null);
         }).to.throw(/^The passed files must not be nil\.$/);
       });
     });
     context('when passing a directory among the files', () => {
       it('should fail', () => {
         expect(() => {
-          FileReader.readFiles(['.']);
+          readFiles(['.']);
         }).to.throw(/^The passed file '.' must exist and must not be a directory to be read\.$/);
       });
     });
     context('when passing valid text files', () => {
-      let content;
+      let content: string[];
 
       before(() => {
         fs.writeFileSync('./myFile1.txt', 'Hello...');
         fs.writeFileSync('./myFile2.txt', ' World!');
-        content = FileReader.readFiles(['./myFile1.txt', './myFile2.txt']);
+        content = readFiles(['./myFile1.txt', './myFile2.txt']);
       });
 
       after(() => {

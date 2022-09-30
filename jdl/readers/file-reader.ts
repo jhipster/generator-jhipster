@@ -17,20 +17,15 @@
  * limitations under the License.
  */
 
-const fs = require('fs');
-const FileUtils = require('../utils/file-utils');
-
-module.exports = {
-  readFile,
-  readFiles,
-};
+import fs from 'fs';
+import { doesFileExist } from '../utils/file-utils';
 
 /**
  * Reads the given files.
  * @param iterable the iterable object containing the file paths.
  * @returns an Iterable of the passed files' content.
  */
-function readFiles(iterable) {
+export function readFiles(iterable: string[]) {
   if (!iterable) {
     throw new Error('The passed files must not be nil.');
   }
@@ -40,13 +35,13 @@ function readFiles(iterable) {
 /**
  * Reads a given file.
  * @param path the file's path.
- * @returns {string} the file's content.
+ * @returns the file's content.
  */
-function readFile(path) {
+export function readFile(path: string): string {
   if (!path) {
     throw new Error('The passed file must not be nil to be read.');
   }
-  if (!FileUtils.doesFileExist(path)) {
+  if (!doesFileExist(path)) {
     throw new Error(`The passed file '${path}' must exist and must not be a directory to be read.`);
   }
   return fs.readFileSync(path, 'utf-8').toString();
