@@ -441,7 +441,13 @@ class BaseApplicationGenerator extends BaseGenerator {
         entitiesToLoad: this.getEntitiesDataToLoad(),
       };
     }
-    if ([WRITING_ENTITIES, POST_WRITING_ENTITIES, DEFAULT].includes(priorityName)) {
+    if ([DEFAULT].includes(priorityName)) {
+      return {
+        application,
+        ...this.getEntitiesDataForPriorities(),
+      };
+    }
+    if ([WRITING_ENTITIES, POST_WRITING_ENTITIES].includes(priorityName)) {
       return {
         application,
         ...this.getEntitiesDataToWrite(),
@@ -545,13 +551,22 @@ class BaseApplicationGenerator extends BaseGenerator {
    * Get entities to write.
    * @returns {object[]}
    */
+  getEntitiesDataForPriorities() {
+    const entitiesDefinitions = this.sharedData.getEntities();
+    return { entities: entitiesDefinitions.map(({ entity }) => entity) };
+  }
+
+  /**
+   * @private
+   * Get entities to write.
+   * @returns {object[]}
+   */
   getEntitiesDataToWrite() {
     const { entities = [] } = this.options;
-    let entitiesDefinitions = this.sharedData.getEntities();
-    if (entities.length > 0) {
-      entitiesDefinitions = entitiesDefinitions.filter(({ entityName }) => entities.includes(entityName));
-    }
-    return { entities: entitiesDefinitions.map(({ entity }) => entity) };
+    const data = this.getEntitiesDataForPriorities();
+    if (entities.length === 0) return data;
+    const filteredEntities = data.entities.filter(entity => entities.includes(entity.name));
+    return { ...data, entities: filteredEntities };
   }
 
   /**
