@@ -194,7 +194,13 @@ Object {
   "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/User.java": Object {
@@ -206,7 +212,13 @@ Object {
   "src/main/java/com/package/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/UserRepository.java": Object {
@@ -239,6 +251,9 @@ Object {
   "src/main/java/com/package/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
@@ -257,6 +272,9 @@ Object {
   "src/main/java/com/package/service/dto/AdminUserRest.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/dto/PasswordChangeDTO.java": Object {
     "stateCleared": "modified",
   },
@@ -264,6 +282,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/UserMapper.java": Object {
@@ -281,7 +308,13 @@ Object {
   "src/main/java/com/package/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/UserJWTController.java": Object {
@@ -389,6 +422,12 @@ Object {
   "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/management/SecurityMetersServiceTests.java": Object {
     "stateCleared": "modified",
   },
@@ -413,13 +452,25 @@ Object {
   "src/test/java/com/package/service/UserServiceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/mapper/UserMapperTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/TestUtil.java": Object {
@@ -670,7 +721,13 @@ Object {
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
@@ -679,7 +736,13 @@ Object {
   "src/main/java/tech/jhipster/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
@@ -706,16 +769,31 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
@@ -739,6 +817,9 @@ Object {
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": Object {
     "stateCleared": "modified",
   },
@@ -749,6 +830,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
@@ -850,6 +934,12 @@ Object {
   "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
@@ -857,6 +947,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
@@ -871,10 +967,16 @@ Object {
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
@@ -1107,7 +1209,13 @@ Object {
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
@@ -1119,7 +1227,13 @@ Object {
   "src/main/java/tech/jhipster/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
@@ -1155,6 +1269,9 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
@@ -1173,6 +1290,9 @@ Object {
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
     "stateCleared": "modified",
   },
@@ -1180,6 +1300,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
@@ -1194,10 +1323,16 @@ Object {
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
@@ -1317,6 +1452,12 @@ Object {
   "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": Object {
     "stateCleared": "modified",
   },
@@ -1341,16 +1482,28 @@ Object {
   "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
@@ -1610,10 +1763,22 @@ Object {
   "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/package-info.java": Object {
@@ -1634,10 +1799,31 @@ Object {
   "src/main/java/com/package/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
@@ -1721,6 +1907,12 @@ Object {
   "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/management/SecurityMetersServiceTests.java": Object {
     "stateCleared": "modified",
   },
@@ -1734,6 +1926,18 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/TokenProviderTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/TestUtil.java": Object {
@@ -1981,7 +2185,13 @@ Object {
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
@@ -1990,7 +2200,13 @@ Object {
   "src/main/java/tech/jhipster/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
@@ -2023,16 +2239,31 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
@@ -2044,10 +2275,16 @@ Object {
   "src/main/java/tech/jhipster/service/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
@@ -2116,6 +2353,12 @@ Object {
   "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
@@ -2149,6 +2392,12 @@ Object {
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
@@ -2161,13 +2410,25 @@ Object {
   "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
@@ -2412,7 +2673,13 @@ Object {
   "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/User.java": Object {
@@ -2421,7 +2688,13 @@ Object {
   "src/main/java/com/package/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/UserRepository.java": Object {
@@ -2448,16 +2721,31 @@ Object {
   "src/main/java/com/package/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/UserService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/dto/AdminUserRest.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/dto/UserRest.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/UserMapper.java": Object {
@@ -2472,7 +2760,13 @@ Object {
   "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
@@ -2541,6 +2835,12 @@ Object {
   "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
@@ -2568,6 +2868,12 @@ Object {
   "src/test/java/com/package/config/TestSecurityConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
@@ -2577,10 +2883,22 @@ Object {
   "src/test/java/com/package/service/UserServiceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/service/mapper/UserMapperTest.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/TestUtil.java": Object {
@@ -2816,7 +3134,13 @@ Object {
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
@@ -2828,7 +3152,13 @@ Object {
   "src/main/java/tech/jhipster/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
@@ -2864,6 +3194,9 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
@@ -2882,6 +3215,9 @@ Object {
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
     "stateCleared": "modified",
   },
@@ -2889,6 +3225,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
@@ -2903,10 +3248,16 @@ Object {
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserJWTController.java": Object {
@@ -3026,6 +3377,12 @@ Object {
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": Object {
     "stateCleared": "modified",
   },
@@ -3050,16 +3407,28 @@ Object {
   "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
@@ -3304,10 +3673,22 @@ Object {
   "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/package-info.java": Object {
@@ -3328,6 +3709,21 @@ Object {
   "src/main/java/com/package/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -3335,6 +3731,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/UserJWTController.java": Object {
@@ -3424,6 +3826,12 @@ Object {
   "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/management/SecurityMetersServiceTests.java": Object {
     "stateCleared": "modified",
   },
@@ -3439,7 +3847,19 @@ Object {
   "src/test/java/com/package/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/TestUtil.java": Object {
@@ -3669,7 +4089,13 @@ Object {
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
@@ -3678,7 +4104,13 @@ Object {
   "src/main/java/tech/jhipster/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
@@ -3711,16 +4143,31 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
@@ -3738,6 +4185,9 @@ Object {
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": Object {
     "stateCleared": "modified",
   },
@@ -3748,6 +4198,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
@@ -3837,6 +4290,12 @@ Object {
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
@@ -3849,6 +4308,12 @@ Object {
   "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
     "stateCleared": "modified",
   },
@@ -3858,6 +4323,9 @@ Object {
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
@@ -3865,6 +4333,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
@@ -4118,7 +4589,13 @@ Object {
   "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/User.java": Object {
@@ -4127,7 +4604,13 @@ Object {
   "src/main/java/com/package/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/UserRepository.java": Object {
@@ -4154,16 +4637,31 @@ Object {
   "src/main/java/com/package/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/UserService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/dto/AdminUserRest.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/dto/UserRest.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/mapper/UserMapper.java": Object {
@@ -4184,6 +4682,9 @@ Object {
   "src/main/java/com/package/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/AuthInfoResource.java": Object {
     "stateCleared": "modified",
   },
@@ -4191,6 +4692,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
@@ -4289,6 +4793,12 @@ Object {
   "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
@@ -4296,6 +4806,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/mapper/UserMapperTest.java": Object {
@@ -4307,10 +4823,16 @@ Object {
   "src/test/java/com/package/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/LogoutResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/TestUtil.java": Object {
@@ -4534,10 +5056,16 @@ Object {
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/PersistentToken.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
@@ -4546,10 +5074,16 @@ Object {
   "src/main/java/tech/jhipster/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/PersistentTokenRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
@@ -4579,6 +5113,9 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
@@ -4597,6 +5134,9 @@ Object {
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
     "stateCleared": "modified",
   },
@@ -4604,6 +5144,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
@@ -4618,10 +5167,16 @@ Object {
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
@@ -4705,6 +5260,12 @@ Object {
   "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
@@ -4735,6 +5296,12 @@ Object {
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": Object {
     "stateCleared": "modified",
   },
@@ -4747,16 +5314,28 @@ Object {
   "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
@@ -5010,7 +5589,19 @@ Object {
   "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/package-info.java": Object {
@@ -5025,6 +5616,21 @@ Object {
   "src/main/java/com/package/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/service/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -5032,6 +5638,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
@@ -5094,6 +5706,12 @@ Object {
   "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
+  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
@@ -5118,10 +5736,28 @@ Object {
   "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/TestUtil.java": Object {
@@ -5200,6 +5836,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5207,6 +5845,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5253,6 +5893,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5260,6 +5902,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5306,6 +5950,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5313,6 +5959,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5358,6 +6006,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5365,6 +6015,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5412,6 +6064,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5419,6 +6073,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5463,6 +6119,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5470,6 +6128,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5516,6 +6176,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5523,6 +6185,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5568,6 +6232,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5575,6 +6241,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5618,6 +6286,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5625,6 +6295,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5671,6 +6343,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5678,6 +6352,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5724,6 +6400,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5731,6 +6409,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },
@@ -5778,6 +6458,8 @@ Object {
         },
         Object {
           "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
           "fields": Array [
             Object {
               "fieldName": "simpleName",
@@ -5785,6 +6467,8 @@ Object {
             },
           ],
           "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
         },
       ],
     },

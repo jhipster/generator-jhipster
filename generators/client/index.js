@@ -33,16 +33,24 @@ const { packageJson: packagejs } = require('../../lib/index.js');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');
-const { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT } = require('../generator-list');
+const {
+  GENERATOR_CYPRESS,
+  GENERATOR_COMMON,
+  GENERATOR_LANGUAGES,
+  GENERATOR_CLIENT,
+  GENERATOR_ENTITY_CLIENT,
+  GENERATOR_ENTITY_I_18_N,
+} = require('../generator-list');
 
 const { ANGULAR } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 
-const NO_DATABASE = databaseTypes.NO;
+const { NO: NO_DATABASE } = databaseTypes;
 const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
 const { GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list');
+const { prepareReactEntity } = require('../../utils/entity.js');
 
 const TYPE_STRING = CommonDBTypes.STRING;
 const TYPE_UUID = CommonDBTypes.UUID;
@@ -255,6 +263,21 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
   }
 
   // Public API method used by the getter and also by Blueprints
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      react({ application, entity }) {
+        if (application.clientFrameworkReact) {
+          prepareReactEntity({ entity, application });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.asPreparingEachEntityTaskGroup(this.delegateToBlueprint ? {} : this.preparingEachEntity);
+  }
+
+  // Public API method used by the getter and also by Blueprints
   get default() {
     return this.asDefaultTaskGroup({
       loadUserManagementEntities({ application }) {
@@ -304,6 +327,30 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this.writing);
+  }
+
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({
+      async composeEachEntity({ application, entities }) {
+        for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipClient)) {
+          const entityName = entity.name;
+          await this.composeWithJHipster(GENERATOR_ENTITY_CLIENT, [entityName], {
+            context: entity,
+            application,
+          });
+          if (application.enableTranslation) {
+            await this.composeWithJHipster(GENERATOR_ENTITY_I_18_N, [entityName], {
+              context: entity,
+              application,
+            });
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+    return this.asWritingEntitiesTaskGroup(this.delegateToBlueprint ? {} : this.writingEntities);
   }
 
   get postWriting() {

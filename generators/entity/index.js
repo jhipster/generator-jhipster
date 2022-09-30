@@ -23,65 +23,19 @@ const _ = require('lodash');
 const path = require('path');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  COMPOSING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-  PREPARING_FIELDS_PRIORITY,
-  PREPARING_RELATIONSHIPS_PRIORITY,
-  DEFAULT_PRIORITY,
-  WRITING_PRIORITY,
-  INSTALL_PRIORITY,
-  END_PRIORITY,
-} = require('../../lib/constants/priorities.cjs').compat;
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, COMPOSING_PRIORITY, WRITING_PRIORITY, INSTALL_PRIORITY, END_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
+const { isReservedClassName } = require('../../jdl/jhipster/reserved-keywords');
 
 const prompts = require('./prompts');
 const { defaultConfig } = require('../generator-defaults');
 const constants = require('../generator-constants');
-const statistics = require('../statistics');
-const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
-const {
-  prepareEntityForTemplates,
-  prepareEntityServerForTemplates,
-  prepareEntityPrimaryKeyForTemplates,
-  loadRequiredConfigIntoEntity,
-  loadRequiredConfigDerivedProperties,
-  preparePostEntityCommonDerivedProperties,
-  preparePostEntitiesCommonDerivedProperties,
-  preparePostEntityServerDerivedProperties,
-  prepareReactEntity,
-  preparePostEntityClientDerivedProperties,
-} = require('../../utils/entity');
-const { prepareFieldForTemplates } = require('../../utils/field');
-const { prepareRelationshipForTemplates } = require('../../utils/relationship');
-const { stringify } = require('../../utils');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
-const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = require('../../jdl/jhipster/database-types');
-const {
-  GENERATOR_ENTITIES,
-  GENERATOR_ENTITY,
-  GENERATOR_ENTITY_CLIENT,
-  GENERATOR_ENTITY_I_18_N,
-  GENERATOR_ENTITY_SERVER,
-} = require('../generator-list');
-const { CommonDBTypes, RelationalOnlyDBTypes } = require('../../jdl/jhipster/field-types');
-
-const { INSTANT } = CommonDBTypes;
-const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
-
-const { PaginationTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
-
-const { NO: NO_PAGINATION } = PaginationTypes;
-const { NO: NO_SERVICE } = ServiceTypes;
-
-const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = require('../../jdl/jhipster/validations');
+const { GENERATOR_ENTITIES, GENERATOR_ENTITY } = require('../generator-list');
 
 /* constants used throughout */
-const { SUPPORTED_VALIDATION_RULES, JHIPSTER_CONFIG_DIR } = constants;
+const { JHIPSTER_CONFIG_DIR } = constants;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 class EntityGenerator extends BaseBlueprintGenerator {
@@ -153,12 +107,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
     this.option('db', {
       desc: 'Provide DB option for the application when using skip-server flag',
       type: String,
-    });
-
-    // This adds support for a `--experimental` flag which can be used to enable experimental features
-    this.option('experimental', {
-      desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
-      type: Boolean,
     });
 
     this.option('single-entity', {
@@ -345,163 +293,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
-  _configuring() {
-    return {
-      configureEntitySearchEngine() {
-        const application = this.application;
-        const { applicationTypeMicroservice, applicationTypeGateway, clientFrameworkAny } = application;
-        if (this.entityConfig.microserviceName && !(applicationTypeMicroservice && clientFrameworkAny)) {
-          if (this.entityConfig.searchEngine === undefined) {
-            // If a non-microfrontent microservice entity, should be disabled by default.
-            this.entityConfig.searchEngine = false;
-          }
-        }
-        if (
-          // Don't touch the configuration for microservice entities published at gateways
-          !(applicationTypeGateway && this.entityConfig.microserviceName) &&
-          !application.searchEngineAny &&
-          ![undefined, false, 'no'].includes(this.entityConfig.searchEngine)
-        ) {
-          // Search engine can only be enabled at entity level and disabled at application level for gateways publishing a microservice entity
-          this.entityConfig.searchEngine = false;
-          this.warning('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
-        }
-      },
-      configureModelFiltering() {
-        const { databaseTypeSql, applicationTypeGateway, reactive } = this.application;
-        if (
-          // Don't touch the configuration for microservice entities published at gateways
-          !(applicationTypeGateway && this.entityConfig.microserviceName) &&
-          this.entityConfig.jpaMetamodelFiltering &&
-          (!databaseTypeSql || this.entityConfig.service === NO_SERVICE || reactive)
-        ) {
-          this.warning('Not compatible with jpaMetamodelFiltering, disabling');
-          this.entityConfig.jpaMetamodelFiltering = false;
-        }
-      },
-      configureEntityTable() {
-        const entity = this.context;
-        entity.entityTableName = this.entityConfig.entityTableName || this.getTableName(entity.name);
-
-        const fixedEntityTableName = this._fixEntityTableName(
-          entity.entityTableName,
-          entity.prodDatabaseType ?? this.application.prodDatabaseType,
-          entity.jhiTablePrefix
-        );
-        if (fixedEntityTableName !== entity.entityTableName) {
-          entity.entityTableName = this.entityConfig.entityTableName = fixedEntityTableName;
-        }
-        const validation = this._validateTableName(
-          entity.entityTableName,
-          entity.prodDatabaseType ?? this.application.prodDatabaseType,
-          entity
-        );
-        if (validation !== true) {
-          throw new Error(validation);
-        }
-
-        this.entityConfig.name = this.entityConfig.name || entity.name;
-
-        // disable pagination if there is no database, unless it’s a microservice entity published by a gateway
-        if (
-          ![SQL, MONGODB, COUCHBASE, NEO4J].includes(entity.databaseType) &&
-          (this.application.applicationType !== GATEWAY || !this.entityConfig.microserviceName)
-        ) {
-          this.entityConfig.pagination = NO_PAGINATION;
-        }
-
-        // Validate root entity json content
-        if (this.entityConfig.changelogDate === undefined) {
-          const currentDate = this.dateFormatForLiquibase();
-          if (entity.entityExisted) {
-            this.info(`changelogDate is missing in .jhipster/${this.entityConfig.name}.json, using ${currentDate} as fallback`);
-          }
-          entity.changelogDate = this.entityConfig.changelogDate = currentDate;
-        }
-
-        if (this.entityConfig.incrementalChangelog === undefined) {
-          // Keep entity's original incrementalChangelog option.
-          this.entityConfig.incrementalChangelog =
-            this.jhipsterConfig.incrementalChangelog &&
-            !fs.existsSync(
-              this.destinationPath(
-                `src/main/resources/config/liquibase/changelog/${this.entityConfig.changelogDate}_added_entity_${this.entityConfig.name}.xml`
-              )
-            );
-        }
-      },
-
-      configureFields() {
-        const context = this.context;
-        const entityName = context.name;
-        // Validate entity json field content
-        const fields = this.entityConfig.fields;
-        fields.forEach(field => {
-          // Migration from JodaTime to Java Time
-          if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
-            field.fieldType = INSTANT;
-          }
-          if (field.fieldType === BYTES && context.databaseType === CASSANDRA) {
-            field.fieldType = BYTE_BUFFER;
-          }
-
-          this._validateField(field);
-
-          if (field.fieldType === BYTE_BUFFER) {
-            this.warning(
-              `Cannot use validation in .jhipster/${entityName}.json for field ${stringify(
-                field
-              )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
-            );
-            field.validation = false;
-            field.fieldValidateRules = [];
-          }
-        });
-        this.entityConfig.fields = fields;
-      },
-
-      configureRelationships() {
-        const context = this.context;
-        const entityName = context.name;
-
-        // Validate entity json relationship content
-        const relationships = this.entityConfig.relationships;
-        relationships.forEach(relationship => {
-          this._validateRelationship(relationship);
-
-          if (relationship.relationshipName === undefined) {
-            relationship.relationshipName = relationship.otherEntityName;
-            this.warning(
-              `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}, using ${
-                relationship.otherEntityName
-              } as fallback`
-            );
-          }
-          if (relationship.useJPADerivedIdentifier) {
-            this.info('Option useJPADerivedIdentifier is deprecated, use id instead');
-            relationship.id = true;
-          }
-        });
-        this.entityConfig.relationships = relationships;
-      },
-
-      addToYoRc() {
-        if (this.jhipsterConfig.entities === undefined) {
-          this.jhipsterConfig.entities = [];
-        }
-        if (!this.jhipsterConfig.entities.find(entityName => entityName === this.context.name)) {
-          this.jhipsterConfig.entities = this.jhipsterConfig.entities.concat([this.context.name]);
-        }
-      },
-    };
-  }
-
-  get [CONFIGURING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._configuring();
-  }
-
-  // Public API method used by the getter and also by Blueprints
   _composing() {
     return {
       async composeEntities() {
@@ -525,240 +316,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
   get [COMPOSING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._composing();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _loading() {
-    return {
-      loadEntity() {
-        const entity = this.context;
-        // Update current context with config from file.
-        Object.assign(entity, this.entityStorage.getAll());
-
-        loadRequiredConfigIntoEntity(entity, this.application);
-        loadRequiredConfigDerivedProperties(entity);
-        this.loadDerivedMicroserviceAppConfig(entity);
-
-        if (entity.fields) {
-          entity.fields
-            .filter(field => field.options)
-            .forEach(field => {
-              // Load jdl annotations as default values.
-              Object.assign(field, field.options);
-            });
-        }
-
-        if (entity.relationships) {
-          entity.relationships
-            .filter(relationship => relationship.options)
-            .forEach(relationship => {
-              // Load jdl annotations as default values.
-              Object.assign(relationship, relationship.options);
-            });
-        }
-      },
-
-      setupSharedConfig() {
-        const context = this.context;
-        if (context.entitySuffix === context.dtoSuffix) {
-          throw new Error('The entity cannot be generated as the entity suffix and DTO suffix are equals !');
-        }
-      },
-
-      shareEntity() {
-        this.configOptions.sharedEntities[this.context.name] = this.context;
-      },
-
-      async composing() {
-        if (this.options.skipWriting) return;
-        const context = this.context;
-        const application = this.application;
-        if (!context.skipServer) {
-          await this.composeWithJHipster(GENERATOR_ENTITY_SERVER, this.arguments, {
-            context,
-            application,
-          });
-        }
-
-        let { skipClient } = context;
-        if (this.application.applicationType === MICROSERVICE && !this.application.clientFrameworkAny) {
-          // If microservices, write entity client only if microfrontend
-          skipClient = true;
-        }
-
-        if (!skipClient || this.application.applicationType === GATEWAY) {
-          await this.composeWithJHipster(GENERATOR_ENTITY_CLIENT, this.arguments, {
-            context,
-            application,
-            skipInstall: this.options.skipInstall,
-          });
-          if (this.application.enableTranslation) {
-            await this.composeWithJHipster(GENERATOR_ENTITY_I_18_N, this.arguments, {
-              context,
-              application,
-              skipInstall: this.options.skipInstall,
-            });
-          }
-        }
-      },
-    };
-  }
-
-  get [LOADING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._loading();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _preparing() {
-    return {
-      loadRelationships() {
-        this.context.relationships.forEach(relationship => {
-          const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-          const otherEntity = this.configOptions.sharedEntities[otherEntityName];
-          if (!otherEntity) {
-            throw new Error(`Error looking for otherEntity ${otherEntityName} at ${Object.keys(this.configOptions.sharedEntities)}`);
-          }
-          relationship.otherEntity = otherEntity;
-          otherEntity.otherRelationships = otherEntity.otherRelationships || [];
-          otherEntity.otherRelationships.push(relationship);
-
-          if (
-            relationship.unidirectional &&
-            (relationship.relationshipType === 'many-to-many' ||
-              // OneToOne back reference is required due to filtering
-              relationship.relationshipType === 'one-to-one' ||
-              (relationship.relationshipType === 'one-to-many' && !this.context.databaseTypeNeo4j && !this.context.databaseTypeNo))
-          ) {
-            relationship.otherEntityRelationshipName = _.lowerFirst(this.context.name);
-            otherEntity.relationships.push({
-              otherEntity: this.context,
-              otherEntityName: relationship.otherEntityRelationshipName,
-              ownerSide: !relationship.ownerSide,
-              otherEntityRelationshipName: relationship.relationshipName,
-              relationshipName: relationship.otherEntityRelationshipName,
-              relationshipType: relationship.relationshipType.split('-').reverse().join('-'),
-            });
-          }
-        });
-      },
-
-      prepareEntityForTemplates() {
-        const entity = this.context;
-        prepareEntityForTemplates(entity, this, this.application);
-      },
-
-      loadDomain() {
-        prepareEntityServerForTemplates(this.context);
-      },
-
-      async prepareReact() {
-        const { context: entity, application } = this;
-        if (!application.clientFrameworkReact) return;
-        prepareReactEntity({ entity, application });
-      },
-    };
-  }
-
-  get [PREPARING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._preparing();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _preparingFields() {
-    return {
-      // If primaryKey doesn't exist, create it.
-      preparePrimaryKey() {
-        const entity = this.context;
-        if (!entity.embedded && !entity.primaryKey) {
-          prepareEntityPrimaryKeyForTemplates(entity, this);
-        }
-      },
-
-      prepareFieldsForTemplates() {
-        const entity = this.context;
-
-        this.context.fields.forEach(field => {
-          prepareFieldForTemplates(entity, field, this);
-        });
-      },
-
-      processDerivedPrimaryKeyFields() {
-        if (!this.context.primaryKey) return;
-        const primaryKey = this.context.primaryKey;
-        if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
-          return;
-        }
-        // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
-        const derivedFields = this.context.primaryKey.derivedFields;
-        this.context.fields.unshift(...derivedFields);
-      },
-    };
-  }
-
-  get [PREPARING_FIELDS_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._preparingFields();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _preparingRelationships() {
-    return {
-      prepareRelationshipsForTemplates() {
-        this.context.relationships.forEach(relationship => {
-          prepareRelationshipForTemplates(this.context, relationship, this);
-        });
-      },
-    };
-  }
-
-  get [PREPARING_RELATIONSHIPS_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._preparingRelationships();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _default() {
-    return {
-      preparePostEntityCommonDerivedProperties() {
-        if (this.configOptions.sharedEntities) {
-          // Make user entity available to templates.
-          this.context.user = this.configOptions.sharedEntities.User;
-        }
-
-        preparePostEntityCommonDerivedProperties(this.context);
-        preparePostEntitiesCommonDerivedProperties(Object.values(this.configOptions.sharedEntities));
-      },
-
-      postProcessEntityDerivedFields() {
-        preparePostEntityServerDerivedProperties(this.context);
-      },
-
-      postPrepareEntityClient() {
-        const { context } = this;
-        preparePostEntityClientDerivedProperties(context);
-      },
-
-      insight() {
-        // track insights
-        const context = this.context;
-
-        statistics.sendEntityStats(
-          context.fields.length,
-          context.relationships.length,
-          context.pagination,
-          context.dto,
-          context.service,
-          context.fluentMethods
-        );
-      },
-    };
-  }
-
-  get [DEFAULT_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._default();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -830,58 +387,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   /**
-   * Validate the entityName
-   * @return {true|string} true for a valid value or error message.
-   */
-  _validateEntityName(entityName) {
-    if (!/^([a-zA-Z0-9]*)$/.test(entityName)) {
-      return 'The entity name must be alphanumeric only';
-    }
-    if (/^[0-9].*$/.test(entityName)) {
-      return 'The entity name cannot start with a number';
-    }
-    if (entityName === '') {
-      return 'The entity name cannot be empty';
-    }
-    if (entityName.indexOf('Detail', entityName.length - 'Detail'.length) !== -1) {
-      return "The entity name cannot end with 'Detail'";
-    }
-    if (!this.context.skipServer && isReservedClassName(entityName)) {
-      return 'The entity name cannot contain a Java or JHipster reserved keyword';
-    }
-    return true;
-  }
-
-  /**
-   * Validate the entityTableName
-   * @return {true|string} true for a valid value or error message.
-   */
-  _validateTableName(entityTableName, prodDatabaseType, entity) {
-    const jhiTablePrefix = entity.jhiTablePrefix;
-    const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}.'`;
-
-    if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
-      return `The table name cannot contain special characters.\n${instructions}`;
-    }
-    if (!entityTableName) {
-      return 'The table name cannot be empty';
-    }
-    if (isReservedTableName(entityTableName, prodDatabaseType)) {
-      if (jhiTablePrefix) {
-        this.warning(
-          `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
-        );
-        entity.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
-      } else {
-        this.warning(
-          `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
-        );
-      }
-    }
-    return true;
-  }
-
-  /**
    * Setup Entity instance level options from context.
    * all variables should be set to dest,
    * all variables should be referred from context,
@@ -915,80 +420,33 @@ class EntityGenerator extends BaseBlueprintGenerator {
     if (context.options.skipServer !== undefined) {
       this.entityConfig.skipServer = context.options.skipServer;
     }
-    dest.experimental = context.options.experimental;
 
-    dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);
-  }
-
-  _validateField(field) {
-    const entityName = this.context.name;
-    if (field.fieldName === undefined) {
-      throw new Error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-    }
-
-    if (field.fieldType === undefined) {
-      throw new Error(`fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-    }
-
-    if (field.fieldValidateRules !== undefined) {
-      if (!Array.isArray(field.fieldValidateRules)) {
-        throw new Error(`fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringify(field)}`);
-      }
-      field.fieldValidateRules.forEach(fieldValidateRule => {
-        if (!SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule)) {
-          throw new Error(
-            `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringify(
-              field
-            )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
-          );
-        }
-      });
-      if (field.fieldValidateRules.includes(MAX) && field.fieldValidateRulesMax === undefined) {
-        throw new Error(`fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-      }
-      if (field.fieldValidateRules.includes(MIN) && field.fieldValidateRulesMin === undefined) {
-        throw new Error(`fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-      }
-      if (field.fieldValidateRules.includes(MAXLENGTH) && field.fieldValidateRulesMaxlength === undefined) {
-        throw new Error(`fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-      }
-      if (field.fieldValidateRules.includes(MINLENGTH) && field.fieldValidateRulesMinlength === undefined) {
-        throw new Error(`fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-      }
-      if (field.fieldValidateRules.includes(MAXBYTES) && field.fieldValidateRulesMaxbytes === undefined) {
-        throw new Error(`fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-      }
-      if (field.fieldValidateRules.includes(MINBYTES) && field.fieldValidateRulesMinbytes === undefined) {
-        throw new Error(`fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-      }
-      if (field.fieldValidateRules.includes(PATTERN) && field.fieldValidateRulesPattern === undefined) {
-        throw new Error(`fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-      }
+    if (context.options.tableName) {
+      this.entityConfig.entityTableName = generator.getTableName(context.options.tableName);
     }
   }
 
-  _validateRelationship(relationship) {
-    const entityName = this.context.name;
-    if (relationship.otherEntityName === undefined) {
-      throw new Error(`otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+  /**
+   * Validate the entityName
+   * @return {true|string} true for a valid value or error message.
+   */
+  _validateEntityName(entityName) {
+    if (!/^([a-zA-Z0-9]*)$/.test(entityName)) {
+      return 'The entity name must be alphanumeric only';
     }
-    if (relationship.relationshipType === undefined) {
-      throw new Error(`relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+    if (/^[0-9].*$/.test(entityName)) {
+      return 'The entity name cannot start with a number';
     }
-
-    if (
-      relationship.ownerSide === undefined &&
-      (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
-    ) {
-      throw new Error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+    if (entityName === '') {
+      return 'The entity name cannot be empty';
     }
-  }
-
-  _fixEntityTableName(entityTableName, prodDatabaseType, jhiTablePrefix) {
-    if (isReservedTableName(entityTableName, prodDatabaseType) && jhiTablePrefix) {
-      entityTableName = `${jhiTablePrefix}_${entityTableName}`;
+    if (entityName.indexOf('Detail', entityName.length - 'Detail'.length) !== -1) {
+      return "The entity name cannot end with 'Detail'";
     }
-    return entityTableName;
+    if (!this.context.skipServer && isReservedClassName(entityName)) {
+      return 'The entity name cannot contain a Java or JHipster reserved keyword';
+    }
+    return true;
   }
 }
 

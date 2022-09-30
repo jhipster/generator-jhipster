@@ -1,22 +1,23 @@
 const fse = require('fs-extra');
 const path = require('path');
-const assert = require('yeoman-assert');
+const assert = require('assert');
 const helpers = require('yeoman-test');
+
 const { JHIPSTER_CONFIG_DIR } = require('../../generators/generator-constants');
 const { appDefaultConfig, serverDefaultConfig } = require('../../generators/generator-defaults');
 
 const mockedComposedGenerators = ['jhipster:entity-client', 'jhipster:entity-server', 'jhipster:database-changelog'];
 
-const generatorPath = path.join(__dirname, '../../generators/entities/index.mjs');
+const generatorPath = path.join(__dirname, '../../generators/entities/index.mts');
 
 describe('jhipster:entities with entitiesToImport option', () => {
   const localConfig = { baseName: 'jhipster', ...appDefaultConfig, ...serverDefaultConfig };
   describe('with --with-entities', () => {
     describe('and single entity', () => {
       let runResult;
-      before(() => {
-        return helpers
-          .create(generatorPath)
+      before(async () => {
+        runResult = await helpers
+          .run(generatorPath)
           .withOptions({
             localConfig,
             entitiesToImport: [{ name: 'Foo' }],
@@ -25,11 +26,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
             defaults: true,
             withEntities: true,
           })
-          .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .withMockedGenerators(mockedComposedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -56,9 +53,9 @@ describe('jhipster:entities with entitiesToImport option', () => {
 
     describe('and 2 entities', () => {
       let runResult;
-      before(() => {
-        return helpers
-          .create(generatorPath)
+      before(async () => {
+        runResult = await helpers
+          .run(generatorPath)
           .withOptions({
             localConfig,
             entitiesToImport: [{ name: 'Foo' }, { name: 'Bar' }],
@@ -67,11 +64,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
             defaults: true,
             withEntities: true,
           })
-          .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .withMockedGenerators(mockedComposedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -101,9 +94,9 @@ describe('jhipster:entities with entitiesToImport option', () => {
 
     describe('and 1 entity and 1 entity file', () => {
       let runResult;
-      before(() => {
-        return helpers
-          .create(generatorPath)
+      before(async () => {
+        runResult = await helpers
+          .run(generatorPath)
           .withOptions({
             localConfig,
             entitiesToImport: [{ name: 'Foo', changelogDate: '20201012010501' }],
@@ -118,11 +111,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
             const entityPath = path.join(entitiesPath, 'Bar.json');
             fse.writeFileSync(entityPath, '{"changelogDate": "20201012010502"}');
           })
-          .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .withMockedGenerators(mockedComposedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -142,9 +131,9 @@ describe('jhipster:entities with entitiesToImport option', () => {
 
     describe('and more than 1 entity and more than 1 entity file', () => {
       let runResult;
-      before(() => {
-        return helpers
-          .create(generatorPath)
+      before(async () => {
+        runResult = await helpers
+          .run(generatorPath)
           .withOptions({
             localConfig,
             entitiesToImport: [
@@ -162,11 +151,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
             fse.writeFileSync(path.join(entitiesPath, 'One.json'), '{"changelogDate": "20201012010503"}');
             fse.writeFileSync(path.join(entitiesPath, 'Three.json'), '{"changelogDate": "20201012010501"}');
           })
-          .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .withMockedGenerators(mockedComposedGenerators);
       });
 
       after(() => runResult.cleanup());
