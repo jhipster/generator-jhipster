@@ -1,10 +1,13 @@
-const { default: PQueue } = require('p-queue');
-const { PTransform } = require('p-transform');
-const { isFilePending } = require('mem-fs-editor/lib/state');
+import PQueue from 'p-queue';
+import pTransform from 'p-transform';
+import memFsEditorState from 'mem-fs-editor/lib/state.js';
 
-const { TemplateFileFs } = require('./template-file-fs');
+import TemplateFileFs from './template-file-fs.mjs';
 
-module.exports.MultiStepTransform = class MultiStepTransform extends PTransform {
+const { PTransform } = pTransform;
+const { isFilePending } = memFsEditorState;
+
+export default class MultiStepTransform extends PTransform {
   constructor(options = {}) {
     super({ logName: 'jhipster:multi-step-transform', ...options });
 
@@ -49,4 +52,4 @@ module.exports.MultiStepTransform = class MultiStepTransform extends PTransform 
       .then(() => this.twoStepTemplateQueue.start().onIdle())
       .then(() => super._flush(callback));
   }
-};
+}

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { createBaseNeedle } = require('../../lib/support/needles.cjs');
+import { createBaseNeedle } from '../../lib/support/needles.mjs';
 
 /**
  * @typedef {Object} ApplicationPropertiesNeedles - creates a new type named 'SpecialType'
@@ -57,9 +57,10 @@ const { createBaseNeedle } = require('../../lib/support/needles.cjs');
  * @param {import('../generator-base.js')} [generator]
  * @param {any} context
  * @param {ApplicationPropertiesNeedles} needles
- * @returns {import('../../generators/generator-base.js').CascatedEditFileCallback | import('../../generators/generator-base.js').EditFileCallback}
+ * @returns {import('../generator-base.js').CascatedEditFileCallback | import('../generator-base.js').EditFileCallback}
  */
-const insertContentIntoApplicationProperties = (generator, data, needles) => {
+// eslint-disable-next-line import/prefer-default-export
+export const insertContentIntoApplicationProperties = (generator, data, needles) => {
   if (!needles) {
     needles = generator;
     generator = null;
@@ -73,8 +74,4 @@ const insertContentIntoApplicationProperties = (generator, data, needles) => {
     },
     needles
   );
-};
-
-module.exports = {
-  insertContentIntoApplicationProperties,
 };

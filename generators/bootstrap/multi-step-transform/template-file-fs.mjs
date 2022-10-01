@@ -1,10 +1,10 @@
-const assert = require('assert');
-const minimatch = require('minimatch');
-const path = require('path');
+import assert from 'assert';
+import minimatch from 'minimatch';
+import path from 'path';
 
-const { TemplateFile } = require('./template-file');
+import TemplateFile from './template-file.mjs';
 
-module.exports.TemplateFileFs = class TemplateFileFs {
+export default class TemplateFileFs {
   constructor(options = {}) {
     this.extension = options.extension || 'jhi';
     this.delimiter = options.delimiter || '&';
@@ -40,4 +40,4 @@ module.exports.TemplateFileFs = class TemplateFileFs {
     this.fragmentFiles[filePath] = this.fragmentFiles[filePath] || new TemplateFile(path.basename(filePath), this.extension);
     return this.fragmentFiles[filePath];
   }
-};
+}

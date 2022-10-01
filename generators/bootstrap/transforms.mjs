@@ -16,17 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { State } = require('mem-fs-editor');
-const path = require('path');
-const { passthrough } = require('p-transform');
-const prettier = require('prettier');
-const prettierPluginJava = require('prettier-plugin-java');
-const prettierPluginPackagejson = require('prettier-plugin-packagejson');
-const { patternSpy } = require('yeoman-environment/transform');
+import memFsEditor from 'mem-fs-editor';
+import path from 'path';
+import pTransform from 'p-transform';
+import prettier from 'prettier';
+import prettierPluginJava from 'prettier-plugin-java';
+import prettierPluginPackagejson from 'prettier-plugin-packagejson';
+// eslint-disable-next-line import/no-unresolved
+import environmentTransform from 'yeoman-environment/transform';
+
+const { State } = memFsEditor;
+const { passthrough } = pTransform;
+const { patternSpy } = environmentTransform;
 
 const { isFileStateDeleted } = State;
 
-const prettierTransform = function (options, generator, transformOptions = {}) {
+export const prettierTransform = function (options, generator, transformOptions = {}) {
   if (typeof transformOptions === 'boolean') {
     transformOptions = { ignoreErrors: transformOptions };
   }
@@ -84,7 +89,7 @@ At: ${fileContent
   ).name('jhipster:prettier');
 };
 
-const generatedAnnotationTransform = generator => {
+export const generatedAnnotationTransform = generator => {
   return passthrough(file => {
     if (
       !file.path.endsWith('package-info.java') &&
@@ -105,9 +110,4 @@ const generatedAnnotationTransform = generator => {
       }
     }
   }, 'jhipster:generated-by-annotation');
-};
-
-module.exports = {
-  prettierTransform,
-  generatedAnnotationTransform,
 };

@@ -29,7 +29,7 @@ const JHipsterCommand = require('./jhipster-command');
 const { CLI_NAME, logger, getCommand, done } = require('./utils');
 const { version: JHIPSTER_VERSION } = require('../package.json');
 const { packageNameToNamespace } = require('../generators/utils');
-const { logo } = require('../lib/constants/logo.cjs');
+const { logo } = require('./logo.cjs');
 
 const JHIPSTER_NS = CLI_NAME;
 
