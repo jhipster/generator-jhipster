@@ -1,6 +1,6 @@
 import PQueue from 'p-queue';
 import pTransform from 'p-transform';
-import memFsEditorState from 'mem-fs-editor/lib/state';
+import memFsEditorState from 'mem-fs-editor/lib/state.js';
 
 import TemplateFileFs from './template-file-fs.mjs';
 
