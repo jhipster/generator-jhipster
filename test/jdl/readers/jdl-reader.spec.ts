@@ -18,10 +18,10 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { expect } = require('chai');
-const fs = require('fs');
-const path = require('path');
-const JDLReader = require('../../../jdl/readers/jdl-reader');
+import { expect } from 'chai';
+import fs from 'fs';
+import path from 'path';
+import * as JDLReader from '../../../jdl/readers/jdl-reader';
 
 describe('JDLReader', () => {
   describe('parseFromFiles', () => {

@@ -17,30 +17,25 @@
  * limitations under the License.
  */
 
-const path = require('path');
-const FileReader = require('./file-reader');
-const { upperFirst } = require('../utils/string-utils');
-
-module.exports = {
-  readJSONFile,
-  toFilePath,
-};
+import path from 'path';
+import { upperFirst } from '../utils/string-utils';
+import { readFile } from './file-reader';
 
 /**
  * Reads a JSON file.
  * @param filePath the JSON file's path
  * @return its content
  */
-function readJSONFile(filePath) {
-  return JSON.parse(FileReader.readFile(filePath));
+export function readJSONFile(filePath) {
+  return JSON.parse(readFile(filePath));
 }
 
 /**
  * From an entity's name, gives the expected file path.
  * @param entityName the entity's name.
- * @returns {string} the file's path.
+ * @returns the file's path.
  */
-function toFilePath(entityName) {
+export function toFilePath(entityName: string): string {
   if (!entityName) {
     throw new Error('The passed entity name must not be nil to be converted to file path.');
   }

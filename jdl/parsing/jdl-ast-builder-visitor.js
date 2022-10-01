@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const JDLParser = require('./jdl-parser');
-const { deduplicate } = require('../utils/array-utils');
+const deduplicate = require('../utils/array-utils').default;
 const { OptionNames } = require('../jhipster/application-options');
 const { PaginationTypes } = require('../jhipster/entity-options');
 const { PATTERN, REQUIRED, UNIQUE } = require('../jhipster/validations');

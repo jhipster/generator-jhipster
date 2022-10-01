@@ -17,18 +17,11 @@
  * limitations under the License.
  */
 
-const logger = require('../utils/objects/logger');
+import logger from '../utils/objects/logger';
 
-const FileReader = require('./file-reader');
-const parser = require('../parsing/api');
-const { performJDLPostParsingTasks } = require('../parsing/jdl-post-parsing-tasks');
-
-module.exports = {
-  parseFromFiles,
-  parseFromContent,
-  getCstFromContent,
-  checkFileIsJDLFile,
-};
+import parser from '../parsing/api';
+import { performJDLPostParsingTasks } from '../parsing/jdl-post-parsing-tasks';
+import { readFile, readFiles } from './file-reader';
 
 /**
  * Parses the given files and returns the resulting intermediate object.
@@ -37,7 +30,7 @@ module.exports = {
  * @param files the files to parse.
  * @returns {Object} the intermediate object.
  */
-function parseFromFiles(files) {
+export function parseFromFiles(files) {
   checkFiles(files);
   checkAllTheFilesAreJDLFiles(files);
   return parse(getFilesContent(files));
@@ -48,14 +41,14 @@ function parseFromFiles(files) {
  * @param content the JDL content to parse.
  * @returns {Object} the intermediate object.
  */
-function parseFromContent(content) {
+export function parseFromContent(content) {
   if (!content) {
     throw new Error('A valid JDL content must be passed so as to be parsed.');
   }
   return parse(content);
 }
 
-function getCstFromContent(content) {
+export function getCstFromContent(content) {
   return getCst(content);
 }
 
@@ -66,7 +59,7 @@ function checkFiles(files) {
 }
 
 function getFilesContent(files) {
-  return files.length === 1 ? FileReader.readFile(files[0]) : aggregateFiles(files);
+  return files.length === 1 ? readFile(files[0]) : aggregateFiles(files);
 }
 
 function checkAllTheFilesAreJDLFiles(files) {
@@ -97,7 +90,7 @@ function callApiMethod(methodName, content) {
     const processedInput = filterJDLDirectives(removeInternalJDLComments(content));
     return parser[methodName](processedInput);
   } catch (error) {
-    logger.error(`Syntax error message:\n\t${error.message}`);
+    logger.error(`Syntax error message:\n\t${(error as any).message}`);
     throw error;
   }
 }
@@ -119,12 +112,12 @@ function filterJDLDirectives(content) {
  * Doesn't return anything, but fails if the extension doesn't match.
  * @param file the file to check.
  */
-function checkFileIsJDLFile(file) {
+export function checkFileIsJDLFile(file) {
   if (!file.endsWith('.jh') && !file.endsWith('.jdl')) {
     throw new Error(`The passed file '${file}' must end with '.jh' or '.jdl' to be valid.`);
   }
 }
 
 function aggregateFiles(files) {
-  return FileReader.readFiles(files).join('\n');
+  return readFiles(files).join('\n');
 }

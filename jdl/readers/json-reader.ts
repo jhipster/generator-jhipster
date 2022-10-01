@@ -17,28 +17,24 @@
  * limitations under the License.
  */
 
-const fs = require('fs');
-const FileUtils = require('../utils/file-utils');
-const { convertEntitiesToJDL } = require('../converters/json-to-jdl-entity-converter');
-const { convertServerOptionsToJDL } = require('../converters/json-to-jdl-option-converter');
-const JSONFileReader = require('./json-file-reader');
-const { mergeJDLObjects } = require('../models/jdl-object-merger');
-const { OptionNames } = require('../jhipster/application-options');
-
-module.exports = {
-  parseFromDir,
-};
+import fs from 'fs';
+import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter';
+import { convertServerOptionsToJDL } from '../converters/json-to-jdl-option-converter';
+import mergeJDLObjects from '../models/jdl-object-merger';
+import { OptionNames } from '../jhipster/application-options';
+import { doesDirectoryExist } from '../utils/file-utils';
+import { readJSONFile } from './json-file-reader';
 
 /* Parse the given jhipster app dir and return a JDLObject */
-function parseFromDir(dir) {
+export default function parseFromDir(dir) {
   if (!dir) {
     throw new Error('The app directory must be passed to read JSON files.');
   }
-  if (!FileUtils.doesDirectoryExist(dir)) {
+  if (!doesDirectoryExist(dir)) {
     throw new Error(`The passed directory '${dir}' must exist and must be a directory to read JSON files.`);
   }
   const entityDir = `${dir}/.jhipster`;
-  if (!FileUtils.doesDirectoryExist(entityDir)) {
+  if (!doesDirectoryExist(entityDir)) {
     throw new Error(`'${entityDir}' must exist as a directory.`);
   }
   const entities = new Map();
@@ -47,13 +43,16 @@ function parseFromDir(dir) {
     if (file.endsWith('.json')) {
       const entityName = file.slice(0, file.length - 5);
       try {
-        entities.set(entityName, JSONFileReader.readJSONFile(`${entityDir}/${file}`));
+        entities.set(entityName, readJSONFile(`${entityDir}/${file}`));
       } catch (error) {
         // Not an entity file, not adding
       }
     }
   });
-  const applicationOptions = JSONFileReader.readJSONFile(`${dir}/.yo-rc.json`)['generator-jhipster'];
+  const applicationOptions = readJSONFile(`${dir}/.yo-rc.json`)['generator-jhipster'];
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const jdlObject = convertServerOptionsToJDL(applicationOptions);
   const skippedUserManagement = !!applicationOptions[OptionNames.SKIP_USER_MANAGEMENT];
   const convertedJDLObject = convertEntitiesToJDL({ entities, skippedUserManagement });

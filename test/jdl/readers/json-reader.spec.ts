@@ -18,12 +18,12 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { renameSync } = require('fs');
-const { join } = require('path');
-const { expect } = require('chai');
+import { renameSync } from 'fs';
+import { join } from 'path';
+import { expect } from 'chai';
 
-const JSONReader = require('../../../jdl/readers/json-reader');
-const { SKIP_CLIENT, SKIP_SERVER } = require('../../../jdl/jhipster/unary-options');
+import parseFromDir from '../../../jdl/readers/json-reader';
+import { SKIP_CLIENT, SKIP_SERVER } from '../../../jdl/jhipster/unary-options';
 
 describe('JSONReader', () => {
   describe('parseFromDir', () => {
@@ -31,14 +31,14 @@ describe('JSONReader', () => {
       context('such as nil', () => {
         it('should fail', () => {
           expect(() => {
-            JSONReader.parseFromDir(null);
+            parseFromDir(null);
           }).to.throw(/^The app directory must be passed to read JSON files\.$/);
         });
       });
       context('such as a file', () => {
         it('should fail', () => {
           expect(() => {
-            JSONReader.parseFromDir('../../test-files/invalid_file.txt');
+            parseFromDir('../../test-files/invalid_file.txt');
           }).to.throw(
             new RegExp("The passed directory '../../test-files/invalid_file.txt' must exist and must be a directory to read JSON files.")
           );
@@ -47,7 +47,7 @@ describe('JSONReader', () => {
       context('such as a dir that does not exist', () => {
         it('should fail', () => {
           expect(() => {
-            JSONReader.parseFromDir('nodir');
+            parseFromDir('nodir');
           }).to.throw(new RegExp("The passed directory 'nodir' must exist and must be a directory to read JSON files."));
         });
       });
@@ -61,7 +61,7 @@ describe('JSONReader', () => {
             join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
             join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt')
           );
-          content = JSONReader.parseFromDir(join(__dirname, '..', 'test-files', 'jhipster_app'));
+          content = parseFromDir(join(__dirname, '..', 'test-files', 'jhipster_app'));
         });
         after(() => {
           renameSync(

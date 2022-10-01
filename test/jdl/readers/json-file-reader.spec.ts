@@ -18,10 +18,10 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { expect } = require('chai');
-const path = require('path');
+import { expect } from 'chai';
+import path from 'path';
 
-const JSONFileReader = require('../../../jdl/readers/json-file-reader');
+import * as JSONFileReader from '../../../jdl/readers/json-file-reader';
 
 describe('JSONFileReader', () => {
   describe('toFilePath', () => {
@@ -29,6 +29,7 @@ describe('JSONFileReader', () => {
       context('with a nil entity name', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-ignore
             JSONFileReader.toFilePath();
           }).to.throw(/^The passed entity name must not be nil to be converted to file path\.$/);
         });
