@@ -17,16 +17,11 @@
  * limitations under the License.
  */
 
-const _ = require('lodash');
-const Lexer = require('chevrotain').Lexer;
-const TokenCollectorVisitor = require('./token-collector-visitor');
+import _ from 'lodash';
+import { Lexer } from 'chevrotain';
+import TokenCollectorVisitor from './token-collector-visitor';
 
-module.exports = {
-  checkTokens,
-  checkConfigKeys,
-};
-
-function checkTokens(allDefinedTokens, rules) {
+export function checkTokens(allDefinedTokens, rules) {
   const usedTokens = getUsedTokens(rules);
   const unusedTokens = getUselessTokens(usedTokens, allDefinedTokens);
   if (unusedTokens.length !== 0) {
@@ -43,17 +38,20 @@ function getUsedTokens(rules) {
   }, []);
 }
 
-function getUselessTokens(usedTokens, allDefinedTokens) {
+function getUselessTokens(usedTokens: any[], allDefinedTokens: any[]) {
   const usedCategories = _.uniq(_.flatMap(usedTokens, 'CATEGORIES'));
+  // TODO: Calling uniq with two parameters is probably a bug.
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const notDirectlyUsedTokens = _.difference(allDefinedTokens, _.uniq(usedTokens, usedCategories));
   const redundant = _.reject(notDirectlyUsedTokens, token => {
-    const tokCategories = token.CATEGORIES;
+    const tokCategories = (token as any).CATEGORIES;
     return _.some(tokCategories, category => _.includes(usedCategories, category));
   });
   return _.reject(redundant, tokenType => tokenType.GROUP === Lexer.SKIPPED);
 }
 
-function checkConfigKeys(definedTokensMap, usedConfigKeys) {
+export function checkConfigKeys(definedTokensMap, usedConfigKeys) {
   checkForUselessConfigurationKeys(definedTokensMap, usedConfigKeys);
   checkForMissingConfigurationKeys(definedTokensMap, usedConfigKeys);
 }

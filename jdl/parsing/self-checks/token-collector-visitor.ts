@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 
-const GAstVisitor = require('chevrotain').GAstVisitor;
+import { GAstVisitor } from 'chevrotain';
 
-class TokenCollectorVisitor extends GAstVisitor {
+export default class TokenCollectorVisitor extends GAstVisitor {
+  actualTokens: any[];
+
   constructor() {
     super();
     this.actualTokens = [];
@@ -37,5 +39,3 @@ class TokenCollectorVisitor extends GAstVisitor {
     this.actualTokens.push(node.separator);
   }
 }
-
-module.exports = TokenCollectorVisitor;
