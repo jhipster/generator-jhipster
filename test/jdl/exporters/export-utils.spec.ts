@@ -18,10 +18,10 @@
  */
 /* eslint-disable no-unused-expressions */
 
-const { jestExpect: expect } = require('mocha-expect-snapshot');
-const path = require('path');
-const { readFileSync, unlinkSync, writeFileSync } = require('fs');
-const { writeConfigFile } = require('../../../jdl/exporters/export-utils');
+import { jestExpect as expect } from 'mocha-expect-snapshot';
+import path from 'path';
+import { readFileSync, unlinkSync, writeFileSync } from 'fs';
+import { writeConfigFile } from '../../../jdl/exporters/export-utils';
 
 describe('ExportUtils', () => {
   describe('writeConfigFile', () => {

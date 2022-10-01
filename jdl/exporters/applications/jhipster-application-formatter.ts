@@ -17,12 +17,7 @@
  * limitations under the License.
  */
 
-const { GENERATOR_NAME } = require('../export-utils');
-
-module.exports = {
-  formatApplicationsToExport,
-  formatApplicationToExport,
-};
+import { GENERATOR_NAME } from '../export-utils';
 
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).
@@ -30,11 +25,14 @@ module.exports = {
  * @param {Object} [configuration]
  * @return object[] exported applications in their final form.
  */
-function formatApplicationsToExport(applications, configuration) {
+export function formatApplicationsToExport(applications, configuration) {
   if (!applications) {
     throw new Error('Applications have to be passed to be exported.');
   }
   return Object.values(applications).map(application => {
+    // TODO: This is probably a bug, too many arguments given.
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return setUpApplicationStructure(application, configuration);
   });
 }
@@ -45,12 +43,15 @@ function formatApplicationsToExport(applications, configuration) {
  * @param {Object} [configuration]
  * @return {Object} the exported application in its final form.
  */
-function formatApplicationToExport(application, configuration = {}) {
+export function formatApplicationToExport(application, configuration = {}) {
+  // TODO: This is probably a bug, too many arguments given.
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return setUpApplicationStructure(application, configuration);
 }
 
 function setUpApplicationStructure(application) {
-  let applicationToExport = {
+  let applicationToExport: any = {
     [GENERATOR_NAME]: {},
   };
   applicationToExport[GENERATOR_NAME] = getApplicationConfig(application);

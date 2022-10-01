@@ -18,19 +18,20 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { expect } = require('chai');
-const { jestExpect } = require('mocha-expect-snapshot');
+import { expect } from 'chai';
+import { jestExpect } from 'mocha-expect-snapshot';
 
-const fs = require('fs');
-const JDLObject = require('../../../jdl/models/jdl-object');
-const JDLEntity = require('../../../jdl/models/jdl-entity');
-const JDLExporter = require('../../../jdl/exporters/jdl-exporter');
-const JDLApplication = require('../../../jdl/models/jdl-application');
+import fs from 'fs';
+import JDLObject from '../../../jdl/models/jdl-object';
+import JDLEntity from '../../../jdl/models/jdl-entity';
+import exportToJDL from '../../../jdl/exporters/jdl-exporter';
+import JDLApplication from '../../../jdl/models/jdl-application';
+import applicationOptions from '../../../jdl/jhipster/application-options';
+import { NO as NO_CLIENT_FRAMEWORK } from '../../../jdl/jhipster/client-framework-types';
 
 const {
   OptionNames: { CLIENT_FRAMEWORK },
-} = require('../../../jdl/jhipster/application-options');
-const { NO: NO_CLIENT_FRAMEWORK } = require('../../../jdl/jhipster/client-framework-types');
+} = applicationOptions;
 
 describe('JDLExporter', () => {
   describe('exportToJDL', () => {
@@ -38,7 +39,8 @@ describe('JDLExporter', () => {
       context('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
-            JDLExporter.exportToJDL();
+            // @ts-ignore
+            exportToJDL();
           }).to.throw(/^A JDLObject has to be passed to be exported\.$/);
         });
       });
@@ -56,7 +58,7 @@ describe('JDLExporter', () => {
               name: 'Toto',
             })
           );
-          JDLExporter.exportToJDL(jdlObject, PATH);
+          exportToJDL(jdlObject, PATH);
           fileExistence = fs.statSync(PATH).isFile();
           jdlContent = fs.readFileSync(PATH, 'utf-8').toString();
         });
@@ -85,7 +87,7 @@ describe('JDLExporter', () => {
                 name: 'Toto',
               })
             );
-            JDLExporter.exportToJDL(jdlObject);
+            exportToJDL(jdlObject);
             fileExistence = fs.statSync(DEFAULT_PATH).isFile();
             jdlContent = fs.readFileSync(DEFAULT_PATH, 'utf-8').toString();
           });
@@ -110,7 +112,7 @@ describe('JDLExporter', () => {
             });
 
             it('should export the JDL and match snapshot', () => {
-              jestExpect(JDLExporter.exportToJDL(jdlObject, false)).toMatchInlineSnapshot(`
+              jestExpect(exportToJDL(jdlObject)).toMatchInlineSnapshot(`
 "application {
   config {
     clientFramework no

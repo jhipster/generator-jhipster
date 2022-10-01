@@ -18,15 +18,15 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { jestExpect } = require('mocha-expect-snapshot');
-const { expect } = require('chai');
-const fs = require('fs');
-const path = require('path');
+import { jestExpect } from 'mocha-expect-snapshot';
+import { expect } from 'chai';
+import fs from 'fs';
+import path from 'path';
+import exportEntities from '../../../jdl/exporters/jhipster-entity-exporter';
 
-const ApplicationTypes = require('../../../jdl/jhipster/application-types');
-const JHipsterEntityExporter = require('../../../jdl/exporters/jhipster-entity-exporter');
-const FileUtils = require('../../../jdl/utils/file-utils');
-const { MapperTypes, PaginationTypes, ServiceTypes } = require('../../../jdl/jhipster/entity-options');
+import ApplicationTypes from '../../../jdl/jhipster/application-types';
+import { MapperTypes, PaginationTypes, ServiceTypes } from '../../../jdl/jhipster/entity-options';
+import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../../../jdl/utils/file-utils';
 
 const { SERVICE_CLASS } = ServiceTypes;
 const NO_DTO = MapperTypes.NO;
@@ -39,7 +39,8 @@ describe('JHipsterEntityExporter', () => {
       context('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
-            JHipsterEntityExporter.exportEntities();
+            // @ts-ignore
+            exportEntities();
           }).to.throw('Entities have to be passed to be exported.');
         });
       });
@@ -73,7 +74,7 @@ describe('JHipsterEntityExporter', () => {
               applications: [],
             },
           ];
-          returned = JHipsterEntityExporter.exportEntities({
+          returned = exportEntities({
             entities,
             application: {
               name: 'MyApp',
@@ -99,7 +100,7 @@ describe('JHipsterEntityExporter', () => {
         let returned;
 
         before(() => {
-          returned = JHipsterEntityExporter.exportEntities({
+          returned = exportEntities({
             entities: [],
             application: {
               name: 'MyApp',
@@ -111,7 +112,7 @@ describe('JHipsterEntityExporter', () => {
           jestExpect(returned).toMatchInlineSnapshot('Array []');
         });
         it('should not create a .jhipster folder', () => {
-          expect(FileUtils.doesDirectoryExist('.jhipster')).to.be.false;
+          expect(doesDirectoryExist('.jhipster')).to.be.false;
         });
       });
       context('when exporting the same entity', () => {
@@ -143,7 +144,7 @@ describe('JHipsterEntityExporter', () => {
               applications: [],
             },
           ];
-          returned = JHipsterEntityExporter.exportEntities({
+          returned = exportEntities({
             entities,
             application: {
               name: 'MyApp',
@@ -152,7 +153,7 @@ describe('JHipsterEntityExporter', () => {
           });
           previousChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
           setTimeout(() => {
-            JHipsterEntityExporter.exportEntities({
+            exportEntities({
               entities,
               application: {
                 name: 'MyApp',
@@ -294,7 +295,7 @@ Array [
                 microserviceName: 'store',
               },
             ];
-            returned = JHipsterEntityExporter.exportEntities({
+            returned = exportEntities({
               entities,
               application: {
                 name: 'client',
@@ -397,10 +398,10 @@ Array [
 `);
           });
           it('should export every entity', () => {
-            expect(FileUtils.doesFileExist('.jhipster/Client.json'));
-            expect(FileUtils.doesFileExist('.jhipster/Location.json'));
-            expect(FileUtils.doesFileExist('.jhipster/LocalStore.json'));
-            expect(FileUtils.doesFileExist('.jhipster/Product.json'));
+            expect(doesFileExist('.jhipster/Client.json'));
+            expect(doesFileExist('.jhipster/Location.json'));
+            expect(doesFileExist('.jhipster/LocalStore.json'));
+            expect(doesFileExist('.jhipster/Product.json'));
           });
 
           after(() => {
@@ -510,7 +511,7 @@ Array [
                   name: 'G',
                 },
               ];
-              returnedContent = JHipsterEntityExporter.exportEntities({
+              returnedContent = exportEntities({
                 entities,
                 application: {
                   name: 'client',
@@ -521,7 +522,7 @@ Array [
 
             it('should export every entity', () => {
               ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
-                expect(FileUtils.doesFileExist(`.jhipster/${entityName}.json`)).to.be.true;
+                expect(doesFileExist(`.jhipster/${entityName}.json`)).to.be.true;
               });
             });
 
@@ -602,7 +603,7 @@ Array [
                   name: 'Product',
                 },
               ];
-              returnedContent = JHipsterEntityExporter.exportEntities({
+              returnedContent = exportEntities({
                 entities,
                 application: {
                   name: 'client',
@@ -612,8 +613,8 @@ Array [
             });
 
             it('should export the entities that should be inside the microservice', () => {
-              expect(FileUtils.doesFileExist('.jhipster/Client.json'));
-              expect(FileUtils.doesFileExist('.jhipster/Location.json'));
+              expect(doesFileExist('.jhipster/Client.json'));
+              expect(doesFileExist('.jhipster/Location.json'));
             });
 
             it('should return the entities that should be inside the microservice', () => {
@@ -653,7 +654,7 @@ Array [
             jpaMetamodelFiltering: false,
             applications: [],
           };
-          FileUtils.createFolderIfItDoesNotExist('.jhipster');
+          createFolderIfItDoesNotExist('.jhipster');
           fs.writeFileSync(path.join('.jhipster', 'A.json'), JSON.stringify({ ...originalContent, customAttribute: '42' }));
           const changedContent = {
             ...JSON.parse(JSON.stringify(originalContent)),
@@ -661,7 +662,7 @@ Array [
             changelogDate: '43',
           };
           const entities = [changedContent];
-          returnedContent = JHipsterEntityExporter.exportEntities({
+          returnedContent = exportEntities({
             entities,
             application: {
               name: 'MyApp',

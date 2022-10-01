@@ -17,20 +17,15 @@
  * limitations under the License.
  */
 
-const path = require('path');
-const { createFolderIfItDoesNotExist, doesFileExist } = require('../../utils/file-utils');
-const { GENERATOR_NAME, writeConfigFile } = require('../export-utils');
-
-module.exports = {
-  exportApplications,
-  exportApplication,
-};
+import path from 'path';
+import { createFolderIfItDoesNotExist, doesFileExist } from '../../utils/file-utils';
+import { GENERATOR_NAME, writeConfigFile } from '../export-utils';
 
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).
  * @param {Array<Object>} applications -  the formatted applications to export
  */
-function exportApplications(applications) {
+export function exportApplications(applications) {
   if (!applications) {
     throw new Error('Applications have to be passed to be exported.');
   }
@@ -43,7 +38,7 @@ function exportApplications(applications) {
  * Exports JDL a application to a JDL file in the current directory.
  * @param {Object} application - the formatted JHipster application to export.
  */
-function exportApplication(application) {
+export function exportApplication(application) {
   writeConfigFile(application);
 }
 

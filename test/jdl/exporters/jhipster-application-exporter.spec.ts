@@ -19,18 +19,18 @@
 
 /* eslint-disable no-unused-expressions */
 
-const { jestExpect } = require('mocha-expect-snapshot');
-const { expect } = require('chai');
-const fs = require('fs');
-const path = require('path');
-const { exportApplication, exportApplications } = require('../../../jdl/exporters/applications/jhipster-application-exporter');
+import { jestExpect } from 'mocha-expect-snapshot';
+import { expect } from 'chai';
+import fs from 'fs';
+import path from 'path';
+import { exportApplication, exportApplications } from '../../../jdl/exporters/applications/jhipster-application-exporter';
 
-const { MONOLITH } = require('../../../jdl/jhipster/application-types');
-const { MAVEN } = require('../../../jdl/jhipster/build-tool-types');
-const { EHCACHE } = require('../../../jdl/jhipster/cache-types');
-const { JWT } = require('../../../jdl/jhipster/authentication-types');
-const { ANGULAR } = require('../../../jdl/jhipster/client-framework-types');
-const { SQL, H2_DISK, MYSQL } = require('../../../jdl/jhipster/database-types');
+import { MONOLITH } from '../../../jdl/jhipster/application-types';
+import { MAVEN } from '../../../jdl/jhipster/build-tool-types';
+import { EHCACHE } from '../../../jdl/jhipster/cache-types';
+import { JWT } from '../../../jdl/jhipster/authentication-types';
+import { ANGULAR } from '../../../jdl/jhipster/client-framework-types';
+import { SQL, H2_DISK, MYSQL } from '../../../jdl/jhipster/database-types';
 
 describe('JHipsterApplicationExporter', () => {
   describe('exportApplication', () => {
@@ -199,6 +199,7 @@ Object {
       context('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-ignore
             exportApplications();
           }).to.throw('Applications have to be passed to be exported.');
         });

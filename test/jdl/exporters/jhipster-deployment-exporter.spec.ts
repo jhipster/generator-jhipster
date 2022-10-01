@@ -19,13 +19,13 @@
 
 /* eslint-disable no-unused-expressions */
 
-const { jestExpect } = require('mocha-expect-snapshot');
-const { expect } = require('chai');
-const fs = require('fs');
-const path = require('path');
-const JHipsterDeploymentExporter = require('../../../jdl/exporters/jhipster-deployment-exporter');
-const JDLDeployment = require('../../../jdl/models/jdl-deployment');
-const { DeploymentTypes } = require('../../../jdl/jhipster/deployment-options');
+import { jestExpect } from 'mocha-expect-snapshot';
+import { expect } from 'chai';
+import fs from 'fs';
+import path from 'path';
+import exportDeployments from '../../../jdl/exporters/jhipster-deployment-exporter';
+import JDLDeployment from '../../../jdl/models/jdl-deployment';
+import { DeploymentTypes } from '../../../jdl/jhipster/deployment-options';
 
 const { DOCKERCOMPOSE, KUBERNETES } = DeploymentTypes;
 
@@ -35,7 +35,8 @@ describe('JHipsterDeploymentExporter', () => {
       context('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
-            JHipsterDeploymentExporter.exportDeployments();
+            // @ts-ignore
+            exportDeployments();
           }).to.throw(/^Deployments have to be passed to be exported\.$/);
         });
       });
@@ -45,7 +46,7 @@ describe('JHipsterDeploymentExporter', () => {
         let returned;
 
         before('common setup for both deployments', () => {
-          returned = JHipsterDeploymentExporter.exportDeployments({
+          returned = exportDeployments({
             'docker-compose': new JDLDeployment({
               deploymentType: DOCKERCOMPOSE,
               appsFolders: ['tata', 'titi'],

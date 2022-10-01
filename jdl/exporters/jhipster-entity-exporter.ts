@@ -17,18 +17,15 @@
  * limitations under the License.
  */
 
-const fs = require('fs');
-const path = require('path');
-const ApplicationTypes = require('../jhipster/application-types');
-const { toFilePath, readJSONFile } = require('../readers/json-file-reader');
-const FileUtils = require('../utils/file-utils');
-const areJHipsterEntitiesEqual = require('../utils/object-utils').areEntitiesEqual;
+import fs from 'fs';
+import path from 'path';
+import ApplicationTypes from '../jhipster/application-types';
+import { toFilePath, readJSONFile } from '../readers/json-file-reader';
+import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils';
 
-let configuration = {};
+import { areEntitiesEqual as areJHipsterEntitiesEqual } from '../utils/object-utils';
 
-module.exports = {
-  exportEntities,
-};
+let configuration: any = {};
 
 /**
  * Exports the passed entities to JSON.
@@ -43,7 +40,7 @@ module.exports = {
  * @param {String} passedConfiguration.application.type - the application's type.
  * @returns {Array<JSONEntity>} the exported entities.
  */
-function exportEntities(passedConfiguration) {
+export default function exportEntities(passedConfiguration) {
   init(passedConfiguration);
   if (configuration.entities.length === 0) {
     return configuration.entities;
@@ -75,7 +72,7 @@ function init(passedConfiguration) {
  * @param subFolder the folder (to create) in which the JHipster entity folder will be.
  */
 function createJHipsterJSONFolder(subFolder) {
-  FileUtils.createFolderIfItDoesNotExist(path.join(subFolder, '.jhipster'));
+  createFolderIfItDoesNotExist(path.join(subFolder, '.jhipster'));
 }
 
 /**
@@ -101,7 +98,7 @@ function writeEntities(subFolder) {
 }
 
 function updateEntityToGenerateWithExistingOne(filePath, entity) {
-  if (FileUtils.doesFileExist(filePath)) {
+  if (doesFileExist(filePath)) {
     const fileOnDisk = readJSONFile(filePath);
     if (fileOnDisk && fileOnDisk.changelogDate) {
       entity.changelogDate = fileOnDisk.changelogDate;
@@ -114,7 +111,7 @@ function updateEntityToGenerateWithExistingOne(filePath, entity) {
 function filterOutUnchangedEntities(subFolder) {
   return configuration.entities.filter(entity => {
     const filePath = path.join(subFolder, toFilePath(entity.name));
-    return !(FileUtils.doesFileExist(filePath) && areJHipsterEntitiesEqual(readJSONFile(filePath), entity));
+    return !(doesFileExist(filePath) && areJHipsterEntitiesEqual(readJSONFile(filePath), entity));
   });
 }
 

@@ -17,21 +17,17 @@
  * limitations under the License.
  */
 
-const path = require('path');
-const { createFolderIfItDoesNotExist, doesFileExist } = require('../utils/file-utils');
-const DeploymentValidator = require('../validators/deployment-validator');
-const { GENERATOR_NAME, writeConfigFile } = require('./export-utils');
-
-module.exports = {
-  exportDeployments,
-};
+import path from 'path';
+import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils';
+import DeploymentValidator from '../validators/deployment-validator';
+import { GENERATOR_NAME, writeConfigFile } from './export-utils';
 
 /**
  * Exports JDL deployments to .yo-rc.json files in separate folders (based on deployment type).
  * @param deployments the deployments to exporters (key: deployment type, value: JDLDeployment- deployment config).
  * @return object[] exported deployments in their final form.
  */
-function exportDeployments(deployments) {
+export default function exportDeployments(deployments) {
   if (!deployments) {
     throw new Error('Deployments have to be passed to be exported.');
   }

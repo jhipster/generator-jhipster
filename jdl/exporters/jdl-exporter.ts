@@ -17,19 +17,15 @@
  * limitations under the License.
  */
 
-const fs = require('fs');
-
-module.exports = {
-  exportToJDL,
-};
+import fs from 'fs';
 
 /**
  * Writes down the given JDL to a file.
  * @param jdl the JDL to write.
  * @param path the path where the file will be written.
- * @returns {string} file contents
+ * @returns file contents
  */
-function exportToJDL(jdl, path = 'app.jdl') {
+export default function exportToJDL(jdl, path = 'app.jdl'): string {
   if (!jdl) {
     throw new Error('A JDLObject has to be passed to be exported.');
   }
