@@ -122,7 +122,7 @@
     "@esbuild-kit/esm-loader": "2.4.2",
     "@types/mocha": "9.1.1",
     "@typescript-eslint/eslint-plugin": "5.38.0",
-    "@typescript-eslint/parser": "5.38.0",
+    "@typescript-eslint/parser": "5.38.1",
     "chai": "4.3.6",
     "ejs-lint": "1.2.2",
     "esbuild": "0.15.9",
