@@ -31,7 +31,7 @@
     <changeSet id="<%= changelogDate %>-1-add-columns" author="jhipster">
         <addColumn tableName="<%= entity.entityTableName %>">
     <%_ for (field of addedFields) { _%>
-            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- formatAsLiquibaseRemarks(field.javadoc, true) %>/>
+            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- this.formatAsLiquibaseRemarks(field.javadoc, true) %>/>
         <%_ if (field.shouldCreateContentType) { _%>
             <column name="<%= field.columnName %>_content_type" type="varchar(255)"/>
         <%_ }
@@ -136,7 +136,7 @@ if (removedRelationships && removedRelationships.length) {
             for (relationship of removedRelationships) {
                 if (relationship.shouldWriteRelationship) {
         _%>
-        <dropForeignKeyConstraint baseTableName="<%= entity.entityTableName %>" constraintName="<%= getFKConstraintName(entity.entityTableName, relationship.relationshipName, prodDatabaseType) %>"/>
+        <dropForeignKeyConstraint baseTableName="<%= entity.entityTableName %>" constraintName="<%= this.getFKConstraintName(entity.entityTableName, relationship.relationshipName, prodDatabaseType) %>"/>
         <%_     }
             }
             /* ======== End dropForeignKeyConstraint ======== */ _%>
