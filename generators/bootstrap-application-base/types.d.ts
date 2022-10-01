@@ -88,6 +88,7 @@ export type CommonClientServerApplication = BaseApplication &
     devServerPort: number;
     pages: string[];
     temporaryDir?: string;
+    prettierExtensions?: string;
   };
 
 type ServiceDiscoveryType = 'no' | 'eureka' | 'consul';

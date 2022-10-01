@@ -1,0 +1,5686 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster neo4j generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "build.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/neo4j/Neo4jMigrations.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/neo4j/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/User.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/UserRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/DomainUserDetailsService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/UserNotActivatedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/jwt/JWTFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/jwt/JWTRelayGatewayFilterFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/jwt/TokenProvider.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/EmailAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/InvalidPasswordException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/MailService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/UserService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/UsernameAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AdminUserRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/PasswordChangeDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/UserRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/UserMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/UserJWTController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/UserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/EmailAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/InvalidPasswordException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/LoginAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/KeyAndPasswordVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/LoginVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/management/SecurityMetersServiceTests.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/DomainUserDetailsServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/JWTFilterTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenProviderTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/MailServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/UserMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/UserJWTControllerIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/UserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/jvm.config": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "pom.xml": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/config/git2consul.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/consul.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/keycloak.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ReactorConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/Neo4jMigrations.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/AudienceValidator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/ModifyServersOpenApiFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/OAuth2ReactiveRefreshTokensWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/GatewayResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/LogoutResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/RouteVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/user.csv": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/JHipsterBlockHoundIntegration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/oauth2/AudienceValidatorTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/filter/ModifyServersOpenApiFilterTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/tech/jhipster/cucumber/gitkeep": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/jvm.config": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "pom.xml": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/client/UserFeignClientInterceptor.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/FeignConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/Neo4jMigrations.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/DomainUserDetailsService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/UserNotActivatedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/jwt/JWTConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/jwt/JWTFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/jwt/TokenProvider.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/MailService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/static/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/CucumberIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/CucumberTestContextConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/cucumber/stepdefs/UserStepDefs.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/JWTFilterTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/TokenProviderTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/MailServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/tech/jhipster/cucumber/gitkeep": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/tech/jhipster/cucumber/user.feature": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "build.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/docker-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-registry.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/EurekaWorkaroundConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/jwt/JWTFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/jwt/TokenProvider.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/static/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/management/SecurityMetersServiceTests.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/JWTFilterTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenProviderTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/jvm.config": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "pom.xml": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/docker-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-registry.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/client/AuthorizedFeignClient.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/client/OAuth2InterceptedFeignConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/client/TokenRelayRequestInterceptor.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/EurekaWorkaroundConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/FeignConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/Neo4jMigrations.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/AudienceValidator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/AuthorizationHeaderUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/static/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/oauth2/AudienceValidatorTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/oauth2/AuthorizationHeaderUtilTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "build.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/config/git2consul.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/consul.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/neo4j/Neo4jMigrations.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/neo4j/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/User.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/UserRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/AudienceValidator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/UserService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AdminUserRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/UserRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/UserMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/static/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestSecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/oauth2/AudienceValidatorTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/UserMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/UserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/jvm.config": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "pom.xml": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/config/git2consul.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/consul.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/Neo4jMigrations.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/DomainUserDetailsService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/UserNotActivatedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/jwt/JWTConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/jwt/JWTFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/jwt/TokenProvider.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/MailService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/UserJWTController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/LoginVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/JWTFilterTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/TokenProviderTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/MailServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserJWTControllerIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "build.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/jwt/JWTFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/jwt/TokenProvider.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/UserJWTController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/LoginVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/CucumberIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/management/SecurityMetersServiceTests.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/JWTFilterTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenProviderTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/UserJWTControllerIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/com/package/cucumber/gitkeep": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/jvm.config": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "pom.xml": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/keycloak.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/OAuth2Configuration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/Neo4jMigrations.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/AudienceValidator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/CustomClaimConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/LogoutResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/user.csv": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestSecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/oauth2/AudienceValidatorTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/oauth2/CustomClaimConverterIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/test/util/OAuth2TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "build.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/docker-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-registry.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/keycloak.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/EurekaWorkaroundConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/OAuth2Configuration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/neo4j/Neo4jMigrations.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/neo4j/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/User.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/UserRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/AudienceValidator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/UserService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AdminUserRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/UserRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/UserMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/OAuth2ReactiveRefreshTokensWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AuthInfoResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/LogoutResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/user.csv": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestSecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/CucumberIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/CucumberTestContextConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/cucumber/stepdefs/StepDefs.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/oauth2/AudienceValidatorTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/UserMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/test/util/OAuth2TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/LogoutResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/UserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/com/package/cucumber/gitkeep": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/jvm.config": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "pom.xml": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/Neo4jMigrations.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/neo4j/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/Authority.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/PersistentToken.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/PersistentTokenRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/DomainUserDetailsService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/PersistentTokenRememberMeServices.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/UserNotActivatedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/MailService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/neo4j/migrations/user__user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/MailServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/activationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/testEmail.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul should match generated files snapshot 1`] = `
+Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "build.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": Object {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/docker.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/sonar.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/config/git2consul.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/consul.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/neo4j.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/GeneratedByJHipster.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/aop/logging/LoggingAspect.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ApplicationProperties.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/AsyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CRLFLogConverter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/CacheConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/Constants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DatabaseConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/JacksonConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LocaleConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingAspectConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/LoggingConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/ReactorConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AbstractAuditingEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/SecurityUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/security/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AccountResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/errors/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/vm/package-info.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/IntegrationTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/EmbeddedNeo4j.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/Neo4jTestContainer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AccountResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/TestUtil.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/testcontainers.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster neo4j generator samples matrix should match snapshot 1`] = `
+Object {
+  "gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "gateway",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "neo4j",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": true,
+        "skipUserManagement": false,
+        "testFrameworks": Array [],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "gateway",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "neo4j",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": false,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+        "websocket": true,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "neo4j",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "neo4j",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": Array [],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "neo4j",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": false,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+        "websocket": true,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "neo4j",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": true,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "neo4j",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": Array [],
+        "websocket": true,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "neo4j",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "neo4j",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "testFrameworks": Array [],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "neo4j",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": true,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "session",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "databaseType": "neo4j",
+        "dtoSuffix": "DTO",
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "reactive": false,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+  "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "session",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "neo4j",
+        "dtoSuffix": "Rest",
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "reactive": true,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+        },
+      ],
+    },
+    "defaults": true,
+  },
+}
+`;

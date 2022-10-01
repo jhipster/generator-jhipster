@@ -33,6 +33,7 @@ const { hasState, setModifiedFileState } = State;
 
 const BaseGenerator = require('../generator-base');
 const { LOADING_PRIORITY, PRE_CONFLICTS_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+const { PRETTIER_EXTENSIONS } = require('../generator-constants');
 
 const { MultiStepTransform } = require('../../utils/multi-step-transform');
 const { GENERATOR_UPGRADE } = require('../generator-list');
@@ -191,7 +192,8 @@ module.exports = class extends BaseGenerator {
     const createApplyPrettierTransform = () => {
       const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
       // Prettier is clever, it uses correct rules and correct parser according to file extension.
-      return prettierTransform(prettierOptions, this, upgradeCommand || ignoreErrors);
+      const transformOptions = { ignoreErrors: ignoreErrors || upgradeCommand, extensions: PRETTIER_EXTENSIONS };
+      return prettierTransform(prettierOptions, this, transformOptions);
     };
 
     const createForceWriteConfigFiles = () =>

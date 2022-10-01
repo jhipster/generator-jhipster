@@ -3,7 +3,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport, clientSamples } from '../../test/support/index.mjs';
+import { testBlueprintSupport, buildClientSamples } from '../../test/support/index.mjs';
 import Generator from './index.js';
 import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
 
@@ -22,8 +22,8 @@ const { VUE: clientFramework } = ClientFrameworkTypes;
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } = constants;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const testSamples = () =>
-  Object.entries(clientSamples).map(([name, sample]) => [
+const samplesBuilder = () =>
+  Object.entries(buildClientSamples()).map(([name, sample]) => [
     name,
     {
       skipInstall: true,
@@ -36,37 +36,39 @@ const testSamples = () =>
     },
   ]);
 
-const clientAdminFiles = [
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.vue`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.service.ts`,
+const clientAdminFiles = (clientSrcDir, clientTestDir) => [
+  `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
+  `${clientSrcDir}app/admin/configuration/configuration.vue`,
+  `${clientSrcDir}app/admin/configuration/configuration.service.ts`,
 
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.vue`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health-modal.vue`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health-modal.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/health/health.service.ts`,
+  `${clientSrcDir}app/admin/health/health.component.ts`,
+  `${clientSrcDir}app/admin/health/health.vue`,
+  `${clientSrcDir}app/admin/health/health-modal.vue`,
+  `${clientSrcDir}app/admin/health/health-modal.component.ts`,
+  `${clientSrcDir}app/admin/health/health.service.ts`,
 
-  `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.service.ts`,
+  `${clientSrcDir}app/admin/logs/logs.component.ts`,
+  `${clientSrcDir}app/admin/logs/logs.service.ts`,
 
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics-modal.component.ts`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.vue`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics-modal.vue`,
-  `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.service.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics.component.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics-modal.component.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics.vue`,
+  `${clientSrcDir}app/admin/metrics/metrics-modal.vue`,
+  `${clientSrcDir}app/admin/metrics/metrics.service.ts`,
 
-  `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.component.spec.ts`,
-  `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics-modal.component.spec.ts`,
+  `${clientTestDir}spec/app/admin/metrics/metrics.component.spec.ts`,
+  `${clientTestDir}spec/app/admin/metrics/metrics-modal.component.spec.ts`,
 
-  `${CLIENT_TEST_SRC_DIR}spec/app/admin/logs/logs.component.spec.ts`,
+  `${clientTestDir}spec/app/admin/logs/logs.component.spec.ts`,
 
-  `${CLIENT_TEST_SRC_DIR}spec/app/admin/configuration/configuration.component.spec.ts`,
+  `${clientTestDir}spec/app/admin/configuration/configuration.component.spec.ts`,
 
-  `${CLIENT_TEST_SRC_DIR}spec/app/admin/health/health.component.spec.ts`,
-  `${CLIENT_TEST_SRC_DIR}spec/app/admin/health/health-modal.component.spec.ts`,
-  `${CLIENT_TEST_SRC_DIR}spec/app/admin/health/health.service.spec.ts`,
+  `${clientTestDir}spec/app/admin/health/health.component.spec.ts`,
+  `${clientTestDir}spec/app/admin/health/health-modal.component.spec.ts`,
+  `${clientTestDir}spec/app/admin/health/health.service.spec.ts`,
 ];
+
+const testSamples = samplesBuilder();
 
 describe(`JHipster ${clientFramework} generator`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -78,7 +80,11 @@ describe(`JHipster ${clientFramework} generator`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  testSamples().forEach(([name, sample]) => {
+  it('samples matrix should match snapshot', () => {
+    expect(Object.fromEntries(testSamples)).toMatchSnapshot();
+  });
+
+  testSamples.forEach(([name, sample]) => {
     const sampleConfig = sample.applicationWithEntities.config;
 
     describe(name, () => {
@@ -116,13 +122,13 @@ describe(`JHipster ${clientFramework} generator`, () => {
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi } = sampleConfig;
+        const { applicationType, withAdminUi, clientSrcDir = CLIENT_MAIN_SRC_DIR, clientTestDir = CLIENT_TEST_SRC_DIR } = sampleConfig;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 
         it(adminUiComponents, () => {
           const assertion = (...args) => (generateAdminUi ? runResult.assertFile(...args) : runResult.assertNoFile(...args));
-          assertion(clientAdminFiles);
+          assertion(clientAdminFiles(clientSrcDir, clientTestDir));
         });
 
         if (applicationType !== 'microservice') {
@@ -131,14 +137,14 @@ describe(`JHipster ${clientFramework} generator`, () => {
 
           it(adminUiRoutingTitle, () => {
             assertion(
-              `${CLIENT_MAIN_SRC_DIR}app/main.ts`,
+              `${clientSrcDir}app/main.ts`,
               "import HealthService from './admin/health/health.service';\n" +
                 "import MetricsService from './admin/metrics/metrics.service';\n" +
                 "import LogsService from './admin/logs/logs.service';\n" +
                 "import ConfigurationService from '@/admin/configuration/configuration.service';"
             );
             assertion(
-              `${CLIENT_MAIN_SRC_DIR}app/main.ts`,
+              `${clientSrcDir}app/main.ts`,
               '    healthService: () => new HealthService(),\n' +
                 '    configurationService: () => new ConfigurationService(),\n' +
                 '    logsService: () => new LogsService(),\n' +
@@ -146,14 +152,14 @@ describe(`JHipster ${clientFramework} generator`, () => {
             );
 
             assertion(
-              `${CLIENT_MAIN_SRC_DIR}app/router/admin.ts`,
+              `${clientSrcDir}app/router/admin.ts`,
               "  const JhiConfigurationComponent = () => import('@/admin/configuration/configuration.vue');\n" +
                 "  const JhiHealthComponent = () => import('@/admin/health/health.vue');\n" +
                 "  const JhiLogsComponent = () => import('@/admin/logs/logs.vue');\n" +
                 "  const JhiMetricsComponent = () => import('@/admin/metrics/metrics.vue');"
             );
             assertion(
-              `${CLIENT_MAIN_SRC_DIR}app/router/admin.ts`,
+              `${clientSrcDir}app/router/admin.ts`,
               `
     {
       path: '/admin/health',
@@ -181,7 +187,7 @@ describe(`JHipster ${clientFramework} generator`, () => {
     },`
             );
             assertion(
-              `${CLIENT_MAIN_SRC_DIR}app/core/jhi-navbar/jhi-navbar.vue`,
+              `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
               '<b-dropdown-item  to="/admin/metrics" active-class="active">\n' +
                 '            <font-awesome-icon icon="tachometer-alt" />\n' +
                 '            <span v-text="$t(\'global.menu.admin.metrics\')">Metrics</span>\n' +

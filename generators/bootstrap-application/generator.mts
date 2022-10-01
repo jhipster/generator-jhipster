@@ -76,6 +76,21 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
         if (application.authenticationType === 'oauth2' || application.databaseType === 'no') {
           application.skipUserManagement = true;
         }
+
+        let prettierExtensions = 'md,json,yml,html';
+        if (!application.applicationTypeAny) {
+          prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
+          if (application.applicationTypeVue) {
+            prettierExtensions = `${prettierExtensions},vue`;
+          }
+          if (application.clientFrameworkSvelte) {
+            prettierExtensions = `${prettierExtensions},svelte`;
+          }
+        }
+        if (!application.skipServer) {
+          prettierExtensions = `${prettierExtensions},java`;
+        }
+        application.prettierExtensions = prettierExtensions;
       },
     });
   }

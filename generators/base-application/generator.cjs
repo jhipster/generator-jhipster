@@ -78,6 +78,7 @@ class BaseApplicationGenerator extends BaseGenerator {
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
+  /** @type {SharedData<ApplicationType>} */
   #sharedData;
 
   constructor(args, options, features) {
@@ -363,6 +364,7 @@ class BaseApplicationGenerator extends BaseGenerator {
 
   /**
    * Shared Data
+   * @type {SharedData<ApplicationType>}
    */
   get sharedData() {
     if (!this.#sharedData) {
@@ -380,6 +382,22 @@ class BaseApplicationGenerator extends BaseGenerator {
       this.#sharedData = new SharedData(sharedApplications[baseName]);
     }
     return this.#sharedData;
+  }
+
+  /**
+   * @deprecated
+   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
+   */
+  get CLIENT_MAIN_SRC_DIR() {
+    return this.sharedData.getApplication().clientSrcDir;
+  }
+
+  /**
+   * @deprecated
+   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
+   */
+  get CLIENT_TEST_SRC_DIR() {
+    return this.sharedData.getApplication().clientTestDir;
   }
 
   /**

@@ -107,10 +107,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
 
   get initializing() {
     return this.asInitialingTaskGroup({
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       displayLogo() {
         if (this.logo) {
           this.printJHipsterLogo();
@@ -159,7 +155,8 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this.prompting);
+    const shouldSkipPrompting = this.delegateToBlueprint || this.options.defaults;
+    return this.asPromptingTaskGroup(shouldSkipPrompting ? {} : this.prompting);
   }
 
   get configuring() {
