@@ -35,9 +35,16 @@
       }
     },
     {
+      "files": ["**/*.mjs"],
+      "rules": {
+        "import/no-unresolved": "off"
+      }
+    },
+    {
       "files": ["**/*.{c,m,}ts"],
       "rules": {
-        "import/extensions": "off"
+        "import/extensions": "off",
+        "import/no-unresolved": "off"
       }
     }
   ],
