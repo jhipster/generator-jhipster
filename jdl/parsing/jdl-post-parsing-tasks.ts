@@ -17,11 +17,7 @@
  * limitations under the License.
  */
 
-module.exports = {
-  performJDLPostParsingTasks,
-};
-
-function performJDLPostParsingTasks(parsedContent) {
+export default function performJDLPostParsingTasks(parsedContent) {
   return resolveEntityNames(parsedContent);
 }
 

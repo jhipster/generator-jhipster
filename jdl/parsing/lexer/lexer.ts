@@ -29,7 +29,7 @@ import OptionTokens from './option-tokens';
 
 import createTokenFromConfigCreator from './token-creator';
 
-export const tokens: Record<string, unknown> = {};
+export const tokens: any = {};
 
 function createTokenFromConfig(config) {
   const newToken = createTokenFromConfigCreator(config);

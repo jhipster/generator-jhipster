@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const JDLParser = require('./jdl-parser');
-const deduplicate = require('../utils/array-utils').default;
-const { OptionNames } = require('../jhipster/application-options');
-const { PaginationTypes } = require('../jhipster/entity-options');
-const { PATTERN, REQUIRED, UNIQUE } = require('../jhipster/validations');
+import JDLParser from './jdl-parser';
+import deduplicate from '../utils/array-utils';
+import { OptionNames } from '../jhipster/application-options';
+import { PaginationTypes } from '../jhipster/entity-options';
+import { PATTERN, REQUIRED, UNIQUE } from '../jhipster/validations';
 
 const { PAGINATION } = PaginationTypes;
 const { PACKAGE_NAME } = OptionNames;
@@ -30,7 +30,7 @@ parser.parse();
 
 const BaseJDLCSTVisitor = parser.getBaseCstVisitorConstructor();
 
-module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
+export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   constructor() {
     super();
     this.validateVisitor();
@@ -124,7 +124,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   entityDeclaration(context) {
-    const annotations = [];
+    const annotations: any[] = [];
     if (context.annotationDeclaration) {
       context.annotationDeclaration.forEach(contextObject => {
         annotations.push(this.visit(contextObject));
@@ -180,7 +180,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   fieldDeclaration(context) {
-    const annotations = [];
+    const annotations: any[] = [];
     if (context.annotationDeclaration) {
       context.annotationDeclaration.forEach(contextObject => {
         annotations.push(this.visit(contextObject));
@@ -279,7 +279,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     const from = this.visit(context.from);
     const to = this.visit(context.to);
 
-    const relationshipOptions = [];
+    const relationshipOptions: any[] = [];
     if (context.relationshipOptions) {
       this.visit(context.relationshipOptions).forEach(option => relationshipOptions.push(option));
     }
@@ -300,7 +300,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     const name = context.NAME[0].image;
 
     const required = !!context.REQUIRED;
-    let injectedField = null;
+    let injectedField: string | null = null;
 
     if (context.injectedField) {
       injectedField = context.injectedField[0].image;
@@ -310,7 +310,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
       }
     }
 
-    const ast = {
+    const ast: any = {
       name,
       injectedField,
       javadoc,
@@ -352,7 +352,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   enumProp(context) {
-    const prop = {
+    const prop: any = {
       key: context.enumPropKey[0].image,
     };
 
@@ -369,7 +369,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   entityList(context) {
-    let entityList = [];
+    let entityList: any[] = [];
     if (context.NAME) {
       entityList = context.NAME.map(nameToken => nameToken.image);
     }
@@ -407,7 +407,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   filterDef(context) {
-    let entityList = [];
+    let entityList: any[] = [];
     if (context.NAME) {
       entityList = context.NAME.map(nameToken => nameToken.image, this);
     }
@@ -458,7 +458,15 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   applicationSubDeclaration(context) {
-    const applicationSubDeclaration = {
+    const applicationSubDeclaration: {
+      config: any;
+      entities: {
+        entityList: any[];
+        excluded: any[];
+      };
+      options: any;
+      useOptions: any[];
+    } = {
       config: {},
       entities: { entityList: [], excluded: [] },
       options: {},
@@ -519,7 +527,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   applicationSubConfig(context) {
-    const config = {};
+    const config: any = {};
 
     if (context.applicationConfigDeclaration) {
       const configProps = context.applicationConfigDeclaration.map(this.visit, this);
@@ -578,7 +586,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     }
     return context.NAME.map(namePart => namePart.image, this);
   }
-};
+}
 
 function getOptionEntityAndExcludedEntityLists(astResult, option) {
   let entityList = astResult.list || [];
@@ -599,7 +607,7 @@ function getEntityListFromContext(context, visitor) {
     excluded = visitor.visit(context.exclusion);
   }
 
-  const result = { entityList, excluded };
+  const result: any = { entityList, excluded };
   if (context.UNARY_OPTION) {
     result.optionName = context.UNARY_OPTION[0].image;
   }

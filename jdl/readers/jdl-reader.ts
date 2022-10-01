@@ -19,8 +19,8 @@
 
 import logger from '../utils/objects/logger';
 
-import parser from '../parsing/api';
-import { performJDLPostParsingTasks } from '../parsing/jdl-post-parsing-tasks';
+import * as parser from '../parsing/api';
+import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks';
 import { readFile, readFiles } from './file-reader';
 
 /**

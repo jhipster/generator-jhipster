@@ -21,14 +21,8 @@
  * This file defines the exported JDL DSL related APIs
  * This file will be used as webpack entry point to produce a UMD bundle.
  */
-const { tokens, JDLLexer } = require('./lexer/lexer');
-const { parse, getSyntacticAutoCompleteSuggestions } = require('./api');
-const JDLParser = require('./jdl-parser');
+import { tokens, JDLLexer } from './lexer/lexer';
+import { parse, getSyntacticAutoCompleteSuggestions } from './api';
+import JDLParser from './jdl-parser';
 
-module.exports = {
-  tokens,
-  JDLLexer,
-  JDLParser,
-  parse,
-  getSyntacticAutoCompleteSuggestions,
-};
+export { tokens, JDLLexer, JDLParser, parse, getSyntacticAutoCompleteSuggestions };

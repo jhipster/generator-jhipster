@@ -17,32 +17,26 @@
  * limitations under the License.
  */
 
-const _ = require('lodash');
-const { EOF } = require('chevrotain');
-const JDLAstBuilderVisitor = require('./jdl-ast-builder-visitor');
-const { JDLLexer, tokens } = require('./lexer/lexer');
-const JDLParser = require('./jdl-parser');
-const { performAdditionalSyntaxChecks } = require('./validator');
-const { checkTokens } = require('./self-checks/parsing-system-checker');
-
-module.exports = {
-  parse,
-  getCst,
-  getSyntacticAutoCompleteSuggestions,
-};
+import _ from 'lodash';
+import { EOF } from 'chevrotain';
+import JDLAstBuilderVisitor from './jdl-ast-builder-visitor';
+import { JDLLexer, tokens } from './lexer/lexer';
+import JDLParser from './jdl-parser';
+import performAdditionalSyntaxChecks from './validator';
+import { checkTokens } from './self-checks/parsing-system-checker';
 
 const parserSingleton = JDLParser.getParser();
 parserSingleton.parse();
 const rules = parserSingleton.getGAstProductions();
 checkTokens(Object.values(tokens), Object.values(rules));
 
-function parse(input, startRule = 'prog') {
+export function parse(input, startRule = 'prog') {
   const cst = getCst(input, startRule);
   const astBuilderVisitor = new JDLAstBuilderVisitor();
   return astBuilderVisitor.visit(cst);
 }
 
-function getCst(input, startRule = 'prog') {
+export function getCst(input, startRule = 'prog') {
   const lexResult = JDLLexer.tokenize(input);
 
   if (lexResult.errors.length > 0) {
@@ -91,7 +85,7 @@ function throwSyntaxError(errors) {
 
 // A more complete example can be found here:
 // https://github.com/SAP/chevrotain/blob/master/examples/parser/content_assist/official_feature_content_assist.js#L134
-function getSyntacticAutoCompleteSuggestions(input, startRule = 'prog') {
+export function getSyntacticAutoCompleteSuggestions(input, startRule = 'prog') {
   const lexResult = JDLLexer.tokenize(input);
 
   // ".input" is a setter which will reset the parsers' internal state.

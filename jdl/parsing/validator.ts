@@ -18,11 +18,12 @@
  */
 /* eslint-disable no-useless-escape */
 
-const _ = require('lodash');
-const matchesToken = require('chevrotain').tokenMatcher;
-const JDLParser = require('./jdl-parser');
-const LexerTokens = require('./lexer/lexer').tokens;
-const checkConfigKeys = require('./self-checks/parsing-system-checker').checkConfigKeys;
+import _ from 'lodash';
+import { tokenMatcher as matchesToken } from '@chevrotain/types';
+
+import JDLParser from './jdl-parser';
+import { tokens as LexerTokens } from './lexer/lexer';
+import { checkConfigKeys } from './self-checks/parsing-system-checker';
 
 const CONSTANT_PATTERN = /^[A-Z_]+$/;
 const ENTITY_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
@@ -322,20 +323,22 @@ const deploymentConfigPropsValidations = {
   },
 };
 
-module.exports = {
-  performAdditionalSyntaxChecks,
-};
-
 const parser = JDLParser.getParser();
 parser.parse();
 const BaseJDLCSTVisitorWithDefaults = parser.getBaseCstVisitorConstructorWithDefaults();
 
 class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
+  errors: any[];
+
   constructor() {
     super();
     this.validateVisitor();
 
     this.errors = [];
+  }
+
+  validateVisitor() {
+    throw new Error('Method not implemented.');
   }
 
   checkNameSyntax(token, expectedPattern, errorMessagePrefix) {
@@ -578,8 +581,12 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
   }
 }
 
-function performAdditionalSyntaxChecks(cst) {
+export default function performAdditionalSyntaxChecks(cst) {
   const syntaxValidatorVisitor = new JDLSyntaxValidatorVisitor();
+
+  // TODO: This method receives less arguments then it expects. This could be a bug.
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   syntaxValidatorVisitor.visit(cst);
   return syntaxValidatorVisitor.errors;
 }
@@ -596,8 +603,8 @@ function getFirstToken(tokOrCstNode) {
   }
 
   // CST Node - - assumes no nested CST Nodes, only terminals
-  return _.flatten(Object.values(tokOrCstNode.children)).reduce(
-    (firstTok, nextTok) => (firstTok.startOffset > nextTok.startOffset ? nextTok : firstTok),
+  return _.flatten(Object.values(tokOrCstNode.children)).reduce<any>(
+    (firstTok: any, nextTok: any) => (firstTok.startOffset > nextTok.startOffset ? nextTok : firstTok),
     { startOffset: Infinity }
   );
 }
