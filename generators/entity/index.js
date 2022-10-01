@@ -653,9 +653,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       async prepareReact() {
-        const { context, application } = this;
+        const { context: entity, application } = this;
         if (!application.clientFrameworkReact) return;
-        prepareReactEntity({ context, application });
+        prepareReactEntity({ entity, application });
       },
     };
   }
