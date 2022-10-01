@@ -99,35 +99,34 @@ export default class BootstrapGenerator extends BaseGenerator {
 
     // Load common runtime options.
     this.parseCommonRuntimeOptions();
+
+    // Force npm override later if needed
+    this.env.options.nodePackageManager = 'npm';
+
+    this.queueMultistepTransform();
   }
 
-  _loading(): LoadingTaskGroup<this> {
+  get loading(): LoadingTaskGroup<this> {
     return {
       createUserManagementEntities() {
         // TODO v8 drop, executed by bootstrap-base.
-        this._createUserManagementEntities();
-      },
-      loadClientPackageManager() {
-        if (this.jhipsterConfig.clientPackageManager) {
-          this.env.options.nodePackageManager = this.jhipsterConfig.clientPackageManager;
-        }
+        this.createUserManagementEntities();
       },
     };
   }
 
   get [BaseGenerator.LOADING]() {
-    return this._loading();
+    return this.loading;
   }
 
-  // Public API method used by the getter and also by Blueprints
-  _preConflicts(): PreConflictsTaskGroup<this> {
+  get preConflicts(): PreConflictsTaskGroup<this> {
     return {
       async commitPrettierConfig() {
         if (this.options.skipCommit) {
           this.debug('Skipping commit prettier');
           return;
         }
-        await this._commitSharedFs(this.env.sharedFs.stream().pipe(patternFilter('**/{.prettierrc**,.prettierignore}')), true);
+        await this.commitSharedFs(this.env.sharedFs.stream().pipe(patternFilter('**/{.prettierrc**,.prettierignore}')), true);
       },
       async commitFiles() {
         if (this.options.skipCommit) {
@@ -135,30 +134,38 @@ export default class BootstrapGenerator extends BaseGenerator {
           return;
         }
         this.env.sharedFs.once('change', () => {
-          this._queueCommit();
+          this.queueMultistepTransform();
+          this.queueCommit();
         });
-        await this._commitSharedFs();
+        await this.commitSharedFs();
       },
     };
   }
 
   get [BaseGenerator.PRE_CONFLICTS]() {
-    return this._preConflicts();
+    return this.preConflicts;
+  }
+
+  /**
+   * Queue multi step templates transform
+   */
+  queueMultistepTransform() {
+    this.queueTransformStream(new MultiStepTransform() as any);
   }
 
   /**
    * Queue environment's commit task.
    */
-  _queueCommit() {
+  queueCommit() {
     this.debug('Queueing conflicts task');
     (this as any).queueTask(
       {
         method: async () => {
           this.debug('Adding queueCommit event listener');
           this.env.sharedFs.once('change', () => {
-            this._queueCommit();
+            this.queueCommit();
           });
-          await this._commitSharedFs();
+          await this.commitSharedFs();
         },
       },
       {
@@ -174,7 +181,7 @@ export default class BootstrapGenerator extends BaseGenerator {
    * @param {boolean} [skipPrettier]
    * @return {Promise}
    */
-  async _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
+  async commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
     const { skipYoResolve } = this.options;
     const { withGeneratedFlag, autoCrlf } = this.jhipsterConfig;
     const env: any = this.env;
@@ -245,8 +252,6 @@ export default class BootstrapGenerator extends BaseGenerator {
       }, 'jhipster:crlf');
 
     const transformStreams = [
-      // multi-step changes the file path, should be executed earlier in the pipeline
-      new MultiStepTransform(),
       ...(skipYoResolve ? [] : [createApplyYoResolveTransform(env.conflicter)]),
       createForceYoRcTransform(),
       createForceWriteConfigFiles(),
@@ -260,7 +265,11 @@ export default class BootstrapGenerator extends BaseGenerator {
     await env.fs.commit(transformStreams, stream);
   }
 
-  _createUserManagementEntities() {
+  /**
+   * @private
+   * @deprecated
+   */
+  createUserManagementEntities() {
     this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
 
     if (
