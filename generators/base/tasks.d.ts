@@ -15,6 +15,7 @@ export {
   NoArgTaskGroup as PreparingTaskGroup,
   NoArgTaskGroup as WritingTaskGroup,
   NoArgTaskGroup as PostWritingTaskGroup,
+  NoArgTaskGroup as PreConflictsTaskGroup,
   NoArgTaskGroup as InstallTaskGroup,
   NoArgTaskGroup as PostInstallTaskGroup,
   NoArgTaskGroup as EndTaskGroup,

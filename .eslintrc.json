@@ -20,7 +20,7 @@
       }
     },
     {
-      "files": ["**/*.spec.{c,m,}js", "test/**/*.{c,m,}js"],
+      "files": ["**/*.spec.{c,m,}{js,ts}", "test/**/*.{c,m,}{js,ts}"],
       "env": {
         "mocha": true
       }
@@ -32,6 +32,12 @@
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-this-alias": "off"
+      }
+    },
+    {
+      "files": ["**/*.{c,m,}ts"],
+      "rules": {
+        "import/extensions": "off"
       }
     }
   ],

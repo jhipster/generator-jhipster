@@ -1,11 +1,11 @@
-const assert = require('assert');
-const debugBuilder = require('debug');
-const ejs = require('ejs');
-const path = require('path');
+import assert from 'assert';
+import debugBuilder from 'debug';
+import ejs from 'ejs';
+import path from 'path';
 
-const { TemplateData } = require('./template-data');
+import TemplateData from './template-data.mjs';
 
-module.exports.TemplateFile = class TemplateFile {
+export default class TemplateFile {
   constructor(filename, extension) {
     this._filename = filename;
     this._extension = extension;
@@ -81,4 +81,4 @@ module.exports.TemplateFile = class TemplateFile {
       throw error;
     }
   }
-};
+}

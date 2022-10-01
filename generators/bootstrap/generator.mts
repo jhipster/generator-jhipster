@@ -16,7 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { State } = require('mem-fs-editor');
+import memFsEditor from 'mem-fs-editor';
+import environmentTransfrom from 'yeoman-environment/transform';
+import pTransform from 'p-transform';
+import { stat } from 'fs/promises';
+import { isBinaryFile } from 'isbinaryfile';
+
+import BaseGenerator from '../base/index.mjs';
+import MultiStepTransform from './multi-step-transform/index.mjs';
+import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
+import constants from '../generator-constants.js';
+import { GENERATOR_UPGRADE } from '../generator-list.mjs';
+import generatorUtils from '../utils.js';
+
+import entityUtils from '../../utils/entity.js';
+import fieldUtils from '../../utils/field.js';
+import liquibaseUtils from '../../utils/liquibase.js';
+import userUtils from '../../utils/user.js';
+import fieldTypes from '../../jdl/jhipster/field-types.js';
+import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
+import type { LoadingTaskGroup, PreConflictsTaskGroup } from '../base/tasks.js';
+
 const {
   createConflicterCheckTransform,
   createConflicterStatusTransform,
@@ -24,32 +44,25 @@ const {
   createYoResolveTransform: createApplyYoResolveTransform,
   patternFilter,
   patternSpy,
-} = require('yeoman-environment/transform');
-const { transform } = require('p-transform');
-const { stat } = require('fs/promises');
-const { isBinaryFile } = require('isbinaryfile');
+} = environmentTransfrom;
+const { transform } = pTransform;
 
+const { State } = memFsEditor as any;
 const { hasState, setModifiedFileState } = State;
+const { PRETTIER_EXTENSIONS } = constants;
+const { detectCrLf, normalizeLineEndings } = generatorUtils;
 
-const BaseGenerator = require('../generator-base');
-const { LOADING_PRIORITY, PRE_CONFLICTS_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
-const { PRETTIER_EXTENSIONS } = require('../generator-constants');
-
-const { MultiStepTransform } = require('../../utils/multi-step-transform');
-const { GENERATOR_UPGRADE } = require('../generator-list');
-const { prettierTransform, generatedAnnotationTransform } = require('../generator-transforms');
-const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
-const { prepareEntityForTemplates, prepareEntityServerForTemplates, prepareEntityPrimaryKeyForTemplates } = require('../../utils/entity');
-const { prepareFieldForTemplates } = require('../../utils/field');
-const { createUserEntity } = require('../../utils/user');
-const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
-const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
-const { detectCrLf, normalizeLineEndings } = require('../utils');
+const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = liquibaseUtils;
+const { prepareEntityForTemplates, prepareEntityServerForTemplates, prepareEntityPrimaryKeyForTemplates } = entityUtils;
+const { prepareFieldForTemplates } = fieldUtils;
+const { createUserEntity } = userUtils;
+const { OAUTH2 } = authenticationTypes;
+const { CommonDBTypes } = fieldTypes;
 
 const { LONG: TYPE_LONG } = CommonDBTypes;
 
-module.exports = class extends BaseGenerator {
-  constructor(args, options, features) {
+export default class BootstrapGenerator extends BaseGenerator {
+  constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', customCommitTask: true, ...features });
 
     if (this.options.help) return;
@@ -77,7 +90,7 @@ module.exports = class extends BaseGenerator {
      * 'set' function sets every key from 'localConfig'.
      */
     if (this.options.localConfig) {
-      this.config.set(this.options.localConfig);
+      (this.config as any).set(this.options.localConfig);
     }
 
     if (this.options.help) return;
@@ -88,9 +101,10 @@ module.exports = class extends BaseGenerator {
     this.parseCommonRuntimeOptions();
   }
 
-  _loading() {
+  _loading(): LoadingTaskGroup<this> {
     return {
       createUserManagementEntities() {
+        // TODO v8 drop, executed by bootstrap-base.
         this._createUserManagementEntities();
       },
       loadClientPackageManager() {
@@ -101,12 +115,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [BaseGenerator.LOADING]() {
     return this._loading();
   }
 
   // Public API method used by the getter and also by Blueprints
-  _preConflicts() {
+  _preConflicts(): PreConflictsTaskGroup<this> {
     return {
       async commitPrettierConfig() {
         if (this.options.skipCommit) {
@@ -128,7 +142,7 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get [PRE_CONFLICTS_PRIORITY]() {
+  get [BaseGenerator.PRE_CONFLICTS]() {
     return this._preConflicts();
   }
 
@@ -137,7 +151,7 @@ module.exports = class extends BaseGenerator {
    */
   _queueCommit() {
     this.debug('Queueing conflicts task');
-    this.queueTask(
+    (this as any).queueTask(
       {
         method: async () => {
           this.debug('Adding queueCommit event listener');
@@ -163,12 +177,13 @@ module.exports = class extends BaseGenerator {
   async _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
     const { skipYoResolve } = this.options;
     const { withGeneratedFlag, autoCrlf } = this.jhipsterConfig;
+    const env: any = this.env;
 
     // JDL writes directly to disk, set the file as modified so prettier will be applied
     const { upgradeCommand, ignoreErrors } = this.options;
     if (!upgradeCommand) {
       stream = stream.pipe(
-        patternSpy(file => {
+        patternSpy((file: any) => {
           if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
             setModifiedFileState(file);
           }
@@ -181,8 +196,9 @@ module.exports = class extends BaseGenerator {
         {
           key: 'i',
           name: 'ignore, do not overwrite and remember (experimental)',
-          value: ({ relativeFilePath }) => {
-            this.env.fs.append(`${this.env.cwd}/.yo-resolve`, `${relativeFilePath} skip`, { create: true });
+          value: (file: any) => {
+            const { relativeFilePath } = file;
+            env.fs.append(`${this.env.cwd}/.yo-resolve`, `${relativeFilePath} skip`, { create: true });
             return 'skip';
           },
         },
@@ -197,12 +213,12 @@ module.exports = class extends BaseGenerator {
     };
 
     const createForceWriteConfigFiles = () =>
-      patternSpy(file => {
+      patternSpy((file: any) => {
         file.conflicter = 'force';
       }, '**/.jhipster/*.json').name('jhipster:config-files:force');
 
     const convertToCRLF = () =>
-      transform(async file => {
+      transform(async (file: any) => {
         if (!file.contents) {
           return file;
         }
@@ -231,17 +247,17 @@ module.exports = class extends BaseGenerator {
     const transformStreams = [
       // multi-step changes the file path, should be executed earlier in the pipeline
       new MultiStepTransform(),
-      ...(skipYoResolve ? [] : [createApplyYoResolveTransform(this.env.conflicter)]),
+      ...(skipYoResolve ? [] : [createApplyYoResolveTransform(env.conflicter)]),
       createForceYoRcTransform(),
       createForceWriteConfigFiles(),
       ...(withGeneratedFlag ? [generatedAnnotationTransform(this)] : []),
       ...(skipPrettier ? [] : [createApplyPrettierTransform()]),
       ...(autoCrlf ? [convertToCRLF()] : []),
-      createConflicterCheckTransform(this.env.conflicter, conflicterStatus),
+      createConflicterCheckTransform(env.conflicter, conflicterStatus),
       createConflicterStatusTransform(),
     ];
 
-    await this.env.fs.commit(transformStreams, stream);
+    await env.fs.commit(transformStreams, stream);
   }
 
   _createUserManagementEntities() {
@@ -258,13 +274,13 @@ module.exports = class extends BaseGenerator {
     const changelogDate = formatDateForChangelog(changelogDateDate);
 
     const application = this._.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
-    const user = createUserEntity.call(this, { changelogDate }, application);
+    const user: any = createUserEntity.call(this, { changelogDate }, application);
 
     prepareEntityForTemplates(user, this, application);
     prepareEntityServerForTemplates(user);
     prepareEntityPrimaryKeyForTemplates(user, this);
 
-    user.fields.forEach(field => {
+    user.fields.forEach((field: any) => {
       prepareFieldForTemplates(user, field, this);
       prepareFieldForLiquibaseTemplates(user, field);
     });
@@ -282,4 +298,4 @@ module.exports = class extends BaseGenerator {
     user.fakeDataCount = liquibaseFakeData.length;
     this.configOptions.sharedLiquibaseFakeData.User = liquibaseFakeData;
   }
-};
+}

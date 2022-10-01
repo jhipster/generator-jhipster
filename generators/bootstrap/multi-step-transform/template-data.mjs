@@ -1,4 +1,4 @@
-module.exports.TemplateData = class TemplateData {
+export default class TemplateData {
   constructor(templateFile, defaultData = {}) {
     this._templateFile = templateFile;
     this._defaultData = defaultData;
@@ -57,4 +57,4 @@ module.exports.TemplateData = class TemplateData {
     }
     return this._templateFile.renderFragments({ ...this._defaultData, ...fragmentData, fragment });
   }
-};
+}
