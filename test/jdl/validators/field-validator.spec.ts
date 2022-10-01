@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLField = require('../../../jdl/models/jdl-field');
-const FieldValidator = require('../../../jdl/validators/field-validator');
+import { expect } from 'chai';
+import JDLField from '../../../jdl/models/jdl-field';
+import FieldValidator from '../../../jdl/validators/field-validator';
 
 describe('FieldValidator', () => {
   let validator;

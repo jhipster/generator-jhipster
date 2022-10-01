@@ -17,7 +17,10 @@
  * limitations under the License.
  */
 
-class Validator {
+export default class Validator {
+  objectType: any;
+  fieldsToCheck: any;
+
   constructor(objectType, fieldsToCheck) {
     this.objectType = objectType;
     this.fieldsToCheck = fieldsToCheck;
@@ -31,10 +34,8 @@ class Validator {
   }
 }
 
-module.exports = Validator;
-
 function checkForAbsentAttributes(validator, object) {
-  const absentAttributes = [];
+  const absentAttributes: any[] = [];
   validator.fieldsToCheck.forEach(attribute => {
     if (!object[attribute]) {
       absentAttributes.push(attribute);

@@ -65,7 +65,7 @@ export default class JDLApplication {
     this.entityNames.add(entityName);
   }
 
-  addEntityNames(entityNames = []) {
+  addEntityNames(entityNames: any = []) {
     this.entityNames.addEntityNames(entityNames);
   }
 

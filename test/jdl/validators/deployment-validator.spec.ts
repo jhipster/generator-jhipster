@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const { Options } = require('../../../jdl/jhipster/deployment-options');
-const { MICROSERVICE } = require('../../../jdl/jhipster/application-types');
-const { MONGODB, NO } = require('../../../jdl/jhipster/database-types');
-const SearchEngineTypes = require('../../../jdl/jhipster/search-engine-types');
-const DeploymentValidator = require('../../../jdl/validators/deployment-validator');
+import { expect } from 'chai';
+import { Options } from '../../../jdl/jhipster/deployment-options';
+import { MICROSERVICE } from '../../../jdl/jhipster/application-types';
+import { MONGODB, NO } from '../../../jdl/jhipster/database-types';
+import SearchEngineTypes from '../../../jdl/jhipster/search-engine-types';
+import DeploymentValidator from '../../../jdl/validators/deployment-validator';
 
 describe('DeploymentValidator', () => {
   let validator;

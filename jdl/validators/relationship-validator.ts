@@ -17,18 +17,17 @@
  * limitations under the License.
  */
 
-const Validator = require('./validator');
-const { exists } = require('../jhipster/relationship-types');
+import Validator from './validator';
+import { exists, ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } from '../jhipster/relationship-types';
 
-const { JPA_DERIVED_IDENTIFIER } = require('../jhipster/relationship-options');
-const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../jhipster/relationship-types');
+import { JPA_DERIVED_IDENTIFIER } from '../jhipster/relationship-options';
 
-module.exports = class RelationshipValidator extends Validator {
+export default class RelationshipValidator extends Validator {
   constructor() {
     super('relationship', ['from', 'to', 'type']);
   }
 
-  validate(jdlRelationship, options = {}) {
+  validate(jdlRelationship, options: any = {}) {
     if (typeof options === 'boolean') {
       options = { skippedUserManagement: options };
     }
@@ -41,7 +40,7 @@ module.exports = class RelationshipValidator extends Validator {
     checkForInvalidUseOfTheUserEntity(jdlRelationship, skippedUserManagement);
     checkRelationshipType(jdlRelationship, { skippedUserManagement, unidirectionalRelationships });
   }
-};
+}
 
 function checkType(jdlRelationship) {
   if (!exists(jdlRelationship.type)) {

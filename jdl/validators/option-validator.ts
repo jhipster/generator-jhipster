@@ -17,24 +17,18 @@
  * limitations under the License.
  */
 
-const Validator = require('./validator');
-const { isReservedClassName } = require('../jhipster/reserved-keywords');
+import Validator from './validator';
 
-class EnumValidator extends Validator {
-  constructor() {
-    super('enum', ['name']);
+export default class OptionValidator extends Validator {
+  constructor(optionType, additionalFieldToCheck?: any) {
+    const fieldsToCheck = ['name', 'entityNames', 'excludedNames', 'getType'];
+    if (additionalFieldToCheck) {
+      fieldsToCheck.push(additionalFieldToCheck);
+    }
+    super(`${optionType} option`, fieldsToCheck);
   }
 
-  validate(jdlEnum) {
-    super.validate(jdlEnum);
-    checkForReservedClassName(jdlEnum);
-  }
-}
-
-module.exports = EnumValidator;
-
-function checkForReservedClassName(jdlEnum) {
-  if (isReservedClassName(jdlEnum.name)) {
-    throw new Error(`The enum name '${jdlEnum.name}' is reserved keyword and can not be used as enum class name.`);
+  validate(jdlOption) {
+    super.validate(jdlOption);
   }
 }

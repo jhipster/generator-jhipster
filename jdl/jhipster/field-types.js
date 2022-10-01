@@ -19,7 +19,7 @@
 
 const _ = require('lodash');
 const { REQUIRED, UNIQUE, MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN } = require('./validations');
-const JDLEnum = require('../models/jdl-enum');
+const JDLEnum = require('../models/jdl-enum').default;
 const { MONGODB, MARIADB, COUCHBASE, NEO4J, CASSANDRA, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = require('./database-types');
 
 const CommonDBTypes = {
@@ -87,6 +87,7 @@ function isCommonDBType(type) {
   if (!type) {
     throw new Error('The passed type must not be nil.');
   }
+
   return _.snakeCase(type).toUpperCase() in CommonDBTypes || type instanceof JDLEnum;
 }
 

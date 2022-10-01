@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-const { MICROSERVICE } = require('../jhipster/application-types');
-const { NO } = require('../jhipster/database-types');
-const { ELASTICSEARCH } = require('../jhipster/search-engine-types');
-const { Options } = require('../jhipster/deployment-options');
-const Validator = require('./validator');
+import { MICROSERVICE } from '../jhipster/application-types';
+import { NO } from '../jhipster/database-types';
+import { ELASTICSEARCH } from '../jhipster/search-engine-types';
+import { Options } from '../jhipster/deployment-options';
+import Validator from './validator';
 
-module.exports = class DeploymentValidator extends Validator {
+export default class DeploymentValidator extends Validator {
   constructor() {
     super('deployment', ['deploymentType', 'appsFolders', 'directoryPath']);
   }
@@ -45,9 +45,9 @@ module.exports = class DeploymentValidator extends Validator {
         throw new Error(`The deployment type ${jdlDeployment.deploymentType} isn't supported.`);
     }
   }
-};
+}
 
-function validateDockerComposeRelatedDeployment(jdlDeployment, options = {}) {
+function validateDockerComposeRelatedDeployment(jdlDeployment, options: any = {}) {
   if (jdlDeployment.gatewayType !== Options.gatewayType.springCloudGateway && options.applicationType === MICROSERVICE) {
     throw new Error('A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.');
   }

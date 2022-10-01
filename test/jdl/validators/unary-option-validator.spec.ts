@@ -17,39 +17,33 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
-const BinaryOptionValidator = require('../../../jdl/validators/binary-option-validator');
+import { expect } from 'chai';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option';
+import UnaryOptionValidator from '../../../jdl/validators/unary-option-validator';
 
-describe('BinaryOptionValidator', () => {
+describe('UnaryOptionValidator', () => {
   let validator;
 
   before(() => {
-    validator = new BinaryOptionValidator();
+    validator = new UnaryOptionValidator();
   });
 
   describe('validate', () => {
     context('when not passing anything', () => {
       it('should fail', () => {
-        expect(() => validator.validate()).to.throw(/^No binary option\.$/);
+        expect(() => validator.validate()).to.throw(/^No unary option\.$/);
       });
     });
-    it('should fail', () => {
-      expect(() => validator.validate({})).to.throw(
-        /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/
-      );
-    });
-    context('when passing a binary option', () => {
+    context('when passing an unary option', () => {
       context('with all its required attributes', () => {
         it('should not fail', () => {
-          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.to.throw();
+          expect(() => validator.validate(new JDLUnaryOption({ name: 'skipClient' }))).not.to.throw();
         });
       });
-      context('without any of its required attributes', () => {});
-      context('with an invalid value', () => {
+      context('without any of its required attributes', () => {
         it('should fail', () => {
-          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(
-            /^The 'dto' option is not valid for value 'toto'\.$/
+          expect(() => validator.validate({})).to.throw(
+            /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/
           );
         });
       });

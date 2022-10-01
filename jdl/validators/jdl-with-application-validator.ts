@@ -17,27 +17,22 @@
  * limitations under the License.
  */
 
-const EntityValidator = require('./entity-validator');
-const FieldValidator = require('./field-validator');
-const FieldTypes = require('../jhipster/field-types');
-const ApplicationTypes = require('../jhipster/application-types');
-const ValidationValidator = require('./validation-validator');
-const RelationshipValidator = require('./relationship-validator');
-const EnumValidator = require('./enum-validator');
-const DeploymentValidator = require('./deployment-validator');
-const UnaryOptionValidator = require('./unary-option-validator');
-const BinaryOptionValidator = require('./binary-option-validator');
-const DatabaseTypes = require('../jhipster/database-types');
-const BinaryOptions = require('../jhipster/binary-options');
-const ApplicationValidator = require('./application-validator');
+import EntityValidator from './entity-validator';
+import FieldValidator from './field-validator';
+import FieldTypes from '../jhipster/field-types';
+import ApplicationTypes from '../jhipster/application-types';
+import ValidationValidator from './validation-validator';
+import RelationshipValidator from './relationship-validator';
+import EnumValidator from './enum-validator';
+import DeploymentValidator from './deployment-validator';
+import UnaryOptionValidator from './unary-option-validator';
+import BinaryOptionValidator from './binary-option-validator';
+import DatabaseTypes from '../jhipster/database-types';
+import BinaryOptions from '../jhipster/binary-options';
+import ApplicationValidator from './application-validator';
 
-const { isReservedFieldName } = require('../jhipster/reserved-keywords');
-const { isReservedTableName } = require('../jhipster/reserved-keywords');
-const { isReservedPaginationWords } = require('../jhipster/reserved-keywords');
-
-module.exports = {
-  createValidator,
-};
+import { isReservedFieldName, isReservedTableName, isReservedPaginationWords } from '../jhipster/reserved-keywords';
+import JDLObject from '../models/jdl-object';
 
 /**
  * Constructor taking the jdl object to check against application settings.
@@ -45,7 +40,7 @@ module.exports = {
  * @param {Object} logger - the logger to use, default to the console.
  * @param {Object} [options]
  */
-function createValidator(jdlObject, logger = console, options = {}) {
+export default function createValidator(jdlObject: JDLObject, logger: any = console, options: any = {}) {
   if (!jdlObject) {
     throw new Error('A JDL object must be passed to check for business errors.');
   }
@@ -141,7 +136,7 @@ function createValidator(jdlObject, logger = console, options = {}) {
     });
   }
 
-  function checkForRelationshipErrors(jdlApplication, options = {}) {
+  function checkForRelationshipErrors(jdlApplication, options: any = {}) {
     if (jdlObject.getRelationshipQuantity() === 0) {
       return;
     }
@@ -215,7 +210,7 @@ function checkForPaginationInAppWithCassandra(jdlOption, jdlApplication) {
 }
 
 function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserManagementOption }) {
-  const absentEntities = [];
+  const absentEntities: any[] = [];
   if (!doesEntityExist(jdlRelationship.from)) {
     absentEntities.push(jdlRelationship.from);
   }
@@ -234,7 +229,7 @@ function isUserManagementEntity(entityName) {
   return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
 }
 
-function isTableNameReserved(tableName, jdlApplication = []) {
+function isTableNameReserved(tableName, jdlApplication: any = []) {
   return isReservedTableName(tableName, jdlApplication.getConfigurationOptionValue('databaseType'));
 }
 

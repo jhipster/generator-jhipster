@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLValidation = require('../../../jdl/models/jdl-validation');
-const ValidationValidator = require('../../../jdl/validators/validation-validator');
+import { expect } from 'chai';
+import JDLValidation from '../../../jdl/models/jdl-validation';
+import ValidationValidator from '../../../jdl/validators/validation-validator';
 
 describe('ValidationValidator', () => {
   let validator;

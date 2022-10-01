@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLEntity = require('../../../jdl/models/jdl-entity');
-const EntityValidator = require('../../../jdl/validators/entity-validator');
+import { expect } from 'chai';
+import JDLEntity from '../../../jdl/models/jdl-entity';
+import EntityValidator from '../../../jdl/validators/entity-validator';
 
 describe('EntityValidator', () => {
   let validator;

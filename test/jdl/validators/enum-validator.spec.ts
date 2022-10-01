@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLEnum = require('../../../jdl/models/jdl-enum');
-const EnumValidator = require('../../../jdl/validators/enum-validator');
+import { expect } from 'chai';
+import JDLEnum from '../../../jdl/models/jdl-enum';
+import EnumValidator from '../../../jdl/validators/enum-validator';
 
 describe('EnumValidator', () => {
   let validator;

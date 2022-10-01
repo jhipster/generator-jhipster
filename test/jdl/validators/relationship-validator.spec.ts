@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLRelationship = require('../../../jdl/models/jdl-relationship');
-const RelationshipValidator = require('../../../jdl/validators/relationship-validator');
+import { expect } from 'chai';
+import JDLRelationship from '../../../jdl/models/jdl-relationship';
+import RelationshipValidator from '../../../jdl/validators/relationship-validator';
 
-const { JPA_DERIVED_IDENTIFIER } = require('../../../jdl/jhipster/relationship-options');
-const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../../jdl/jhipster/relationship-types');
+import { JPA_DERIVED_IDENTIFIER } from '../../../jdl/jhipster/relationship-options';
+import { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } from '../../../jdl/jhipster/relationship-types';
 
 describe('RelationshipValidator', () => {
   let validator;

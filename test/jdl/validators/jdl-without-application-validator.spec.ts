@@ -17,25 +17,26 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLObject = require('../../../jdl/models/jdl-object');
-const JDLEntity = require('../../../jdl/models/jdl-entity');
-const JDLField = require('../../../jdl/models/jdl-field');
-const JDLValidation = require('../../../jdl/models/jdl-validation');
-const JDLRelationship = require('../../../jdl/models/jdl-relationship');
-const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
-const ApplicationTypes = require('../../../jdl/jhipster/application-types');
-const DatabaseTypes = require('../../../jdl/jhipster/database-types');
-const FieldTypes = require('../../../jdl/jhipster/field-types');
-const Validations = require('../../../jdl/jhipster/validations');
-const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
-const BinaryOptions = require('../../../jdl/jhipster/binary-options');
-const { createValidator } = require('../../../jdl/validators/jdl-without-application-validator');
+import { expect } from 'chai';
+import JDLObject from '../../../jdl/models/jdl-object';
+import JDLEntity from '../../../jdl/models/jdl-entity';
+import JDLField from '../../../jdl/models/jdl-field';
+import JDLValidation from '../../../jdl/models/jdl-validation';
+import JDLRelationship from '../../../jdl/models/jdl-relationship';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
+import ApplicationTypes from '../../../jdl/jhipster/application-types';
+import DatabaseTypes from '../../../jdl/jhipster/database-types';
+import FieldTypes from '../../../jdl/jhipster/field-types';
+import Validations from '../../../jdl/jhipster/validations';
+import RelationshipTypes from '../../../jdl/jhipster/relationship-types';
+import BinaryOptions from '../../../jdl/jhipster/binary-options';
+import createValidator from '../../../jdl/validators/jdl-without-application-validator';
 
 describe('JDLWithoutApplicationValidator', () => {
   describe('createValidator', () => {
     context('when not passing a JDL object', () => {
       it('should fail', () => {
+        // @ts-ignore
         expect(() => createValidator()).to.throw(/^A JDL object must be passed to check for business errors.$/);
       });
     });

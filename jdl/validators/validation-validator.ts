@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-const Validator = require('./validator');
-const { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES } = require('../jhipster/validations');
+import Validator from './validator';
+import { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES } from '../jhipster/validations';
 
-class ValidationValidator extends Validator {
+export default class ValidationValidator extends Validator {
   constructor() {
     super('validation', ['name']);
   }
@@ -34,8 +34,6 @@ class ValidationValidator extends Validator {
     }
   }
 }
-
-module.exports = ValidationValidator;
 
 function checkForInvalidName(jdlValidation) {
   if (!exists(jdlValidation.name)) {

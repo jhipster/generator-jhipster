@@ -18,27 +18,27 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 const { expect } = chai;
 
-const ApplicationValidator = require('../../../jdl/validators/application-validator');
+import ApplicationValidator from '../../../jdl/validators/application-validator';
 
-const { OptionNames, OptionValues } = require('../../../jdl/jhipster/application-options');
-const { SPRING_WEBSOCKET } = require('../../../jdl/jhipster/websocket-types');
-const { MAVEN } = require('../../../jdl/jhipster/build-tool-types');
-const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../../jdl/jhipster/application-types');
-const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } = require('../../../jdl/jhipster/database-types');
-const { JWT } = require('../../../jdl/jhipster/authentication-types');
-const { READ_ONLY } = require('../../../jdl/jhipster/unary-options');
-const BinaryOptions = require('../../../jdl/jhipster/binary-options');
-const JDLApplication = require('../../../jdl/models/jdl-application');
-const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
-const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
-const logger = require('../../../jdl/utils/objects/logger');
+import { OptionNames, OptionValues } from '../../../jdl/jhipster/application-options';
+import { SPRING_WEBSOCKET } from '../../../jdl/jhipster/websocket-types';
+import { MAVEN } from '../../../jdl/jhipster/build-tool-types';
+import { MONOLITH, MICROSERVICE, GATEWAY } from '../../../jdl/jhipster/application-types';
+import { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } from '../../../jdl/jhipster/database-types';
+import { JWT } from '../../../jdl/jhipster/authentication-types';
+import { READ_ONLY } from '../../../jdl/jhipster/unary-options';
+import BinaryOptions from '../../../jdl/jhipster/binary-options';
+import JDLApplication from '../../../jdl/models/jdl-application';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
+import logger from '../../../jdl/utils/objects/logger';
 
 describe('ApplicationValidator', () => {
   let validator;
@@ -202,7 +202,7 @@ describe('ApplicationValidator', () => {
                     config: {
                       ...basicValidApplicationConfig,
                       databaseType: SQL,
-                      devDatabaseType: OptionValues[OptionNames.DEV_DATABASE_TYPE].h2Memory,
+                      devDatabaseType: (OptionValues[OptionNames.DEV_DATABASE_TYPE] as any).h2Memory,
                       prodDatabaseType: MONGODB,
                     },
                   })
@@ -495,7 +495,7 @@ describe('ApplicationValidator', () => {
                   config: {
                     ...basicValidApplicationConfig,
                     reactive: true,
-                    websocket: OptionValues[OptionNames.WEBSOCKET][SPRING_WEBSOCKET],
+                    websocket: (OptionValues[OptionNames.WEBSOCKET] as any)[SPRING_WEBSOCKET],
                   },
                 })
               )

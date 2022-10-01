@@ -17,12 +17,10 @@
  * limitations under the License.
  */
 
-const OptionValidator = require('./option-validator');
+import OptionValidator from './option-validator';
 
-class UnaryOptionValidator extends OptionValidator {
+export default class UnaryOptionValidator extends OptionValidator {
   constructor() {
     super('unary');
   }
 }
-
-module.exports = UnaryOptionValidator;

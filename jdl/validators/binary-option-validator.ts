@@ -17,16 +17,22 @@
  * limitations under the License.
  */
 
-const Validator = require('./validator');
+import BinaryOptions from '../jhipster/binary-options';
+import OptionValidator from './option-validator';
 
-class FieldValidator extends Validator {
+export default class BinaryOptionValidator extends OptionValidator {
   constructor() {
-    super('field', ['name', 'type']);
+    super('binary', 'value');
   }
 
-  validate(jdlField) {
-    super.validate(jdlField);
+  validate(jdlOption) {
+    super.validate(jdlOption);
+    checkForInvalidValue(jdlOption);
   }
 }
 
-module.exports = FieldValidator;
+function checkForInvalidValue(jdlOption) {
+  if (!!jdlOption.value && !BinaryOptions.exists(jdlOption.name, jdlOption.value)) {
+    throw new Error(`The '${jdlOption.name}' option is not valid for value '${jdlOption.value}'.`);
+  }
+}

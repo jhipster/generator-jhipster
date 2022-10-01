@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 
-const Validator = require('./validator');
-const UnaryOptionValidator = require('./unary-option-validator');
-const BinaryOptionValidator = require('./binary-option-validator');
-const { OptionNames, OptionValues, getTypeForOption, doesOptionExist, doesOptionValueExist } = require('../jhipster/application-options');
-const { MICROSERVICE } = require('../jhipster/application-types');
-const { COUCHBASE, NEO4J, CASSANDRA, MONGODB, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = require('../jhipster/database-types');
-const { Options } = require('../jhipster/binary-options');
+import Validator from './validator';
+import UnaryOptionValidator from './unary-option-validator';
+import BinaryOptionValidator from './binary-option-validator';
+import { OptionNames, OptionValues, getTypeForOption, doesOptionExist, doesOptionValueExist } from '../jhipster/application-options';
+import { MICROSERVICE } from '../jhipster/application-types';
+import { COUCHBASE, NEO4J, CASSANDRA, MONGODB, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } from '../jhipster/database-types';
+import { Options } from '../jhipster/binary-options';
 
-class ApplicationValidator extends Validator {
+export default class ApplicationValidator extends Validator {
   constructor() {
     super('application', []);
   }
@@ -42,8 +42,6 @@ class ApplicationValidator extends Validator {
     checkForReactiveAppWithWebsocket(jdlApplication);
   }
 }
-
-module.exports = ApplicationValidator;
 
 function checkRequiredOptionsAreSet(jdlApplication) {
   if (
@@ -189,15 +187,15 @@ function checkForInvalidDatabaseCombinations(jdlApplication) {
     }
     if (
       ![
-        OptionValues[OptionNames.DEV_DATABASE_TYPE].h2Memory,
-        OptionValues[OptionNames.DEV_DATABASE_TYPE].h2Disk,
+        (OptionValues[OptionNames.DEV_DATABASE_TYPE] as any).h2Memory,
+        (OptionValues[OptionNames.DEV_DATABASE_TYPE] as any).h2Disk,
         prodDatabaseType,
       ].includes(devDatabaseType)
     ) {
       throw new Error(
         `Only ${formatValueList([
-          OptionValues[OptionNames.DEV_DATABASE_TYPE].h2Memory,
-          OptionValues[OptionNames.DEV_DATABASE_TYPE].h2Disk,
+          (OptionValues[OptionNames.DEV_DATABASE_TYPE] as any).h2Memory,
+          (OptionValues[OptionNames.DEV_DATABASE_TYPE] as any).h2Disk,
           prodDatabaseType,
         ])} are allowed as devDatabaseType values for databaseType 'sql'.`
       );

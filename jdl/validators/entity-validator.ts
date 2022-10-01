@@ -17,20 +17,23 @@
  * limitations under the License.
  */
 
-const Validator = require('./validator');
+import Validator from './validator';
+import { isReservedClassName } from '../jhipster/reserved-keywords';
 
-class OptionValidator extends Validator {
-  constructor(optionType, additionalFieldToCheck) {
-    const fieldsToCheck = ['name', 'entityNames', 'excludedNames', 'getType'];
-    if (additionalFieldToCheck) {
-      fieldsToCheck.push(additionalFieldToCheck);
-    }
-    super(`${optionType} option`, fieldsToCheck);
+export default class EntityValidator extends Validator {
+  constructor() {
+    super('entity', ['name', 'tableName']);
   }
 
-  validate(jdlOption) {
-    super.validate(jdlOption);
+  validate(jdlEntity) {
+    console.log('in validate');
+    super.validate(jdlEntity);
+    checkForReservedClassName(jdlEntity);
   }
 }
 
-module.exports = OptionValidator;
+function checkForReservedClassName(jdlEntity) {
+  if (isReservedClassName(jdlEntity.name)) {
+    throw new Error(`The name '${jdlEntity.name}' is a reserved keyword and can not be used as an entity class name.`);
+  }
+}
