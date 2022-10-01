@@ -23,7 +23,7 @@ const BaseApplication = require('../base-application/generator.cjs');
 const { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } = require('./files.cjs');
 const { stringify } = require('../../utils/index.js');
 const { CommonDBTypes } = require('../../jdl/jhipster/field-types.js');
-const { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_BASE } = require('../generator-list.js');
+const { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } = require('../generator-list.js');
 
 const TYPE_LONG = CommonDBTypes.LONG;
 
@@ -53,8 +53,8 @@ module.exports = class DatabaseChangelogLiquibase extends BaseApplication {
   }
 
   async _postConstruct() {
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
       await this.composeWithBlueprints(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE);
     }
   }
@@ -201,6 +201,9 @@ module.exports = class DatabaseChangelogLiquibase extends BaseApplication {
     return {
       writeLiquibaseFiles({ application }) {
         const entity = this.entity;
+        if (entity.skipServer) {
+          return {};
+        }
         const entityChanges = this.entityChanges;
         const databaseChangelog = this.databaseChangelog;
 

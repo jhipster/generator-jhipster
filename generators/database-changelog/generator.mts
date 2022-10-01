@@ -22,7 +22,11 @@ import BaseApplication from '../base-application/index.mjs';
 import type { DefaultTaskGroup } from '../base-application/tasks.js';
 import type { LiquibaseApplication } from '../bootstrap-application-server/types.js';
 import constants from '../generator-constants.js';
-import { GENERATOR_DATABASE_CHANGELOG, GENERATOR_DATABASE_CHANGELOG_LIQUIBASE } from '../generator-list.mjs';
+import {
+  GENERATOR_DATABASE_CHANGELOG,
+  GENERATOR_DATABASE_CHANGELOG_LIQUIBASE,
+  GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
+} from '../generator-list.mjs';
 
 const { JHIPSTER_CONFIG_DIR } = constants;
 
@@ -51,6 +55,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<Liquibas
   }
 
   async _postConstruct() {
+    this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DATABASE_CHANGELOG);
     }
