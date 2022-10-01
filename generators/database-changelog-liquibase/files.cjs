@@ -110,7 +110,7 @@ const fakeFiles = {
             interpolate: INTERPOLATE_REGEX,
           },
           renameTo: generator => {
-            if (!generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog) {
+            if (!generator.incrementalChangelog || generator.recreateInitialChangelog) {
               return `config/liquibase/fake-data/${generator.entity.entityTableName}.csv`;
             }
 
@@ -132,7 +132,7 @@ const fakeFiles = {
     {
       condition: generator => generator.entity.fieldsContainTextBlob === true,
       path: SERVER_MAIN_RES_DIR,
-      templates: [{ file: 'config/liquibase/fake-data/blob/hipster.txt' }],
+      templates: ['config/liquibase/fake-data/blob/hipster.txt'],
     },
   ],
 };

@@ -16,13 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const fs = require('fs');
+import fs from 'fs';
 
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { DEFAULT_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+import BaseApplication from '../base-application/index.mjs';
+import type { DefaultTaskGroup } from '../base-application/tasks.js';
+import type { LiquibaseApplication } from '../bootstrap-application-server/types.js';
+import constants from '../generator-constants.js';
+import {
+  GENERATOR_DATABASE_CHANGELOG,
+  GENERATOR_DATABASE_CHANGELOG_LIQUIBASE,
+  GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
+} from '../generator-list.mjs';
 
-const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
-const { GENERATOR_DATABASE_CHANGELOG, GENERATOR_DATABASE_CHANGELOG_LIQUIBASE } = require('../generator-list');
+const { JHIPSTER_CONFIG_DIR } = constants;
 
 const BASE_CHANGELOG = {
   addedFields: [],
@@ -31,13 +37,12 @@ const BASE_CHANGELOG = {
   removedRelationships: [],
 };
 
-/* eslint-disable consistent-return */
-module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, options, features) {
+export default class DatabaseChangelogGenerator extends BaseApplication<LiquibaseApplication> {
+  constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
     this.argument('entities', {
-      desc: 'Which entities to generate a new changelog',
+      description: 'Which entities to generate a new changelog',
       type: Array,
       required: false,
     });
@@ -50,55 +55,49 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   async _postConstruct() {
+    this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DATABASE_CHANGELOG);
     }
   }
 
-  _default() {
+  override get default(): DefaultTaskGroup<this, LiquibaseApplication> {
     return {
-      async calculateChangelogs() {
-        const diff = this._generateChangelogFromFiles();
-
-        await Promise.all(
-          diff.map(([fieldChanges, _relationshipChanges]) => {
-            if (fieldChanges.type === 'entity-new') {
-              return this._composeWithIncrementalChangelogProvider(fieldChanges);
-            }
-            if (fieldChanges.addedFields.length > 0 || fieldChanges.removedFields.length > 0) {
-              return this._composeWithIncrementalChangelogProvider(fieldChanges);
-            }
-            return undefined;
-          })
-        );
-
-        await Promise.all(
-          diff.map(([_fieldChanges, relationshipChanges]) => {
-            if (
-              relationshipChanges &&
-              relationshipChanges.incremental &&
-              (relationshipChanges.addedRelationships.length > 0 || relationshipChanges.removedRelationships.length > 0)
-            ) {
-              return this._composeWithIncrementalChangelogProvider(relationshipChanges);
-            }
-            return undefined;
-          })
-        );
+      async calculateChangelogs({ application }) {
+        const diffs = this._generateChangelogFromFiles(application);
+        for (const [fieldChanges] of diffs) {
+          if (fieldChanges.type === 'entity-new') {
+            await this._composeWithIncrementalChangelogProvider(fieldChanges);
+          }
+          if (fieldChanges.addedFields.length > 0 || fieldChanges.removedFields.length > 0) {
+            await this._composeWithIncrementalChangelogProvider(fieldChanges);
+          }
+        }
+        // eslint-disable-next-line no-unused-vars
+        for (const [_fieldChanges, relationshipChanges] of diffs) {
+          if (
+            relationshipChanges &&
+            relationshipChanges.incremental &&
+            (relationshipChanges.addedRelationships.length > 0 || relationshipChanges.removedRelationships.length > 0)
+          ) {
+            await this._composeWithIncrementalChangelogProvider(relationshipChanges);
+          }
+        }
       },
     };
   }
 
-  get [DEFAULT_PRIORITY]() {
+  get [BaseApplication.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
-    return this._default();
+    return this.default;
   }
 
   /* ======================================================================== */
   /* private methods use within generator                                     */
   /* ======================================================================== */
 
-  _composeWithIncrementalChangelogProvider(databaseChangelog) {
-    const skipWriting = this.options.skipWriting || !this.options.entities.includes(databaseChangelog.entityName);
+  _composeWithIncrementalChangelogProvider(databaseChangelog: any) {
+    const skipWriting = this.options.entities.length !== 0 && !this.options.entities.includes(databaseChangelog.entityName);
     return this.composeWithJHipster(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, {
       databaseChangelog,
       skipWriting,
@@ -109,18 +108,18 @@ module.exports = class extends BaseBlueprintGenerator {
   /**
    * Generate changelog from differences between the liquibase entity and current entity.
    */
-  _generateChangelogFromFiles() {
+  _generateChangelogFromFiles(application: LiquibaseApplication) {
     // Compare entity changes and create changelogs
     return this.getExistingEntityNames().map(entityName => {
       const filename = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
 
-      const newConfig = this.fs.readJSON(filename);
-      const newFields = (newConfig.fields || []).filter(field => !field.transient);
-      const newRelationships = newConfig.relationships || [];
+      const newConfig: any = this.fs.readJSON(filename);
+      const newFields: any[] = (newConfig.fields || []).filter((field: any) => !field.transient);
+      const newRelationships: any[] = newConfig.relationships || [];
 
       if (
         this.configOptions.recreateInitialChangelog ||
-        !this.jhipsterConfig.incrementalChangelog ||
+        !application.incrementalChangelog ||
         !fs.existsSync(filename) ||
         !fs.existsSync(
           this.destinationPath(`src/main/resources/config/liquibase/changelog/${newConfig.changelogDate}_added_entity_${entityName}.xml`)
@@ -136,15 +135,15 @@ module.exports = class extends BaseBlueprintGenerator {
           },
         ];
       }
-      this._debug(`Calculating diffs for ${entityName}`);
+      (this as any)._debug(`Calculating diffs for ${entityName}`);
 
-      const oldConfig = JSON.parse(fs.readFileSync(filename));
+      const oldConfig: any = JSON.parse(fs.readFileSync(filename) as any);
       // Share old entity
       this.configOptions.oldSharedEntities[entityName] = oldConfig;
 
-      const oldFields = (oldConfig.fields || []).filter(field => !field.transient);
-      const oldFieldNames = oldFields.map(field => field.fieldName);
-      const newFieldNames = newFields.map(field => field.fieldName);
+      const oldFields: any[] = (oldConfig.fields || []).filter((field: any) => !field.transient);
+      const oldFieldNames: string[] = oldFields.map(field => field.fieldName);
+      const newFieldNames: string[] = newFields.map(field => field.fieldName);
 
       // Calculate new fields
       const addedFieldNames = newFieldNames.filter(fieldName => !oldFieldNames.includes(fieldName));
@@ -154,7 +153,7 @@ module.exports = class extends BaseBlueprintGenerator {
       const removedFields = removedFieldNames.map(fieldName => oldFields.find(field => fieldName === field.fieldName));
 
       const newRelationshipNames = newRelationships.map(relationship => relationship.relationshipName);
-      const oldRelationships = oldConfig.relationships || [];
+      const oldRelationships: any[] = oldConfig.relationships || [];
       const oldRelationshipNames = oldRelationships.map(relationship => relationship.relationshipName);
 
       // Calculate new relationships
@@ -174,4 +173,4 @@ module.exports = class extends BaseBlueprintGenerator {
       ];
     });
   }
-};
+}

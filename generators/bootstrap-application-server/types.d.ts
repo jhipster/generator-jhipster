@@ -32,6 +32,10 @@ type DatabaseTypeSqlApplication = GenericDerivedProperty<DatabaseType, 'sql'> &
     prodDatabaseType: string;
   };
 
+export type LiquibaseApplication = DatabaseTypeSqlApplication & {
+  incrementalChangelog: boolean;
+};
+
 type DatabaseTypeApplication =
   | DatabaseTypeSqlApplication
   | GenericDerivedProperty<DatabaseType, 'no'>

@@ -1,11 +1,18 @@
-const path = require('path');
-const fs = require('fs');
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
+import path, { basename, join } from 'path';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { fileURLToPath } from 'url';
 
-const expectedFiles = require('../utils/expected-files');
-const { SERVER_MAIN_RES_DIR } = require('../../generators/generator-constants');
-const { createImporterFromContent } = require('../../jdl/jdl-importer');
+import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import constants from '../generator-constants.js';
+import jdlImporter from '../../jdl/jdl-importer.js';
+import expectedFiles from '../../test/utils/expected-files.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const { createImporterFromContent } = jdlImporter;
+const { SERVER_MAIN_RES_DIR } = constants;
 
 const incrementalFiles = [
   `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
@@ -38,6 +45,8 @@ relationship ManyToOne {
 }
 `;
 
+const generatorPath = join(__dirname, '../app/index.mjs');
+
 describe('jhipster:app --incremental-changelog', function () {
   this.timeout(45000);
   const options = {
@@ -52,14 +61,8 @@ describe('jhipster:app --incremental-changelog', function () {
   };
   context('when creating a new application', () => {
     let runResult;
-    before(() => {
-      return helpers
-        .create(path.join(__dirname, '../../generators/app'))
-        .withOptions(options)
-        .run()
-        .then(result => {
-          runResult = result;
-        });
+    before(async () => {
+      runResult = await helpers.run(generatorPath).withOptions(options);
     });
 
     after(() => runResult.cleanup());
@@ -71,29 +74,30 @@ describe('jhipster:app --incremental-changelog', function () {
     it('creates expected liquibase files', () => {
       runResult.assertFile(expectedFiles.liquibase);
     });
+
+    it('should match snapshot', () => {
+      expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
   });
 
   context('when incremental liquibase files exists', () => {
     context('with default options', () => {
       let runResult;
-      before(() => {
-        return helpers
-          .create(path.join(__dirname, '../../generators/app'))
+      before(async () => {
+        runResult = await helpers
+          .create(generatorPath)
           .withOptions(options)
           .doInDir(cwd => {
             incrementalFiles.forEach(filePath => {
-              filePath = path.join(cwd, filePath);
+              filePath = join(cwd, filePath);
               const dirname = path.dirname(filePath);
-              if (!fs.existsSync(dirname)) {
-                fs.mkdirSync(dirname, { recursive: true });
+              if (!existsSync(dirname)) {
+                mkdirSync(dirname, { recursive: true });
               }
-              fs.writeFileSync(filePath, filePath);
+              writeFileSync(filePath, basename(filePath));
             });
           })
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
       after(() => runResult.cleanup());
@@ -108,31 +112,32 @@ describe('jhipster:app --incremental-changelog', function () {
 
       it('should not override existing incremental files', () => {
         incrementalFiles.forEach(filePath => {
-          runResult.assertFileContent(filePath, filePath);
+          runResult.assertFileContent(filePath, basename(filePath));
         });
+      });
+
+      it('should match snapshot', () => {
+        expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
       });
     });
 
     context('with --recreate-initial-changelog', () => {
       let runResult;
-      before(() => {
-        return helpers
-          .create(path.join(__dirname, '../../generators/app'))
+      before(async () => {
+        runResult = await helpers
+          .create(generatorPath)
           .withOptions({ ...options, recreateInitialChangelog: true })
           .doInDir(cwd => {
             incrementalFiles.forEach(filePath => {
-              filePath = path.join(cwd, filePath);
+              filePath = join(cwd, filePath);
               const dirname = path.dirname(filePath);
-              if (!fs.existsSync(dirname)) {
-                fs.mkdirSync(dirname, { recursive: true });
+              if (!existsSync(dirname)) {
+                mkdirSync(dirname, { recursive: true });
               }
-              fs.writeFileSync(filePath, filePath);
+              writeFileSync(filePath, basename(filePath));
             });
           })
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
       after(() => runResult.cleanup());
@@ -150,41 +155,40 @@ describe('jhipster:app --incremental-changelog', function () {
           runResult.assertNoFileContent(filePath, filePath);
         });
       });
+
+      it('should match snapshot', () => {
+        expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+      });
     });
   });
 
   context('regenerating the application', () => {
     let runResult;
-    before(() => {
-      const state = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
+    before(async () => {
+      const initialState = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
         ...options,
         skipFileGeneration: true,
         creationTimestampConfig: options.creationTimestamp,
       }).import();
-      const applicationWithEntities = state.exportedApplicationsWithEntities[baseName];
-      assert(applicationWithEntities);
-      assert.equal(applicationWithEntities.entities.length, 2);
-      return helpers
-        .create(path.join(__dirname, '../../generators/app'))
+      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
+      expect(applicationWithEntities).toBeTruthy();
+      expect(applicationWithEntities.entities.length).toBe(2);
+      runResult = await helpers
+        .create(generatorPath)
         .withOptions({ ...options, applicationWithEntities })
-        .run()
-        .then(result => {
-          const state = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
-            skipFileGeneration: true,
-            ...options,
-          }).import();
-          return result
-            .create(path.join(__dirname, '../../generators/app'))
-            .withOptions({
-              ...options,
-              applicationWithEntities: state.exportedApplicationsWithEntities.JhipsterApp,
-              creationTimestamp: '2020-01-02',
-            })
-            .run()
-            .then(result => {
-              runResult = result;
-            });
-        });
+        .run();
+      const state = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
+        skipFileGeneration: true,
+        ...options,
+      }).import();
+      runResult = await runResult
+        .create(generatorPath)
+        .withOptions({
+          ...options,
+          applicationWithEntities: state.exportedApplicationsWithEntities.JhipsterApp,
+          creationTimestamp: '2020-01-02',
+        })
+        .run();
     });
 
     after(() => runResult.cleanup());
@@ -193,7 +197,7 @@ describe('jhipster:app --incremental-changelog', function () {
       runResult.assertFile(['.yo-rc.json']);
     });
     it('should create entity config file', () => {
-      runResult.assertFile([path.join('.jhipster', 'One.json'), path.join('.jhipster', 'Another.json')]);
+      runResult.assertFile([join('.jhipster', 'One.json'), join('.jhipster', 'Another.json')]);
     });
     it('should create entity initial changelog', () => {
       runResult.assertFile([
@@ -215,13 +219,17 @@ describe('jhipster:app --incremental-changelog', function () {
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000200_updated_entity_constraints_Another.xml`,
       ]);
     });
+
+    it('should match snapshot', () => {
+      expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
   });
 
   context('when adding a field without constraints', () => {
     let runResult;
-    before(() => {
+    before(async () => {
       const baseName = 'JhipsterApp';
-      const state = createImporterFromContent(
+      const initialState = createImporterFromContent(
         `
 ${jdlApplication}
 entity Customer {
@@ -234,39 +242,35 @@ entity Customer {
           creationTimestampConfig: options.creationTimestamp,
         }
       ).import();
-      const applicationWithEntities = state.exportedApplicationsWithEntities[baseName];
-      assert(applicationWithEntities);
-      assert.equal(applicationWithEntities.entities.length, 1);
-      return helpers
-        .create(path.join(__dirname, '../../generators/app'))
+      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
+      expect(applicationWithEntities).toBeTruthy();
+      expect(applicationWithEntities.entities.length).toBe(1);
+      runResult = await helpers
+        .create(generatorPath)
         .withOptions({ ...options, applicationWithEntities })
-        .run()
-        .then(result => {
-          const state = createImporterFromContent(
-            `
+        .run();
+
+      const state = createImporterFromContent(
+        `
 ${jdlApplication}
 entity Customer {
     original String
     foo String
 }
 `,
-            {
-              skipFileGeneration: true,
-              ...options,
-            }
-          ).import();
-          return result
-            .create(path.join(__dirname, '../../generators/app'))
-            .withOptions({
-              ...options,
-              applicationWithEntities: state.exportedApplicationsWithEntities.JhipsterApp,
-              creationTimestamp: '2020-01-02',
-            })
-            .run()
-            .then(result => {
-              runResult = result;
-            });
-        });
+        {
+          skipFileGeneration: true,
+          ...options,
+        }
+      ).import();
+      runResult = await runResult
+        .create(generatorPath)
+        .withOptions({
+          ...options,
+          applicationWithEntities: state.exportedApplicationsWithEntities.JhipsterApp,
+          creationTimestamp: '2020-01-02',
+        })
+        .run();
     });
 
     after(() => runResult.cleanup());
@@ -275,7 +279,7 @@ entity Customer {
       runResult.assertFile(['.yo-rc.json']);
     });
     it('should create entity config file', () => {
-      runResult.assertFile([path.join('.jhipster', 'Customer.json')]);
+      runResult.assertFile([join('.jhipster', 'Customer.json')]);
     });
     it('should create entity initial changelog', () => {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_Customer.xml`]);
@@ -301,13 +305,16 @@ entity Customer {
     it('should not create the entity constraint update changelog', () => {
       runResult.assertNoFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_Customer.xml`]);
     });
+    it('should match snapshot', () => {
+      expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
   });
 
   context('when adding a field with constraints', () => {
     let runResult;
-    before(() => {
+    before(async () => {
       const baseName = 'JhipsterApp';
-      const state = createImporterFromContent(
+      const initialState = createImporterFromContent(
         `
 ${jdlApplication}
 entity Customer {
@@ -320,39 +327,36 @@ entity Customer {
           creationTimestampConfig: options.creationTimestamp,
         }
       ).import();
-      const applicationWithEntities = state.exportedApplicationsWithEntities[baseName];
-      assert(applicationWithEntities);
-      assert.equal(applicationWithEntities.entities.length, 1);
-      return helpers
-        .create(path.join(__dirname, '../../generators/app'))
+      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
+      expect(applicationWithEntities).toBeTruthy();
+      expect(applicationWithEntities.entities.length).toBe(1);
+      runResult = await helpers
+        .create(generatorPath)
         .withOptions({ ...options, applicationWithEntities })
-        .run()
-        .then(result => {
-          const state = createImporterFromContent(
-            `
+        .run();
+
+      const regenerateState = createImporterFromContent(
+        `
 ${jdlApplication}
 entity Customer {
-    original String
-    foo String required
+  original String
+  foo String required
 }
 `,
-            {
-              skipFileGeneration: true,
-              ...options,
-            }
-          ).import();
-          return result
-            .create(path.join(__dirname, '../../generators/app'))
-            .withOptions({
-              ...options,
-              applicationWithEntities: state.exportedApplicationsWithEntities.JhipsterApp,
-              creationTimestamp: '2020-01-02',
-            })
-            .run()
-            .then(result => {
-              runResult = result;
-            });
-        });
+        {
+          skipFileGeneration: true,
+          ...options,
+        }
+      ).import();
+
+      runResult = await runResult
+        .create(generatorPath)
+        .withOptions({
+          ...options,
+          applicationWithEntities: regenerateState.exportedApplicationsWithEntities.JhipsterApp,
+          creationTimestamp: '2020-01-02',
+        })
+        .run();
     });
 
     after(() => runResult.cleanup());
@@ -361,7 +365,7 @@ entity Customer {
       runResult.assertFile(['.yo-rc.json']);
     });
     it('should create entity config file', () => {
-      runResult.assertFile([path.join('.jhipster', 'Customer.json')]);
+      runResult.assertFile([join('.jhipster', 'Customer.json')]);
     });
     it('should create entity initial changelog', () => {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_Customer.xml`]);
@@ -387,13 +391,16 @@ entity Customer {
     it('should create the entity constraint update changelog', () => {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_Customer.xml`]);
     });
+    it('should match snapshot', () => {
+      expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
   });
 
   context('when removing a field without constraints', () => {
     let runResult;
-    before(() => {
+    before(async () => {
       const baseName = 'JhipsterApp';
-      const state = createImporterFromContent(
+      const initialState = createImporterFromContent(
         `
 ${jdlApplication}
 entity Customer {
@@ -407,38 +414,34 @@ entity Customer {
           creationTimestampConfig: options.creationTimestamp,
         }
       ).import();
-      const applicationWithEntities = state.exportedApplicationsWithEntities[baseName];
-      assert(applicationWithEntities);
-      assert.equal(applicationWithEntities.entities.length, 1);
-      return helpers
-        .create(path.join(__dirname, '../../generators/app'))
+      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
+      expect(applicationWithEntities).toBeTruthy();
+      expect(applicationWithEntities.entities.length).toBe(1);
+      runResult = await helpers
+        .create(generatorPath)
         .withOptions({ ...options, applicationWithEntities })
-        .run()
-        .then(result => {
-          const state = createImporterFromContent(
-            `
+        .run();
+
+      const state = createImporterFromContent(
+        `
 ${jdlApplication}
 entity Customer {
     original String
 }
 `,
-            {
-              skipFileGeneration: true,
-              ...options,
-            }
-          ).import();
-          return result
-            .create(path.join(__dirname, '../../generators/app'))
-            .withOptions({
-              ...options,
-              applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
-              creationTimestamp: '2020-01-02',
-            })
-            .run()
-            .then(result => {
-              runResult = result;
-            });
-        });
+        {
+          skipFileGeneration: true,
+          ...options,
+        }
+      ).import();
+      runResult = await runResult
+        .create(generatorPath)
+        .withOptions({
+          ...options,
+          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
+          creationTimestamp: '2020-01-02',
+        })
+        .run();
     });
 
     after(() => runResult.cleanup());
@@ -447,7 +450,7 @@ entity Customer {
       runResult.assertFile(['.yo-rc.json']);
     });
     it('should create entity config file', () => {
-      runResult.assertFile([path.join('.jhipster', 'Customer.json')]);
+      runResult.assertFile([join('.jhipster', 'Customer.json')]);
     });
     it('should create entity initial changelog', () => {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_Customer.xml`]);
@@ -473,13 +476,16 @@ entity Customer {
     it('should not create the entity constraint update changelog', () => {
       runResult.assertNoFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_Customer.xml`]);
     });
+    it('should match snapshot', () => {
+      expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
   });
 
   context('when removing a field with constraints', () => {
     let runResult;
-    before(() => {
+    before(async () => {
       const baseName = 'JhipsterApp';
-      const state = createImporterFromContent(
+      const initialState = createImporterFromContent(
         `
 ${jdlApplication}
 entity Customer {
@@ -493,38 +499,34 @@ entity Customer {
           creationTimestampConfig: options.creationTimestamp,
         }
       ).import();
-      const applicationWithEntities = state.exportedApplicationsWithEntities[baseName];
-      assert(applicationWithEntities);
-      assert.equal(applicationWithEntities.entities.length, 1);
-      return helpers
-        .create(path.join(__dirname, '../../generators/app'))
+      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
+      expect(applicationWithEntities).toBeTruthy();
+      expect(applicationWithEntities.entities.length).toBe(1);
+      runResult = await helpers
+        .create(generatorPath)
         .withOptions({ ...options, applicationWithEntities })
-        .run()
-        .then(result => {
-          const state = createImporterFromContent(
-            `
+        .run();
+
+      const state = createImporterFromContent(
+        `
 ${jdlApplication}
 entity Customer {
     original String
 }
 `,
-            {
-              skipFileGeneration: true,
-              ...options,
-            }
-          ).import();
-          return result
-            .create(path.join(__dirname, '../../generators/app'))
-            .withOptions({
-              ...options,
-              applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
-              creationTimestamp: '2020-01-02',
-            })
-            .run()
-            .then(result => {
-              runResult = result;
-            });
-        });
+        {
+          skipFileGeneration: true,
+          ...options,
+        }
+      ).import();
+      runResult = await runResult
+        .create(generatorPath)
+        .withOptions({
+          ...options,
+          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
+          creationTimestamp: '2020-01-02',
+        })
+        .run();
     });
 
     after(() => runResult.cleanup());
@@ -533,7 +535,7 @@ entity Customer {
       runResult.assertFile(['.yo-rc.json']);
     });
     it('should create entity config file', () => {
-      runResult.assertFile([path.join('.jhipster', 'Customer.json')]);
+      runResult.assertFile([join('.jhipster', 'Customer.json')]);
     });
     it('should create entity initial changelog', () => {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_Customer.xml`]);
@@ -559,49 +561,48 @@ entity Customer {
     it('should create the entity constraint update changelog', () => {
       runResult.assertNoFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_Customer.xml`]);
     });
+    it('should match snapshot', () => {
+      expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
   });
 
   context('when adding a relationship', () => {
     let runResult;
-    before(() => {
+    before(async () => {
       const baseName = 'JhipsterApp';
-      const state = createImporterFromContent(jdlApplicationWithEntities, {
+      const initialState = createImporterFromContent(jdlApplicationWithEntities, {
         ...options,
         skipFileGeneration: true,
         creationTimestampConfig: options.creationTimestamp,
       }).import();
-      const applicationWithEntities = state.exportedApplicationsWithEntities[baseName];
-      assert(applicationWithEntities);
-      assert.equal(applicationWithEntities.entities.length, 2);
-      return helpers
-        .create(path.join(__dirname, '../../generators/app'))
+      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
+      expect(applicationWithEntities).toBeTruthy();
+      expect(applicationWithEntities.entities.length).toBe(2);
+      runResult = await helpers
+        .create(generatorPath)
         .withOptions({ ...options, applicationWithEntities })
-        .run()
-        .then(result => {
-          const state = createImporterFromContent(
-            `
+        .run();
+
+      const state = createImporterFromContent(
+        `
 ${jdlApplicationWithEntities}
 relationship OneToOne {
     One to Another,
 }
 `,
-            {
-              skipFileGeneration: true,
-              ...options,
-            }
-          ).import();
-          return result
-            .create(path.join(__dirname, '../../generators/app'))
-            .withOptions({
-              ...options,
-              applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
-              creationTimestamp: '2020-01-02',
-            })
-            .run()
-            .then(result => {
-              runResult = result;
-            });
-        });
+        {
+          skipFileGeneration: true,
+          ...options,
+        }
+      ).import();
+      runResult = await runResult
+        .create(generatorPath)
+        .withOptions({
+          ...options,
+          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
+          creationTimestamp: '2020-01-02',
+        })
+        .run();
     });
 
     after(() => runResult.cleanup());
@@ -610,7 +611,7 @@ relationship OneToOne {
       runResult.assertFile(['.yo-rc.json']);
     });
     it('should create entity config file', () => {
-      runResult.assertFile([path.join('.jhipster', 'One.json'), path.join('.jhipster', 'Another.json')]);
+      runResult.assertFile([join('.jhipster', 'One.json'), join('.jhipster', 'Another.json')]);
     });
     it('should create entity initial changelog', () => {
       runResult.assertFile([
@@ -635,6 +636,9 @@ relationship OneToOne {
     });
     it('should create the entity constraint update changelog', () => {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`]);
+    });
+    it('should match snapshot', () => {
+      expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
     });
   });
 });
