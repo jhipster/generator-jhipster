@@ -16,16 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const assert = require('assert');
-const fs = require('fs');
-const fse = require('fs-extra');
-const path = require('path');
-const sortKeys = require('sort-keys');
+import assert from 'assert';
+import fs from 'fs';
+import fse from 'fs-extra';
+import path, { dirname } from 'path';
+import sortKeys from 'sort-keys';
+import { fileURLToPath } from 'url';
 
-const { JWT, SESSION } = require('../jdl/jhipster/authentication-types');
-const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
+import authenticationTypes from '../jdl/jhipster/authentication-types.js';
+import applicationTypes from '../jdl/jhipster/application-types.js';
 
-const { formatDateForChangelog } = require('../utils/liquibase');
+import liquibaseUtils from '../utils/liquibase.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const { JWT, SESSION } = authenticationTypes;
+const { GATEWAY, MICROSERVICE } = applicationTypes;
+const { formatDateForChangelog } = liquibaseUtils;
 
 const fixSamples = process.argv.includes('--fix-samples');
 const itSamplesPath = path.join(__dirname, '..', 'test-integration', 'samples');

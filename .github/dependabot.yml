@@ -14,8 +14,6 @@ updates:
       # ESM only version
       - dependency-name: 'os-locale'
         versions: ['>=6']
-      - dependency-name: 'sort-keys'
-        versions: ['>=5']
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/angular/'
