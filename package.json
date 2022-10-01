@@ -77,7 +77,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "5.5.3",
-    "@types/lodash": "4.14.185",
+    "@types/lodash": "4.14.186",
     "@types/yeoman-generator": "5.2.11",
     "@types/yeoman-test": "4.0.3",
     "aws-sdk": "2.1223.0",
