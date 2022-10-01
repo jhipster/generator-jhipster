@@ -17,13 +17,10 @@
  * limitations under the License.
  */
 
-const { Lexer } = require('chevrotain');
-const { createTokenFromConfig } = require('./token-creator');
-const {
-  KEYWORD,
-  sharedCategoryTokens: { UNARY_OPTION },
-} = require('./shared-tokens');
-const { OptionNames } = require('../../jhipster/application-options');
+import { Lexer } from 'chevrotain';
+import createTokenFromConfig from './token-creator';
+import { UNARY_OPTION, KEYWORD } from './shared-tokens';
+import { OptionNames } from '../../jhipster/application-options';
 
 const {
   APPLICATION_TYPE,
@@ -121,16 +118,16 @@ const applicationConfigTokens = [
   { name: 'MICROFRONTENDS', pattern: MICROFRONTENDS },
   { name: 'MICROFRONTEND', pattern: MICROFRONTEND },
 ].map(tokenConfig => {
-  tokenConfig.categories = [applicationConfigCategoryToken];
+  (tokenConfig as any).categories = [applicationConfigCategoryToken];
   // This is actually needed as the skipClient & skipServer options are both entity & app options...
   if (['SKIP_CLIENT', 'SKIP_SERVER'].includes(tokenConfig.name)) {
-    tokenConfig.categories.push(KEYWORD);
-    tokenConfig.categories.push(UNARY_OPTION);
+    (tokenConfig as any).categories.push(KEYWORD);
+    (tokenConfig as any).categories.push(UNARY_OPTION);
   }
   return createTokenFromConfig(tokenConfig);
 });
 
-module.exports = {
+export default {
   categoryToken: applicationConfigCategoryToken,
   tokens: [applicationConfigCategoryToken, ...applicationConfigTokens],
 };

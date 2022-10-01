@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-const { Lexer } = require('chevrotain');
-const { KEYWORD } = require('./shared-tokens');
-const { createTokenFromConfig } = require('./token-creator');
+import { Lexer } from 'chevrotain';
+import { KEYWORD } from './shared-tokens';
+import createTokenFromConfig from './token-creator';
 
 const mixMaxCategoryToken = createTokenFromConfig({ name: 'MIN_MAX_KEYWORD', pattern: Lexer.NA, categories: KEYWORD });
 
@@ -31,11 +31,11 @@ const minMaxTokens = [
   { name: 'MIN', pattern: 'min' },
   { name: 'MAX', pattern: 'max' },
 ].map(tokenConfig => {
-  tokenConfig.categories = [mixMaxCategoryToken];
+  (tokenConfig as any).categories = [mixMaxCategoryToken];
   return createTokenFromConfig(tokenConfig);
 });
 
-module.exports = {
+export default {
   categoryToken: mixMaxCategoryToken,
   tokens: [mixMaxCategoryToken, ...minMaxTokens],
 };

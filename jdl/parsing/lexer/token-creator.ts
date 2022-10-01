@@ -17,15 +17,12 @@
  * limitations under the License.
  */
 
-const { isString } = require('lodash');
-const { createToken } = require('chevrotain');
-const { NAME, KEYWORD, namePattern } = require('./shared-tokens');
+import { isString } from 'lodash';
+import { createToken } from 'chevrotain';
 
-module.exports = {
-  createTokenFromConfig,
-};
+import { NAME, KEYWORD, namePattern } from './shared-tokens';
 
-function createTokenFromConfig(config) {
+export default function createTokenFromConfig(config) {
   if (!config) {
     throw new Error("Can't create a token without the proper config.");
   }

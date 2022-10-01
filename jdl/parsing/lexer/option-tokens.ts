@@ -17,13 +17,10 @@
  * limitations under the License.
  */
 
-const { createTokenFromConfig } = require('./token-creator');
-const {
-  KEYWORD,
-  sharedCategoryTokens: { UNARY_OPTION, BINARY_OPTION },
-} = require('./shared-tokens');
+import createTokenFromConfig from './token-creator';
+import { KEYWORD, UNARY_OPTION, BINARY_OPTION } from './shared-tokens';
 
-const optionTokens = [
+const tokens = [
   { name: 'WITH', pattern: 'with' },
   { name: 'EXCEPT', pattern: 'except' },
   { name: 'USE', pattern: 'use' },
@@ -41,9 +38,9 @@ const optionTokens = [
   { name: 'FILTER', pattern: 'filter', type: 'unary' },
 ].map(tokenConfig => {
   if (tokenConfig.type === 'unary') {
-    tokenConfig.categories = [UNARY_OPTION, KEYWORD];
+    (tokenConfig as any).categories = [UNARY_OPTION, KEYWORD];
   } else if (tokenConfig.type === 'binary') {
-    tokenConfig.categories = [BINARY_OPTION, KEYWORD];
+    (tokenConfig as any).categories = [BINARY_OPTION, KEYWORD];
   }
   // clean up the custom attribute from the config, it doesn't belong to chevrotain and its sole purpose is to
   // temporarily flag tokens that won't have a category.
@@ -51,6 +48,6 @@ const optionTokens = [
   return createTokenFromConfig(tokenConfig);
 });
 
-module.exports = {
-  tokens: optionTokens,
+export default {
+  tokens,
 };

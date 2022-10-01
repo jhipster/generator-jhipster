@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-const { Lexer } = require('chevrotain');
-const { createTokenFromConfig } = require('./token-creator');
+import { Lexer } from 'chevrotain';
+import createTokenFromConfig from './token-creator';
 
 const deploymentCategoryToken = createTokenFromConfig({
   name: 'DEPLOYMENT_KEY',
@@ -45,11 +45,11 @@ const deploymentTokens = [
   { name: 'REGISTRY_REPLICAS', pattern: 'registryReplicas' },
   { name: 'STORAGE_TYPE', pattern: 'storageType' },
 ].map(tokenConfig => {
-  tokenConfig.categories = [deploymentCategoryToken];
+  (tokenConfig as any).categories = [deploymentCategoryToken];
   return createTokenFromConfig(tokenConfig);
 });
 
-module.exports = {
+export default {
   categoryToken: deploymentCategoryToken,
   tokens: [deploymentCategoryToken, ...deploymentTokens],
 };

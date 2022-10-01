@@ -17,14 +17,15 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const { NAME, KEYWORD } = require('../../../../jdl/parsing/lexer/shared-tokens');
-const { createTokenFromConfig } = require('../../../../jdl/parsing/lexer/token-creator');
+import { expect } from 'chai';
+import { NAME, KEYWORD } from '../../../../jdl/parsing/lexer/shared-tokens';
+import createTokenFromConfig from '../../../../jdl/parsing/lexer/token-creator';
 
 describe('TokenCreator', () => {
   describe('createTokenFromConfig', () => {
     context('when not passing a config', () => {
       it('should fail', () => {
+        // @ts-ignore
         expect(() => createTokenFromConfig()).to.throw(/^Can't create a token without the proper config\.$/);
       });
     });

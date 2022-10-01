@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { Lexer, createToken } = require('chevrotain');
+import { Lexer, createToken } from 'chevrotain';
 
 const namePattern = /[a-zA-Z_][a-zA-Z_\-\d]*/;
 const nameTokenConfig = { name: 'NAME', pattern: namePattern };
@@ -33,12 +33,8 @@ const keywordToken = createToken(keywordTokenConfig);
 const unaryOptionCategoryToken = createToken({ name: 'UNARY_OPTION', pattern: Lexer.NA });
 const binaryOptionCategoryToken = createToken({ name: 'BINARY_OPTION', pattern: Lexer.NA });
 
-module.exports = {
-  NAME: nameToken,
-  KEYWORD: keywordToken,
-  namePattern,
-  sharedCategoryTokens: {
-    UNARY_OPTION: unaryOptionCategoryToken,
-    BINARY_OPTION: binaryOptionCategoryToken,
-  },
-};
+export { nameToken as NAME };
+export { keywordToken as KEYWORD };
+export { namePattern };
+export { unaryOptionCategoryToken as UNARY_OPTION };
+export { binaryOptionCategoryToken as BINARY_OPTION };

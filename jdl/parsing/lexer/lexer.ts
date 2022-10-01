@@ -17,19 +17,19 @@
  * limitations under the License.
  */
 
-const { Lexer } = require('chevrotain');
-const {
-  NAME,
-  sharedCategoryTokens: { UNARY_OPTION, BINARY_OPTION },
-} = require('./shared-tokens');
-const ValidationTokens = require('./validation-tokens');
-const ApplicationTokens = require('./application-tokens');
-const DeploymentTokens = require('./deployment-tokens');
-const RelationshipTypeTokens = require('./relationship-type-tokens');
-const OptionTokens = require('./option-tokens');
-const createTokenFromConfigCreator = require('./token-creator').createTokenFromConfig;
+import { Lexer } from 'chevrotain';
 
-const tokens = {};
+import { NAME, UNARY_OPTION, BINARY_OPTION } from './shared-tokens';
+
+import ValidationTokens from './validation-tokens';
+import ApplicationTokens from './application-tokens';
+import DeploymentTokens from './deployment-tokens';
+import RelationshipTypeTokens from './relationship-type-tokens';
+import OptionTokens from './option-tokens';
+
+import createTokenFromConfigCreator from './token-creator';
+
+export const tokens: Record<string, unknown> = {};
 
 function createTokenFromConfig(config) {
   const newToken = createTokenFromConfigCreator(config);
@@ -152,10 +152,4 @@ tokens.NAME = NAME;
 // with 'ensureOptimizations' the lexer initialization will throw a descriptive error
 // instead of silently reverting to an unoptimized algorithm.
 // This will avoid performance regressions.
-const JDLLexer = new Lexer(Object.values(tokens), { ensureOptimizations: true });
-
-// Cannot exporters constants before they have been defined (unlike functions...)
-module.exports = {
-  tokens,
-  JDLLexer,
-};
+export const JDLLexer = new Lexer(Object.values(tokens), { ensureOptimizations: true });
