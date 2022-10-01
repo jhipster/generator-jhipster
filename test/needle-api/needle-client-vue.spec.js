@@ -20,9 +20,6 @@ const mockBlueprintSubGen = class extends ClientGenerator {
 
   get [ClientGenerator.POST_WRITING]() {
     const customPhaseSteps = {
-      async composeEntitiesClient() {
-        await this.composeWithJHipster('entities-client');
-      },
       addCustomMethods() {
         this.addEntityToMenu('routerName', false, VUE);
       },

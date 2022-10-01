@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 import { jestExpect as expect } from 'mocha-expect-snapshot';
+import jestMock from 'jest-mock';
 import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import EnvironmentBuilder from '../../cli/environment-builder.js';
 import Generator from './generator.cjs';
+import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
 
 const { snakeCase } = lodash;
 
@@ -40,14 +42,55 @@ describe(`JHipster ${generator} generator`, () => {
     expect(instance.features.bar).toBe(true);
   });
 
-  // TODO test is broken due to @esbuild-kit/esm-loader
-  describe.skip('EnvironmentBuilder', () => {
+  describe('EnvironmentBuilder', () => {
     let envBuilder;
     before(() => {
       envBuilder = EnvironmentBuilder.createDefaultBuilder();
     });
     it(`should be registered as jhipster:${generator} at yeoman-environment`, async () => {
       expect(await envBuilder.getEnvironment().get(`jhipster:${generator}`)).toBe(Generator);
+    });
+  });
+
+  describe('skipPriorities', () => {
+    const initializing = jestMock.fn();
+    const prompting = jestMock.fn();
+    const writing = jestMock.fn();
+    const postWriting = jestMock.fn();
+
+    class CustomGenerator extends Generator {
+      get [Generator.INITIALIZING]() {
+        initializing();
+        return {};
+      }
+
+      get [Generator.PROMPTING]() {
+        prompting();
+        return {};
+      }
+
+      get [Generator.WRITING]() {
+        writing();
+        return {};
+      }
+
+      get [Generator.POST_WRITING]() {
+        postWriting();
+        return {};
+      }
+    }
+
+    before(async () => {
+      await helpers.run(CustomGenerator).withOptions({
+        skipPriorities: ['prompting', 'writing', 'postWriting'],
+      });
+    });
+
+    it('should skip priorities', async () => {
+      expect(initializing).toBeCalled();
+      expect(prompting).not.toBeCalled();
+      expect(writing).not.toBeCalled();
+      expect(postWriting).not.toBeCalled();
     });
   });
 });

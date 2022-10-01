@@ -59,17 +59,21 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   static END = asPriority(END);
 
   constructor(args, options, features) {
-    super(args, options, { taskPrefix: PRIORITY_PREFIX, ...features });
+    super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, ...features });
   }
 
   /**
-   * Utility method to get typed objects for autocomplete.
+   * @private
+   * Override yeoman-generator method that gets methods to be queued, filtering the result.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @return {string[]}
    */
-  get [JHipsterBaseBlueprintGenerator.INITIALIZING]() {
-    return {};
+  getTaskNames() {
+    let priorities = super.getTaskNames();
+    if (this.options.skipPriorities) {
+      priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
+    }
+    return priorities;
   }
 }
 

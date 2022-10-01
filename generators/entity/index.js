@@ -51,6 +51,9 @@ const {
   loadRequiredConfigDerivedProperties,
   preparePostEntityCommonDerivedProperties,
   preparePostEntitiesCommonDerivedProperties,
+  preparePostEntityServerDerivedProperties,
+  prepareReactEntity,
+  preparePostEntityClientDerivedProperties,
 } = require('../../utils/entity');
 const { prepareFieldForTemplates } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
@@ -648,6 +651,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
       loadDomain() {
         prepareEntityServerForTemplates(this.context);
       },
+
+      async prepareReact() {
+        const { context: entity, application } = this;
+        if (!application.clientFrameworkReact) return;
+        prepareReactEntity({ entity, application });
+      },
     };
   }
 
@@ -673,6 +682,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.context.fields.forEach(field => {
           prepareFieldForTemplates(entity, field, this);
         });
+      },
+
+      processDerivedPrimaryKeyFields() {
+        if (!this.context.primaryKey) return;
+        const primaryKey = this.context.primaryKey;
+        if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
+          return;
+        }
+        // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
+        const derivedFields = this.context.primaryKey.derivedFields;
+        this.context.fields.unshift(...derivedFields);
       },
     };
   }
@@ -709,6 +729,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         preparePostEntityCommonDerivedProperties(this.context);
         preparePostEntitiesCommonDerivedProperties(Object.values(this.configOptions.sharedEntities));
+      },
+
+      postProcessEntityDerivedFields() {
+        preparePostEntityServerDerivedProperties(this.context);
+      },
+
+      postPrepareEntityClient() {
+        const { context } = this;
+        preparePostEntityClientDerivedProperties(context);
       },
 
       insight() {
