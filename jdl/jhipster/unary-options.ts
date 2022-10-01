@@ -16,28 +16,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import applicationOptions from './application-options';
 
-/**
- * formats a comment
- * @param comment string.
- * @returns formatted comment string
- */
-export default function formatComment(comment?: string): string | undefined {
-  if (!comment) {
-    return undefined;
+const Options: any = {
+  SKIP_CLIENT: applicationOptions.OptionNames.SKIP_CLIENT,
+  SKIP_SERVER: applicationOptions.OptionNames.SKIP_SERVER,
+  NO_FLUENT_METHOD: 'noFluentMethod',
+  READ_ONLY: 'readOnly',
+  FILTER: 'filter',
+  EMBEDDED: 'embedded',
+};
+
+const optionNames = Object.values(Options);
+
+Options.forEach = passedFunction => {
+  if (!passedFunction) {
+    throw new Error('A function has to be passed to loop over the unary options.');
   }
-  const parts = comment.trim().split('\n');
-  if (parts.length === 1 && parts[0].indexOf('*') !== 0) {
-    return parts[0];
-  }
-  return parts.reduce((previousValue, currentValue) => {
-    // newlines in the middle of the comment should stay to achieve:
-    // multiline comments entered by user drive unchanged from JDL
-    // studio to generated domain class
-    let delimiter = '';
-    if (previousValue !== '') {
-      delimiter = '\\n';
-    }
-    return previousValue.concat(delimiter, currentValue.trim().replace(/[*]*\s*/, ''));
-  }, '');
-}
+  optionNames.forEach(optionName => {
+    passedFunction(optionName);
+  });
+};
+
+Options.exists = option => Object.values(Options).includes(option);
+
+export default Options;

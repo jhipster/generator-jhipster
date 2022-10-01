@@ -17,27 +17,16 @@
  * limitations under the License.
  */
 
+import _ from 'lodash';
+
 /**
- * formats a comment
- * @param comment string.
- * @returns formatted comment string
+ * Returns an entity table name based on the passed entity name.
+ * @param entityName - the entity's name
+ * @returns the corresponding table name.
  */
-export default function formatComment(comment?: string): string | undefined {
-  if (!comment) {
-    return undefined;
+export default function getTableNameFromEntityName(entityName: string): string {
+  if (!entityName) {
+    throw new Error('An entity name must be passed to get a table name.');
   }
-  const parts = comment.trim().split('\n');
-  if (parts.length === 1 && parts[0].indexOf('*') !== 0) {
-    return parts[0];
-  }
-  return parts.reduce((previousValue, currentValue) => {
-    // newlines in the middle of the comment should stay to achieve:
-    // multiline comments entered by user drive unchanged from JDL
-    // studio to generated domain class
-    let delimiter = '';
-    if (previousValue !== '') {
-      delimiter = '\\n';
-    }
-    return previousValue.concat(delimiter, currentValue.trim().replace(/[*]*\s*/, ''));
-  }, '');
+  return _.snakeCase(entityName);
 }
