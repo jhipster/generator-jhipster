@@ -1,10 +1,9 @@
-import pQueue from 'p-queue';
+import PQueue from 'p-queue';
 import pTransform from 'p-transform';
 import memFsEditorState from 'mem-fs-editor/lib/state';
 
 import TemplateFileFs from './template-file-fs.mjs';
 
-const { default: PQueue } = pQueue;
 const { PTransform } = pTransform;
 const { isFilePending } = memFsEditorState;
 
