@@ -93,7 +93,7 @@
     "escape-string-regexp": "4.0.0",
     "glob": "8.0.3",
     "insight": "0.11.1",
-    "isbinaryfile": "4.0.10",
+    "isbinaryfile": "5.0.0",
     "js-yaml": "4.1.0",
     "lodash": "4.17.21",
     "mem-fs-editor": "9.5.0",
