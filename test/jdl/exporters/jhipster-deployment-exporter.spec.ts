@@ -25,9 +25,11 @@ import fs from 'fs';
 import path from 'path';
 import exportDeployments from '../../../jdl/exporters/jhipster-deployment-exporter';
 import JDLDeployment from '../../../jdl/models/jdl-deployment';
-import { DeploymentTypes } from '../../../jdl/jhipster/deployment-options';
+import DeploymentOptions from '../../../jdl/jhipster/deployment-options';
 
-const { DOCKERCOMPOSE, KUBERNETES } = DeploymentTypes;
+const {
+  DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },
+} = DeploymentOptions;
 
 describe('JHipsterDeploymentExporter', () => {
   describe('exportDeployments', () => {
