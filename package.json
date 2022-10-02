@@ -120,7 +120,6 @@
   },
   "devDependencies": {
     "@chevrotain/types": "^10.3.0",
-    "@esbuild-kit/cjs-loader": "^2.3.3",
     "@esbuild-kit/esm-loader": "2.4.2",
     "@types/chai": "4.3.3",
     "@types/mocha": "10.0.0",
