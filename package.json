@@ -143,7 +143,7 @@
     "sinon": "14.0.0",
     "sinon-chai": "3.7.0",
     "sort-keys": "5.0.0",
-    "typescript": "4.8.3",
+    "typescript": "4.8.4",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "6.3.0"
   },
