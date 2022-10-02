@@ -24,4 +24,9 @@ const Types = {
   FALSE: false,
 };
 
+export const EUREKA = Types.EUREKA;
+export const CONSUL = Types.CONSUL;
+export const NO = Types.NO;
+export const FALSE = Types.FALSE;
+
 export default Types;

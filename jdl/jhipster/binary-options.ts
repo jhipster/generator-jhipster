@@ -26,12 +26,9 @@ const NO_MAPPER = MapperTypes.NO;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 const NO_SERVICE = ServiceTypes.NO;
 
-const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
-const NO_PAGINATION = PaginationTypes.NO;
-
 const { ELASTICSEARCH, COUCHBASE, NO: NO_SEARCH } = SearchTypes;
 
-const Options = {
+export const Options = {
   DTO: 'dto',
   SERVICE: 'service',
   PAGINATION: 'pagination',
@@ -41,20 +38,28 @@ const Options = {
   CLIENT_ROOT_FOLDER: 'clientRootFolder',
 };
 
+export const DTO = Options.DTO;
+export const SERVICE = Options.SERVICE;
+export const PAGINATION = Options.PAGINATION;
+export const MICROSERVICE = Options.MICROSERVICE;
+export const SEARCH = Options.SEARCH;
+export const ANGULAR_SUFFIX = Options.ANGULAR_SUFFIX;
+export const CLIENT_ROOT_FOLDER = Options.CLIENT_ROOT_FOLDER;
+
 const optionNames = Object.values(Options);
 
 const Values = {
   [Options.DTO]: { MAPSTRUCT, NO: NO_MAPPER },
   [Options.SERVICE]: { SERVICE_CLASS, SERVICE_IMPL, NO: NO_SERVICE },
   [Options.PAGINATION]: {
-    PAGINATION,
-    'INFINITE-SCROLL': INFINITE_SCROLL,
-    NO: NO_PAGINATION,
+    PAGINATION: PaginationTypes.PAGINATION,
+    'INFINITE-SCROLL': PaginationTypes.INFINITE_SCROLL,
+    NO: PaginationTypes.NO,
   },
   [Options.SEARCH]: { ELASTICSEARCH, COUCHBASE, NO: NO_SEARCH },
 };
 
-const DefaultValues = {
+export const DefaultValues = {
   [Options.DTO]: Values[Options.DTO].NO,
   [Options.SERVICE]: Values[Options.SERVICE].NO,
   [Options.PAGINATION]: Values[Options.PAGINATION].NO,

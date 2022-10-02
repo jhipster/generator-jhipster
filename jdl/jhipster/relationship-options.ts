@@ -21,6 +21,8 @@ const Options = {
   JPA_DERIVED_IDENTIFIER: 'jpaDerivedIdentifier',
 };
 
+export const JPA_DERIVED_IDENTIFIER = Options.JPA_DERIVED_IDENTIFIER;
+
 function exists(option) {
   return Object.values(Options).includes(option);
 }

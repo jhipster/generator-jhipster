@@ -1,16 +1,16 @@
-const OpenAPIOptionsNames = {
+export const OpenAPIOptionsNames = {
   REGEN: 'regen',
   API_CLIENTS: 'new',
 };
 
-const OpenAPIOptionsValues = {
+export const OpenAPIOptionsValues = {
   REGEN: {
     YES: true,
     NO: false,
   },
 };
 
-const OpenAPIDefaultValues = {
+export const OpenAPIDefaultValues = {
   REGEN: OpenAPIOptionsValues.REGEN.NO,
 };
 

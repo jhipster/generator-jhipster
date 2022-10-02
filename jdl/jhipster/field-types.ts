@@ -25,7 +25,7 @@ import databaseTypes from './database-types';
 const { REQUIRED, UNIQUE, MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN } = validations;
 const { MONGODB, MARIADB, COUCHBASE, NEO4J, CASSANDRA, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 
-const CommonDBTypes = {
+export const CommonDBTypes = {
   STRING: 'String',
   INTEGER: 'Integer',
   LONG: 'Long',
@@ -45,12 +45,12 @@ const CommonDBTypes = {
   DURATION: 'Duration',
 };
 
-const RelationalOnlyDBTypes = {
+export const RelationalOnlyDBTypes = {
   BYTES: 'byte[]',
   BYTE_BUFFER: 'ByteBuffer',
 };
 
-const BlobTypes = {
+export const BlobTypes = {
   IMAGE: 'image',
   ANY: 'any',
   TEXT: 'text',
@@ -86,7 +86,7 @@ export default {
   BlobTypes,
 };
 
-function isCommonDBType(type) {
+export function isCommonDBType(type) {
   if (!type) {
     throw new Error('The passed type must not be nil.');
   }
@@ -94,7 +94,7 @@ function isCommonDBType(type) {
   return _.snakeCase(type).toUpperCase() in CommonDBTypes || type instanceof JDLEnum;
 }
 
-function isBlobType(type?: any) {
+export function isBlobType(type?: any) {
   if (!type) {
     return false;
   }
@@ -103,7 +103,7 @@ function isBlobType(type?: any) {
   );
 }
 
-function hasValidation(type, validation, isAnEnum?: any) {
+export function hasValidation(type, validation, isAnEnum?: any) {
   if (!type || !validation) {
     throw new Error('The passed type and value must not be nil.');
   }
@@ -113,7 +113,7 @@ function hasValidation(type, validation, isAnEnum?: any) {
   return isCommonDBType(type) && CommonDBValidations[type].has(validation);
 }
 
-function getIsType(databaseType, callback?: any) {
+export function getIsType(databaseType, callback?: any) {
   if (!databaseType) {
     throw new Error('The passed type must not be nil.');
   }

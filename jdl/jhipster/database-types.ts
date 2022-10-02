@@ -33,6 +33,15 @@ const Types: any = {
   NO: 'no',
 };
 
+export const SQL = Types.SQL;
+export const MYSQL = Types.MYSQL;
+export const POSTGRESQL = Types.POSTGRESQL;
+export const ORACLE = Types.ORACLE;
+export const MARIADB = Types.MARIADB;
+export const MSSQL = Types.MSSQL;
+export const H2_DISK = Types.H2_DISK;
+export const H2_MEMORY = Types.H2_MEMORY;
+
 Types.isSql = type =>
   [Types.SQL, Types.MYSQL, Types.POSTGRESQL, Types.ORACLE, Types.MARIADB, Types.MSSQL, Types.H2_DISK, Types.H2_MEMORY].includes(type);
 

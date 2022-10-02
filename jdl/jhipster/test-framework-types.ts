@@ -25,4 +25,10 @@ const Types = {
   NO: 'no',
 };
 
+export const PROTRACTOR = Types.PROTRACTOR;
+export const CYPRESS = Types.CYPRESS;
+export const CUCUMBER = Types.CUCUMBER;
+export const GATLING = Types.GATLING;
+export const NO = Types.NO;
+
 export default Types;

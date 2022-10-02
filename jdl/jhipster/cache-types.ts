@@ -27,4 +27,12 @@ const Types = {
   NO: 'no',
 };
 
+export const CAFFEINE = Types.CAFFEINE;
+export const EHCACHE = Types.EHCACHE;
+export const HAZELCAST = Types.HAZELCAST;
+export const INFINISPAN = Types.INFINISPAN;
+export const MEMCACHED = Types.MEMCACHED;
+export const REDIS = Types.REDIS;
+export const NO = Types.NO;
+
 export default Types;

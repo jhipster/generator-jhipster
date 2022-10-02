@@ -25,4 +25,10 @@ const Types = {
   NO: 'no',
 };
 
+export const ANGULAR = Types.ANGULAR;
+export const REACT = Types.REACT;
+export const VUE = Types.VUE;
+export const SVELTE = Types.SVELTE;
+export const NO = Types.NO;
+
 export default Types;

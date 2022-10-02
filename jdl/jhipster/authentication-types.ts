@@ -23,4 +23,8 @@ const Types = {
   SESSION: 'session',
 };
 
+export const JWT = Types.JWT;
+export const OAUTH2 = Types.OAUTH2;
+export const SESSION = Types.SESSION;
+
 export default Types;

@@ -22,4 +22,7 @@ const MessageBrokerTypes = {
   NO: false,
 };
 
+export const KAFKA = MessageBrokerTypes.KAFKA;
+export const NO = MessageBrokerTypes.NO;
+
 export default MessageBrokerTypes;
