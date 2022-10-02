@@ -64,7 +64,7 @@ module.exports = class DatabaseChangelogLiquibase extends BaseApplication {
     return this.asPreparingTaskGroup({
       prepareEntityForTemplates({ application }) {
         const databaseChangelog = this.databaseChangelog;
-        const entity = this.configOptions.sharedEntities[databaseChangelog.entityName];
+        const entity = this.sharedData.getEntity(databaseChangelog.entityName);
         if (!entity) {
           throw new Error(`Shared entity ${databaseChangelog.entityName} was not found`);
         }
@@ -163,7 +163,7 @@ module.exports = class DatabaseChangelogLiquibase extends BaseApplication {
           entityChanges.addedRelationships = databaseChangelog.addedRelationships
             .map(relationship => {
               const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-              relationship.otherEntity = this.configOptions.sharedEntities[otherEntityName];
+              relationship.otherEntity = this.sharedData.getEntity(otherEntityName);
               if (!relationship.otherEntity) {
                 throw new Error(`Error at entity ${entity.name}: could not find the entity of the relationship ${stringify(relationship)}`);
               }
