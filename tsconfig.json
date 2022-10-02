@@ -12,6 +12,7 @@
     /* Modules */
     "module": "node16" /* Specify what module code is generated. */,
     "rootDir": "./" /* Specify the root folder within your source files. */,
+    "resolveJsonModule": true,
 
     /* JavaScript Support */
     "allowJs": true /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */,
