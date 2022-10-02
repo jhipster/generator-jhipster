@@ -25,8 +25,8 @@ const { DEFAULT_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/prio
 const { writeAngularFiles, cleanupAngular } = require('./files-angular.cjs');
 const { writeReactFiles, cleanupReact } = require('./files-react.cjs');
 const { writeVueFiles } = require('./files-vue.cjs');
-const { entityClientI18nFiles } = require('../entity-i18n/files');
-const { clientI18nFiles } = require('../languages/files');
+const { entityClientI18nFiles } = require('../entity-i18n/files.js');
+const { clientI18nFiles } = require('../languages/files.js');
 
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
 

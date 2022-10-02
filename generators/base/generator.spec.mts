@@ -42,7 +42,7 @@ describe(`JHipster ${generator} generator`, () => {
     expect(instance.features.bar).toBe(true);
   });
 
-  describe('EnvironmentBuilder', () => {
+  describe.skip('EnvironmentBuilder', () => {
     let envBuilder;
     before(() => {
       envBuilder = EnvironmentBuilder.createDefaultBuilder();

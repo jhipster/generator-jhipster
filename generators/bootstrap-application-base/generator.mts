@@ -48,6 +48,20 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
     this.loadStoredAppOptions();
   }
 
+  get configuring() {
+    return this.asLoadingTaskGroup({
+      configuring() {
+        if (this.jhipsterConfig.baseName === undefined) {
+          this.jhipsterConfig.baseName = 'jhipster';
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.configuring;
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadApplication({ application }) {

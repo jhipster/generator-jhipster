@@ -18,7 +18,6 @@
  */
 import chalk from 'chalk';
 import lodash from 'lodash';
-import { readFile } from 'fs/promises';
 
 import BaseBlueprintGenerator from '../generator-base-blueprint.js';
 import { SKIP_COMMIT_HOOK } from '../init/constants.cjs';

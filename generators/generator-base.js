@@ -158,6 +158,9 @@ class JHipsterBaseGenerator extends PrivateBase {
     /* Register generator for compose once */
     this.registerComposedGenerator(this.options.namespace);
 
+    this.loadRuntimeOptions();
+    this.loadStoredAppOptions();
+
     if (this.options.namespace !== 'jhipster:bootstrap') {
       /*
       // eslint-disable-next-line global-require
@@ -1904,8 +1907,6 @@ class JHipsterBaseGenerator extends PrivateBase {
    * Generate a KeyStore.
    */
   generateKeyStore() {
-    const done = this.async();
-
     let keystoreFolder = `${SERVER_MAIN_RES_DIR}config/tls/`;
     if (this.destinationPath) {
       keystoreFolder = this.destinationPath(keystoreFolder);
@@ -1914,7 +1915,6 @@ class JHipsterBaseGenerator extends PrivateBase {
 
     if (this.fs.exists(keyStoreFile)) {
       this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
-      done();
     } else {
       try {
         shelljs.mkdir('-p', keystoreFolder);
@@ -1929,6 +1929,11 @@ class JHipsterBaseGenerator extends PrivateBase {
       if (javaHome) {
         keytoolPath = `${javaHome}/bin/`;
       }
+      if (process.env.FAKE_KEYTOOL === 'true') {
+        fs.writeFileSync(keyStoreFile, 'fake key-tool');
+        return;
+      }
+      const done = this.async();
       // Generate the PKCS#12 keystore
       shelljs.exec(
         // prettier-ignore

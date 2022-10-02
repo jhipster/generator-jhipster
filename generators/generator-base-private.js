@@ -542,7 +542,7 @@ module.exports = class PrivateBase extends Generator {
       if (!creationTimestamp) {
         this.warning(`Error parsing creationTimestamp ${creationTimestampOption}.`);
       } else if (creationTimestamp > new Date().getTime()) {
-        this.error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
+        throw new Error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
       }
     }
     return creationTimestamp;
