@@ -27,10 +27,11 @@ const EnvironmentBuilder = require('./environment-builder');
 const SUB_GENERATORS = require('./commands');
 const JHipsterCommand = require('./jhipster-command');
 const { CLI_NAME, logger, getCommand, done } = require('./utils');
-const { version: JHIPSTER_VERSION } = require('../package.json');
+const { packageJson } = require('../lib/index.js');
 const { packageNameToNamespace } = require('../generators/utils');
 const { logo } = require('./logo.cjs');
 
+const { version: JHIPSTER_VERSION } = packageJson;
 const JHIPSTER_NS = CLI_NAME;
 
 const moreInfo = `\n  For more info visit ${chalk.blue('https://www.jhipster.tech')}\n`;

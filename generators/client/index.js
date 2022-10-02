@@ -29,7 +29,7 @@ const { cleanup: cleanupVue, writeFiles: writeVueFiles } = require('./files-vue'
 const writeCommonFiles = require('./files-common').writeFiles;
 const { clientI18nFiles } = require('../languages/files');
 
-const packagejs = require('../../package.json');
+const { packageJson: packagejs } = require('../../lib/index.js');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');

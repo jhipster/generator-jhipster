@@ -36,7 +36,7 @@ const prompts = require('./prompts');
 const statistics = require('../statistics');
 const constants = require('../generator-constants');
 const { translationDefaultConfig } = require('../generator-defaults');
-const { GENERATOR_LANGUAGES } = require('../generator-list');
+const { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION_BASE } = require('../generator-list');
 const { clientI18nFiles } = require('./files');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
@@ -103,6 +103,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   async _postConstruct() {
+    this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints('languages', { languages: this.languagesToApply, arguments: this.options.languages });
     }
