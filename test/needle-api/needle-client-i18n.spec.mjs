@@ -1,12 +1,19 @@
-const path = require('path');
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const fse = require('fs-extra');
-const LanguagesGenerator = require('../../generators/languages');
-const constants = require('../../generators/generator-constants');
+import path, { dirname } from 'path';
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import fse from 'fs-extra';
+import { fileURLToPath } from 'url';
+
+import LanguagesGenerator from '../../generators/languages/index.mjs';
+import constants from '../../generators/generator-constants.js';
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const generatorPath = path.join(__dirname, '../../generators/languages/index.mjs');
 
 const mockBlueprintSubGen = class extends LanguagesGenerator {
   constructor(args, opts, features) {
@@ -21,7 +28,7 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
     this.sbsBlueprint = true;
   }
 
-  get writing() {
+  get [LanguagesGenerator.WRITING]() {
     const customPhaseSteps = {
       addElementInTranslation() {
         this.addElementTranslationKey('my_key', 'My Value', 'en');
@@ -41,9 +48,9 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
 };
 
 describe('needle API i18n: JHipster language generator with blueprint', () => {
-  before(done => {
-    helpers
-      .run(path.join(__dirname, '../../generators/languages'))
+  before(async () => {
+    await helpers
+      .run(generatorPath)
       .inTmpDir(dir => {
         fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
       })
@@ -63,8 +70,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
         enableTranslation: true,
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
-      })
-      .on('end', done);
+      });
   });
 
   it('Assert english global.json contain the new key', () => {

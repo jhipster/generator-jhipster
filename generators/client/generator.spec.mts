@@ -20,7 +20,7 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import assert from 'yeoman-assert';
+import assert from 'assert';
 
 import testSupport from '../../test/support/index.cjs';
 import Generator from './index.js';

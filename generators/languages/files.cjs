@@ -16,7 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { CLIENT_MAIN_SRC_DIR } = require('../generator-constants');
+const constants = require('../generator-constants.js');
+
+const { CLIENT_MAIN_SRC_DIR } = constants;
 
 module.exports.clientI18nFiles = {
   clientI18nFiles: [

@@ -16,16 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { detectLanguage } = require('../../utils/language');
+import detectLanguage from './detect-language.mjs';
 
-module.exports = {
-  askForLanguages,
-  askI18n,
-};
-
-function askI18n() {
-  if (this.options.skipPrompts) return undefined;
-  return this.prompt(
+export async function askI18n() {
+  if (!this.askForMoreLanguages || this.options.skipPrompts) return;
+  const nativeLanguage = this.jhipsterConfig.nativeLanguage;
+  const answers = await this.prompt(
     [
       {
         type: 'confirm',
@@ -44,13 +40,16 @@ function askI18n() {
     ],
     this.config
   );
+  if (nativeLanguage !== answers.nativeLanguage) {
+    this.languagesToApply.push(answers.nativeLanguage);
+  }
 }
 
-function askForLanguages() {
-  if (this.options.skipPrompts || this.languagesToApply || !this.jhipsterConfig.enableTranslation) {
-    return undefined;
+export async function askForLanguages() {
+  if (!this.askForMoreLanguages || this.options.skipPrompts || this.options.languages || !this.jhipsterConfig.enableTranslation) {
+    return;
   }
-  return this.prompt([
+  const answers = await this.prompt([
     {
       type: 'checkbox',
       name: 'languages',
@@ -62,7 +61,8 @@ function askForLanguages() {
         return languageOptions.filter(l => l.value !== nativeLanguage && !currentLanguages.includes(l.value));
       },
     },
-  ]).then(answers => {
-    this.languagesToApply = answers.languages;
-  });
+  ]);
+  if (answers.languages && answers.languages.length > 0) {
+    this.languagesToApply.push(...answers.languages);
+  }
 }
