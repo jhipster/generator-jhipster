@@ -16,24 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { uniqBy } = require('lodash');
-const JDLReader = require('./readers/jdl-reader');
-const ParsedJDLToJDLObjectConverter = require('./converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
-const { readJSONFile } = require('./readers/json-file-reader');
-const { doesFileExist } = require('./utils/file-utils');
-const JDLWithoutApplicationToJSONConverter = require('./converters/jdl-to-json/jdl-without-application-to-json-converter');
-const JDLWithApplicationsToJSONConverter = require('./converters/jdl-to-json/jdl-with-applications-to-json-converter');
-const JHipsterApplicationExporter = require('./exporters/applications/jhipster-application-exporter');
-const JHipsterApplicationFormatter = require('./exporters/applications/jhipster-application-formatter');
-const JHipsterDeploymentExporter = require('./exporters/jhipster-deployment-exporter');
-const JHipsterEntityExporter = require('./exporters/jhipster-entity-exporter');
-const JDLWithApplicationValidator = require('./validators/jdl-with-application-validator');
-const JDLWithoutApplicationValidator = require('./validators/jdl-without-application-validator');
-const { OptionNames } = require('./jhipster/application-options');
+import { uniqBy } from 'lodash';
+import * as JDLReader from './readers/jdl-reader';
+import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter';
+import { readJSONFile } from './readers/json-file-reader';
+import { doesFileExist } from './utils/file-utils';
+import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter';
+import JDLWithApplicationsToJSONConverter from './converters/jdl-to-json/jdl-with-applications-to-json-converter';
+import { exportApplication, exportApplications } from './exporters/applications/jhipster-application-exporter';
+import { formatApplicationToExport, formatApplicationsToExport } from './exporters/applications/jhipster-application-formatter';
+import exportDeployments from './exporters/jhipster-deployment-exporter';
+import exportEntities from './exporters/jhipster-entity-exporter';
+import createWithApplicationValidator from './validators/jdl-with-application-validator';
+import createWithoutApplicationValidator from './validators/jdl-without-application-validator';
+import { OptionNames } from './jhipster/application-options';
 
 const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
 
-module.exports = {
+export default {
   createImporterFromContent,
   createImporterFromFiles,
 };
@@ -57,7 +57,7 @@ module.exports = {
  * @returns {Object} a JDL importer.
  * @throws {Error} if files aren't passed.
  */
-function createImporterFromFiles(files, configuration) {
+export function createImporterFromFiles(files, configuration?: any) {
   if (!files) {
     throw new Error('Files must be passed to create a new JDL importer.');
   }
@@ -85,7 +85,7 @@ function createImporterFromFiles(files, configuration) {
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
  */
-function createImporterFromContent(jdlString, configuration) {
+export function createImporterFromContent(jdlString, configuration?: any) {
   if (!jdlString) {
     throw new Error('A JDL content must be passed to create a new JDL importer.');
   }
@@ -93,8 +93,15 @@ function createImporterFromContent(jdlString, configuration) {
   return makeJDLImporter(content, configuration || {});
 }
 
+type ImportState = {
+  exportedApplications: any[];
+  exportedApplicationsWithEntities: any;
+  exportedEntities: any[];
+  exportedDeployments: any[];
+};
+
 function makeJDLImporter(content, configuration) {
-  let importState = {
+  let importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},
     exportedEntities: [],
@@ -185,7 +192,7 @@ function checkForErrors(jdlObject, configuration, logger = console) {
         blueprints = application['generator-jhipster'].blueprints;
       }
     }
-    validator = JDLWithoutApplicationValidator.createValidator(
+    validator = createWithoutApplicationValidator(
       jdlObject,
       {
         applicationType,
@@ -197,7 +204,7 @@ function checkForErrors(jdlObject, configuration, logger = console) {
       { unidirectionalRelationships }
     );
   } else {
-    validator = JDLWithApplicationValidator.createValidator(jdlObject, logger, { unidirectionalRelationships });
+    validator = createWithApplicationValidator(jdlObject, logger, { unidirectionalRelationships });
   }
   validator.checkForErrors();
 }
@@ -236,15 +243,15 @@ function importOnlyEntities(jdlObject, configuration) {
 function importOneApplicationAndEntities(jdlObject, configuration) {
   const { skipFileGeneration, unidirectionalRelationships, forceNoFiltering } = configuration;
 
-  const importState = {
+  const importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},
     exportedEntities: [],
     exportedDeployments: [],
   };
-  const formattedApplication = JHipsterApplicationFormatter.formatApplicationToExport(jdlObject.getApplications()[0], configuration);
+  const formattedApplication = formatApplicationToExport(jdlObject.getApplications()[0], configuration);
   if (!skipFileGeneration) {
-    JHipsterApplicationExporter.exportApplication(formattedApplication);
+    exportApplication(formattedApplication);
   }
   importState.exportedApplications.push(formattedApplication);
   const jdlApplication = jdlObject.getApplications()[0];
@@ -253,7 +260,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
     jdlObject,
     unidirectionalRelationships,
   });
-  const jsonEntities = entitiesPerApplicationMap.get(applicationName);
+  const jsonEntities: any = entitiesPerApplicationMap.get(applicationName);
   importState.exportedApplicationsWithEntities[applicationName] = {
     config: formattedApplication['generator-jhipster'],
     entities: [],
@@ -275,19 +282,19 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
 function importApplicationsAndEntities(jdlObject, configuration) {
   const { skipFileGeneration, unidirectionalRelationships, forceNoFiltering } = configuration;
 
-  const importState = {
+  const importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},
     exportedEntities: [],
     exportedDeployments: [],
   };
 
-  const formattedApplications = JHipsterApplicationFormatter.formatApplicationsToExport(jdlObject.applications, configuration);
+  const formattedApplications = formatApplicationsToExport(jdlObject.applications, configuration);
   importState.exportedApplications = formattedApplications;
   if (!skipFileGeneration) {
-    JHipsterApplicationExporter.exportApplications(formattedApplications);
+    exportApplications(formattedApplications);
   }
-  const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
+  const entitiesPerApplicationMap: Map<any, any> = JDLWithApplicationsToJSONConverter.convert({
     jdlObject,
     unidirectionalRelationships,
   });
@@ -311,7 +318,7 @@ function importApplicationsAndEntities(jdlObject, configuration) {
 }
 
 function importDeployments(deployments) {
-  return JHipsterDeploymentExporter.exportDeployments(deployments);
+  return exportDeployments(deployments);
 }
 
 function exportJSONEntities(entities, configuration) {
@@ -324,7 +331,7 @@ function exportJSONEntities(entities, configuration) {
     applicationType = configuration.application['generator-jhipster'].applicationType;
   }
 
-  return JHipsterEntityExporter.exportEntities({
+  return exportEntities({
     entities,
     forceNoFiltering,
     skipFileGeneration,

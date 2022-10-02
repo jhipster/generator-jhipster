@@ -18,20 +18,23 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { jestExpect } = require('mocha-expect-snapshot');
-const fse = require('fs-extra');
-const path = require('path');
-const { expect } = require('chai');
+import { jestExpect } from 'mocha-expect-snapshot';
+import fse from 'fs-extra';
+import path from 'path';
+import { expect } from 'chai';
 
-const ApplicationTypes = require('../../jdl/jhipster/application-types');
-const { NO: NO_CLIENT_FRAMEWORK } = require('../../jdl/jhipster/client-framework-types');
-const DatabaseTypes = require('../../jdl/jhipster/database-types');
-const { createImporterFromFiles, createImporterFromContent } = require('../../jdl/jdl-importer');
+import ApplicationTypes from '../../jdl/jhipster/application-types';
+import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
+import DatabaseTypes from '../../jdl/jhipster/database-types';
+import { createImporterFromFiles, createImporterFromContent } from '../../jdl/jdl-importer';
+
+const { NO: NO_CLIENT_FRAMEWORK } = ClientFrameworkTypes;
 
 describe('JDLImporter', () => {
   describe('createImporterFromFiles', () => {
     context('when not passing files', () => {
       it('should fail', () => {
+        // @ts-ignore
         expect(() => createImporterFromFiles()).to.throw(/^Files must be passed to create a new JDL importer\.$/);
       });
     });
@@ -39,6 +42,7 @@ describe('JDLImporter', () => {
   describe('createImporterFromContent', () => {
     context('when not passing any content', () => {
       it('should fail', () => {
+        // @ts-ignore
         expect(() => createImporterFromContent()).to.throw(/^A JDL content must be passed to create a new JDL importer\.$/);
       });
     });
@@ -46,7 +50,7 @@ describe('JDLImporter', () => {
   describe('import', () => {
     context('when not parsing applications', () => {
       const ENTITY_NAMES = ['Country', 'Department', 'Employee', 'Job', 'JobHistory', 'Location', 'Region', 'Task'];
-      let filesExist = true;
+      let filesExist: any = true;
       let returned;
 
       before(() => {
@@ -281,7 +285,7 @@ relationship OneToOne {
       });
     });
     context('when parsing JDL applications and exporting them', () => {
-      const contents = [];
+      const contents: any[] = [];
       const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
 
       before(() => {
@@ -475,7 +479,7 @@ relationship OneToOne {
       });
     });
     context('when parsing JDL applications and deployment config', () => {
-      const contents = [];
+      const contents: any[] = [];
       const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
 
       before(() => {
@@ -509,7 +513,7 @@ relationship OneToOne {
       });
     });
     context('when parsing deployment config', () => {
-      const contents = [];
+      const contents: any[] = [];
       const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes', 'openshift'];
 
       before(() => {
@@ -537,7 +541,7 @@ relationship OneToOne {
       });
     });
     context('when parsing JDL applications and deployment config with a realistic sample', () => {
-      const contents = [];
+      const contents: any[] = [];
       const FOLDER_NAMES = ['store', 'product', 'invoice', 'notification', 'docker-compose', 'kubernetes'];
 
       before(() => {
@@ -907,7 +911,7 @@ ${entities}`,
             parameter = callParameter;
           },
         };
-        importState = importer.import(logger);
+        importState = importer.import(logger as Console);
       });
       after(() => {
         fse.removeSync('.yo-rc.json');
