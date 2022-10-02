@@ -8,7 +8,7 @@ import {
   buildServerMatrix,
   extendMatrix,
   extendFilteredMatrix,
-  entitiesSimple as entities,
+  entitiesServerSamples as entities,
 } from '../../test/support/index.mjs';
 import Generator from './index.js';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
