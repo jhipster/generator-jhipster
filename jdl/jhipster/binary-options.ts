@@ -60,11 +60,11 @@ const DefaultValues = {
   [Options.PAGINATION]: Values[Options.PAGINATION].NO,
 };
 
-function getOptionName(optionValue) {
+export function getOptionName(optionValue) {
   return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
 }
 
-const OptionValues = {
+export const OptionValues = {
   mapstruct: 'MAPSTRUCT',
   serviceClass: 'SERVICE_CLASS',
   serviceImpl: 'SERVICE_IMPL',

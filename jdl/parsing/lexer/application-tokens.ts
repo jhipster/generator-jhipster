@@ -20,7 +20,10 @@
 import { Lexer } from 'chevrotain';
 import createTokenFromConfig from './token-creator';
 import { UNARY_OPTION, KEYWORD } from './shared-tokens';
-import { OptionNames } from '../../jhipster/application-options';
+
+import ApplicationOptions from '../../jhipster/application-options';
+
+const { OptionNames } = ApplicationOptions;
 
 const {
   APPLICATION_TYPE,

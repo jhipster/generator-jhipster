@@ -17,29 +17,28 @@
  * limitations under the License.
  */
 
-export { formatComment };
+import JDLField from '../../models/jdl-field';
+import { formatComment } from '../../utils/format-utils';
+import { lowerFirst } from '../../utils/string-utils';
+
+export default { convertField };
 
 /**
- * formats a comment
- * @param comment string.
- * @returns formatted comment string
+ * Converts a parsed JDL content corresponding to a field to a JDLField object.
+ * @param {Object} field - a parsed JDL field.
+ * @return {JDLField} the converted JDLField.
  */
-export default function formatComment(comment?: string): string | undefined {
-  if (!comment) {
-    return undefined;
+export function convertField(field) {
+  if (!field) {
+    throw new Error('A field has to be passed so as to be converted.');
   }
-  const parts = comment.trim().split('\n');
-  if (parts.length === 1 && parts[0].indexOf('*') !== 0) {
-    return parts[0];
+  const name = lowerFirst(field.name);
+  const jdlField = new JDLField({
+    name,
+    type: field.type,
+  });
+  if (field.javadoc) {
+    jdlField.comment = formatComment(field.javadoc);
   }
-  return parts.reduce((previousValue, currentValue) => {
-    // newlines in the middle of the comment should stay to achieve:
-    // multiline comments entered by user drive unchanged from JDL
-    // studio to generated domain class
-    let delimiter = '';
-    if (previousValue !== '') {
-      delimiter = '\\n';
-    }
-    return previousValue.concat(delimiter, currentValue.trim().replace(/[*]*\s*/, ''));
-  }, '');
+  return jdlField;
 }

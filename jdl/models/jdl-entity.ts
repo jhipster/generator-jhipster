@@ -18,7 +18,7 @@
  */
 
 import { merge } from '../utils/object-utils';
-import { getTableNameFromEntityName } from '../jhipster/entity-table-name-creator';
+import getTableNameFromEntityName from '../jhipster/entity-table-name-creator';
 
 export default class JDLEntity {
   name: any;

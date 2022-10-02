@@ -19,7 +19,7 @@
 /* eslint-disable no-useless-escape */
 
 import _ from 'lodash';
-import { tokenMatcher as matchesToken } from '@chevrotain/types';
+import { tokenMatcher as matchesToken } from 'chevrotain';
 
 import JDLParser from './jdl-parser';
 import { tokens as LexerTokens } from './lexer/lexer';
@@ -337,9 +337,7 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
     this.errors = [];
   }
 
-  validateVisitor() {
-    throw new Error('Method not implemented.');
-  }
+  validateVisitor() {}
 
   checkNameSyntax(token, expectedPattern, errorMessagePrefix) {
     if (!expectedPattern.test(token.image)) {

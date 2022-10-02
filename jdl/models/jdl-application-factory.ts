@@ -26,6 +26,8 @@ import {
 } from '../jhipster/default-application-options';
 import JDLApplication from './jdl-application';
 
+export { createJDLApplication };
+
 /**
  * Creates a JDL application from a passed configuration.
  * @param {Object} config - the application configuration.

@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { CstParser } from '@chevrotain/types';
+import { CstParser } from 'chevrotain';
 import { tokens as LexerTokens } from './lexer/lexer';
 
 let instance;

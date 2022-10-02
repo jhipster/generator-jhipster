@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 
-import { OptionNames } from '../jhipster/application-options';
+import ApplicationOptions from '../jhipster/application-options';
+
+const { OptionNames } = ApplicationOptions;
 
 export default class JDLApplicationConfiguration {
   options: any;

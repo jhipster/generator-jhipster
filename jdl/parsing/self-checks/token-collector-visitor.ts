@@ -17,9 +17,17 @@
  * limitations under the License.
  */
 
-import { GAstVisitor } from 'chevrotain';
+import { Alternation, Alternative, GAstVisitor, NonTerminal, Option, Repetition, RepetitionMandatory, Rule } from 'chevrotain';
 
 export default class TokenCollectorVisitor extends GAstVisitor {
+  visitNonTerminal(node: NonTerminal) {}
+  visitAlternative(node: Alternative) {}
+  visitOption(node: Option) {}
+  visitRepetition(node: Repetition) {}
+  visitRepetitionMandatory(node: RepetitionMandatory) {}
+  visitAlternation(node: Alternation) {}
+  visitRule(node: Rule) {}
+
   actualTokens: any[];
 
   constructor() {

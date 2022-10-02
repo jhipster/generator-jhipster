@@ -19,7 +19,9 @@
 import logger from '../utils/objects/logger';
 import RelationshipTypes from '../jhipster/relationship-types';
 import { lowerFirst } from '../utils/string-utils';
-import { REQUIRED } from '../jhipster/validations';
+import Validations from '../jhipster/validations';
+
+const { REQUIRED } = Validations;
 
 export default class JDLRelationship {
   from: any;

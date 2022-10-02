@@ -81,15 +81,7 @@ const {
   GRADLE_ENTERPRISE_HOST,
 } = OptionNames;
 
-export default {
-  getConfigForMonolithApplication,
-  getConfigForGatewayApplication,
-  getConfigForMicroserviceApplication,
-  getDefaultConfigForNewApplication,
-  getConfigForApplicationType,
-};
-
-function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
+export function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
   if (applicationType === MONOLITH) {
     return getConfigForMonolithApplication(customOptions);
   }
@@ -102,7 +94,7 @@ function getConfigForApplicationType(applicationType = undefined, customOptions 
   return getDefaultConfigForNewApplication(customOptions);
 }
 
-function getConfigForMonolithApplication(customOptions: any = {}): any {
+export function getConfigForMonolithApplication(customOptions: any = {}): any {
   const options = {
     [AUTHENTICATION_TYPE]: JWT,
     [CACHE_PROVIDER]: EHCACHE,
@@ -131,7 +123,7 @@ function getConfigForMonolithApplication(customOptions: any = {}): any {
   };
 }
 
-function getConfigForGatewayApplication(customOptions: any = {}): any {
+export function getConfigForGatewayApplication(customOptions: any = {}): any {
   const options = {
     [AUTHENTICATION_TYPE]: JWT,
     [CLIENT_FRAMEWORK]: ANGULAR,
@@ -165,7 +157,7 @@ function getConfigForGatewayApplication(customOptions: any = {}): any {
   };
 }
 
-function getConfigForMicroserviceApplication(customOptions: any = {}): any {
+export function getConfigForMicroserviceApplication(customOptions: any = {}): any {
   const DEFAULT_SERVER_PORT = '8081';
   const options = {
     [AUTHENTICATION_TYPE]: JWT,
@@ -200,7 +192,7 @@ function getConfigForMicroserviceApplication(customOptions: any = {}): any {
   };
 }
 
-function getDefaultConfigForNewApplication(customOptions: any = {}): any {
+export function getDefaultConfigForNewApplication(customOptions: any = {}): any {
   const options = {
     [BASE_NAME]: OptionValues[BASE_NAME],
     [BUILD_TOOL]: MAVEN,
