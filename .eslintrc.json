@@ -72,6 +72,9 @@
     "@typescript-eslint/no-empty-function": "off",
     "comma-dangle": "off",
     "max-len": "off",
+    // TODO: Investigate if we can avoid the issue instead of
+    // deactivating the lint rule.
+    "import/no-duplicates": "off",
     "func-names": "off",
     "class-methods-use-this": "off",
     "no-underscore-dangle": "off",
