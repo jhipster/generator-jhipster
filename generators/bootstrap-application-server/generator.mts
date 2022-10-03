@@ -30,7 +30,6 @@ const {
   CommonDBTypes: { LONG: TYPE_LONG },
 } = FieldTypes.default;
 const { OAUTH2 } = AuthentitcationTypes.default;
-const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } = constants;
 const {
   loadRequiredConfigIntoEntity,
   loadRequiredConfigDerivedProperties,
