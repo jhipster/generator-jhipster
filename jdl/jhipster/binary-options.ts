@@ -48,7 +48,7 @@ export const CLIENT_ROOT_FOLDER = Options.CLIENT_ROOT_FOLDER;
 
 const optionNames = Object.values(Options);
 
-const Values = {
+export const Values = {
   [Options.DTO]: { MAPSTRUCT, NO: NO_MAPPER },
   [Options.SERVICE]: { SERVICE_CLASS, SERVICE_IMPL, NO: NO_SERVICE },
   [Options.PAGINATION]: {
