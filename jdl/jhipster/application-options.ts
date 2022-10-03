@@ -309,6 +309,7 @@ const QuotedOptionNames = [
 ];
 
 export { optionNames as OptionNames };
+export { optionValues as OptionValues };
 
 export default {
   OptionTypes: ApplicationOptionTypes,

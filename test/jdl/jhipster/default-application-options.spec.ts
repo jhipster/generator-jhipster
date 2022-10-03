@@ -19,14 +19,13 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import defaultApplicationOptions from '../../../jdl/jhipster/default-application-options';
 
-const {
+import {
   getConfigForMonolithApplication,
   getConfigForGatewayApplication,
   getConfigForMicroserviceApplication,
   getDefaultConfigForNewApplication,
-} = defaultApplicationOptions;
+} from '../../../jdl/jhipster/default-application-options';
 
 describe('DefaultApplicationOptions', () => {
   describe('getConfigForMonolithApplication', () => {
