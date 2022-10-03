@@ -35,7 +35,7 @@ describe('ObjectUtils', () => {
       });
     });
     context('when merging a not-empty object with a nil one', () => {
-      let merged: {} | { a: number };
+      let merged: Record<string, never> | { a: number };
 
       before(() => {
         merged = merge({}, { a: 1 });
