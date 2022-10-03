@@ -107,7 +107,6 @@ describe('FieldTypes', () => {
           FieldTypes.hasValidation();
         }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {
-          // @ts-expect-error
           FieldTypes.hasValidation(null, Validations.MAXLENGTH);
         }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {
