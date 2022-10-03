@@ -582,9 +582,6 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
 export default function performAdditionalSyntaxChecks(cst) {
   const syntaxValidatorVisitor = new JDLSyntaxValidatorVisitor();
 
-  // TODO: This method receives less arguments then it expects. This could be a bug.
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   syntaxValidatorVisitor.visit(cst);
   return syntaxValidatorVisitor.errors;
 }
