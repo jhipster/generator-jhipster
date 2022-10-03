@@ -88,7 +88,7 @@ describe('StringUtils', () => {
       context('as it is nil', () => {
         it('should fail', () => {
           expect(() => {
-            // @ts-ignore
+            // @ts-expect-error
             camelCase();
           }).to.throw(/^The passed string cannot be nil\.$/);
         });
@@ -104,7 +104,7 @@ describe('StringUtils', () => {
     context('when passing a nil string', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           lowerFirst();
         }).to.throw(/^The passed string cannot be nil.$/);
       });
@@ -124,7 +124,7 @@ describe('StringUtils', () => {
     context('when passing a nil string', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           upperFirst();
         }).to.throw(/^The passed string cannot be nil\.$/);
       });

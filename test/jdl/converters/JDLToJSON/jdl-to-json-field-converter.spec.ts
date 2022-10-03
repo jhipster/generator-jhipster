@@ -36,7 +36,7 @@ describe('JDLToJSONFieldConverter', () => {
   describe('convert', () => {
     context('when not passing a JDL object', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convert()).to.throw(/^A JDL Object must be passed to convert JDL fields to JSON\.$/);
       });
     });

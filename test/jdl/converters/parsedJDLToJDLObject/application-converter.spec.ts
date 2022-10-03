@@ -28,7 +28,7 @@ describe('ApplicationConverter', () => {
   describe('convertApplications', () => {
     context('when not passing applications', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convertApplications()).to.throw(/^Applications have to be passed so as to be converted\.$/);
       });
     });

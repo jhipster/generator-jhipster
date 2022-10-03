@@ -34,7 +34,7 @@ describe('JDLImporter', () => {
   describe('createImporterFromFiles', () => {
     context('when not passing files', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => createImporterFromFiles()).to.throw(/^Files must be passed to create a new JDL importer\.$/);
       });
     });
@@ -42,7 +42,7 @@ describe('JDLImporter', () => {
   describe('createImporterFromContent', () => {
     context('when not passing any content', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => createImporterFromContent()).to.throw(/^A JDL content must be passed to create a new JDL importer\.$/);
       });
     });

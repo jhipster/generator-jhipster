@@ -24,7 +24,7 @@ describe('EnumConverter', () => {
   describe('convertEnums', () => {
     context('when not passing enumerations', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convertEnums()).toThrow(/^Enumerations have to be passed so as to be converted.$/);
       });
     });

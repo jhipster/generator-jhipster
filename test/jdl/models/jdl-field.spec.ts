@@ -30,7 +30,7 @@ describe('JDLField', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           new JDLField();
         }).to.throw('The field name and type are mandatory to create a field.');
       });
@@ -58,7 +58,7 @@ describe('JDLField', () => {
           name: 'abc',
           type: 'String',
           comment: 'comment',
-          // @ts-ignore
+          // @ts-expect-error
           validations: [new JDLValidation()],
         };
         field = new JDLField(args);
@@ -190,7 +190,7 @@ describe('JDLField', () => {
           type: 'String',
           comment: 'comment',
           validations: [
-            // @ts-ignore
+            // @ts-expect-error
             new JDLValidation(),
             new JDLValidation({
               name: 'minlength',

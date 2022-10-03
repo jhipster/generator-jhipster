@@ -85,7 +85,7 @@ function init(passedConfiguration) {
 function fillApplications() {
   // TODO: Function which expects two arguments is called with three.
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  // @ts-expect-error
   const jdlApplications = convertApplications(parsedContent.applications, configuration, entityNames);
   jdlApplications.forEach(jdlApplication => {
     jdlObject.addApplication(jdlApplication);

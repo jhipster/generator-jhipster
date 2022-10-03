@@ -24,19 +24,19 @@ describe('EnumIssue', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => new EnumIssue()).to.throw(/^An issue must at least have a rule name\.$/);
       });
     });
     context('when not passing a rule name', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => new EnumIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
       });
     });
     context('when not passing an enum name', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => new EnumIssue({ ruleName: 'Toto' })).to.throw(/^An enum name must be passed\.$/);
       });
     });

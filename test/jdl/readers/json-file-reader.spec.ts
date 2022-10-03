@@ -29,7 +29,7 @@ describe('JSONFileReader', () => {
       context('with a nil entity name', () => {
         it('should fail', () => {
           expect(() => {
-            // @ts-ignore
+            // @ts-expect-error
             JSONFileReader.toFilePath();
           }).to.throw(/^The passed entity name must not be nil to be converted to file path\.$/);
         });

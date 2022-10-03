@@ -28,7 +28,7 @@ describe('JDLEntity', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           new JDLEntity();
         }).to.throw('The entity name is mandatory to create an entity.');
       });
@@ -65,7 +65,7 @@ describe('JDLEntity', () => {
               name: 'abc',
               type: 'String',
               comment: 'comment',
-              // @ts-ignore
+              // @ts-expect-error
               validations: [new JDLValidation()],
             }),
           ],
@@ -285,7 +285,7 @@ entity ${args.name} (${args.tableName})`
           name: 'myField',
           type: 'Integer',
           comment: 'Field comment',
-          // @ts-ignore
+          // @ts-expect-error
           validations: [new JDLValidation()],
         });
         field2 = new JDLField({

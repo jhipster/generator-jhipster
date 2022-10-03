@@ -33,7 +33,7 @@ describe('JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {
     context('when not passing JDL entities', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convert()).to.throw(/^JDL entities must be passed to get the basic entity information\.$/);
       });
     });
@@ -93,7 +93,7 @@ describe('JDLToJSONBasicEntityConverter', () => {
             comment: 'The best entity',
           });
           // TODO: Convert only accepts one argument. This might be a bug.
-          // @ts-ignore
+          // @ts-expect-error
           const returnedMap: any = convert([entityA], new Date(2020, 0, 1, 1, 0, 0));
           convertedEntity = returnedMap.get('A');
         });

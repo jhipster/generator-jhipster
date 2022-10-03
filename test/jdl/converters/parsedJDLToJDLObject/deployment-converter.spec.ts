@@ -24,7 +24,7 @@ describe('DeploymentConverter', () => {
   describe('convertDeployments', () => {
     context('when not passing deployments', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convertDeployments()).toThrow(/^Deployments have to be passed so as to be converted\.$/);
       });
     });

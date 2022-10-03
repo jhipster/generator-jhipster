@@ -27,7 +27,7 @@ describe('JSONEntity', () => {
     context('when not passing a configuration', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           new JSONEntity();
         }).to.throw(/^At least an entity name must be passed\.$/);
       });

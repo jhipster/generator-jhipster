@@ -37,7 +37,7 @@ describe('JHipsterDeploymentExporter', () => {
       context('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
-            // @ts-ignore
+            // @ts-expect-error
             exportDeployments();
           }).to.throw(/^Deployments have to be passed to be exported\.$/);
         });

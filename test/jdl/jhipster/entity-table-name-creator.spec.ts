@@ -24,7 +24,7 @@ describe('EntityTableNameCreator', () => {
   describe('getTableNameFromEntityName', () => {
     context('when not passing an entity name', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => getTableNameFromEntityName(undefined)).to.throw(/^An entity name must be passed to get a table name.$/);
       });
     });

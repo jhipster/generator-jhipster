@@ -584,7 +584,7 @@ export default function performAdditionalSyntaxChecks(cst) {
 
   // TODO: This method receives less arguments then it expects. This could be a bug.
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  // @ts-expect-error
   syntaxValidatorVisitor.visit(cst);
   return syntaxValidatorVisitor.errors;
 }

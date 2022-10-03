@@ -27,7 +27,7 @@ describe('ApplicationOptions', () => {
   describe('doesOptionExist', () => {
     context('when not passing anything', () => {
       it('should return false', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(doesOptionExist()).to.be.false;
       });
     });
@@ -45,7 +45,7 @@ describe('ApplicationOptions', () => {
   describe('getTypeForOption', () => {
     context('when not passing anything', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => getTypeForOption()).to.throw(/^A name has to be passed to get the option type.$/);
       });
     });
@@ -90,7 +90,7 @@ describe('ApplicationOptions', () => {
 
     context('when not passing anything', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => shouldTheValueBeQuoted()).to.throw(/^An option name has to be passed to know whether it is quoted.$/);
       });
     });

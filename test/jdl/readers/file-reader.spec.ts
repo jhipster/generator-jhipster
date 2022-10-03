@@ -27,7 +27,7 @@ describe('FileReader', () => {
     context('when passing a nil path', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           readFile(null);
         }).to.throw(/^The passed file must not be nil to be read\.$/);
       });
@@ -60,7 +60,7 @@ describe('FileReader', () => {
     context('when passing a nil iterable', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           readFiles(null);
         }).to.throw(/^The passed files must not be nil\.$/);
       });

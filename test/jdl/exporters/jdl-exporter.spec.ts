@@ -39,7 +39,7 @@ describe('JDLExporter', () => {
       context('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
-            // @ts-ignore
+            // @ts-expect-error
             exportToJDL();
           }).to.throw(/^A JDLObject has to be passed to be exported\.$/);
         });

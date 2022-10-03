@@ -33,7 +33,7 @@ export default function createApplicationConfigurationFromObject(configurationOb
     const optionValue = configurationObject[optionName];
     // TODO: This is probably a bug. The function does not expect two arguments!
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error
     if (!doesOptionExist(optionName, optionValue)) {
       logger.debug(`Unrecognized application option name and value: ${optionName} and ${optionValue}`);
       return;

@@ -25,7 +25,7 @@ describe('TokenCreator', () => {
   describe('createTokenFromConfig', () => {
     context('when not passing a config', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => createTokenFromConfig()).to.throw(/^Can't create a token without the proper config\.$/);
       });
     });

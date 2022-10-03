@@ -33,7 +33,7 @@ describe('JDLLinter', () => {
   describe('createJDLLinterFromFile', () => {
     context('when not passing a file', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => createJDLLinterFromFile(undefined)).to.throw(/^A JDL file must be passed to create a new JDL linter\.$/);
       });
     });
@@ -57,7 +57,7 @@ describe('JDLLinter', () => {
   describe('createJDLLinterFromContent', () => {
     context('when not passing a content', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => createJDLLinterFromContent(undefined)).to.throw(/^A JDL content must be passed to create a new JDL linter\.$/);
       });
     });

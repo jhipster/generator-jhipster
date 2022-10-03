@@ -24,7 +24,7 @@ describe('ArrayUtils', () => {
   describe('deduplicate', () => {
     context('when not passing an array', () => {
       it('should return an empty array', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(deduplicate()).to.deep.equal([]);
       });
     });

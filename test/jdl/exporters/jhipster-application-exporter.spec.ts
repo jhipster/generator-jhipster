@@ -199,7 +199,7 @@ Object {
       context('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
-            // @ts-ignore
+            // @ts-expect-error
             exportApplications();
           }).to.throw('Applications have to be passed to be exported.');
         });

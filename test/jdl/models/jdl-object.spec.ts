@@ -982,7 +982,7 @@ Array [
       object.addDeployment(deployment);
       entityA = new JDLEntity({ name: 'EntityA', tableName: 't_entity_a' });
       const field = new JDLField({ name: 'myField', type: 'String' });
-      // @ts-ignore
+      // @ts-expect-error
       field.addValidation(new JDLValidation());
       entityA.addField(field);
       object.addEntity(entityA);

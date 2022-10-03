@@ -24,7 +24,7 @@ describe('FieldConverter', () => {
   describe('convertField', () => {
     context('when not passing anything', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convertField()).toThrow(/^A field has to be passed so as to be converted.$/);
       });
     });

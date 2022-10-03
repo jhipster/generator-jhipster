@@ -38,7 +38,7 @@ describe('JDLToJSONOptionConverter', () => {
   describe('convert', () => {
     context('when not passing a JDL option holder', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convert()).to.throw(/^A JDL object or application must be passed to convert JDL options to JSON\.$/);
       });
     });

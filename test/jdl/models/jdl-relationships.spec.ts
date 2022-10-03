@@ -31,7 +31,7 @@ describe('JDLRelationships', () => {
       context('because it is nil', () => {
         it('should fail', () => {
           expect(() => {
-            // @ts-ignore
+            // @ts-expect-error
             new JDLRelationships().add();
           }).to.throw('A relationship must be passed so as to be added.');
         });
@@ -76,7 +76,7 @@ describe('JDLRelationships', () => {
     context('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           new JDLRelationships().get(RelationshipTypes.ONE_TO_MANY);
         }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
@@ -112,7 +112,7 @@ describe('JDLRelationships', () => {
     context('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           new JDLRelationships().getOneToOne();
         }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
@@ -148,7 +148,7 @@ describe('JDLRelationships', () => {
     context('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           new JDLRelationships().getOneToMany();
         }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
@@ -184,7 +184,7 @@ describe('JDLRelationships', () => {
     context('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           new JDLRelationships().getManyToOne();
         }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
@@ -220,7 +220,7 @@ describe('JDLRelationships', () => {
     context('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           new JDLRelationships().getManyToMany();
         }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });

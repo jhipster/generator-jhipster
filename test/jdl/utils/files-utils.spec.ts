@@ -29,7 +29,7 @@ describe('FileUtils', () => {
     context('when checking a file path', () => {
       context('with a nil file path', () => {
         it('should return false', () => {
-          // @ts-ignore
+          // @ts-expect-error
           expect(doesFileExist()).to.be.false;
         });
       });
@@ -49,7 +49,7 @@ describe('FileUtils', () => {
     context('when checking a directory path', () => {
       context('with a nil directory path', () => {
         it('return false', () => {
-          // @ts-ignore
+          // @ts-expect-error
           expect(doesDirectoryExist()).to.be.false;
         });
       });
@@ -69,7 +69,7 @@ describe('FileUtils', () => {
     context('when not passing a directory', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           createFolderIfItDoesNotExist();
         }).to.throw(/^A directory must be passed to be created\.$/);
       });

@@ -42,7 +42,7 @@ function getUselessTokens(usedTokens: any[], allDefinedTokens: any[]) {
   const usedCategories = _.uniq(_.flatMap(usedTokens, 'CATEGORIES'));
   // TODO: Calling uniq with two parameters is probably a bug.
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  // @ts-expect-error
   const notDirectlyUsedTokens = _.difference(allDefinedTokens, _.uniq(usedTokens, usedCategories));
   const redundant = _.reject(notDirectlyUsedTokens, token => {
     const tokCategories = (token as any).CATEGORIES;

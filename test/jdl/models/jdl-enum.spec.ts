@@ -27,7 +27,7 @@ describe('JDLEnum', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           new JDLEnum();
         }).to.throw("The enum's name must be passed to create an enum.");
       });

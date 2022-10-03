@@ -25,7 +25,7 @@ describe('JDLEnumValue', () => {
   describe('new', () => {
     context('when not passing an enum value name', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => new JDLEnumValue()).to.throw(/^The enum value name has to be passed to create an enum\.$/);
       });
     });
@@ -35,7 +35,7 @@ describe('JDLEnumValue', () => {
       let enumValue;
 
       before(() => {
-        // @ts-ignore
+        // @ts-expect-error
         enumValue = new JDLEnumValue('FRENCH');
       });
 
@@ -47,7 +47,7 @@ describe('JDLEnumValue', () => {
       let enumValue;
 
       before(() => {
-        // @ts-ignore
+        // @ts-expect-error
         enumValue = new JDLEnumValue('FRENCH', 'frenchy');
       });
 

@@ -103,15 +103,15 @@ describe('FieldTypes', () => {
     context('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           FieldTypes.hasValidation();
         }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           FieldTypes.hasValidation(null, Validations.MAXLENGTH);
         }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           FieldTypes.hasValidation('UNKNOWN-TYPE');
         }).to.throw(/^The passed type and value must not be nil\.$/);
       });

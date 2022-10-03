@@ -24,7 +24,7 @@ describe('EntityConverter', () => {
   describe('convertEntities', () => {
     context('when not passing entities', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convertEntities()).toThrow(/^Entities have to be passed so as to be converted\.$/);
       });
     });

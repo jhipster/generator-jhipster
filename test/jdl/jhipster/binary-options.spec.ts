@@ -64,7 +64,7 @@ Object {
   describe('forEach', () => {
     context('when not passing a function', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => BinaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the binary options\.$/);
       });
     });

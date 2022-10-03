@@ -30,7 +30,7 @@ describe('AbstractJDLOption', () => {
           new JDLBinaryOption({
             name: BinaryOptions.Options.SERVICE,
             value: BinaryOptions.Values.service.SERVICE_CLASS,
-            // @ts-ignore
+            // @ts-expect-error
           }).resolveEntityNames();
         }).toThrow(/^Entity names have to be passed to resolve the option's entities\.$/);
       });

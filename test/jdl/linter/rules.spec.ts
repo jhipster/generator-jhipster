@@ -25,14 +25,14 @@ describe('Rules', () => {
   describe('getRules', () => {
     context('when not passing a rule name', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => getRule(undefined)).to.throw(/^A rule name has to be passed to get a rule\.$/);
       });
     });
     context('when passing a rule name', () => {
       context('of an absent rule', () => {
         it('should return undefined', () => {
-          // @ts-ignore
+          // @ts-expect-error
           expect(getRule('toto')).to.be.undefined;
         });
       });

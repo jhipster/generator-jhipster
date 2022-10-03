@@ -39,7 +39,7 @@ describe('JHipsterEntityExporter', () => {
       context('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
-            // @ts-ignore
+            // @ts-expect-error
             exportEntities();
           }).to.throw('Entities have to be passed to be exported.');
         });

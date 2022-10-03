@@ -32,7 +32,7 @@ export function formatApplicationsToExport(applications, configuration) {
   return Object.values(applications).map(application => {
     // TODO: This is probably a bug, too many arguments given.
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error
     return setUpApplicationStructure(application, configuration);
   });
 }
@@ -46,7 +46,7 @@ export function formatApplicationsToExport(applications, configuration) {
 export function formatApplicationToExport(application, configuration = {}) {
   // TODO: This is probably a bug, too many arguments given.
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  // @ts-expect-error
   return setUpApplicationStructure(application, configuration);
 }
 

@@ -24,7 +24,7 @@ describe('ValidationConverter', () => {
   describe('convertValidations', () => {
     context('when not passing validations', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convertValidations()).toThrow(/^Validations have to be passed so as to be converted.$/);
       });
     });

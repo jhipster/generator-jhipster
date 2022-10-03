@@ -37,7 +37,7 @@ describe('JDLWithApplicationValidator', () => {
   describe('createValidator', () => {
     context('when not passing a JDL object', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => createValidator()).to.throw(/^A JDL object must be passed to check for business errors.$/);
       });
     });

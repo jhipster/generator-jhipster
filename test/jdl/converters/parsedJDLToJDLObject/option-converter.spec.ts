@@ -34,7 +34,7 @@ describe('OptionConverter', () => {
   describe('convertOptions', () => {
     context('when not passing options', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convertOptions()).toThrow(/^Options have to be passed so as to be converted\.$/);
       });
     });

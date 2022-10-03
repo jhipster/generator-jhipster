@@ -25,13 +25,13 @@ describe('Rule', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => new Rule()).to.throw(/^A rule must at least have a name\.$/);
       });
     });
     context('when not passing any name', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => new Rule({})).to.throw(/^A rule must at least have a name\.$/);
       });
     });
@@ -39,7 +39,7 @@ describe('Rule', () => {
       let rule: Rule;
 
       before(() => {
-        // @ts-ignore
+        // @ts-expect-error
         rule = new Rule({ name: 'Toto' });
       });
 
@@ -53,17 +53,17 @@ describe('Rule', () => {
     let otherRule: Rule;
 
     beforeEach(() => {
-      // @ts-ignore
+      // @ts-expect-error
       rule = new Rule({ name: 'Toto' });
 
-      // @ts-ignore
+      // @ts-expect-error
       otherRule = new Rule({ name: 'Tata' });
     });
 
     context('when comparing to no rule', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           rule.compareTo();
         }).to.throw(/^A rule has to be passed so as to be compared\.$/);
       });

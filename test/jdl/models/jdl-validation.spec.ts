@@ -28,7 +28,7 @@ describe('JDLValidation', () => {
       let validation;
 
       before(() => {
-        // @ts-ignore
+        // @ts-expect-error
         validation = new JDLValidation();
       });
 
@@ -58,7 +58,7 @@ describe('JDLValidation', () => {
       let validation;
 
       before(() => {
-        // @ts-ignore
+        // @ts-expect-error
         validation = new JDLValidation();
       });
 

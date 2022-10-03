@@ -24,7 +24,7 @@ describe('RelationshipConverter', () => {
   describe('convertRelationships', () => {
     context('when not passing relationships', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => convertRelationships()).toThrow(/^Relationships have to be passed so as to be converted\.$/);
       });
     });

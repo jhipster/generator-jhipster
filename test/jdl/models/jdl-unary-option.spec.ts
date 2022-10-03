@@ -28,7 +28,7 @@ describe('JDLUnaryOption', () => {
     context('when passing no argument', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error
           new JDLUnaryOption();
         }).to.throw("The option's name must be passed to create an option.");
       });

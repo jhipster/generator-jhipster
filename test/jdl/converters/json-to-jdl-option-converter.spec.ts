@@ -33,7 +33,7 @@ describe('JSONToJDLOptionConverter', () => {
       let jdlObject;
 
       before(() => {
-        // @ts-ignore
+        // @ts-expect-error
         jdlObject = convertServerOptionsToJDL();
       });
 

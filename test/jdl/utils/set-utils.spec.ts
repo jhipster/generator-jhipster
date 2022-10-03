@@ -24,7 +24,7 @@ describe('SetUtils', () => {
   describe('addAll', () => {
     context('when not passing a set', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => addAll()).toThrow(/^A Set must be passed so as to insert elements\.$/);
       });
     });
@@ -33,7 +33,7 @@ describe('SetUtils', () => {
 
       before(() => {
         set = new Set([1, 2, 3]);
-        // @ts-ignore
+        // @ts-expect-error
         addAll(set);
       });
 
@@ -88,7 +88,7 @@ Set {
   describe('join', () => {
     context('when not passing a set', () => {
       it('should fail', () => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(() => join()).toThrow(/^A Set must be passed so as to join elements\.$/);
       });
     });
