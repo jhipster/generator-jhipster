@@ -21,6 +21,7 @@ import utils from './utils.js';
 export const {
   DEFAULT_TEST_OPTIONS,
   basicHelpers,
+  defaultHelpers,
   skipPrettierHelpers,
   dryRunHelpers,
   createTestHelpers,

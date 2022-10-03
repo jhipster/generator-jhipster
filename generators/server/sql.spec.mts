@@ -11,7 +11,7 @@ import {
   entitiesSimple as entities,
 } from '../../test/support/index.mjs';
 import Generator from './index.js';
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 

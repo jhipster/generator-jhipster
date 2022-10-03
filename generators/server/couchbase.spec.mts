@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport, buildServerMatrix, extendMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
 import Generator from './index.js';
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import DatabaseTypes from '../../jdl/jhipster/database-types';
 

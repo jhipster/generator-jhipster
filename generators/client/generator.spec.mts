@@ -24,7 +24,7 @@ import assert from 'yeoman-assert';
 
 import testSupport from '../../test/support/index.cjs';
 import Generator from './index.js';
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 import constants from '../generator-defaults.js';
 import TestFrameworkTypes from '../../jdl/jhipster/test-framework-types.js';
 

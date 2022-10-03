@@ -30,7 +30,7 @@ import constants from '../generator-constants.js';
 
 const { CYPRESS } = TestFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
-const { skipPrettierHelpers: helpers } = testUtils;
+const { defaultHelpers: helpers } = testUtils;
 const { CLIENT_TEST_SRC_DIR } = constants;
 
 const { snakeCase } = lodash;

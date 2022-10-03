@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 
 import EnvironmentBuilder from '../../cli/environment-builder.js';
 import Generator from './generator.cjs';
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 const { snakeCase } = lodash;
 
