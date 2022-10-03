@@ -25,7 +25,7 @@
     "gradleEnterpriseHost": "",
     "jhiPrefix": "jhi",
     "jhipsterVersion": "7.9.3",
-    "jwtSecretKey": "YzUwYjdlNzEyODkxMGJkYTBjZjQ4ZGJmNzc2ZjJkMTgxNTk3YWY3MDExYmUwZWM1ZWM3YWI4NThmZTQ1N2EwY2U4MTJlOTQwNDlkNGI1MTk0NTZlZjA5M2Y0YmM4ZGY3OWUzZmE0MDY4NDYxMWIyOTY3N2I4ZDcwNDhmY2FiNzI=",
+    "jwtSecretKey": "jwtSecretKey",
     "languages": ["en"],
     "lastLiquibaseTimestamp": 1663956134000,
     "messageBroker": false,

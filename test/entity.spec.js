@@ -1073,12 +1073,11 @@ describe('JHipster generator for entity', () => {
       });
     });
   });
-  context.only('Reactive entity filtering feature', () => {
+  context('Reactive entity filtering feature', () => {
     describe('Gateway with entity filtering option', () => {
       before(async () => {
         await helpers
           .run(require.resolve('../generators/entity'))
-          .cd('testBed')
           .doInDir(dir => {
             fse.copySync(path.join(__dirname, '../test/templates/reative-entity-filter'), dir);
           })
@@ -1097,7 +1096,7 @@ describe('JHipster generator for entity', () => {
         );
         assert.fileContent(
           `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/CustomerService.java`,
-          /public Flux<Customer> findByCriteria\(CustomerCriteria criteria\)/
+          /public Flux<Customer> findByCriteria\(CustomerCriteria criteria, Pageable pageable\)/
         );
         assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomerRepository.java`, /findByCriteria/);
         assert.fileContent(
@@ -1107,7 +1106,7 @@ describe('JHipster generator for entity', () => {
         assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/criteria/AddressCriteria.java`);
         assert.fileContent(
           `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AddressResource.java`,
-          /public Flux<Address> getAllAddresses\(AddressCriteria criteria\)/
+          /public Mono<ResponseEntity<List<Address>>> getAllAddresses\(AddressCriteria criteria, @org.springdoc.api.annotations.ParameterObject Pageable pageable, ServerHttpRequest request\)/
         );
         assert.fileContent(
           `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AddressResource.java`,
@@ -1115,7 +1114,7 @@ describe('JHipster generator for entity', () => {
         );
         assert.fileContent(
           `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/AddressService.java`,
-          /public Flux<Address> findByCriteria\(AddressCriteria criteria\)/
+          /public Flux<Address> findByCriteria\(AddressCriteria criteria, Pageable pageable\)/
         );
         assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/AddressRepository.java`, /findByCriteria/);
         assert.fileContent(
