@@ -30,6 +30,10 @@ type RelationshipDeclaration = {
   };
 };
 
+export default {
+  checkRelationships,
+};
+
 /**
  * Check relationships for lint issues.
  * That is done by passing the list of relationship declarations from the CST (from the JDLReader output).
