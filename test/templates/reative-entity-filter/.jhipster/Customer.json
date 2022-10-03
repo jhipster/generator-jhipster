@@ -1,0 +1,73 @@
+{
+  "applications": ["filterreactive"],
+  "changelogDate": "20220923180114",
+  "databaseType": "sql",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "customer",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "age",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "distanceTravelled",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "amountSpent",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "amountSaved",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "amountEarned",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "happyPerson",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "dob",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "travelDate",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "travelTime",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "customerType",
+      "fieldType": "CustomerType",
+      "fieldValues": "MVP,VP"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "Customer",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "address",
+      "otherEntityRelationshipName": "customer",
+      "relationshipName": "address",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

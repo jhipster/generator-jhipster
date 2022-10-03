@@ -37,6 +37,9 @@ _%>
 import <%= entityAbsolutePackage %>.service.<%= entityClass %>Service;
 <%_ } _%>
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
+<%_ }  _%>
 import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 <%_ if (isUsingMapsId === true) { _%>
 import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
@@ -174,6 +177,44 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
             .map(<%= entityToDtoReference %>);<% } %>
 <%_ } _%>
     }
+
+<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+ <%_ if (!serviceImpl) { _%>
+    /**
+        * Find <%= entityInstancePlural %> by Criteria.
+        *
+    <%_ if (!paginationNo) { _%>
+        * @param pageable the pagination information.
+    <%_ } _%>
+        * @return the list of entities.
+        */
+ <%_ } _%>
+ <%_ if (serviceImpl) { _%>
+    @Override
+ <%_ } _%>
+ <%_ if (databaseTypeSql) { _%>
+    @Transactional(readOnly = true)
+ <%_ } _%>
+    public <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findByCriteria(<%= entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
+        log.debug("Request to get all <%= entityClassPlural %> by Criteria");
+ <%_ if (paginationNo) { _%>
+        return <%= entityInstance %>Repository.findByCriteria(criteria, null);
+ <%_ } else { _%>
+        return <%= entityInstance %>Repository.findByCriteria(criteria, pageable);
+ <%_ } _%>
+    }
+
+    /**
+    * Find the count of <%= entityInstancePlural %> by criteria.
+    * @param criteria filtering criteria
+    * @return the count of <%= entityInstancePlural %>
+    */
+    public Mono<Long> countByCriteria(<%= entityClass %>Criteria criteria) {
+        log.debug("Request to get the count of all <%= entityClassPlural %> by Criteria");
+        return <%= entityInstance %>Repository.countByCriteria(criteria);
+    }
+<%_ }  _%>
+
 
 <%_ if (implementsEagerLoadApis) { _%>
 

@@ -1073,4 +1073,66 @@ describe('JHipster generator for entity', () => {
       });
     });
   });
+  context.only('Reactive entity filtering feature', () => {
+    describe('Gateway with entity filtering option', () => {
+      before(async () => {
+        await helpers
+          .run(require.resolve('../generators/entity'))
+          .cd('testBed')
+          .doInDir(dir => {
+            fse.copySync(path.join(__dirname, '../test/templates/reative-entity-filter'), dir);
+          })
+          .withArguments(['customer']);
+      });
+
+      it('creates expected default files', () => {
+        assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/criteria/CustomerCriteria.java`);
+        assert.fileContent(
+          `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/CustomerResource.java`,
+          /public Mono<ResponseEntity<List<Customer>>> getAllCustomers\(CustomerCriteria criteria, @org.springdoc.api.annotations.ParameterObject Pageable pageable, ServerHttpRequest request\)/
+        );
+        assert.fileContent(
+          `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/CustomerResource.java`,
+          /public Mono<ResponseEntity<Long>> countCustomers\(CustomerCriteria criteria\)/
+        );
+        assert.fileContent(
+          `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/CustomerService.java`,
+          /public Flux<Customer> findByCriteria\(CustomerCriteria criteria\)/
+        );
+        assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomerRepository.java`, /findByCriteria/);
+        assert.fileContent(
+          `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomerRepositoryInternalImpl.java`,
+          /buildConditions\(CustomerCriteria criteria\)/
+        );
+        assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/criteria/AddressCriteria.java`);
+        assert.fileContent(
+          `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AddressResource.java`,
+          /public Flux<Address> getAllAddresses\(AddressCriteria criteria\)/
+        );
+        assert.fileContent(
+          `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AddressResource.java`,
+          /public Mono<ResponseEntity<Long>> countAddresses\(AddressCriteria criteria\)/
+        );
+        assert.fileContent(
+          `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/AddressService.java`,
+          /public Flux<Address> findByCriteria\(AddressCriteria criteria\)/
+        );
+        assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/AddressRepository.java`, /findByCriteria/);
+        assert.fileContent(
+          `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/AddressRepositoryInternalImpl.java`,
+          /buildConditions\(AddressCriteria criteria\)/
+        );
+        assert.fileContent(
+          `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AddressResourceIT.java`,
+          /getAllAddressesByCustomerIsEqualToSomething/
+        );
+        assert.fileContent(`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AddressResourceIT.java`, /CustomerRepository;/);
+        assert.noFileContent(
+          `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/CustomerResourceIT.java`,
+          /getAllCustomersByAddressIsEqualToSomething/
+        );
+        assert.noFileContent(`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/CustomerResourceIT.java`, /AddressRepository;/);
+      });
+    });
+  });
 });

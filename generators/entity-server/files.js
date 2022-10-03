@@ -234,7 +234,7 @@ const restFiles = {
 const filteringFiles = {
   filteringFiles: [
     {
-      condition: generator => generator.jpaMetamodelFiltering,
+      condition: generator => generator.jpaMetamodelFiltering && !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -244,6 +244,21 @@ const filteringFiles = {
         {
           file: 'package/service/EntityQueryService.java',
           renameTo: generator => `${generator.entityAbsoluteFolder}/service/${generator.entityClass}QueryService.java`,
+        },
+      ],
+    },
+  ],
+};
+
+const filteringReactiveFiles = {
+  filteringReactiveFiles: [
+    {
+      condition: generator => generator.jpaMetamodelFiltering && generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/service/criteria/EntityCriteria.java',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/criteria/${generator.entityClass}Criteria.java`,
         },
       ],
     },
@@ -419,6 +434,7 @@ const serverFiles = {
   ...entityFiles,
   ...restFiles,
   ...filteringFiles,
+  ...filteringReactiveFiles,
   ...elasticSearchFiles,
   ...respositoryFiles,
   ...serviceFiles,

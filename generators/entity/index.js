@@ -365,12 +365,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
       },
       configureModelFiltering() {
-        const { databaseTypeSql, applicationTypeGateway, reactive } = this.application;
+        const { databaseTypeSql, applicationTypeGateway } = this.application;
         if (
           // Don't touch the configuration for microservice entities published at gateways
           !(applicationTypeGateway && this.entityConfig.microserviceName) &&
           this.entityConfig.jpaMetamodelFiltering &&
-          (!databaseTypeSql || this.entityConfig.service === NO_SERVICE || reactive)
+          (!databaseTypeSql || this.entityConfig.service === NO_SERVICE) // || reactive)
         ) {
           this.warning('Not compatible with jpaMetamodelFiltering, disabling');
           this.entityConfig.jpaMetamodelFiltering = false;
