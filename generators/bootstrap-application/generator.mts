@@ -33,7 +33,7 @@ import type { ClientServerApplication } from './types.js';
 
 const { sortedUniq, intersection } = lodash;
 
-const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
+const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes.default;
 
 const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
@@ -47,7 +47,7 @@ const {
 } = entityUtils;
 const { fieldIsEnum } = fieldUtils;
 
-const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations;
+const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations.default;
 const { SUPPORTED_VALIDATION_RULES } = constants;
 const { stringify } = utils;
 

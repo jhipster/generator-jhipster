@@ -308,6 +308,8 @@ const QuotedOptionNames = [
   optionNames.GRADLE_ENTERPRISE_HOST,
 ];
 
+export { optionNames as OptionNames };
+
 export default {
   OptionTypes: ApplicationOptionTypes,
   OptionNames: optionNames,

@@ -152,6 +152,8 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
   };
 };
 
+export { Options };
+
 export default {
   Options,
   DeploymentTypes,

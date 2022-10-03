@@ -18,7 +18,7 @@
  */
 
 import EntityIssue from './issues/entity-issue';
-import { getTableNameFromEntityName } from '../jhipster/entity-table-name-creator';
+import getTableNameFromEntityName from '../jhipster/entity-table-name-creator';
 import { rulesNames } from './rules';
 
 let issues: EntityIssue[];

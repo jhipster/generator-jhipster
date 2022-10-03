@@ -18,7 +18,7 @@
  */
 
 import { readFile } from '../readers/file-reader';
-import JDLReader from '../readers/jdl-reader';
+import * as JDLReader from '../readers/jdl-reader';
 import Issues from './issues/issues';
 import { checkEntities, EntityDeclaration } from './entity-linter';
 import { checkFields } from './field-linter';

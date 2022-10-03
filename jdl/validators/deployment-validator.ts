@@ -17,11 +17,16 @@
  * limitations under the License.
  */
 
-import { MICROSERVICE } from '../jhipster/application-types';
-import { NO } from '../jhipster/database-types';
-import { ELASTICSEARCH } from '../jhipster/search-engine-types';
-import { Options } from '../jhipster/deployment-options';
 import Validator from './validator';
+import ApplicationTypes from '../jhipster/application-types';
+import DatabaseTypes from '../jhipster/database-types';
+import SearchEngineTypes from '../jhipster/search-engine-types';
+import DeploymentOptions from '../jhipster/deployment-options';
+
+const { MICROSERVICE } = ApplicationTypes;
+const { NO } = DatabaseTypes;
+const { ELASTICSEARCH } = SearchEngineTypes;
+const { Options } = DeploymentOptions;
 
 export default class DeploymentValidator extends Validator {
   constructor() {

@@ -56,8 +56,8 @@ const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = liquibaseU
 const { prepareEntityForTemplates, prepareEntityServerForTemplates, prepareEntityPrimaryKeyForTemplates } = entityUtils;
 const { prepareFieldForTemplates } = fieldUtils;
 const { createUserEntity } = userUtils;
-const { OAUTH2 } = authenticationTypes;
-const { CommonDBTypes } = fieldTypes;
+const { OAUTH2 } = authenticationTypes.default;
+const { CommonDBTypes } = fieldTypes.default;
 
 const { LONG: TYPE_LONG } = CommonDBTypes;
 
