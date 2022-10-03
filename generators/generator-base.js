@@ -1930,7 +1930,7 @@ class JHipsterBaseGenerator extends PrivateBase {
         keytoolPath = `${javaHome}/bin/`;
       }
       if (process.env.FAKE_KEYTOOL === 'true') {
-        fs.writeFileSync(keyStoreFile, 'fake key-tool');
+        this.writeDestination(keyStoreFile, 'fake key-tool');
         return;
       }
       const done = this.async();
