@@ -23,13 +23,11 @@ import constants from '../generator-constants.js';
 import entityUtils from '../../utils/entity.js';
 import type { SpringBootApplication } from './types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.js';
-import AuthentitcationTypes from '../../jdl/jhipster/authentication-types.js';
-import FieldTypes from '../../jdl/jhipster/field-types.js';
+import { OAUTH2 } from '../../jdl/jhipster/authentication-types.js';
+import { CommonDBTypes } from '../../jdl/jhipster/field-types.js';
 
-const {
-  CommonDBTypes: { LONG: TYPE_LONG },
-} = FieldTypes.default;
-const { OAUTH2 } = AuthentitcationTypes.default;
+const { LONG: TYPE_LONG } = CommonDBTypes;
+
 const {
   loadRequiredConfigIntoEntity,
   loadRequiredConfigDerivedProperties,

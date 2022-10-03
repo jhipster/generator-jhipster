@@ -22,7 +22,7 @@ import lodash from 'lodash';
 import BaseApplicationGenerator from '../base-application/generator.cjs';
 
 import validations from '../../jdl/jhipster/validations.js';
-import fieldTypes from '../../jdl/jhipster/field-types.js';
+import { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } from '../../jdl/jhipster/field-types.js';
 import constants from '../generator-constants.js';
 import utils from '../../utils/index.js';
 import entityUtils from '../../utils/entity.js';
@@ -32,8 +32,6 @@ import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION
 import type { ClientServerApplication } from './types.js';
 
 const { sortedUniq, intersection } = lodash;
-
-const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes.default;
 
 const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;

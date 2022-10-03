@@ -33,8 +33,8 @@ import entityUtils from '../../utils/entity.js';
 import fieldUtils from '../../utils/field.js';
 import liquibaseUtils from '../../utils/liquibase.js';
 import userUtils from '../../utils/user.js';
-import fieldTypes from '../../jdl/jhipster/field-types.js';
-import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
+import { CommonDBTypes } from '../../jdl/jhipster/field-types.js';
+import { OAUTH2 } from '../../jdl/jhipster/authentication-types.js';
 import type { LoadingTaskGroup, PreConflictsTaskGroup } from '../base/tasks.js';
 
 const {
@@ -56,8 +56,6 @@ const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = liquibaseU
 const { prepareEntityForTemplates, prepareEntityServerForTemplates, prepareEntityPrimaryKeyForTemplates } = entityUtils;
 const { prepareFieldForTemplates } = fieldUtils;
 const { createUserEntity } = userUtils;
-const { OAUTH2 } = authenticationTypes.default;
-const { CommonDBTypes } = fieldTypes.default;
 
 const { LONG: TYPE_LONG } = CommonDBTypes;
 
