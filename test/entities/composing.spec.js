@@ -7,6 +7,8 @@ const { appDefaultConfig, serverDefaultConfig } = require('../../generators/gene
 
 const mockedComposedGenerators = ['jhipster:entity-client', 'jhipster:entity-server', 'jhipster:database-changelog'];
 
+const generatorPath = path.join(__dirname, '../../generators/entities/index.mjs');
+
 describe('jhipster:entities with entitiesToImport option', () => {
   const localConfig = { baseName: 'jhipster', ...appDefaultConfig, ...serverDefaultConfig };
   describe('with --with-entities', () => {
@@ -14,7 +16,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
       let runResult;
       before(() => {
         return helpers
-          .create(require.resolve('../../generators/entities'))
+          .create(generatorPath)
           .withOptions({
             localConfig,
             entitiesToImport: [{ name: 'Foo' }],
@@ -56,7 +58,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
       let runResult;
       before(() => {
         return helpers
-          .create(require.resolve('../../generators/entities'))
+          .create(generatorPath)
           .withOptions({
             localConfig,
             entitiesToImport: [{ name: 'Foo' }, { name: 'Bar' }],
@@ -101,7 +103,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
       let runResult;
       before(() => {
         return helpers
-          .create(require.resolve('../../generators/entities'))
+          .create(generatorPath)
           .withOptions({
             localConfig,
             entitiesToImport: [{ name: 'Foo', changelogDate: '20201012010501' }],
@@ -142,7 +144,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
       let runResult;
       before(() => {
         return helpers
-          .create(require.resolve('../../generators/entities'))
+          .create(generatorPath)
           .withOptions({
             localConfig,
             entitiesToImport: [

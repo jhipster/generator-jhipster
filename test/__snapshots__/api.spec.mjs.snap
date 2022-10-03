@@ -24,7 +24,6 @@ Object {
     "GENERATOR_DATABASE_CHANGELOG_LIQUIBASE": "database-changelog-liquibase",
     "GENERATOR_DOCKER_COMPOSE": "docker-compose",
     "GENERATOR_ENTITIES": "entities",
-    "GENERATOR_ENTITIES_CLIENT": "entities-client",
     "GENERATOR_ENTITY": "entity",
     "GENERATOR_ENTITY_CLIENT": "entity-client",
     "GENERATOR_ENTITY_I_18_N": "entity-i18n",

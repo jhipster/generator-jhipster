@@ -20,7 +20,7 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 const cliUtils = require('./utils');
-const packageJson = require('../package.json');
+const { packageJson } = require('../lib/index.js');
 
 const { logger, toString } = cliUtils;
 

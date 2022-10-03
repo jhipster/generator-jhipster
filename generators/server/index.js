@@ -24,7 +24,7 @@ const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER, GENERATOR_BOOTS
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const BaseApplicationGenerator = require('../base-application/generator.cjs');
 const { writeFiles } = require('./files');
-const packagejs = require('../../package.json');
+const { packageJson: packagejs } = require('../../lib/index.js');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');

@@ -21,7 +21,7 @@ const fs = require('fs');
 const path = require('path');
 const semver = require('semver');
 
-const packagejs = require('../package.json');
+const { packageJson: packagejs } = require('../lib/index.js');
 const { packageNameToNamespace } = require('./utils');
 const JHipsterBaseGenerator = require('./generator-base');
 const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../utils/blueprint');

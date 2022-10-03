@@ -22,7 +22,7 @@ const createMockBlueprint = function (parent, spy) {
       }
     }
 
-    ['>spy']() {
+    ['>initializing']() {
       spy();
     }
   };
@@ -108,12 +108,12 @@ const prompts = {
 
 describe('JHipster with app blueprints', () => {
   describe('1 app blueprint', () => {
-    before(done => {
+    before(async function () {
       this.spyClient1 = sinon.spy();
       this.spyServer1 = sinon.spy();
       this.spyLanguages1 = sinon.spy();
       this.spyCommon1 = sinon.spy();
-      helpers
+      await helpers
         .run(path.join(__dirname, '../../generators/app'))
         .withOptions(options)
         .withGenerators([
@@ -123,11 +123,10 @@ describe('JHipster with app blueprints', () => {
           [createMockBlueprint(CommonGenerator, this.spyCommon1), 'jhipster-my-blueprint:common'],
           [mockAppBlueprintSubGen, 'jhipster-my-blueprint:app'],
         ])
-        .withPrompts(prompts)
-        .on('end', done);
+        .withPrompts(prompts);
     });
 
-    it('every sub-generator must be called once', () => {
+    it('every sub-generator must be called once', function () {
       sinon.assert.calledOnce(this.spyClient1);
       sinon.assert.calledOnce(this.spyServer1);
       sinon.assert.calledOnce(this.spyCommon1);
@@ -136,7 +135,7 @@ describe('JHipster with app blueprints', () => {
   });
 
   describe('2 app blueprint', () => {
-    before(done => {
+    before(async function () {
       this.spyClient1 = sinon.spy();
       this.spyServer1 = sinon.spy();
       this.spyLanguages1 = sinon.spy();
@@ -147,7 +146,7 @@ describe('JHipster with app blueprints', () => {
       this.spyLanguages2 = sinon.spy();
       this.spyCommon2 = sinon.spy();
 
-      helpers
+      await helpers
         .run(path.join(__dirname, '../../generators/app'))
         .withOptions({ ...options, blueprints: 'my-blueprint,my-blueprint-2' })
         .withGenerators([
@@ -162,11 +161,10 @@ describe('JHipster with app blueprints', () => {
           [createMockBlueprint(CommonGenerator, this.spyCommon2), 'jhipster-my-blueprint-2:common'],
           [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app'],
         ])
-        .withPrompts(prompts)
-        .on('end', done);
+        .withPrompts(prompts);
     });
 
-    it('every sub-generator must be called once', () => {
+    it('every sub-generator must be called once', function () {
       sinon.assert.calledOnce(this.spyClient1);
       sinon.assert.calledOnce(this.spyServer1);
       sinon.assert.calledOnce(this.spyCommon1);
@@ -180,7 +178,7 @@ describe('JHipster with app blueprints', () => {
   });
 
   describe('3 app blueprint', () => {
-    before(done => {
+    before(async function () {
       this.spyClient1 = sinon.spy();
       this.spyServer1 = sinon.spy();
       this.spyLanguages1 = sinon.spy();
@@ -191,7 +189,7 @@ describe('JHipster with app blueprints', () => {
       this.spyLanguages2 = sinon.spy();
       this.spyCommon2 = sinon.spy();
 
-      helpers
+      await helpers
         .run(path.join(__dirname, '../../generators/app'))
         .withOptions({ ...options, blueprints: 'my-blueprint,my-blueprint-2,my-blueprint-3' })
         .withGenerators([
@@ -207,11 +205,10 @@ describe('JHipster with app blueprints', () => {
           [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app'],
           [mockAppBlueprintSubGen, 'jhipster-my-blueprint-3:app'],
         ])
-        .withPrompts(prompts)
-        .on('end', done);
+        .withPrompts(prompts);
     });
 
-    it('every sub-generator must be called once', () => {
+    it('every sub-generator must be called once', function () {
       sinon.assert.calledOnce(this.spyClient1);
       sinon.assert.calledOnce(this.spyServer1);
       sinon.assert.calledOnce(this.spyCommon1);

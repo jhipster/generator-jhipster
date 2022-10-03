@@ -27,7 +27,7 @@ const exec = require('child_process').exec;
 const https = require('https');
 
 const { reproducibleConfigForTests: projectNameReproducibleConfigForTests } = require('./project-name/config.cjs');
-const packagejs = require('../package.json');
+const { packageJson: packagejs } = require('../lib/index.js');
 const jhipsterUtils = require('./utils');
 const { JAVA_COMPATIBLE_VERSIONS, SERVER_TEST_SRC_DIR, SUPPORTED_CLIENT_FRAMEWORKS } = require('./generator-constants');
 const { languageToJavaLanguage } = require('./utils');
@@ -542,7 +542,7 @@ module.exports = class PrivateBase extends Generator {
       if (!creationTimestamp) {
         this.warning(`Error parsing creationTimestamp ${creationTimestampOption}.`);
       } else if (creationTimestamp > new Date().getTime()) {
-        this.error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
+        throw new Error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
       }
     }
     return creationTimestamp;

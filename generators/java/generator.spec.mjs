@@ -26,7 +26,7 @@ import testUtils from '../../test/utils/utils.js';
 import Generator from './index.cjs';
 import generatorConfig from './config.cjs';
 
-const { skipPrettierHelpers: helpers } = testUtils;
+const { defaultHelpers: helpers } = testUtils;
 
 const { defaultConfig, requiredConfig } = generatorConfig;
 

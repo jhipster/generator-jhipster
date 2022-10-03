@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport, buildClientSamples } from '../../test/support/index.mjs';
 import Generator from './index.js';
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
 import constants from '../generator-constants.js';

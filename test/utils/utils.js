@@ -18,10 +18,14 @@ const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
 module.exports = {
   DEFAULT_TEST_OPTIONS,
-  basicHelpers: createTestHelpers(),
-  skipPrettierHelpers: createTestHelpers({ generatorOptions: { skipPrettier: true, reproducible: true } }),
+  basicHelpers: createTestHelpers({ generatorOptions: { reproducible: true, skipChecks: true } }),
+  defaultHelpers: createTestHelpers({
+    generatorOptions: { skipPrettier: true, reproducible: true, skipChecks: true },
+    environmentOptions: { dryRun: true },
+  }),
+  skipPrettierHelpers: createTestHelpers({ generatorOptions: { skipPrettier: true, reproducible: true, skipChecks: true } }),
   dryRunHelpers: createTestHelpers({
-    generatorOptions: { skipPrettier: true, reproducible: true },
+    generatorOptions: { skipPrettier: true, reproducible: true, skipChecks: true },
     environmentOptions: { dryRun: true },
   }),
   createTestHelpers,

@@ -4,7 +4,7 @@ const helpers = require('yeoman-test');
 const shelljs = require('shelljs');
 const fse = require('fs-extra');
 const { jestExpect: expect } = require('mocha-expect-snapshot');
-const packageJson = require('../../package.json');
+const { packageJson } = require('../../lib/index.js');
 const { prepareTempDir } = require('../../test/utils/utils');
 const { escapeRegExp } = require('../utils');
 

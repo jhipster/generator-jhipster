@@ -27,7 +27,7 @@ const EnvironmentBuilder = require('./environment-builder');
 const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArgs } = require('./utils');
 const { createImporterFromContent, createImporterFromFiles } = require('../jdl/jdl-importer');
 
-const packagejs = require('../package.json');
+const { packageJson: packagejs } = require('../lib/index.js');
 const statistics = require('../generators/statistics');
 const { JHIPSTER_CONFIG_DIR } = require('../generators/generator-constants');
 
