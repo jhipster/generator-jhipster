@@ -16,4 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.mjs';
+
+import osLocale from 'os-locale';
+import constants from '../generator-constants.js';
+
+const { LANGUAGES } = constants;
+
+const detectLanguage = () => {
+  const locale = osLocale.sync();
+  if (locale) {
+    const language =
+      LANGUAGES.find(lang => lang.value === locale.toLowerCase()) || LANGUAGES.find(lang => lang.value === locale.split('-')[0]);
+    if (language) {
+      return language.value;
+    }
+  }
+  return 'en';
+};
+
+export default detectLanguage;

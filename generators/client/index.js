@@ -27,7 +27,7 @@ const { cleanup: cleanupAngular, writeFiles: writeAngularFiles } = require('./fi
 const { cleanup: cleanupReact, writeFiles: writeReactFiles } = require('./files-react');
 const { cleanup: cleanupVue, writeFiles: writeVueFiles } = require('./files-vue');
 const writeCommonFiles = require('./files-common').writeFiles;
-const { clientI18nFiles } = require('../languages/files');
+const { clientI18nFiles } = require('../languages/files.cjs');
 
 const { packageJson: packagejs } = require('../../lib/index.js');
 const constants = require('../generator-constants');

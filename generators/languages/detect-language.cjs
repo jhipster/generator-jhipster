@@ -18,9 +18,12 @@
  */
 
 const osLocale = require('os-locale');
-const { LANGUAGES } = require('../generators/generator-constants');
 
-function detectLanguage() {
+const constants = require('../generator-constants.js');
+
+const { LANGUAGES } = constants;
+
+const detectLanguage = () => {
   const locale = osLocale.sync();
   if (locale) {
     const language =
@@ -30,6 +33,6 @@ function detectLanguage() {
     }
   }
   return 'en';
-}
+};
 
-module.exports = { detectLanguage };
+module.export = detectLanguage;

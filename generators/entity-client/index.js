@@ -26,7 +26,7 @@ const { writeAngularFiles, cleanupAngular } = require('./files-angular.cjs');
 const { writeReactFiles, cleanupReact } = require('./files-react.cjs');
 const { writeVueFiles } = require('./files-vue.cjs');
 const { entityClientI18nFiles } = require('../entity-i18n/files.js');
-const { clientI18nFiles } = require('../languages/files.js');
+const { clientI18nFiles } = require('../languages/files.cjs');
 
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
 

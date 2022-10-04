@@ -1,11 +1,19 @@
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const constants = require('../generators/generator-constants');
-const EnvironmentBuilder = require('../cli/environment-builder');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+import constants from '../generator-constants';
+import EnvironmentBuilder from '../../cli/environment-builder';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const generatorPath = join(__dirname, 'index.mjs');
 
 const createClientProject = options =>
   helpers
@@ -100,22 +108,23 @@ describe('JHipster generator languages', () => {
       describe(`with prompts for ${language.name}`, () => {
         before(() =>
           helpers
-            .run(require.resolve('../generators/languages'))
-            .withOptions({ skipInstall: true })
+            .create(generatorPath)
+            .withOptions({ skipInstall: true, baseName: 'jhipster' })
             .withPrompts({
               enableTranslation: true,
               nativeLanguage: language.value,
               languages: [language.value],
             })
+            .run()
         );
         containsLanguageFiles(language.value);
       });
       describe(`with options for ${language.name}`, () => {
         before(() =>
           helpers
-            .run(require.resolve('../generators/languages'))
+            .run(generatorPath)
             .withLocalConfig({ enableTranslation: true, nativeLanguage: language.value })
-            .withOptions({ skipInstall: true, languages: [language.value] })
+            .withOptions({ skipInstall: true, languages: [language.value], baseName: 'jhipster' })
         );
         containsLanguageFiles(language.value);
       });
@@ -125,18 +134,18 @@ describe('JHipster generator languages', () => {
     describe('for already generated native language', () => {
       before(() =>
         helpers
-          .run(require.resolve('../generators/languages'))
+          .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
-          .withOptions({ skipInstall: true })
+          .withOptions({ skipInstall: true, baseName: 'jhipster' })
       );
       noLanguageFiles('fr');
     });
     describe('for already generated languages', () => {
       before(() =>
         helpers
-          .run(require.resolve('../generators/languages'))
+          .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
-          .withOptions({ skipInstall: true, skipPrompts: true })
+          .withOptions({ skipInstall: true, skipPrompts: true, baseName: 'jhipster' })
       );
       noLanguageFiles('fr');
       noLanguageFiles('en');
@@ -145,7 +154,7 @@ describe('JHipster generator languages', () => {
   context('should create default i18n files for the native language', () => {
     describe('using prompts', () => {
       before(() =>
-        helpers.run(require.resolve('../generators/languages')).withOptions({ skipInstall: true }).withPrompts({
+        helpers.run(generatorPath).withOptions({ skipInstall: true, baseName: 'jhipster' }).withPrompts({
           enableTranslation: true,
           nativeLanguage: 'fr',
           languages: [],
@@ -156,33 +165,33 @@ describe('JHipster generator languages', () => {
     describe('using options', () => {
       before(() =>
         helpers
-          .run(require.resolve('../generators/languages'))
-          .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: [] })
-          .withOptions({ skipInstall: true })
+          .run(generatorPath)
+          .withLocalConfig({ enableTranslation: true })
+          .withOptions({ skipInstall: true, nativeLanguage: 'fr', baseName: 'jhipster' })
       );
       containsLanguageFiles('fr');
     });
     describe('when regenerating', () => {
       before(() =>
         helpers
-          .run(require.resolve('../generators/languages'))
+          .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
-          .withOptions({ skipInstall: true, skipPrompts: true, regenerate: true })
+          .withOptions({ skipInstall: true, skipPrompts: true, regenerate: true, baseName: 'jhipster' })
       );
       containsLanguageFiles('fr');
     });
   });
   context('should create default i18n files for the native language and an additional language', () => {
     describe('by default', () => {
-      before(() => helpers.run(require.resolve('../generators/languages')).withOptions({ skipInstall: true, skipPrompts: true }));
+      before(() => helpers.run(generatorPath).withOptions({ skipInstall: true, skipPrompts: true, baseName: 'jhipster' }));
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
     });
     describe('using prompts', () => {
       before(() =>
         helpers
-          .run(require.resolve('../generators/languages'))
-          .withOptions({ skipInstall: true })
+          .run(generatorPath)
+          .withOptions({ skipInstall: true, baseName: 'jhipster' })
           .withPrompts({
             enableTranslation: true,
             nativeLanguage: 'fr',
@@ -195,9 +204,9 @@ describe('JHipster generator languages', () => {
     describe('using options', () => {
       before(() =>
         helpers
-          .run(require.resolve('../generators/languages'))
-          .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr' })
-          .withOptions({ skipInstall: true, languages: ['en'] })
+          .run(generatorPath)
+          .withLocalConfig({ enableTranslation: true })
+          .withOptions({ skipInstall: true, nativeLanguage: 'fr', languages: ['en'], baseName: 'jhipster' })
       );
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
@@ -205,9 +214,9 @@ describe('JHipster generator languages', () => {
     describe('when regenerating', () => {
       before(() =>
         helpers
-          .run(require.resolve('../generators/languages'))
+          .run(generatorPath)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
-          .withOptions({ skipInstall: true, skipPrompts: true, regenerate: true })
+          .withOptions({ skipInstall: true, skipPrompts: true, regenerate: true, baseName: 'jhipster' })
       );
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
@@ -217,8 +226,8 @@ describe('JHipster generator languages', () => {
     describe('with prompts', () => {
       before(() =>
         helpers
-          .run(require.resolve('../generators/languages'))
-          .withOptions({ skipInstall: true })
+          .run(generatorPath)
+          .withOptions({ skipInstall: true, baseName: 'jhipster' })
           .withPrompts({
             enableTranslation: true,
             nativeLanguage: 'fr',
@@ -231,9 +240,9 @@ describe('JHipster generator languages', () => {
     describe('with options', () => {
       before(() =>
         helpers
-          .run(require.resolve('../generators/languages'))
-          .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr' })
-          .withOptions({ skipInstall: true, languages: ['fr', 'de'] })
+          .run(generatorPath)
+          .withLocalConfig({ enableTranslation: true, nativeLanguage: 'en' })
+          .withOptions({ skipInstall: true, languages: ['fr', 'de'], baseName: 'jhipster' })
       );
       containsLanguageFiles('fr');
       containsLanguageFiles('de');
@@ -249,7 +258,7 @@ describe('JHipster generator languages', () => {
           helpers
             .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
             .setDir(result.cwd)
-            .withOptions({ skipInstall: true })
+            .withOptions({ skipInstall: true, baseName: 'jhipster' })
             .withPrompts({
               languages: ['fr', 'de'],
             })
@@ -276,7 +285,7 @@ describe('JHipster generator languages', () => {
           helpers
             .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
             .setDir(result.cwd)
-            .withOptions({ skipInstall: true, languages: ['fr', 'de'] })
+            .withOptions({ skipInstall: true, languages: ['fr', 'de'], baseName: 'jhipster' })
             .run()
         )
       );
