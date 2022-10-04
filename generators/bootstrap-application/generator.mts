@@ -105,6 +105,10 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
         entityConfig.fields.forEach((field: any) => {
           const { fieldName, fieldType, fieldValidateRules } = field;
 
+          if (entityConfig.name === undefined) {
+            entityConfig.name = entityName;
+          }
+
           assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
           assert(fieldType, `fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
 
