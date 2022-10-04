@@ -170,15 +170,6 @@
     "mainGenerator": "generate-blueprint",
     "prettierDefaultIndent": 2,
     "projectName": "CiTest",
-    "subGenerators": [
-      "app",
-      "client",
-      "common",
-      "cypress",
-      "entity",
-      "entity-client",
-      "entity-i18n",
-      "server"
-    ]
+    "subGenerators": ["app", "client", "common", "cypress", "entity", "entity-client", "entity-i18n", "server"]
   }
 }
