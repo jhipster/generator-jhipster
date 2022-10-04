@@ -115,7 +115,7 @@ describe(`JHipster ${clientFramework} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.create(generatorFile).withOptions(sample).run();
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });
 
       after(() => runResult.cleanup());
