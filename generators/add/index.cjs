@@ -16,10 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const {
-  Priorities: { INITIALIZING_PRIORITY, COMPOSING_PRIORITY },
-} = require('generator-jhipster/support');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 const { GENERATOR_ADD } = require('../generator-list');
 
 /**
@@ -56,7 +53,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseBlueprintGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -71,7 +68,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [COMPOSING_PRIORITY]() {
+  get [BaseBlueprintGenerator.COMPOSING]() {
     if (this.fromBlueprint) return {};
     return this._composing();
   }

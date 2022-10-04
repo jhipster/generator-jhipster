@@ -20,20 +20,6 @@
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 const GeneratorBaseEntity = require('../base-application/generator.cjs');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  COMPOSING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-  CONFIGURING_EACH_ENTITY_PRIORITY,
-  PREPARING_EACH_ENTITY_PRIORITY,
-  PREPARING_EACH_ENTITY_FIELD_PRIORITY,
-  PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY,
-  WRITING_PRIORITY,
-  WRITING_ENTITIES_PRIORITY,
-} = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list');
 const {
@@ -103,7 +89,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [MixedChain.INITIALIZING]() {
     if (this.delegateToBlueprint) return;
     return this.initializing;
   }
@@ -141,7 +127,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [MixedChain.PROMPTING]() {
     if (this.delegateToBlueprint) return;
     return this.prompting;
   }
@@ -154,7 +140,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [MixedChain.CONFIGURING]() {
     if (this.delegateToBlueprint) return;
     return this.configuring;
   }
@@ -168,7 +154,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [COMPOSING_PRIORITY]() {
+  get [MixedChain.COMPOSING]() {
     if (this.delegateToBlueprint) return;
     return this.composing;
   }
@@ -187,7 +173,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [MixedChain.LOADING]() {
     if (this.delegateToBlueprint) return;
     return this.loading;
   }
@@ -200,7 +186,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [PREPARING_PRIORITY]() {
+  get [MixedChain.PREPARING]() {
     if (this.delegateToBlueprint) return;
     return this.preparing;
   }
@@ -209,7 +195,7 @@ module.exports = class extends MixedChain {
     return {};
   }
 
-  get [CONFIGURING_EACH_ENTITY_PRIORITY]() {
+  get [MixedChain.CONFIGURING_EACH_ENTITY]() {
     if (this.delegateToBlueprint) return {};
     return this.configuringEachEntity;
   }
@@ -218,7 +204,7 @@ module.exports = class extends MixedChain {
     return {};
   }
 
-  get [PREPARING_EACH_ENTITY_PRIORITY]() {
+  get [MixedChain.PREPARING_EACH_ENTITY]() {
     if (this.delegateToBlueprint) return {};
     return this.preparingEachEntity;
   }
@@ -227,7 +213,7 @@ module.exports = class extends MixedChain {
     return {};
   }
 
-  get [PREPARING_EACH_ENTITY_FIELD_PRIORITY]() {
+  get [MixedChain.PREPARING_EACH_ENTITY_FIELD]() {
     if (this.delegateToBlueprint) return {};
     return this.preparingEachEntityField;
   }
@@ -236,7 +222,7 @@ module.exports = class extends MixedChain {
     return {};
   }
 
-  get [PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY]() {
+  get [MixedChain.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     if (this.delegateToBlueprint) return {};
     return this.preparingEachEntityRelationship;
   }
@@ -250,7 +236,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [MixedChain.WRITING]() {
     if (this.delegateToBlueprint) return;
     return this.writing;
   }
@@ -259,7 +245,7 @@ module.exports = class extends MixedChain {
     return {};
   }
 
-  get [WRITING_ENTITIES_PRIORITY]() {
+  get [MixedChain.WRITING_ENTITIES]() {
     if (this.delegateToBlueprint) return {};
     return this.writingEntities;
   }

@@ -21,7 +21,7 @@ const { expect } = require('chai');
 const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../utils/entity');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { defaultConfig } = require('../generators/generator-defaults');
-const BaseGenerator = require('../generators/generator-base');
+const BaseGenerator = require('../generators/base/generator-base.cjs');
 const { prepareFieldForTemplates, getEnumValuesWithCustomValues } = require('../utils/field');
 
 describe('main utilities', () => {

@@ -19,17 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  COMPOSING_PRIORITY,
-  DEFAULT_PRIORITY,
-  WRITING_PRIORITY,
-  INSTALL_PRIORITY,
-  END_PRIORITY,
-} = require('../../lib/constants/priorities.cjs').compat;
+const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
@@ -378,7 +368,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseBlueprintGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) {
       return;
     }
@@ -393,7 +383,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [BaseBlueprintGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return;
     return this._prompting();
   }
@@ -429,7 +419,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [BaseBlueprintGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return;
     return this._configuring();
   }
@@ -506,7 +496,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [COMPOSING_PRIORITY]() {
+  get [BaseBlueprintGenerator.COMPOSING]() {
     if (this.delegateToBlueprint) return;
     return this._composing();
   }
@@ -523,7 +513,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [DEFAULT_PRIORITY]() {
+  get [BaseBlueprintGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return;
     return this._default();
   }
@@ -537,7 +527,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseBlueprintGenerator.WRITING]() {
     if (this.delegateToBlueprint) return;
     return this._writing();
   }
@@ -554,7 +544,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [INSTALL_PRIORITY]() {
+  get [BaseBlueprintGenerator.INSTALL]() {
     if (this.delegateToBlueprint) return;
     return this._install();
   }
@@ -598,7 +588,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [END_PRIORITY]() {
+  get [BaseBlueprintGenerator.END]() {
     if (this.delegateToBlueprint) return;
     return this._end();
   }

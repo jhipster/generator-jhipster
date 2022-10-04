@@ -11,7 +11,7 @@ const helpers = require('yeoman-test');
 const { createProgram, buildJHipster } = require('../../cli/program');
 const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
 const { logger } = require('../../cli/utils');
-const BaseGenerator = require('../../generators/generator-base');
+const BaseGenerator = require('../../generators/base/generator-base.cjs');
 
 const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.js'));
 

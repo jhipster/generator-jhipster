@@ -18,8 +18,7 @@
  */
 const chalk = require('chalk');
 const shelljs = require('shelljs');
-const BaseGenerator = require('../generator-base');
-const { INITIALIZING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+const BaseGenerator = require('../base/generator-base.cjs');
 
 // We use console.log() in this generator because we want to print on stdout not on
 // stderr unlike yeoman's log() so that user can easily redirect output to a file.
@@ -40,7 +39,7 @@ module.exports = class extends BaseGenerator {
     this.env.options.skipInstall = true;
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseGenerator.INITIALIZING]() {
     return {
       sayHello() {
         this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));

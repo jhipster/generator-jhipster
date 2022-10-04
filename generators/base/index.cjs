@@ -17,9 +17,6 @@
  * limitations under the License.
  */
 
-/*
- * Register generator-base at yeoman-environment
- */
-import BaseGenerator from './generator.cjs';
+const BaseGenerator = require('./generator.cjs');
 
-export default BaseGenerator;
+module.exports = BaseGenerator;

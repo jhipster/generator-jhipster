@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
-const BaseBlueprint = require('../generators/generator-base-blueprint');
+const BaseBlueprint = require('../generators/base/generator-base-blueprint.cjs');
 
 const BaseGenerator = BaseBlueprint.prototype;
 

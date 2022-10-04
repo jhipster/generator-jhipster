@@ -2,8 +2,8 @@ const path = require('path');
 const expect = require('chai').expect;
 const { jestExpect } = require('mocha-expect-snapshot');
 // using base generator which extends the private base
-const BaseGeneratorPrivate = require('../generators/generator-base-private').prototype;
-const BaseGenerator = require('../generators/generator-base').prototype; // TODO remove in favor of a cleaner architecture
+const BaseGeneratorPrivate = require('../generators/base/generator-base-private.cjs').prototype;
+const BaseGenerator = require('../generators/base/generator-base.cjs').prototype; // TODO remove in favor of a cleaner architecture
 const { CASSANDRA, MONGODB, MYSQL, SQL } = require('../jdl/jhipster/database-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
 const { CommonDBTypes } = require('../jdl/jhipster/field-types');

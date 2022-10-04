@@ -19,16 +19,7 @@
 const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  LOADING_PRIORITY,
-  DEFAULT_PRIORITY,
-  WRITING_PRIORITY,
-  END_PRIORITY,
-} = require('../../lib/constants/priorities.cjs').compat;
+const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const statistics = require('../statistics');
 
@@ -102,7 +93,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseBlueprintGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -268,7 +259,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [BaseBlueprintGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -285,7 +276,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [BaseBlueprintGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -328,7 +319,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get [DEFAULT_PRIORITY]() {
+  get [BaseBlueprintGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -344,7 +335,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [BaseBlueprintGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -372,7 +363,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseBlueprintGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -498,7 +489,7 @@ for more detailed information.`
     };
   }
 
-  get [END_PRIORITY]() {
+  get [BaseBlueprintGenerator.END]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }

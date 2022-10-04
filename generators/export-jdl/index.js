@@ -18,8 +18,7 @@
  */
 const chalk = require('chalk');
 
-const BaseGenerator = require('../generator-base');
-const { DEFAULT_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+const BaseGenerator = require('../base/index.cjs');
 
 const statistics = require('../statistics');
 const { GENERATOR_EXPORT_JDL } = require('../generator-list');
@@ -41,12 +40,8 @@ module.exports = class extends BaseGenerator {
     this.jdlFile = this.options.jdlFile || `${this.baseName}.jdl`;
   }
 
-  get [DEFAULT_PRIORITY]() {
+  get [BaseGenerator.DEFAULT]() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_EXPORT_JDL);
       },
@@ -61,7 +56,11 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  end() {
-    this.log(chalk.green.bold('\nThe JDL export is complete!\n'));
+  get [BaseGenerator.END]() {
+    return {
+      end() {
+        this.log(chalk.green.bold('\nThe JDL export is complete!\n'));
+      },
+    };
   }
 };

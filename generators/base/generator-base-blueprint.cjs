@@ -21,12 +21,12 @@ const fs = require('fs');
 const path = require('path');
 const semver = require('semver');
 
-const { packageJson: packagejs } = require('../lib/index.js');
-const { packageNameToNamespace } = require('./utils');
-const JHipsterBaseGenerator = require('./generator-base');
-const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../utils/blueprint');
+const { packageJson: packagejs } = require('../../lib/index.js');
+const { packageNameToNamespace } = require('../utils');
+const JHipsterBaseGenerator = require('./generator-base.cjs');
+const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../../utils/blueprint');
 
-const { compat, PRIORITY_NAMES } = require('../lib/constants/priorities.cjs');
+const { compat, PRIORITY_NAMES } = require('../../lib/constants/priorities.cjs');
 
 const { PRIORITY_PREFIX } = compat;
 
@@ -118,8 +118,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asInitialingTaskGroup(taskGroup) {
     return taskGroup;
@@ -147,8 +147,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asPromptingTaskGroup(taskGroup) {
     return taskGroup;
@@ -174,8 +174,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asConfiguringTaskGroup(taskGroup) {
     return taskGroup;
@@ -201,8 +201,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asComposingTaskGroup(taskGroup) {
     return taskGroup;
@@ -214,7 +214,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
    * Loading should be used to load application configuration from jhipster configuration.
    * Before this priority the configuration should be considered dirty, while each generator configures itself at configuring priority, another generator composed at composing priority can still change it.
    *
-   * @returns {import('./base/tasks.js').LoadingTaskGroup<this>}
+   * @returns {import('./tasks.js').LoadingTaskGroup<this>}
    */
   get loading() {
     return this.asLoadingTaskGroup(this._loading());
@@ -231,8 +231,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asLoadingTaskGroup(taskGroup) {
     return taskGroup;
@@ -258,8 +258,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asPreparingTaskGroup(taskGroup) {
     return taskGroup;
@@ -299,8 +299,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asDefaultTaskGroup(taskGroup) {
     return taskGroup;
@@ -311,7 +311,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
    *
    * Writing priority should used to write files.
    *
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   get writing() {
     return this.asWritingTaskGroup(this._writing());
@@ -328,8 +328,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asWritingTaskGroup(taskGroup) {
     return taskGroup;
@@ -355,8 +355,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asPostWritingTaskGroup(taskGroup) {
     return taskGroup;
@@ -382,8 +382,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asInstallTaskGroup(taskGroup) {
     return taskGroup;
@@ -409,8 +409,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asPostInstallTaskGroup(taskGroup) {
     return taskGroup;
@@ -436,8 +436,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @param {import('./tasks.js').BasicTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.js').BasicTaskGroup<this>}
    */
   asEndTaskGroup(taskGroup) {
     return taskGroup;

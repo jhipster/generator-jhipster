@@ -22,8 +22,6 @@ const shelljs = require('shelljs');
 const fs = require('fs');
 
 const BaseDockerGenerator = require('../generator-base-docker');
-const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, LOADING_PRIORITY, WRITING_PRIORITY, END_PRIORITY } =
-  require('../../lib/constants/priorities.cjs').compat;
 
 const prompts = require('./prompts');
 const { writeFiles } = require('./files');
@@ -88,7 +86,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseDockerGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -109,7 +107,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [BaseDockerGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -137,7 +135,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [BaseDockerGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -155,7 +153,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [BaseDockerGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -164,7 +162,7 @@ module.exports = class extends BaseDockerGenerator {
     return writeFiles();
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseDockerGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -238,7 +236,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get [END_PRIORITY]() {
+  get [BaseDockerGenerator.END]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }

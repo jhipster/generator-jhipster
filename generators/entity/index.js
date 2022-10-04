@@ -22,9 +22,8 @@ const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
 
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, COMPOSING_PRIORITY, WRITING_PRIORITY, INSTALL_PRIORITY, END_PRIORITY } =
-  require('../../lib/constants/priorities.cjs').compat;
+const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+
 const { isReservedClassName } = require('../../jdl/jhipster/reserved-keywords');
 
 const prompts = require('./prompts');
@@ -265,7 +264,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseBlueprintGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -287,7 +286,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [BaseBlueprintGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -313,7 +312,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [COMPOSING_PRIORITY]() {
+  get [BaseBlueprintGenerator.COMPOSING]() {
     if (this.delegateToBlueprint) return {};
     return this._composing();
   }
@@ -337,7 +336,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseBlueprintGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -367,7 +366,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [INSTALL_PRIORITY]() {
+  get [BaseBlueprintGenerator.INSTALL]() {
     if (this.delegateToBlueprint) return {};
     return this._install();
   }
@@ -381,7 +380,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [END_PRIORITY]() {
+  get [BaseBlueprintGenerator.END]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }

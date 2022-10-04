@@ -21,13 +21,6 @@ const chalk = require('chalk');
 const { startCase } = require('lodash');
 
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-} = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 const { defaultConfig } = require('./config.cjs');
@@ -84,7 +77,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [MixedChain.INITIALIZING]() {
     if (this.delegateToBlueprint) return;
     return this.initializing;
   }
@@ -115,7 +108,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [MixedChain.PROMPTING]() {
     if (this.delegateToBlueprint) return;
     return this.prompting;
   }
@@ -128,7 +121,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [MixedChain.CONFIGURING]() {
     if (this.delegateToBlueprint) return;
     return this.configuring;
   }
@@ -147,7 +140,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [MixedChain.LOADING]() {
     if (this.delegateToBlueprint) return;
     return this.loading;
   }
@@ -160,7 +153,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [PREPARING_PRIORITY]() {
+  get [MixedChain.PREPARING]() {
     if (this.delegateToBlueprint) return;
     return this.preparing;
   }

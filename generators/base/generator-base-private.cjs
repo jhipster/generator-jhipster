@@ -26,19 +26,19 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const https = require('https');
 
-const { reproducibleConfigForTests: projectNameReproducibleConfigForTests } = require('./project-name/config.cjs');
-const { packageJson: packagejs } = require('../lib/index.js');
-const jhipsterUtils = require('./utils');
-const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = require('./generator-constants');
-const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
-const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
-const { stringify } = require('../utils');
-const { fieldIsEnum } = require('../utils/field');
-const { databaseData } = require('./sql-constants');
+const { reproducibleConfigForTests: projectNameReproducibleConfigForTests } = require('../project-name/config.cjs');
+const { packageJson: packagejs } = require('../../lib/index.js');
+const jhipsterUtils = require('../utils');
+const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = require('../generator-constants');
+const JSONToJDLEntityConverter = require('../../jdl/converters/json-to-jdl-entity-converter');
+const JSONToJDLOptionConverter = require('../../jdl/converters/json-to-jdl-option-converter');
+const { stringify } = require('../../utils');
+const { fieldIsEnum } = require('../../utils/field');
+const { databaseData } = require('../sql-constants');
 
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
-const dbTypes = require('../jdl/jhipster/field-types');
-const { REQUIRED } = require('../jdl/jhipster/validations');
+const dbTypes = require('../../jdl/jhipster/field-types');
+const { REQUIRED } = require('../../jdl/jhipster/validations');
 
 const {
   STRING: TYPE_STRING,
@@ -58,11 +58,11 @@ const {
 const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
 
-const databaseTypes = require('../jdl/jhipster/database-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
 
 const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL, ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databaseTypes;
 
-const { MAVEN } = require('../jdl/jhipster/build-tool-types');
+const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 
 /**
  * This is the Generator base private class.

@@ -21,7 +21,7 @@ const { expect } = require('chai');
 const { prepareEntityPrimaryKeyForTemplates } = require('../utils/entity');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { defaultConfig, entityDefaultConfig } = require('../generators/generator-defaults');
-const BaseGenerator = require('../generators/generator-base');
+const BaseGenerator = require('../generators/base/generator-base.cjs');
 
 describe('entity utilities', () => {
   const defaultGenerator = { jhipsterConfig: defaultConfig };

@@ -21,16 +21,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  LOADING_PRIORITY,
-  DEFAULT_PRIORITY,
-  WRITING_PRIORITY,
-  END_PRIORITY,
-} = require('../../lib/constants/priorities.cjs').compat;
+const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
@@ -112,7 +103,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseBlueprintGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -259,7 +250,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [BaseBlueprintGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -278,7 +269,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [BaseBlueprintGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -498,7 +489,7 @@ which is free for the first 30 days`);
     };
   }
 
-  get [DEFAULT_PRIORITY]() {
+  get [BaseBlueprintGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -519,7 +510,7 @@ which is free for the first 30 days`);
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [BaseBlueprintGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -537,7 +528,7 @@ which is free for the first 30 days`);
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseBlueprintGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -661,7 +652,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
     };
   }
 
-  get [END_PRIORITY]() {
+  get [BaseBlueprintGenerator.END]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }

@@ -86,8 +86,8 @@ describe('Enforce some developments patterns', () => {
 
   describe('at generators base', () => {
     const filesToTest = [
-      path.join(__dirname, '..', 'generators', 'generator-base-private.js'),
-      path.join(__dirname, '..', 'generators', 'generator-base.js'),
+      path.join(__dirname, '..', 'generators', 'base', 'generator-base-private.cjs'),
+      path.join(__dirname, '..', 'generators', 'base', 'generator-base.cjs'),
     ];
     filesToTest.forEach(file => {
       describe(`file ${path.basename(file)}`, () => {

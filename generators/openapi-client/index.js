@@ -20,16 +20,7 @@
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  WRITING_PRIORITY,
-  POST_WRITING_PRIORITY,
-  INSTALL_PRIORITY,
-  END_PRIORITY,
-} = require('../../lib/constants/priorities.cjs').compat;
+const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const { GENERATOR_OPENAPI_CLIENT } = require('../generator-list');
 const { OpenAPIOptionsNames, OpenAPIDefaultValues } = require('../../jdl/jhipster/openapi-options');
@@ -70,7 +61,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseBlueprintGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -83,7 +74,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [BaseBlueprintGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -116,7 +107,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [BaseBlueprintGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -125,7 +116,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return writeFiles();
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseBlueprintGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -134,7 +125,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return customizeFiles();
   }
 
-  get [POST_WRITING_PRIORITY]() {
+  get [BaseBlueprintGenerator.POST_WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
@@ -161,7 +152,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [INSTALL_PRIORITY]() {
+  get [BaseBlueprintGenerator.INSTALL]() {
     if (this.delegateToBlueprint) return {};
     return this._install();
   }
@@ -174,7 +165,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [END_PRIORITY]() {
+  get [BaseBlueprintGenerator.END]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }
