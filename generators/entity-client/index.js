@@ -89,7 +89,7 @@ module.exports = class extends BaseBlueprintGenerator {
       entity.entityClientTranslations = entity.entityClientTranslations || {};
       entityClientTranslations = entity.entityClientTranslations;
     }
-    const rootTemplatesPath = this.fetchFromInstalledJHipster('languages/templates/entity');
+    const rootTemplatesPath = this.fetchFromInstalledJHipster('languages/templates');
     const translationFiles = await this.writeFiles({
       sections: entityClientI18nFiles,
       rootTemplatesPath,
