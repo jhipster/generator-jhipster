@@ -28,18 +28,17 @@ const { cleanup: cleanupReact, writeFiles: writeReactFiles } = require('./files-
 const { cleanup: cleanupVue, writeFiles: writeVueFiles } = require('./files-vue');
 const writeCommonFiles = require('./files-common').writeFiles;
 const { clientI18nFiles } = require('../languages/files.cjs');
+const { entityClientI18nFiles } = require('../languages/entity-files.cjs');
+
+const { writeEntitiesAngularFiles, cleanupEntitiesAngular } = require('./entity-files-angular.cjs');
+const { writeEntitiesReactFiles, cleanupEntitiesReact } = require('./entity-files-react.cjs');
+const { writeEntitiesVueFiles } = require('./entity-files-vue.cjs');
 
 const { packageJson: packagejs } = require('../../lib/index.js');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');
-const {
-  GENERATOR_CYPRESS,
-  GENERATOR_COMMON,
-  GENERATOR_LANGUAGES,
-  GENERATOR_CLIENT,
-  GENERATOR_ENTITY_CLIENT,
-} = require('../generator-list');
+const { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT } = require('../generator-list');
 
 const { ANGULAR } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
@@ -285,6 +284,11 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
           application.userPrimaryKeyTypeUUID = application.user.primaryKey.type === TYPE_UUID;
         }
       },
+      async loadNativeLanguage({ application, entities }) {
+        for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+          await this._loadEntityClientTranslations(entity, application);
+        }
+      },
 
       loadEntities() {
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
@@ -330,15 +334,11 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
-      async composeEachEntity({ application, entities }) {
-        for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipClient)) {
-          const entityName = entity.name;
-          await this.composeWithJHipster(GENERATOR_ENTITY_CLIENT, [entityName], {
-            context: entity,
-            application,
-          });
-        }
-      },
+      writeEntitiesAngularFiles,
+      cleanupEntitiesAngular,
+      writeEntitiesReactFiles,
+      cleanupEntitiesReact,
+      writeEntitiesVueFiles,
     });
   }
 
@@ -409,16 +409,76 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
 
   /**
    * @experimental
+   * Load entity client native translation.
+   */
+  async _loadEntityClientTranslations(entity, configContext = this, entityClientTranslations = entity.entityClientTranslations) {
+    const { frontendAppName = this.getFrontendAppName(), nativeLanguage = 'en' } = configContext;
+    if (!entityClientTranslations) {
+      entity.entityClientTranslations = entity.entityClientTranslations || {};
+      entityClientTranslations = entity.entityClientTranslations;
+    }
+    const rootTemplatesPath = this.fetchFromInstalledJHipster('languages/templates');
+    const translationFiles = await this.writeFiles({
+      sections: entityClientI18nFiles,
+      rootTemplatesPath,
+      context: { ...entity, clientSrcDir: '__tmp__', frontendAppName, lang: 'en' },
+    });
+    if (nativeLanguage && nativeLanguage !== 'en') {
+      translationFiles.push(
+        ...(await this.writeFiles({
+          sections: entityClientI18nFiles,
+          rootTemplatesPath,
+          context: { ...entity, clientSrcDir: '__tmp__', frontendAppName, lang: nativeLanguage },
+        }))
+      );
+    }
+    for (const translationFile of translationFiles) {
+      _.merge(entityClientTranslations, this.readDestinationJSON(translationFile));
+      delete this.env.sharedFs.get(translationFile).state;
+    }
+
+    if (!this.configOptions.entitiesClientTranslations) {
+      this.configOptions.entitiesClientTranslations = {};
+    }
+    this.entitiesClientTranslations = this.configOptions.entitiesClientTranslations;
+    _.merge(this.entitiesClientTranslations, entityClientTranslations);
+  }
+
+  /**
+   * @experimental
+   * Get translation value for a key.
+   *
+   * @param translationKey {string} - key to be translated
+   * @param [data] {object} - template data in case translated value is a template
+   */
+  _getEntityClientTranslation(translationKey, data) {
+    if (translationKey.startsWith('global.') || translationKey.startsWith('entity.')) {
+      return this._getClientTranslation(translationKey, data);
+    }
+    const translatedValue = _.get(this.entitiesClientTranslations, translationKey);
+    if (translatedValue === undefined) {
+      const errorMessage = `Entity translation missing for ${translationKey}`;
+      this.warning(`${errorMessage} at ${JSON.stringify(this.entityClientTranslations)}`);
+      return errorMessage;
+    }
+    if (!data) {
+      return translatedValue;
+    }
+    const compiledTemplate = _.template(translatedValue, { interpolate: /{{([\s\S]+?)}}/g });
+    return compiledTemplate(data);
+  }
+
+  /**
+   * @experimental
    * Load client native translation.
    */
   async _loadClientTranslations(configContext = this) {
-    configContext.clientTranslations = this.configOptions.clientTranslations;
-    if (configContext.clientTranslations) {
-      this.clientTranslations = configContext.clientTranslations;
+    if (this.configOptions.clientTranslations) {
+      this.clientTranslations = this.configOptions.clientTranslations;
       return;
     }
     const { nativeLanguage } = configContext;
-    this.clientTranslations = configContext.clientTranslations = this.configOptions.clientTranslations = {};
+    this.clientTranslations = this.configOptions.clientTranslations = {};
     const rootTemplatesPath = this.fetchFromInstalledJHipster('languages/templates/');
 
     // Prepare and load en translation
@@ -467,7 +527,9 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
       translatedValue = _.get(this.clientTranslations, `${others.reverse().join('.')}['${second}.${last}']`);
     }
     if (translatedValue === undefined) {
-      return `Translation missing for ${translationKey}`;
+      const errorMessage = `Translation missing for ${translationKey}`;
+      this.warning(`${errorMessage} at ${JSON.stringify(this.clientTranslations)}`);
+      return errorMessage;
     }
     if (!data) {
       return translatedValue;

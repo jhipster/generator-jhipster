@@ -287,15 +287,6 @@ Object {
   "generators/entities/templates/template-file-entities.ejs": Object {
     "stateCleared": "modified",
   },
-  "generators/entity-client/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/entity-client/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/entity-client/templates/template-file-entity-client.ejs": Object {
-    "stateCleared": "modified",
-  },
   "generators/entity/generator.mjs": Object {
     "stateCleared": "modified",
   },

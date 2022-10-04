@@ -40,7 +40,6 @@ const Generators = {
   GENERATOR_DOCKER_COMPOSE: 'docker-compose',
   GENERATOR_ENTITIES: 'entities',
   GENERATOR_ENTITY: 'entity',
-  GENERATOR_ENTITY_CLIENT: 'entity-client',
   GENERATOR_EXPORT_JDL: 'export-jdl',
   GENERATOR_GAE: 'gae',
   GENERATOR_GENERATE_BLUEPRINT: 'generate-blueprint',

@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 const { CLIENT_TEST_SRC_DIR, REACT_DIR } = require('../generator-constants');
-const { replaceReactTranslations } = require('../client/transform-react.cjs');
-const { addEnumerationFiles } = require('./files');
+const { replaceReactTranslations } = require('./transform-react.cjs');
+const { addEnumerationFiles } = require('./entity-files.cjs');
 
 const reactFiles = {
   client: [
@@ -106,50 +106,50 @@ const reactFiles = {
   ],
 };
 
-async function writeReactFiles() {
-  const { entity, application } = this;
+async function writeEntitiesReactFiles({ application, entities }) {
   if (!application.clientFrameworkReact) return;
-  if (entity.skipClient) return;
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+    await addEnumerationFiles.call(this, { application, entity }, REACT_DIR);
 
-  await addEnumerationFiles.call(this, { application, entity }, REACT_DIR);
-
-  await this.writeFiles({
-    sections: reactFiles,
-    rootTemplatesPath: 'react',
-    transform: !application.enableTranslation ? [replaceReactTranslations] : undefined,
-    context: { ...application, ...entity },
-  });
-
-  if (!entity.embedded) {
-    const { entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName } = entity;
-
-    const { CLIENT_MAIN_SRC_DIR } = this;
-    const { applicationTypeMicroservice } = application;
-    this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, {
-      applicationTypeMicroservice,
-      CLIENT_MAIN_SRC_DIR,
+    await this.writeFiles({
+      sections: reactFiles,
+      rootTemplatesPath: 'entity/react',
+      transform: !application.enableTranslation ? [replaceReactTranslations] : undefined,
+      context: { ...application, ...entity },
     });
-    this.needleApi.clientReact.addEntityToMenu(
-      entity.entityPage,
-      application.enableTranslation,
-      entity.entityTranslationKeyMenu,
-      entity.entityClassHumanized
-    );
+
+    if (!entity.embedded) {
+      const { entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName } = entity;
+
+      const { CLIENT_MAIN_SRC_DIR } = this;
+      const { applicationTypeMicroservice } = application;
+      this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, {
+        applicationTypeMicroservice,
+        CLIENT_MAIN_SRC_DIR,
+      });
+      this.needleApi.clientReact.addEntityToMenu(
+        entity.entityPage,
+        application.enableTranslation,
+        entity.entityTranslationKeyMenu,
+        entity.entityClassHumanized
+      );
+    }
   }
 }
 
-function cleanupReact() {
-  const { entity, application } = this;
-  const { entityFolderName, entityFileName } = entity;
-  if (application.clientFrameworkReact) return;
+function cleanupEntitiesReact({ application, entities }) {
+  if (!application.clientFrameworkReact) return;
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+    const { entityFolderName, entityFileName } = entity;
 
-  if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
-    this.removeFile(`${this.CLIENT_TEST_SRC_DIR}spec/app/entities/${entityFolderName}/${entityFileName}-reducer.spec.ts`);
+    if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+      this.removeFile(`${this.CLIENT_TEST_SRC_DIR}spec/app/entities/${entityFolderName}/${entityFileName}-reducer.spec.ts`);
+    }
   }
 }
 
 module.exports = {
   reactFiles,
-  writeReactFiles,
-  cleanupReact,
+  writeEntitiesReactFiles,
+  cleanupEntitiesReact,
 };
