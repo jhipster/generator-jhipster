@@ -25,7 +25,7 @@ const { DEFAULT_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/prio
 const { writeAngularFiles, cleanupAngular } = require('./files-angular.cjs');
 const { writeReactFiles, cleanupReact } = require('./files-react.cjs');
 const { writeVueFiles } = require('./files-vue.cjs');
-const { entityClientI18nFiles } = require('../entity-i18n/files.js');
+const { entityClientI18nFiles } = require('../languages/entity-files.cjs');
 const { clientI18nFiles } = require('../languages/files.cjs');
 
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
@@ -89,7 +89,7 @@ module.exports = class extends BaseBlueprintGenerator {
       entity.entityClientTranslations = entity.entityClientTranslations || {};
       entityClientTranslations = entity.entityClientTranslations;
     }
-    const rootTemplatesPath = this.fetchFromInstalledJHipster('entity-i18n/templates/');
+    const rootTemplatesPath = this.fetchFromInstalledJHipster('languages/templates/entity');
     const translationFiles = await this.writeFiles({
       sections: entityClientI18nFiles,
       rootTemplatesPath,

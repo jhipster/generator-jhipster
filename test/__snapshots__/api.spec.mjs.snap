@@ -26,7 +26,6 @@ Object {
     "GENERATOR_ENTITIES": "entities",
     "GENERATOR_ENTITY": "entity",
     "GENERATOR_ENTITY_CLIENT": "entity-client",
-    "GENERATOR_ENTITY_I_18_N": "entity-i18n",
     "GENERATOR_EXPORT_JDL": "export-jdl",
     "GENERATOR_GAE": "gae",
     "GENERATOR_GENERATE_BLUEPRINT": "generate-blueprint",

@@ -39,7 +39,6 @@ const {
   GENERATOR_LANGUAGES,
   GENERATOR_CLIENT,
   GENERATOR_ENTITY_CLIENT,
-  GENERATOR_ENTITY_I_18_N,
 } = require('../generator-list');
 
 const { ANGULAR } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
@@ -338,12 +337,6 @@ module.exports = class JHipsterClientGenerator extends BaseApplicationGenerator 
             context: entity,
             application,
           });
-          if (application.enableTranslation) {
-            await this.composeWithJHipster(GENERATOR_ENTITY_I_18_N, [entityName], {
-              context: entity,
-              application,
-            });
-          }
         }
       },
     });

@@ -28,7 +28,7 @@ const entityClientI18nFiles = {
     {
       templates: [
         {
-          sourceFile: context => `i18n/entity_${context.lang}.json.ejs`,
+          sourceFile: context => `entity/i18n/entity_${context.lang}.json.ejs`,
           destinationFile: context => `${context.clientSrcDir}i18n/${context.lang}/${context.entityTranslationKey}.json`,
         },
       ],
@@ -41,7 +41,7 @@ const enumClientI18nFiles = {
     {
       templates: [
         {
-          sourceFile: 'i18n/enum.json.ejs',
+          sourceFile: 'entity/i18n/enum.json.ejs',
           destinationFile: context => `${context.clientSrcDir}i18n/${context.lang}/${context.clientRootFolder}${context.enumInstance}.json`,
         },
       ],
@@ -52,49 +52,59 @@ const enumClientI18nFiles = {
 module.exports = {
   entityClientI18nFiles,
   enumClientI18nFiles,
-  writeFiles,
+  writeEntityFiles,
 };
 
-function writeFiles() {
+function writeEntityFiles() {
   return {
-    async writeEnumFiles() {
-      const { application, entity } = this;
-      if (entity.skipClient || !application.enableTranslation) return;
+    async writeEnumFiles({ entities, application }) {
+      if (application.skipClient) return;
+      entities = entities.filter(entity => !entity.skipClient && !entity.builtIn);
       const { clientSrcDir, packageName, frontendAppName } = application;
       await Promise.all(
-        entity.fields
-          .map(field => {
-            if (!field.fieldIsEnum) return undefined;
-            // Copy for each
-            const languages = application.languages || this.getAllInstalledLanguages();
-            return languages.map(lang =>
-              this.writeFiles({
-                sections: enumClientI18nFiles,
-                context: {
-                  ...utils.getEnumInfo(field, entity.clientRootFolder),
-                  lang,
-                  frontendAppName,
-                  packageName,
-                  clientSrcDir,
-                },
+        entities
+          .map(entity =>
+            entity.fields
+              .map(field => {
+                if (!field.fieldIsEnum) return undefined;
+                // Copy for each
+                const languages = application.languages || this.getAllInstalledLanguages();
+                return languages.map(lang =>
+                  this.writeFiles({
+                    sections: enumClientI18nFiles,
+                    context: {
+                      ...utils.getEnumInfo(field, entity.clientRootFolder),
+                      lang,
+                      frontendAppName,
+                      packageName,
+                      clientSrcDir,
+                    },
+                  })
+                );
               })
-            );
-          })
+              .flat()
+          )
           .flat()
       );
     },
 
-    async writeClientFiles() {
-      const { application, entity } = this;
-      if (entity.skipClient || !application.enableTranslation) return;
+    async writeClientFiles({ application, entities }) {
+      if (application.skipClient) return;
+      entities = entities.filter(entity => !entity.skipClient && !entity.builtIn);
 
       // Copy each
       const { clientSrcDir, frontendAppName, languages = this.getAllInstalledLanguages() } = application;
       await Promise.all(
-        languages.map(async lang => {
-          await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
-          this.addEntityTranslationKey(entity.entityTranslationKeyMenu, entity.entityClassHumanized || startCase(entity.entityClass), lang);
-        })
+        entities.map(entity =>
+          languages.map(async lang => {
+            await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
+            this.addEntityTranslationKey(
+              entity.entityTranslationKeyMenu,
+              entity.entityClassHumanized || startCase(entity.entityClass),
+              lang
+            );
+          })
+        )
       );
     },
   };

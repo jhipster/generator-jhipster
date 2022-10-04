@@ -39,7 +39,6 @@ export const GENERATOR_DOCKER_COMPOSE = 'docker-compose';
 export const GENERATOR_ENTITIES = 'entities';
 export const GENERATOR_ENTITY = 'entity';
 export const GENERATOR_ENTITY_CLIENT = 'entity-client';
-export const GENERATOR_ENTITY_I_18_N = 'entity-i18n';
 export const GENERATOR_EXPORT_JDL = 'export-jdl';
 export const GENERATOR_GAE = 'gae';
 export const GENERATOR_GENERATE_BLUEPRINT = 'generate-blueprint';
