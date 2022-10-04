@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const execSync = require('child_process').execSync;
-const dockerPrompts = require('../docker-prompts');
+const dockerPrompts = require('../base-docker/docker-prompts.cjs');
 const { MONOLITH } = require('../../jdl/jhipster/application-types');
 const { IngressTypes, ServiceTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
 

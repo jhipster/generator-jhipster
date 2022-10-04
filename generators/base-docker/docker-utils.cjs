@@ -18,8 +18,8 @@
  */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
-const dockerCLI = require('./docker-cli');
-const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
+const dockerCLI = require('./docker-cli.cjs');
+const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.

@@ -18,16 +18,16 @@
  */
 const _ = require('lodash');
 
-const prompts = require('./docker-prompts');
-const BlueprintBaseGenerator = require('./base/generator-base-blueprint.cjs');
-const { GENERATOR_DOCKER_COMPOSE } = require('./generator-list');
-const { loadFromYoRc, checkDocker, checkImages, generateJwtSecret, setAppsFolderPaths } = require('./docker-base');
-const statistics = require('./statistics');
+const prompts = require('./docker-prompts.cjs');
+const BlueprintBaseGenerator = require('../base/index.cjs');
+const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list');
+const { loadFromYoRc, checkDocker, checkImages, generateJwtSecret, setAppsFolderPaths } = require('./docker-base.cjs');
+const statistics = require('../statistics');
 
-const constants = require('./generator-constants');
+const constants = require('../generator-constants');
 
-const { OptionNames } = require('../jdl/jhipster/application-options');
-const { Options: DeploymentOptions } = require('../jdl/jhipster/deployment-options');
+const { OptionNames } = require('../../jdl/jhipster/application-options');
+const { Options: DeploymentOptions } = require('../../jdl/jhipster/deployment-options');
 
 const { JWT_SECRET_KEY } = OptionNames;
 

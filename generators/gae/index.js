@@ -27,7 +27,7 @@ const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const { GENERATOR_GAE } = require('../generator-list');
 const statistics = require('../statistics');
-const dockerPrompts = require('../docker-prompts');
+const dockerPrompts = require('../base-docker/docker-prompts.cjs');
 const constants = require('../generator-constants');
 const cacheProviders = require('../../jdl/jhipster/cache-types');
 const { MEMCACHED } = require('../../jdl/jhipster/cache-types');

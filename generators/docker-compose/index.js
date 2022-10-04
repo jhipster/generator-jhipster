@@ -22,7 +22,7 @@ const jsyaml = require('js-yaml');
 const pathjs = require('path');
 const normalize = require('normalize-path');
 
-const BaseDockerGenerator = require('../generator-base-docker');
+const BaseDockerGenerator = require('../base-docker/index.cjs');
 
 const writeFiles = require('./files').writeFiles;
 const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const dockerPrompts = require('../docker-prompts');
+const dockerPrompts = require('../base-docker/docker-prompts.cjs');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');

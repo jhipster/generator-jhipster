@@ -20,14 +20,14 @@
 const chalk = require('chalk');
 const fs = require('fs');
 
-const BaseDockerGenerator = require('../generator-base-docker');
+const BaseDockerGenerator = require('../base-docker/index.cjs');
 
 const prompts = require('./prompts');
 const { writeFiles } = require('./files');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { GENERATOR_KUBERNETES } = require('../generator-list');
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../base-docker/docker-base.cjs');
 const {
   checkKubernetes,
   loadConfig,

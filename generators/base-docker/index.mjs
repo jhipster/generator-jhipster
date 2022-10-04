@@ -17,6 +17,9 @@
  * limitations under the License.
  */
 
-const BaseDockerGenerator = require('./generator.cjs');
+/*
+ * Register generator-base at yeoman-environment
+ */
+import BaseDockerGenerator from './generator.cjs';
 
-module.exports = BaseDockerGenerator;
+export default BaseDockerGenerator;

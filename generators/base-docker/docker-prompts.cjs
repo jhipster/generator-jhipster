@@ -18,14 +18,14 @@
  */
 const chalk = require('chalk');
 const shelljs = require('shelljs');
-const { loadConfigs, setClusteredApps } = require('./docker-base');
-const { getBase64Secret } = require('./utils');
-const { MICROSERVICE, MONOLITH, GATEWAY } = require('../jdl/jhipster/application-types');
-const { PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
-const monitoring = require('../jdl/jhipster/monitoring-types');
+const { loadConfigs, setClusteredApps } = require('./docker-base.cjs');
+const { getBase64Secret } = require('../utils');
+const { MICROSERVICE, MONOLITH, GATEWAY } = require('../../jdl/jhipster/application-types');
+const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const monitoring = require('../../jdl/jhipster/monitoring-types');
 
 const NO_MONITORING = monitoring.NO;
-const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
+const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 
 module.exports = {
   askForApplicationType,

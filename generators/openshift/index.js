@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const shelljs = require('shelljs');
 
-const BaseDockerGenerator = require('../generator-base-docker');
+const BaseDockerGenerator = require('../base-docker/index.cjs');
 
 const prompts = require('./prompts');
 const { GENERATOR_OPENSHIFT } = require('../generator-list');
@@ -32,7 +32,7 @@ const serviceDiscoveryTypes = require('../../jdl/jhipster/service-discovery-type
 const { StorageTypes } = require('../../jdl/jhipster/openshift-platform-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const writeFiles = require('./files').writeFiles;
-const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../base-docker/docker-base.cjs');
 const { setupKubernetesConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
 

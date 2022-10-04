@@ -17,6 +17,6 @@
  * limitations under the License.
  */
 
-const BaseDockerGenerator = require('./generator.cjs');
+const BaseGenerator = require('./generator.cjs');
 
-module.exports = BaseDockerGenerator;
+module.exports = BaseGenerator;

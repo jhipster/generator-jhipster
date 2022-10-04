@@ -20,10 +20,10 @@ const shelljs = require('shelljs');
 const chalk = require('chalk');
 const _ = require('lodash');
 
-const dockerUtils = require('./docker-utils');
-const { getBase64Secret } = require('./utils');
-const { MAVEN } = require('../jdl/jhipster/build-tool-types');
-const { MONOLITH, MICROSERVICE, GATEWAY } = require('../jdl/jhipster/application-types');
+const dockerUtils = require('./docker-utils.cjs');
+const { getBase64Secret } = require('../utils');
+const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../jdl/jhipster/application-types');
 
 module.exports = {
   checkDocker: dockerUtils.checkDocker,
