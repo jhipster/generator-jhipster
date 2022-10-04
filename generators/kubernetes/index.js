@@ -34,7 +34,7 @@ const {
   saveConfig,
   setupKubernetesConstants,
   derivedKubernetesPlatformProperties,
-} = require('../kubernetes-base');
+} = require('./kubernetes-base.cjs');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseDockerGenerator {

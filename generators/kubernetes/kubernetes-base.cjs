@@ -21,11 +21,11 @@ const _ = require('lodash');
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const crypto = require('crypto');
-const { defaultKubernetesConfig } = require('./kubernetes/kubernetes-constants');
-const { loadFromYoRc } = require('./base-docker/docker-base.cjs');
-const constants = require('./generator-constants');
-const { MICROSERVICE } = require('../jdl/jhipster/application-types');
-const { GeneratorTypes, IngressTypes, ServiceTypes } = require('../jdl/jhipster/kubernetes-platform-types');
+const { defaultKubernetesConfig } = require('./kubernetes-constants');
+const { loadFromYoRc } = require('../base-docker/docker-base.cjs');
+const constants = require('../generator-constants');
+const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { GeneratorTypes, IngressTypes, ServiceTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
 
 const { INGRESS } = ServiceTypes;
 const { GKE, NGINX } = IngressTypes;

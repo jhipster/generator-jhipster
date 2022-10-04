@@ -37,7 +37,7 @@ const {
   setupKubernetesConstants,
   setupHelmConstants,
   derivedKubernetesPlatformProperties,
-} = require('../kubernetes-base');
+} = require('../kubernetes/kubernetes-base.cjs');
 const statistics = require('../statistics');
 const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
 
