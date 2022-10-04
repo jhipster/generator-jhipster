@@ -8,31 +8,13 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "build.gradle": Object {
@@ -84,9 +66,6 @@ Object {
     "stateCleared": "modified",
   },
   "settings.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -547,25 +526,10 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": Object {
@@ -577,16 +541,7 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
@@ -608,9 +563,6 @@ Object {
     "stateCleared": "modified",
   },
   "pom.xml": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -1065,25 +1017,10 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": Object {
@@ -1095,16 +1032,7 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
@@ -1126,9 +1054,6 @@ Object {
     "stateCleared": "modified",
   },
   "pom.xml": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -1607,31 +1532,13 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "build.gradle": Object {
@@ -1683,9 +1590,6 @@ Object {
     "stateCleared": "modified",
   },
   "settings.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -2041,25 +1945,10 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": Object {
@@ -2071,16 +1960,7 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
@@ -2102,9 +1982,6 @@ Object {
     "stateCleared": "modified",
   },
   "pom.xml": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -2544,31 +2421,13 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "build.gradle": Object {
@@ -2620,9 +2479,6 @@ Object {
     "stateCleared": "modified",
   },
   "settings.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -3032,25 +2888,10 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": Object {
@@ -3062,16 +2903,7 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
@@ -3093,9 +2925,6 @@ Object {
     "stateCleared": "modified",
   },
   "pom.xml": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -3589,31 +3418,13 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "build.gradle": Object {
@@ -3665,9 +3476,6 @@ Object {
     "stateCleared": "modified",
   },
   "settings.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -4020,25 +3828,10 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": Object {
@@ -4050,16 +3843,7 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
@@ -4081,9 +3865,6 @@ Object {
     "stateCleared": "modified",
   },
   "pom.xml": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -4508,31 +4289,13 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "build.gradle": Object {
@@ -4584,9 +4347,6 @@ Object {
     "stateCleared": "modified",
   },
   "settings.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -5035,25 +4795,10 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": Object {
@@ -5065,16 +4810,7 @@ Object {
   ".mvn/wrapper/maven-wrapper.properties": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
@@ -5096,9 +4832,6 @@ Object {
     "stateCleared": "modified",
   },
   "pom.xml": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -5556,31 +5289,13 @@ Object {
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
   ".jhipster/AnotherSimple.json": Object {
     "stateCleared": "modified",
   },
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "build.gradle": Object {
@@ -5632,9 +5347,6 @@ Object {
     "stateCleared": "modified",
   },
   "settings.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {

@@ -108,7 +108,7 @@ describe(`JHipster ${databaseType} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample);
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:languages', 'jhipster:common']);
       });
 
       after(() => runResult.cleanup());
