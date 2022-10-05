@@ -20,7 +20,7 @@
 const semver = require('semver');
 const path = require('path');
 const { logger } = require('./utils');
-const { packageJson } = require('../lib/index.js');
+const { packageJson } = require('../lib/index.cjs');
 
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;

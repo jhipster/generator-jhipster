@@ -27,7 +27,7 @@ const exec = require('child_process').exec;
 const https = require('https');
 
 const { reproducibleConfigForTests: projectNameReproducibleConfigForTests } = require('../project-name/config.cjs');
-const { packageJson: packagejs } = require('../../lib/index.js');
+const { packageJson: packagejs } = require('../../lib/index.cjs');
 const jhipsterUtils = require('../utils.cjs');
 const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = require('../generator-constants.cjs');
 const JSONToJDLEntityConverter = require('../../jdl/converters/json-to-jdl-entity-converter');

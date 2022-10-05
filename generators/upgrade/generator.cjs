@@ -31,7 +31,7 @@ const cleanup = require('../cleanup.cjs');
 const constants = require('../generator-constants.cjs');
 const statistics = require('../statistics.cjs');
 const { parseBluePrints } = require('../../utils/blueprint');
-const { packageJson: packagejs } = require('../../lib/index.js');
+const { packageJson: packagejs } = require('../../lib/index.cjs');
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';

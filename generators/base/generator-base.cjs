@@ -29,7 +29,7 @@ const os = require('os');
 const normalize = require('normalize-path');
 const simpleGit = require('simple-git');
 
-const { packageJson: packagejs } = require('../../lib/index.js');
+const { packageJson: packagejs } = require('../../lib/index.cjs');
 const jhipsterUtils = require('../utils.cjs');
 const constants = require('../generator-constants.cjs');
 const PrivateBase = require('./generator-base-private.cjs');

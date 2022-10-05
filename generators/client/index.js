@@ -34,7 +34,7 @@ const { writeEntitiesAngularFiles, cleanupEntitiesAngular } = require('./entity-
 const { writeEntitiesReactFiles, cleanupEntitiesReact } = require('./entity-files-react.cjs');
 const { writeEntitiesVueFiles } = require('./entity-files-vue.cjs');
 
-const { packageJson: packagejs } = require('../../lib/index.js');
+const { packageJson: packagejs } = require('../../lib/index.cjs');
 const constants = require('../generator-constants.cjs');
 const statistics = require('../statistics.cjs');
 const { clientDefaultConfig } = require('../generator-defaults.cjs');

@@ -27,7 +27,7 @@ const EnvironmentBuilder = require('./environment-builder');
 const SUB_GENERATORS = require('./commands');
 const JHipsterCommand = require('./jhipster-command');
 const { CLI_NAME, logger, getCommand, done } = require('./utils');
-const { packageJson } = require('../lib/index.js');
+const { packageJson } = require('../lib/index.cjs');
 const { packageNameToNamespace } = require('../generators/utils.cjs');
 const { logo } = require('./logo.cjs');
 
