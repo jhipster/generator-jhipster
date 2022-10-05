@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } = require('../generator-constants');
+const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } = require('../generator-constants.cjs');
 
 const entityCouchbaseFiles = {
   dbChangelog: [

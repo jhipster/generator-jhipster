@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 
 /* Constants use throughout */
 const DOCKER_DIR = constants.DOCKER_DIR;

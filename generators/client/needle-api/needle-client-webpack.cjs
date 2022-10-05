@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const needleClient = require('./needle-client.cjs');
-const constants = require('../../generator-constants');
+const constants = require('../../generator-constants.cjs');
 
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const SUPPORTED_CLIENT_FRAMEWORKS = constants.SUPPORTED_CLIENT_FRAMEWORKS;

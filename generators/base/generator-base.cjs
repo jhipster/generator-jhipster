@@ -31,7 +31,7 @@ const simpleGit = require('simple-git');
 
 const { packageJson: packagejs } = require('../../lib/index.js');
 const jhipsterUtils = require('../utils');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const PrivateBase = require('./generator-base-private.cjs');
 const NeedleApi = require('../needle-api.cjs');
 const { defaultConfig, defaultConfigMicroservice } = require('../generator-defaults');

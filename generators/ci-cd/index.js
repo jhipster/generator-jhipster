@@ -25,7 +25,7 @@ const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 const { defaultConfig } = require('../generator-defaults');
 const prompts = require('./prompts');
 const statistics = require('../statistics');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
 const { GENERATOR_CI_CD } = require('../generator-list.cjs');
 

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const { replaceVueTranslations } = require('./transform-vue.cjs');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
 const { GATEWAY } = require('../../jdl/jhipster/application-types');

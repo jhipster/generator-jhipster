@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const constants = require('./generator-constants');
+const constants = require('./generator-constants.cjs');
 const { languageSnakeCase, languageToJavaLanguage } = require('./utils');
 const { cleanupOldServerFiles } = require('./server/cleanup');
 

@@ -23,7 +23,7 @@ const { access } = require('fs/promises');
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { defaultHelpers: helpers } = require('../../test/utils/utils');
 const { defaultConfig, requiredConfig } = require('./config.cjs');
-const { GENERATOR_JHIPSTER } = require('../generator-constants');
+const { GENERATOR_JHIPSTER } = require('../generator-constants.cjs');
 const { GENERATOR_INIT } = require('../generator-list.cjs');
 
 const generatorPath = path.join(__dirname, 'index.cjs');

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { CLIENT_TEST_SRC_DIR, VUE_DIR } = require('../generator-constants');
+const { CLIENT_TEST_SRC_DIR, VUE_DIR } = require('../generator-constants.cjs');
 const { replaceVueTranslations } = require('./transform-vue.cjs');
 const { addEnumerationFiles } = require('./entity-files.cjs');
 

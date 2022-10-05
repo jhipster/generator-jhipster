@@ -33,7 +33,7 @@ const { MapperTypes } = require('../jdl/jhipster/entity-options');
 const { OAUTH2, SESSION } = require('../jdl/jhipster/authentication-types');
 const { CommonDBTypes } = require('../jdl/jhipster/field-types');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
-const constants = require('../generators/generator-constants');
+const constants = require('../generators/generator-constants.cjs');
 
 const { BOOLEAN, LONG, STRING, UUID } = CommonDBTypes;
 const { NO: NO_DTO, MAPSTRUCT } = MapperTypes;

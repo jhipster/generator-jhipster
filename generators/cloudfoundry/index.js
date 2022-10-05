@@ -29,7 +29,7 @@ const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const cacheProviders = require('../../jdl/jhipster/cache-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { GENERATOR_CLOUDFOUNDRY } = require('../generator-list.cjs');
 
 const NO_CACHE_PROVIDER = cacheProviders.NO;

@@ -25,7 +25,7 @@ import { isBinaryFile } from 'isbinaryfile';
 import BaseGenerator from '../base/index.mjs';
 import MultiStepTransform from './multi-step-transform/index.mjs';
 import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import generatorUtils from '../utils.js';
 

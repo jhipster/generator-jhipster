@@ -24,7 +24,7 @@ import fieldUtils from '../../utils/field.js';
 import relationshipUtils from '../../utils/relationship.js';
 import utils from '../../utils/index.js';
 import userUtils from '../../utils/user.js';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import type { CommonClientServerApplication } from './types.js';
 
 const { prepareEntityForTemplates } = entityUtils;

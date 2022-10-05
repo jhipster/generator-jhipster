@@ -28,7 +28,7 @@ const { isReservedClassName } = require('../../jdl/jhipster/reserved-keywords');
 
 const prompts = require('./prompts');
 const { defaultConfig } = require('../generator-defaults');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
 const { GENERATOR_ENTITIES, GENERATOR_ENTITY } = require('../generator-list.cjs');

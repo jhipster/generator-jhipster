@@ -23,7 +23,7 @@ const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const prompts = require('./prompts.cjs');
 const { customizeFiles: customizeVueFiles, vueFiles } = require('./files-vue.cjs');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { GENERATOR_PAGE } = require('../generator-list.cjs');
 const { PROTRACTOR } = require('../../jdl/jhipster/test-framework-types');
 

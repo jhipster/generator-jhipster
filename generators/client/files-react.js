@@ -20,7 +20,7 @@ const { replaceReactTranslations } = require('./transform-react.cjs');
 const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
 const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 const { GATEWAY } = require('../../jdl/jhipster/application-types');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
 

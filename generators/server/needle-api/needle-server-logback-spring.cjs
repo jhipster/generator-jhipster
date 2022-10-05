@@ -18,7 +18,7 @@
  */
 const chalk = require('chalk');
 const needleServer = require('./needle-server.cjs');
-const constants = require('../../generator-constants');
+const constants = require('../../generator-constants.cjs');
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 

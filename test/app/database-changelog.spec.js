@@ -3,7 +3,7 @@ const fse = require('fs-extra');
 const helpers = require('yeoman-test');
 const { createMockedConfig } = require('../support/mock-config.cjs');
 
-const { SERVER_MAIN_RES_DIR } = require('../../generators/generator-constants');
+const { SERVER_MAIN_RES_DIR } = require('../../generators/generator-constants.cjs');
 
 describe('jhipster:app database changelogs', () => {
   context('when regenerating the application', () => {

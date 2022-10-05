@@ -29,7 +29,7 @@ const { createImporterFromContent, createImporterFromFiles } = require('../jdl/j
 
 const { packageJson: packagejs } = require('../lib/index.js');
 const statistics = require('../generators/statistics');
-const { JHIPSTER_CONFIG_DIR } = require('../generators/generator-constants');
+const { JHIPSTER_CONFIG_DIR } = require('../generators/generator-constants.cjs');
 
 const jhipsterCli = require.resolve('./cli.js');
 const { writeConfigFile } = require('../jdl/exporters/export-utils');

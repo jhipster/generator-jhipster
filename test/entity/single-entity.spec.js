@@ -2,7 +2,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const helpers = require('yeoman-test');
 
-const { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } = require('../../generators/generator-constants');
+const { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } = require('../../generators/generator-constants.cjs');
 const { createMockedConfig } = require('../support/mock-config.cjs');
 
 const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };

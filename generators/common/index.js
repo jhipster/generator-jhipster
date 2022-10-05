@@ -23,7 +23,7 @@ const BaseApplicationGenerator = require('../base-application/generator.cjs');
 
 const writeFiles = require('./files').writeFiles;
 const prettierConfigFiles = require('./files').prettierConfigFiles;
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { packageJson } = require('../../lib/index.js');
 const { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list.cjs');
 

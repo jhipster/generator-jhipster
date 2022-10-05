@@ -1,4 +1,4 @@
-const constants = require('../../generators/generator-constants');
+const constants = require('../../generators/generator-constants.cjs');
 
 const { TEST_DIR, CLIENT_MAIN_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, DOCKER_DIR } =
   constants;

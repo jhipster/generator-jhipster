@@ -3,7 +3,7 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const ServerGenerator = require('../../generators/server');
-const constants = require('../../generators/generator-constants');
+const constants = require('../../generators/generator-constants.cjs');
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 

@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const fs = require('fs');
 const _ = require('lodash');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 const { CASSANDRA, SQL } = require('../../jdl/jhipster/database-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');

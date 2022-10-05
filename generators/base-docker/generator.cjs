@@ -24,7 +24,7 @@ const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list.cjs');
 const { loadFromYoRc, checkDocker, checkImages, generateJwtSecret, setAppsFolderPaths } = require('./docker-base.cjs');
 const statistics = require('../statistics');
 
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const { Options: DeploymentOptions } = require('../../jdl/jhipster/deployment-options');

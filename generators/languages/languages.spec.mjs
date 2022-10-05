@@ -3,7 +3,7 @@ import helpers from 'yeoman-test';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-import constants from '../generator-constants';
+import constants from '../generator-constants.cjs';
 import EnvironmentBuilder from '../../cli/environment-builder';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;

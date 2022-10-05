@@ -21,7 +21,7 @@ import fs from 'fs';
 import BaseApplication from '../base-application/index.mjs';
 import type { DefaultTaskGroup } from '../base-application/tasks.js';
 import type { LiquibaseApplication } from '../bootstrap-application-server/types.js';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import {
   GENERATOR_DATABASE_CHANGELOG,
   GENERATOR_DATABASE_CHANGELOG_LIQUIBASE,

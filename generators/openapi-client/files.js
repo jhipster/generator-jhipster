@@ -20,7 +20,7 @@
 const path = require('path');
 const _ = require('lodash');
 const chalk = require('chalk');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');

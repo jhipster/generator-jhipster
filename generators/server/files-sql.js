@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const { mergeSections, addSectionsCondition } = require('../utils');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 
 const DOCKER_DIR = constants.DOCKER_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;

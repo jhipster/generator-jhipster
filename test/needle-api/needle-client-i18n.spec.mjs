@@ -5,7 +5,7 @@ import fse from 'fs-extra';
 import { fileURLToPath } from 'url';
 
 import LanguagesGenerator from '../../generators/languages/index.mjs';
-import constants from '../../generators/generator-constants.js';
+import constants from '../../generators/generator-constants.cjs';
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;

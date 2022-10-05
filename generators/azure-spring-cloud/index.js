@@ -23,7 +23,7 @@ const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const statistics = require('../statistics');
 
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 
 const cacheTypes = require('../../jdl/jhipster/cache-types');
 const { MEMCACHED } = require('../../jdl/jhipster/cache-types');

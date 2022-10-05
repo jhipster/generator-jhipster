@@ -27,7 +27,7 @@ const { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION 
 
 const TYPE_LONG = CommonDBTypes.LONG;
 
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 
 // TODO v8: Remove this constant
 const { LIQUIBASE_DTD_VERSION } = constants;

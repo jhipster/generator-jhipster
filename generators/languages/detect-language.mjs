@@ -18,7 +18,7 @@
  */
 
 import osLocale from 'os-locale';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 
 const { LANGUAGES } = constants;
 

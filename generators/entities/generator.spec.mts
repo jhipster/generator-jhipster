@@ -21,7 +21,7 @@ import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import testSupport from '../../test/support/index.cjs';
 import Generator from './generator.cjs';
 import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';

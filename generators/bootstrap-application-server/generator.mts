@@ -19,7 +19,7 @@
 import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import entityUtils from '../../utils/entity.js';
 import type { SpringBootApplication } from './types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.js';

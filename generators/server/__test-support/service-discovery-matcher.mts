@@ -1,6 +1,6 @@
 import type { RunResult } from 'yeoman-test';
 
-import constants from '../../generator-constants.js';
+import constants from '../../generator-constants.cjs';
 import { matchWrittenConfig, matchWrittenFiles } from '../../../test/support/matcher.mjs';
 
 const { DOCKER_DIR } = constants;

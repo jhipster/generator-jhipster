@@ -8,7 +8,7 @@ import Generator from './index.js';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 
 const { snakeCase } = lodash;
 

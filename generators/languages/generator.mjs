@@ -24,7 +24,7 @@ import BaseApplication from '../base-application/generator.cjs';
 
 import { askForLanguages, askI18n } from './prompts.mjs';
 import statistics from '../statistics.js';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 
 import generatorDefaults from '../generator-defaults.js';
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';

@@ -23,7 +23,7 @@ import BaseApplicationGenerator from '../base-application/generator.cjs';
 
 import validations from '../../jdl/jhipster/validations.js';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import utils from '../../utils/index.js';
 import entityUtils from '../../utils/entity.js';
 import fieldUtils from '../../utils/field.js';

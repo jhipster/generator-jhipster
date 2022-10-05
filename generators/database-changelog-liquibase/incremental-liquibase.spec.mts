@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
 import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import jdlImporter from '../../jdl/jdl-importer.js';
 import expectedFiles from '../../test/utils/expected-files.js';
 

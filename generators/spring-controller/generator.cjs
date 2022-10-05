@@ -22,7 +22,7 @@ const chalk = require('chalk');
 
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const prompts = require('./prompts.cjs');
 const statistics = require('../statistics');
 const { OptionNames } = require('../../jdl/jhipster/application-options');

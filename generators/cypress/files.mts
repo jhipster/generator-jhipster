@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 
 import type { WriteFileSection } from '../base/api.js';
 import type CypressGenerator from './generator.mjs';

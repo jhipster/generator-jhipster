@@ -20,7 +20,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { GENERATOR_JHIPSTER } = require('../generator-constants');
+const { GENERATOR_JHIPSTER } = require('../generator-constants.cjs');
 const {
   DeploymentTypes: { DOCKERCOMPOSE },
 } = require('../../jdl/jhipster/deployment-options');

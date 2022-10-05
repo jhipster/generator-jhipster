@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { clientDefaultConfig } = require('../generator-defaults');
 const clientFrameworks = require('../../jdl/jhipster/client-framework-types');
 

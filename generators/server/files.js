@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const serverCleanup = require('./cleanup');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { addSectionsCondition, mergeSections } = require('../utils');
 const { writeCouchbaseFiles } = require('./files-couchbase');
 const { writeSqlFiles } = require('./files-sql');

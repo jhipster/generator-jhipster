@@ -18,7 +18,7 @@
  */
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
-const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
+const { JHIPSTER_CONFIG_DIR } = require('../generator-constants.cjs');
 const { GENERATOR_ENTITIES, GENERATOR_APP } = require('../generator-list.cjs');
 
 module.exports = class extends BaseBlueprintGenerator {

@@ -28,7 +28,7 @@ const cleanupKafka = require('./cleanup-kafka');
 const cleanupReactive = require('./cleanup-reactive');
 const cleanupCucumber = require('./cleanup-cucumber');
 const cleanupMaven = require('./cleanup-maven');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore

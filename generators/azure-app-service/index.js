@@ -27,7 +27,7 @@ const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 
 // Global constants
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { GENERATOR_AZURE_APP_SERVICE } = require('../generator-list.cjs');

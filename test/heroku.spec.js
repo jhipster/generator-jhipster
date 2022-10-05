@@ -6,7 +6,7 @@ const sinon = require('sinon');
 const ChildProcess = require('child_process');
 const { jestExpect: expect } = require('mocha-expect-snapshot');
 
-const constants = require('../generators/generator-constants');
+const constants = require('../generators/generator-constants.cjs');
 
 const expectedFiles = {
   monolith: [

@@ -35,7 +35,7 @@ const { writeEntitiesReactFiles, cleanupEntitiesReact } = require('./entity-file
 const { writeEntitiesVueFiles } = require('./entity-files-vue.cjs');
 
 const { packageJson: packagejs } = require('../../lib/index.js');
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');
 const { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT } = require('../generator-list.cjs');

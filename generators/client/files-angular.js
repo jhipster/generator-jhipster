@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const { replaceAngularTranslations } = require('./transform-angular.cjs');
 
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, ANGULAR_DIR } = constants;
