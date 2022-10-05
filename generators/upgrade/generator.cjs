@@ -27,7 +27,7 @@ const childProcess = require('child_process');
 
 const BaseGenerator = require('../base/index.cjs');
 
-const cleanup = require('../cleanup');
+const cleanup = require('../cleanup.cjs');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { parseBluePrints } = require('../../utils/blueprint');

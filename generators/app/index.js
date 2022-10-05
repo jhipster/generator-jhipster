@@ -21,7 +21,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
-const cleanup = require('../cleanup');
+const cleanup = require('../cleanup.cjs');
 const prompts = require('./prompts');
 const { packageJson: packagejs } = require('../../lib/index.js');
 const statistics = require('../statistics');
