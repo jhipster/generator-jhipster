@@ -1,5 +1,5 @@
 const assert = require('yeoman-assert');
-const NeedleApiBase = require('../../generators/needle-base');
+const NeedleApiBase = require('../../generators/needle-base.cjs');
 
 describe('Unit tests for needle-base API', () => {
   before(done => {

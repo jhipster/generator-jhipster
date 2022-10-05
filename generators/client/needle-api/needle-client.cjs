@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const needleBase = require('../../needle-base');
+const needleBase = require('../../needle-base.cjs');
 
 module.exports = class extends needleBase {
   constructor(generator) {

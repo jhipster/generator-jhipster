@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const needleClient = require('./needle-client');
+const needleClient = require('./needle-client.cjs');
 
 module.exports = class extends needleClient {
   addElementTranslationKey(key, value, language, webappSrcDir) {

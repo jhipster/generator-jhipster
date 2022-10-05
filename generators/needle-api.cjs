@@ -16,18 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const Base = require('./needle-base');
-const Client = require('./client/needle-api/needle-client');
-const ClientAngular = require('./client/needle-api/needle-client-angular');
-const ClientReact = require('./client/needle-api/needle-client-react');
-const ClientVue = require('./client/needle-api/needle-client-vue');
-const ClientWebpack = require('./client/needle-api/needle-client-webpack');
-const ClientI18n = require('./client/needle-api/needle-client-i18n');
-const ServerMaven = require('./server/needle-api/needle-server-maven');
-const ServerGradle = require('./server/needle-api/needle-server-gradle');
-const ServerCache = require('./server/needle-api/needle-server-cache');
-const ServerLiquibase = require('./server/needle-api/needle-server-liquibase');
-const ServerLog = require('./server/needle-api/needle-server-logback-spring');
+const Base = require('./needle-base.cjs');
+const Client = require('./client/needle-api/needle-client.cjs');
+const ClientAngular = require('./client/needle-api/needle-client-angular.cjs');
+const ClientReact = require('./client/needle-api/needle-client-react.cjs');
+const ClientVue = require('./client/needle-api/needle-client-vue.cjs');
+const ClientWebpack = require('./client/needle-api/needle-client-webpack.cjs');
+const ClientI18n = require('./client/needle-api/needle-client-i18n.cjs');
+const ServerMaven = require('./server/needle-api/needle-server-maven.cjs');
+const ServerGradle = require('./server/needle-api/needle-server-gradle.cjs');
+const ServerCache = require('./server/needle-api/needle-server-cache.cjs');
+const ServerLiquibase = require('./server/needle-api/needle-server-liquibase.cjs');
+const ServerLog = require('./server/needle-api/needle-server-logback-spring.cjs');
 
 module.exports = class NeedleApi {
   constructor(generator) {

@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const jhipsterUtils = require('../../utils');
-const needleClientBase = require('./needle-client');
+const needleClientBase = require('./needle-client.cjs');
 
 module.exports = class extends needleClientBase {
   addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {

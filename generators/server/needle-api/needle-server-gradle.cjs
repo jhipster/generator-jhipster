@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const needleServer = require('./needle-server');
+const needleServer = require('./needle-server.cjs');
 
 const buildGradlePath = 'build.gradle';
 const gradleSettingsPath = 'settings.gradle';

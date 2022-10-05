@@ -18,7 +18,7 @@
  */
 const chalk = require('chalk');
 const _ = require('lodash');
-const needleClientBase = require('./needle-client');
+const needleClientBase = require('./needle-client.cjs');
 const constants = require('../../generator-constants');
 const jhipsterUtils = require('../../utils');
 

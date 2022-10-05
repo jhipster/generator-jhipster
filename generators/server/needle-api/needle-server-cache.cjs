@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const needleServer = require('./needle-server');
+const needleServer = require('./needle-server.cjs');
 const constants = require('../../generator-constants');
 const { CAFFEINE, EHCACHE, REDIS } = require('../../../jdl/jhipster/cache-types');
 
