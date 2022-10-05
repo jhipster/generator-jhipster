@@ -23,7 +23,7 @@ const path = require('path');
 const { existsSync } = require('fs');
 const Environment = require('yeoman-environment');
 const { CLI_NAME, logger } = require('./utils');
-const { loadYoRc, packageNameToNamespace } = require('../generators/utils');
+const { loadYoRc, packageNameToNamespace } = require('../generators/utils.cjs');
 const { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } = require('../utils/blueprint');
 
 const createEnvironment = (args, options = {}, adapter) => {

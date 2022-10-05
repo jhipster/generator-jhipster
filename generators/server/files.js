@@ -18,7 +18,7 @@
  */
 const serverCleanup = require('./cleanup');
 const constants = require('../generator-constants.cjs');
-const { addSectionsCondition, mergeSections } = require('../utils');
+const { addSectionsCondition, mergeSections } = require('../utils.cjs');
 const { writeCouchbaseFiles } = require('./files-couchbase');
 const { writeSqlFiles } = require('./files-sql');
 

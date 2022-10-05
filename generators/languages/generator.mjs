@@ -30,7 +30,7 @@ import generatorDefaults from '../generator-defaults.cjs';
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import files from './files.cjs';
 import entityFiles from './entity-files.cjs';
-import jhipsterUtils from '../utils.js';
+import jhipsterUtils from '../utils.cjs';
 
 const { languageToJavaLanguage } = jhipsterUtils;
 const { clientI18nFiles } = files;

@@ -19,7 +19,7 @@
 const Faker = require('@faker-js/faker/lib');
 const Randexp = require('randexp');
 
-const { languageToJavaLanguage } = require('../generators/utils');
+const { languageToJavaLanguage } = require('../generators/utils.cjs');
 
 class RandexpWithFaker extends Randexp {
   constructor(regexp, m, faker) {

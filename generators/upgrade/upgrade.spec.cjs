@@ -6,7 +6,7 @@ const fse = require('fs-extra');
 const { jestExpect: expect } = require('mocha-expect-snapshot');
 const { packageJson } = require('../../lib/index.js');
 const { prepareTempDir } = require('../../test/utils/utils');
-const { escapeRegExp } = require('../utils');
+const { escapeRegExp } = require('../utils.cjs');
 
 describe('JHipster upgrade generator', function () {
   this.timeout(400000);

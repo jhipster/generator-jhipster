@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const { startCase } = require('lodash');
-const utils = require('../utils');
+const utils = require('../utils.cjs');
 
 /**
  * The default is to use a file path string. It implies use of the template method.

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const utils = require('../utils');
+const utils = require('../utils.cjs');
 const constants = require('../generator-constants.cjs');
 
 /* Constants use throughout */

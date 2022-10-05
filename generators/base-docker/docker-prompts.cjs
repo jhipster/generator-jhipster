@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const shelljs = require('shelljs');
 const { loadConfigs, setClusteredApps } = require('./docker-base.cjs');
-const { getBase64Secret } = require('../utils');
+const { getBase64Secret } = require('../utils.cjs');
 const { MICROSERVICE, MONOLITH, GATEWAY } = require('../../jdl/jhipster/application-types');
 const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
 const monitoring = require('../../jdl/jhipster/monitoring-types');

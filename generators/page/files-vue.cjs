@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const constants = require('../generator-constants.cjs');
-const utils = require('../utils');
+const utils = require('../utils.cjs');
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;

@@ -18,7 +18,7 @@
  */
 
 const constants = require('./generator-constants.cjs');
-const { languageSnakeCase, languageToJavaLanguage } = require('./utils');
+const { languageSnakeCase, languageToJavaLanguage } = require('./utils.cjs');
 const { cleanupOldServerFiles } = require('./server/cleanup');
 
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR } = constants;

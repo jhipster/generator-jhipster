@@ -28,7 +28,7 @@ const SUB_GENERATORS = require('./commands');
 const JHipsterCommand = require('./jhipster-command');
 const { CLI_NAME, logger, getCommand, done } = require('./utils');
 const { packageJson } = require('../lib/index.js');
-const { packageNameToNamespace } = require('../generators/utils');
+const { packageNameToNamespace } = require('../generators/utils.cjs');
 const { logo } = require('./logo.cjs');
 
 const { version: JHIPSTER_VERSION } = packageJson;

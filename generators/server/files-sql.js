@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { mergeSections, addSectionsCondition } = require('../utils');
+const { mergeSections, addSectionsCondition } = require('../utils.cjs');
 const constants = require('../generator-constants.cjs');
 
 const DOCKER_DIR = constants.DOCKER_DIR;

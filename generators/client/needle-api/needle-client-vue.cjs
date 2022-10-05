@@ -18,7 +18,7 @@
  */
 const chalk = require('chalk');
 const _ = require('lodash');
-const jhipsterUtils = require('../../utils');
+const jhipsterUtils = require('../../utils.cjs');
 const needleClientBase = require('./needle-client.cjs');
 
 module.exports = class extends needleClientBase {

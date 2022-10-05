@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const jhipsterUtils = require('./utils');
+const jhipsterUtils = require('./utils.cjs');
 
 module.exports = class {
   constructor(generator) {

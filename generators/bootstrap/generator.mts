@@ -27,7 +27,7 @@ import MultiStepTransform from './multi-step-transform/index.mjs';
 import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
 import constants from '../generator-constants.cjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
-import generatorUtils from '../utils.js';
+import generatorUtils from '../utils.cjs';
 
 import entityUtils from '../../utils/entity.js';
 import fieldUtils from '../../utils/field.js';
