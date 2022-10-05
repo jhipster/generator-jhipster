@@ -22,7 +22,7 @@ const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
 const { SPRING_BOOT_VERSION, SPRING_BOOT_PARENT_BOM } = require('./constants.cjs');
 
-const { GENERATOR_JAVA } = require('../generator-list');
+const { GENERATOR_JAVA } = require('../generator-list.cjs');
 
 module.exports.dependencyChain = [GENERATOR_JAVA];
 

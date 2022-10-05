@@ -29,7 +29,7 @@ const {
   GENERATOR_SERVER,
   GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_DATABASE_CHANGELOG,
-} = require('../generator-list');
+} = require('../generator-list.cjs');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const BaseApplicationGenerator = require('../base-application/generator.cjs');
 const { writeFiles } = require('./files');

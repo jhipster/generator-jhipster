@@ -22,7 +22,7 @@ const shelljs = require('shelljs');
 const BaseDockerGenerator = require('../base-docker/index.cjs');
 
 const prompts = require('./prompts');
-const { GENERATOR_OPENSHIFT } = require('../generator-list');
+const { GENERATOR_OPENSHIFT } = require('../generator-list.cjs');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');

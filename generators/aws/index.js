@@ -23,7 +23,7 @@ const prompts = require('./prompts');
 const AwsFactory = require('./lib/aws');
 const statistics = require('../statistics');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
-const { GENERATOR_AWS } = require('../generator-list');
+const { GENERATOR_AWS } = require('../generator-list.cjs');
 
 const { BUILD_TOOL, BASE_NAME, PROD_DATABASE_TYPE } = OptionNames;
 

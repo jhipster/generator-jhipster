@@ -24,7 +24,7 @@ const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
-const { GENERATOR_SPRING_SERVICE } = require('../generator-list');
+const { GENERATOR_SPRING_SERVICE } = require('../generator-list.cjs');
 
 const { BASE_NAME, PACKAGE_NAME, PACKAGE_FOLDER, DATABASE_TYPE } = OptionNames;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;

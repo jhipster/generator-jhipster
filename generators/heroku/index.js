@@ -34,7 +34,7 @@ const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { GENERATOR_HEROKU } = require('../generator-list');
+const { GENERATOR_HEROKU } = require('../generator-list.cjs');
 const { MARIADB, MYSQL, POSTGRESQL } = require('../../jdl/jhipster/database-types');
 const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 

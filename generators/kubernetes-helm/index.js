@@ -24,7 +24,7 @@ const BaseDockerGenerator = require('../base-docker/index.cjs');
 
 const prompts = require('../kubernetes/prompts');
 const { writeFiles } = require('./files');
-const { GENERATOR_KUBERNETES_HELM } = require('../generator-list');
+const { GENERATOR_KUBERNETES_HELM } = require('../generator-list.cjs');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../base-docker/docker-base.cjs');
 const {

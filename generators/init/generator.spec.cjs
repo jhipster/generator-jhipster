@@ -24,7 +24,7 @@ const { basicTests, testBlueprintSupport } = require('../../test/support/index.c
 const { defaultHelpers: helpers } = require('../../test/utils/utils');
 const { defaultConfig, requiredConfig } = require('./config.cjs');
 const { GENERATOR_JHIPSTER } = require('../generator-constants');
-const { GENERATOR_INIT } = require('../generator-list');
+const { GENERATOR_INIT } = require('../generator-list.cjs');
 
 const generatorPath = path.join(__dirname, 'index.cjs');
 const generator = path.basename(__dirname);

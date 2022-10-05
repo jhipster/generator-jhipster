@@ -22,7 +22,7 @@ const { startCase } = require('lodash');
 
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 
-const { GENERATOR_PROJECT_NAME } = require('../generator-list');
+const { GENERATOR_PROJECT_NAME } = require('../generator-list.cjs');
 const { defaultConfig } = require('./config.cjs');
 const { BASE_NAME, PROJECT_NAME } = require('./constants.cjs');
 const { dependencyChain } = require('./mixin.cjs');

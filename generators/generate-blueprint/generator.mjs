@@ -43,7 +43,7 @@ import {
   ALL_PRIORITIES,
 } from './constants.mjs';
 
-import GENERATOR_LIST from '../generator-list.js';
+import GENERATOR_LIST from '../generator-list.cjs';
 import { files, generatorFiles } from './files.mjs';
 import { packageJson } from '../../lib/index.mjs';
 

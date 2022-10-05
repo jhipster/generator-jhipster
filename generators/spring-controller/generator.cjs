@@ -28,7 +28,7 @@ const statistics = require('../statistics');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const cacheProviders = require('../../jdl/jhipster/cache-types');
 const messageBrokers = require('../../jdl/jhipster/message-broker-types');
-const { GENERATOR_SPRING_CONTROLLER } = require('../generator-list');
+const { GENERATOR_SPRING_CONTROLLER } = require('../generator-list.cjs');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;

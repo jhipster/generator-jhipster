@@ -32,7 +32,7 @@ const { CASSANDRA, COUCHBASE, MONGODB, ORACLE, NO: NO_DATABASE } = require('../.
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
-const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list');
+const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list.cjs');
 
 /* eslint-disable consistent-return */
 module.exports = class extends BaseDockerGenerator {

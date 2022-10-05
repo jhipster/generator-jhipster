@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
-const { GENERATOR_ADD } = require('../generator-list');
+const { GENERATOR_ADD } = require('../generator-list.cjs');
 
 /**
  * @experimental

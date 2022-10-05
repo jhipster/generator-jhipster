@@ -27,7 +27,7 @@ const prompts = require('./prompts');
 const statistics = require('../statistics');
 const constants = require('../generator-constants');
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
-const { GENERATOR_CI_CD } = require('../generator-list');
+const { GENERATOR_CI_CD } = require('../generator-list.cjs');
 
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 

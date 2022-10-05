@@ -20,7 +20,7 @@ const _ = require('lodash');
 
 const prompts = require('./docker-prompts.cjs');
 const BlueprintBaseGenerator = require('../base/index.cjs');
-const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list');
+const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list.cjs');
 const { loadFromYoRc, checkDocker, checkImages, generateJwtSecret, setAppsFolderPaths } = require('./docker-base.cjs');
 const statistics = require('../statistics');
 

@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 
-const { GENERATOR_INIT } = require('../generator-list');
+const { GENERATOR_INIT } = require('../generator-list.cjs');
 const { PRETTIER_DEFAULT_INDENT, PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 const { files, commitHooksFiles } = require('./files.cjs');
 const { dependencyChain } = require('./mixin.cjs');

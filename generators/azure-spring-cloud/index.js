@@ -31,7 +31,7 @@ const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { GENERATOR_AZURE_SPRING_CLOUD } = require('../generator-list');
+const { GENERATOR_AZURE_SPRING_CLOUD } = require('../generator-list.cjs');
 
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {

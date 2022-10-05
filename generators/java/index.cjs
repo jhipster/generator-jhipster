@@ -21,7 +21,7 @@ const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 const GeneratorBaseEntity = require('../base-application/generator.cjs');
 
-const { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list');
+const { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list.cjs');
 const {
   PACKAGE_NAME,
   PACKAGE_NAME_DEFAULT_VALUE,

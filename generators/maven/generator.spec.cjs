@@ -22,7 +22,7 @@ const path = require('path');
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
 const { GENERATOR_JHIPSTER } = require('../generator-constants');
-const { GENERATOR_MAVEN } = require('../generator-list');
+const { GENERATOR_MAVEN } = require('../generator-list.cjs');
 
 const generatorPath = path.join(__dirname, 'index.cjs');
 const generator = path.basename(__dirname);

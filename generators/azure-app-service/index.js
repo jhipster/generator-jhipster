@@ -30,7 +30,7 @@ const { defaultConfig } = require('../generator-defaults');
 const constants = require('../generator-constants');
 
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { GENERATOR_AZURE_APP_SERVICE } = require('../generator-list');
+const { GENERATOR_AZURE_APP_SERVICE } = require('../generator-list.cjs');
 
 // Local constants
 const AZURE_WEBAPP_MAVEN_PLUGIN_VERSION = '1.8.0';

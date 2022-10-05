@@ -26,7 +26,7 @@ const prompts = require('./prompts');
 const { packageJson: packagejs } = require('../../lib/index.js');
 const statistics = require('../statistics');
 const { appDefaultConfig } = require('../generator-defaults');
-const { GENERATOR_APP } = require('../generator-list');
+const { GENERATOR_APP } = require('../generator-list.cjs');
 const { GENERATOR_JHIPSTER } = require('../generator-constants');
 const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
@@ -40,7 +40,7 @@ const {
   GENERATOR_CLIENT,
   GENERATOR_PAGE,
   GENERATOR_SERVER,
-} = require('../generator-list');
+} = require('../generator-list.cjs');
 
 module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {

@@ -60,7 +60,7 @@ const GENERATOR_JHIPSTER = 'generator-jhipster';
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
-const { GENERATOR_BOOTSTRAP } = require('../generator-list');
+const { GENERATOR_BOOTSTRAP } = require('../generator-list.cjs');
 const { PROMETHEUS, ELK } = require('../../jdl/jhipster/monitoring-types');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = require('../../jdl/jhipster/cache-types');

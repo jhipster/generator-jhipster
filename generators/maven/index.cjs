@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 
-const { GENERATOR_JAVA, GENERATOR_MAVEN } = require('../generator-list');
+const { GENERATOR_JAVA, GENERATOR_MAVEN } = require('../generator-list.cjs');
 const { files } = require('./files.cjs');
 const { MAVEN, BUILD_DESTINATION_VALUE } = require('./constants.cjs');
 const { BUILD_TOOL, BUILD_DESTINATION } = require('../java/constants.cjs');

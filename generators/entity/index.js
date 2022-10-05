@@ -31,7 +31,7 @@ const { defaultConfig } = require('../generator-defaults');
 const constants = require('../generator-constants');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
-const { GENERATOR_ENTITIES, GENERATOR_ENTITY } = require('../generator-list');
+const { GENERATOR_ENTITIES, GENERATOR_ENTITY } = require('../generator-list.cjs');
 
 /* constants used throughout */
 const { JHIPSTER_CONFIG_DIR } = constants;

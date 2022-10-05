@@ -30,7 +30,7 @@ const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const cacheProviders = require('../../jdl/jhipster/cache-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const constants = require('../generator-constants');
-const { GENERATOR_CLOUDFOUNDRY } = require('../generator-list');
+const { GENERATOR_CLOUDFOUNDRY } = require('../generator-list.cjs');
 
 const NO_CACHE_PROVIDER = cacheProviders.NO;
 const NO_DATABASE_TYPE = databaseTypes.NO;

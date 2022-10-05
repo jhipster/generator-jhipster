@@ -20,7 +20,7 @@ const assert = require('assert');
 const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
-const { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } = require('../generators/generator-list');
+const { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } = require('../generators/generator-list.cjs');
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 

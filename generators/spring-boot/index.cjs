@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 
-const { GENERATOR_SPRING_BOOT } = require('../generator-list');
+const { GENERATOR_SPRING_BOOT } = require('../generator-list.cjs');
 const { files } = require('./files.cjs');
 const { dependencyChain } = require('./mixin.cjs');
 

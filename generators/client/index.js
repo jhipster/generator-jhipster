@@ -38,7 +38,7 @@ const { packageJson: packagejs } = require('../../lib/index.js');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');
-const { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT } = require('../generator-list');
+const { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT } = require('../generator-list.cjs');
 
 const { ANGULAR } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
@@ -47,7 +47,7 @@ const databaseTypes = require('../../jdl/jhipster/database-types');
 
 const { NO: NO_DATABASE } = databaseTypes;
 const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
-const { GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list');
+const { GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list.cjs');
 const { prepareReactEntity } = require('../../utils/entity.js');
 
 const TYPE_STRING = CommonDBTypes.STRING;
