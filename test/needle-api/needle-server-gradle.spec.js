@@ -1,6 +1,6 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const ServerGenerator = require('../../generators/server');
+const ServerGenerator = require('../../generators/server/index.cjs');
 const { getGenerator } = require('../support/index.cjs');
 
 const mockBlueprintSubGen = class extends ServerGenerator {
