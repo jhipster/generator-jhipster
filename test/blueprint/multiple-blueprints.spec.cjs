@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const expectedFiles = require('../utils/expected-files');
+const expectedFiles = require('../utils/expected-files.cjs');
 const ClientGenerator = require('../../generators/client/index.cjs');
 const ServerGenerator = require('../../generators/server/index.cjs');
 const { MYSQL, SQL, H2_MEMORY } = require('../../jdl/jhipster/database-types');

@@ -3,7 +3,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const { createEnv } = require('yeoman-environment');
 
-const { dryRunHelpers: helpers } = require('../utils/utils');
+const { dryRunHelpers: helpers } = require('../utils/utils.cjs');
 const { JHIPSTER_CONFIG_DIR } = require('../../generators/generator-constants.cjs');
 const { getGenerator } = require('../support/index.cjs');
 

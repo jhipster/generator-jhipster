@@ -5,7 +5,7 @@ const { jestExpect: expect } = require('mocha-expect-snapshot');
 const { writeFileSync } = require('fs');
 
 const utils = require('../generators/utils.cjs');
-const { prepareTempDir } = require('./utils/utils');
+const { prepareTempDir } = require('./utils/utils.cjs');
 
 const { detectCrLf } = utils;
 

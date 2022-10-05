@@ -3,7 +3,7 @@
 const expect = require('chai').expect;
 
 const { createProgram } = require('../../cli/program');
-const { prepareTempDir } = require('../utils/utils');
+const { prepareTempDir } = require('../utils/utils.cjs');
 
 describe('jhipster program', () => {
   let cleanup;

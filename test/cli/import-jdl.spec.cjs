@@ -5,7 +5,7 @@ const assert = require('yeoman-assert');
 const expect = require('chai').expect;
 const utils = require('../../cli/utils');
 
-const { testInTempDir, revertTempDir } = require('../utils/utils');
+const { testInTempDir, revertTempDir } = require('../utils/utils.cjs');
 const { getTemplatePath } = require('../support/index.cjs');
 
 let subGenCallParams = {

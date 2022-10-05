@@ -19,7 +19,7 @@
 const { jestExpect: expect } = require('mocha-expect-snapshot');
 const path = require('path');
 
-const { defaultHelpers: helpers } = require('../../test/utils/utils');
+const { defaultHelpers: helpers } = require('../../test/utils/utils.cjs');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { requiredConfig, defaultConfig } = require('./config.cjs');

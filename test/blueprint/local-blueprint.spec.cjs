@@ -3,7 +3,7 @@ const path = require('path');
 const { jestExpect } = require('mocha-expect-snapshot');
 const { mkdirSync, writeFileSync } = require('fs');
 
-const { skipPrettierHelpers: helpers } = require('../utils/utils');
+const { skipPrettierHelpers: helpers } = require('../utils/utils.cjs');
 
 const BLUEPRINT_NS = 'jhipster:app';
 const BLUEPRINT_CONTENTS = `export async function createGenerator(env){

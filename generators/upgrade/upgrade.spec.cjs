@@ -5,7 +5,7 @@ const shelljs = require('shelljs');
 const fse = require('fs-extra');
 const { jestExpect: expect } = require('mocha-expect-snapshot');
 const { packageJson } = require('../../lib/index.cjs');
-const { prepareTempDir } = require('../../test/utils/utils');
+const { prepareTempDir } = require('../../test/utils/utils.cjs');
 const { escapeRegExp } = require('../utils.cjs');
 
 describe('JHipster upgrade generator', function () {

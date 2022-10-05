@@ -22,7 +22,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import testSupport from '../../test/support/index.cjs';
-import testUtils from '../../test/utils/utils.js';
+import testUtils from '../../test/utils/utils.cjs';
 import Generator from './index.cjs';
 import generatorConfig from './config.cjs';
 

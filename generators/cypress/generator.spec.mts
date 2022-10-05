@@ -24,7 +24,7 @@ import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
 import TestFrameworkTypes from '../../jdl/jhipster/test-framework-types.js';
 
 import { testBlueprintSupport, fromMatrix, extendMatrix, AuthenticationTypeMatrix } from '../../test/support/index.mjs';
-import testUtils from '../../test/utils/utils.js';
+import testUtils from '../../test/utils/utils.cjs';
 import Generator from './generator.mjs';
 import constants from '../generator-constants.cjs';
 

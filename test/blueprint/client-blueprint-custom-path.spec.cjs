@@ -1,6 +1,6 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const expectedFiles = require('../utils/expected-files');
+const expectedFiles = require('../utils/expected-files.cjs');
 const ClientGenerator = require('../../generators/client/index.cjs');
 const { MYSQL } = require('../../jdl/jhipster/database-types');
 const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');

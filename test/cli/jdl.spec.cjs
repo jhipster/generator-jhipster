@@ -7,7 +7,7 @@ const fse = require('fs-extra');
 const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 const sinon = require('sinon');
 
-const { testInTempDir, revertTempDir } = require('../utils/utils');
+const { testInTempDir, revertTempDir } = require('../utils/utils.cjs');
 const { buildJHipster } = require('../../cli/program');
 const packageJson = require('../../package.json');
 const cliUtils = require('../../cli/utils');

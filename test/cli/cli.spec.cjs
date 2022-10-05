@@ -9,7 +9,7 @@ const Environment = require('yeoman-environment');
 const helpers = require('yeoman-test');
 
 const { createProgram, buildJHipster } = require('../../cli/program');
-const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
+const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils.cjs');
 const { logger } = require('../../cli/utils');
 const BaseGenerator = require('../../generators/base/generator-base.cjs');
 const { getTemplatePath } = require('../support/index.cjs');
