@@ -26,7 +26,7 @@ import { askForLanguages, askI18n } from './prompts.mjs';
 import statistics from '../statistics.js';
 import constants from '../generator-constants.cjs';
 
-import generatorDefaults from '../generator-defaults.js';
+import generatorDefaults from '../generator-defaults.cjs';
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import files from './files.cjs';
 import entityFiles from './entity-files.cjs';

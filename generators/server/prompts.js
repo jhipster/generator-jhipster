@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 
 const constants = require('../generator-constants.cjs');
-const { serverDefaultConfig } = require('../generator-defaults');
+const { serverDefaultConfig } = require('../generator-defaults.cjs');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const cacheProviderTypes = require('../../jdl/jhipster/cache-types');

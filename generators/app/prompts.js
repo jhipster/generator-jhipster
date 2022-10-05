@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const statistics = require('../statistics');
 const { packageJson: packagejs } = require('../../lib/index.js');
-const { appDefaultConfig, defaultConfigMicroservice } = require('../generator-defaults');
+const { appDefaultConfig, defaultConfigMicroservice } = require('../generator-defaults.cjs');
 const { GATEWAY, MONOLITH, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 

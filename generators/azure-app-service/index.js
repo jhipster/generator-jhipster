@@ -24,7 +24,7 @@ const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const statistics = require('../statistics');
-const { defaultConfig } = require('../generator-defaults');
+const { defaultConfig } = require('../generator-defaults.cjs');
 
 // Global constants
 const constants = require('../generator-constants.cjs');

@@ -18,7 +18,7 @@
  */
 const chalk = require('chalk');
 const constants = require('../generator-constants.cjs');
-const { clientDefaultConfig } = require('../generator-defaults');
+const { clientDefaultConfig } = require('../generator-defaults.cjs');
 const clientFrameworks = require('../../jdl/jhipster/client-framework-types');
 
 const NO_CLIENT_FRAMEWORK = clientFrameworks.NO;

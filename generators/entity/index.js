@@ -27,7 +27,7 @@ const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 const { isReservedClassName } = require('../../jdl/jhipster/reserved-keywords');
 
 const prompts = require('./prompts');
-const { defaultConfig } = require('../generator-defaults');
+const { defaultConfig } = require('../generator-defaults.cjs');
 const constants = require('../generator-constants.cjs');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
