@@ -1,6 +1,8 @@
-import { CommonDBTypes } from '../../jdl/jhipster/field-types.js';
+import fieldTypes from '../../jdl/jhipster/field-types.js';
 
-const { UUID } = CommonDBTypes;
+const {
+  CommonDBTypes: { UUID },
+} = fieldTypes;
 
 export const entitySimple = {
   name: 'Simple',

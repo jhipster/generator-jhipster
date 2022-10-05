@@ -33,9 +33,12 @@ import entityUtils from '../../utils/entity.js';
 import fieldUtils from '../../utils/field.js';
 import liquibaseUtils from '../../utils/liquibase.js';
 import userUtils from '../../utils/user.js';
-import { CommonDBTypes } from '../../jdl/jhipster/field-types.js';
-import { OAUTH2 } from '../../jdl/jhipster/authentication-types.js';
+import fieldTypes from '../../jdl/jhipster/field-types.js';
+import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
 import type { LoadingTaskGroup, PreConflictsTaskGroup } from '../base/tasks.js';
+
+const { CommonDBTypes } = fieldTypes;
+const { OAUTH2 } = authenticationTypes;
 
 const {
   createConflicterCheckTransform,

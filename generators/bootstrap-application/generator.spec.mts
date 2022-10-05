@@ -23,9 +23,11 @@ import { fileURLToPath } from 'url';
 
 import Generator from './index.mjs';
 import { dryRunHelpers as helpers } from '../../test/utils/utils.mjs';
-import { CommonDBTypes } from '../../jdl/jhipster/field-types.js';
+import fieldTypes from '../../jdl/jhipster/field-types.js';
 
-const { UUID } = CommonDBTypes;
+const {
+  CommonDBTypes: { UUID },
+} = fieldTypes;
 
 const { snakeCase } = lodash;
 
