@@ -22,7 +22,7 @@ const fs = require('fs');
 
 const BaseDockerGenerator = require('../base-docker/index.cjs');
 
-const prompts = require('../kubernetes/prompts');
+const prompts = require('../kubernetes/prompts.cjs');
 const { writeFiles } = require('./files.cjs');
 const { GENERATOR_KUBERNETES_HELM } = require('../generator-list.cjs');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');

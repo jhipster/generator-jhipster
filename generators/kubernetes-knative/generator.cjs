@@ -23,7 +23,7 @@ const fs = require('fs');
 
 const BaseDockerGenerator = require('../base-docker/index.cjs');
 
-const prompts = require('./prompts');
+const prompts = require('./prompts.cjs');
 const { writeFiles } = require('./files.cjs');
 const { GENERATOR_KUBERNETES_KNATIVE } = require('../generator-list.cjs');
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');

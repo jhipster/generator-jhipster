@@ -22,7 +22,7 @@ const { MONOLITH } = require('../../jdl/jhipster/application-types');
 const { IngressTypes, ServiceTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
 
 const databaseTypes = require('../../jdl/jhipster/database-types');
-const { defaultKubernetesConfig, ingressDefaultConfig } = require('./kubernetes-constants');
+const { defaultKubernetesConfig, ingressDefaultConfig } = require('./kubernetes-constants.cjs');
 
 const NO_DATABASE = databaseTypes.NO;
 const { LOAD_BALANCER, INGRESS, NODE_PORT } = ServiceTypes;

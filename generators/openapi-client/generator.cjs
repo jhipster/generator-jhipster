@@ -24,7 +24,7 @@ const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const { GENERATOR_OPENAPI_CLIENT } = require('../generator-list.cjs');
 const { OpenAPIOptionsNames, OpenAPIDefaultValues } = require('../../jdl/jhipster/openapi-options');
-const prompts = require('./prompts');
+const prompts = require('./prompts.cjs');
 const { writeFiles, customizeFiles } = require('./files.cjs');
 
 module.exports = class extends BaseBlueprintGenerator {
