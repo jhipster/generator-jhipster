@@ -8,7 +8,7 @@ import {
   buildServerMatrix,
   extendMatrix,
   extendFilteredMatrix,
-  entitiesSimple as entities,
+  entitiesServerSamples as entities,
 } from '../../test/support/index.mjs';
 import Generator from './index.js';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
@@ -108,7 +108,7 @@ describe(`JHipster ${databaseType} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample);
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:languages', 'jhipster:common']);
       });
 
       after(() => runResult.cleanup());

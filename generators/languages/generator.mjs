@@ -29,10 +29,12 @@ import constants from '../generator-constants.js';
 import generatorDefaults from '../generator-defaults.js';
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import files from './files.cjs';
+import entityFiles from './entity-files.cjs';
 import jhipsterUtils from '../utils.js';
 
 const { languageToJavaLanguage } = jhipsterUtils;
 const { clientI18nFiles } = files;
+const { writeEntityFiles } = entityFiles;
 const { translationDefaultConfig } = generatorDefaults;
 const { SERVER_TEST_SRC_DIR } = constants;
 
@@ -253,6 +255,17 @@ export default class LanguagesGenerator extends BaseApplication {
   get [BaseApplication.WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this.writing;
+  }
+
+  get writingEntities() {
+    return {
+      ...writeEntityFiles(),
+    };
+  }
+
+  get [BaseApplication.WRITING_ENTITIES]() {
+    if (this.delegateToBlueprint) return {};
+    return this.writingEntities;
   }
 
   get postWriting() {

@@ -37,7 +37,6 @@
 
 'theme: i18n':
   - generators/languages/**/*
-  - generators/entity-i18n/**/*
 
 'theme: java':
   - generators/common/**

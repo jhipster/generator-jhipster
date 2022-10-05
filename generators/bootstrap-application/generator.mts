@@ -102,6 +102,10 @@ export default class extends BaseApplicationGenerator<ClientServerApplication> {
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
       configureFields({ entityName, entityConfig }) {
+        if (entityConfig.name === undefined) {
+          entityConfig.name = entityName;
+        }
+
         entityConfig.fields.forEach((field: any) => {
           const { fieldName, fieldType, fieldValidateRules } = field;
 

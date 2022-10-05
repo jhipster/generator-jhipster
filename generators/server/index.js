@@ -16,37 +16,59 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /* eslint-disable consistent-return */
+const { existsSync } = require('fs');
 const chalk = require('chalk');
 const os = require('os');
 const prompts = require('./prompts');
-const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list');
+const { isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
+const {
+  GENERATOR_COMMON,
+  GENERATOR_LANGUAGES,
+  GENERATOR_SERVER,
+  GENERATOR_BOOTSTRAP_APPLICATION,
+  GENERATOR_DATABASE_CHANGELOG,
+} = require('../generator-list');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const BaseApplicationGenerator = require('../base-application/generator.cjs');
 const { writeFiles } = require('./files');
+const { writeFiles: writeEntityFiles, customizeFiles } = require('./entity-files');
 const { packageJson: packagejs } = require('../../lib/index.js');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 
-const { CASSANDRA, COUCHBASE, ORACLE, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
-const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const { MICROSERVICE, GATEWAY } = require('../../jdl/jhipster/application-types');
+const applicationTypes = require('../../jdl/jhipster/application-types');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const cacheTypes = require('../../jdl/jhipster/cache-types');
 const websocketTypes = require('../../jdl/jhipster/websocket-types');
+const fieldTypes = require('../../jdl/jhipster/field-types');
+const entityOptions = require('../../jdl/jhipster/entity-options');
+const validations = require('../../jdl/jhipster/validations');
+const { stringify } = require('../../utils');
 
-const NO_CACHE = cacheTypes.NO;
-const NO_DATABASE = databaseTypes.NO;
-const NO_WEBSOCKET = websocketTypes.FALSE;
+const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
+const { FALSE: NO_WEBSOCKET } = websocketTypes;
+const { CASSANDRA, COUCHBASE, ORACLE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
+const { MICROSERVICE, GATEWAY } = applicationTypes;
 
 const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, MAIN_DIR, TEST_DIR } = constants;
+const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
+const { INSTANT } = CommonDBTypes;
+const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
+const { PaginationTypes, ServiceTypes } = entityOptions;
+const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations;
 
 const WAIT_TIMEOUT = 3 * 60000;
+const { NO: NO_PAGINATION } = PaginationTypes;
+const { NO: NO_SERVICE } = ServiceTypes;
+
+const { SUPPORTED_VALIDATION_RULES } = constants;
 
 /**
  * @class
@@ -326,18 +348,175 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     return this.asPreparingTaskGroup(this.delegateToBlueprint ? {} : this.preparing);
   }
 
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({
+      configureMicroservice({ application, entityConfig }) {
+        if (application.applicationTypeMicroservice) {
+          if (entityConfig.microserviceName === undefined) {
+            entityConfig.microserviceName = application.baseName;
+          }
+          if (entityConfig.clientRootFolder === undefined) {
+            entityConfig.clientRootFolder = entityConfig.microserviceName;
+          }
+          if (entityConfig.databaseType === undefined) {
+            entityConfig.databaseType = application.databaseType;
+          }
+        }
+      },
+      configureGateway({ application, entityConfig }) {
+        if (application.applicationTypeGateway) {
+          if (entityConfig.databaseType === undefined) {
+            entityConfig.databaseType = application.databaseType;
+          }
+          if (entityConfig.clientRootFolder === undefined) {
+            entityConfig.clientRootFolder = entityConfig.clientRootFolder = entityConfig.skipUiGrouping
+              ? ''
+              : entityConfig.microserviceName;
+          }
+        }
+      },
+      configureEntitySearchEngine({ application, entityConfig }) {
+        const { applicationTypeMicroservice, applicationTypeGateway, clientFrameworkAny } = application;
+        if (entityConfig.microserviceName && !(applicationTypeMicroservice && clientFrameworkAny)) {
+          if (entityConfig.searchEngine === undefined) {
+            // If a non-microfrontent microservice entity, should be disabled by default.
+            entityConfig.searchEngine = false;
+          }
+        }
+        if (
+          // Don't touch the configuration for microservice entities published at gateways
+          !(applicationTypeGateway && entityConfig.microserviceName) &&
+          !application.searchEngineAny &&
+          ![undefined, false, 'no'].includes(entityConfig.searchEngine)
+        ) {
+          // Search engine can only be enabled at entity level and disabled at application level for gateways publishing a microservice entity
+          entityConfig.searchEngine = false;
+          this.warning('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
+        }
+      },
+      configureModelFiltering({ application, entityConfig }) {
+        const { databaseTypeSql, applicationTypeGateway, reactive } = application;
+        if (
+          // Don't touch the configuration for microservice entities published at gateways
+          !(applicationTypeGateway && entityConfig.microserviceName) &&
+          entityConfig.jpaMetamodelFiltering &&
+          (!databaseTypeSql || entityConfig.service === NO_SERVICE || reactive)
+        ) {
+          this.warning('Not compatible with jpaMetamodelFiltering, disabling');
+          entityConfig.jpaMetamodelFiltering = false;
+        }
+      },
+      configureEntityTable({ application, entityName, entityConfig, entityStorage }) {
+        entityConfig.entityTableName = entityConfig.entityTableName || this.getTableName(entityName);
+
+        const fixedEntityTableName = this._fixEntityTableName(
+          entityConfig.entityTableName,
+          entityConfig.prodDatabaseType ?? application.prodDatabaseType,
+          application.jhiTablePrefix
+        );
+        if (fixedEntityTableName !== entityConfig.entityTableName) {
+          entityConfig.entityTableName = fixedEntityTableName;
+        }
+        const validation = this._validateTableName(
+          entityConfig.entityTableName,
+          entityConfig.prodDatabaseType ?? application.prodDatabaseType,
+          entityConfig
+        );
+        if (validation !== true) {
+          throw new Error(validation);
+        }
+
+        // disable pagination if there is no database, unless it’s a microservice entity published by a gateway
+        if (
+          ![SQL, MONGODB, COUCHBASE, NEO4J].includes(entityConfig.databaseType ?? application.databaseType) &&
+          (application.applicationType !== GATEWAY || !entityConfig.microserviceName)
+        ) {
+          entityConfig.pagination = NO_PAGINATION;
+        }
+
+        // Validate root entity json content
+        if (entityConfig.changelogDate === undefined) {
+          const currentDate = this.dateFormatForLiquibase();
+          if (entityStorage.existed) {
+            this.info(`changelogDate is missing in .jhipster/${entityConfig.name}.json, using ${currentDate} as fallback`);
+          }
+          entityConfig.changelogDate = currentDate;
+        }
+
+        if (entityConfig.incrementalChangelog === undefined) {
+          // Keep entity's original incrementalChangelog option.
+          entityConfig.incrementalChangelog =
+            this.jhipsterConfig.incrementalChangelog &&
+            !existsSync(
+              this.destinationPath(
+                `src/main/resources/config/liquibase/changelog/${entityConfig.changelogDate}_added_entity_${entityConfig.name}.xml`
+              )
+            );
+        }
+      },
+
+      configureFields({ application, entityConfig, entityName }) {
+        const databaseType = entityConfig.databaseType ?? application.databaseType;
+        // Validate entity json field content
+        const fields = entityConfig.fields;
+        fields.forEach(field => {
+          // Migration from JodaTime to Java Time
+          if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
+            field.fieldType = INSTANT;
+          }
+          if (field.fieldType === BYTES && databaseType === CASSANDRA) {
+            field.fieldType = BYTE_BUFFER;
+          }
+
+          this._validateField(entityName, field);
+
+          if (field.fieldType === BYTE_BUFFER) {
+            this.warning(
+              `Cannot use validation in .jhipster/${entityName}.json for field ${stringify(
+                field
+              )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
+            );
+            field.validation = false;
+            field.fieldValidateRules = [];
+          }
+        });
+        entityConfig.fields = fields;
+      },
+
+      configureRelationships({ entityConfig, entityName }) {
+        // Validate entity json relationship content
+        const relationships = entityConfig.relationships;
+        relationships.forEach(relationship => {
+          this._validateRelationship(entityName, relationship);
+
+          if (relationship.relationshipName === undefined) {
+            relationship.relationshipName = relationship.otherEntityName;
+            this.warning(
+              `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}, using ${
+                relationship.otherEntityName
+              } as fallback`
+            );
+          }
+          if (relationship.useJPADerivedIdentifier) {
+            this.info('Option useJPADerivedIdentifier is deprecated, use id instead');
+            relationship.id = true;
+          }
+        });
+        entityConfig.relationships = relationships;
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this.configuringEachEntity);
+  }
+
   /** @inheritdoc */
   get default() {
     return this.asDefaultTaskGroup({
-      loadDomains({ application }) {
-        if (!this.configOptions.sharedEntities) return;
+      loadDomains({ application, entities }) {
         application.domains = [
-          ...new Set([
-            application.packageName,
-            ...Object.values(this.configOptions.sharedEntities)
-              .map(entity => entity.entityAbsolutePackage)
-              .filter(packageName => packageName),
-          ]),
+          ...new Set([application.packageName, ...entities.map(entity => entity.entityAbsolutePackage).filter(Boolean)]),
         ];
       },
 
@@ -379,6 +558,30 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this.writing);
+  }
+
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({
+      ...writeEntityFiles(),
+
+      async databaseChangelog({ application, entities }) {
+        if (!application.databaseTypeSql || this.options.skipDbChangelog) {
+          return;
+        }
+        const filteredEntities = entities.filter(entity => !entity.builtIn && !entity.skipServer);
+        if (filteredEntities.length === 0) {
+          return;
+        }
+        await this.composeWithJHipster(
+          GENERATOR_DATABASE_CHANGELOG,
+          filteredEntities.map(entity => entity.name)
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+    return this.asWritingEntitiesTaskGroup(this.delegateToBlueprint ? {} : this.writingEntities);
   }
 
   get postWriting() {
@@ -570,6 +773,16 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
     return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
   }
 
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({
+      customizeFiles,
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.asPostWritingEntitiesTaskGroup(this.delegateToBlueprint ? {} : this.postWritingEntities);
+  }
+
   get end() {
     return this.asEndTaskGroup({
       checkLocaleValue({ application }) {
@@ -651,5 +864,110 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
       config.prodDatabaseType = databaseType;
       config.enableHibernateCache = false;
     }
+  }
+
+  _generateSqlSafeName(name) {
+    if (isReservedTableName(name, SQL)) {
+      return `e_${name}`;
+    }
+    return name;
+  }
+
+  /**
+   * Validate the entityTableName
+   * @return {true|string} true for a valid value or error message.
+   */
+  _validateTableName(entityTableName, prodDatabaseType, entity) {
+    const jhiTablePrefix = entity.jhiTablePrefix;
+    const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}.'`;
+
+    if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
+      return `The table name cannot contain special characters.\n${instructions}`;
+    }
+    if (!entityTableName) {
+      return 'The table name cannot be empty';
+    }
+    if (isReservedTableName(entityTableName, prodDatabaseType)) {
+      if (jhiTablePrefix) {
+        this.warning(
+          `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
+        );
+        entity.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
+      } else {
+        this.warning(
+          `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
+        );
+      }
+    }
+    return true;
+  }
+
+  _validateField(entityName, field) {
+    if (field.fieldName === undefined) {
+      throw new Error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+    }
+
+    if (field.fieldType === undefined) {
+      throw new Error(`fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+    }
+
+    if (field.fieldValidateRules !== undefined) {
+      if (!Array.isArray(field.fieldValidateRules)) {
+        throw new Error(`fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringify(field)}`);
+      }
+      field.fieldValidateRules.forEach(fieldValidateRule => {
+        if (!SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule)) {
+          throw new Error(
+            `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringify(
+              field
+            )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
+          );
+        }
+      });
+      if (field.fieldValidateRules.includes(MAX) && field.fieldValidateRulesMax === undefined) {
+        throw new Error(`fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+      }
+      if (field.fieldValidateRules.includes(MIN) && field.fieldValidateRulesMin === undefined) {
+        throw new Error(`fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+      }
+      if (field.fieldValidateRules.includes(MAXLENGTH) && field.fieldValidateRulesMaxlength === undefined) {
+        throw new Error(`fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+      }
+      if (field.fieldValidateRules.includes(MINLENGTH) && field.fieldValidateRulesMinlength === undefined) {
+        throw new Error(`fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+      }
+      if (field.fieldValidateRules.includes(MAXBYTES) && field.fieldValidateRulesMaxbytes === undefined) {
+        throw new Error(`fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+      }
+      if (field.fieldValidateRules.includes(MINBYTES) && field.fieldValidateRulesMinbytes === undefined) {
+        throw new Error(`fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+      }
+      if (field.fieldValidateRules.includes(PATTERN) && field.fieldValidateRulesPattern === undefined) {
+        throw new Error(`fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+      }
+    }
+  }
+
+  _validateRelationship(entityName, relationship) {
+    if (relationship.otherEntityName === undefined) {
+      throw new Error(`otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+    }
+    if (relationship.relationshipType === undefined) {
+      throw new Error(`relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+    }
+
+    if (
+      relationship.ownerSide === undefined &&
+      (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
+    ) {
+      throw new Error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+    }
+  }
+
+  _fixEntityTableName(entityTableName, prodDatabaseType, jhiTablePrefix) {
+    if (isReservedTableName(entityTableName, prodDatabaseType) && jhiTablePrefix) {
+      entityTableName = `${jhiTablePrefix}_${entityTableName}`;
+    }
+    return entityTableName;
   }
 };

@@ -22,7 +22,7 @@ const constants = require('../generator-constants');
 /* Constants use throughout */
 const { ANGULAR } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
-const CLIENT_COMMON_TEMPLATES_DIR = 'common';
+const CLIENT_COMMON_TEMPLATES_DIR = 'entity/common';
 
 module.exports = {
   addEnumerationFiles,

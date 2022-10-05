@@ -105,66 +105,6 @@
         "sbs": false,
         "written": true
       },
-      "entity-client": {
-        "command": false,
-        "priorities": [
-          "initializing",
-          "prompting",
-          "configuring",
-          "composing",
-          "loading",
-          "preparing",
-          "preparingFields",
-          "preparingRelationships",
-          "default",
-          "writing",
-          "postWriting",
-          "install",
-          "end"
-        ],
-        "sbs": false,
-        "written": true
-      },
-      "entity-i18n": {
-        "command": false,
-        "priorities": [
-          "initializing",
-          "prompting",
-          "configuring",
-          "composing",
-          "loading",
-          "preparing",
-          "preparingFields",
-          "preparingRelationships",
-          "default",
-          "writing",
-          "postWriting",
-          "install",
-          "end"
-        ],
-        "sbs": false,
-        "written": true
-      },
-      "entity-server": {
-        "command": false,
-        "priorities": [
-          "initializing",
-          "prompting",
-          "configuring",
-          "composing",
-          "loading",
-          "preparing",
-          "preparingFields",
-          "preparingRelationships",
-          "default",
-          "writing",
-          "postWriting",
-          "install",
-          "end"
-        ],
-        "sbs": false,
-        "written": true
-      },
       "server": {
         "command": false,
         "priorities": [
@@ -190,17 +130,6 @@
     "mainGenerator": "generate-blueprint",
     "prettierDefaultIndent": 2,
     "projectName": "CiTest",
-    "subGenerators": [
-      "app",
-      "client",
-      "common",
-      "cypress",
-      "entity",
-      "entity-client",
-      "entity-i18n",
-      "entity-i18n",
-      "entity-server",
-      "server"
-    ]
+    "subGenerators": ["app", "client", "common", "cypress", "entity", "server"]
   }
 }
