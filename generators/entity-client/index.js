@@ -20,16 +20,15 @@
 const _ = require('lodash');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+const { DEFAULT_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
 
 const { writeAngularFiles, cleanupAngular } = require('./files-angular.cjs');
 const { writeReactFiles, cleanupReact } = require('./files-react.cjs');
 const { writeVueFiles } = require('./files-vue.cjs');
-const { entityClientI18nFiles } = require('../entity-i18n/files');
-const { clientI18nFiles } = require('../languages/files');
+const { entityClientI18nFiles } = require('../entity-i18n/files.js');
+const { clientI18nFiles } = require('../languages/files.cjs');
 
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
-const { preparePostEntityClientDerivedProperties, prepareReactEntity } = require('../../utils/entity');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -47,22 +46,6 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
-  _preparing() {
-    return {
-      async prepareReact() {
-        const { entity, application } = this;
-        if (!application.clientFrameworkReact) return;
-        prepareReactEntity({ entity, application });
-      },
-    };
-  }
-
-  get [PREPARING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._preparing();
-  }
-
-  // Public API method used by the getter and also by Blueprints
   _default() {
     return {
       async loadNativeLanguage() {
@@ -71,11 +54,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
         const context = { ...this.application };
         await this._loadClientTranslations(context);
-      },
-
-      postPrepareEntityClient() {
-        const { entity } = this;
-        preparePostEntityClientDerivedProperties(entity);
       },
     };
   }

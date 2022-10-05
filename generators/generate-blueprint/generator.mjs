@@ -18,7 +18,6 @@
  */
 import chalk from 'chalk';
 import lodash from 'lodash';
-import { readFile } from 'fs/promises';
 
 import BaseBlueprintGenerator from '../generator-base-blueprint.js';
 import { SKIP_COMMIT_HOOK } from '../init/constants.cjs';
@@ -59,6 +58,7 @@ import {
 
 import GENERATOR_LIST from '../generator-list.js';
 import { files, generatorFiles } from './files.mjs';
+import { packageJson } from '../../lib/index.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
@@ -196,7 +196,7 @@ export default class extends BaseBlueprintGenerator {
         this.application = { ...defaultConfig(), ...this.config.getAll() };
       },
       async load() {
-        this.application.packagejs = JSON.parse(await readFile(new URL('../../package.json', import.meta.url)));
+        this.application.packagejs = packageJson;
       },
     };
   }

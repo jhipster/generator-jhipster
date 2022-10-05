@@ -365,6 +365,7 @@ const constants = {
   SERVER_MAIN_RES_DIR: `${MAIN_DIR}resources/`,
   SERVER_TEST_SRC_DIR: `${TEST_DIR}java/`,
   SERVER_TEST_RES_DIR: `${TEST_DIR}resources/`,
+  PRETTIER_EXTENSIONS: 'md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,vue,svelte,java',
 
   R2DBC_DB_OPTIONS,
   SQL_DB_OPTIONS,

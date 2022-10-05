@@ -19,18 +19,29 @@
 /* eslint-disable consistent-return */
 const _ = require('lodash');
 
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { INITIALIZING_PRIORITY, CONFIGURING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
-  require('../../lib/constants/priorities.cjs').compat;
+const BaseApplicationGenerator = require('../base-application/generator.cjs');
 
 const writeFiles = require('./files').writeFiles;
 const prettierConfigFiles = require('./files').prettierConfigFiles;
 const constants = require('../generator-constants');
-const packageJson = require('../../package.json');
+const { packageJson } = require('../../lib/index.js');
+const { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list');
 
-module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
+/**
+ * @class
+ * @extends {BaseApplicationGenerator<import('../bootstrap-application-base/types').CommonClientServerApplication>}
+ */
+module.exports = class CommonGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
+
+    this.jhipsterOptions({
+      prettierTabWidth: {
+        desc: 'Default tab width for prettier',
+        type: Number,
+        scope: 'storage',
+      },
+    });
 
     if (this.options.help) {
       return;
@@ -41,40 +52,14 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   }
 
   async _postConstruct() {
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints('common');
+      await this.composeWithBlueprints(GENERATOR_COMMON);
     }
   }
 
   // Public API method used by the getter and also by Blueprints
-  _initializing() {
-    return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
-      setupConstants() {
-        // Make constants available in templates
-        this.MAIN_DIR = constants.MAIN_DIR;
-        this.TEST_DIR = constants.TEST_DIR;
-        this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-        this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-        this.REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-
-        // Make documentation URL available in templates
-        this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-        this.DOCUMENTATION_ARCHIVE_PATH = constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
-      },
-    };
-  }
-
-  get [INITIALIZING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._initializing();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _configuring() {
+  get configuring() {
     return {
       async configureMonorepository() {
         if (this.jhipsterConfig.monorepository) return;
@@ -92,24 +77,14 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [BaseApplicationGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _loading() {
+  get loading() {
     return {
-      loadSharedConfig() {
-        this.loadAppConfig();
-        this.loadDerivedAppConfig();
-        this.loadClientConfig();
-        this.loadDerivedClientConfig();
-        this.loadServerConfig();
-        this.loadTranslationConfig();
-        this.loadPlatformConfig();
-      },
-
       loadPackageJson() {
         // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
         _.merge(this.dependabotPackageJson, {
@@ -123,64 +98,81 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
         // Load common package.json into packageJson
         _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
       },
-    };
-  }
 
-  get [LOADING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this._loading();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _preparing() {
-    return {
-      prepareForTemplates() {
-        this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
-        this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
+      loadConfig({ application }) {
+        application.prettierTabWidth = this.jhipsterConfig.prettierTabWidth || 2;
       },
     };
   }
 
-  get [PREPARING_PRIORITY]() {
+  get [BaseApplicationGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._preparing();
+    return this.loading;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _writing() {
+  get preparing() {
     return {
-      cleanup() {
+      prepareForTemplates({ application }) {
+        application.BUILD_DIR = this.getBuildDirectoryForBuildTool(application.buildTool);
+        application.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(application.buildTool) + constants.CLIENT_DIST_DIR;
+      },
+
+      setupConstants({ application }) {
+        // Make constants available in templates
+        application.MAIN_DIR = constants.MAIN_DIR;
+        application.TEST_DIR = constants.TEST_DIR;
+        application.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+        application.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+        application.REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+
+        // Make documentation URL available in templates
+        application.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
+        application.DOCUMENTATION_ARCHIVE_PATH = constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
+      },
+    };
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    if (this.delegateToBlueprint) return {};
+    return this.preparing;
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  get writing() {
+    return {
+      cleanup({ application }) {
         if (this.isJhipsterVersionLessThan('7.1.1')) {
-          if (!this.skipCommitHook) {
+          if (!application.skipCommitHook) {
             this.removeFile('.huskyrc');
           }
         }
         if (this.isJhipsterVersionLessThan('7.6.1')) {
-          if (this.skipClient) {
+          if (application.skipClient) {
             this.removeFile('npmw');
             this.removeFile('npmw.cmd');
           }
         }
       },
-      writePrettierConfig() {
-        // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
+      writePrettierConfig({ application }) {
         return this.writeFiles({
           sections: prettierConfigFiles,
+          context: application,
         });
       },
       ...writeFiles(),
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseApplicationGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
-  _postWriting() {
+  get postWriting() {
     return {
-      addCommitHookDependencies() {
-        if (this.skipCommitHook) return;
+      addCommitHookDependencies({ application }) {
+        if (application.skipCommitHook) return;
         this.packageJson.merge({
           scripts: {
             prepare: 'husky install',
@@ -194,8 +186,8 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [POST_WRITING_PRIORITY]() {
+  get [BaseApplicationGenerator.POST_WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._postWriting();
+    return this.postWriting;
   }
 };

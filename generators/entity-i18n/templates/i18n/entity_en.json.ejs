@@ -15,8 +15,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%><%
-let helpBlocks = 0; %>
+-%>
 {
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
@@ -44,20 +43,29 @@ let helpBlocks = 0; %>
 <%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
-            }<% for (idx in fields) {
-            if (typeof fields[idx].javadoc !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
-            "help": {<% for (idx in fields) {
-                if (fields[idx].javadoc) {
-                    --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].javadoc %>"<% if (helpBlocks > 0) { %>,<% }
-                }
-            } %>
-            }<% } %>
+            }
+<%_ for (const field of fields) { -%>
+            ,
+            "<%= field.fieldName %>": "<%= field.fieldNameHumanized %>"
+<%_ } -%>
+<% for (const relationship of relationships) { -%>
+            ,
+            "<%= relationship.relationshipName %>": "<%= relationship.relationshipNameHumanized %>"
+<%_ } -%>
+<%_ const fieldsWithDoc = fields.filter(field => field.javadoc); -%>
+<%_ if (fieldsWithDoc.length > 0) { -%>
+  <%_ const lastField = fieldsWithDoc[fieldsWithDoc.length - 1]; -%>
+            ,
+            "help": {
+  <%_ for (const field of fieldsWithDoc) { _%>
+                "<%= field.fieldName %>": "<%= field.javadoc %>"<% if (field !== lastField) { %>,<% } %>
+  <%_ } _%>
+            }
+<%_ } _%>
         }
     }
-<%_ if (microserviceAppName && !readOnly) { _%>,
+<%_ if (microserviceAppName && !readOnly) { -%>
+    ,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",

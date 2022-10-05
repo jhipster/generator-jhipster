@@ -111,8 +111,7 @@ const couchbaseFiles = {
 
 function writeCouchbaseFiles() {
   return {
-    cleanupCouchbaseFiles() {
-      const { application } = this;
+    cleanupCouchbaseFiles({ application }) {
       if (!application.databaseTypeCouchbase) return;
 
       if (this.isJhipsterVersionLessThan('7.1.1')) {
@@ -137,8 +136,7 @@ function writeCouchbaseFiles() {
       }
     },
 
-    async writeCouchbaseFiles() {
-      const { application } = this;
+    async writeCouchbaseFiles({ application }) {
       if (!application.databaseTypeCouchbase) return;
 
       await this.writeFiles({

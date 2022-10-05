@@ -217,6 +217,7 @@ Object {
   "entityUrl": "user",
   "enums": Array [],
   "existingEnum": false,
+  "fakeDataCount": 2,
   "faker": Any<Object>,
   "fieldNameChoices": Array [],
   "fields": Array [
@@ -546,6 +547,14 @@ Object {
   "isUsingMapsId": false,
   "jhiPrefix": "jhi",
   "jpaMetamodelFiltering": false,
+  "liquibaseFakeData": Array [
+    Object {
+      "id": 1,
+    },
+    Object {
+      "id": 2,
+    },
+  ],
   "mapsIdAssoc": null,
   "microfrontend": false,
   "microserviceAppName": "",

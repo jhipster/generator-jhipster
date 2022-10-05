@@ -30,7 +30,7 @@ import constants from '../generator-constants.js';
 
 const { CYPRESS } = TestFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
-const { skipPrettierHelpers: helpers } = testUtils;
+const { defaultHelpers: helpers } = testUtils;
 const { CLIENT_TEST_SRC_DIR } = constants;
 
 const { snakeCase } = lodash;
@@ -51,6 +51,11 @@ const e2eMatrix = extendMatrix(
     clientFramework: [ANGULAR, REACT, VUE],
     withAdminUi: [false, true],
     cypressCoverage: [false, true],
+    clientSrcDir: [
+      undefined,
+      { value: 'src/', additional: { clientTestDir: 'test/' } },
+      { value: 'src/main/webapp2/', additional: { clientTestDir: 'src/test/javascript2/' } },
+    ],
   }
 );
 
@@ -75,6 +80,8 @@ const testSamples = () =>
     },
   ]);
 
+const e2eSamples = testSamples();
+
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -85,7 +92,11 @@ describe(`JHipster ${generator} generator`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  testSamples().forEach(([name, sample]) => {
+  it('samples matrix should match snapshot', () => {
+    expect(Object.fromEntries(e2eSamples)).toMatchSnapshot();
+  });
+
+  e2eSamples.forEach(([name, sample]) => {
     const sampleConfig = sample.applicationWithEntities.config;
 
     describe(name, () => {
@@ -106,7 +117,7 @@ describe(`JHipster ${generator} generator`, () => {
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi } = sampleConfig;
+        const { applicationType, withAdminUi, clientTestDir = CLIENT_TEST_SRC_DIR } = sampleConfig;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
 
         if (applicationType !== 'microservice') {
@@ -116,7 +127,7 @@ describe(`JHipster ${generator} generator`, () => {
               generateAdminUi ? runResult.assertFileContent(...args) : runResult.assertNoFileContent(...args);
 
             assertion(
-              `${CLIENT_TEST_SRC_DIR}cypress/e2e/administration/administration.cy.ts`,
+              `${clientTestDir}cypress/e2e/administration/administration.cy.ts`,
               '  metricsPageHeadingSelector,\n' +
                 '  healthPageHeadingSelector,\n' +
                 '  logsPageHeadingSelector,\n' +
@@ -124,7 +135,7 @@ describe(`JHipster ${generator} generator`, () => {
             );
 
             assertion(
-              `${CLIENT_TEST_SRC_DIR}cypress/e2e/administration/administration.cy.ts`,
+              `${clientTestDir}cypress/e2e/administration/administration.cy.ts`,
               "  describe('/metrics', () => {\n" +
                 "    it('should load the page', () => {\n" +
                 "      cy.clickOnAdminMenuItem('metrics');\n" +
@@ -155,7 +166,7 @@ describe(`JHipster ${generator} generator`, () => {
             );
 
             assertion(
-              `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
+              `${clientTestDir}cypress/support/commands.ts`,
               'export const metricsPageHeadingSelector = \'[data-cy="metricsPageHeading"]\';\n' +
                 'export const healthPageHeadingSelector = \'[data-cy="healthPageHeading"]\';\n' +
                 'export const logsPageHeadingSelector = \'[data-cy="logsPageHeading"]\';\n' +

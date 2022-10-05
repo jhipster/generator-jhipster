@@ -78,6 +78,7 @@ class BaseApplicationGenerator extends BaseGenerator {
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
+  /** @type {SharedData<ApplicationType>} */
   #sharedData;
 
   constructor(args, options, features) {
@@ -363,6 +364,7 @@ class BaseApplicationGenerator extends BaseGenerator {
 
   /**
    * Shared Data
+   * @type {SharedData<ApplicationType>}
    */
   get sharedData() {
     if (!this.#sharedData) {
@@ -380,6 +382,34 @@ class BaseApplicationGenerator extends BaseGenerator {
       this.#sharedData = new SharedData(sharedApplications[baseName]);
     }
     return this.#sharedData;
+  }
+
+  /**
+   * @deprecated
+   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
+   */
+  get CLIENT_MAIN_SRC_DIR() {
+    return this.sharedData.getApplication().clientSrcDir;
+  }
+
+  /**
+   * @deprecated
+   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
+   */
+  get CLIENT_TEST_SRC_DIR() {
+    return this.sharedData.getApplication().clientTestDir;
+  }
+
+  /**
+   * Reset entities fake data seed.
+   * @param {string} seed
+   */
+  resetEntitiesFakeData(seed) {
+    seed = `${this.sharedData.getApplication().baseName}-${seed}`;
+    this.debug(`Reseting entities seed with '${seed}'`);
+    this.sharedData.getEntities().forEach(({ entity }) => {
+      entity.resetFakerSeed(seed);
+    });
   }
 
   /**
@@ -429,7 +459,13 @@ class BaseApplicationGenerator extends BaseGenerator {
         entitiesToLoad: this.getEntitiesDataToLoad(),
       };
     }
-    if ([WRITING_ENTITIES, POST_WRITING_ENTITIES, DEFAULT].includes(priorityName)) {
+    if ([DEFAULT].includes(priorityName)) {
+      return {
+        application,
+        ...this.getEntitiesDataForPriorities(),
+      };
+    }
+    if ([WRITING_ENTITIES, POST_WRITING_ENTITIES].includes(priorityName)) {
       return {
         application,
         ...this.getEntitiesDataToWrite(),
@@ -533,13 +569,22 @@ class BaseApplicationGenerator extends BaseGenerator {
    * Get entities to write.
    * @returns {object[]}
    */
+  getEntitiesDataForPriorities() {
+    const entitiesDefinitions = this.sharedData.getEntities();
+    return { entities: entitiesDefinitions.map(({ entity }) => entity) };
+  }
+
+  /**
+   * @private
+   * Get entities to write.
+   * @returns {object[]}
+   */
   getEntitiesDataToWrite() {
     const { entities = [] } = this.options;
-    let entitiesDefinitions = this.sharedData.getEntities();
-    if (entities.length > 0) {
-      entitiesDefinitions = entitiesDefinitions.filter(({ entityName }) => entities.includes(entityName));
-    }
-    return { entities: entitiesDefinitions.map(({ entity }) => entity) };
+    const data = this.getEntitiesDataForPriorities();
+    if (entities.length === 0) return data;
+    const filteredEntities = data.entities.filter(entity => entities.includes(entity.name));
+    return { ...data, entities: filteredEntities };
   }
 
   /**

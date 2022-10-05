@@ -19,4 +19,4 @@
 
 export { default } from './index.js';
 export { serverFiles as files } from './files.js';
-export * from './needles.cjs';
+export * from './needles.mjs';

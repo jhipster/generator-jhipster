@@ -33,7 +33,7 @@ const {
 
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
-const packagejs = require('../../package.json');
+const { packageJson: packagejs } = require('../../lib/index.js');
 const statistics = require('../statistics');
 const { appDefaultConfig } = require('../generator-defaults');
 const { GENERATOR_APP } = require('../generator-list');
@@ -344,7 +344,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       },
 
       validateBlueprint() {
-        if (this.jhipsterConfig.blueprints && !this.skipChecks) {
+        if (this.jhipsterConfig.blueprints && !this.options.skipChecks) {
           this.jhipsterConfig.blueprints.forEach(blueprint => {
             this._checkJHipsterBlueprintVersion(blueprint.name);
             this._checkBlueprint(blueprint.name);
@@ -365,7 +365,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       },
 
       checkForNewJHVersion() {
-        if (!this.skipChecks) {
+        if (!this.options.skipChecks) {
           this.checkForNewVersion();
         }
       },

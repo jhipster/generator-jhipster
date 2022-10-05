@@ -64,8 +64,11 @@ const commonFiles = {
 
 function writeFiles() {
   return {
-    writeFiles() {
-      return this.writeFiles({ sections: commonFiles });
+    writeFiles({ application }) {
+      return this.writeFiles({
+        sections: commonFiles,
+        context: application,
+      });
     },
   };
 }

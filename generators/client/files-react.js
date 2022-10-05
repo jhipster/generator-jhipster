@@ -340,8 +340,7 @@ module.exports = {
   cleanup,
 };
 
-function cleanup() {
-  const application = this.application;
+function cleanup({ application }) {
   if (!application.clientFrameworkReact) return;
 
   if (this.isJhipsterVersionLessThan('7.4.0') && application.enableI18nRTL) {
@@ -362,8 +361,7 @@ function cleanup() {
   }
 }
 
-async function writeFiles() {
-  const application = this.application;
+async function writeFiles({ application }) {
   if (!application.clientFrameworkReact) return;
 
   await this.writeFiles({

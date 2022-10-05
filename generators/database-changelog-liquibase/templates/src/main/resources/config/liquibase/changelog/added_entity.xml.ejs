@@ -28,9 +28,9 @@
         Added the entity <%= entity.entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-1" author="jhipster">
-        <createTable tableName="<%= entity.entityTableName %>"<%- formatAsLiquibaseRemarks(entity.javadoc, true) %>>
+        <createTable tableName="<%= entity.entityTableName %>"<%- this.formatAsLiquibaseRemarks(entity.javadoc, true) %>>
 <%_ for (field of fields) { _%>
-            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- formatAsLiquibaseRemarks(field.javadoc, true) %><% if (field.id && field.liquibaseAutoIncrement) { %> autoIncrement="true" <%_ } %>>
+            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- this.formatAsLiquibaseRemarks(field.javadoc, true) %><% if (field.id && field.liquibaseAutoIncrement) { %> autoIncrement="true" <%_ } %>>
     <%_ if (field.id) { _%>
                 <constraints primaryKey="true" nullable="false"/>
     <%_ } else if (field.unique) { _%>
@@ -49,7 +49,7 @@
     if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
                 && !relationship.id) {
         relationship.otherEntity.primaryKey.fields.forEach(idField => {
-        const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
+        const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
          _%>
             <column name="<%= relationship.columnName %>_<%= idField.columnName %>" type="<%= idField.columnType %>">
                 <constraints nullable="<%= relationship.nullable %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%= uniqueConstraintName %>"<% } %> />

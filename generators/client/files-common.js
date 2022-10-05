@@ -75,8 +75,7 @@ const files = {
   ],
 };
 
-async function writeFiles() {
-  const application = this.application;
+async function writeFiles({ application }) {
   await this.writeFiles({
     sections: files,
     rootTemplatesPath: 'common',

@@ -1,3 +1,5 @@
+import type { OptionConfig } from 'yeoman-generator';
+
 // eslint-disable-next-line no-use-before-define
 export type EditFileCallback<Generator> = (this: Generator, content: string, filePath: string) => CascatedEditFileCallback<Generator>;
 
@@ -37,11 +39,7 @@ export type WriteFileBlock<Generator, DataType> = {
   templates: WriteFileTemplate<Generator, DataType>[];
 };
 
-export type WriteFileSection<Generator, DataType> = Record<string, WriteFileBlock<Generator, DataType>[]> & {
-  _?: {
-    transform?: EditFileCallback<Generator>[];
-  };
-};
+export type WriteFileSection<Generator, DataType> = Record<string, WriteFileBlock<Generator, DataType>[]>;
 
 export type WriteFileOptions<Generator, DataType> = {
   /** transforms (files processing) to be applied */
@@ -68,3 +66,9 @@ export type WriteFileOptions<Generator, DataType> = {
       blocks: WriteFileBlock<Generator, DataType>;
     }
 );
+
+export type JHipsterOption = OptionConfig & {
+  scope?: 'storage' | 'blueprint' | 'generator';
+};
+
+export type JHipsterOptions = Record<string, JHipsterOption>;

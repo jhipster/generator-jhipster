@@ -1,0 +1,624 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster common generator with default config should succeed 1`] = `
+Object {
+  ".editorconfig": Object {
+    "contents": "# EditorConfig helps developers define and maintain consistent
+# coding styles between different editors and IDEs
+# editorconfig.org
+
+root = true
+
+[*]
+
+# We recommend you to keep these unchanged
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Change these settings to your own preference
+indent_style = space
+indent_size = 4
+
+[*.{ts,tsx,js,jsx,json,css,scss,yml,html,vue}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+",
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "contents": "# This file is inspired by https://github.com/alexkaratarakis/gitattributes
+#
+# Auto detect text files and perform LF normalization
+# http://davidlaing.com/2012/09/19/customise-your-gitattributes-to-become-a-git-ninja/
+* text=auto
+
+# The above will handle all files NOT found below
+# These files are text and should be normalized (Convert crlf => lf)
+
+*.bat           text eol=crlf
+*.cmd           text eol=crlf
+*.ps1           text eol=crlf
+*.coffee        text
+*.css           text
+*.cql           text
+*.df            text
+*.ejs           text
+*.html          text
+*.java          text
+*.js            text
+*.json          text
+*.less          text
+*.properties    text
+*.sass          text
+*.scss          text
+*.sh            text eol=lf
+*.sql           text
+*.txt           text
+*.ts            text
+*.xml           text
+*.yaml          text
+*.yml           text
+
+# Documents
+*.doc           diff=astextplain
+*.DOC           diff=astextplain
+*.docx          diff=astextplain
+*.DOCX          diff=astextplain
+*.dot           diff=astextplain
+*.DOT           diff=astextplain
+*.pdf           diff=astextplain
+*.PDF           diff=astextplain
+*.rtf           diff=astextplain
+*.RTF           diff=astextplain
+*.markdown      text
+*.md            text
+*.adoc          text
+*.textile       text
+*.mustache      text
+*.csv           text
+*.tab           text
+*.tsv           text
+*.txt           text
+AUTHORS         text
+CHANGELOG       text
+CHANGES         text
+CONTRIBUTING    text
+COPYING         text
+copyright       text
+*COPYRIGHT*     text
+INSTALL         text
+license         text
+LICENSE         text
+NEWS            text
+readme          text
+*README*        text
+TODO            text
+
+# Graphics
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.tif           binary
+*.tiff          binary
+*.ico           binary
+# SVG treated as an asset (binary) by default. If you want to treat it as text,
+# comment-out the following line and uncomment the line after.
+*.svg           binary
+#*.svg          text
+*.eps           binary
+
+# These files are binary and should be left untouched
+# (binary is a macro for -text -diff)
+*.class         binary
+*.jar           binary
+*.war           binary
+
+## LINTERS
+.csslintrc      text
+.eslintrc       text
+.jscsrc         text
+.jshintrc       text
+.jshintignore   text
+.stylelintrc    text
+
+## CONFIGS
+*.conf          text
+*.config        text
+.editorconfig   text
+.gitattributes  text
+.gitconfig      text
+.gitignore      text
+.htaccess       text
+*.npmignore     text
+
+## HEROKU
+Procfile        text
+.slugignore     text
+
+## AUDIO
+*.kar           binary
+*.m4a           binary
+*.mid           binary
+*.midi          binary
+*.mp3           binary
+*.ogg           binary
+*.ra            binary
+
+## VIDEO
+*.3gpp          binary
+*.3gp           binary
+*.as            binary
+*.asf           binary
+*.asx           binary
+*.fla           binary
+*.flv           binary
+*.m4v           binary
+*.mng           binary
+*.mov           binary
+*.mp4           binary
+*.mpeg          binary
+*.mpg           binary
+*.swc           binary
+*.swf           binary
+*.webm          binary
+
+## ARCHIVES
+*.7z            binary
+*.gz            binary
+*.rar           binary
+*.tar           binary
+*.zip           binary
+
+## FONTS
+*.ttf           binary
+*.eot           binary
+*.otf           binary
+*.woff          binary
+*.woff2         binary
+",
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "contents": "######################
+# Project Specific
+######################
+/src/main/webapp/content/css/main.css
+/target/classes/static/**
+/src/test/javascript/coverage/
+
+######################
+# Node
+######################
+/node/
+node_tmp/
+node_modules/
+npm-debug.log.*
+/.awcache/*
+/.cache-loader/*
+
+######################
+# SASS
+######################
+.sass-cache/
+
+######################
+# Eclipse
+######################
+*.pydevproject
+.project
+.metadata
+tmp/
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+.factorypath
+/src/main/resources/rebel.xml
+
+# External tool builders
+.externalToolBuilders/**
+
+# Locally stored \\"Eclipse launch configurations\\"
+*.launch
+
+# CDT-specific
+.cproject
+
+# PDT-specific
+.buildpath
+
+# STS-specific
+/.sts4-cache/*
+
+######################
+# IntelliJ
+######################
+.idea/
+*.iml
+*.iws
+*.ipr
+*.ids
+*.orig
+classes/
+out/
+
+######################
+# Visual Studio Code
+######################
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+######################
+# Maven
+######################
+/log/
+/target/
+
+######################
+# Gradle
+######################
+.gradle/
+/build/
+
+######################
+# Package Files
+######################
+*.jar
+*.war
+*.ear
+*.db
+
+######################
+# Windows
+######################
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+######################
+# Mac OSX
+######################
+.DS_Store
+.svn
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+######################
+# Directories
+######################
+/bin/
+/deploy/
+
+######################
+# Logs
+######################
+*.log*
+
+######################
+# Others
+######################
+*.class
+*.*~
+*~
+.merge_file*
+
+######################
+# Gradle Wrapper
+######################
+!gradle/wrapper/gradle-wrapper.jar
+
+######################
+# Maven Wrapper
+######################
+!.mvn/wrapper/maven-wrapper.jar
+
+######################
+# ESLint
+######################
+.eslintcache
+
+######################
+# Code coverage
+######################
+/coverage/
+/.nyc_output/
+",
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "contents": "#!/bin/sh
+. \\"$(dirname \\"$0\\")/_/husky.sh\\"
+
+
+\\"$(dirname \\"$0\\")/../npmw\\" exec --no-install lint-staged
+",
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "contents": "module.exports = {
+  '{,src/**/,webpack/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java}': ['prettier --write'],
+};
+",
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "contents": "node_modules
+target
+build
+package-lock.json
+.git
+.mvn
+gradle
+.gradle
+",
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "contents": "# Prettier configuration
+
+printWidth: 140
+singleQuote: true
+tabWidth: 2
+useTabs: false
+
+# js and ts rules:
+arrowParens: avoid
+
+# jsx and tsx rules:
+bracketSameLine: false
+
+# java rules:
+overrides:
+  - files: \\"*.java\\"
+    options:
+      tabWidth: 4
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"baseName\\": \\"jhipster\\",
+    \\"creationTimestamp\\": 946684800000,
+    \\"entities\\": []
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "contents": "# jhipster
+
+This application was generated using JHipster , you can find documentation and help at [https://www.jhipster.tech/documentation-archive/vundefined](https://www.jhipster.tech/documentation-archive/vundefined).
+
+## Project Structure
+
+Node is required for generation and recommended for development. \`package.json\` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
+
+In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
+
+
+\`/src/*\` structure follows default Java structure.
+
+- \`.yo-rc.json\` - Yeoman configuration file
+JHipster configuration is stored in this file at \`generator-jhipster\` key. You may find \`generator-jhipster-*\` for specific blueprints configuration.
+- \`.yo-resolve\` (optional) - Yeoman conflict resolver
+Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match \`[pattern] [action]\` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if ommited) or force. Lines starting with \`#\` are considered comments and are ignored.
+- \`.jhipster/*.json\` - JHipster entity configuration files
+
+- \`npmw\` - wrapper to use locally installed npm.
+JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using \`./npmw\` instead of the traditional \`npm\` you can configure a Node-less environment to develop or test your application.
+- \`/src/main/docker\` - Docker configurations for the application and services that the application depends on
+
+## Development
+
+
+### JHipster Control Center
+
+JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+
+\`\`\`
+docker compose -f src/main/docker/jhipster-control-center.yml up
+\`\`\`
+
+
+
+## Building for production
+
+### Packaging as jar
+
+To build the final jar and optimize the jhipster application for production, run:
+
+\`\`\`
+./mvnw -Pprod clean verify
+\`\`\`
+
+This will concatenate and minify the client CSS and JavaScript files. It will also modify \`index.html\` so it references these new files.
+To ensure everything worked, run:
+
+\`\`\`
+java -jar target/*.jar
+\`\`\`
+
+Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
+
+Refer to [Using JHipster in production][] for more details.
+
+### Packaging as war
+
+To package your application as a war in order to deploy it to an application server, run:
+
+\`\`\`
+./mvnw -Pprod,war clean verify
+\`\`\`
+
+
+## Testing
+
+To launch your application's tests, run:
+
+\`\`\`
+./mvnw verify
+\`\`\`
+
+
+For more information, refer to the [Running tests page][].
+
+### Code quality
+
+Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
+
+\`\`\`
+docker compose -f src/main/docker/sonar.yml up -d
+\`\`\`
+
+Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
+
+You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
+
+Then, run a Sonar analysis:
+
+\`\`\`
+./mvnw -Pprod clean verify sonar:sonar
+\`\`\`
+
+If you need to re-run the Sonar phase, please be sure to specify at least the \`initialize\` phase since Sonar properties are loaded from the sonar-project.properties file.
+
+\`\`\`
+./mvnw initialize sonar:sonar
+\`\`\`
+
+For more information, refer to the [Code quality page][].
+
+## Using Docker to simplify development (optional)
+
+You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
+
+For example, to start a postgresql database in a docker container, run:
+
+\`\`\`
+docker compose -f src/main/docker/postgresql.yml up -d
+\`\`\`
+
+To stop it and remove the container, run:
+
+\`\`\`
+docker compose -f src/main/docker/postgresql.yml down
+\`\`\`
+
+You can also fully dockerize your application and all the services that it depends on.
+To achieve this, first build a docker image of your app by running:
+
+\`\`\`
+npm run java:docker
+\`\`\`
+
+Or build a arm64 docker image when using an arm64 processor os like MacOS with M1 processor family running:
+
+\`\`\`
+npm run java:docker:arm64
+\`\`\`
+
+Then run:
+
+\`\`\`
+docker compose -f src/main/docker/app.yml up -d
+\`\`\`
+
+When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental \`Use the new Virtualization framework\` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
+
+For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (\`jhipster docker-compose\`), which is able to generate docker configurations for one or several JHipster applications.
+
+## Continuous Integration (optional)
+
+To configure CI for your project, run the ci-cd sub-generator (\`jhipster ci-cd\`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
+
+
+[JHipster Homepage and latest documentation]: https://www.jhipster.tech
+[JHipster  archive]: https://www.jhipster.tech/documentation-archive/vundefined
+[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/vundefined/development/
+[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/vundefined/docker-compose
+[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/vundefined/production/
+[Running tests page]: https://www.jhipster.tech/documentation-archive/vundefined/running-tests/
+[Code quality page]: https://www.jhipster.tech/documentation-archive/vundefined/code-quality/
+[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/vundefined/setting-up-ci/
+
+[Node.js]: https://nodejs.org/
+[NPM]: https://www.npmjs.com/
+",
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "contents": "{
+  \\"scripts\\": {
+    \\"prepare\\": \\"husky install\\"
+  },
+  \\"devDependencies\\": {
+    \\"husky\\": \\"7.0.4\\",
+    \\"lint-staged\\": \\"13.0.3\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "contents": "sonar.projectKey=jhipster
+sonar.projectName=jhipster generated by jhipster
+
+# Typescript tests files must be inside sources and tests, othewise \`INFO: Test execution data ignored for 80 unknown files, including:\` is shown.
+sonar.sources=src
+sonar.tests=src
+sonar.host.url=http://localhost:9001
+
+sonar.test.inclusions=src/test/**/*.*, src/main/webapp/app/**/*.spec.ts
+sonar.coverage.jacoco.xmlReportPaths=target/site/**/jacoco*.xml
+sonar.java.codeCoveragePlugin=jacoco
+sonar.junit.reportPaths=target/surefire-reports,target/failsafe-reports
+sonar.testExecutionReportPaths=target/test-results/jest/TESTS-results-sonar.xml
+sonar.javascript.lcov.reportPaths=target/test-results/lcov.info
+
+sonar.sourceEncoding=UTF-8
+sonar.exclusions=src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.js, target/classes/static/**/*.*
+
+sonar.issue.ignore.multicriteria=S3437,S4502,S4684,S5145,UndocumentedApi
+# Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored, as a JPA-managed field cannot be transient
+sonar.issue.ignore.multicriteria.S3437.resourceKey=src/main/java/**/*
+sonar.issue.ignore.multicriteria.S3437.ruleKey=squid:S3437
+# Rule https://rules.sonarsource.com/java/RSPEC-4502 is ignored, as for JWT tokens we are not subject to CSRF attack
+sonar.issue.ignore.multicriteria.S4502.resourceKey=src/main/java/**/*
+sonar.issue.ignore.multicriteria.S4502.ruleKey=java:S4502
+# Rule https://rules.sonarsource.com/java/RSPEC-4684
+sonar.issue.ignore.multicriteria.S4684.resourceKey=src/main/java/**/*
+sonar.issue.ignore.multicriteria.S4684.ruleKey=java:S4684
+# Rule https://rules.sonarsource.com/java/RSPEC-5145 log filter is applied
+sonar.issue.ignore.multicriteria.S5145.resourceKey=src/main/java/**/*
+sonar.issue.ignore.multicriteria.S5145.ruleKey=javasecurity:S5145
+# Rule https://rules.sonarsource.com/java/RSPEC-1176 is ignored, as we want to follow \\"clean code\\" guidelines and classes, methods and arguments names should be self-explanatory
+sonar.issue.ignore.multicriteria.UndocumentedApi.resourceKey=src/main/java/**/*
+sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey=squid:UndocumentedApi
+",
+    "stateCleared": "modified",
+  },
+}
+`;

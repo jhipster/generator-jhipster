@@ -144,8 +144,8 @@
     "default_environment": "prod"
   },
   "scripts": {
-    "prettier:check": "prettier --check \"{,src/**/,webpack/,.blueprint/**/}*.{<%= this.getPrettierExtensions() %>}\"",
-    "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= this.getPrettierExtensions() %>}\"",
+    "prettier:check": "prettier --check \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "lint": "eslint . --ext .ts,.vue ",
     "lint:fix": "eslint . --ext .ts,.vue --fix",
     "cleanup": "rimraf <%= DIST_DIR %>",

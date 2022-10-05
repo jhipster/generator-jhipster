@@ -26,7 +26,6 @@ const {
   GENERATOR_CYPRESS,
   GENERATOR_ENTITY_I_18_N,
   GENERATOR_ENTITY_CLIENT,
-  GENERATOR_ENTITIES_CLIENT,
 } = require('../generators/generator-list');
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
@@ -56,7 +55,6 @@ describe('Enforce some developments patterns', () => {
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_CYPRESS)),
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_ENTITY_I_18_N)),
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_ENTITY_CLIENT)),
-      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_ENTITIES_CLIENT)),
     ].filter(file => !/\.spec\.[mc]?[jt]s(.snap)?$/.test(file));
     filesToTest.forEach(file => {
       describe(`file ${path.basename(file)}`, () => {
@@ -69,7 +67,7 @@ describe('Enforce some developments patterns', () => {
           ['src/main/webapp', '<%= CLIENT_MAIN_SRC_DIR %>'],
           ['src/test/javascript', '<%= CLIENT_TEST_SRC_DIR %>'],
           ['jhiTranslate', '<%= jhiPrefix %>Translate'],
-          [' Java ', ' <%= backendName %> '],
+          [' Java ', ' <%= backendType %> '],
         ].forEach(([notSpected, replacement]) => {
           const regex = new RegExp(notSpected, 'g');
           const regexSeparator = new RegExp(`${notSpected}/`, 'g');

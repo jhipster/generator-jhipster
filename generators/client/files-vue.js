@@ -353,8 +353,7 @@ const vueFiles = {
   ],
 };
 
-function cleanup() {
-  const application = this.application;
+function cleanup({ application }) {
   if (!application.clientFrameworkVue) return;
 
   if (this.isJhipsterVersionLessThan('7.3.1')) {
@@ -370,8 +369,7 @@ function cleanup() {
   }
 }
 
-async function writeFiles() {
-  const application = this.application;
+async function writeFiles({ application }) {
   if (!application.clientFrameworkVue) return;
 
   await this.writeFiles({

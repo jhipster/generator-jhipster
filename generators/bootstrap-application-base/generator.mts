@@ -48,6 +48,20 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
     this.loadStoredAppOptions();
   }
 
+  get configuring() {
+    return this.asLoadingTaskGroup({
+      configuring() {
+        if (this.jhipsterConfig.baseName === undefined) {
+          this.jhipsterConfig.baseName = 'jhipster';
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.configuring;
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadApplication({ application }) {
@@ -109,7 +123,9 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
           throw new Error("Fail to bootstrap 'User', already exists.");
         }
 
-        this.sharedData.setEntity('User', createUserEntity.call(this, {}, application));
+        const user = createUserEntity.call(this, {}, application);
+        this.sharedData.setEntity('User', user);
+        application.user = user;
       },
       loadingEntities({ entitiesToLoad }) {
         for (const { entityName, entityStorage } of entitiesToLoad) {

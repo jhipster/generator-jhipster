@@ -20,8 +20,21 @@ const JHipsterBaseBlueprintGenerator = require('../generator-base-blueprint.js')
 
 const { PRIORITY_NAMES, PRIORITY_PREFIX } = require('../../lib/constants/priorities.cjs');
 
-const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
-  PRIORITY_NAMES;
+const {
+  INITIALIZING,
+  PROMPTING,
+  CONFIGURING,
+  COMPOSING,
+  LOADING,
+  PREPARING,
+  DEFAULT,
+  WRITING,
+  POST_WRITING,
+  PRE_CONFLICTS,
+  INSTALL,
+  POST_INSTALL,
+  END,
+} = PRIORITY_NAMES;
 
 const asPriority = priorityName => `${PRIORITY_PREFIX}${priorityName}`;
 
@@ -52,6 +65,8 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   static POST_WRITING = asPriority(POST_WRITING);
 
+  static PRE_CONFLICTS = asPriority(PRE_CONFLICTS);
+
   static INSTALL = asPriority(INSTALL);
 
   static POST_INSTALL = asPriority(POST_INSTALL);
@@ -59,17 +74,21 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   static END = asPriority(END);
 
   constructor(args, options, features) {
-    super(args, options, { taskPrefix: PRIORITY_PREFIX, ...features });
+    super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, ...features });
   }
 
   /**
-   * Utility method to get typed objects for autocomplete.
+   * @private
+   * Override yeoman-generator method that gets methods to be queued, filtering the result.
    *
-   * @param {import('./base/tasks.js').BasicTaskGroup<this>} taskGroup
-   * @returns {import('./base/tasks.js').BasicTaskGroup<this>}
+   * @return {string[]}
    */
-  get [JHipsterBaseBlueprintGenerator.INITIALIZING]() {
-    return {};
+  getTaskNames() {
+    let priorities = super.getTaskNames();
+    if (this.options.skipPriorities) {
+      priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
+    }
+    return priorities;
   }
 }
 

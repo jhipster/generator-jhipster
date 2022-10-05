@@ -29,20 +29,20 @@ const os = require('os');
 const normalize = require('normalize-path');
 const simpleGit = require('simple-git');
 
-const packagejs = require('../package.json');
+const { packageJson: packagejs } = require('../lib/index.js');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig, defaultConfigMicroservice } = require('./generator-defaults');
 const { commonOptions } = require('./options');
-const { detectLanguage } = require('../utils/language');
+const { detectLanguage } = require('./languages/detect-language.cjs');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { databaseData } = require('./sql-constants');
-const { ANGULAR, REACT, VUE, SVELTE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
+const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
 const { joinCallbacks } = require('../lib/support/base.cjs');
 
 const {
@@ -158,6 +158,9 @@ class JHipsterBaseGenerator extends PrivateBase {
     /* Register generator for compose once */
     this.registerComposedGenerator(this.options.namespace);
 
+    this.loadRuntimeOptions();
+    this.loadStoredAppOptions();
+
     if (this.options.namespace !== 'jhipster:bootstrap') {
       /*
       // eslint-disable-next-line global-require
@@ -196,21 +199,19 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @deprecated
    * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
    */
   get CLIENT_MAIN_SRC_DIR() {
-    this._CLIENT_MAIN_SRC_DIR =
-      this._CLIENT_MAIN_SRC_DIR || this.applyOutputPathCustomizer(constants.CLIENT_MAIN_SRC_DIR) || constants.CLIENT_MAIN_SRC_DIR;
-    return this._CLIENT_MAIN_SRC_DIR;
+    return CLIENT_MAIN_SRC_DIR;
   }
 
   /**
+   * @deprecated
    * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
    */
   get CLIENT_TEST_SRC_DIR() {
-    this._CLIENT_TEST_SRC_DIR =
-      this._CLIENT_TEST_SRC_DIR || this.applyOutputPathCustomizer(constants.CLIENT_TEST_SRC_DIR) || constants.CLIENT_TEST_SRC_DIR;
-    return this._CLIENT_TEST_SRC_DIR;
+    return CLIENT_TEST_SRC_DIR;
   }
 
   /**
@@ -303,23 +304,6 @@ class JHipsterBaseGenerator extends PrivateBase {
       return outputPath;
     }
     return outputPathCustomizer.call(this, outputPath);
-  }
-
-  getPrettierExtensions() {
-    let prettierExtensions = 'md,json,yml,html';
-    if (!this.skipClient && !this.jhipsterConfig.skipClient) {
-      prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
-      if (this.jhipsterConfig.clientFramework === VUE) {
-        prettierExtensions = `${prettierExtensions},vue`;
-      }
-      if (this.jhipsterConfig.clientFramework === SVELTE) {
-        prettierExtensions = `${prettierExtensions},svelte`;
-      }
-    }
-    if (!this.skipServer && !this.jhipsterConfig.skipServer) {
-      prettierExtensions = `${prettierExtensions},java`;
-    }
-    return prettierExtensions;
   }
 
   /**
@@ -1923,8 +1907,6 @@ class JHipsterBaseGenerator extends PrivateBase {
    * Generate a KeyStore.
    */
   generateKeyStore() {
-    const done = this.async();
-
     let keystoreFolder = `${SERVER_MAIN_RES_DIR}config/tls/`;
     if (this.destinationPath) {
       keystoreFolder = this.destinationPath(keystoreFolder);
@@ -1933,7 +1915,6 @@ class JHipsterBaseGenerator extends PrivateBase {
 
     if (this.fs.exists(keyStoreFile)) {
       this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
-      done();
     } else {
       try {
         shelljs.mkdir('-p', keystoreFolder);
@@ -1948,6 +1929,11 @@ class JHipsterBaseGenerator extends PrivateBase {
       if (javaHome) {
         keytoolPath = `${javaHome}/bin/`;
       }
+      if (process.env.FAKE_KEYTOOL === 'true') {
+        this.writeDestination(keyStoreFile, 'fake key-tool');
+        return;
+      }
+      const done = this.async();
       // Generate the PKCS#12 keystore
       shelljs.exec(
         // prettier-ignore
@@ -2241,6 +2227,10 @@ class JHipsterBaseGenerator extends PrivateBase {
         destinationFile = resolveCallback(destinationFile);
       } else {
         destinationFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
+      }
+      // TODO v8 drop
+      if (typeof context.customizeDestination === 'function') {
+        destinationFile = context.customizeDestination(context, destinationFile);
       }
 
       let sourceFileFrom;
@@ -2832,7 +2822,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientThemeVariant = config.clientThemeVariant;
     dest.devServerPort = config.devServerPort;
 
-    dest.clientSrcDir = config.clientSrcDir || this.CLIENT_MAIN_SRC_DIR;
+    dest.clientSrcDir = config.clientSrcDir || CLIENT_MAIN_SRC_DIR;
+    dest.clientTestDir = config.clientTestDir || CLIENT_TEST_SRC_DIR;
   }
 
   /**
@@ -3219,7 +3210,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {Object} [options] - Object containing options.
+   * @param {import('./base/api').JHipsterOptions} [options] - Object containing options.
    */
   jhipsterOptions(options = {}) {
     options = _.cloneDeep(options);
