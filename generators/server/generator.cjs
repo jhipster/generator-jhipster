@@ -21,7 +21,7 @@
 const { existsSync } = require('fs');
 const chalk = require('chalk');
 const os = require('os');
-const prompts = require('./prompts');
+const prompts = require('./prompts.cjs');
 const { isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 const {
   GENERATOR_COMMON,
@@ -32,8 +32,8 @@ const {
 } = require('../generator-list.cjs');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const BaseApplicationGenerator = require('../base-application/generator.cjs');
-const { writeFiles } = require('./files');
-const { writeFiles: writeEntityFiles, customizeFiles } = require('./entity-files');
+const { writeFiles } = require('./files.cjs');
+const { writeFiles: writeEntityFiles, customizeFiles } = require('./entity-files.cjs');
 const { packageJson: packagejs } = require('../../lib/index.cjs');
 const constants = require('../generator-constants.cjs');
 const statistics = require('../statistics.cjs');
@@ -50,7 +50,7 @@ const websocketTypes = require('../../jdl/jhipster/websocket-types');
 const fieldTypes = require('../../jdl/jhipster/field-types');
 const entityOptions = require('../../jdl/jhipster/entity-options');
 const validations = require('../../jdl/jhipster/validations');
-const { stringify } = require('../../utils');
+const { stringify } = require('../../utils/index');
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
 const { FALSE: NO_WEBSOCKET } = websocketTypes;

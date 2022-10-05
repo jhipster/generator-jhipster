@@ -22,11 +22,11 @@ const _ = require('lodash');
 
 const BaseApplicationGenerator = require('../base-application/generator.cjs');
 
-const prompts = require('./prompts');
-const { cleanup: cleanupAngular, writeFiles: writeAngularFiles } = require('./files-angular');
-const { cleanup: cleanupReact, writeFiles: writeReactFiles } = require('./files-react');
-const { cleanup: cleanupVue, writeFiles: writeVueFiles } = require('./files-vue');
-const writeCommonFiles = require('./files-common').writeFiles;
+const prompts = require('./prompts.cjs');
+const { cleanup: cleanupAngular, writeFiles: writeAngularFiles } = require('./files-angular.cjs');
+const { cleanup: cleanupReact, writeFiles: writeReactFiles } = require('./files-react.cjs');
+const { cleanup: cleanupVue, writeFiles: writeVueFiles } = require('./files-vue.cjs');
+const writeCommonFiles = require('./files-common.cjs').writeFiles;
 const { clientI18nFiles } = require('../languages/files.cjs');
 const { entityClientI18nFiles } = require('../languages/entity-files.cjs');
 

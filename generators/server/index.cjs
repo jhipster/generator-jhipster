@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const ServerGenerator = require('./generator.cjs');
 
-export { default } from './generator.cjs';
-export { serverFiles as files } from './files.cjs';
-export * from './needles.mjs';
+module.exports = ServerGenerator;

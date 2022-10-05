@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 export { default } from './generator.cjs';
-export { files as angularFiles } from './files-angular.js';
-export { files as commonFiles } from './files-common.js';
-export { files as reactFiles } from './files-react.js';
-export { files as vueFiles } from './files-vue.js';
+export { files as angularFiles } from './files-angular.cjs';
+export { files as commonFiles } from './files-common.cjs';
+export { files as reactFiles } from './files-react.cjs';
+export { files as vueFiles } from './files-vue.cjs';

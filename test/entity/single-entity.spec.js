@@ -10,7 +10,7 @@ const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: tru
 
 describe('jhipster:entity --single-entity', () => {
   context('when regenerating', () => {
-    describe('with default configuration', () => {
+    describe.only('with default configuration', () => {
       let runResult;
       before(async () => {
         runResult = await helpers

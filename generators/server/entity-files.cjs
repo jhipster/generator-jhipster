@@ -19,14 +19,14 @@
 const _ = require('lodash');
 const chalk = require('chalk');
 const fs = require('fs');
-const entityServerCleanup = require('./entity-cleanup');
+const entityServerCleanup = require('./entity-cleanup.cjs');
 const utils = require('../utils.cjs');
 const constants = require('../generator-constants.cjs');
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = require('../../jdl/jhipster/database-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { MapperTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
 const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = require('../../jdl/jhipster/cache-types');
-const { writeEntityCouchbaseFiles } = require('./entity-files-couchbase');
+const { writeEntityCouchbaseFiles } = require('./entity-files-couchbase.cjs');
 
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;

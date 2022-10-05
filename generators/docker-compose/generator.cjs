@@ -24,7 +24,7 @@ const normalize = require('normalize-path');
 
 const BaseDockerGenerator = require('../base-docker/index.cjs');
 
-const writeFiles = require('./files').writeFiles;
+const writeFiles = require('./files.cjs').writeFiles;
 const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
 const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');

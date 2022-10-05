@@ -22,38 +22,41 @@ const fs = require('fs');
 
 const BaseDockerGenerator = require('../base-docker/index.cjs');
 
-const prompts = require('./prompts');
-const { writeFiles } = require('./files');
+const prompts = require('../kubernetes/prompts');
+const { writeFiles } = require('./files.cjs');
+const { GENERATOR_KUBERNETES_HELM } = require('../generator-list.cjs');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
-const { GENERATOR_KUBERNETES } = require('../generator-list.cjs');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../base-docker/docker-base.cjs');
 const {
   checkKubernetes,
+  checkHelm,
   loadConfig,
   saveConfig,
   setupKubernetesConstants,
+  setupHelmConstants,
   derivedKubernetesPlatformProperties,
-} = require('./kubernetes-base.cjs');
+} = require('../kubernetes/kubernetes-base.cjs');
 const statistics = require('../statistics.cjs');
 
 module.exports = class extends BaseDockerGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_KUBERNETES);
+      await this.composeWithBlueprints(GENERATOR_KUBERNETES_HELM);
     }
   }
 
   _initializing() {
     return {
       sayHello() {
-        this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
+        this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
         this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
       ...super._initializing(),
       checkKubernetes,
+      checkHelm,
       loadConfig,
       setupKubernetesConstants,
+      setupHelmConstants,
     };
   }
 
@@ -78,8 +81,6 @@ module.exports = class extends BaseDockerGenerator {
       askForKubernetesServiceType: prompts.askForKubernetesServiceType,
       askForIngressType: prompts.askForIngressType,
       askForIngressDomain: prompts.askForIngressDomain,
-      askForPersistentStorage: prompts.askForPersistentStorage,
-      askForStorageClassName: prompts.askForStorageClassName,
     };
   }
 
@@ -91,7 +92,7 @@ module.exports = class extends BaseDockerGenerator {
   _configuring() {
     return {
       insight() {
-        statistics.sendSubGenEvent('generator', GENERATOR_KUBERNETES);
+        statistics.sendSubGenEvent('generator', GENERATOR_KUBERNETES_HELM);
       },
 
       checkImages,
@@ -147,15 +148,14 @@ module.exports = class extends BaseDockerGenerator {
     return {
       deploy() {
         if (this.hasWarning) {
-          this.log(`\n${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated, but no Jib cache found`);
+          this.log(`\n${chalk.yellow.bold('WARNING!')} Helm configuration generated, but no Jib cache found`);
           this.log('If you forgot to generate the Docker image for this application, please run:');
           this.log(this.warningMessage);
         } else {
-          this.log(`\n${chalk.bold.green('Kubernetes configuration successfully generated!')}`);
+          this.log(`\n${chalk.bold.green('Helm configuration successfully generated!')}`);
         }
-
         this.log(
-          `\n${chalk.yellow.bold(
+          `${chalk.yellow.bold(
             'WARNING!'
           )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
         );
@@ -167,41 +167,19 @@ module.exports = class extends BaseDockerGenerator {
           }
           this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
-
-        if (this.dockerRepositoryName) {
-          this.log(`\n${chalk.green.bold('INFO!')} Alternatively, you can use Jib to build and push image directly to a remote registry:`);
-          this.appsFolders.forEach((appsFolder, index) => {
-            const appConfig = this.appConfigs[index];
-            let runCommand = '';
-            if (appConfig.buildTool === MAVEN) {
-              runCommand = `./mvnw -ntp -Pprod verify jib:build -Djib.to.image=${appConfig.targetImageName}`;
-            } else {
-              runCommand = `./gradlew bootJar -Pprod jib -Djib.to.image=${appConfig.targetImageName}`;
-            }
-            this.log(`  ${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
-          });
-        }
-        this.log('\nYou can deploy all your apps by running the following kubectl command:');
-        this.log(`  ${chalk.cyan('bash kubectl-apply.sh -f')}`);
-        this.log('\n[OR]');
-        this.log('\nIf you want to use kustomize configuration, then run the following command:');
-        this.log(`  ${chalk.cyan('bash kubectl-apply.sh -k')}`);
-        if (this.gatewayNb + this.monolithicNb >= 1) {
-          const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
-          this.log("\nUse these commands to find your application's IP addresses:");
-          for (let i = 0; i < this.appsFolders.length; i++) {
-            if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-              this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}${namespaceSuffix}`)}`);
-            }
-          }
-          this.log();
-        }
+        this.log('\nYou can deploy all your apps by running the following script:');
+        this.log(`  ${chalk.cyan('bash helm-apply.sh')}`);
+        this.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
+        this.log(`  ${chalk.cyan('bash helm-upgrade.sh')}`);
         // Make the apply script executable
         try {
-          fs.chmodSync('kubectl-apply.sh', '755');
+          fs.chmodSync('helm-apply.sh', '755');
+          fs.chmodSync('helm-upgrade.sh', '755');
         } catch (err) {
           this.log(
-            `${chalk.yellow.bold('WARNING!')}Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'`
+            `${chalk.yellow.bold(
+              'WARNING!'
+            )}Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh`
           );
         }
       },

@@ -16,18 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const cleanupCassandra = require('./cleanup-cassandra');
-const cleanupMongodb = require('./cleanup-mongodb');
-const cleanupSql = require('./cleanup-sql');
-const cleanupElasticsearch = require('./cleanup-elasticsearch');
-const cleanupCacheProvider = require('./cleanup-cache-provider');
-const cleanupAngular = require('./cleanup-angular');
-const cleanupGradle = require('./cleanup-gradle');
-const cleanupOauth2 = require('./cleanup-oauth2');
-const cleanupKafka = require('./cleanup-kafka');
-const cleanupReactive = require('./cleanup-reactive');
-const cleanupCucumber = require('./cleanup-cucumber');
-const cleanupMaven = require('./cleanup-maven');
+const cleanupCassandra = require('./cleanup-cassandra.cjs');
+const cleanupMongodb = require('./cleanup-mongodb.cjs');
+const cleanupSql = require('./cleanup-sql.cjs');
+const cleanupElasticsearch = require('./cleanup-elasticsearch.cjs');
+const cleanupCacheProvider = require('./cleanup-cache-provider.cjs');
+const cleanupAngular = require('./cleanup-angular.cjs');
+const cleanupGradle = require('./cleanup-gradle.cjs');
+const cleanupOauth2 = require('./cleanup-oauth2.cjs');
+const cleanupKafka = require('./cleanup-kafka.cjs');
+const cleanupReactive = require('./cleanup-reactive.cjs');
+const cleanupCucumber = require('./cleanup-cucumber.cjs');
+const cleanupMaven = require('./cleanup-maven.cjs');
 const constants = require('../generator-constants.cjs');
 
 /**

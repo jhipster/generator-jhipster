@@ -4,7 +4,7 @@ import sinon from 'sinon';
 
 import AppGenerator from '../../generators/app/index.mjs';
 import ClientGenerator from '../../generators/client/index.mjs';
-import ServerGenerator from '../../generators/server';
+import ServerGenerator from '../../generators/server/index.mjs';
 import CommonGenerator from '../../generators/common/index.mjs';
 import LanguagesGenerator from '../../generators/languages/index.mjs';
 import databaseTypes from '../../jdl/jhipster/database-types';

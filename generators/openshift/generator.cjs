@@ -21,7 +21,7 @@ const shelljs = require('shelljs');
 
 const BaseDockerGenerator = require('../base-docker/index.cjs');
 
-const prompts = require('./prompts');
+const prompts = require('./prompts.cjs');
 const { GENERATOR_OPENSHIFT } = require('../generator-list.cjs');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
@@ -31,7 +31,7 @@ const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 const serviceDiscoveryTypes = require('../../jdl/jhipster/service-discovery-types');
 const { StorageTypes } = require('../../jdl/jhipster/openshift-platform-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
-const writeFiles = require('./files').writeFiles;
+const writeFiles = require('./files.cjs').writeFiles;
 const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../base-docker/docker-base.cjs');
 const { setupKubernetesConstants } = require('../kubernetes/kubernetes-base.cjs');
 const statistics = require('../statistics.cjs');

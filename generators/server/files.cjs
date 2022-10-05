@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const serverCleanup = require('./cleanup');
+const serverCleanup = require('./cleanup.cjs');
 const constants = require('../generator-constants.cjs');
 const { addSectionsCondition, mergeSections } = require('../utils.cjs');
-const { writeCouchbaseFiles } = require('./files-couchbase');
-const { writeSqlFiles } = require('./files-sql');
+const { writeCouchbaseFiles } = require('./files-couchbase.cjs');
+const { writeSqlFiles } = require('./files-sql.cjs');
 
 /* Constants use throughout */
 const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
