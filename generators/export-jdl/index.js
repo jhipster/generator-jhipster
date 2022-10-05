@@ -20,7 +20,7 @@ const chalk = require('chalk');
 
 const BaseGenerator = require('../base/index.cjs');
 
-const statistics = require('../statistics');
+const statistics = require('../statistics.cjs');
 const { GENERATOR_EXPORT_JDL } = require('../generator-list.cjs');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const JSONToJDLConverter = require('../../jdl/converters/json-to-jdl-converter');

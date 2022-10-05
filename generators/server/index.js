@@ -36,7 +36,7 @@ const { writeFiles } = require('./files');
 const { writeFiles: writeEntityFiles, customizeFiles } = require('./entity-files');
 const { packageJson: packagejs } = require('../../lib/index.js');
 const constants = require('../generator-constants.cjs');
-const statistics = require('../statistics');
+const statistics = require('../statistics.cjs');
 const { defaultConfig } = require('../generator-defaults.cjs');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 

@@ -24,7 +24,7 @@ const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const constants = require('../generator-constants.cjs');
 const prompts = require('./prompts.cjs');
-const statistics = require('../statistics');
+const statistics = require('../statistics.cjs');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const cacheProviders = require('../../jdl/jhipster/cache-types');
 const messageBrokers = require('../../jdl/jhipster/message-broker-types');

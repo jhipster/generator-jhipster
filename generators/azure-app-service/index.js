@@ -23,7 +23,7 @@ const exec = require('child_process').exec;
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
-const statistics = require('../statistics');
+const statistics = require('../statistics.cjs');
 const { defaultConfig } = require('../generator-defaults.cjs');
 
 // Global constants

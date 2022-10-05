@@ -27,7 +27,7 @@ const glob = require('glob');
 
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
-const statistics = require('../statistics');
+const statistics = require('../statistics.cjs');
 const constants = require('../generator-constants.cjs');
 const cacheProviderOptions = require('../../jdl/jhipster/cache-types');
 const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');

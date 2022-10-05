@@ -26,7 +26,7 @@ const _ = require('lodash');
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const { GENERATOR_GAE } = require('../generator-list.cjs');
-const statistics = require('../statistics');
+const statistics = require('../statistics.cjs');
 const dockerPrompts = require('../base-docker/docker-prompts.cjs');
 const constants = require('../generator-constants.cjs');
 const cacheProviders = require('../../jdl/jhipster/cache-types');

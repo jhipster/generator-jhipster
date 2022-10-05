@@ -23,7 +23,7 @@ import _ from 'lodash';
 import BaseApplication from '../base-application/generator.cjs';
 
 import { askForLanguages, askI18n } from './prompts.mjs';
-import statistics from '../statistics.js';
+import statistics from '../statistics.cjs';
 import constants from '../generator-constants.cjs';
 
 import generatorDefaults from '../generator-defaults.cjs';

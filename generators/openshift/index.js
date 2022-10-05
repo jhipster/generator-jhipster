@@ -34,7 +34,7 @@ const databaseTypes = require('../../jdl/jhipster/database-types');
 const writeFiles = require('./files').writeFiles;
 const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../base-docker/docker-base.cjs');
 const { setupKubernetesConstants } = require('../kubernetes/kubernetes-base.cjs');
-const statistics = require('../statistics');
+const statistics = require('../statistics.cjs');
 
 const NO_DATABASE = databaseTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;

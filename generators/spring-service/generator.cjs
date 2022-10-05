@@ -22,7 +22,7 @@ const _ = require('lodash');
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const constants = require('../generator-constants.cjs');
-const statistics = require('../statistics');
+const statistics = require('../statistics.cjs');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const { GENERATOR_SPRING_SERVICE } = require('../generator-list.cjs');
 

@@ -38,7 +38,7 @@ const {
   setupHelmConstants,
   derivedKubernetesPlatformProperties,
 } = require('../kubernetes/kubernetes-base.cjs');
-const statistics = require('../statistics');
+const statistics = require('../statistics.cjs');
 const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
 
 const { K8S } = GeneratorTypes;

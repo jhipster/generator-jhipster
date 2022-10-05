@@ -28,7 +28,7 @@ const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArg
 const { createImporterFromContent, createImporterFromFiles } = require('../jdl/jdl-importer');
 
 const { packageJson: packagejs } = require('../lib/index.js');
-const statistics = require('../generators/statistics');
+const statistics = require('../generators/statistics.cjs');
 const { JHIPSTER_CONFIG_DIR } = require('../generators/generator-constants.cjs');
 
 const jhipsterCli = require.resolve('./cli.js');
