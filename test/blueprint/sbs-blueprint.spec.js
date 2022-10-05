@@ -1,4 +1,3 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const Generator = require('yeoman-generator');
@@ -7,6 +6,7 @@ const { MYSQL } = require('../../jdl/jhipster/database-types');
 const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
 const { JWT } = require('../../jdl/jhipster/authentication-types');
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { getGenerator } = require('../support/index.cjs');
 
 const mockBlueprintSubGen = class extends Generator {
   constructor(args, opts, features) {
@@ -31,7 +31,7 @@ const mockBlueprintSubGen = class extends Generator {
 describe('JHipster client generator with sbs blueprint', () => {
   before(done => {
     helpers
-      .run(path.join(__dirname, '../../generators/client/index.mjs'))
+      .run(getGenerator('client'))
       .withOptions({
         fromCli: true,
         build: MAVEN,

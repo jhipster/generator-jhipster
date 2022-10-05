@@ -143,6 +143,4 @@ const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config } =
   return generator;
 };
 
-module.exports = {
-  createMockedConfig,
-};
+module.exports = createMockedConfig;

@@ -1,8 +1,8 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const { jestExpect: expect } = require('mocha-expect-snapshot');
+const { getTemplatePath, getGenerator } = require('./support/index.cjs');
 
 const expectedFiles = {
   travis: ['.travis.yml'],
@@ -23,9 +23,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -52,9 +52,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -81,9 +81,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -118,9 +118,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -159,9 +159,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -188,9 +188,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -216,9 +216,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/npm-skip-server'), dir);
+            fse.copySync(getTemplatePath('ci-cd/npm-skip-server'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -242,9 +242,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -279,9 +279,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -316,9 +316,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ autoconfigureGitlab: true })
           .run();
@@ -346,9 +346,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -372,9 +372,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -402,9 +402,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -447,9 +447,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -475,9 +475,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -501,9 +501,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -526,9 +526,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -551,9 +551,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ autoconfigureAzure: true })
           .run();
@@ -575,9 +575,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -597,9 +597,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -619,9 +619,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -662,9 +662,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -698,9 +698,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ autoconfigureGithub: true })
           .run();
@@ -722,9 +722,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -751,9 +751,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -780,9 +780,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({
@@ -805,9 +805,9 @@ describe('JHipster CI-CD Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/ci-cd/index.mjs'))
+          .create(getGenerator('ci-cd'))
           .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+            fse.copySync(getTemplatePath('ci-cd/gradle-ngx-npm'), dir);
           })
           .withOptions({ skipChecks: true })
           .withPrompts({

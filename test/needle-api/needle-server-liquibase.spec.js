@@ -4,6 +4,7 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const ServerGenerator = require('../../generators/server');
 const constants = require('../../generators/generator-constants.cjs');
+const { getGenerator } = require('../support/index.cjs');
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
@@ -80,7 +81,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
 describe('needle API server liquibase: JHipster server generator with blueprint', () => {
   before(done => {
     helpers
-      .run(path.join(__dirname, '../../generators/server'))
+      .run(getGenerator('server'))
       .inTmpDir(dir => {
         fse.copySync(
           path.join(__dirname, 'templates/src/main/resources/config/liquibase/changelog/'),

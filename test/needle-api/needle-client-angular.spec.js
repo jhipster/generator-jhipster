@@ -1,6 +1,6 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
+const { getGenerator } = require('../support/index.cjs');
 
 const ClientGenerator = require('../../generators/client/index.cjs');
 const constants = require('../../generators/generator-constants.cjs');
@@ -53,7 +53,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
   let runResult;
 
   before(async () => {
-    runContext = helpers.create(path.join(__dirname, '../../generators/client/index.mjs'));
+    runContext = helpers.create(getGenerator('client'));
     runResult = await runContext
       .withOptions({
         fromCli: true,

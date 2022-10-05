@@ -1,9 +1,10 @@
 const path = require('path');
 const fse = require('fs-extra');
 const helpers = require('yeoman-test');
-const { createMockedConfig } = require('../support/mock-config.cjs');
+const createMockedConfig = require('../support/mock-config.cjs');
 
 const { SERVER_MAIN_RES_DIR } = require('../../generators/generator-constants.cjs');
+const { getEntityTemplatePath, getGenerator } = require('../support/index.cjs');
 
 describe('jhipster:app database changelogs', () => {
   context('when regenerating the application', () => {
@@ -11,10 +12,10 @@ describe('jhipster:app database changelogs', () => {
       let runResult;
       before(() =>
         helpers
-          .create(require.resolve('../../generators/app/index.mjs'))
+          .create(getGenerator('app'))
           .doInDir(dir => {
             createMockedConfig('05-cassandra', dir, { appDir: '' });
-            fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
+            fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
           })
           .withOptions({ withEntities: true, force: true, skipClient: true })
           .run()

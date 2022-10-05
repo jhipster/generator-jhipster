@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
@@ -9,6 +8,7 @@ const { MYSQL, SQL, H2_MEMORY } = require('../../jdl/jhipster/database-types');
 const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
 const { JWT } = require('../../jdl/jhipster/authentication-types');
 const { EHCACHE } = require('../../jdl/jhipster/cache-types');
+const { getGenerator } = require('../support/index.cjs');
 
 const mockClientBlueprintSubGen = class extends ClientGenerator {
   constructor(args, opts, features) {
@@ -154,7 +154,7 @@ describe('JHipster entity generator with multiple blueprints', () => {
     describe(`generate entity with multiple blueprints option '${blueprints}'`, () => {
       before(done => {
         helpers
-          .run(path.join(__dirname, '../../generators/app/index.mjs'))
+          .run(getGenerator('app'))
           .withOptions({
             fromCli: true,
             skipInstall: true,

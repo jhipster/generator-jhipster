@@ -33,14 +33,7 @@ const { OptionNames } = require('../../jdl/jhipster/application-options');
 const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
 
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = OptionNames;
-const {
-  GENERATOR_COMMON,
-  GENERATOR_ENTITIES,
-  GENERATOR_LANGUAGES,
-  GENERATOR_CLIENT,
-  GENERATOR_PAGE,
-  GENERATOR_SERVER,
-} = require('../generator-list.cjs');
+const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT, GENERATOR_PAGE, GENERATOR_SERVER } = require('../generator-list.cjs');
 
 module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -474,11 +467,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         this.blueprints && (config.blueprints = this.blueprints);
         this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
         this.config.set(config);
-      },
-
-      async composeEntities() {
-        if (!this.options.withEntities) return;
-        await this.composeWithJHipster(GENERATOR_ENTITIES, { skipInstall: true }, true);
       },
 
       async composePages() {

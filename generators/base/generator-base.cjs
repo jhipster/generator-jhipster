@@ -104,6 +104,8 @@ class JHipsterBaseGenerator extends PrivateBase {
   /** @type {Record<string, any>} */
   dependabotPackageJson;
 
+  sbsBlueprint;
+
   constructor(args, options, features) {
     super(args, options, features);
 

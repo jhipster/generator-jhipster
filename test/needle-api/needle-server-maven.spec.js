@@ -1,7 +1,7 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const ServerGenerator = require('../../generators/server');
+const { getGenerator } = require('../support/index.cjs');
 
 const mockBlueprintSubGen = class extends ServerGenerator {
   constructor(args, opts, features) {
@@ -93,7 +93,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
 describe('needle API server maven: JHipster server generator with blueprint', () => {
   before(done => {
     helpers
-      .run(path.join(__dirname, '../../generators/server'))
+      .run(getGenerator('server'))
       .withOptions({
         fromCli: true,
         skipInstall: true,

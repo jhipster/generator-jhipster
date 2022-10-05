@@ -1,21 +1,21 @@
-import path, { dirname } from 'path';
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import fse from 'fs-extra';
-import { fileURLToPath } from 'url';
 
 import LanguagesGenerator from '../../generators/languages/index.mjs';
 import constants from '../../generators/generator-constants.cjs';
+import { getGenerator, getTemplatePath } from '../support/index.mjs';
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const generatorPath = getGenerator('languages');
 
-const generatorPath = path.join(__dirname, '../../generators/languages/index.mjs');
-
-const mockBlueprintSubGen = class extends LanguagesGenerator {
+/**
+ * @class
+ * @extends {LanguagesGenerator}
+ */
+class mockBlueprintSubGen extends LanguagesGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 
@@ -45,14 +45,14 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
     };
     return { ...customPhaseSteps };
   }
-};
+}
 
 describe('needle API i18n: JHipster language generator with blueprint', () => {
   before(async () => {
     await helpers
       .run(generatorPath)
       .inTmpDir(dir => {
-        fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
+        fse.copySync(getTemplatePath('ngx-blueprint'), dir);
       })
       .withOptions({
         fromCli: true,

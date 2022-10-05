@@ -1,9 +1,10 @@
-const path = require('path');
-const fse = require('fs-extra');
-const helpers = require('yeoman-test');
+import path from 'path';
+import fse from 'fs-extra';
+import helpers from 'yeoman-test';
 
-const { SERVER_MAIN_RES_DIR } = require('../../generators/generator-constants.cjs');
-const { createMockedConfig } = require('../support/mock-config.cjs');
+import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
+import createMockedConfig from '../support/mock-config.cjs';
+import { getEntityTemplatePath, getGenerator } from '../support/index.mjs';
 
 describe('jhipster:entity database changelogs', () => {
   context('when regenerating the entity', () => {
@@ -11,10 +12,10 @@ describe('jhipster:entity database changelogs', () => {
       let runResult;
       before(() =>
         helpers
-          .create(require.resolve('../../generators/entity'))
+          .create(getGenerator('entity'))
           .doInDir(dir => {
             createMockedConfig('05-cassandra', dir, { appDir: '' });
-            fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
+            fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
           })
           .withArguments(['Foo'])
           .withOptions({ regenerate: true, force: true })
@@ -34,11 +35,11 @@ describe('jhipster:entity database changelogs', () => {
       let runResult;
       before(() =>
         helpers
-          .create(require.resolve('../../generators/entity'))
+          .create(getGenerator('entity'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir, { appDir: '' });
             const jsonFile = path.join(dir, '.jhipster/Foo.json');
-            fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), jsonFile);
+            fse.copySync(getEntityTemplatePath('Simple'), jsonFile);
             fse.writeJsonSync(jsonFile, {
               ...fse.readJsonSync(jsonFile),
               microservicePath: 'microservice1',

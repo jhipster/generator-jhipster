@@ -2,7 +2,8 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const { jestExpect: expect } = require('mocha-expect-snapshot');
 
-const { createMockedConfig } = require('./support/mock-config.cjs');
+const createMockedConfig = require('./support/mock-config.cjs');
+const { getGenerator } = require('./support/index.cjs');
 
 const expectedFiles = {
   eurekaregistry: ['./registry-knative/jhipster-registry.yml', './registry-knative/application-configmap.yml'],
@@ -103,7 +104,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
@@ -143,7 +144,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
             createMockedConfig('02-mysql', dir);
@@ -184,7 +185,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
@@ -224,7 +225,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
@@ -262,7 +263,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
             createMockedConfig('03-psql', dir);
@@ -306,7 +307,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
             createMockedConfig('02-mysql', dir);
@@ -363,7 +364,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
@@ -405,7 +406,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
@@ -447,7 +448,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
@@ -487,7 +488,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
             createMockedConfig('02-mysql', dir);
@@ -530,7 +531,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
@@ -572,7 +573,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })
@@ -617,7 +618,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
             createMockedConfig('03-psql', dir);
@@ -665,7 +666,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
             createMockedConfig('02-mysql', dir);
@@ -725,7 +726,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('02-mysql', dir);
           })
@@ -770,7 +771,7 @@ describe('JHipster Knative Sub Generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .create(require.resolve('../generators/kubernetes-knative'))
+          .create(getGenerator('kubernetes-knative'))
           .doInDir(dir => {
             createMockedConfig('01-gateway', dir);
           })

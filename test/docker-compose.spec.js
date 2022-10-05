@@ -4,7 +4,8 @@ const { jestExpect: expect } = require('mocha-expect-snapshot');
 const monitoringTypes = require('../jdl/jhipster/monitoring-types');
 const { MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
-const { createMockedConfig } = require('./support/mock-config.cjs');
+const createMockedConfig = require('./support/mock-config.cjs');
+const { getGenerator } = require('./support/index.cjs');
 
 const NO_MONITORING = monitoringTypes.NO;
 
@@ -19,7 +20,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
@@ -53,7 +54,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
         })
@@ -87,7 +88,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
         })
@@ -116,7 +117,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -151,7 +152,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -188,7 +189,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -225,7 +226,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -263,7 +264,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -300,7 +301,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -336,7 +337,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('05-cassandra', dir);
@@ -370,7 +371,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('08-monolith', dir);
         })
@@ -400,7 +401,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -437,7 +438,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('10-couchbase', dir);
@@ -471,7 +472,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
+        .create(getGenerator('docker-compose'))
         .doInDir(dir => {
           createMockedConfig('12-oracle', dir);
         })

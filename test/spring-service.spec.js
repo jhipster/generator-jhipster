@@ -1,12 +1,12 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const constants = require('../generators/generator-constants.cjs');
+const { getGenerator, getTemplatePath } = require('./support/index.cjs');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-const generator = require.resolve('../generators/spring-service/index.mjs');
+const generator = getGenerator('spring-service');
 
 describe('JHipster generator service', () => {
   describe('creates service without interface', () => {
@@ -14,7 +14,7 @@ describe('JHipster generator service', () => {
       helpers
         .run(generator)
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
+          fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])
         .withPrompts({
@@ -37,7 +37,7 @@ describe('JHipster generator service', () => {
       helpers
         .run(generator)
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
+          fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])
         .withPrompts({
@@ -59,7 +59,7 @@ describe('JHipster generator service', () => {
       helpers
         .run(generator)
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
+          fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])
         .withOptions({ default: true })

@@ -7,6 +7,7 @@ const { JWT } = require('../../jdl/jhipster/authentication-types');
 const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { getGenerator } = require('../support/index.cjs');
 
 const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:client', 'jhipster:languages', 'jhipster:entity'];
 
@@ -16,7 +17,7 @@ describe('jhipster:app prompts', () => {
       let runResult;
       before(() => {
         return helpers
-          .create(require.resolve('../../generators/app/index.mjs'))
+          .create(getGenerator('app'))
           .withOptions({
             fromCli: true,
             skipInstall: true,

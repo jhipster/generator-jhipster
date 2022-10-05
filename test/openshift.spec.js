@@ -2,7 +2,8 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const { jestExpect: expect } = require('mocha-expect-snapshot');
 
-const { createMockedConfig } = require('./support/mock-config.cjs');
+const createMockedConfig = require('./support/mock-config.cjs');
+const { getGenerator } = require('./support/index.cjs');
 
 const expectedFiles = {
   sccconfig: ['./ocp/registry/scc-config.yml'],
@@ -26,7 +27,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/openshift'))
+        .create(getGenerator('openshift'))
         .inTmpDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
@@ -63,7 +64,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/openshift'))
+        .create(getGenerator('openshift'))
         .inTmpDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -101,7 +102,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/openshift'))
+        .create(getGenerator('openshift'))
         .inTmpDir(dir => {
           createMockedConfig('02-mysql', dir);
           createMockedConfig('03-psql', dir);
@@ -142,7 +143,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/openshift'))
+        .create(getGenerator('openshift'))
         .inTmpDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -195,7 +196,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/openshift'))
+        .create(getGenerator('openshift'))
         .inTmpDir(dir => {
           createMockedConfig('08-monolith', dir);
         })

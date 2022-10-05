@@ -2,7 +2,8 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const { jestExpect: expect } = require('mocha-expect-snapshot');
 
-const { createMockedConfig } = require('./support/mock-config.cjs');
+const createMockedConfig = require('./support/mock-config.cjs');
+const { getGenerator } = require('./support/index.cjs');
 
 const expectedFiles = {
   eurekaregistry: ['./registry-k8s/jhipster-registry.yml', './registry-k8s/application-configmap.yml'],
@@ -47,7 +48,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
@@ -89,7 +90,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -131,7 +132,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
         })
@@ -172,7 +173,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
@@ -210,7 +211,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
           createMockedConfig('03-psql', dir);
@@ -255,7 +256,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -313,7 +314,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('08-monolith', dir);
         })
@@ -351,7 +352,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('09-kafka', dir);
         })
@@ -389,7 +390,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
         })
@@ -432,7 +433,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
@@ -473,7 +474,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes'))
+        .create(getGenerator('kubernetes'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);

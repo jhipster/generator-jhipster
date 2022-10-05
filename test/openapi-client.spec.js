@@ -1,8 +1,8 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const { jestExpect: expect } = require('mocha-expect-snapshot');
+const { getTemplatePath, getGenerator } = require('./support/index.cjs');
 
 const basePackage = 'src/main/java/com/mycompany/myapp';
 
@@ -14,10 +14,10 @@ describe('JHipster OpenAPI Client Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/openapi-client'))
+        .create(getGenerator('openapi-client'))
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/openapi-client/microservice-simple'), dir);
-          fse.copySync(path.join(__dirname, './templates/openapi-client'), dir);
+          fse.copySync(getTemplatePath('openapi-client/microservice-simple'), dir);
+          fse.copySync(getTemplatePath('openapi-client'), dir);
         })
         .withOptions({ skipChecks: true })
         .withPrompts({
@@ -40,10 +40,10 @@ describe('JHipster OpenAPI Client Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/openapi-client'))
+        .create(getGenerator('openapi-client'))
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/openapi-client/microservice-with-client'), dir);
-          fse.copySync(path.join(__dirname, './templates/openapi-client'), dir);
+          fse.copySync(getTemplatePath('openapi-client/microservice-with-client'), dir);
+          fse.copySync(getTemplatePath('openapi-client'), dir);
         })
         .withOptions({ skipChecks: true, regen: true })
         .run();

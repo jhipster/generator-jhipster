@@ -12,6 +12,7 @@ const { createProgram, buildJHipster } = require('../../cli/program');
 const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
 const { logger } = require('../../cli/utils');
 const BaseGenerator = require('../../generators/base/generator-base.cjs');
+const { getTemplatePath } = require('../support/index.cjs');
 
 const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.js'));
 
@@ -373,7 +374,7 @@ describe('jhipster cli', () => {
         let stdout;
         beforeEach(done => {
           const tmpdir = process.cwd();
-          copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
+          copyBlueprint(getTemplatePath('blueprint-cli'), tmpdir, 'cli');
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
@@ -394,8 +395,8 @@ describe('jhipster cli', () => {
         let stdout;
         beforeEach(done => {
           const tmpdir = process.cwd();
-          copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
-          copyBlueprint(path.join(__dirname, '../templates/blueprint-cli-shared'), tmpdir, 'cli-shared');
+          copyBlueprint(getTemplatePath('blueprint-cli'), tmpdir, 'cli');
+          copyBlueprint(getTemplatePath('blueprint-cli-shared'), tmpdir, 'cli-shared');
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
@@ -417,7 +418,7 @@ describe('jhipster cli', () => {
         let stdout;
         beforeEach(done => {
           const tmpdir = process.cwd();
-          copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
+          copyBlueprint(getTemplatePath('blueprint-cli'), tmpdir, 'cli');
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
@@ -439,7 +440,7 @@ describe('jhipster cli', () => {
         let stdout;
         beforeEach(done => {
           const tmpdir = process.cwd();
-          copyBlueprint(path.join(__dirname, '../templates/blueprint-cli-shared'), tmpdir, 'cli-shared');
+          copyBlueprint(getTemplatePath('blueprint-cli-shared'), tmpdir, 'cli-shared');
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['bar', '--blueprints', 'cli-shared', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
@@ -509,7 +510,7 @@ describe('jhipster cli', () => {
         let exitCode;
         beforeEach(done => {
           const tmpdir = process.cwd();
-          copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
+          copyBlueprint(getTemplatePath('blueprint-cli'), tmpdir, 'cli');
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {
@@ -535,7 +536,7 @@ describe('jhipster cli', () => {
         let exitCode;
         beforeEach(done => {
           const tmpdir = process.cwd();
-          copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
+          copyBlueprint(getTemplatePath('blueprint-cli'), tmpdir, 'cli');
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--foo-bar'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {

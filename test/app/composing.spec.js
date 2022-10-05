@@ -5,6 +5,7 @@ const { createEnv } = require('yeoman-environment');
 
 const { dryRunHelpers: helpers } = require('../utils/utils');
 const { JHIPSTER_CONFIG_DIR } = require('../../generators/generator-constants.cjs');
+const { getGenerator } = require('../support/index.cjs');
 
 const mockedComposedGenerators = [
   'jhipster:common',
@@ -24,7 +25,7 @@ describe('jhipster:app composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
+        runContext = helpers.create(getGenerator('app'));
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
@@ -73,7 +74,7 @@ describe('jhipster:app composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
+        runContext = helpers.create(getGenerator('app'));
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
@@ -123,7 +124,7 @@ describe('jhipster:app composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
+        runContext = helpers.create(getGenerator('app'));
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
@@ -170,7 +171,7 @@ describe('jhipster:app composing', () => {
         let runContext;
         let runResult;
         before(async () => {
-          runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
+          runContext = helpers.create(getGenerator('app'));
           runResult = await runContext
             .withOptions({
               baseName: 'jhipster',
@@ -209,7 +210,7 @@ describe('jhipster:app composing', () => {
           assert(LanguagesGenerator.calledOnce);
         });
         it('should compose with entities generator once', () => {
-          assert.equal(runResult.mockedGenerators['jhipster:entities'].callCount, 1);
+          assert.equal(runResult.mockedGenerators['jhipster:entities'].callCount, 0);
         });
         it('should not compose with entity generator', () => {
           const MockedGenerator = runResult.mockedGenerators['jhipster:entity'];
@@ -225,7 +226,7 @@ describe('jhipster:app composing', () => {
         let runContext;
         let runResult;
         before(async () => {
-          runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
+          runContext = helpers.create(getGenerator('app'));
           runResult = await runContext
             .withOptions({
               baseName: 'jhipster',
@@ -280,7 +281,7 @@ describe('jhipster:app composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
+        runContext = helpers.create(getGenerator('app'));
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',

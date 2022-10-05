@@ -3,7 +3,8 @@ const fse = require('fs-extra');
 const helpers = require('yeoman-test');
 
 const { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } = require('../../generators/generator-constants.cjs');
-const { createMockedConfig } = require('../support/mock-config.cjs');
+const createMockedConfig = require('../support/mock-config.cjs');
+const { getTemplatePath, getEntityTemplatePath, getGenerator } = require('../support/index.cjs');
 
 const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };
 
@@ -11,21 +12,17 @@ describe('jhipster:entity --single-entity', () => {
   context('when regenerating', () => {
     describe('with default configuration', () => {
       let runResult;
-      before(() =>
-        helpers
-          .create(require.resolve('../../generators/entity'))
+      before(async () => {
+        runResult = await helpers
+          .run(getGenerator('entity'))
           .doInDir(dir => {
-            fse.copySync(path.join(__dirname, '../templates/default'), dir);
-            fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
-            fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple2.json'), path.join(dir, '.jhipster/Bar.json'));
+            fse.copySync(getTemplatePath('default'), dir);
+            fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
+            fse.copySync(getEntityTemplatePath('Simple2'), path.join(dir, '.jhipster/Bar.json'));
           })
           .withArguments(['Foo'])
-          .withOptions({ ...DEFAULT_TEST_OPTIONS, regenerate: true, force: true, singleEntity: true })
-          .run()
-          .then(result => {
-            runResult = result;
-          })
-      );
+          .withOptions({ ...DEFAULT_TEST_OPTIONS, regenerate: true, force: true, singleEntity: true });
+      });
 
       after(() => runResult.cleanup());
 
@@ -50,11 +47,11 @@ describe('jhipster:entity --single-entity', () => {
       let runResult;
       before(() =>
         helpers
-          .create(require.resolve('../../generators/entity'))
+          .create(getGenerator('entity'))
           .doInDir(dir => {
             createMockedConfig('05-cassandra', dir, { appDir: '' });
-            fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
-            fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple2.json'), path.join(dir, '.jhipster/Bar.json'));
+            fse.copySync(getEntityTemplatePath('Simple'), path.join(dir, '.jhipster/Foo.json'));
+            fse.copySync(getEntityTemplatePath('Simple2'), path.join(dir, '.jhipster/Bar.json'));
           })
           .withArguments(['Foo'])
           .withOptions({ ...DEFAULT_TEST_OPTIONS, regenerate: true, force: true, singleEntity: true })

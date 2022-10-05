@@ -20,7 +20,7 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 
-import BaseApplication from '../base-application/generator.cjs';
+import BaseApplicationGenerator from '../base-application/generator.cjs';
 
 import { askForLanguages, askI18n } from './prompts.mjs';
 import statistics from '../statistics.cjs';
@@ -38,7 +38,13 @@ const { writeEntityFiles } = entityFiles;
 const { translationDefaultConfig } = generatorDefaults;
 const { SERVER_TEST_SRC_DIR } = constants;
 
-export default class LanguagesGenerator extends BaseApplication {
+/**
+ * This is the base class for a generator that generates entities.
+ *
+ * @class
+ * @extends {BaseApplicationGenerator}
+ */
+export default class LanguagesGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -121,7 +127,7 @@ export default class LanguagesGenerator extends BaseApplication {
     };
   }
 
-  get [BaseApplication.INITIALIZING]() {
+  get [BaseApplicationGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
     return this.initializing;
   }
@@ -142,7 +148,7 @@ export default class LanguagesGenerator extends BaseApplication {
     };
   }
 
-  get [BaseApplication.PROMPTING]() {
+  get [BaseApplicationGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
     return this.prompting;
   }
@@ -177,7 +183,7 @@ export default class LanguagesGenerator extends BaseApplication {
     };
   }
 
-  get [BaseApplication.CONFIGURING]() {
+  get [BaseApplicationGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
     return this.configuring;
   }
@@ -204,7 +210,7 @@ export default class LanguagesGenerator extends BaseApplication {
     };
   }
 
-  get [BaseApplication.PREPARING]() {
+  get [BaseApplicationGenerator.PREPARING]() {
     if (this.delegateToBlueprint) return {};
     return this.preparing;
   }
@@ -217,7 +223,7 @@ export default class LanguagesGenerator extends BaseApplication {
     };
   }
 
-  get [BaseApplication.DEFAULT]() {
+  get [BaseApplicationGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
     return this.default;
   }
@@ -252,7 +258,7 @@ export default class LanguagesGenerator extends BaseApplication {
     };
   }
 
-  get [BaseApplication.WRITING]() {
+  get [BaseApplicationGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this.writing;
   }
@@ -263,7 +269,7 @@ export default class LanguagesGenerator extends BaseApplication {
     };
   }
 
-  get [BaseApplication.WRITING_ENTITIES]() {
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     if (this.delegateToBlueprint) return {};
     return this.writingEntities;
   }
@@ -295,7 +301,7 @@ export default class LanguagesGenerator extends BaseApplication {
     };
   }
 
-  get [BaseApplication.POST_WRITING]() {
+  get [BaseApplicationGenerator.POST_WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this.postWriting;
   }

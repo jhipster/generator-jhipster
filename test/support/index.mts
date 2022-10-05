@@ -4,6 +4,8 @@ const { basicTests, testBlueprintSupport, testOptions } = testSupport;
 
 export { basicTests, testBlueprintSupport, testOptions };
 
+export * from './get-generator.mjs';
+export * from './get-template-path.mjs';
 export * from './application-samples.mjs';
 export * from './entity-samples.mjs';
 export * from './client-samples.mjs';

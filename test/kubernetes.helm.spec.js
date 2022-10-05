@@ -2,7 +2,8 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const { jestExpect: expect } = require('mocha-expect-snapshot');
 
-const { createMockedConfig } = require('./support/mock-config.cjs');
+const createMockedConfig = require('./support/mock-config.cjs');
+const { getGenerator } = require('./support/index.cjs');
 
 const expectedFiles = {
   csvcfiles: ['./csvc-helm/Chart.yaml', './csvc-helm/requirements.yaml', './csvc-helm/values.yaml', './csvc-helm/templates/_helpers.tpl'],
@@ -77,7 +78,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes-helm'))
+        .create(getGenerator('kubernetes-helm'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
@@ -116,7 +117,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes-helm'))
+        .create(getGenerator('kubernetes-helm'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -158,7 +159,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes-helm'))
+        .create(getGenerator('kubernetes-helm'))
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
         })
@@ -199,7 +200,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes-helm'))
+        .create(getGenerator('kubernetes-helm'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })
@@ -245,7 +246,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes-helm'))
+        .create(getGenerator('kubernetes-helm'))
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
           createMockedConfig('03-psql', dir);
@@ -292,7 +293,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes-helm'))
+        .create(getGenerator('kubernetes-helm'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
           createMockedConfig('02-mysql', dir);
@@ -351,7 +352,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes-helm'))
+        .create(getGenerator('kubernetes-helm'))
         .doInDir(dir => {
           createMockedConfig('08-monolith', dir);
         })
@@ -388,7 +389,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes-helm'))
+        .create(getGenerator('kubernetes-helm'))
         .doInDir(dir => {
           createMockedConfig('09-kafka', dir);
         })
@@ -424,7 +425,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes-helm'))
+        .create(getGenerator('kubernetes-helm'))
         .doInDir(dir => {
           createMockedConfig('02-mysql', dir);
         })
@@ -468,7 +469,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
-        .create(require.resolve('../generators/kubernetes-helm'))
+        .create(getGenerator('kubernetes-helm'))
         .doInDir(dir => {
           createMockedConfig('01-gateway', dir);
         })

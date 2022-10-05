@@ -6,6 +6,7 @@ const fse = require('fs-extra');
 const { jestExpect } = require('mocha-expect-snapshot');
 const jhipsterVersion = require('../../package.json').version;
 const EnvironmentBuilder = require('../../cli/environment-builder');
+const { getGenerator, getTemplatePath } = require('../support/index.cjs');
 
 describe('JHipster application generator with blueprint', () => {
   describe('generate application with a version-compatible blueprint', () => {
@@ -24,7 +25,7 @@ describe('JHipster application generator with blueprint', () => {
           };
           const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
           fse.ensureDirSync(fakeBlueprintModuleDir);
-          fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
+          fse.copySync(getTemplatePath('fake-blueprint'), fakeBlueprintModuleDir);
           fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
         })
         .withOptions({
@@ -56,7 +57,7 @@ describe('JHipster application generator with blueprint', () => {
     it('throws an error', () =>
       jestExpect(() =>
         helpers
-          .run(path.join(__dirname, '../../generators/app/index.mjs'))
+          .run(getGenerator('app'))
           .inTmpDir(dir => {
             // Fake the presence of the blueprint in node_modules
             const packagejs = {
@@ -68,7 +69,7 @@ describe('JHipster application generator with blueprint', () => {
             };
             const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
             fse.ensureDirSync(fakeBlueprintModuleDir);
-            fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
+            fse.copySync(getTemplatePath('fake-blueprint'), fakeBlueprintModuleDir);
             fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
           })
           .withOptions({
@@ -84,7 +85,7 @@ describe('JHipster application generator with blueprint', () => {
   describe('generating application with a git blueprint', () => {
     it('should succeed', () =>
       helpers
-        .run(path.join(__dirname, '../../generators/app/index.mjs'))
+        .run(getGenerator('app'))
         .inTmpDir(dir => {
           // Fake the presence of the blueprint in node_modules
           const packagejs = {
@@ -96,7 +97,7 @@ describe('JHipster application generator with blueprint', () => {
           };
           const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
           fse.ensureDirSync(fakeBlueprintModuleDir);
-          fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
+          fse.copySync(getTemplatePath('fake-blueprint'), fakeBlueprintModuleDir);
           fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
         })
         .withOptions({
@@ -123,7 +124,7 @@ describe('JHipster application generator with blueprint', () => {
           };
           const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
           fse.ensureDirSync(fakeBlueprintModuleDir);
-          fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
+          fse.copySync(getTemplatePath('fake-blueprint'), fakeBlueprintModuleDir);
           fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
         })
         .withOptions({
@@ -155,7 +156,7 @@ describe('JHipster application generator with blueprint', () => {
     it('throws an error', () =>
       jestExpect(() =>
         helpers
-          .run(path.join(__dirname, '../../generators/app/index.mjs'))
+          .run(getGenerator('app'))
           .inTmpDir(dir => {
             // Fake the presence of the blueprint in node_modules
             const packagejs = {
@@ -167,7 +168,7 @@ describe('JHipster application generator with blueprint', () => {
             };
             const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
             fse.ensureDirSync(fakeBlueprintModuleDir);
-            fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
+            fse.copySync(getTemplatePath('fake-blueprint'), fakeBlueprintModuleDir);
             fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
           })
           .withOptions({

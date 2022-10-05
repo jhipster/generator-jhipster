@@ -1,8 +1,8 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const ServerGenerator = require('../../generators/server');
 const constants = require('../../generators/generator-constants.cjs');
+const { getGenerator } = require('../support/index.cjs');
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
@@ -34,7 +34,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
 describe('needle API server log: JHipster server generator with blueprint', () => {
   before(done => {
     helpers
-      .run(path.join(__dirname, '../../generators/server'))
+      .run(getGenerator('server'))
       .withOptions({
         fromCli: true,
         skipInstall: true,

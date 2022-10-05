@@ -5,6 +5,7 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const EnvironmentBuilder = require('../../cli/environment-builder');
+const { getTemplatePath } = require('../support/index.cjs');
 
 describe('JHipster application generator with scoped blueprint', () => {
   describe('generate monolith application with scoped blueprint', () => {
@@ -16,7 +17,7 @@ describe('JHipster application generator with scoped blueprint', () => {
           // Fake the presence of the blueprint in node_modules
           const fakeBlueprintModuleDir = path.join(dir, 'node_modules/@jhipster/generator-jhipster-scoped-blueprint');
           fse.ensureDirSync(fakeBlueprintModuleDir);
-          fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
+          fse.copySync(getTemplatePath('fake-blueprint'), fakeBlueprintModuleDir);
         })
         .withOptions({
           fromCli: true,

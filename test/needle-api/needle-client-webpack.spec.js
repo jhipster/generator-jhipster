@@ -1,8 +1,8 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const ClientGenerator = require('../../generators/client/index.cjs');
 const constants = require('../../generators/generator-constants.cjs');
+const { getGenerator } = require('../support/index.cjs');
 
 const { ANGULAR, VUE, REACT } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
@@ -36,7 +36,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
 describe('needle API Webpack: JHipster client generator with blueprint', () => {
   function generateAppWithClientFramework(clientFramework) {
     return helpers
-      .create(path.join(__dirname, '../../generators/client/index.mjs'))
+      .create(getGenerator('client'))
       .withOptions({
         fromCli: true,
         build: 'maven',

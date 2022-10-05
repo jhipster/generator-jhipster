@@ -1,8 +1,8 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const ServerGenerator = require('../../generators/server');
 const constants = require('../../generators/generator-constants.cjs');
+const { getGenerator } = require('../support/index.cjs');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
@@ -90,7 +90,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
   describe('ehcache', () => {
     before(done => {
       helpers
-        .run(path.join(__dirname, '../../generators/server'))
+        .run(getGenerator('server'))
         .withOptions({
           ...DEFAULT_TEST_OPTIONS,
           blueprint: 'myblueprint',
@@ -140,7 +140,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
   describe('caffeine', () => {
     before(done => {
       helpers
-        .run(path.join(__dirname, '../../generators/server'))
+        .run(getGenerator('server'))
         .withOptions({
           ...DEFAULT_TEST_OPTIONS,
           blueprint: 'myblueprint',
@@ -190,7 +190,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
   describe('infinispan', () => {
     before(done => {
       helpers
-        .run(path.join(__dirname, '../../generators/server'))
+        .run(getGenerator('server'))
         .withOptions({
           ...DEFAULT_TEST_OPTIONS,
           blueprint: 'myblueprint',
@@ -221,7 +221,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
   describe('redis', () => {
     before(done => {
       helpers
-        .run(path.join(__dirname, '../../generators/server'))
+        .run(getGenerator('server'))
         .withOptions({
           ...DEFAULT_TEST_OPTIONS,
           blueprint: 'myblueprint',

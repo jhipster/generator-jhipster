@@ -1,13 +1,13 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const { getTemplatePath, getGenerator } = require('./support/index.cjs');
 
 describe('JHipster generator export jdl', () => {
   describe('exports entities to a JDL file without argument', () => {
     before(async () => {
-      await helpers.run(require.resolve('../generators/export-jdl/index.mjs')).inTmpDir(dir => {
-        fse.copySync(path.join(__dirname, './templates/export-jdl'), dir);
+      await helpers.run(getGenerator('export-jdl')).inTmpDir(dir => {
+        fse.copySync(getTemplatePath('export-jdl'), dir);
       });
     });
 
@@ -19,9 +19,9 @@ describe('JHipster generator export jdl', () => {
   describe('exports entities to a JDL file with file argument', () => {
     before(async () => {
       await helpers
-        .run(require.resolve('../generators/export-jdl/index.mjs'))
+        .run(getGenerator('export-jdl'))
         .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/export-jdl'), dir);
+          fse.copySync(getTemplatePath('export-jdl'), dir);
         })
         .withArguments('custom-app.jdl');
     });

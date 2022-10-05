@@ -1,9 +1,9 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
 const ClientGenerator = require('../../generators/client/index.cjs');
 const constants = require('../../generators/generator-constants.cjs');
+const { getGenerator } = require('../support/index.cjs');
 
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
@@ -43,7 +43,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
 describe('needle API Vue: JHipster client generator with blueprint', () => {
   before(() =>
     helpers
-      .run(path.join(__dirname, '../../generators/client/index.mjs'))
+      .run(getGenerator('client'))
       .withOptions({
         fromCli: true,
         build: 'maven',

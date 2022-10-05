@@ -1,8 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import path, { dirname } from 'path';
 import helpers from 'yeoman-test';
 import sinon from 'sinon';
-import { fileURLToPath } from 'url';
 
 import AppGenerator from '../../generators/app/index.mjs';
 import ClientGenerator from '../../generators/client/index.mjs';
@@ -13,16 +11,14 @@ import databaseTypes from '../../jdl/jhipster/database-types';
 import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
 import authenticationTypes from '../../jdl/jhipster/authentication-types';
 import cacheTypes from '../../jdl/jhipster/cache-types';
+import { getGenerator } from '../support/index.cjs';
 
 const { MYSQL, SQL, H2_MEMORY } = databaseTypes;
 const { ANGULAR } = clientFrameworkTypes;
 const { JWT } = authenticationTypes;
 const { EHCACHE } = cacheTypes;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generatorPath = path.join(__dirname, '../../generators/app/index.cjs');
+const generatorPath = getGenerator('app');
 
 const createMockBlueprint = function (parent, spy) {
   return class extends parent {
