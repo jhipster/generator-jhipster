@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "generator-jhipster",
   "version": "7.9.3",
   "description": "Spring Boot + Angular/React/Vue in one handy generator",
@@ -57,7 +58,7 @@
     "clean": "rimraf dist",
     "compile": "tsc",
     "completion": "tabtab install --name jhipster --auto",
-    "copy-files": "cpy 'generators/**' '!**/*.(js|cjs|mjs|ts|cts|mts|snap)' '!**/__*/*' dist/generators",
+    "copy-files": "cpy 'jdl/package.json' 'dist/jdl/package.json' && cpy 'generators/**' '!**/*.(js|cjs|mjs|ts|cts|mts|snap)' '!**/__*/*' dist/generators",
     "ejslint": "ejslint generators/**/*.ejs",
     "eslint": "eslint . --ext .js,.cjs,.mjs,.ts,.cts,.mts",
     "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
