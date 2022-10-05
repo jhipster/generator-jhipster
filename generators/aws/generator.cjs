@@ -19,8 +19,8 @@
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
-const prompts = require('./prompts');
-const AwsFactory = require('./lib/aws');
+const prompts = require('./prompts.cjs');
+const AwsFactory = require('./lib/aws.cjs');
 const statistics = require('../statistics.cjs');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const { GENERATOR_AWS } = require('../generator-list.cjs');

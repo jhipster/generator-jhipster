@@ -1,7 +1,7 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const ClientGenerator = require('../../generators/client');
+const ClientGenerator = require('../../generators/client/index.cjs');
 const constants = require('../../generators/generator-constants.cjs');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
@@ -32,7 +32,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
 describe('needle API Client: JHipster client generator with blueprint', () => {
   before(done => {
     helpers
-      .run(path.join(__dirname, '../../generators/client'))
+      .run(path.join(__dirname, '../../generators/client/index.mjs'))
       .withOptions({
         fromCli: true,
         defaults: true,

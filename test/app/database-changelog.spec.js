@@ -11,7 +11,7 @@ describe('jhipster:app database changelogs', () => {
       let runResult;
       before(() =>
         helpers
-          .create(require.resolve('../../generators/app'))
+          .create(require.resolve('../../generators/app/index.mjs'))
           .doInDir(dir => {
             createMockedConfig('05-cassandra', dir, { appDir: '' });
             fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));

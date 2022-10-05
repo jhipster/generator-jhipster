@@ -21,8 +21,8 @@ const _ = require('lodash');
 
 const BaseApplicationGenerator = require('../base-application/generator.cjs');
 
-const writeFiles = require('./files').writeFiles;
-const prettierConfigFiles = require('./files').prettierConfigFiles;
+const writeFiles = require('./files.cjs').writeFiles;
+const prettierConfigFiles = require('./files.cjs').prettierConfigFiles;
 const constants = require('../generator-constants.cjs');
 const { packageJson } = require('../../lib/index.cjs');
 const { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list.cjs');

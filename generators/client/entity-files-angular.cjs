@@ -163,7 +163,7 @@ const angularFiles = {
 };
 
 /**
- * @this {import('./client/index.js')}
+ * @this {import('./client/index.mjs')}
  * @returns
  */
 async function writeEntitiesAngularFiles({ application, entities }) {

@@ -4,7 +4,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport, buildClientSamples } from '../../test/support/index.mjs';
-import Generator from './index.js';
+import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
@@ -16,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.js');
+const generatorFile = join(__dirname, 'index.mjs');
 
 const { VUE: clientFramework } = ClientFrameworkTypes;
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } = constants;

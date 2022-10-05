@@ -22,7 +22,7 @@ const _ = require('lodash');
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const cleanup = require('../cleanup.cjs');
-const prompts = require('./prompts');
+const prompts = require('./prompts.cjs');
 const { packageJson: packagejs } = require('../../lib/index.cjs');
 const statistics = require('../statistics.cjs');
 const { appDefaultConfig } = require('../generator-defaults.cjs');

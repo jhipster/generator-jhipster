@@ -45,7 +45,7 @@ relationship ManyToOne {
 }
 `;
 
-const generatorPath = join(__dirname, '../app/index.mjs');
+const generatorPath = join(__dirname, '../app/index.cjs');
 
 describe('jhipster:app --incremental-changelog', function () {
   this.timeout(45000);

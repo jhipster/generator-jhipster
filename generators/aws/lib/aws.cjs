@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const S3 = require('./s3');
-const Rds = require('./rds');
-const Eb = require('./eb');
-const Iam = require('./iam');
+const S3 = require('./s3.cjs');
+const Rds = require('./rds.cjs');
+const Eb = require('./eb.cjs');
+const Iam = require('./iam.cjs');
 
 let Aws;
 let generator;

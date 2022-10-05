@@ -4,7 +4,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
-import Generator from './index.js';
+import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import DatabaseTypes from '../../jdl/jhipster/database-types.js';
@@ -15,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.js');
+const generatorFile = join(__dirname, 'index.mjs');
 
 const { NEO4J: databaseType } = DatabaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

@@ -3,7 +3,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
-const ClientGenerator = require('../../generators/client');
+const ClientGenerator = require('../../generators/client/index.cjs');
 const ServerGenerator = require('../../generators/server');
 const { MYSQL, SQL, H2_MEMORY } = require('../../jdl/jhipster/database-types');
 const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
@@ -154,7 +154,7 @@ describe('JHipster entity generator with multiple blueprints', () => {
     describe(`generate entity with multiple blueprints option '${blueprints}'`, () => {
       before(done => {
         helpers
-          .run(path.join(__dirname, '../../generators/app'))
+          .run(path.join(__dirname, '../../generators/app/index.mjs'))
           .withOptions({
             fromCli: true,
             skipInstall: true,

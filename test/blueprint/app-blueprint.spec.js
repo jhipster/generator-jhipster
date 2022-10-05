@@ -56,7 +56,7 @@ describe('JHipster application generator with blueprint', () => {
     it('throws an error', () =>
       jestExpect(() =>
         helpers
-          .run(path.join(__dirname, '../../generators/app'))
+          .run(path.join(__dirname, '../../generators/app/index.mjs'))
           .inTmpDir(dir => {
             // Fake the presence of the blueprint in node_modules
             const packagejs = {
@@ -84,7 +84,7 @@ describe('JHipster application generator with blueprint', () => {
   describe('generating application with a git blueprint', () => {
     it('should succeed', () =>
       helpers
-        .run(path.join(__dirname, '../../generators/app'))
+        .run(path.join(__dirname, '../../generators/app/index.mjs'))
         .inTmpDir(dir => {
           // Fake the presence of the blueprint in node_modules
           const packagejs = {
@@ -155,7 +155,7 @@ describe('JHipster application generator with blueprint', () => {
     it('throws an error', () =>
       jestExpect(() =>
         helpers
-          .run(path.join(__dirname, '../../generators/app'))
+          .run(path.join(__dirname, '../../generators/app/index.mjs'))
           .inTmpDir(dir => {
             // Fake the presence of the blueprint in node_modules
             const packagejs = {

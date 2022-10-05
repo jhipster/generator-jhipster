@@ -2,7 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
-const ClientGenerator = require('../../generators/client');
+const ClientGenerator = require('../../generators/client/index.cjs');
 const { MYSQL } = require('../../jdl/jhipster/database-types');
 const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
 const { JWT } = require('../../jdl/jhipster/authentication-types');
@@ -86,7 +86,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
     describe(`generate client with blueprint option '${blueprintName}'`, () => {
       before(() =>
         helpers
-          .run(path.join(__dirname, '../../generators/client'))
+          .run(path.join(__dirname, '../../generators/client/index.mjs'))
           .withOptions({
             fromCli: true,
             build: MAVEN,

@@ -23,7 +23,7 @@ const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 const { defaultConfig } = require('../generator-defaults.cjs');
-const prompts = require('./prompts');
+const prompts = require('./prompts.cjs');
 const statistics = require('../statistics.cjs');
 const constants = require('../generator-constants.cjs');
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');

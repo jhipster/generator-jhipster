@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 
 import testSupport from '../../test/support/index.cjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
-import Generator from './index.js';
+import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
 const { testBlueprintSupport } = testSupport;

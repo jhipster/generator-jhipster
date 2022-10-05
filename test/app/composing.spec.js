@@ -24,7 +24,7 @@ describe('jhipster:app composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(require.resolve('../../generators/app'));
+        runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
@@ -73,7 +73,7 @@ describe('jhipster:app composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(require.resolve('../../generators/app'));
+        runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
@@ -123,7 +123,7 @@ describe('jhipster:app composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(require.resolve('../../generators/app'));
+        runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
@@ -170,7 +170,7 @@ describe('jhipster:app composing', () => {
         let runContext;
         let runResult;
         before(async () => {
-          runContext = helpers.create(require.resolve('../../generators/app'));
+          runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
           runResult = await runContext
             .withOptions({
               baseName: 'jhipster',
@@ -225,7 +225,7 @@ describe('jhipster:app composing', () => {
         let runContext;
         let runResult;
         before(async () => {
-          runContext = helpers.create(require.resolve('../../generators/app'));
+          runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
           runResult = await runContext
             .withOptions({
               baseName: 'jhipster',
@@ -280,7 +280,7 @@ describe('jhipster:app composing', () => {
       let runContext;
       let runResult;
       before(async () => {
-        runContext = helpers.create(require.resolve('../../generators/app'));
+        runContext = helpers.create(require.resolve('../../generators/app/index.mjs'));
         runResult = await runContext
           .withOptions({
             baseName: 'jhipster',

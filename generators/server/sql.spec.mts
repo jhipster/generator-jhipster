@@ -10,7 +10,7 @@ import {
   extendFilteredMatrix,
   entitiesServerSamples as entities,
 } from '../../test/support/index.mjs';
-import Generator from './index.js';
+import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
@@ -27,7 +27,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.js');
+const generatorFile = join(__dirname, 'index.mjs');
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = DatabaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

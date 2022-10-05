@@ -16,7 +16,7 @@ describe('jhipster:app prompts', () => {
       let runResult;
       before(() => {
         return helpers
-          .create(require.resolve('../../generators/app'))
+          .create(require.resolve('../../generators/app/index.mjs'))
           .withOptions({
             fromCli: true,
             skipInstall: true,

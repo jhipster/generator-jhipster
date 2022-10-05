@@ -31,7 +31,7 @@ const mockBlueprintSubGen = class extends Generator {
 describe('JHipster client generator with sbs blueprint', () => {
   before(done => {
     helpers
-      .run(path.join(__dirname, '../../generators/client'))
+      .run(path.join(__dirname, '../../generators/client/index.mjs'))
       .withOptions({
         fromCli: true,
         build: MAVEN,

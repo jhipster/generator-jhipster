@@ -1,7 +1,7 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const ClientGenerator = require('../../generators/client');
+const ClientGenerator = require('../../generators/client/index.cjs');
 const constants = require('../../generators/generator-constants.cjs');
 
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -52,7 +52,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
 
   before(async () => {
     result = await helpers
-      .run(path.join(__dirname, '../../generators/client'))
+      .run(path.join(__dirname, '../../generators/client/index.mjs'))
       .withOptions({
         fromCli: true,
         build: 'maven',
