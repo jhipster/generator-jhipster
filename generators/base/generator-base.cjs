@@ -41,7 +41,7 @@ const { formatDateForChangelog } = require('../../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../../utils/db');
 const defaultApplicationOptions = require('../../jdl/jhipster/default-application-options');
 const databaseTypes = require('../../jdl/jhipster/database-types');
-const { databaseData } = require('../sql-constants');
+const { databaseData } = require('../sql-constants.cjs');
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
 const { joinCallbacks } = require('../../lib/support/base.cjs');
 

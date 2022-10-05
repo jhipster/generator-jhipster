@@ -34,7 +34,7 @@ const JSONToJDLEntityConverter = require('../../jdl/converters/json-to-jdl-entit
 const JSONToJDLOptionConverter = require('../../jdl/converters/json-to-jdl-option-converter');
 const { stringify } = require('../../utils');
 const { fieldIsEnum } = require('../../utils/field');
-const { databaseData } = require('../sql-constants');
+const { databaseData } = require('../sql-constants.cjs');
 
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
 const dbTypes = require('../../jdl/jhipster/field-types');
