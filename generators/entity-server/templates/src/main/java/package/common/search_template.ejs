@@ -27,7 +27,7 @@ if (paginationNo) { %>
     public <% if (reactive) { %>Mono<<% } %>List<<%= instanceType %>><% if (reactive) { %>><% } %> search<%= entityClassPlural %>(@RequestParam String query) {
         log.debug("REST request to search <%= entityClassPlural %> for query {}", query);<%- include('search_stream_template', {viaService: viaService, fromResource: true}); -%>
 <% } else { %>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= listOrFlux %><<%= instanceType %>>><% if (reactive) { %>><% } %> search<%= entityClassPlural %>(@RequestParam String query, @org.springdoc.api.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %>) {
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= listOrFlux %><<%= instanceType %>>><% if (reactive) { %>><% } %> search<%= entityClassPlural %>(@RequestParam String query, @org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %>) {
         log.debug("REST request to search for a page of <%= entityClassPlural %> for query {}", query);
   <%_ if (reactive) { _%>
         return <%= entityInstance %><%= viaService ?
