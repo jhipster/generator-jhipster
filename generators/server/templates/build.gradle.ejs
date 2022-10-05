@@ -330,9 +330,9 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
 <%_ if (reactive) { _%>
-    implementation "org.springdoc:springdoc-openapi-webflux-core"
+    implementation "org.springdoc:springdoc-openapi-starter-webflux-api"
 <%_ } else { _%>
-    implementation "org.springdoc:springdoc-openapi-webmvc-core"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-api"
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
     implementation "com.zaxxer:HikariCP"
