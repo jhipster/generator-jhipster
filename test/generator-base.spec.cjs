@@ -7,7 +7,7 @@ const Environment = require('yeoman-environment');
 
 const Base = require('../generators/base/generator-base.cjs');
 const { testInTempDir, revertTempDir } = require('./utils/utils.cjs');
-const { parseLiquibaseChangelogDate } = require('../utils/liquibase');
+const { parseLiquibaseChangelogDate } = require('../utils/liquibase.cjs');
 const { H2_MEMORY, H2_DISK, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = require('../jdl/jhipster/database-types');
 
 const BaseGenerator = Base.prototype;

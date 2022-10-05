@@ -20,7 +20,7 @@
 const _ = require('lodash');
 const pluralize = require('pluralize');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
-const { stringify } = require('.');
+const { stringify } = require('./index.cjs');
 const { NEO4J, NO: DATABASE_NO } = require('../jdl/jhipster/database-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
 const { REQUIRED } = require('../jdl/jhipster/validations');

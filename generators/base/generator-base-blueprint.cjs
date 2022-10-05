@@ -24,7 +24,7 @@ const semver = require('semver');
 const { packageJson: packagejs } = require('../../lib/index.cjs');
 const { packageNameToNamespace } = require('../utils.cjs');
 const JHipsterBaseGenerator = require('./generator-base.cjs');
-const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../../utils/blueprint');
+const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../../utils/blueprint.cjs');
 
 const { compat, PRIORITY_NAMES } = require('../../lib/constants/priorities.cjs');
 

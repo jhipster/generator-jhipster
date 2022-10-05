@@ -29,10 +29,10 @@ import constants from '../generator-constants.cjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import generatorUtils from '../utils.cjs';
 
-import entityUtils from '../../utils/entity.js';
-import fieldUtils from '../../utils/field.js';
-import liquibaseUtils from '../../utils/liquibase.js';
-import userUtils from '../../utils/user.js';
+import entityUtils from '../../utils/entity.cjs';
+import fieldUtils from '../../utils/field.cjs';
+import liquibaseUtils from '../../utils/liquibase.cjs';
+import userUtils from '../../utils/user.cjs';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
 import type { LoadingTaskGroup, PreConflictsTaskGroup } from '../base/tasks.js';

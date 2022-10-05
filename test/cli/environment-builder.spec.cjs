@@ -23,7 +23,7 @@ const fs = require('fs');
 const sinon = require('sinon');
 const helpers = require('yeoman-test');
 
-const EnvironmentBuilder = require('../../cli/environment-builder');
+const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
 const { getTemplatePath } = require('../support/index.cjs');
 
 const { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } = require('../utils/utils.cjs');

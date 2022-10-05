@@ -19,11 +19,11 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import entityUtils from '../../utils/entity.js';
-import fieldUtils from '../../utils/field.js';
-import relationshipUtils from '../../utils/relationship.js';
-import utils from '../../utils/index.js';
-import userUtils from '../../utils/user.js';
+import entityUtils from '../../utils/entity.cjs';
+import fieldUtils from '../../utils/field.cjs';
+import relationshipUtils from '../../utils/relationship.cjs';
+import utils from '../../utils/index.cjs';
+import userUtils from '../../utils/user.cjs';
 import constants from '../generator-constants.cjs';
 import type { CommonClientServerApplication } from './types.js';
 

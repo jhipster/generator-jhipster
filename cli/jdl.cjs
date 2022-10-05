@@ -19,9 +19,9 @@
 const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
-const cliUtils = require('./utils');
-const importJdl = require('./import-jdl');
-const download = require('./download');
+const cliUtils = require('./utils.cjs');
+const importJdl = require('./import-jdl.cjs');
+const download = require('./download.cjs');
 
 const { logger } = cliUtils;
 

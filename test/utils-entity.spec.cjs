@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const { prepareEntityPrimaryKeyForTemplates } = require('../utils/entity');
-const { formatDateForChangelog } = require('../utils/liquibase');
+const { prepareEntityPrimaryKeyForTemplates } = require('../utils/entity.cjs');
+const { formatDateForChangelog } = require('../utils/liquibase.cjs');
 const { defaultConfig, entityDefaultConfig } = require('../generators/generator-defaults.cjs');
 const BaseGenerator = require('../generators/base/generator-base.cjs');
 

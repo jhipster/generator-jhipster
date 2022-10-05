@@ -1,6 +1,6 @@
 const helpers = require('yeoman-test');
 
-const EnvironmentBuilder = require('../cli/environment-builder');
+const EnvironmentBuilder = require('../cli/environment-builder.cjs');
 const constants = require('../generators/generator-constants.cjs');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;

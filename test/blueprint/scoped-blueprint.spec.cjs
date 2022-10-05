@@ -4,7 +4,7 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
-const EnvironmentBuilder = require('../../cli/environment-builder');
+const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
 const { getTemplatePath } = require('../support/index.cjs');
 
 describe('JHipster application generator with scoped blueprint', () => {

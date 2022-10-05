@@ -6,7 +6,7 @@ const fse = require('fs-extra');
 const fs = require('fs');
 const { createHelpers } = require('yeoman-test');
 
-const EnvironmentBuilder = require('../../cli/environment-builder');
+const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
 const constants = require('../../generators/generator-constants.cjs');
 
 const DOCKER_DIR = constants.DOCKER_DIR;
@@ -67,7 +67,7 @@ function shouldBeV3DockerfileCompatible(databaseType) {
 }
 
 function getJHipsterCli() {
-  const cmdPath = path.join(__dirname, '../../cli/jhipster');
+  const cmdPath = path.join(__dirname, '../../cli/jhipster.mjs');
   let cmd = `node ${cmdPath} `;
   if (os.platform() === 'win32') {
     // corrected test for windows user

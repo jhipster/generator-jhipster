@@ -17,10 +17,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const semver = require('semver');
-const path = require('path');
-const { logger } = require('./utils');
-const { packageJson } = require('../lib/index.cjs');
+import semver from 'semver';
+import path from 'path';
+import cliUtils from './utils.cjs';
+import { packageJson } from '../lib/index.mjs';
+
+const { logger } = cliUtils;
 
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;
@@ -45,24 +47,24 @@ if (preferLocalArg && preferGlobalArg) {
 // --prefer-local: Always resolve node modules locally (useful when using linked module)
 const preferLocal = preferLocalArg || (!preferGlobalArg && !process.argv.includes('upgrade'));
 
-requireCLI(preferLocal);
+await requireCLI(preferLocal);
 
 /*
  * Require cli.js giving priority to local version over bundled one if it exists.
  */
-function requireCLI(preferLocal) {
+async function requireCLI(preferLocal) {
   let message = BUNDLED_VERSION_MESSAGE;
   /* eslint-disable global-require */
   if (preferLocal) {
     try {
-      const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'cli', 'cli.js'));
+      const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'cli', 'cli.mjs'));
       if (__dirname === path.dirname(localCLI)) {
         message = LOCAL_VERSION_MESSAGE;
       } else {
         // load local version
         /* eslint-disable import/no-dynamic-require */
         logger.info(LOCAL_VERSION_MESSAGE);
-        require(localCLI);
+        await import(localCLI);
         return;
       }
     } catch (e) {
@@ -71,6 +73,6 @@ function requireCLI(preferLocal) {
   }
   // load current jhipster
   logger.info(message);
-  require('./cli');
+  await import('./cli.cjs');
   /* eslint-enable  */
 }

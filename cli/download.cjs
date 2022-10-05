@@ -19,7 +19,7 @@
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
-const cliUtils = require('./utils');
+const cliUtils = require('./utils.cjs');
 const { packageJson } = require('../lib/index.cjs');
 
 const { logger, toString } = cliUtils;

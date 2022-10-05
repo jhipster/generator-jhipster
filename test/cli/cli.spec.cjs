@@ -8,13 +8,13 @@ const sinon = require('sinon');
 const Environment = require('yeoman-environment');
 const helpers = require('yeoman-test');
 
-const { createProgram, buildJHipster } = require('../../cli/program');
+const { createProgram, buildJHipster } = require('../../cli/program.cjs');
 const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils.cjs');
-const { logger } = require('../../cli/utils');
+const { logger } = require('../../cli/utils.cjs');
 const BaseGenerator = require('../../generators/base/generator-base.cjs');
 const { getTemplatePath } = require('../support/index.cjs');
 
-const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.js'));
+const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.cjs'));
 
 const mockCli = (opts = {}) => {
   const program = buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
@@ -494,10 +494,10 @@ describe('jhipster cli', () => {
         });
 
         it('should print usage', () => {
-          expect(stdout.includes('Usage: jhipster run jhipster:app [options]')).to.be.true;
+          expect(stdout).to.include('Usage: jhipster run jhipster:app [options]');
         });
         it('should print options', () => {
-          expect(stdout.includes('--application-type <value>')).to.be.true;
+          expect(stdout).to.include('--application-type <value>');
         });
         it('should exit with code 0', () => {
           expect(exitCode).to.equal(0);

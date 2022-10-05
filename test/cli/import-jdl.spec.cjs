@@ -3,7 +3,7 @@ const proxyquire = require('proxyquire');
 const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const expect = require('chai').expect;
-const utils = require('../../cli/utils');
+const utils = require('../../cli/utils.cjs');
 
 const { testInTempDir, revertTempDir } = require('../utils/utils.cjs');
 const { getTemplatePath } = require('../support/index.cjs');
@@ -40,7 +40,7 @@ const env = {
 
 const loadImportJdl = options => {
   options = {
-    './utils': {
+    './utils.cjs': {
       ...utils,
       logger: {
         ...utils.logger,
@@ -60,7 +60,7 @@ const loadImportJdl = options => {
         };
       },
     },
-    './environment-builder': {
+    './environment-builder.cjs': {
       createDefaultBuilder: () => {
         return {
           getEnvironment: () => {
@@ -77,7 +77,7 @@ const loadImportJdl = options => {
     },
     ...options,
   };
-  return proxyquire('../../cli/import-jdl', options);
+  return proxyquire('../../cli/import-jdl.cjs', options);
 };
 
 const defaultAddedOptions = {};

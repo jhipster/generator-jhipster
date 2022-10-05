@@ -48,7 +48,7 @@ const databaseTypes = require('../../jdl/jhipster/database-types');
 const { NO: NO_DATABASE } = databaseTypes;
 const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
 const { GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list.cjs');
-const { prepareReactEntity } = require('../../utils/entity.js');
+const { prepareReactEntity } = require('../../utils/entity.cjs');
 
 const TYPE_STRING = CommonDBTypes.STRING;
 const TYPE_UUID = CommonDBTypes.UUID;

@@ -30,7 +30,7 @@ const BaseGenerator = require('../base/index.cjs');
 const cleanup = require('../cleanup.cjs');
 const constants = require('../generator-constants.cjs');
 const statistics = require('../statistics.cjs');
-const { parseBluePrints } = require('../../utils/blueprint');
+const { parseBluePrints } = require('../../utils/blueprint.cjs');
 const { packageJson: packagejs } = require('../../lib/index.cjs');
 
 /* Constants used throughout */

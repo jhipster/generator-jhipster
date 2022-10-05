@@ -26,7 +26,7 @@ import { fileURLToPath } from 'url';
 import authenticationTypes from '../jdl/jhipster/authentication-types.js';
 import applicationTypes from '../jdl/jhipster/application-types.js';
 
-import liquibaseUtils from '../utils/liquibase.js';
+import liquibaseUtils from '../utils/liquibase.cjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

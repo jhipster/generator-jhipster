@@ -21,12 +21,12 @@ const pluralize = require('pluralize');
 const path = require('path');
 
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
-const { hibernateSnakeCase } = require('./db');
-const { createFaker } = require('./faker');
-const { parseLiquibaseChangelogDate } = require('./liquibase');
+const { hibernateSnakeCase } = require('./db.cjs');
+const { createFaker } = require('./faker.cjs');
+const { parseLiquibaseChangelogDate } = require('./liquibase.cjs');
 const { entityDefaultConfig } = require('../generators/generator-defaults.cjs');
 const { stringHashCode } = require('../generators/utils.cjs');
-const { fieldToReference } = require('./field');
+const { fieldToReference } = require('./field.cjs');
 const { PaginationTypes, ServiceTypes } = require('../jdl/jhipster/entity-options');
 const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');

@@ -32,8 +32,8 @@ const jhipsterUtils = require('../utils.cjs');
 const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = require('../generator-constants.cjs');
 const JSONToJDLEntityConverter = require('../../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../../jdl/converters/json-to-jdl-option-converter');
-const { stringify } = require('../../utils');
-const { fieldIsEnum } = require('../../utils/field');
+const { stringify } = require('../../utils/index.cjs');
+const { fieldIsEnum } = require('../../utils/field.cjs');
 const { databaseData } = require('../sql-constants.cjs');
 
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;

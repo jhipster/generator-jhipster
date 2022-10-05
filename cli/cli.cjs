@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-const { runJHipster } = require('./program');
-const { done, logger } = require('./utils');
+const { runJHipster } = require('./program.cjs');
+const { done, logger } = require('./utils.cjs');
 
 module.exports = runJHipster().catch(done);
 

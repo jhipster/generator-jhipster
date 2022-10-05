@@ -18,7 +18,7 @@
  */
 const _ = require('lodash');
 
-const { loadRequiredConfigIntoEntity } = require('./entity');
+const { loadRequiredConfigIntoEntity } = require('./entity.cjs');
 
 const { SQL } = require('../jdl/jhipster/database-types');
 const { OAUTH2 } = require('../jdl/jhipster/authentication-types');

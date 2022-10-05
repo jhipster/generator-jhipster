@@ -5,7 +5,7 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const { jestExpect } = require('mocha-expect-snapshot');
 const jhipsterVersion = require('../../package.json').version;
-const EnvironmentBuilder = require('../../cli/environment-builder');
+const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
 const { getGenerator, getTemplatePath } = require('../support/index.cjs');
 
 describe('JHipster application generator with blueprint', () => {

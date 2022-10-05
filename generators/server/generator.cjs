@@ -50,7 +50,7 @@ const websocketTypes = require('../../jdl/jhipster/websocket-types');
 const fieldTypes = require('../../jdl/jhipster/field-types');
 const entityOptions = require('../../jdl/jhipster/entity-options');
 const validations = require('../../jdl/jhipster/validations');
-const { stringify } = require('../../utils/index');
+const { stringify } = require('../../utils/index.cjs');
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
 const { FALSE: NO_WEBSOCKET } = websocketTypes;

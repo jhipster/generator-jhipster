@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
 /**
  * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
@@ -23,10 +25,10 @@ const didYouMean = require('didyoumean');
 const fs = require('fs');
 const path = require('path');
 
-const EnvironmentBuilder = require('./environment-builder');
-const SUB_GENERATORS = require('./commands');
-const JHipsterCommand = require('./jhipster-command');
-const { CLI_NAME, logger, getCommand, done } = require('./utils');
+const EnvironmentBuilder = require('./environment-builder.cjs');
+const SUB_GENERATORS = require('./commands.cjs');
+const JHipsterCommand = require('./jhipster-command.cjs');
+const { CLI_NAME, logger, getCommand, done } = require('./utils.cjs');
 const { packageJson } = require('../lib/index.cjs');
 const { packageNameToNamespace } = require('../generators/utils.cjs');
 const { logo } = require('./logo.cjs');
@@ -256,7 +258,9 @@ const buildJHipster = ({
   printBlueprintLogo,
   env = envBuilder.getEnvironment(),
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
-  loadCommand = key => require(`./${key}`),
+  loadCommand = key => {
+    return require(`./${key}.cjs`);
+  },
   defaultCommand,
 } = {}) => {
   /* setup debugging */

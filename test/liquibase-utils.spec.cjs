@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const assert = require('yeoman-assert');
-const liquibaseUtils = require('../utils/liquibase');
+const liquibaseUtils = require('../utils/liquibase.cjs');
 
 describe('Liquibase Utils', () => {
   describe('::parseLiquibaseChangelogDate', () => {
