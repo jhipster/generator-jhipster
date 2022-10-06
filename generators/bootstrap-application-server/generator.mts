@@ -167,6 +167,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         entity.fields.unshift(...derivedFields);
       },
       prepareUser({ entity }) {
+        this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
         if (entity.builtIn && entity.name === 'User') {
           const oauth2 = entity.authenticationType === OAUTH2;
           const userIdType = entity.primaryKey.type;
