@@ -1,13 +1,14 @@
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const ClientGenerator = require('../../generators/client/index.cjs');
-const constants = require('../../generators/generator-constants.cjs');
-const { getGenerator } = require('../support/index.cjs');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import ClientGenerator from '../../generators/client/index.cjs';
+import constants from '../../generators/generator-constants.cjs';
+import { getGenerator } from '../support/index.mjs';
 
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
-const mockBlueprintSubGen = class extends ClientGenerator {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockBlueprintSubGen: any = class extends ClientGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 

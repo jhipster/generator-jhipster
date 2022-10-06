@@ -1,12 +1,16 @@
-const path = require('path');
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const fse = require('fs-extra');
-const ServerGenerator = require('../../generators/server/index.cjs');
-const constants = require('../../generators/generator-constants.cjs');
-const { getGenerator } = require('../support/index.cjs');
+import path, { dirname } from 'path';
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import fse from 'fs-extra';
+import { fileURLToPath } from 'url';
+import ServerGenerator from '../../generators/server/index.cjs';
+import constants from '../../generators/generator-constants.cjs';
+import { getGenerator } from '../support/index.mjs';
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const serverFiles = {
   serverResource: [
@@ -21,7 +25,8 @@ const serverFiles = {
   ],
 };
 
-const mockBlueprintSubGen = class extends ServerGenerator {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockBlueprintSubGen: any = class extends ServerGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 

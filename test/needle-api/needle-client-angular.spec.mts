@@ -1,9 +1,9 @@
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const { getGenerator } = require('../support/index.cjs');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import { getGenerator } from '../support/index.mjs';
 
-const ClientGenerator = require('../../generators/client/index.cjs');
-const constants = require('../../generators/generator-constants.cjs');
+import ClientGenerator from '../../generators/client/index.cjs';
+import constants from '../../generators/generator-constants.cjs';
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;

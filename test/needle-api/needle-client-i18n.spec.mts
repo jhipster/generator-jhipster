@@ -11,11 +11,8 @@ const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 const generatorPath = getGenerator('languages');
 
-/**
- * @class
- * @extends {LanguagesGenerator}
- */
-class mockBlueprintSubGen extends LanguagesGenerator {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockBlueprintSubGen: any = class extends LanguagesGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 
@@ -45,7 +42,7 @@ class mockBlueprintSubGen extends LanguagesGenerator {
     };
     return { ...customPhaseSteps };
   }
-}
+};
 
 describe('needle API i18n: JHipster language generator with blueprint', () => {
   before(async () => {
