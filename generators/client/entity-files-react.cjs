@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { CLIENT_TEST_SRC_DIR, REACT_DIR } = require('../generator-constants');
+const { CLIENT_TEST_SRC_DIR, REACT_DIR } = require('../generator-constants.cjs');
 const { replaceReactTranslations } = require('./transform-react.cjs');
 const { addEnumerationFiles } = require('./entity-files.cjs');
 

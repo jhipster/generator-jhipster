@@ -21,7 +21,7 @@ const path = require('path');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { defaultConfig, requiredConfig, reproducibleConfigForTests } = require('./config.cjs');
-const { GENERATOR_PROJECT_NAME } = require('../generator-list');
+const { GENERATOR_PROJECT_NAME } = require('../generator-list.cjs');
 
 const generatorPath = path.join(__dirname, 'generator.cjs');
 const generator = path.basename(__dirname);

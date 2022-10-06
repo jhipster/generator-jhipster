@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { createProgram, buildCommands, buildJHipster, runJHipster, printJHipsterLogo, done, logger } from './program.js';
-export { default as EnvironmentBuilder } from './environment-builder.js';
+export { createProgram, buildCommands, buildJHipster, runJHipster, printJHipsterLogo, done, logger } from './program.cjs';
+export { default as EnvironmentBuilder } from './environment-builder.cjs';

@@ -4,7 +4,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
-import Generator from './index.js';
+import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import DatabaseTypes from '../../jdl/jhipster/database-types.js';
@@ -15,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.js');
+const generatorFile = join(__dirname, 'index.mjs');
 
 const { NEO4J: databaseType } = DatabaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
@@ -39,7 +39,7 @@ const testSamples = samplesBuilder();
 
 describe(`JHipster ${databaseType} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });

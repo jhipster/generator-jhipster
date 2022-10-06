@@ -77,7 +77,7 @@
     "prefer-destructuring": "off",
     "no-multi-assign": "off",
     "no-param-reassign": "off",
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/no-extraneous-dependencies": "off",
     "no-await-in-loop": "off",
     "no-restricted-syntax": [
       "error",

@@ -23,10 +23,10 @@ import BaseApplicationGenerator from '../base-application/generator.cjs';
 
 import validations from '../../jdl/jhipster/validations.js';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
-import constants from '../generator-constants.js';
-import utils from '../../utils/index.js';
-import entityUtils from '../../utils/entity.js';
-import fieldUtils from '../../utils/field.js';
+import constants from '../generator-constants.cjs';
+import utils from '../../utils/index.cjs';
+import entityUtils from '../../utils/entity.cjs';
+import fieldUtils from '../../utils/field.cjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
 import type { ClientServerApplication } from './types.js';

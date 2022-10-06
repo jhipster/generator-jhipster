@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 
 import testSupport from '../../test/support/index.cjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
-import Generator from './index.js';
+import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
 const { testBlueprintSupport } = testSupport;
@@ -36,7 +36,7 @@ const generatorPath = join(__dirname, 'index.mjs');
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });

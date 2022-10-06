@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { COMPOSING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
-const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
-const { GENERATOR_ENTITIES, GENERATOR_APP } = require('../generator-list');
+const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+
+const { JHIPSTER_CONFIG_DIR } = require('../generator-constants.cjs');
+const { GENERATOR_ENTITIES, GENERATOR_APP } = require('../generator-list.cjs');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -125,7 +125,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [COMPOSING_PRIORITY]() {
+  get [BaseBlueprintGenerator.COMPOSING]() {
     if (this.delegateToBlueprint) return {};
     return this._composing();
   }

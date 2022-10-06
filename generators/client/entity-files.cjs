@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const utils = require('../utils');
-const constants = require('../generator-constants');
+const utils = require('../utils.cjs');
+const constants = require('../generator-constants.cjs');
 
 /* Constants use throughout */
 const { ANGULAR } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
