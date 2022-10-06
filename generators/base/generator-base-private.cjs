@@ -93,6 +93,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * TODO v8 drop customizer
    * Override yeoman generator's destinationPath to apply custom output dir.
    */
   destinationPath(...paths) {
@@ -115,6 +116,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Remove Folder
    *
    * @param folder
@@ -128,6 +130,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Execute a git mv.
    *
    * @param {string} source
@@ -157,6 +160,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Format As Class Javadoc
    *
    * @param {string} text - text to format
@@ -167,6 +171,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Format As Field Javadoc
    *
    * @param {string} text - text to format
@@ -177,6 +182,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Format As Api Description
    *
    * @param {string} text - text to format
@@ -201,6 +207,9 @@ module.exports = class PrivateBase extends Generator {
     return description;
   }
 
+  /**
+   * @private
+   */
   formatLineForJavaStringUse(text) {
     if (!text) {
       return text;
@@ -209,6 +218,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Format As Liquibase Remarks
    *
    * @param {string} text - text to format
@@ -245,6 +255,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Parse creationTimestamp option
    * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
    *                   obtained by parsing the given string representation of the creationTimestamp.
@@ -263,6 +274,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * @param {any} input input
    * @returns {boolean} true if input is number; false otherwise
    */
@@ -271,6 +283,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * @param {any} input input
    * @returns {boolean} true if input is a signed number; false otherwise
    */
@@ -279,6 +292,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * @param {any} input input
    * @returns {boolean} true if input is a signed decimal number; false otherwise
    */
@@ -287,6 +301,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Filter Number
    *
    * @param {string} input - input to filter
@@ -305,6 +320,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Checks if git is installed.
    *
    * @param {function} callback[optional] - function to be called after checking if git is installed. The callback will receive the code of the shell command executed.
@@ -320,6 +336,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Initialize git repository.
    */
   initializeGitRepository() {
@@ -340,6 +357,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Commit pending files to git.
    */
   commitFilesToGit(commitMsg, done) {
@@ -383,6 +401,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Get Option From Array
    *
    * @param {Array} array - array
@@ -401,6 +420,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Function to issue a https get request, and process the result
    *
    *  @param {string} url - the url to fetch
@@ -422,6 +442,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Strip margin indicated by pipe `|` from a string literal
    *
    *  @param {string} content - the string to process
@@ -431,6 +452,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Utility function to copy and process templates.
    *
    * @param {string} source - source
@@ -460,6 +482,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Utility function to render a template into a string
    *
    * @param {string} source - source
@@ -477,6 +500,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Utility function to copy files.
    *
    * @param {string} source - Original file.
@@ -510,6 +534,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Check if Java is installed
    */
   checkJava() {
@@ -534,6 +559,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Check if Node is installed
    */
   checkNode() {
@@ -552,6 +578,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Check if Git is installed
    */
   checkGit() {
@@ -560,6 +587,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Generate Entity Client Field Default Values
    *
    * @param {Array|Object} fields - array of fields
@@ -583,6 +611,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Find key type for Typescript
    *
    * @param {string | object} primaryKey - primary key definition
@@ -599,6 +628,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Find type for Typescript
    *
    * @param {string} fieldType - field type
@@ -621,6 +651,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Generate Entity Client Field Declarations
    *
    * @param {string} primaryKey - primary key definition
@@ -685,6 +716,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Generate Entity Client Imports
    *
    * @param {Array|Object} relationships - array of relationships
@@ -712,6 +744,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Generate Entity Client Enum Imports
    *
    * @param {Array|Object} fields - array of the entity fields
@@ -736,6 +769,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Get DB type from DB value
    * @param {string} db - db
    */
@@ -744,6 +778,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Get build directory used by buildTool
    * @param {string} buildTool - buildTool
    */
@@ -752,6 +787,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Get resource build directory used by buildTool
    * @param {string} buildTool - buildTool
    */
@@ -760,6 +796,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * @returns generated JDL from entities
    */
   generateJDLFromEntities() {
@@ -779,6 +816,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Generate language objects in array of "'en': { name: 'English' }" format
    * @param {string[]} languages
    * @param clientFramework
@@ -794,6 +832,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Check if language should be skipped for locale setting
    * @param {string} language
    */
@@ -803,6 +842,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Return the method name which converts the filter to specification
    * @param {string} fieldType
    */
@@ -829,6 +869,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * @param {string} fieldType
    * @returns {boolean} true if type is filterable; false otherwise.
    */
@@ -837,6 +878,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Rebuild client for Angular
    */
   rebuildClient() {
@@ -848,6 +890,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Generate a primary key, according to the type
    *
    * @param {any} primaryKey - primary key definition
@@ -873,6 +916,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Generate a test entity, according to the type
    *
    * @param {any} primaryKey - primary key definition.
@@ -888,6 +932,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Generate a test entity, according to the references
    *
    * @param references
@@ -926,6 +971,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Generate a test entity, according to the type
    *
    * @param references
@@ -953,6 +999,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Return the primary key data type based on DB
    *
    * @param {any} databaseType - the database type
@@ -971,6 +1018,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Returns the URL for a particular databaseType and protocol
    *
    * @param {string} databaseType
@@ -1013,6 +1061,9 @@ module.exports = class PrivateBase extends Generator {
     return `${url}${skipExtraOptions ? '' : extraOptions}`;
   }
 
+  /**
+   * @private
+   */
   getDBCExtraOption(databaseType) {
     const databaseDataForType = databaseData[databaseType];
     const { extraOptions = '' } = databaseDataForType;
@@ -1020,6 +1071,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Returns the primary key value based on the primary key type, DB and default value
    *
    * @param {string} primaryKey - the primary key type
@@ -1046,6 +1098,9 @@ module.exports = class PrivateBase extends Generator {
     return `${defaultValue}L`;
   }
 
+  /**
+   * @private
+   */
   getJavaValueGeneratorForType(type) {
     if (type === 'String') {
       return 'UUID.randomUUID().toString()';
@@ -1060,6 +1115,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Get a root folder name for entity
    * @param {string} clientRootFolder
    * @param {string} entityFileName
@@ -1072,6 +1128,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Get a parent folder path addition for entity
    * @param {string} clientRootFolder
    */
@@ -1099,6 +1156,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Check if the subgenerator has been invoked from JHipster CLI or from Yeoman (yo jhipster:subgenerator)
    */
   checkInvocationFromCLI() {
@@ -1111,6 +1169,9 @@ module.exports = class PrivateBase extends Generator {
     }
   }
 
+  /**
+   * @private
+   */
   generateDateTimeFormat(language, index, length) {
     let config = `  '${language}': {\n`;
 
@@ -1134,6 +1195,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Convert to Java bean name case
    *
    * Handle the specific case when the second letter is capitalized
@@ -1151,6 +1213,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Create a java getter of reference.
    *
    * @param {object|string[]} reference
@@ -1169,6 +1232,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Create a dotted path of reference.
    *
    * @param {object|string[]} reference
@@ -1180,6 +1244,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Create a java getter method of reference.
    *
    * @param {object} reference
@@ -1191,6 +1256,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Create a java getter method of reference.
    *
    * @param {object} reference
@@ -1202,6 +1268,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Create a java getter method of reference.
    *
    * @param {object} reference
@@ -1213,6 +1280,7 @@ module.exports = class PrivateBase extends Generator {
   }
 
   /**
+   * @private
    * Create a angular form path getter method of reference.
    *
    * @param {object} reference

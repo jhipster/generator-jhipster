@@ -178,6 +178,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
    */
   jhipsterTemplatePath(...args) {
@@ -191,6 +192,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Get generator dependencies for building help
    * This is a stub and should be overwritten by the generator.
    *
@@ -217,6 +219,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Verify if the entity is a built-in Entity.
    * @param {String} entityName - Entity name to verify.
    * @return {boolean} true if the entity is built-in.
@@ -226,6 +229,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Verify if the application is using built-in User.
    * @return {boolean} true if the User is built-in.
    */
@@ -238,6 +242,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Verify if the entity is a User entity.
    * @param {String} entityName - Entity name to verify.
    * @return {boolean} true if the entity is User.
@@ -247,6 +252,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Verify if the entity is a built-in User.
    * @param {String} entityName - Entity name to verify.
    * @return {boolean} true if the entity is User and is built-in.
@@ -256,6 +262,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Verify if the application is using built-in Authority.
    * @return {boolean} true if the Authority is built-in.
    */
@@ -268,6 +275,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Verify if the entity is a Authority entity.
    * @param {String} entityName - Entity name to verify.
    * @return {boolean} true if the entity is Authority.
@@ -277,6 +285,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Verify if the entity is a built-in Authority.
    * @param {String} entityName - Entity name to verify.
    * @return {boolean} true if the entity is Authority and is built-in.
@@ -286,6 +295,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Apply output customizer.
    *
    * @param {string} outputPath - Path to customize.
@@ -309,6 +319,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Replace placeholders with versions from packageJsonSourceFile.
    * @param {string} keyToReplace - PlaceHolder name.
    * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
@@ -337,6 +348,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new icon to icon imports.
    *
    * @param {string} iconName - The name of the Font Awesome icon.
@@ -352,6 +364,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new menu element, at the root of the menu.
    *
    * @param {string} routerName - The name of the Angular router that is added to the menu.
@@ -370,6 +383,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add external resources to root file(index.html).
    *
    * @param {string} resources - Resources added to root file.
@@ -398,6 +412,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new entity in the "entities" menu.
    *
    * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
@@ -430,6 +445,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new entity in the TS modules file.
    *
    * @param {string} entityInstance - Entity Instance
@@ -468,6 +484,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new admin in the TS modules file.
    *
    * @param {string} appName - Angular2 application name.
@@ -489,6 +506,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new lazy loaded module to admin routing file.
    *
    * @param {string} route - The route for the module. For example 'entity-audit'.
@@ -503,6 +521,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new element in the "global.json" translations.
    *
    * @param {string} key - Key for the menu entry
@@ -514,6 +533,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new element in the admin section of "global.json" translations.
    *
    * @param {string} key - Key for the menu entry
@@ -525,6 +545,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new entity in the "global.json" translations.
    *
    * @param {string} key - Key for the entity name
@@ -536,6 +557,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new entry as a root param in "global.json" translations.
    *
    * @param {string} key - Key for the entry
@@ -563,6 +585,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a translation key to all installed languages
    *
    * @param {string} key - Key for the entity name
@@ -579,6 +602,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get all the languages installed currently
    */
   getAllInstalledLanguages() {
@@ -599,6 +623,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get all the languages supported by JHipster
    */
   getAllSupportedLanguages() {
@@ -606,6 +631,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * check if a language is supported by JHipster
    * @param {string} language - Key for the language
    */
@@ -614,6 +640,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * check if Right-to-Left support is necessary for i18n
    * @param {string[]} languages - languages array
    */
@@ -626,6 +653,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * return the localeId from the given language key (from constants.LANGUAGES)
    * if no localeId is defined, return the language key (which is a localeId itself)
    * @param {string} language - language key
@@ -636,6 +664,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * return the dayjsLocaleId from the given language key (from constants.LANGUAGES)
    * if no dayjsLocaleId is defined, return the language key (which is a localeId itself)
    * @param {string} language - language key
@@ -646,6 +675,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get all the languages options supported by JHipster
    */
   getAllSupportedLanguageOptions() {
@@ -653,6 +683,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new dependency in the "package.json".
    *
    * @param {string} name - dependency name
@@ -682,6 +713,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new devDependency in the "package.json".
    *
    * @param {string} name - devDependency name
@@ -711,6 +743,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new script in the "package.json".
    *
    * @param {string} name - script name
@@ -740,6 +773,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new module in the TS modules file.
    *
    * @param {string} appName - Angular2 application name.
@@ -754,6 +788,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new entity to Ehcache, for the 2nd level cache of an entity and its relationships.
    *
    * @param {string} entityClass - the entity to cache
@@ -766,6 +801,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new entry to Ehcache in CacheConfiguration.java
    *
    * @param {string} entry - the entry (including package name) to cache
@@ -776,6 +812,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new entity to the chosen cache provider, for the 2nd level cache of an entity and its relationships.
    *
    * @param {string} entityClass - the entity to cache
@@ -789,6 +826,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new entry to the chosen cache provider in CacheConfiguration.java
    *
    * @param {string} entry - the entry (including package name) to cache
@@ -800,6 +838,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new changelog to the Liquibase master.xml file.
    *
    * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
@@ -809,6 +848,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a incremental changelog to the Liquibase master.xml file.
    *
    * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
@@ -818,6 +858,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new constraints changelog to the Liquibase master.xml file.
    *
    * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
@@ -827,6 +868,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new changelog to the Liquibase master.xml file.
    *
    * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
@@ -837,6 +879,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new column to a Liquibase changelog file for entity.
    *
    * @param {string} filePath - The full path of the changelog file.
@@ -847,6 +890,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new load column to a Liquibase changelog file for entity.
    *
    * @param {string} filePath - The full path of the changelog file.
@@ -857,6 +901,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new changeset to a Liquibase changelog file for entity.
    *
    * @param {string} filePath - The full path of the changelog file.
@@ -867,6 +912,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add new scss style to the angular application in "global.scss
    *
    * @param {string} style - css to add in the file
@@ -890,6 +936,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add new scss style to the angular application in "vendor.scss".
    *
    * @param {string} style - scss to add in the file
@@ -914,6 +961,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add new scss style to the react application in "app.scss".
    *
    * @param {string} style - css to add in the file
@@ -937,6 +985,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Copy third-party library resources path.
    *
    * @param {string} sourceFolder - third-party library resources source path
@@ -956,6 +1005,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a Maven dependency Management.
    *
    * @param {string} groupId - dependency groupId
@@ -970,6 +1020,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a remote Maven Repository to the Maven build.
    *
    * @param {string} id - id of the repository
@@ -981,6 +1032,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a remote Maven Plugin Repository to the Maven build.
    *
    * @param {string} id - id of the repository
@@ -991,6 +1043,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a distributionManagement to the Maven build.
    *
    * @param {string} snapshotsId Snapshots Repository Id
@@ -1003,6 +1056,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new Maven property.
    *
    * @param {string} name - property name
@@ -1013,6 +1067,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new Maven dependency.
    *
    * @param {string} groupId - dependency groupId
@@ -1025,6 +1080,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new Maven dependency in a specific folder..
    *
    * @param {string} directory - the folder to add the dependency in
@@ -1038,6 +1094,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new Maven plugin.
    *
    * @param {string} groupId - plugin groupId
@@ -1050,6 +1107,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new Maven plugin management.
    *
    * @param {string} groupId - plugin groupId
@@ -1062,6 +1120,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new annotation processor path to Maven compiler configuration.
    *
    * @param {string} groupId - plugin groupId
@@ -1073,6 +1132,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a new Maven profile.
    *
    * @param {string} profileId - profile ID
@@ -1083,6 +1143,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * A new Gradle property.
    *
    * @param {string} name - property name
@@ -1093,6 +1154,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * A new Gradle plugin.
    *
    * @param {string} group - plugin GroupId
@@ -1104,6 +1166,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * A new Gradle plugin to plugin management block in settings.gradle
    *
    * @param {string} id - plugin id
@@ -1114,6 +1177,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add Gradle plugin to the plugins block
    *
    * @param {string} id - plugin id
@@ -1124,6 +1188,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * A new dependency to build.gradle file.
    *
    * @param {string} scope - scope of the new dependency, e.g. compile
@@ -1136,6 +1201,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * A new dependency to build.gradle file in a specific folder.
    *
    * @param {string} directory - directory
@@ -1149,6 +1215,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Apply from an external Gradle build script.
    *
    * @param {string} name - name of the file to apply from, must be 'fileName.gradle'
@@ -1158,6 +1225,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a logger to the logback-spring.xml
    *
    * @param {string} logName - name of the log we want to track
@@ -1168,6 +1236,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a remote Maven Repository to the Gradle build.
    *
    * @param {string} url - url of the repository
@@ -1179,6 +1248,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add a remote Maven repository to the Gradle plugin management block in settings.gradle
    *
    * @param {string} url - url of the repository
@@ -1236,6 +1306,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Copy templates with all the custom logic applied according to the type.
    *
    * @param {string} source - path of the source file to copy from
@@ -1334,6 +1405,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Rewrite the specified file with provided content at the needle location
    *
    * @param {string} filePath - path of the source file to rewrite
@@ -1347,6 +1419,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Replace the pattern/regex with provided content
    *
    * @param {string} filePath - path of the source file to rewrite
@@ -1374,6 +1447,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Register a module configuration to .jhipster/modules/jhi-hooks.json
    *
    * @param {string} npmPackageName - npm package name of the generator
@@ -1419,6 +1493,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Add configuration to Entity.json files
    *
    * @param {string} file - configuration file name for the entity
@@ -1437,6 +1512,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get the module hooks config json
    */
   getModuleHooks() {
@@ -1453,6 +1529,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Call all the module hooks with the given options.
    * @param {string} hookFor - "app" or "entity"
    * @param {string} hookType - "pre" or "post"
@@ -1575,6 +1652,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Compose an external generator with Yeoman.
    * @param {string} npmPackageName - package name
    * @param {string} subGen - sub generator name
@@ -1595,6 +1673,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Get a name suitable for microservice
    * @param {string} microserviceName
    */
@@ -1610,6 +1689,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Read entity json from config folder.
    * @param {string} entityName - Entity name
    * @return {object} entity definition
@@ -1701,6 +1781,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get a table name in JHipster preferred style.
    *
    * @param {string} value - table name string
@@ -1710,6 +1791,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get a table column name in JHipster preferred style.
    *
    * @param {string} value - table column name string
@@ -1719,6 +1801,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get a table name for joined tables in JHipster preferred style.
    *
    * @param {string} entityName - name of the entity
@@ -1746,6 +1829,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get a constraint name for tables in JHipster preferred style
    *
    * @param {string} entityName - name of the entity
@@ -1830,6 +1914,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get a foreign key constraint name for tables in JHipster preferred style.
    *
    * @param {string} entityName - name of the entity
@@ -1845,6 +1930,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get a unique constraint name for tables in JHipster preferred style.
    *
    * @param {string} entityName - name of the entity
@@ -1906,6 +1992,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Generate a KeyStore.
    */
   generateKeyStore() {
@@ -1988,6 +2075,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Return the user home
    */
   getUserHome() {
@@ -1995,6 +2083,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * Checks if there is a newer JHipster version available.
    */
   checkForNewVersion() {
@@ -2026,6 +2115,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get the frontend application name.
    * @param {string} baseName of application - (defaults to <code>this.jhipsterConfig.baseName</code>)
    */
@@ -2043,6 +2133,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get the java main class name.
    * @param {string} baseName of application
    */
@@ -2054,6 +2145,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * get a hipster based on the applications name.
    * @param {string} baseName of application
    */
@@ -2075,6 +2167,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * ask a prompt for apps name.
    *
    * @param {object} generator - generator instance to use
@@ -2138,6 +2231,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
    * run a command using the configured Java build tool.
    *
    * @param {String} buildTool - maven | gradle
@@ -3062,6 +3156,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @private
    * Construct the entity's dto name by appending the dto suffix.
    * @param {String} name entity name
    */
@@ -3069,6 +3164,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return name + (application.dtoSuffix ?? '');
   }
 
+  /**
+   * @private
+   */
   get needleApi() {
     if (this._needleApi === undefined || this._needleApi === null) {
       this._needleApi = new NeedleApi(this);
@@ -3091,6 +3189,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @private
    * Get default config based on applicationType
    */
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
@@ -3100,6 +3199,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     };
   }
 
+  /**
+   * @private
+   */
   setConfigDefaults(defaults = this.jhipsterDefaults) {
     const jhipsterVersion = packagejs.version;
     const baseName = this.getDefaultAppName();
@@ -3114,6 +3216,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @private
    * Returns the JDBC URL for a databaseType
    *
    * @param {string} databaseType
@@ -3124,6 +3227,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @private
    * Returns the R2DBC URL for a databaseType
    *
    * @param {string} databaseType
@@ -3134,6 +3238,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @private
    * @experimental
    */
   showHello() {
@@ -3186,6 +3291,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @private
    * Load config for simulating existing project.
    */
   parseTestOptions() {
