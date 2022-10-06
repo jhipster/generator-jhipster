@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-expressions */
-const path = require('path');
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const fse = require('fs-extra');
-const { jestExpect } = require('mocha-expect-snapshot');
-const jhipsterVersion = require('../../package.json').version;
-const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
-const { getGenerator, getTemplatePath } = require('../support/index.cjs');
+import path from 'path';
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import fse from 'fs-extra';
+import { jestExpect } from 'mocha-expect-snapshot';
+import EnvironmentBuilder from '../../cli/environment-builder.cjs';
+import { getGenerator, getTemplatePath } from '../support/index.mjs';
+import { packageJson } from '../../lib/index.mjs';
+
+const jhipsterVersion = packageJson.version;
 
 describe('JHipster application generator with blueprint', () => {
   describe('generate application with a version-compatible blueprint', () => {

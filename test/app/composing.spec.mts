@@ -1,11 +1,13 @@
-const fse = require('fs-extra');
-const path = require('path');
-const assert = require('yeoman-assert');
-const { createEnv } = require('yeoman-environment');
+import fse from 'fs-extra';
+import path from 'path';
+import assert from 'yeoman-assert';
+import Environment from 'yeoman-environment';
 
-const { dryRunHelpers: helpers } = require('../utils/utils.cjs');
-const { JHIPSTER_CONFIG_DIR } = require('../../generators/generator-constants.cjs');
-const { getGenerator } = require('../support/index.cjs');
+import { dryRunHelpers as helpers } from '../utils/utils.mjs';
+import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.mjs';
+import { getGenerator } from '../support/index.mjs';
+
+const { createEnv } = Environment;
 
 const mockedComposedGenerators = [
   'jhipster:common',

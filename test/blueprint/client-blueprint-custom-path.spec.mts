@@ -1,14 +1,20 @@
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const expectedFiles = require('../utils/expected-files.cjs');
-const ClientGenerator = require('../../generators/client/index.cjs');
-const { MYSQL } = require('../../jdl/jhipster/database-types');
-const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { getGenerator } = require('../support/index.cjs');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import expectedFiles from '../utils/expected-files.cjs';
+import ClientGenerator from '../../generators/client/index.cjs';
+import databaseTypes from '../../jdl/jhipster/database-types';
+import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
+import authenticationTypes from '../../jdl/jhipster/authentication-types';
+import buildToolTypes from '../../jdl/jhipster/build-tool-types';
+import { getGenerator } from '../support/index.mjs';
 
-const mockBlueprintSubGen = class extends ClientGenerator {
+const { MYSQL } = databaseTypes;
+const { ANGULAR } = clientFrameworkTypes;
+const { JWT } = authenticationTypes;
+const { MAVEN } = buildToolTypes;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockBlueprintSubGen: any = class extends ClientGenerator {
   constructor(args, opts, features) {
     super(
       args,

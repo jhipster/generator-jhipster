@@ -1,14 +1,21 @@
 /* eslint-disable max-classes-per-file */
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const expectedFiles = require('../utils/expected-files.cjs');
-const ClientGenerator = require('../../generators/client/index.cjs');
-const ServerGenerator = require('../../generators/server/index.cjs');
-const { MYSQL, SQL, H2_MEMORY } = require('../../jdl/jhipster/database-types');
-const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { EHCACHE } = require('../../jdl/jhipster/cache-types');
-const { getGenerator } = require('../support/index.cjs');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import expectedFiles from '../utils/expected-files.cjs';
+import ClientGenerator from '../../generators/client/index.cjs';
+import ServerGenerator from '../../generators/server/index.cjs';
+import databaseTypes from '../../jdl/jhipster/database-types';
+import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
+import authenticationTypes from '../../jdl/jhipster/authentication-types';
+import cacheProviderTypes from '../../jdl/jhipster/cache-types';
+import testSupport from '../support/index.cjs';
+
+const { getGenerator } = testSupport;
+
+const { MYSQL, SQL, H2_MEMORY } = databaseTypes;
+const { ANGULAR } = clientFrameworkTypes;
+const { JWT } = authenticationTypes;
+const { EHCACHE } = cacheProviderTypes;
 
 const mockClientBlueprintSubGen = class extends ClientGenerator {
   constructor(args, opts, features) {

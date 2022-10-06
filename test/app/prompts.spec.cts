@@ -1,13 +1,13 @@
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const { MONOLITH } = require('../../jdl/jhipster/application-types');
-const { H2_DISK, MYSQL, SQL } = require('../../jdl/jhipster/database-types');
-const { EHCACHE } = require('../../jdl/jhipster/cache-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
-const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { getGenerator } = require('../support/index.cjs');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import { MONOLITH } from '../../jdl/jhipster/application-types';
+import { H2_DISK, MYSQL, SQL } from '../../jdl/jhipster/database-types';
+import { EHCACHE } from '../../jdl/jhipster/cache-types';
+import { JWT } from '../../jdl/jhipster/authentication-types';
+import { CYPRESS } from '../../jdl/jhipster/test-framework-types';
+import { ANGULAR } from '../../jdl/jhipster/client-framework-types';
+import { MAVEN } from '../../jdl/jhipster/build-tool-types';
+import { getGenerator } from '../support/index.cjs';
 
 const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:client', 'jhipster:languages', 'jhipster:entity'];
 

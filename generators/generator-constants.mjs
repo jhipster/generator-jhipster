@@ -18,7 +18,7 @@
  */
 import constants from './generator-constants.cjs';
 
-const {
+export const {
   GENERATOR_JHIPSTER,
   SERVER_MAIN_SRC_DIR,
   SERVER_MAIN_RES_DIR,
@@ -26,14 +26,5 @@ const {
   SERVER_TEST_RES_DIR,
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
+  JHIPSTER_CONFIG_DIR,
 } = constants;
-
-export {
-  GENERATOR_JHIPSTER,
-  SERVER_MAIN_SRC_DIR,
-  SERVER_MAIN_RES_DIR,
-  SERVER_TEST_SRC_DIR,
-  SERVER_TEST_RES_DIR,
-  CLIENT_MAIN_SRC_DIR,
-  CLIENT_TEST_SRC_DIR,
-};

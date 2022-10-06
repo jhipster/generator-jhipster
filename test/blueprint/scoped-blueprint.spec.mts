@@ -1,11 +1,11 @@
-const { jestExpect: expect } = require('mocha-expect-snapshot');
-const path = require('path');
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const fse = require('fs-extra');
+import { jestExpect as expect } from 'mocha-expect-snapshot';
+import path from 'path';
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import fse from 'fs-extra';
 
-const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
-const { getTemplatePath } = require('../support/index.cjs');
+import EnvironmentBuilder from '../../cli/environment-builder.cjs';
+import { getTemplatePath } from '../support/index.mjs';
 
 describe('JHipster application generator with scoped blueprint', () => {
   describe('generate monolith application with scoped blueprint', () => {

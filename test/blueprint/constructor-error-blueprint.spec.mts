@@ -1,8 +1,12 @@
-const path = require('path');
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const fse = require('fs-extra');
-const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
+import path, { dirname } from 'path';
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import fse from 'fs-extra';
+import { fileURLToPath } from 'url';
+import EnvironmentBuilder from '../../cli/environment-builder.cjs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 describe('JHipster application generator with blueprint with constructor error', () => {
   describe('generate monolith application with scoped blueprint', () => {

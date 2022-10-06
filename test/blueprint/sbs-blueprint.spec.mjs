@@ -1,12 +1,19 @@
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const Generator = require('yeoman-generator');
-const expectedFiles = require('../utils/expected-files.cjs');
-const { MYSQL } = require('../../jdl/jhipster/database-types');
-const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { getGenerator } = require('../support/index.cjs');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import Generator from 'yeoman-generator';
+import expectedFiles from '../utils/expected-files.cjs';
+import buildToolTypes from '../../jdl/jhipster/build-tool-types';
+import databaseTypes from '../../jdl/jhipster/database-types';
+import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
+import authenticationTypes from '../../jdl/jhipster/authentication-types';
+import testSupport from '../support/index.cjs';
+
+const { getGenerator } = testSupport;
+
+const { MYSQL } = databaseTypes;
+const { ANGULAR } = clientFrameworkTypes;
+const { JWT } = authenticationTypes;
+const { MAVEN } = buildToolTypes;
 
 const mockBlueprintSubGen = class extends Generator {
   constructor(args, opts, features) {
