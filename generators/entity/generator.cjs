@@ -386,6 +386,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   /**
+   * @private
    * Setup Entity instance level options from context.
    * all variables should be set to dest,
    * all variables should be referred from context,
@@ -426,6 +427,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   /**
+   * @private
    * Validate the entityName
    * @return {true|string} true for a valid value or error message.
    */

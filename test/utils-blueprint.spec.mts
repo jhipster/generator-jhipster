@@ -1,5 +1,5 @@
-const assert = require('yeoman-assert');
-const utils = require('../utils/blueprint.cjs');
+import assert from 'yeoman-assert';
+import utils from '../utils/blueprint.cjs';
 
 describe('JHipster Blueprint Utils', () => {
   describe('::parseBluePrints', () => {
@@ -15,8 +15,6 @@ describe('JHipster Blueprint Utils', () => {
     });
     it('returns a array if not string', () => {
       assert.deepStrictEqual(utils.parseBluePrints(), []);
-      assert.deepStrictEqual(utils.parseBluePrints(1), []);
-      assert.deepStrictEqual(utils.parseBluePrints(1.1), []);
     });
     it('adds generator-jhipster prefix if it is absent', () => {
       const expected = [{ name: 'generator-jhipster-foo' }];
@@ -52,10 +50,10 @@ describe('JHipster Blueprint Utils', () => {
       });
     });
     describe('passing undefined', () => {
-      const argument = undefined;
       it('throws an error', done => {
         try {
-          utils.mergeBlueprints(argument);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          utils.mergeBlueprints(undefined as any);
         } catch (error) {
           assert.equal(error.message, 'Only arrays are supported.');
           done();
@@ -66,7 +64,8 @@ describe('JHipster Blueprint Utils', () => {
       const argumentsToPass = [[], undefined];
       it('throws an error', done => {
         try {
-          utils.mergeBlueprints(...argumentsToPass);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (utils.mergeBlueprints as any)(...argumentsToPass);
         } catch (error) {
           assert.equal(error.message, 'Only arrays are supported.');
           done();

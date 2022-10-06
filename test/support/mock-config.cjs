@@ -111,7 +111,7 @@ const applications = {
   },
 };
 
-const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config } = {}) => {
+const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config = {} } = {}) => {
   const generator = {
     testDir,
     editFile(filePath, ...callbacks) {

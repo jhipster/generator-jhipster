@@ -17,11 +17,15 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const { prepareEntityPrimaryKeyForTemplates } = require('../utils/entity.cjs');
-const { formatDateForChangelog } = require('../utils/liquibase.cjs');
-const { defaultConfig, entityDefaultConfig } = require('../generators/generator-defaults.cjs');
-const BaseGenerator = require('../generators/base/generator-base.cjs');
+import { expect } from 'chai';
+import entityUtils from '../utils/entity.cjs';
+import liquibaseUtils from '../utils/liquibase.cjs';
+import generatorDefaults from '../generators/generator-defaults.cjs';
+import BaseGenerator from '../generators/base/generator-base.cjs';
+
+const { prepareEntityPrimaryKeyForTemplates } = entityUtils;
+const { formatDateForChangelog } = liquibaseUtils;
+const { defaultConfig, entityDefaultConfig } = generatorDefaults;
 
 describe('entity utilities', () => {
   const defaultGenerator = { jhipsterConfig: defaultConfig };
@@ -30,7 +34,8 @@ describe('entity utilities', () => {
   describe('prepareEntityPrimaryKeyForTemplates', () => {
     describe('with field with id name', () => {
       describe('without @Id', () => {
-        let entity = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let entity: any = {
           ...entityDefaultConfig,
           name: 'Entity',
           changelogDate: formatDateForChangelog(new Date()),

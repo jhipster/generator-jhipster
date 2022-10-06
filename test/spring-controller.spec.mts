@@ -1,9 +1,9 @@
-const path = require('path');
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const fse = require('fs-extra');
-const constants = require('../generators/generator-constants.cjs');
-const { getGenerator, getTemplatePath } = require('./support/index.cjs');
+import path from 'path';
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import fse from 'fs-extra';
+import constants from '../generators/generator-constants.cjs';
+import { getGenerator, getTemplatePath } from './support/index.mjs';
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;

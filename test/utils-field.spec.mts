@@ -17,12 +17,17 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../utils/entity.cjs');
-const { formatDateForChangelog } = require('../utils/liquibase.cjs');
-const { defaultConfig } = require('../generators/generator-defaults.cjs');
-const BaseGenerator = require('../generators/base/generator-base.cjs');
-const { prepareFieldForTemplates, getEnumValuesWithCustomValues } = require('../utils/field.cjs');
+import { expect } from 'chai';
+import entityUtils from '../utils/entity.cjs';
+import liquibaseUtils from '../utils/liquibase.cjs';
+import generatorDefaults from '../generators/generator-defaults.cjs';
+import BaseGenerator from '../generators/base/generator-base.cjs';
+import fieldUtils from '../utils/field.cjs';
+
+const { defaultConfig } = generatorDefaults;
+const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = entityUtils;
+const { formatDateForChangelog } = liquibaseUtils;
+const { prepareFieldForTemplates, getEnumValuesWithCustomValues } = fieldUtils;
 
 describe('main utilities', () => {
   const defaultGenerator = { jhipsterConfig: defaultConfig };
@@ -36,7 +41,8 @@ describe('main utilities', () => {
 
   describe('prepareFieldForTemplates', () => {
     describe('when called', () => {
-      let field = { fieldName: 'name', fieldType: 'String' };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let field: any = { fieldName: 'name', fieldType: 'String' };
       beforeEach(() => {
         field = prepareFieldForTemplates(defaultEntity, field, defaultGenerator);
       });
@@ -54,7 +60,8 @@ describe('main utilities', () => {
       });
     });
     describe('with dto == mapstruct and @MapstructExpression', () => {
-      let field = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let field: any = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
       beforeEach(() => {
         field = prepareFieldForTemplates({ ...defaultEntity, dto: 'mapstruct' }, field, defaultGenerator);
       });

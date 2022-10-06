@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-expressions, max-classes-per-file */
-const sinon = require('sinon');
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
+import sinon from 'sinon';
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
 
-const BaseBlueprint = require('../generators/base/generator-base-blueprint.cjs');
+import BaseBlueprint from '../generators/base/generator-base-blueprint.cjs';
 
 const BaseGenerator = BaseBlueprint.prototype;
 

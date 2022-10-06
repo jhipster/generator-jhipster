@@ -1,9 +1,9 @@
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const { jestExpect: expect } = require('mocha-expect-snapshot');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-const createMockedConfig = require('./support/mock-config.cjs');
-const { getGenerator } = require('./support/index.cjs');
+import createMockedConfig from './support/mock-config.cjs';
+import { getGenerator } from './support/index.mjs';
 
 const expectedFiles = {
   eurekaregistry: ['./registry-knative/jhipster-registry.yml', './registry-knative/application-configmap.yml'],

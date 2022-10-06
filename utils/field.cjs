@@ -365,7 +365,7 @@ function fieldIsEnum(fieldType) {
 
 /**
  * From an enum's values (with or without custom values), returns the enum's values without custom values.
- * @param {String} enumValues - an enum's values.
+ * @param {String} [enumValues] - an enum's values.
  * @return {Array<String>} the formatted enum's values.
  */
 function getEnumValuesWithCustomValues(enumValues) {

@@ -1,7 +1,7 @@
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const fse = require('fs-extra');
-const { getTemplatePath, getGenerator } = require('./support/index.cjs');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import fse from 'fs-extra';
+import { getTemplatePath, getGenerator } from './support/index.mjs';
 
 describe('JHipster generator export jdl', () => {
   describe('exports entities to a JDL file without argument', () => {

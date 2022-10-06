@@ -623,7 +623,6 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @private
    * get all the languages supported by JHipster
    */
   getAllSupportedLanguages() {
@@ -631,7 +630,6 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @private
    * check if a language is supported by JHipster
    * @param {string} language - Key for the language
    */

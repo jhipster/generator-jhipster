@@ -1,11 +1,13 @@
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const { jestExpect: expect } = require('mocha-expect-snapshot');
-const monitoringTypes = require('../jdl/jhipster/monitoring-types');
-const { MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
-const { PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
-const createMockedConfig = require('./support/mock-config.cjs');
-const { getGenerator } = require('./support/index.cjs');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
+import monitoringTypes from '../jdl/jhipster/monitoring-types';
+import applicationTypes from '../jdl/jhipster/application-types';
+import createMockedConfig from './support/mock-config.cjs';
+import { getGenerator } from './support/index.mjs';
+
+const { PROMETHEUS } = monitoringTypes;
+const { MICROSERVICE, MONOLITH } = applicationTypes;
 
 const NO_MONITORING = monitoringTypes.NO;
 

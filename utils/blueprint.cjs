@@ -50,7 +50,7 @@ function loadBlueprintsFromConfiguration(config) {
 /**
  * @private
  * Splits and normalizes a comma separated list of blueprint names with optional versions.
- * @param {string} blueprints - comma separated list of blueprint names, e.g kotlin,vuewjs@1.0.1. If an array then
+ * @param {string|any[]} [blueprints] - comma separated list of blueprint names, e.g kotlin,vuewjs@1.0.1. If an array then
  * no processing is performed and it is returned as is.
  * @returns {Array} an array that contains the info for each blueprint
  */
@@ -70,7 +70,7 @@ function parseBluePrints(blueprints) {
 /**
  * @private
  * Merges blueprint arrays, keeping order and version priority.
- * @param {...Blueprint[]} blueprintsToMerge - Blueprint arrays to be merged.
+ * @param {...Blueprint[]} [blueprintsToMerge] - Blueprint arrays to be merged.
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
 function mergeBlueprints(...blueprintsToMerge) {

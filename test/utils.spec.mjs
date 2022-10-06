@@ -1,13 +1,18 @@
-const assert = require('yeoman-assert');
-const path = require('path');
-const sinon = require('sinon');
-const { jestExpect: expect } = require('mocha-expect-snapshot');
-const { writeFileSync } = require('fs');
+import { fileURLToPath } from 'url';
 
-const utils = require('../generators/utils.cjs');
-const { prepareTempDir } = require('./utils/utils.cjs');
+import assert from 'yeoman-assert';
+import path, { dirname } from 'path';
+import sinon from 'sinon';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
+import { writeFileSync } from 'fs';
+
+import utils from '../generators/utils.cjs';
+import { prepareTempDir } from './utils/utils.mjs';
 
 const { detectCrLf } = utils;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 describe('JHipster Utils', () => {
   describe('::getJavadoc', () => {

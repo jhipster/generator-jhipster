@@ -1,7 +1,7 @@
-const helpers = require('yeoman-test');
+import helpers from 'yeoman-test';
 
-const EnvironmentBuilder = require('../cli/environment-builder.cjs');
-const constants = require('../generators/generator-constants.cjs');
+import EnvironmentBuilder from '../cli/environment-builder.cjs';
+import constants from '../generators/generator-constants.cjs';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -23,8 +23,8 @@ const createClientProject = options =>
     })
     .run();
 
-const createPage = (cwd, options) =>
-  helpers
+const createPage = (cwd, options?) =>
+  (helpers as any)
     .create('jhipster:page', {}, { createEnv: EnvironmentBuilder.createEnv })
     .setDir(cwd)
     .withOptions({

@@ -1,12 +1,12 @@
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const fse = require('fs-extra');
-const sinon = require('sinon');
-const ChildProcess = require('child_process');
-const { jestExpect: expect } = require('mocha-expect-snapshot');
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import fse from 'fs-extra';
+import sinon from 'sinon';
+import ChildProcess from 'child_process';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-const constants = require('../generators/generator-constants.cjs');
-const { getTemplatePath, getGenerator } = require('./support/index.cjs');
+import constants from '../generators/generator-constants.cjs';
+import { getTemplatePath, getGenerator } from './support/index.cjs';
 
 const expectedFiles = {
   monolith: [
@@ -27,7 +27,8 @@ describe('JHipster Heroku Sub Generator', () => {
     stub.withArgs('git init').yields([false, '', '']);
   });
   afterEach(() => {
-    ChildProcess.exec.restore();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (ChildProcess.exec as any).restore();
   });
 
   describe('microservice application', () => {
@@ -41,6 +42,7 @@ describe('JHipster Heroku Sub Generator', () => {
           .yields(false, '', '')
           .returns({
             stdout: {
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
               on: () => {},
             },
           });
@@ -81,6 +83,7 @@ describe('JHipster Heroku Sub Generator', () => {
           .yields(true, '', `Name ${herokuAppName} is already taken`)
           .returns({
             stdout: {
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
               on: () => {},
             },
           });

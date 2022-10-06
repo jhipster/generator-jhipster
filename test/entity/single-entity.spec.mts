@@ -1,10 +1,10 @@
-const path = require('path');
-const fse = require('fs-extra');
-const helpers = require('yeoman-test');
+import path from 'path';
+import fse from 'fs-extra';
+import helpers from 'yeoman-test';
 
-const { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } = require('../../generators/generator-constants.cjs');
-const createMockedConfig = require('../support/mock-config.cjs');
-const { getTemplatePath, getEntityTemplatePath, getGenerator } = require('../support/index.cjs');
+import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
+import createMockedConfig from '../support/mock-config.cjs';
+import { getTemplatePath, getEntityTemplatePath, getGenerator } from '../support/index.mjs';
 
 const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };
 

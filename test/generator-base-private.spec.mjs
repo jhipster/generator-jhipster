@@ -1,12 +1,17 @@
-const path = require('path');
-const expect = require('chai').expect;
-const { jestExpect } = require('mocha-expect-snapshot');
-// using base generator which extends the private base
-const BaseGeneratorPrivate = require('../generators/base/generator-base-private.cjs').prototype;
-const BaseGenerator = require('../generators/base/generator-base.cjs').prototype; // TODO remove in favor of a cleaner architecture
-const { CASSANDRA, MONGODB, MYSQL, SQL } = require('../jdl/jhipster/database-types');
-const { MapperTypes } = require('../jdl/jhipster/entity-options');
-const { CommonDBTypes } = require('../jdl/jhipster/field-types');
+import path from 'path';
+import { expect } from 'chai';
+import { jestExpect } from 'mocha-expect-snapshot';
+import BaseGeneratorPrivateClass from '../generators/base/generator-base-private.cjs';
+import BaseGeneratorClass from '../generators/base/generator-base.cjs';
+import databaseTypes from '../jdl/jhipster/database-types';
+import entityOptions from '../jdl/jhipster/entity-options';
+import fieldTypes from '../jdl/jhipster/field-types';
+
+const { CASSANDRA, MONGODB, MYSQL, SQL } = databaseTypes;
+const { MapperTypes } = entityOptions;
+const { CommonDBTypes } = fieldTypes;
+const BaseGeneratorPrivate = BaseGeneratorPrivateClass.prototype;
+const BaseGenerator = BaseGeneratorClass.prototype;
 
 const NO_DTO = MapperTypes.NO;
 

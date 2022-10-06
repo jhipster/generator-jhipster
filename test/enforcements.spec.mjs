@@ -16,11 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const assert = require('assert');
-const fs = require('fs');
-const fse = require('fs-extra');
-const path = require('path');
-const { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } = require('../generators/generator-list.cjs');
+import assert from 'assert';
+import fs from 'fs';
+import fse from 'fs-extra';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } from '../generators/generator-list.mjs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 

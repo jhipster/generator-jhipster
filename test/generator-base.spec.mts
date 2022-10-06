@@ -1,16 +1,19 @@
 /* eslint-disable no-unused-expressions */
-const expect = require('chai').expect;
-const sinon = require('sinon');
-const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const Environment = require('yeoman-environment');
+import { expect } from 'chai';
+import sinon from 'sinon';
+import assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import Environment from 'yeoman-environment';
 
-const Base = require('../generators/base/generator-base.cjs');
-const { testInTempDir, revertTempDir } = require('./utils/utils.cjs');
-const { parseLiquibaseChangelogDate } = require('../utils/liquibase.cjs');
-const { H2_MEMORY, H2_DISK, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = require('../jdl/jhipster/database-types');
+import Base from '../generators/base/generator-base.cjs';
+import { testInTempDir, revertTempDir } from './utils/utils.mjs';
+import liquibaseUtils from '../utils/liquibase.cjs';
+import databaseTypes from '../jdl/jhipster/database-types';
 
-const BaseGenerator = Base.prototype;
+const { parseLiquibaseChangelogDate } = liquibaseUtils;
+const { H2_MEMORY, H2_DISK, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
+
+const BaseGenerator: any = Base.prototype;
 
 BaseGenerator.log = msg => {
   // eslint-disable-next-line no-console
@@ -77,6 +80,7 @@ describe('Generator Base', () => {
     });
     describe('when legacyRelationshipTableName is set', () => {
       it('returns a proper join table name', () => {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         function TestClass() {}
         TestClass.prototype = Object.create(Base.prototype);
         TestClass.prototype.jhipsterConfig = { legacyRelationshipTableName: true };
@@ -259,7 +263,8 @@ describe('Generator Base', () => {
     let oldCwd;
     let options;
     beforeEach(() => {
-      oldCwd = testInTempDir(() => {}, true);
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      oldCwd = testInTempDir(() => {});
       base = new Base({ ...options, env: Environment.createEnv() });
     });
     afterEach(() => {
@@ -620,7 +625,8 @@ describe('Generator Base', () => {
       priorities.forEach(priority => {
         mockedPriorities[priority] = sinon.fake();
       });
-      const mockBlueprintSubGen = class extends Base {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const mockBlueprintSubGen: any = class extends Base {
         get initializing() {
           return {
             mocked() {
