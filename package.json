@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "generator-jhipster",
   "version": "7.9.3",
   "description": "Spring Boot + Angular/React/Vue in one handy generator",
@@ -35,6 +34,7 @@
     "email": "",
     "url": "https://github.com/jdubois"
   },
+  "type": "module",
   "exports": {
     ".": "./dist/lib/index.mjs",
     "./cli": "./dist/cli/index.mjs",
