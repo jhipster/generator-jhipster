@@ -41,6 +41,10 @@ const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const { EPHEMERAL, PERSISTENT } = StorageTypes;
 
 /* eslint-disable consistent-return */
+/**
+ * @class
+ * @extends {BaseDockerGenerator}
+ */
 module.exports = class extends BaseDockerGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {

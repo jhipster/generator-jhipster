@@ -31,6 +31,10 @@ const { Options: DeploymentOptions } = require('../../jdl/jhipster/deployment-op
 
 const { JWT_SECRET_KEY } = OptionNames;
 
+/**
+ * @class
+ * @extends {BlueprintBaseGenerator}
+ */
 module.exports = class extends BlueprintBaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);

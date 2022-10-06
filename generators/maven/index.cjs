@@ -27,6 +27,10 @@ const { BUILD_TOOL, BUILD_DESTINATION } = require('../java/constants.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_JAVA);
 
+/**
+ * @class
+ * @extends {import('../base/index.mjs')}
+ */
 module.exports = class extends MixedChain {
   constructor(args, options, features) {
     super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });

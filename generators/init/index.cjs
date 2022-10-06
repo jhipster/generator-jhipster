@@ -27,6 +27,10 @@ const { dependencyChain } = require('./mixin.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_INIT);
 
+/**
+ * @class
+ * @extends {import('../base/index.mjs')}
+ */
 module.exports = class extends MixedChain {
   constructor(args, options, features) {
     super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });

@@ -38,6 +38,10 @@ const {
 } = require('../kubernetes/kubernetes-base.cjs');
 const statistics = require('../statistics.cjs');
 
+/**
+ * @class
+ * @extends {BaseDockerGenerator}
+ */
 module.exports = class extends BaseDockerGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {

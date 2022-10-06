@@ -43,6 +43,10 @@ const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types
 
 const { K8S } = GeneratorTypes;
 
+/**
+ * @class
+ * @extends {BaseDockerGenerator}
+ */
 module.exports = class extends BaseDockerGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {

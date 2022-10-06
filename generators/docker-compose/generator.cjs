@@ -35,6 +35,10 @@ const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list.cjs');
 
 /* eslint-disable consistent-return */
+/**
+ * @class
+ * @extends {import('../base/index.mjs')}
+ */
 module.exports = class extends BaseDockerGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
