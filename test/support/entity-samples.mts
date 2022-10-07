@@ -60,6 +60,6 @@ export const entitySkipClient = {
   fields: [{ fieldName: 'skipClientName', fieldType: 'String' }],
 };
 
-export const entitiesServerSamples = [entitySimple, entityCustomId, entitiesMicroservice];
+export const entitiesServerSamples = [entitySimple, entityAnotherSimple, entityCustomId, entitiesMicroservice];
 
 export const entitiesClientSamples = [entitySimple, entityCustomId, entitiesMicroservice, entitySkipClient];
