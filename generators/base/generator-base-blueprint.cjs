@@ -38,6 +38,11 @@ const { PRIORITY_NAMES } = require('./priorities.cjs');
  * @property {import('yeoman-generator')} jhipsterContext - JHipster parent generator (Blueprints only).
  */
 module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerator {
+  /**
+   * @param {string | string[]} args
+   * @param {import('./base/api.cjs').JHipsterGeneratorOptions} options
+   * @param {import('./base/api.cjs').JHipsterGeneratorFeatures} features
+   */
   constructor(args, options, features) {
     super(args, options, features);
 

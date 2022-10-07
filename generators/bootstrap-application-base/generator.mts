@@ -26,6 +26,7 @@ import utils from '../../utils/index.cjs';
 import userUtils from '../../utils/user.cjs';
 import constants from '../generator-constants.cjs';
 import type { CommonClientServerApplication } from './types.js';
+import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 
 const { prepareEntityForTemplates } = entityUtils;
 const { prepareFieldForTemplates } = fieldUtils;
@@ -46,6 +47,10 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
     if (this.options.help) return;
 
     this.loadStoredAppOptions();
+  }
+
+  async _postConstruct() {
+    await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
   }
 
   get configuring() {

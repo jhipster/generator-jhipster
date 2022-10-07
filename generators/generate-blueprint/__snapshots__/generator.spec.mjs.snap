@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster generate-blueprint generator with all option should write java files with gradle build tool and match snapshot 1`] = `
+exports[`JHipster generate-blueprint generator with all option should match snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",

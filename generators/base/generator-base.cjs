@@ -106,6 +106,11 @@ class JHipsterBaseGenerator extends PrivateBase {
 
   sbsBlueprint;
 
+  /**
+   * @param {string | string[]} args
+   * @param {import('./base/api.cjs').JHipsterGeneratorOptions} options
+   * @param {import('./base/api.cjs').JHipsterGeneratorFeatures} features
+   */
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -1431,7 +1436,7 @@ class JHipsterBaseGenerator extends PrivateBase {
   /**
    * Compose with a jhipster generator using default jhipster config.
    * @param {string} generator - jhipster generator.
-   * @param {object} args - args to pass
+   * @param {object} [args] - args to pass
    * @param {object} [options] - options to pass
    * @param {boolean} [once] - compose once with the generator
    * @return {object} the composed generator
@@ -2099,7 +2104,7 @@ class JHipsterBaseGenerator extends PrivateBase {
    * write the given files using provided options.
    *
    * @template DataType
-   * @param {import('./base/api.js').WriteFileOptions<this, DataType>} options
+   * @param {import('./api.cjs').WriteFileOptions<this, DataType>} options
    * @return {Promise<string[]>}
    */
   async writeFiles(options) {
@@ -2930,7 +2935,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   /**
    * @param {Object} config - config to load config from
-   * @param {import('./bootstrap-application-base/types.js').PlatformApplication} dest - destination context to use default is context
+   * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
@@ -2940,7 +2945,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   /**
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
-   * @param {import('./bootstrap-application-base/types.js').PlatformApplication} dest - destination context to use default is context
+   * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
   loadDerivedPlatformConfig(dest = this) {
     dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
@@ -3141,7 +3146,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./base/api').JHipsterOptions} [options] - Object containing options.
+   * @param {import('./base/api.cjs').JHipsterOptions} [options] - Object containing options.
    */
   jhipsterOptions(options = {}) {
     options = _.cloneDeep(options);
@@ -3187,8 +3192,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * Edit file content
    * @param {string} file
-   * @param {...import('./base/api.js').EditFileCallback} transformCallbacks
-   * @returns {import('./base/api.js').CascatedEditFileCallback}
+   * @param {...import('./api.cjs').EditFileCallback} transformCallbacks
+   * @returns {import('./api.cjs').CascatedEditFileCallback}
    */
   editFile(file, ...transformCallbacks) {
     let filePath = this.destinationPath(file);
