@@ -102,17 +102,29 @@ describe(`JHipster ${databaseType} generator`, () => {
 
   testSamples.forEach(([name, sample]) => {
     const sampleConfig = sample.applicationWithEntities.config;
-    const { authenticationType } = sampleConfig;
+    const { authenticationType, enableTranslation } = sampleConfig;
 
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:languages', 'jhipster:common']);
+        runResult = await helpers
+          .run(generatorFile)
+          .withOptions(sample)
+          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:database-changelog']);
       });
 
       after(() => runResult.cleanup());
 
+      it('should compose with jhipster:common', () => {
+        expect(runResult.mockedGenerators['jhipster:common'].callCount).toBe(1);
+      });
+      it('should not compose with jhipster:languages', () => {
+        expect(runResult.mockedGenerators['jhipster:languages'].callCount).toBe(enableTranslation ? 1 : 0);
+      });
+      it('should not compose with jhipster:languages', () => {
+        expect(runResult.mockedGenerators['jhipster:database-changelog'].callCount).toBe(1);
+      });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
