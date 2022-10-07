@@ -6,7 +6,6 @@ import { buildServerMatrix, extendMatrix, extendFilteredMatrix, entitiesServerSa
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import DatabaseTypes from '../../jdl/jhipster/database-types.js';
-import SearchEngineTypes from '../../jdl/jhipster/search-engine-types.js';
 import CacheTypes from '../../jdl/jhipster/cache-types.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,7 +15,6 @@ const generatorFile = join(__dirname, 'index.mjs');
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = DatabaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
-const { ELASTICSEARCH, NO: NO_SEARCH_ENGINE } = SearchEngineTypes;
 const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = CacheTypes;
 
 let sqlSamples = buildServerMatrix();
@@ -24,7 +22,6 @@ let sqlSamples = buildServerMatrix();
 sqlSamples = extendMatrix(sqlSamples, {
   prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE],
   enableHibernateCache: [false, true],
-  searchEngine: [NO_SEARCH_ENGINE, ELASTICSEARCH],
 });
 
 sqlSamples = extendFilteredMatrix(sqlSamples, ({ prodDatabaseType }) => prodDatabaseType === POSTGRESQL, {

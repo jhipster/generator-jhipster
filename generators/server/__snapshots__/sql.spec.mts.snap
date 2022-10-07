@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster sql generator gateway-jwt-mariadb-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-cucumber-websocket(true)-skipUserManagement(true)-eureka-enableHibernateCache(false)-searchEngine(no)-h2Disk-memcached should match generated files snapshot 1`] = `
+exports[`JHipster sql generator gateway-jwt-mariadb-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-cucumber-websocket(true)-skipUserManagement(true)-eureka-enableHibernateCache(false)-h2Disk-memcached should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -380,7 +380,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator gateway-jwt-mssql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-h2Disk-infinispan should match generated files snapshot 1`] = `
+exports[`JHipster sql generator gateway-jwt-mssql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-infinispan should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -422,9 +422,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -490,9 +487,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -536,9 +530,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/rowmapper/ColumnConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -640,15 +631,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -736,7 +718,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator gateway-jwt-mysql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(true)-elasticsearch-h2Disk-caffeine should match generated files snapshot 1`] = `
+exports[`JHipster sql generator gateway-jwt-mysql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(true)-h2Disk-caffeine should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -816,9 +798,6 @@ Object {
   "src/main/docker/consul.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -877,9 +856,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
@@ -943,12 +919,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/UserRowMapper.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -1143,15 +1113,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -1263,7 +1224,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator gateway-jwt-oracle-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(true)-searchEngine(no)-h2Disk-hazelcast should match generated files snapshot 1`] = `
+exports[`JHipster sql generator gateway-jwt-oracle-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(true)-h2Disk-hazelcast should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -1766,7 +1727,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator gateway-jwt-postgresql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(true)-searchEngine(no)-h2Disk-ehcache should match generated files snapshot 1`] = `
+exports[`JHipster sql generator gateway-jwt-postgresql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Disk-ehcache should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -2242,7 +2203,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator gateway-oauth2-mariadb-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-cucumber-websocket(false)-consul-enableHibernateCache(true)-searchEngine(no)-h2Memory-infinispan should match generated files snapshot 1`] = `
+exports[`JHipster sql generator gateway-oauth2-mariadb-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-cucumber-websocket(false)-consul-enableHibernateCache(true)-h2Memory-infinispan should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -2706,7 +2667,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator gateway-oauth2-mssql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(false)-eureka-enableHibernateCache(true)-elasticsearch-h2Memory-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`JHipster sql generator gateway-oauth2-mssql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(false)-eureka-enableHibernateCache(true)-h2Memory-cacheProvider(no) should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -2780,9 +2741,6 @@ Object {
   "src/main/docker/central-server-config/localhost-config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -2852,9 +2810,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/EurekaWorkaroundConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -2916,12 +2871,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/UserRowMapper.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -3080,15 +3029,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -3179,7 +3119,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator gateway-oauth2-mysql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Memory-hazelcast should match generated files snapshot 1`] = `
+exports[`JHipster sql generator gateway-oauth2-mysql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-hazelcast should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -3580,7 +3520,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator gateway-oauth2-oracle-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-elasticsearch-h2Memory-redis should match generated files snapshot 1`] = `
+exports[`JHipster sql generator gateway-oauth2-oracle-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-h2Memory-redis should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -3634,9 +3574,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -3714,9 +3651,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -3775,12 +3709,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/rowmapper/UserRowMapper.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -3939,15 +3867,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedRedis.java": Object {
     "stateCleared": "modified",
   },
@@ -4041,7 +3960,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator gateway-oauth2-postgresql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-eureka-enableHibernateCache(false)-elasticsearch-h2Memory-caffeine should match generated files snapshot 1`] = `
+exports[`JHipster sql generator gateway-oauth2-postgresql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-eureka-enableHibernateCache(false)-h2Memory-caffeine should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -4092,9 +4011,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -4166,9 +4082,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/EurekaWorkaroundConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -4230,12 +4143,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/rowmapper/UserRowMapper.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -4388,15 +4295,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -4487,7 +4385,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-enableHibernateCache(false)-elasticsearch-h2Disk-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-cacheProvider(no) should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -4544,9 +4442,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -4612,9 +4507,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/FeignConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -4667,12 +4559,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -4864,15 +4750,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -5002,7 +4879,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-gatling-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-searchEngine(no)-mariadb should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-gatling-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-mariadb should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -5340,7 +5217,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-h2Disk-ehcache should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-ehcache should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -5382,9 +5259,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -5453,9 +5327,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/FeignConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -5508,12 +5379,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -5693,15 +5558,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -5843,7 +5699,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-skipUserManagement(true)-eureka-enableHibernateCache(true)-searchEngine(no)-mssql should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-skipUserManagement(true)-eureka-enableHibernateCache(true)-mssql should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -6193,7 +6049,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-searchEngine(no)-h2Disk-redis should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-redis should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -6720,7 +6576,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-elasticsearch-mysql should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-jwt-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-mysql should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -6800,9 +6656,6 @@ Object {
   "src/main/docker/consul.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -6863,9 +6716,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -6909,9 +6759,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/ColumnConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -7007,15 +6854,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -7088,7 +6926,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(false)-searchEngine(no)-h2Disk-memcached should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-memcached should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -7570,7 +7408,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-elasticsearch-oracle should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-jwt-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-oracle should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -7635,9 +7473,6 @@ Object {
   "src/main/docker/app.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -7695,9 +7530,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -7741,9 +7573,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/ColumnConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -7833,15 +7662,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -7920,7 +7740,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Disk-hazelcast should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-hazelcast should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -8393,7 +8213,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-jwt-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-enableHibernateCache(true)-elasticsearch-postgresql should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-jwt-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-enableHibernateCache(true)-postgresql should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -8467,9 +8287,6 @@ Object {
   "src/main/docker/central-server-config/localhost-config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -8533,9 +8350,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/EurekaWorkaroundConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -8582,9 +8396,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/ColumnConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -8686,15 +8497,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -8767,7 +8569,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-websocket(false)-eureka-enableHibernateCache(false)-searchEngine(no)-mariadb-ehcache should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-websocket(false)-eureka-enableHibernateCache(false)-mariadb-ehcache should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -9192,7 +8994,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-enableSwaggerCodegen:true-consul-enableHibernateCache(true)-elasticsearch-h2Memory should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-enableSwaggerCodegen:true-consul-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -9272,9 +9074,6 @@ Object {
   "src/main/docker/consul.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -9335,9 +9134,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -9396,12 +9192,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/UserRowMapper.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -9527,15 +9317,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -9617,7 +9398,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-websocket(false)-consul-enableHibernateCache(false)-searchEngine(no)-mssql-caffeine should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-websocket(false)-consul-enableHibernateCache(false)-mssql-caffeine should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -10021,7 +9802,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-serviceDiscoveryType(no)-enableHibernateCache(true)-elasticsearch-h2Memory should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -10086,9 +9867,6 @@ Object {
   "src/main/docker/app.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -10149,9 +9927,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -10210,12 +9985,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/UserRowMapper.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -10335,15 +10104,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -10431,7 +10191,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-mysql-memcached should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-mysql-memcached should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -10476,9 +10236,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -10556,9 +10313,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/FeignConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -10608,12 +10362,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -10736,15 +10484,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -10853,7 +10592,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-eureka-enableHibernateCache(true)-searchEngine(no)-h2Memory should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-oauth2-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-eureka-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -11257,7 +10996,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(true)-eureka-enableHibernateCache(false)-elasticsearch-oracle-infinispan should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(true)-eureka-enableHibernateCache(false)-oracle-infinispan should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -11308,9 +11047,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -11388,9 +11124,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/EurekaWorkaroundConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -11443,12 +11176,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -11577,15 +11304,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -11682,7 +11400,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-cucumber-consul-enableHibernateCache(true)-searchEngine(no)-h2Memory should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-oauth2-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-cucumber-consul-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -12086,7 +11804,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-elasticsearch-postgresql-redis should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-postgresql-redis should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -12140,9 +11858,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -12229,9 +11944,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/FeignConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -12281,12 +11993,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -12421,15 +12127,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedRedis.java": Object {
     "stateCleared": "modified",
   },
@@ -12535,7 +12232,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator microservice-oauth2-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-gatling-serviceDiscoveryType(no)-enableHibernateCache(true)-searchEngine(no)-h2Memory should match generated files snapshot 1`] = `
+exports[`JHipster sql generator microservice-oauth2-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-gatling-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -12918,7 +12615,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Disk-hazelcast should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-hazelcast should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -13388,7 +13085,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-enableHibernateCache(true)-elasticsearch-mariadb should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-enableHibernateCache(true)-mariadb should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -13465,9 +13162,6 @@ Object {
   "src/main/docker/config/mariadb/my.cnf": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -13531,9 +13225,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/EurekaWorkaroundConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -13580,9 +13271,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/ColumnConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -13684,15 +13372,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -13786,7 +13465,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-searchEngine(no)-h2Disk-redis should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-redis should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -14298,7 +13977,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-elasticsearch-mssql should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-mssql should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -14375,9 +14054,6 @@ Object {
   "src/main/docker/consul.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -14438,9 +14114,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -14484,9 +14157,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/ColumnConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -14594,15 +14264,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -14681,7 +14342,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-enableHibernateCache(false)-elasticsearch-h2Disk-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-cacheProvider(no) should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -14738,9 +14399,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -14803,9 +14461,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -14855,12 +14510,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -15049,15 +14698,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -15187,7 +14827,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-searchEngine(no)-mysql should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-jwt-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-mysql should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -15537,7 +15177,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-h2Disk-ehcache should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-ehcache should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -15579,9 +15219,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -15641,9 +15278,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -15693,12 +15327,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -15887,15 +15515,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -16019,7 +15638,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-gatling-skipUserManagement(true)-eureka-enableHibernateCache(true)-searchEngine(no)-oracle should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-jwt-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-gatling-skipUserManagement(true)-eureka-enableHibernateCache(true)-oracle should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -16381,7 +16000,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-eureka-enableHibernateCache(false)-elasticsearch-h2Disk-infinispan should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-infinispan should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -16432,9 +16051,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -16506,9 +16122,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/EurekaWorkaroundConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -16561,12 +16174,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -16753,15 +16360,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
@@ -16911,7 +16509,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-jwt-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-skipUserManagement(true)-consul-enableHibernateCache(true)-searchEngine(no)-postgresql should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-jwt-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-skipUserManagement(true)-consul-enableHibernateCache(true)-postgresql should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -17270,7 +16868,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-elasticsearch-mariadb-redis should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-mariadb-redis should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -17327,9 +16925,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -17413,9 +17008,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -17465,12 +17057,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -17617,15 +17203,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedRedis.java": Object {
     "stateCleared": "modified",
   },
@@ -17743,7 +17320,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-serviceDiscoveryType(no)-enableHibernateCache(true)-searchEngine(no)-h2Memory should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -18171,7 +17748,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-mssql-memcached should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-mssql-memcached should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -18213,9 +17790,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -18287,9 +17861,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -18339,12 +17910,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -18491,15 +18056,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -18605,7 +18161,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-eureka-enableHibernateCache(true)-searchEngine(no)-h2Memory should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-eureka-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -19048,7 +18604,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-eureka-enableHibernateCache(false)-searchEngine(no)-mysql-ehcache should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-eureka-enableHibernateCache(false)-mysql-ehcache should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -19488,7 +19044,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-consul-enableHibernateCache(true)-elasticsearch-h2Memory should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-oauth2-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-consul-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -19568,9 +19124,6 @@ Object {
   "src/main/docker/consul.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -19637,9 +19190,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -19701,12 +19251,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/UserRowMapper.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -19856,15 +19400,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -19952,7 +19487,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-consul-enableHibernateCache(false)-searchEngine(no)-oracle-caffeine should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-consul-enableHibernateCache(false)-oracle-caffeine should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -20386,7 +19921,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-serviceDiscoveryType(no)-enableHibernateCache(true)-elasticsearch-h2Memory should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-oauth2-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -20451,9 +19986,6 @@ Object {
   "src/main/docker/app.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -20512,9 +20044,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
@@ -20578,12 +20107,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/UserRowMapper.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -20721,15 +20244,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -20811,7 +20325,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-postgresql-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-postgresql-cacheProvider(no) should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -21212,7 +20726,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-oauth2-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-enableHibernateCache(true)-elasticsearch-h2Memory should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-oauth2-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -21286,9 +20800,6 @@ Object {
   "src/main/docker/central-server-config/localhost-config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -21358,9 +20869,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/EurekaWorkaroundConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -21425,12 +20933,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/UserRowMapper.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -21574,15 +21076,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -21682,7 +21175,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-session-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-h2Memory-caffeine should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-session-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-caffeine should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -21727,9 +21220,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -21792,9 +21282,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -21847,12 +21334,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -22023,15 +21504,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -22164,7 +21636,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-session-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-skipUserManagement(true)-consul-enableHibernateCache(true)-searchEngine(no)-h2Disk should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-session-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -22502,7 +21974,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-session-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-h2Memory-hazelcast should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-session-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-hazelcast should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -22544,9 +22016,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
@@ -22612,9 +22081,6 @@ Object {
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -22667,12 +22133,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
@@ -22843,15 +22303,6 @@ Object {
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -22963,7 +22414,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-session-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-cucumber-skipUserManagement(true)-consul-enableHibernateCache(true)-searchEngine(no)-h2Disk should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-session-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-cucumber-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -23307,7 +22758,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-session-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Memory-infinispan should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-session-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-infinispan should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -23750,7 +23201,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-session-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-elasticsearch-h2Disk should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-session-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -23830,9 +23281,6 @@ Object {
   "src/main/docker/consul.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -23893,9 +23341,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -23936,9 +23381,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/ColumnConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -24031,15 +23473,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -24115,7 +23548,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-session-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Memory-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-session-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-cacheProvider(no) should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -24549,7 +23982,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-session-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-elasticsearch-h2Disk should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-session-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -24626,9 +24059,6 @@ Object {
   "src/main/docker/consul.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -24686,9 +24116,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -24729,9 +24156,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/ColumnConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -24830,15 +24254,6 @@ Object {
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
     "stateCleared": "modified",
   },
@@ -24899,7 +24314,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-session-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Memory-memcached should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-session-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-memcached should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -25357,7 +24772,7 @@ Object {
 }
 `;
 
-exports[`JHipster sql generator monolith-session-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-elasticsearch-h2Disk should match generated files snapshot 1`] = `
+exports[`JHipster sql generator monolith-session-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -25434,9 +24849,6 @@ Object {
   "src/main/docker/consul.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/elasticsearch.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -25497,9 +24909,6 @@ Object {
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ElasticsearchConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -25540,9 +24949,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/rowmapper/ColumnConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/search/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/AuthoritiesConstants.java": Object {
@@ -25633,15 +25039,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/AsyncSyncConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/ElasticsearchTestContainer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/EmbeddedSQL.java": Object {
@@ -25709,7 +25106,7 @@ Object {
 
 exports[`JHipster sql generator samples matrix should match snapshot 1`] = `
 Object {
-  "gateway-jwt-mariadb-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-cucumber-websocket(true)-skipUserManagement(true)-eureka-enableHibernateCache(false)-searchEngine(no)-h2Disk-memcached": Object {
+  "gateway-jwt-mariadb-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-cucumber-websocket(true)-skipUserManagement(true)-eureka-enableHibernateCache(false)-h2Disk-memcached": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "gateway",
@@ -25731,7 +25128,6 @@ Object {
         "nativeLanguage": "en",
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mariadb",
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": false,
@@ -25744,7 +25140,7 @@ Object {
     },
     "defaults": true,
   },
-  "gateway-jwt-mssql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-h2Disk-infinispan": Object {
+  "gateway-jwt-mssql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-infinispan": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "gateway",
@@ -25766,7 +25162,6 @@ Object {
         "nativeLanguage": "en",
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mssql",
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -25781,7 +25176,7 @@ Object {
     },
     "defaults": true,
   },
-  "gateway-jwt-mysql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(true)-elasticsearch-h2Disk-caffeine": Object {
+  "gateway-jwt-mysql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(true)-h2Disk-caffeine": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "gateway",
@@ -25803,7 +25198,6 @@ Object {
         "nativeLanguage": "en",
         "packageName": "com.package",
         "prodDatabaseType": "mysql",
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -25816,7 +25210,7 @@ Object {
     },
     "defaults": true,
   },
-  "gateway-jwt-oracle-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(true)-searchEngine(no)-h2Disk-hazelcast": Object {
+  "gateway-jwt-oracle-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(true)-h2Disk-hazelcast": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "gateway",
@@ -25838,7 +25232,6 @@ Object {
         "nativeLanguage": "en",
         "packageName": "com.package",
         "prodDatabaseType": "oracle",
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": true,
@@ -25849,7 +25242,7 @@ Object {
     },
     "defaults": true,
   },
-  "gateway-jwt-postgresql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(true)-searchEngine(no)-h2Disk-ehcache": Object {
+  "gateway-jwt-postgresql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Disk-ehcache": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "gateway",
@@ -25871,7 +25264,6 @@ Object {
         "nativeLanguage": "en",
         "packageName": "com.package",
         "prodDatabaseType": "postgresql",
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": true,
@@ -25884,7 +25276,7 @@ Object {
     },
     "defaults": true,
   },
-  "gateway-oauth2-mariadb-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-cucumber-websocket(false)-consul-enableHibernateCache(true)-searchEngine(no)-h2Memory-infinispan": Object {
+  "gateway-oauth2-mariadb-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-cucumber-websocket(false)-consul-enableHibernateCache(true)-h2Memory-infinispan": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "gateway",
@@ -25906,7 +25298,6 @@ Object {
         "nativeLanguage": "en",
         "packageName": "com.package",
         "prodDatabaseType": "mariadb",
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": true,
@@ -25918,7 +25309,7 @@ Object {
     },
     "defaults": true,
   },
-  "gateway-oauth2-mssql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(false)-eureka-enableHibernateCache(true)-elasticsearch-h2Memory-cacheProvider(no)": Object {
+  "gateway-oauth2-mssql-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(false)-eureka-enableHibernateCache(true)-h2Memory-cacheProvider(no)": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "gateway",
@@ -25940,7 +25331,6 @@ Object {
         "nativeLanguage": "en",
         "packageName": "com.package",
         "prodDatabaseType": "mssql",
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -25954,7 +25344,7 @@ Object {
     },
     "defaults": true,
   },
-  "gateway-oauth2-mysql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Memory-hazelcast": Object {
+  "gateway-oauth2-mysql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-hazelcast": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "gateway",
@@ -25976,7 +25366,6 @@ Object {
         "nativeLanguage": "en",
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mysql",
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": false,
@@ -25988,7 +25377,7 @@ Object {
     },
     "defaults": true,
   },
-  "gateway-oauth2-oracle-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-elasticsearch-h2Memory-redis": Object {
+  "gateway-oauth2-oracle-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-h2Memory-redis": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "gateway",
@@ -26010,7 +25399,6 @@ Object {
         "nativeLanguage": "en",
         "packageName": "tech.jhipster",
         "prodDatabaseType": "oracle",
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26024,7 +25412,7 @@ Object {
     },
     "defaults": true,
   },
-  "gateway-oauth2-postgresql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-eureka-enableHibernateCache(false)-elasticsearch-h2Memory-caffeine": Object {
+  "gateway-oauth2-postgresql-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-eureka-enableHibernateCache(false)-h2Memory-caffeine": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "gateway",
@@ -26046,7 +25434,6 @@ Object {
         "nativeLanguage": "en",
         "packageName": "tech.jhipster",
         "prodDatabaseType": "postgresql",
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26058,7 +25445,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-enableHibernateCache(false)-elasticsearch-h2Disk-cacheProvider(no)": Object {
+  "microservice-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-cacheProvider(no)": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26081,7 +25468,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mariadb",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26096,7 +25482,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-gatling-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-searchEngine(no)-mariadb": Object {
+  "microservice-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-gatling-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-mariadb": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26118,7 +25504,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mariadb",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": false,
@@ -26130,7 +25515,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-h2Disk-ehcache": Object {
+  "microservice-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-ehcache": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26153,7 +25538,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mssql",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26168,7 +25552,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-skipUserManagement(true)-eureka-enableHibernateCache(true)-searchEngine(no)-mssql": Object {
+  "microservice-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-skipUserManagement(true)-eureka-enableHibernateCache(true)-mssql": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26190,7 +25574,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mssql",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": false,
@@ -26200,7 +25583,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-searchEngine(no)-h2Disk-redis": Object {
+  "microservice-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-redis": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26223,7 +25606,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mysql",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": true,
@@ -26236,7 +25618,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-jwt-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-elasticsearch-mysql": Object {
+  "microservice-jwt-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-mysql": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26258,7 +25640,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mysql",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26270,7 +25651,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(false)-searchEngine(no)-h2Disk-memcached": Object {
+  "microservice-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-memcached": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26293,7 +25674,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "oracle",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": false,
@@ -26304,7 +25684,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-jwt-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-elasticsearch-oracle": Object {
+  "microservice-jwt-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-oracle": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26326,7 +25706,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "oracle",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26340,7 +25719,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Disk-hazelcast": Object {
+  "microservice-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-hazelcast": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26363,7 +25742,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "postgresql",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": true,
@@ -26376,7 +25754,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-jwt-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-enableHibernateCache(true)-elasticsearch-postgresql": Object {
+  "microservice-jwt-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-enableHibernateCache(true)-postgresql": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26398,7 +25776,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "postgresql",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26412,7 +25789,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-websocket(false)-eureka-enableHibernateCache(false)-searchEngine(no)-mariadb-ehcache": Object {
+  "microservice-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-websocket(false)-eureka-enableHibernateCache(false)-mariadb-ehcache": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26435,7 +25812,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mariadb",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": false,
@@ -26447,7 +25823,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-enableSwaggerCodegen:true-consul-enableHibernateCache(true)-elasticsearch-h2Memory": Object {
+  "microservice-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-enableSwaggerCodegen:true-consul-enableHibernateCache(true)-h2Memory": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26469,7 +25845,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mariadb",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26480,7 +25855,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-websocket(false)-consul-enableHibernateCache(false)-searchEngine(no)-mssql-caffeine": Object {
+  "microservice-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-websocket(false)-consul-enableHibernateCache(false)-mssql-caffeine": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26503,7 +25878,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mssql",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": true,
@@ -26513,7 +25887,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-serviceDiscoveryType(no)-enableHibernateCache(true)-elasticsearch-h2Memory": Object {
+  "microservice-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26535,7 +25909,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mssql",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26548,7 +25921,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-mysql-memcached": Object {
+  "microservice-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-mysql-memcached": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26571,7 +25944,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mysql",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26585,7 +25957,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-oauth2-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-eureka-enableHibernateCache(true)-searchEngine(no)-h2Memory": Object {
+  "microservice-oauth2-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-eureka-enableHibernateCache(true)-h2Memory": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26607,7 +25979,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mysql",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": true,
@@ -26616,7 +25987,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(true)-eureka-enableHibernateCache(false)-elasticsearch-oracle-infinispan": Object {
+  "microservice-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(true)-eureka-enableHibernateCache(false)-oracle-infinispan": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26639,7 +26010,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "oracle",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26651,7 +26021,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-oauth2-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-cucumber-consul-enableHibernateCache(true)-searchEngine(no)-h2Memory": Object {
+  "microservice-oauth2-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(false)-cucumber-consul-enableHibernateCache(true)-h2Memory": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26673,7 +26043,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "oracle",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": false,
@@ -26684,7 +26053,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-elasticsearch-postgresql-redis": Object {
+  "microservice-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-postgresql-redis": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26707,7 +26076,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "postgresql",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26721,7 +26089,7 @@ Object {
     },
     "defaults": true,
   },
-  "microservice-oauth2-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-gatling-serviceDiscoveryType(no)-enableHibernateCache(true)-searchEngine(no)-h2Memory": Object {
+  "microservice-oauth2-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-gatling-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "microservice",
@@ -26743,7 +26111,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "postgresql",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": true,
@@ -26754,7 +26121,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Disk-hazelcast": Object {
+  "monolith-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-hazelcast": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -26777,7 +26144,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mariadb",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": true,
@@ -26788,7 +26154,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-enableHibernateCache(true)-elasticsearch-mariadb": Object {
+  "monolith-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-enableHibernateCache(true)-mariadb": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -26810,7 +26176,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mariadb",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26824,7 +26189,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-searchEngine(no)-h2Disk-redis": Object {
+  "monolith-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-websocket(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-redis": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -26847,7 +26212,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mssql",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": true,
@@ -26860,7 +26224,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-elasticsearch-mssql": Object {
+  "monolith-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-mssql": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -26882,7 +26246,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mssql",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26896,7 +26259,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-enableHibernateCache(false)-elasticsearch-h2Disk-cacheProvider(no)": Object {
+  "monolith-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-cacheProvider(no)": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -26919,7 +26282,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mysql",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -26932,7 +26294,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-jwt-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-searchEngine(no)-mysql": Object {
+  "monolith-jwt-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-mysql": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -26954,7 +26316,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mysql",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": false,
@@ -26966,7 +26327,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-h2Disk-ehcache": Object {
+  "monolith-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-ehcache": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -26989,7 +26350,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "oracle",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27004,7 +26364,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-jwt-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-gatling-skipUserManagement(true)-eureka-enableHibernateCache(true)-searchEngine(no)-oracle": Object {
+  "monolith-jwt-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-gatling-skipUserManagement(true)-eureka-enableHibernateCache(true)-oracle": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27026,7 +26386,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "oracle",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": false,
@@ -27038,7 +26397,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-eureka-enableHibernateCache(false)-elasticsearch-h2Disk-infinispan": Object {
+  "monolith-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-infinispan": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27061,7 +26420,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "postgresql",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27076,7 +26434,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-jwt-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-skipUserManagement(true)-consul-enableHibernateCache(true)-searchEngine(no)-postgresql": Object {
+  "monolith-jwt-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-skipUserManagement(true)-consul-enableHibernateCache(true)-postgresql": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27098,7 +26456,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "postgresql",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": true,
@@ -27108,7 +26465,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-elasticsearch-mariadb-redis": Object {
+  "monolith-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-consul-enableHibernateCache(false)-mariadb-redis": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27131,7 +26488,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mariadb",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27143,7 +26499,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-serviceDiscoveryType(no)-enableHibernateCache(true)-searchEngine(no)-h2Memory": Object {
+  "monolith-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27165,7 +26521,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mariadb",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": true,
@@ -27176,7 +26531,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-mssql-memcached": Object {
+  "monolith-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-serviceDiscoveryType(no)-enableHibernateCache(false)-mssql-memcached": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27199,7 +26554,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mssql",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27213,7 +26567,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-eureka-enableHibernateCache(true)-searchEngine(no)-h2Memory": Object {
+  "monolith-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-eureka-enableHibernateCache(true)-h2Memory": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27235,7 +26589,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mssql",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": true,
@@ -27246,7 +26599,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-eureka-enableHibernateCache(false)-searchEngine(no)-mysql-ehcache": Object {
+  "monolith-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-eureka-enableHibernateCache(false)-mysql-ehcache": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27269,7 +26622,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mysql",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "eureka",
         "skipCommitHook": false,
@@ -27281,7 +26633,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-oauth2-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-consul-enableHibernateCache(true)-elasticsearch-h2Memory": Object {
+  "monolith-oauth2-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-consul-enableHibernateCache(true)-h2Memory": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27303,7 +26655,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mysql",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27316,7 +26667,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-consul-enableHibernateCache(false)-searchEngine(no)-oracle-caffeine": Object {
+  "monolith-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-consul-enableHibernateCache(false)-oracle-caffeine": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27339,7 +26690,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "oracle",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": false,
@@ -27351,7 +26701,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-oauth2-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-serviceDiscoveryType(no)-enableHibernateCache(true)-elasticsearch-h2Memory": Object {
+  "monolith-oauth2-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27373,7 +26723,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "oracle",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27384,7 +26733,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-postgresql-cacheProvider(no)": Object {
+  "monolith-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-postgresql-cacheProvider(no)": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27407,7 +26756,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "postgresql",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": false,
@@ -27417,7 +26765,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-oauth2-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-enableHibernateCache(true)-elasticsearch-h2Memory": Object {
+  "monolith-oauth2-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-enableHibernateCache(true)-h2Memory": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27439,7 +26787,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "postgresql",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27452,7 +26799,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-session-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-h2Memory-caffeine": Object {
+  "monolith-session-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-caffeine": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27475,7 +26822,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mariadb",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27490,7 +26836,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-session-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-skipUserManagement(true)-consul-enableHibernateCache(true)-searchEngine(no)-h2Disk": Object {
+  "monolith-session-mariadb-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27512,7 +26858,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mariadb",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": false,
@@ -27522,7 +26867,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-session-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-elasticsearch-h2Memory-hazelcast": Object {
+  "monolith-session-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-hazelcast": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27545,7 +26890,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mssql",
         "reactive": false,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27558,7 +26902,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-session-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-cucumber-skipUserManagement(true)-consul-enableHibernateCache(true)-searchEngine(no)-h2Disk": Object {
+  "monolith-session-mssql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-cucumber-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27580,7 +26924,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mssql",
         "reactive": true,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "consul",
         "skipCommitHook": true,
@@ -27592,7 +26935,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-session-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Memory-infinispan": Object {
+  "monolith-session-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-infinispan": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27615,7 +26958,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "mysql",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": false,
@@ -27626,7 +26968,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-session-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-elasticsearch-h2Disk": Object {
+  "monolith-session-mysql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27648,7 +26990,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "mysql",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27662,7 +27003,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-session-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Memory-cacheProvider(no)": Object {
+  "monolith-session-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-cacheProvider(no)": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27685,7 +27026,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "oracle",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": false,
@@ -27698,7 +27038,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-session-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-elasticsearch-h2Disk": Object {
+  "monolith-session-oracle-reactive(true)-gradle-enableTranslation(true)-com.package-fix--DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27720,7 +27060,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "oracle",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],
@@ -27734,7 +27073,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-session-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-searchEngine(no)-h2Memory-memcached": Object {
+  "monolith-session-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-memcached": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27757,7 +27096,6 @@ Object {
         "packageName": "tech.jhipster",
         "prodDatabaseType": "postgresql",
         "reactive": false,
-        "searchEngine": "no",
         "serverSideOptions": Array [],
         "serviceDiscoveryType": "no",
         "skipCommitHook": true,
@@ -27770,7 +27108,7 @@ Object {
     },
     "defaults": true,
   },
-  "monolith-session-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-elasticsearch-h2Disk": Object {
+  "monolith-session-postgresql-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(false)-enableSwaggerCodegen:true-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk": Object {
     "applicationWithEntities": Object {
       "config": Object {
         "applicationType": "monolith",
@@ -27792,7 +27130,6 @@ Object {
         "packageName": "com.package",
         "prodDatabaseType": "postgresql",
         "reactive": true,
-        "searchEngine": "elasticsearch",
         "serverSideOptions": Array [
           "enableSwaggerCodegen:true",
         ],

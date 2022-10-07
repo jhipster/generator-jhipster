@@ -6,14 +6,11 @@ import { fileURLToPath } from 'url';
 import { testBlueprintSupport, buildServerMatrix, extendMatrix, extendFilteredMatrix } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
-import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 
 import DatabaseTypes from '../../jdl/jhipster/database-types.js';
-import SearchEngineTypes from '../../jdl/jhipster/search-engine-types.js';
 import CacheTypes from '../../jdl/jhipster/cache-types.js';
 import ServiceDiscoveryTypes from '../../jdl/jhipster/service-discovery-types.js';
-import AuthenticationTypes from '../../jdl/jhipster/authentication-types.js';
 
 const { snakeCase } = lodash;
 
@@ -25,10 +22,8 @@ const generatorFile = join(__dirname, 'index.mjs');
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = DatabaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
-const { ELASTICSEARCH, NO: NO_SEARCH_ENGINE } = SearchEngineTypes;
 const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = CacheTypes;
 const { CONSUL, EUREKA } = ServiceDiscoveryTypes;
-const { OAUTH2 } = AuthenticationTypes;
 
 let sqlSamples = buildServerMatrix({
   prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE],
@@ -36,7 +31,6 @@ let sqlSamples = buildServerMatrix({
 
 sqlSamples = extendMatrix(sqlSamples, {
   enableHibernateCache: [false, true],
-  searchEngine: [NO_SEARCH_ENGINE, ELASTICSEARCH],
 });
 
 sqlSamples = extendFilteredMatrix(sqlSamples, ({ prodDatabaseType }) => prodDatabaseType === POSTGRESQL, {
@@ -127,15 +121,6 @@ describe(`JHipster ${databaseType} generator`, () => {
       });
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
-      });
-
-      describe('searchEngine', () => {
-        const elasticsearch = sampleConfig.searchEngine === ELASTICSEARCH;
-        matchElasticSearch(() => runResult, elasticsearch);
-        matchElasticSearchUser(
-          () => runResult,
-          elasticsearch && (sampleConfig.authenticationType === OAUTH2 || !sampleConfig.skipUserManagement)
-        );
       });
 
       describe('serviceDiscoveryType', () => {
