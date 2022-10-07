@@ -73,6 +73,11 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   static END = asPriority(END);
 
+  /**
+   * @param {string | string[]} args
+   * @param {import('./api.cjs').JHipsterGeneratorOptions} options
+   * @param {import('./api.cjs').JHipsterGeneratorFeatures} features
+   */
   constructor(args, options, features) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, ...features });
   }
