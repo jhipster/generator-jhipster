@@ -27,7 +27,6 @@ const crypto = require('crypto');
 const os = require('os');
 
 const constants = require('./generator-constants.cjs');
-const FileUtils = require('../jdl/utils/file-utils');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
 
@@ -53,7 +52,6 @@ module.exports = {
   getRandomHex,
   checkStringInFile,
   checkRegexInFile,
-  loadYoRc,
   packageNameToNamespace,
   stringHashCode,
   gitExec,
@@ -707,13 +705,6 @@ function copyObjectProps(toObj, fromObj) {
  */
 function decodeBase64(string, encoding = 'utf-8') {
   return Buffer.from(string, 'base64').toString(encoding);
-}
-
-function loadYoRc(filePath = '.yo-rc.json') {
-  if (!FileUtils.doesFileExist(filePath)) {
-    return undefined;
-  }
-  return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
 }
 
 /**
