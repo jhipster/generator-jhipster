@@ -30,8 +30,6 @@ const { reproducibleConfigForTests: projectNameReproducibleConfigForTests } = re
 const { packageJson: packagejs } = require('../../lib/index.cjs');
 const jhipsterUtils = require('../utils.cjs');
 const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = require('../generator-constants.cjs');
-const JSONToJDLEntityConverter = require('../../jdl/converters/json-to-jdl-entity-converter');
-const JSONToJDLOptionConverter = require('../../jdl/converters/json-to-jdl-option-converter');
 const { stringify } = require('../../utils/index.cjs');
 const { fieldIsEnum } = require('../../utils/field.cjs');
 const { databaseData } = require('../sql-constants.cjs');
@@ -115,6 +113,18 @@ module.exports = class PrivateBase extends Generator {
    */
   set features(features) {
     super.features = features;
+  }
+
+  /**
+   * Normalizes a command across OS and spawns it (asynchronously).
+   *
+   * @param {string} command The program to execute.
+   * @param {string[]} args A list of arguments to pass to the program.
+   * @param {import('child_process').SpawnOptions} [opt] Any cross-spawn options.
+   * @returns {Promise<import('execa').ExecaChildProcess>}
+   */
+  spawnCommand(command, args, opt) {
+    return super.spawnCommand(command, args, opt);
   }
 
   /* ======================================================================== */
@@ -829,26 +839,6 @@ module.exports = class PrivateBase extends Generator {
    */
   getResourceBuildDirectoryForBuildTool(buildTool) {
     return buildTool === MAVEN ? 'target/classes/' : 'build/resources/main/';
-  }
-
-  /**
-   * @private
-   * @returns generated JDL from entities
-   */
-  generateJDLFromEntities() {
-    let jdlObject;
-    const entities = new Map();
-    try {
-      this.getExistingEntities().forEach(entity => {
-        entities.set(entity.name, entity.definition);
-      });
-      jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL({ entities });
-      JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
-    } catch (error) {
-      this.log(error.message || error);
-      this.error('\nError while parsing entities to JDL\n');
-    }
-    return jdlObject;
   }
 
   /**
