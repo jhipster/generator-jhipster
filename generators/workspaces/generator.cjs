@@ -20,14 +20,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const { INITIALIZING_PRIORITY, CONFIGURING_PRIORITY, LOADING_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
-  require('../../lib/constants/priorities.cjs').compat;
-
-const { GENERATOR_JHIPSTER } = require('../generator-constants');
+const { GENERATOR_JHIPSTER } = require('../generator-constants.cjs');
 const {
   DeploymentTypes: { DOCKERCOMPOSE },
 } = require('../../jdl/jhipster/deployment-options');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
 /**
  * Base class for a generator that can be extended through a blueprint.
@@ -81,7 +78,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseBlueprintGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -138,7 +135,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [BaseBlueprintGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -160,7 +157,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [BaseBlueprintGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -176,7 +173,7 @@ module.exports = class extends BaseBlueprintGenerator {
     });
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseBlueprintGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -210,7 +207,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [POST_WRITING_PRIORITY]() {
+  get [BaseBlueprintGenerator.POST_WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }

@@ -21,21 +21,18 @@ const chalk = require('chalk');
 const { startCase } = require('lodash');
 
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-} = require('../../lib/constants/priorities.cjs');
 
-const { GENERATOR_PROJECT_NAME } = require('../generator-list');
+const { GENERATOR_PROJECT_NAME } = require('../generator-list.cjs');
 const { defaultConfig } = require('./config.cjs');
 const { BASE_NAME, PROJECT_NAME } = require('./constants.cjs');
 const { dependencyChain } = require('./mixin.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_PROJECT_NAME);
 
+/**
+ * @class
+ * @extends {import('../base/index.mjs')}
+ */
 module.exports = class extends MixedChain {
   constructor(args, options, features) {
     super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });
@@ -84,7 +81,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [MixedChain.INITIALIZING]() {
     if (this.delegateToBlueprint) return;
     return this.initializing;
   }
@@ -115,7 +112,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [MixedChain.PROMPTING]() {
     if (this.delegateToBlueprint) return;
     return this.prompting;
   }
@@ -128,7 +125,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [MixedChain.CONFIGURING]() {
     if (this.delegateToBlueprint) return;
     return this.configuring;
   }
@@ -147,7 +144,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [MixedChain.LOADING]() {
     if (this.delegateToBlueprint) return;
     return this.loading;
   }
@@ -160,7 +157,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [PREPARING_PRIORITY]() {
+  get [MixedChain.PREPARING]() {
     if (this.delegateToBlueprint) return;
     return this.preparing;
   }

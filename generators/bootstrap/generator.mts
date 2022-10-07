@@ -25,20 +25,10 @@ import { isBinaryFile } from 'isbinaryfile';
 import BaseGenerator from '../base/index.mjs';
 import MultiStepTransform from './multi-step-transform/index.mjs';
 import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
-import generatorUtils from '../utils.js';
-
-import entityUtils from '../../utils/entity.js';
-import fieldUtils from '../../utils/field.js';
-import liquibaseUtils from '../../utils/liquibase.js';
-import userUtils from '../../utils/user.js';
-import fieldTypes from '../../jdl/jhipster/field-types.js';
-import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
-import type { LoadingTaskGroup, PreConflictsTaskGroup } from '../base/tasks.js';
-
-const { CommonDBTypes } = fieldTypes;
-const { OAUTH2 } = authenticationTypes;
+import generatorUtils from '../utils.cjs';
+import type { PreConflictsTaskGroup } from '../base/tasks.js';
 
 const {
   createConflicterCheckTransform,
@@ -54,13 +44,6 @@ const { State } = memFsEditor as any;
 const { hasState, setModifiedFileState } = State;
 const { PRETTIER_EXTENSIONS } = constants;
 const { detectCrLf, normalizeLineEndings } = generatorUtils;
-
-const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = liquibaseUtils;
-const { prepareEntityForTemplates, prepareEntityServerForTemplates, prepareEntityPrimaryKeyForTemplates } = entityUtils;
-const { prepareFieldForTemplates } = fieldUtils;
-const { createUserEntity } = userUtils;
-
-const { LONG: TYPE_LONG } = CommonDBTypes;
 
 export default class BootstrapGenerator extends BaseGenerator {
   constructor(args: any, options: any, features: any) {
@@ -105,19 +88,6 @@ export default class BootstrapGenerator extends BaseGenerator {
     this.env.options.nodePackageManager = 'npm';
 
     this.queueMultistepTransform();
-  }
-
-  get loading(): LoadingTaskGroup<this> {
-    return {
-      createUserManagementEntities() {
-        // TODO v8 drop, executed by bootstrap-base.
-        this.createUserManagementEntities();
-      },
-    };
-  }
-
-  get [BaseGenerator.LOADING]() {
-    return this.loading;
   }
 
   get preConflicts(): PreConflictsTaskGroup<this> {
@@ -264,48 +234,5 @@ export default class BootstrapGenerator extends BaseGenerator {
     ];
 
     await env.fs.commit(transformStreams, stream);
-  }
-
-  /**
-   * @private
-   * @deprecated
-   */
-  createUserManagementEntities() {
-    this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
-
-    if (
-      this.configOptions.sharedEntities.User ||
-      (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== OAUTH2)
-    ) {
-      return;
-    }
-
-    const changelogDateDate = this.jhipsterConfig.creationTimestamp ? new Date(this.jhipsterConfig.creationTimestamp) : new Date();
-    const changelogDate = formatDateForChangelog(changelogDateDate);
-
-    const application = this._.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
-    const user: any = createUserEntity.call(this, { changelogDate }, application);
-
-    prepareEntityForTemplates(user, this, application);
-    prepareEntityServerForTemplates(user);
-    prepareEntityPrimaryKeyForTemplates(user, this);
-
-    user.fields.forEach((field: any) => {
-      prepareFieldForTemplates(user, field, this);
-      prepareFieldForLiquibaseTemplates(user, field);
-    });
-    this.configOptions.sharedEntities.User = user;
-
-    const oauth2 = user.authenticationType === OAUTH2;
-    const userIdType = user.primaryKey.type;
-    const liquibaseFakeData = oauth2
-      ? []
-      : [
-          { id: userIdType === TYPE_LONG ? 1 : user.primaryKey.fields[0].generateFakeData() },
-          { id: userIdType === TYPE_LONG ? 2 : user.primaryKey.fields[0].generateFakeData() },
-        ];
-    user.liquibaseFakeData = liquibaseFakeData;
-    user.fakeDataCount = liquibaseFakeData.length;
-    this.configOptions.sharedLiquibaseFakeData.User = liquibaseFakeData;
   }
 }

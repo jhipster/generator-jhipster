@@ -16,11 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { COMPOSING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
-const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
-const { SQL } = require('../../jdl/jhipster/database-types');
-const { GENERATOR_ENTITIES, GENERATOR_ENTITY, GENERATOR_DATABASE_CHANGELOG } = require('../generator-list');
+const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+
+const { JHIPSTER_CONFIG_DIR } = require('../generator-constants.cjs');
+const { GENERATOR_ENTITIES, GENERATOR_APP } = require('../generator-list.cjs');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -108,7 +107,7 @@ module.exports = class extends BaseBlueprintGenerator {
       this.setConfigDefaults(this.getDefaultConfigForApplicationType());
     }
 
-    if (!this.options.entities || this.options.entities.length === 0) {
+    if (!this.options.entities || this.options.entities.length === 0 || this.options.writeEveryEntity) {
       this.options.entities = this.getExistingEntityNames();
       if (this.options.regenerate === undefined) {
         // Execute a non interactive regeneration.
@@ -120,41 +119,13 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _composing() {
     return {
-      async composeEachEntity() {
-        return Promise.all(
-          this.getExistingEntityNames().map(async entityName => {
-            if (this.options.composedEntities && this.options.composedEntities.includes(entityName)) return;
-            const selectedEntity = this.options.entities.includes(entityName);
-            const { regenerate = !selectedEntity } = this.options;
-            await this.composeWithJHipster(GENERATOR_ENTITY, [entityName], {
-              skipWriting: this.options.skipWriting || (!this.options.writeEveryEntity && !selectedEntity),
-              regenerate,
-              skipDbChangelog: this.jhipsterConfig.databaseType === SQL || this.options.skipDbChangelog,
-              skipInstall: true,
-              skipPrompts: this.options.skipPrompts,
-            });
-          })
-        );
-      },
-
-      async databaseChangelog() {
-        if (this.jhipsterConfig.skipServer || this.jhipsterConfig.databaseType !== SQL || this.options.skipDbChangelog) {
-          return;
-        }
-        const existingEntities = this.getExistingEntityNames();
-        if (existingEntities.length === 0) {
-          return;
-        }
-
-        await this.composeWithJHipster(
-          GENERATOR_DATABASE_CHANGELOG,
-          this.options.writeEveryEntity ? existingEntities : this.options.entities
-        );
+      async composeApp() {
+        await this.composeWithJHipster(GENERATOR_APP, { skipPriorities: ['writing', 'postWriting'] });
       },
     };
   }
 
-  get [COMPOSING_PRIORITY]() {
+  get [BaseBlueprintGenerator.COMPOSING]() {
     if (this.delegateToBlueprint) return {};
     return this._composing();
   }

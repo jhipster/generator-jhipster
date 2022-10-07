@@ -26,7 +26,7 @@ import { insertContentIntoApplicationProperties } from './needles.mjs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const generatorPath = join(__dirname, 'index.js');
+const generatorPath = join(__dirname, 'index.mjs');
 const generator = basename(__dirname);
 
 describe(`JHipster ${generator} needles`, () => {

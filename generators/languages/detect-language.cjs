@@ -19,7 +19,7 @@
 
 const osLocale = require('os-locale');
 
-const constants = require('../generator-constants.js');
+const constants = require('../generator-constants.cjs');
 
 const { LANGUAGES } = constants;
 

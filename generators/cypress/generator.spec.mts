@@ -24,9 +24,9 @@ import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
 import TestFrameworkTypes from '../../jdl/jhipster/test-framework-types.js';
 
 import { testBlueprintSupport, fromMatrix, extendMatrix, AuthenticationTypeMatrix } from '../../test/support/index.mjs';
-import testUtils from '../../test/utils/utils.js';
+import testUtils from '../../test/utils/utils.cjs';
 import Generator from './generator.mjs';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 
 const { CYPRESS } = TestFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -84,7 +84,7 @@ const e2eSamples = testSamples();
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });

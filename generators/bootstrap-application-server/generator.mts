@@ -19,12 +19,12 @@
 import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
-import constants from '../generator-constants.js';
-import entityUtils from '../../utils/entity.js';
+import constants from '../generator-constants.cjs';
+import entityUtils from '../../utils/entity.cjs';
 import type { SpringBootApplication } from './types.js';
-import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.js';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
+import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.cjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -168,6 +168,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         entity.fields.unshift(...derivedFields);
       },
       prepareUser({ entity }) {
+        this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
         if (entity.builtIn && entity.name === 'User') {
           const oauth2 = entity.authenticationType === OAUTH2;
           const userIdType = entity.primaryKey.type;

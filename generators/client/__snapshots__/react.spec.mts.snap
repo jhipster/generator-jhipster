@@ -2,37 +2,13 @@
 
 exports[`JHipster react generator gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(true) should match generated files snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "jest.conf.js": Object {
@@ -42,9 +18,6 @@ Object {
     "stateCleared": "modified",
   },
   "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/404.html": Object {
@@ -358,37 +331,13 @@ Object {
 
 exports[`JHipster react generator gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/-websocket(true) should match generated files snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "jest.conf.js": Object {
@@ -398,9 +347,6 @@ Object {
     "stateCleared": "modified",
   },
   "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/404.html": Object {
@@ -747,37 +693,13 @@ Object {
 
 exports[`JHipster react generator microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(false) should match generated files snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "jest.conf.js": Object {
@@ -787,9 +709,6 @@ Object {
     "stateCleared": "modified",
   },
   "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/404.html": Object {
@@ -1181,37 +1100,13 @@ Object {
 
 exports[`JHipster react generator microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(false) should match generated files snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "jest.conf.js": Object {
@@ -1221,9 +1116,6 @@ Object {
     "stateCleared": "modified",
   },
   "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/404.html": Object {
@@ -1564,37 +1456,13 @@ Object {
 
 exports[`JHipster react generator monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(true) should match generated files snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "jest.conf.js": Object {
@@ -1604,9 +1472,6 @@ Object {
     "stateCleared": "modified",
   },
   "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/404.html": Object {
@@ -2016,37 +1881,13 @@ Object {
 
 exports[`JHipster react generator monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match generated files snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "jest.conf.js": Object {
@@ -2056,9 +1897,6 @@ Object {
     "stateCleared": "modified",
   },
   "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": Object {
@@ -2378,37 +2216,13 @@ Object {
 
 exports[`JHipster react generator monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true) should match generated files snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "jest.conf.js": Object {
@@ -2418,9 +2232,6 @@ Object {
     "stateCleared": "modified",
   },
   "postcss.config.js": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": Object {

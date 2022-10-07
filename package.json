@@ -34,6 +34,7 @@
     "email": "",
     "url": "https://github.com/jdubois"
   },
+  "type": "module",
   "exports": {
     ".": "./dist/lib/index.mjs",
     "./cli": "./dist/cli/index.mjs",
@@ -44,7 +45,7 @@
   },
   "main": "dist/lib/index.mjs",
   "bin": {
-    "jhipster": "dist/cli/jhipster.js"
+    "jhipster": "dist/cli/jhipster.mjs"
   },
   "files": [
     "dist",
@@ -57,14 +58,13 @@
     "clean": "rimraf dist",
     "compile": "tsc",
     "completion": "tabtab install --name jhipster --auto",
-    "copy-files": "cpy 'generators/**' '!**/*.(js|cjs|mjs|ts|cts|mts|snap)' '!**/__*/*' dist/generators",
-    "ejs-lint": "mocha test/ejslint.js",
-    "ejslint": "ejslint",
+    "copy-files": "cpy 'jdl/*.json' 'dist/jdl' && cpy 'generators/**' '!**/*.(js|cjs|mjs|ts|cts|mts|snap)' '!**/__*/*' dist/generators",
+    "ejslint": "ejslint generators/**/*.ejs",
     "eslint": "eslint . --ext .js,.cjs,.mjs,.ts,.cts,.mts",
     "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
     "jdl:test-watch": "npm run jdl:test -- --watch",
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
-    "lint": "npm run eslint && npm run ejs-lint",
+    "lint": "npm run eslint && npm run ejslint",
     "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
     "prepare": "npm run build",
     "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
@@ -72,7 +72,7 @@
     "pretest": "npm run lint",
     "test": "mocha test generators --no-insight --forbid-only --parallel --max-old-space-size=4096",
     "update-snapshot": "mocha --no-insight --no-parallel --updateSnapshot --",
-    "update-snapshots": "npm run update-snapshot -- test generators",
+    "update-snapshots": "UPDATE_SNAPSHOT=all npm test",
     "watch": "tsc --watch"
   },
   "dependencies": {

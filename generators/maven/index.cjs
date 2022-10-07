@@ -19,15 +19,18 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
-const { INITIALIZING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs');
 
-const { GENERATOR_JAVA, GENERATOR_MAVEN } = require('../generator-list');
+const { GENERATOR_JAVA, GENERATOR_MAVEN } = require('../generator-list.cjs');
 const { files } = require('./files.cjs');
 const { MAVEN, BUILD_DESTINATION_VALUE } = require('./constants.cjs');
 const { BUILD_TOOL, BUILD_DESTINATION } = require('../java/constants.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_JAVA);
 
+/**
+ * @class
+ * @extends {import('../base/index.mjs')}
+ */
 module.exports = class extends MixedChain {
   constructor(args, options, features) {
     super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });
@@ -78,7 +81,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [MixedChain.INITIALIZING]() {
     if (this.delegateToBlueprint) return;
     return this.initializing;
   }
@@ -97,7 +100,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [MixedChain.LOADING]() {
     if (this.delegateToBlueprint) return;
     return this.loading;
   }
@@ -110,7 +113,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [PREPARING_PRIORITY]() {
+  get [MixedChain.PREPARING]() {
     if (this.delegateToBlueprint) return;
     return this.preparing;
   }
@@ -124,7 +127,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [MixedChain.WRITING]() {
     if (this.delegateToBlueprint) return;
     return this.writing;
   }

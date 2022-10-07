@@ -57,7 +57,7 @@ jobs:
             ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
       - name: 'install required npm version'
-        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-constants').NPM_VERSION);")
+        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-constants.cjs').NPM_VERSION);")
       - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
         shell: bash
       - name: Config git variables

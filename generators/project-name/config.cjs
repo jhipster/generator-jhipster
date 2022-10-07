@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { packageJson } = require('../../lib/index.js');
+const { packageJson } = require('../../lib/index.cjs');
 const { BASE_NAME, JHIPSTER_VERSION, PROJECT_NAME, PROJECT_NAME_DEFAULT_VALUE } = require('./constants.cjs');
 
 const { version: jhipsterVersion } = packageJson;

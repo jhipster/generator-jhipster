@@ -20,17 +20,15 @@
 const _ = require('lodash');
 const chalk = require('chalk');
 
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, LOADING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } =
-  require('../../lib/constants/priorities.cjs').compat;
+const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
 
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 const prompts = require('./prompts.cjs');
-const statistics = require('../statistics');
+const statistics = require('../statistics.cjs');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const cacheProviders = require('../../jdl/jhipster/cache-types');
 const messageBrokers = require('../../jdl/jhipster/message-broker-types');
-const { GENERATOR_SPRING_CONTROLLER } = require('../generator-list');
+const { GENERATOR_SPRING_CONTROLLER } = require('../generator-list.cjs');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
@@ -99,7 +97,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseBlueprintGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -111,7 +109,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [BaseBlueprintGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -126,7 +124,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [BaseBlueprintGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -140,7 +138,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [DEFAULT_PRIORITY]() {
+  get [BaseBlueprintGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -197,7 +195,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseBlueprintGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }

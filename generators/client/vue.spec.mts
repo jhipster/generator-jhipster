@@ -4,11 +4,11 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport, buildClientSamples } from '../../test/support/index.mjs';
-import Generator from './index.js';
+import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 
 const { snakeCase } = lodash;
 
@@ -16,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.js');
+const generatorFile = join(__dirname, 'index.mjs');
 
 const { VUE: clientFramework } = ClientFrameworkTypes;
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } = constants;
@@ -72,7 +72,7 @@ const testSamples = samplesBuilder();
 
 describe(`JHipster ${clientFramework} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });
@@ -91,7 +91,7 @@ describe(`JHipster ${clientFramework} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.create(generatorFile).withOptions(sample).run();
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });
 
       after(() => runResult.cleanup());

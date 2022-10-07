@@ -20,4 +20,6 @@
 /*
  * Register generator-base at yeoman-environment
  */
-export { default } from './generator.cjs';
+import BaseGenerator from './generator.cjs';
+
+export default BaseGenerator;

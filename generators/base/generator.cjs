@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const JHipsterBaseBlueprintGenerator = require('../generator-base-blueprint.js');
+const JHipsterBaseBlueprintGenerator = require('./generator-base-blueprint.cjs');
 
 const { PRIORITY_NAMES, PRIORITY_PREFIX } = require('../../lib/constants/priorities.cjs');
 

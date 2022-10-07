@@ -4,9 +4,9 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
 import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import jdlImporter from '../../jdl/jdl-importer.js';
-import expectedFiles from '../../test/utils/expected-files.js';
+import expectedFiles from '../../test/utils/expected-files.cjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,7 +45,7 @@ relationship ManyToOne {
 }
 `;
 
-const generatorPath = join(__dirname, '../app/index.mjs');
+const generatorPath = join(__dirname, '../app/index.cjs');
 
 describe('jhipster:app --incremental-changelog', function () {
   this.timeout(45000);
