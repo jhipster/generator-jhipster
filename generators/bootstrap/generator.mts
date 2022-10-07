@@ -28,7 +28,7 @@ import { prettierTransform, generatedAnnotationTransform } from './transforms.mj
 import constants from '../generator-constants.cjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import generatorUtils from '../utils.cjs';
-import type { PreConflictsTaskGroup } from '../base/tasks.js';
+import type { PreConflictsTaskGroup } from '../base/tasks.cjs';
 
 const {
   createConflicterCheckTransform,
