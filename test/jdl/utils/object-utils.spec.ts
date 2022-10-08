@@ -760,7 +760,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not have the same number of attributes', () => {
-        let firstObject: {
+        type ObjectType = {
           javadoc: string;
           fields: (
             | { id: number; theAnswer: number; notTheAnswer?: undefined }
@@ -771,16 +771,9 @@ describe('ObjectUtils', () => {
           pagination: string;
           service: string;
         };
-        let secondObject: {
-          javadoc: string;
-          fields: (
-            | { id: number; theAnswer: number; notTheAnswer?: undefined }
-            | { id: number; notTheAnswer: number; theAnswer?: undefined }
-          )[];
-          relationships: { id: number; anotherField: number }[];
-          dto: string;
-          pagination: string;
-          service: string;
+
+        let firstObject: ObjectType;
+        let secondObject: ObjectType & {
           custom: boolean;
         };
 
