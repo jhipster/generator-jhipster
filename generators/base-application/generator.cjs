@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const BaseGenerator = require('../base/index.cjs');
-const { CUSTOM_PRIORITIES_ENTITIES, PRIORITY_NAMES, QUEUES, PRIORITY_PREFIX } = require('../../lib/constants/priorities.cjs');
+const { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } = require('./priorities.cjs');
 const SharedData = require('../../lib/support/shared-data.cjs');
 
 const {
@@ -80,13 +80,13 @@ class BaseApplicationGenerator extends BaseGenerator {
   #sharedData;
 
   constructor(args, options, features) {
-    super(args, options, { priorityArgs: true, taskPrefix: PRIORITY_PREFIX, ...features });
+    super(args, options, features);
 
     if (this.options.help) {
       return;
     }
 
-    this.registerPriorities(CUSTOM_PRIORITIES_ENTITIES);
+    this.registerPriorities(CUSTOM_PRIORITIES);
 
     /* Add tasks allowing entities priorities to match normal priorities pattern */
     this.on('queueOwnTasks', () => {

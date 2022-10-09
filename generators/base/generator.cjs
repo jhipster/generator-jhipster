@@ -18,7 +18,7 @@
  */
 const JHipsterBaseBlueprintGenerator = require('./generator-base-blueprint.cjs');
 
-const { PRIORITY_NAMES, PRIORITY_PREFIX } = require('../../lib/constants/priorities.cjs');
+const { PRIORITY_NAMES, PRIORITY_PREFIX } = require('./priorities.cjs');
 
 const {
   INITIALIZING,
