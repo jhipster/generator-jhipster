@@ -30,9 +30,9 @@ export default { convertRelationships };
  * @param {Function} annotationToOptionConverter - the function that can convert annotations to options.
  * @param {Object} conversionOptions - conversion options
  * @param {Boolean} conversionOptions.unidirectionalRelationships - whether to generate bidirectional one-to-many.
- * @return {Array<JDLRelationship>} the converted JDL relationships.
+ * @return the converted JDL relationships.
  */
-export function convertRelationships(parsedRelationships, annotationToOptionConverter, conversionOptions: any = {}) {
+export function convertRelationships(parsedRelationships, annotationToOptionConverter, conversionOptions: any = {}): JDLRelationship[] {
   if (!parsedRelationships) {
     throw new Error('Relationships have to be passed so as to be converted.');
   }

@@ -28,9 +28,9 @@ export default { convertValidations };
  * Converts a parsed JDL content corresponding to validations to an array of JDLValidation objects.
  * @param {Array} validations - parsed JDL validations.
  * @param constantValueGetter - the function to get a constant's value.
- * @return {Array<JDLValidation>} the converted JDLValidations.
+ * @return the converted JDLValidations.
  */
-export function convertValidations(validations, constantValueGetter) {
+export function convertValidations(validations, constantValueGetter): JDLValidation[] {
   if (!validations) {
     throw new Error('Validations have to be passed so as to be converted.');
   }
@@ -46,9 +46,9 @@ export function convertValidations(validations, constantValueGetter) {
  * Converts a parsed JDL content corresponding to a validation to a JDLValidation object.
  * @param {Object} validation - a parsed JDL validation.
  * @param {Function} constantValueGetter - the function to get a constant's value.
- * @return {JDLValidation} the converted JDLValidation.
+ * @return the converted JDLValidation.
  */
-function convertValidation(validation, constantValueGetter) {
+function convertValidation(validation, constantValueGetter): JDLValidation {
   let { value } = validation;
   if (validation.constant) {
     value = constantValueGetter.call(undefined, value);

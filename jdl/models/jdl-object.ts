@@ -21,14 +21,15 @@ import JDLEnums from './jdl-enums';
 import JDLRelationships from './jdl-relationships';
 import JDLOptions from './jdl-options';
 import BinaryOptions from '../jhipster/binary-options';
+import JDLEntity from './jdl-entity';
 
 /**
  * The JDL object class, containing applications, entities etc.
  */
 export default class JDLObject {
-  applications: any;
-  deployments: any;
-  entities: any;
+  applications: Record<string, any>;
+  deployments: Record<string, any>;
+  entities: Record<string, JDLEntity>;
   enums: JDLEnums;
   relationships: JDLRelationships;
   options: JDLOptions;
@@ -112,14 +113,14 @@ export default class JDLObject {
    * Adds or replaces an entity.
    * @param entity the entity to add.
    */
-  addEntity(entity) {
+  addEntity(entity: JDLEntity) {
     if (!entity) {
       throw new Error("Can't add nil entity.");
     }
     this.entities[entity.name] = entity;
   }
 
-  getEntity(entityName) {
+  getEntity(entityName: string): JDLEntity {
     if (!entityName) {
       throw new Error('An entity name must be passed so as to be retrieved.');
     }
@@ -138,7 +139,7 @@ export default class JDLObject {
     return Object.keys(this.entities);
   }
 
-  forEachEntity(passedFunction) {
+  forEachEntity(passedFunction: (entity: JDLEntity, index: number, entityNames: string[]) => void) {
     if (!passedFunction) {
       return;
     }

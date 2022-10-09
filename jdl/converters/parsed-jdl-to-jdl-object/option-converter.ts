@@ -41,7 +41,7 @@ export function convertOptions(parsedOptions, useOptions) {
 }
 
 function convertUnaryOptions(parsedOptions) {
-  const convertedUnaryOptions: any[] = [];
+  const convertedUnaryOptions: JDLUnaryOption[] = [];
   UnaryOptions.forEach(unaryOptionName => {
     const parsedUnaryOption = parsedOptions[unaryOptionName];
     if (!parsedUnaryOption || !parsedUnaryOption.list || parsedUnaryOption.list.length === 0) {
@@ -59,7 +59,7 @@ function convertUnaryOptions(parsedOptions) {
 }
 
 function convertBinaryOptions(parsedOptions) {
-  const convertedBinaryOptions: any[] = [];
+  const convertedBinaryOptions: JDLBinaryOption[] = [];
   BinaryOptions.forEach(binaryOptionName => {
     if (!parsedOptions[binaryOptionName]) {
       return;
@@ -81,7 +81,7 @@ function convertBinaryOptions(parsedOptions) {
 }
 
 function convertUseOptions(useOptions) {
-  const convertedUseOptions: any[] = [];
+  const convertedUseOptions: JDLBinaryOption[] = [];
 
   useOptions.forEach(useValue => {
     const { optionValues, list, excluded } = useValue;

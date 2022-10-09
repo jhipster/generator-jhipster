@@ -26,9 +26,9 @@ export default { convertEntities };
  * Converts parsed entities to JDLEntity Objects.
  * @param {Array<Object>} parsedEntities - parsed entities from JDL content.
  * @param {Function} jdlFieldGetterFunction - the function called to retrieve JDL fields for an entity.
- * @returns {Array<JDLEntity>} converted JDLEntity objects.
+ * @returns converted JDLEntity objects.
  */
-export function convertEntities(parsedEntities, jdlFieldGetterFunction) {
+export function convertEntities(parsedEntities, jdlFieldGetterFunction): JDLEntity[] {
   if (!parsedEntities) {
     throw new Error('Entities have to be passed so as to be converted.');
   }

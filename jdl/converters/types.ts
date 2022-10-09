@@ -1,8 +1,8 @@
 export type Field = {
   fieldName: string;
   fieldType: string;
-  options: Record<string, boolean | string | number>;
-} & Record<string, boolean | string | number | string[]>;
+  options?: Record<string, boolean | string | number>;
+} & Record<string, boolean | string | number | string[] | Record<string, unknown>>;
 
 export type Relationship = {
   relationshipName: string;

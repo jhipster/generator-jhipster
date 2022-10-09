@@ -95,7 +95,7 @@ function addEntity(entity: Entity, entityName: string) {
   addEntityOptionsToJDL(entity, entityName);
 }
 
-function convertJSONToJDLEntity(entity: Entity, entityName: string) {
+function convertJSONToJDLEntity(entity: Entity, entityName: string): JDLEntity {
   const jdlEntity = new JDLEntity({
     name: entityName,
     tableName: entity.entityTableName,

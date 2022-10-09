@@ -42,7 +42,7 @@ const USER = 'User';
 
 let parsedContent;
 let configuration;
-let jdlObject;
+let jdlObject: JDLObject;
 let entityNames;
 let applicationsPerEntityName;
 
@@ -57,9 +57,9 @@ let applicationsPerEntityName;
  * @param {String} configurationObject.generatorVersion - The generator's version
  * @param {Boolean} configurationObject.skippedUserManagement - Whether user management is skipped
  * @param {Boolean} [configurationObject.unidirectionalRelationships] - Whether to generate unidirectional relationships
- * @return {JDLObject} the built JDL object.
+ * @return the built JDL object.
  */
-export function parseFromConfigurationObject(configurationObject) {
+export function parseFromConfigurationObject(configurationObject): JDLObject {
   parsedContent = configurationObject.parsedContent || configurationObject.document;
   if (!parsedContent) {
     throw new Error('The parsed JDL content must be passed.');
@@ -200,6 +200,9 @@ function fillAssociations(conversionOptions: any = {}) {
   const { unidirectionalRelationships = configuration.databaseType === DatabaseTypes.NEO4J } = conversionOptions;
   const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions, { unidirectionalRelationships });
   jdlRelationships.forEach(jdlRelationship => {
+    // TODO: addRelationship only expects one argument.
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     jdlObject.addRelationship(jdlRelationship, configuration.skippedUserManagement);
   });
 }

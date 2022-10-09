@@ -22,7 +22,7 @@ import { addAll } from '../utils/set-utils';
 
 export default class AbstractJDLOption {
   name: any;
-  entityNames: Set<unknown>;
+  entityNames: Set<string>;
   excludedNames: any;
 
   constructor(args) {
@@ -83,7 +83,7 @@ export default class AbstractJDLOption {
    * @param entityNames all the entity names declared in a JDL Object.
    * @returns the resolved list.
    */
-  resolveEntityNames(entityNames) {
+  resolveEntityNames(entityNames: string[]) {
     if (!entityNames) {
       throw new Error("Entity names have to be passed to resolve the option's entities.");
     }

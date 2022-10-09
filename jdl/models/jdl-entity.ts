@@ -19,11 +19,12 @@
 
 import { merge } from '../utils/object-utils';
 import getTableNameFromEntityName from '../jhipster/entity-table-name-creator';
+import JDLField from './jdl-field';
 
 export default class JDLEntity {
   name: any;
   tableName: any;
-  fields: any;
+  fields: Record<string, JDLField>;
   comment: any;
 
   constructor(args) {
@@ -39,20 +40,20 @@ export default class JDLEntity {
 
   /**
    * Adds the fields to the entity.
-   * @param {Iterable} fields - the fields to add
+   * @param fields - the fields to add
    */
-  addFields(fields = []) {
+  addFields(fields: JDLField[] = []) {
     fields.forEach(field => this.addField(field));
   }
 
-  addField(field) {
+  addField(field: JDLField) {
     if (!field) {
       throw new Error("Can't add nil field to the JDL entity.");
     }
     this.fields[field.name] = field;
   }
 
-  forEachField(functionToApply) {
+  forEachField(functionToApply: (field: JDLField, index: number, array: JDLField[]) => void) {
     if (!functionToApply) {
       throw new Error('A function must be passed to iterate over fields');
     }

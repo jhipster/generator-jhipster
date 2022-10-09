@@ -22,6 +22,9 @@ import Validations from '../../jhipster/validations';
 import formatComment from '../../utils/format-utils';
 import { camelCase } from '../../utils/string-utils';
 import fieldTypes from '../../jhipster/field-types';
+import JDLObject from '../../models/jdl-object';
+import { Field } from '../types';
+import JDLEntity from '../../models/jdl-entity';
 
 const { UNIQUE, REQUIRED } = Validations;
 
@@ -34,14 +37,14 @@ export default { convert };
 
 /**
  * Converts entity fields to JSON content.
- * @param {JDLObject} jdlObject - the JDL object containing entities, fields and enums.
- * @return {Map<String, Array<Object>>} a map having for keys an entity's name and for values its JSON fields.
+ * @param jdlObject - the JDL object containing entities, fields and enums.
+ * @return a map having for keys an entity's name and for values its JSON fields.
  */
-export function convert(jdlObject) {
+export function convert(jdlObject: JDLObject): Map<string, Field[]> {
   if (!jdlObject) {
     throw new Error('A JDL Object must be passed to convert JDL fields to JSON.');
   }
-  const convertedFields = new Map();
+  const convertedFields = new Map<string, Field[]>();
   jdlObject.forEachEntity(jdlEntity => {
     const convertedEntityFields = getConvertedFieldsForEntity(jdlEntity, jdlObject);
     convertedFields.set(jdlEntity.name, convertedEntityFields);
@@ -49,10 +52,10 @@ export function convert(jdlObject) {
   return convertedFields;
 }
 
-function getConvertedFieldsForEntity(jdlEntity, jdlObject) {
-  const convertedEntityFields: any[] = [];
+function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject): Field[] {
+  const convertedEntityFields: Field[] = [];
   jdlEntity.forEachField(jdlField => {
-    let fieldData: any = {
+    let fieldData: Field = {
       fieldName: camelCase(jdlField.name),
       fieldType: jdlField.type,
     };

@@ -42,7 +42,7 @@ export default {
  * @param output the file where the JDL will be written
  */
 export function convertToJDL(directory = '.', output = 'app.jdl') {
-  let jdlObject;
+  let jdlObject: JDLObject;
   if (doesFileExist(path.join(directory, '.yo-rc.json'))) {
     const yoRcFileContent = readJSONFile(path.join(directory, '.yo-rc.json'));
     let entities;

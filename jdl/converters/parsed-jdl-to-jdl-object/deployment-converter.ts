@@ -24,9 +24,9 @@ export default { convertDeployments };
 /**
  * Converts a parsed JDL content corresponding to deployments to an array of JDLDeployment objects.
  * @param {Array} parsedDeployments - parsed JDL deployments.
- * @return {Array<JDLDeployment>} the converted JDLDeployment objects.
+ * @return the converted JDLDeployment objects.
  */
-export function convertDeployments(parsedDeployments) {
+export function convertDeployments(parsedDeployments): JDLDeployment[] {
   if (!parsedDeployments) {
     throw new Error('Deployments have to be passed so as to be converted.');
   }

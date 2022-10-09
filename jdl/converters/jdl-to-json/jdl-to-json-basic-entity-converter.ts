@@ -21,6 +21,7 @@ import JSONEntity from '../../jhipster/json-entity';
 import formatComment from '../../utils/format-utils';
 import getTableNameFromEntityName from '../../jhipster/entity-table-name-creator';
 import logger from '../../utils/objects/logger';
+import JDLEntity from '../../models/jdl-entity';
 
 const USER = 'user';
 const AUTHORITY = 'authority';
@@ -32,19 +33,20 @@ export default {
 
 /**
  * Converts JDL entities to JSONEntity objects with basic information.
- * @param {Array<JDLEntity>} jdlEntities - the JDL entities to convert.
- * @return {Map<String, JSONEntity>} a map having for keys entity names and for values the corresponding JSON entities.
+ * @param jdlEntities - the JDL entities to convert.
+ * @return a map having for keys entity names and for values the corresponding JSON entities.
  */
-export function convert(jdlEntities) {
+export function convert(jdlEntities: JDLEntity[]): Map<string, JSONEntity> {
   if (!jdlEntities) {
     throw new Error('JDL entities must be passed to get the basic entity information.');
   }
   return createJSONEntities(jdlEntities);
 }
 
-function createJSONEntities(jdlEntities) {
-  const convertedEntities = new Map();
-  jdlEntities.forEach((jdlEntity, index) => {
+function createJSONEntities(jdlEntities: JDLEntity[]): Map<string, JSONEntity> {
+  const convertedEntities = new Map<string, JSONEntity>();
+
+  jdlEntities.forEach(jdlEntity => {
     const entityName = jdlEntity.name;
     /*
      * If the user adds a 'User' entity we consider it as the already

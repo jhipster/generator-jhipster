@@ -25,9 +25,9 @@ export default { convertEnums };
 /**
  * Converts a parsed JDL content corresponding to enumerations to an array of JDLEnum objects.
  * @param {Array} enumerations - parsed JDL enumerations.
- * @return {Array<JDLEnum>} the converted JDLEnums.
+ * @return the converted JDLEnums.
  */
-export function convertEnums(enumerations) {
+export function convertEnums(enumerations): JDLEnum[] {
   if (!enumerations) {
     throw new Error('Enumerations have to be passed so as to be converted.');
   }
@@ -37,9 +37,9 @@ export function convertEnums(enumerations) {
 /**
  * Converts a parsed JDL content corresponding to an enumeration to a JDLEnum object.
  * @param {Object} enumeration - a parsed JDL enumeration.
- * @return {JDLEnum} the converted JDLEnum.
+ * @return the converted JDLEnum.
  */
-function convertEnum(enumeration) {
+function convertEnum(enumeration): JDLEnum {
   return new JDLEnum({
     name: enumeration.name,
     values: enumeration.values,

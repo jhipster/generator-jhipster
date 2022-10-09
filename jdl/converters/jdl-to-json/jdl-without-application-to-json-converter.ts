@@ -21,13 +21,14 @@ import BasicEntityConverter from './jdl-to-json-basic-entity-converter';
 import FieldConverter from './jdl-to-json-field-converter';
 import RelationshipConverter from './jdl-to-json-relationship-converter';
 import OptionConverter from './jdl-to-json-option-converter';
+import JDLObject from '../../models/jdl-object';
 
 const USER = 'user';
 const AUTHORITY = 'authority';
 const builtInEntities = new Set([USER, AUTHORITY]);
 
 let entities;
-let jdlObject;
+let jdlObject: JDLObject | null;
 
 export default {
   convert,
@@ -71,21 +72,21 @@ function resetState() {
 }
 
 function setBasicEntityInformation() {
-  const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities());
+  const convertedEntities = BasicEntityConverter.convert(jdlObject!.getEntities());
   convertedEntities.forEach((jsonEntity, entityName) => {
     entities[entityName] = jsonEntity;
   });
 }
 
 function setOptions() {
-  const convertedOptionContents = OptionConverter.convert(jdlObject);
+  const convertedOptionContents = OptionConverter.convert(jdlObject!);
   convertedOptionContents.forEach((optionContent, entityName) => {
     entities[entityName].setOptions(optionContent);
   });
 }
 
 function setFields() {
-  const convertedFields = FieldConverter.convert(jdlObject);
+  const convertedFields = FieldConverter.convert(jdlObject!);
   convertedFields.forEach((entityFields, entityName) => {
     if (builtInEntities.has(entityName.toLowerCase())) {
       return;
@@ -95,7 +96,11 @@ function setFields() {
 }
 
 function setRelationships(conversionOptions) {
-  const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames(), conversionOptions);
+  const convertedRelationships = RelationshipConverter.convert(
+    jdlObject!.getRelationships(),
+    jdlObject!.getEntityNames(),
+    conversionOptions
+  );
   convertedRelationships.forEach((entityRelationships, entityName) => {
     if (builtInEntities.has(entityName.toLowerCase())) {
       return;

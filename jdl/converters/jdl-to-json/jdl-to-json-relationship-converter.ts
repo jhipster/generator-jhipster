@@ -22,6 +22,7 @@ import RelationshipTypes from '../../jhipster/relationship-types';
 import RelationshipOptions from '../../jhipster/relationship-options';
 import Validations from '../../jhipster/validations';
 import { camelCase, lowerFirst } from '../../utils/string-utils';
+import JDLRelationship from '../../models/jdl-relationship';
 
 const { REQUIRED } = Validations;
 const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
@@ -37,13 +38,13 @@ export default { convert };
 
 /**
  * Converts passed JDL relationships to JSON content.
- * @param {Array<JDLRelationship>} jdlRelationships - the relationships to convert
- * @param {Array<String>} entityNames - all the entities' names
+ * @param jdlRelationships - the relationships to convert
+ * @param entityNames - all the entities' names
  * @param {Object} conversionOptions - the conversion options
  * @param {Boolean} [conversionOptions.unidirectionalRelationships] - Whether to generate unidirectional relationships
  * @return {Map<String, Array<Object>>} a map having for keys entity names and for values arrays of JSON relationships.
  */
-export function convert(jdlRelationships: any[] = [], entityNames: string[] = [], conversionOptions: any = {}) {
+export function convert(jdlRelationships: JDLRelationship[] = [], entityNames: string[] = [], conversionOptions: any = {}) {
   if (jdlRelationships.length === 0 || entityNames.length === 0) {
     return new Map();
   }

@@ -22,6 +22,8 @@ import UnaryOptions from '../../jhipster/unary-options';
 
 import BinaryOptions from '../../jhipster/binary-options';
 import EntityOptions from '../../jhipster/entity-options';
+import JDLObject from '../../models/jdl-object';
+import JDLApplication from '../../models/jdl-application';
 
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = UnaryOptions;
 
@@ -35,9 +37,11 @@ const serviceClassOptionValue = BinaryOptions.Values.service.SERVICE_CLASS;
 
 const USER = 'user';
 
-let convertedOptionContent;
+let convertedOptionContent: Map<string, any>;
 
 export default { convert };
+
+type JDLOptionHolder = JDLObject | JDLApplication;
 
 /**
  * Converts JDL options to JSON content to be set in JSON entities.
@@ -45,10 +49,10 @@ export default { convert };
  * calls:
  *   - forEachOption, to loop over JDL options
  *   - getEntityNames, to get the declared entity names
- * @param {JDLObject|JDLApplication} jdlOptionHolder - a JDL object (a JDLObject or a JDLApplication) containing the options.
+ * @param jdlOptionHolder - a JDL object (a JDLObject or a JDLApplication) containing the options.
  * @return {Map<String, Object>} a map having for keys entity names and for values the JSON option contents.
  */
-export function convert(jdlOptionHolder) {
+export function convert(jdlOptionHolder: JDLOptionHolder) {
   if (!jdlOptionHolder) {
     throw new Error('A JDL object or application must be passed to convert JDL options to JSON.');
   }
@@ -58,7 +62,7 @@ export function convert(jdlOptionHolder) {
   return convertedOptionContent;
 }
 
-function resolveEntityNamesForEachOption(jdlOptionHolder) {
+function resolveEntityNamesForEachOption(jdlOptionHolder: JDLOptionHolder) {
   jdlOptionHolder.forEachOption(jdlOption => {
     if (jdlOption.entityNames.has('*')) {
       jdlOption.setEntityNames(
@@ -68,7 +72,7 @@ function resolveEntityNamesForEachOption(jdlOptionHolder) {
   });
 }
 
-function setConvertedOptionContents(jdlOptionHolder) {
+function setConvertedOptionContents(jdlOptionHolder: JDLOptionHolder) {
   jdlOptionHolder.forEachOption(jdlOption => {
     setOptionsToEachEntityName(jdlOption);
   });
@@ -124,7 +128,7 @@ function preventEntitiesFromBeingSearched(entityNames) {
   });
 }
 
-function setOptionToEntityName(option, entityName) {
+function setOptionToEntityName(option, entityName: string) {
   const { optionName, optionValue } = option;
   const optionContentForEntity = convertedOptionContent.get(entityName) || {};
   optionContentForEntity[optionName] = optionValue;

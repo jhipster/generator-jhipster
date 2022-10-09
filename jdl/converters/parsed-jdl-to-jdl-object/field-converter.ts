@@ -26,9 +26,9 @@ export default { convertField };
 /**
  * Converts a parsed JDL content corresponding to a field to a JDLField object.
  * @param {Object} field - a parsed JDL field.
- * @return {JDLField} the converted JDLField.
+ * @return the converted JDLField.
  */
-export function convertField(field) {
+export function convertField(field): JDLField {
   if (!field) {
     throw new Error('A field has to be passed so as to be converted.');
   }

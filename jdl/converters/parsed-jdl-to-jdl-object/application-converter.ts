@@ -20,6 +20,8 @@
 import { createJDLApplication } from '../../models/jdl-application-factory';
 import { convertOptions } from './option-converter';
 import ApplicationOptions from '../../jhipster/application-options';
+import JDLUnaryOption from '../../models/jdl-unary-option';
+import JDLBinaryOption from '../../models/jdl-binary-option';
 
 const {
   OptionNames: { BASE_NAME },
@@ -80,12 +82,16 @@ function getEntityOptionsInApplication(parsedApplication) {
 
 /**
  * Checks whether the entity names used in the options are present in the entity names declared for the application.
- * @param {String} applicationName - the application's name
- * @param {Array<JDLUnaryOption|JDLBinaryOption>} entityOptions - the options declared in the application
- * @param {Array<String>} entityNamesInApplication - the entity names declared in the application
+ * @param applicationName - the application's name
+ * @param entityOptions - the options declared in the application
+ * @param entityNamesInApplication - the entity names declared in the application
  */
-function checkEntityNamesInOptions(applicationName, entityOptions, entityNamesInApplication) {
-  const entityNamesInApplicationSet = new Set(entityNamesInApplication);
+function checkEntityNamesInOptions(
+  applicationName: string,
+  entityOptions: (JDLUnaryOption | JDLBinaryOption)[],
+  entityNamesInApplication: string[]
+) {
+  const entityNamesInApplicationSet = new Set<string>(entityNamesInApplication);
   entityOptions.forEach(option => {
     const entityNamesForTheOption = option.resolveEntityNames(entityNamesInApplication);
     entityNamesForTheOption.forEach(entityNameForTheOption => {
