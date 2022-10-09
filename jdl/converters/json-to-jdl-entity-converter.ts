@@ -34,6 +34,7 @@ import UnaryOptions from '../jhipster/unary-options';
 import BinaryOptions from '../jhipster/binary-options';
 import RelationshipTypes from '../jhipster/relationship-types';
 import RelationshipOptions from '../jhipster/relationship-options';
+import { Entity, Field, Relationship } from './types';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = FieldTypes;
 const { OptionNames } = ApplicationOptions;
@@ -52,18 +53,18 @@ export default {
 const USER_ENTITY_NAME = 'User';
 const USER_ENTITY = new JDLEntity({ name: USER_ENTITY_NAME });
 
-let entities;
-let jdlObject;
-let skippedUserManagement;
+let entities: Map<string, Entity>;
+let jdlObject: JDLObject;
+let skippedUserManagement: boolean;
 
 /**
  * Convert the passed entities (parsed from JSON files) to a JDL object.
- * @param {Object} params - an object containing the entities and relevant options.
- * @param {Map<string, Object>} params.entities - a Map having for keys the entity names and values the JSON entity files.
- * @param {boolean} params.skippedUserManagement - whether management of the User entity by JHipster is skipped.
- * @return {JDLObject} the parsed entities in the JDL form.
+ * @param params - an object containing the entities and relevant options.
+ * @param params.entities - a Map having for keys the entity names and values the JSON entity files.
+ * @param params.skippedUserManagement - whether management of the User entity by JHipster is skipped.
+ * @return the parsed entities in the JDL form.
  */
-export function convertEntitiesToJDL(params) {
+export function convertEntitiesToJDL(params: { entities: Map<string, Entity>; skippedUserManagement: boolean }): JDLObject {
   if (!params.entities) {
     throw new Error('Entities have to be passed to be converted.');
   }
@@ -85,7 +86,7 @@ function addEntities() {
   });
 }
 
-function addEntity(entity, entityName) {
+function addEntity(entity: Entity, entityName: string) {
   if (entityName === USER_ENTITY_NAME && !skippedUserManagement) {
     throw new Error(`User entity name is reserved if ${OptionNames.SKIP_USER_MANAGEMENT} is not set.`);
   }
@@ -94,7 +95,7 @@ function addEntity(entity, entityName) {
   addEntityOptionsToJDL(entity, entityName);
 }
 
-function convertJSONToJDLEntity(entity, entityName) {
+function convertJSONToJDLEntity(entity: Entity, entityName: string) {
   const jdlEntity = new JDLEntity({
     name: entityName,
     tableName: entity.entityTableName,
@@ -104,13 +105,13 @@ function convertJSONToJDLEntity(entity, entityName) {
   return jdlEntity;
 }
 
-function addFields(jdlEntity, entity) {
-  entity.fields.forEach(field => {
+function addFields(jdlEntity: JDLEntity, entity: Entity) {
+  entity?.fields?.forEach(field => {
     jdlEntity.addField(convertJSONToJDLField(field));
   });
 }
 
-function convertJSONToJDLField(field) {
+function convertJSONToJDLField(field: Field) {
   const jdlField = new JDLField({
     name: lowerFirst(field.fieldName),
     type: field.fieldType,
@@ -138,15 +139,15 @@ function addValidations(jdlField, field) {
   });
 }
 
-function convertJSONToJDLValidation(rule, field) {
+function convertJSONToJDLValidation(rule, field: Field) {
   return new JDLValidation({
     name: rule,
     value: field[`fieldValidateRules${upperFirst(rule)}`],
   });
 }
 
-function addEnumsToJDL(entity) {
-  entity.fields.forEach(field => {
+function addEnumsToJDL(entity: Entity) {
+  entity?.fields?.forEach(field => {
     if (field.fieldValues !== undefined) {
       jdlObject.addEnum(
         new JDLEnum({
@@ -185,7 +186,7 @@ function addRelationshipsToJDL() {
   });
 }
 
-function dealWithRelationships(relationships, entityName) {
+function dealWithRelationships(relationships: Relationship[] | undefined, entityName: string) {
   if (!relationships) {
     return;
   }
@@ -197,7 +198,7 @@ function dealWithRelationships(relationships, entityName) {
   });
 }
 
-function getRelationship(relationship, entityName) {
+function getRelationship(relationship: Relationship, entityName: string) {
   let relationshipConfiguration: any = {
     sourceEntity: null,
     destinationEntity: null,
@@ -258,7 +259,7 @@ function getRelationship(relationship, entityName) {
   return undefined;
 }
 
-function shouldHandleUserEntity(relationship) {
+function shouldHandleUserEntity(relationship: Relationship) {
   return relationship.otherEntityName.toLowerCase() === USER_ENTITY_NAME.toLowerCase() && !skippedUserManagement;
 }
 
@@ -295,7 +296,7 @@ function getDestinationEntitySideAttributes(isEntityTheDestinationSideEntity, de
   };
 }
 
-function getRelationshipOptions(relationship) {
+function getRelationshipOptions(relationship: Relationship) {
   const options = relationship.options || {
     global: {},
     source: {},
@@ -345,7 +346,7 @@ function getInjectedFieldInSourceEntity(relationship) {
   );
 }
 
-function addEntityOptionsToJDL(entity, entityName) {
+function addEntityOptionsToJDL(entity: Entity, entityName: string) {
   if (entity.fluentMethods === false) {
     addUnaryOptionToJDL(NO_FLUENT_METHOD, entityName);
   }
@@ -379,7 +380,7 @@ function addEntityOptionsToJDL(entity, entityName) {
   }
 }
 
-function addUnaryOptionToJDL(unaryOption, entityName) {
+function addUnaryOptionToJDL(unaryOption, entityName: string) {
   jdlObject.addOption(
     new JDLUnaryOption({
       name: unaryOption,
@@ -388,7 +389,7 @@ function addUnaryOptionToJDL(unaryOption, entityName) {
   );
 }
 
-function addBinaryOptionToJDL(binaryOption, value, entityName) {
+function addBinaryOptionToJDL(binaryOption, value, entityName: string) {
   jdlObject.addOption(
     new JDLBinaryOption({
       name: binaryOption,

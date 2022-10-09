@@ -27,6 +27,7 @@ import { convertApplicationToJDL } from './json-to-jdl-application-converter';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter';
 import exportJDLObject from '../exporters/jdl-exporter';
 import ApplicationOptions from '../jhipster/application-options';
+import { Entity } from './types';
 
 const { OptionNames } = ApplicationOptions;
 
@@ -59,7 +60,7 @@ export function convertToJDL(directory = '.', output = 'app.jdl') {
   exportJDLObject(jdlObject, path.join(directory, output));
 }
 
-export function convertSingleContentToJDL(yoRcFileContent, entities?: any) {
+export function convertSingleContentToJDL(yoRcFileContent, entities?: Map<string, Entity>) {
   return getJDLObjectFromSingleApplication(yoRcFileContent, entities).toString();
 }
 
@@ -81,7 +82,11 @@ function getJDLObjectFromMultipleApplications(directory) {
   return jdlObject;
 }
 
-function getJDLObjectFromSingleApplication(yoRcFileContent, entities?: any, existingJDLObject = new JDLObject()) {
+function getJDLObjectFromSingleApplication(
+  yoRcFileContent,
+  entities?: Map<string, Entity>,
+  existingJDLObject = new JDLObject()
+): JDLObject {
   const cleanedYoRcFileContent = cleanYoRcFileContent(yoRcFileContent);
   const jdlApplication = convertApplicationToJDL({ application: cleanedYoRcFileContent });
   if (!entities) {
@@ -110,7 +115,7 @@ function cleanYoRcFileContent(yoRcFileContent) {
   return yoRcFileContent;
 }
 
-function getJSONEntityFiles(applicationDirectory) {
+function getJSONEntityFiles(applicationDirectory: string) {
   const entities = new Map();
   fs.readdirSync(path.join(applicationDirectory, '.jhipster')).forEach(file => {
     const jsonFilePath = path.join(applicationDirectory, '.jhipster', file);
@@ -122,6 +127,6 @@ function getJSONEntityFiles(applicationDirectory) {
   return entities;
 }
 
-function getSubdirectories(rootDirectory) {
+function getSubdirectories(rootDirectory: string) {
   return fs.readdirSync(path.join(rootDirectory)).filter(file => doesDirectoryExist(path.join(rootDirectory, file)));
 }

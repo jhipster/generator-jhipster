@@ -30,10 +30,10 @@ export default {
 /**
  * Parses the jhipster configuration into JDL.
  * @param config the jhipster config ('generator-jhipster' in .yo-rc.json)
- * @param jdl {JDLObject} to which the parsed options are added. If undefined a new JDLObject is created.
- * @returns {JDLObject} the JDLObject
+ * @param jdl to which the parsed options are added. If undefined a new JDLObject is created.
+ * @returns the JDLObject
  */
-export function convertServerOptionsToJDL(config, jdl) {
+export function convertServerOptionsToJDL(config, jdl: JDLObject): JDLObject {
   const jdlObject = jdl || new JDLObject();
   const jhipsterConfig = config || {};
   [SKIP_CLIENT, SKIP_SERVER].forEach(option => {
