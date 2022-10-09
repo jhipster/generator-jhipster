@@ -611,8 +611,6 @@ describe('Generator Base', () => {
       'composing',
       'loading',
       'preparing',
-      'preparingFields',
-      'preparingRelationships',
       'default',
       'writing',
       'postWriting',
@@ -671,22 +669,6 @@ describe('Generator Base', () => {
           return {
             mocked() {
               mockedPriorities.preparing();
-            },
-          };
-        }
-
-        get preparingFields() {
-          return {
-            mocked() {
-              mockedPriorities.preparingFields();
-            },
-          };
-        }
-
-        get preparingRelationships() {
-          return {
-            mocked() {
-              mockedPriorities.preparingRelationships();
             },
           };
         }

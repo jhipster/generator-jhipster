@@ -266,20 +266,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
   }
 
   /**
-   * Public API method used by the getter and also by Blueprints
-   */
-  _preparingFields() {
-    return {};
-  }
-
-  /**
-   * Public API method used by the getter and also by Blueprints
-   */
-  _preparingRelationships() {
-    return {};
-  }
-
-  /**
    * Priority API stub for blueprints.
    *
    * Default priority should used as misc customizations.
@@ -484,7 +470,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
     const { taskPrefix: baseGeneratorTaskPrefix = '' } = this.features;
     const { taskPrefix: blueprintTaskPrefix = '' } = blueprintGenerator.features;
     // v8 remove deprecated priorities
-    const DEPRECATED_PRIORITIES = ['preparingFields', 'preparingRelationships', 'preConflicts'];
+    const DEPRECATED_PRIORITIES = ['preConflicts'];
     for (const priorityName of Object.values(PRIORITY_NAMES).filter(p => !DEPRECATED_PRIORITIES.includes(p))) {
       const baseGeneratorPriorityName = `${baseGeneratorTaskPrefix}${priorityName}`;
       if (baseGeneratorPriorityName in this) {
