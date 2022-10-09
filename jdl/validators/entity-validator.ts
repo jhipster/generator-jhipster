@@ -26,7 +26,6 @@ export default class EntityValidator extends Validator {
   }
 
   validate(jdlEntity) {
-    console.log('in validate');
     super.validate(jdlEntity);
     checkForReservedClassName(jdlEntity);
   }
