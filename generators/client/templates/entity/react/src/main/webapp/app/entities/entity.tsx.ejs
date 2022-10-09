@@ -32,7 +32,7 @@ import {
   Translate<% if (searchEngine) { %>, translate<% } %>
   <% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (!paginationNo) { _%>
-  , getSortState
+  , getPaginationState
   <%_ if (paginationPagination) { _%>
   , JhiPagination, JhiItemCount
   <%_ }
@@ -71,7 +71,7 @@ export const <%= entityReactName %> = () => {
   const [search, setSearch] = useState('');
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), location.search));
+  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getPaginationState(location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), location.search));
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   const [sorting, setSorting] = useState(false);
