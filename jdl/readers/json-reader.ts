@@ -24,9 +24,10 @@ import mergeJDLObjects from '../models/jdl-object-merger';
 import { OptionNames } from '../jhipster/application-options';
 import { doesDirectoryExist } from '../utils/file-utils';
 import { readJSONFile } from './json-file-reader';
+import JDLObject from '../models/jdl-object';
 
 /* Parse the given jhipster app dir and return a JDLObject */
-export default function parseFromDir(dir) {
+export default function parseFromDir(dir: string): JDLObject {
   if (!dir) {
     throw new Error('The app directory must be passed to read JSON files.');
   }

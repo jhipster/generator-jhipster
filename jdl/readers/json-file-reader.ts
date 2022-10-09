@@ -26,7 +26,7 @@ import { readFile } from './file-reader';
  * @param filePath the JSON file's path
  * @return its content
  */
-export function readJSONFile(filePath) {
+export function readJSONFile(filePath: string) {
   return JSON.parse(readFile(filePath));
 }
 
