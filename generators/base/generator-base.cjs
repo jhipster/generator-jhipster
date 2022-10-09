@@ -43,7 +43,7 @@ const defaultApplicationOptions = require('../../jdl/jhipster/default-applicatio
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const { databaseData } = require('../sql-constants.cjs');
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
-const { joinCallbacks } = require('../../lib/support/base.cjs');
+const { joinCallbacks } = require('./utils.cjs');
 
 const {
   JHIPSTER_CONFIG_DIR,
