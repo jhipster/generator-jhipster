@@ -7,6 +7,8 @@ module.exports = {
   extension: ['js', 'spec.cjs', 'spec.mjs', 'spec.ts', 'spec.mts'],
   require: ['mocha-expect-snapshot/old-format', 'test/mocha.config.cjs'],
   // Resolve absolute path for test with fork and different cwd.
-  loader: require.resolve('tsx'),
+  // `loader` options is passed to forks, but `require` is not.
+  // Use node-option instead (it overrides loader option)
+  'node-option': [`require=${require.resolve('@esbuild-kit/cjs-loader')}`, `loader=${require.resolve('@esbuild-kit/esm-loader')}`],
   parallel: true,
 };
