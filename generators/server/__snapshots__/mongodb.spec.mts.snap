@@ -5544,6 +5544,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5601,6 +5602,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5658,6 +5660,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5714,6 +5717,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5772,6 +5776,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5827,6 +5832,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5884,6 +5890,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5940,6 +5947,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5994,6 +6002,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6051,6 +6060,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6108,6 +6118,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6166,6 +6177,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
