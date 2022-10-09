@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const prompts = require('./prompts.cjs');
 const AwsFactory = require('./lib/aws.cjs');
@@ -30,14 +30,14 @@ const { BUILD_TOOL, BASE_NAME, PROD_DATABASE_TYPE } = OptionNames;
 const { MYSQL, POSTGRESQL, MARIADB } = require('../../jdl/jhipster/database-types');
 
 /* eslint-disable consistent-return */
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_AWS);
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       initAws() {
         const done = this.async();
@@ -90,21 +90,21 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return prompts.prompting;
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_AWS);
@@ -128,12 +128,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _default() {
+  get default() {
     return {
       productionBuild() {
         const cb = this.async();
@@ -286,8 +286,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.DEFAULT]() {
+  get [BaseGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
-    return this._default();
+    return this.default;
   }
 };

@@ -21,7 +21,7 @@ const childProcess = require('child_process');
 const chalk = require('chalk');
 const glob = require('glob');
 
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const prompts = require('./prompts.cjs');
 const statistics = require('../statistics.cjs');
@@ -38,14 +38,14 @@ const NO_DATABASE_TYPE = databaseTypes.NO;
 const exec = childProcess.exec;
 
 /* eslint-disable consistent-return */
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLOUDFOUNDRY);
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       sayHello() {
         this.log(chalk.bold('CloudFoundry configuration is starting'));
@@ -67,21 +67,21 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return prompts.prompting;
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_CLOUDFOUNDRY);
@@ -116,12 +116,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _default() {
+  get default() {
     return {
       cloudfoundryAppShow() {
         if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
@@ -183,12 +183,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.DEFAULT]() {
+  get [BaseGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
-    return this._default();
+    return this.default;
   }
 
-  _end() {
+  get end() {
     return {
       cloudfoundryPush() {
         if (this.abort) return;
@@ -233,8 +233,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.END]() {
+  get [BaseGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 };

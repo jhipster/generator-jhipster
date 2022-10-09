@@ -57,7 +57,7 @@ module.exports = class extends BlueprintBaseGenerator {
     this.skipChecks = this.options.skipChecks;
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -103,11 +103,7 @@ module.exports = class extends BlueprintBaseGenerator {
     };
   }
 
-  get initializing() {
-    return this._initializing();
-  }
-
-  _prompting() {
+  get prompting() {
     return {
       askForApplicationType: prompts.askForApplicationType,
       askForGatewayType: prompts.askForGatewayType,
@@ -121,11 +117,7 @@ module.exports = class extends BlueprintBaseGenerator {
     };
   }
 
-  get prompting() {
-    return this._prompting();
-  }
-
-  _configuring() {
+  get configuring() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_DOCKER_COMPOSE);
@@ -135,10 +127,6 @@ module.exports = class extends BlueprintBaseGenerator {
       generateJwtSecret,
       setAppsFolderPaths,
     };
-  }
-
-  get configuring() {
-    return this._configuring();
   }
 
   loadDeploymentConfig(

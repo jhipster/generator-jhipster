@@ -24,15 +24,15 @@ const { GENERATOR_JHIPSTER } = require('../generator-constants.cjs');
 const {
   DeploymentTypes: { DOCKERCOMPOSE },
 } = require('../../jdl/jhipster/deployment-options');
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 /**
  * Base class for a generator that can be extended through a blueprint.
  *
  * @class
- * @extends {BaseBlueprintGenerator}
+ * @extends {BaseGenerator}
  */
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -63,7 +63,7 @@ module.exports = class extends BaseBlueprintGenerator {
     this.loadRuntimeOptions();
   }
 
-  _initializing() {
+  get initializing() {
     return {
       initializeGit() {
         if (!this.options.monorepository) return;
@@ -78,12 +78,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       async configureUsingImportState() {
         const importState = this.options.importState;
@@ -135,12 +135,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _loading() {
+  get loading() {
     return {
       async loadConfig() {
         if (!this.generateWorkspaces) return;
@@ -157,12 +157,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.LOADING]() {
+  get [BaseGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.loading;
   }
 
-  _writing() {
+  get writing() {
     return this.asWritingTaskGroup({
       async writeTemplates() {
         if (!this.generateWorkspaces) return;
@@ -173,12 +173,12 @@ module.exports = class extends BaseBlueprintGenerator {
     });
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
-  _postWriting() {
+  get postWriting() {
     return {
       generatePackageJson() {
         if (!this.generateWorkspaces) return;
@@ -207,9 +207,9 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.POST_WRITING]() {
+  get [BaseGenerator.POST_WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._postWriting();
+    return this.postWriting;
   }
 
   _detectNodePackageManager() {

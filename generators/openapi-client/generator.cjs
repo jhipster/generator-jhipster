@@ -20,14 +20,14 @@
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const { GENERATOR_OPENAPI_CLIENT } = require('../generator-list.cjs');
 const { OpenAPIOptionsNames, OpenAPIDefaultValues } = require('../../jdl/jhipster/openapi-options');
 const prompts = require('./prompts.cjs');
 const { writeFiles, customizeFiles } = require('./files.cjs');
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
     this.option(OpenAPIOptionsNames.REGEN, {
@@ -43,9 +43,9 @@ module.exports = class extends BaseBlueprintGenerator {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
-      ...super._initializing(),
+      ...super.initializing,
       validateFromCli() {
         this.checkInvocationFromCLI();
       },
@@ -61,12 +61,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       askActionType: prompts.askActionType,
       askExistingAvailableDocs: prompts.askExistingAvailableDocs,
@@ -74,12 +74,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       determineApisToGenerate() {
         this.clientsToGenerate = {};
@@ -107,30 +107,30 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _writing() {
+  get writing() {
     return writeFiles();
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
-  _postWriting() {
+  get postWriting() {
     return customizeFiles();
   }
 
-  get [BaseBlueprintGenerator.POST_WRITING]() {
+  get [BaseGenerator.POST_WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._postWriting();
+    return this.postWriting;
   }
 
-  _install() {
+  get install() {
     return {
       executeOpenApiClient() {
         this.clientPackageManager = this.config.get('clientPackageManager');
@@ -152,12 +152,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INSTALL]() {
+  get [BaseGenerator.INSTALL]() {
     if (this.delegateToBlueprint) return {};
-    return this._install();
+    return this.install;
   }
 
-  _end() {
+  get end() {
     return {
       tearDown() {
         this.log('End of openapi-client generator');
@@ -165,8 +165,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.END]() {
+  get [BaseGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 };

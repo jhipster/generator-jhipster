@@ -49,13 +49,13 @@ module.exports = class extends BaseDockerGenerator {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       sayHello() {
         this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
         this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      ...super._initializing(),
+      ...super.initializing,
       checkKubernetes,
       checkHelm,
       loadConfig,
@@ -66,10 +66,10 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       askForApplicationType: prompts.askForApplicationType,
       askForPath: prompts.askForPath,
@@ -90,10 +90,10 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_KUBERNETES_HELM);
@@ -118,10 +118,10 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _loading() {
+  get loading() {
     return {
       loadSharedConfig() {
         this.appConfigs.forEach(element => {
@@ -136,19 +136,19 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.loading;
   }
 
-  _writing() {
+  get writing() {
     return writeFiles();
   }
 
   get [BaseDockerGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
-  _end() {
+  get end() {
     return {
       deploy() {
         if (this.hasWarning) {
@@ -192,6 +192,6 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 };

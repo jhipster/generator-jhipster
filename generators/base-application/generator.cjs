@@ -108,7 +108,7 @@ class BaseApplicationGenerator extends BaseGenerator {
    * @returns {import('./tasks.js').WritingTaskGroup<this, ApplicationType>}
    */
   get writing() {
-    return this.asWritingTaskGroup(this._writing());
+    return this.asWritingTaskGroup({});
   }
 
   /**
