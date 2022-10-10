@@ -121,7 +121,7 @@ module.exports = class PrivateBase extends Generator {
    * @param {string} command The program to execute.
    * @param {string[]} args A list of arguments to pass to the program.
    * @param {import('child_process').SpawnOptions} [opt] Any cross-spawn options.
-   * @returns {Promise<import('execa').ExecaChildProcess>}
+   * @returns {import('execa').ExecaChildProcess<string>}
    */
   spawnCommand(command, args, opt) {
     return super.spawnCommand(command, args, opt);

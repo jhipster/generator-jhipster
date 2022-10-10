@@ -20,6 +20,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+import type { ExecaReturnValue } from 'execa';
 
 import BaseGenerator from '../base/index.mjs';
 import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-converter.js';
@@ -92,12 +93,12 @@ export default class InfoGenerator extends BaseGenerator {
       },
 
       async checkDocker() {
-        await this.checkCommand('docker', ['-v'], { stdio: 'pipe' });
+        await this.checkCommand('docker', ['-v']);
       },
     });
   }
 
-  async checkCommand(command: string, args: string[], printInfo = ({ stdout }) => console.log(stdout)) {
+  async checkCommand(command: string, args: string[], printInfo = ({ stdout }: ExecaReturnValue<string>) => console.log(stdout)) {
     try {
       printInfo(await this.spawnCommand(command, args, { stdio: 'pipe' }));
     } catch (_error) {
