@@ -26,7 +26,7 @@ import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-co
 import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.cjs';
 
-export default class extends BaseGenerator {
+export default class InfoGenerator extends BaseGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -73,38 +73,36 @@ export default class extends BaseGenerator {
 
       async checkJava() {
         console.log('\n##### **Environment and Tools**\n');
-        const result = await this.spawnCommand('java', ['-version'], { stdio: 'pipe' });
-        console.log(result.stderr);
+        await this.checkCommand('java', ['-version'], ({ stderr }) => console.log(stderr));
         console.log();
       },
 
       async checkGit() {
-        const result = await this.spawnCommand('git', ['version'], { stdio: 'pipe' });
-        console.log(result.stdout);
+        await this.checkCommand('git', ['version']);
         console.log();
       },
 
       async checkNode() {
-        const { stdout } = await this.spawnCommand('node', ['-v'], { stdio: 'pipe' });
-        console.log(`node: ${stdout}`);
+        await this.checkCommand('node', ['-v'], ({ stdout }) => console.log(`node: ${stdout}`));
       },
 
       async checkNpm() {
-        const { stdout } = await this.spawnCommand('npm', ['-v'], { stdio: 'pipe' });
-        console.log(`npm: ${stdout}`);
+        await this.checkCommand('npm', ['-v'], ({ stdout }) => console.log(`npm: ${stdout}`));
         console.log();
       },
 
       async checkDocker() {
-        const { stdout } = await this.spawnCommand('docker', ['-v'], { stdio: 'pipe' });
-        console.log(stdout);
-      },
-
-      async checkDockerCompose() {
-        const { stdout } = await this.spawnCommand('docker', ['compose', 'version'], { stdio: 'pipe' });
-        console.log(stdout);
+        await this.checkCommand('docker', ['-v'], { stdio: 'pipe' });
       },
     });
+  }
+
+  async checkCommand(command: string, args: string[], printInfo = ({ stdout }) => console.log(stdout)) {
+    try {
+      printInfo(await this.spawnCommand(command, args, { stdio: 'pipe' }));
+    } catch (_error) {
+      console.log(chalk.red(`'${command}' command could not be found`));
+    }
   }
 
   /**
