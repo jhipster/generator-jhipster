@@ -6,3 +6,4 @@ docs
 test/templates
 jdl/bundling
 test/fixtures/**
+dist

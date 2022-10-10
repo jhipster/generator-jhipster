@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 export const EntityNavbarItems = [
-<%_ for (const entity of localEntities) { _%>
+<%_ for (const entity of this.localEntities) { _%>
   {
     name: '<%= entity.entityAngularName %>',
     route: '<%= entity.entityPage %>',

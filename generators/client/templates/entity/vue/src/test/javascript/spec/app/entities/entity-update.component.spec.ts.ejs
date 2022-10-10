@@ -1,0 +1,202 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ const tsKeyId = this.generateTestEntityId(primaryKey.type); _%>
+/* tslint:disable max-line-length */
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import sinon, { SinonStubbedInstance } from 'sinon';
+import Router from 'vue-router';
+import { ToastPlugin } from 'bootstrap-vue';
+
+<%_ let dayJsIncluded = false;
+  for (field of fields.filter(field => !field.id)) { _%>
+  <%_ if (field.fieldTypeTimed && !dayJsIncluded) {
+      dayJsIncluded = true; _%>
+import dayjs from 'dayjs';
+import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
+  <%_ } _%>
+<%_ } _%>
+
+import * as config from '@/shared/config/config';
+import <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
+import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
+import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+
+<%_ const importEntitiesSeen = [entityAngularName];
+  for (relationship of relationships) { _%>
+  <%_ if (!relationship.otherEntityIsEmbedded) {
+    const otherEntityAngularName = relationship.otherEntityAngularName;
+    const otherEntityFileName = relationship.otherEntityFileName;
+    const otherEntityFolderName = relationship.otherEntityFileName;
+    const otherEntityClientRootFolder = relationship.otherEntityClientRootFolder; _%>
+    <%_ if (!importEntitiesSeen.includes(otherEntityAngularName)) { _%>
+      <% if (relationship.otherEntityUser && (!skipUserManagement || authenticationTypeOauth2)) { %>
+import UserService from '@/entities/user/user.service';
+      <% } else if (!relationship.otherEntityUser) { %>
+import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
+      <%_ } _%>
+    <%_ } _%>
+    <%_ importEntitiesSeen.push(otherEntityAngularName); _%>
+  <%_ } _%>
+<%_ } _%>
+import AlertService from '@/shared/alert/alert.service';
+
+const localVue = createLocalVue();
+
+config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
+const i18n = config.initI18N(localVue);
+<%_ } _%>
+const store = config.initVueXStore(localVue);
+const router = new Router();
+localVue.use(Router);
+localVue.use(ToastPlugin);
+localVue.component('font-awesome-icon', {});
+localVue.component('b-input-group', {});
+localVue.component('b-input-group-prepend', {});
+localVue.component('b-form-datepicker', {});
+localVue.component('b-form-input', {});
+
+describe('Component Tests', () => {
+
+  describe('<%= entityAngularName %> Management Update Component', () => {
+    let wrapper: Wrapper<<%= entityAngularName %>Class>;
+    let comp: <%= entityAngularName %>Class;
+    let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
+
+    beforeEach(() => {
+      <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
+
+      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>UpdateComponent, {
+        store,
+<%_ if (enableTranslation) { _%>
+        i18n,
+<%_ } _%>
+        localVue,
+        router,
+        provide: {
+          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
+          alertService: () => new AlertService(),
+<%_
+  const entitiesSeen = [entityAngularName];
+  for (relationship of relationships) { _%>
+  <%_ if (!relationship.otherEntityIsEmbedded) {
+      const otherEntityName = relationship.otherEntityName;
+      const otherEntityAngularName = relationship.otherEntityAngularName; _%>
+    <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
+      <% if (relationship.otherEntityUser && (!skipUserManagement || authenticationTypeOauth2)) { %>
+          userService: () => new UserService(),
+      <%_ } else { _%>
+          <%= otherEntityName %>Service: () =>
+            sinon.createStubInstance<<%= otherEntityAngularName %>Service>(<%= otherEntityAngularName %>Service, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
+      <%_ } _%>
+    <%_ } _%>
+    <%_ entitiesSeen.push(otherEntityAngularName); _%>
+  <%_ } _%>
+<%_ } _%>
+
+        }
+      });
+      comp = wrapper.vm;
+    });
+
+<%_
+  let dateTestsIncluded = false;
+  for (field of fields.filter(field => !field.id)) {
+    if (field.fieldTypeTimed && !dateTestsIncluded) {
+      dateTestsIncluded = true;
+_%>
+    describe('load', () => {
+      it('Should convert date from string', () => {
+        // GIVEN
+        const date = new Date('2019-10-15T11:42:02Z');
+
+        // WHEN
+        const convertedDate = comp.convertDateTimeFromServer(date);
+
+        // THEN
+        expect(convertedDate).toEqual(dayjs(date).format(DATE_TIME_LONG_FORMAT));
+      });
+
+      it('Should not convert date if date is not present', () => {
+        expect(comp.convertDateTimeFromServer(null)).toBeNull();
+      });
+    });
+  <%_ } _%>
+<%_ } _%>
+
+    describe('save', () => {
+      it('Should call update service on save for existing entity', async () => {
+        // GIVEN
+        const entity = {id:<%- tsKeyId %>};
+        comp.<%= entityInstance %> = entity;
+        <%= entityInstance %>ServiceStub.update.resolves(entity);
+
+        // WHEN
+        comp.save();
+        await comp.$nextTick();
+
+        // THEN
+        expect(<%= entityInstance %>ServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(comp.isSaving).toEqual(false);
+      });
+
+      it('Should call create service on save for new entity', async () => {
+        // GIVEN
+        const entity = {};
+        comp.<%= entityInstance %> = entity;
+        <%= entityInstance %>ServiceStub.create.resolves(entity);
+
+        // WHEN
+        comp.save();
+        await comp.$nextTick();
+
+        // THEN
+        expect(<%= entityInstance %>ServiceStub.create.calledWith(entity)).toBeTruthy();
+        expect(comp.isSaving).toEqual(false);
+      });
+    });
+
+    describe('Before route enter', () => {
+      it('Should retrieve data', async () => {
+        // GIVEN
+        const found<%= entityAngularName %> = { id: <%- tsKeyId %> };
+        <%= entityInstance %>ServiceStub.find.resolves(found<%= entityAngularName %>);
+        <%= entityInstance %>ServiceStub.retrieve.resolves([found<%= entityAngularName %>]);
+
+        // WHEN
+        comp.beforeRouteEnter({ params: { <%= entityInstance %>Id: <%- tsKeyId %> } }, null, cb => cb(comp));
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.<%= entityInstance %>).toBe(found<%= entityAngularName %>);
+      });
+    });
+
+    describe('Previous state', () => {
+      it('Should go previous state', async () => {
+        comp.previousState();
+        await comp.$nextTick();
+
+        expect(comp.$router.currentRoute.fullPath).toContain('/');
+      });
+    });
+  });
+});

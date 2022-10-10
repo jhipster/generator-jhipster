@@ -1,6 +1,6 @@
-const createGenerator = env => class extends env.requireGenerator('jhipster:app') {
-    constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+const createGenerator = async env => class extends (await env.requireGenerator('jhipster:app')) {
+    constructor(args, opts, features) {
+        super(args, opts, { taskPrefix: '>', ...features });
 
         this.option('foo-bar', {
             desc: 'Sample option',
@@ -17,31 +17,51 @@ const createGenerator = env => class extends env.requireGenerator('jhipster:app'
         }
     }
 
-    get initializing() {
+    get ['>initializing']() {
         return super._initializing();
     }
 
-    get prompting() {
+    get ['>prompting']() {
         return super._prompting();
     }
 
-    get configuring() {
+    get ['>configuring']() {
         return super._configuring();
     }
 
-    get default() {
+    get ['>composing']() {
+      return super._composing();
+    }
+
+    get ['>loading']() {
+      return super._loading();
+    }
+
+    get ['>preparing']() {
+      return super._preparing();
+    }
+
+    get ['>default']() {
         return super._default();
     }
 
-    get writing() {
+    get ['>writing']() {
         return super._writing();
     }
 
-    get install() {
+    get ['>postWriting']() {
+        return super._postWriting();
+    }
+
+    get ['>install']() {
         return super._install();
     }
 
-    get end() {
+    get ['>postInstall']() {
+        return super._postInstall();
+    }
+
+    get ['>end']() {
         return super._end();
     }
 };

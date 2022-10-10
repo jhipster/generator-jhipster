@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const { expect } = require('chai');
 const JDLObject = require('../../../../jdl/models/jdl-object');
 const JDLEntity = require('../../../../jdl/models/jdl-entity');

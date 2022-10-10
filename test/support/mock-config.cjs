@@ -2,7 +2,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const { writeFileSync, mkdirSync, readFileSync } = require('fs');
 
-const GeneratorBase = require('../../generators/generator-base');
+const GeneratorBase = require('../../generators/base/generator-base.cjs');
 
 const { loadDerivedAppConfig, loadDerivedServerConfig } = GeneratorBase.prototype;
 
@@ -111,7 +111,7 @@ const applications = {
   },
 };
 
-const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config } = {}) => {
+const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config = {} } = {}) => {
   const generator = {
     testDir,
     editFile(filePath, ...callbacks) {
@@ -143,6 +143,4 @@ const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config } =
   return generator;
 };
 
-module.exports = {
-  createMockedConfig,
-};
+module.exports = createMockedConfig;

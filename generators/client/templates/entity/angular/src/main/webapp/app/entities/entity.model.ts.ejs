@@ -1,0 +1,52 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%
+const enumImports = this.generateEntityClientEnumImports(fields, clientFramework);
+%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+import dayjs from 'dayjs/esm';
+<%_ } _%>
+<%_ for (const relationshipsByType of Object.values(differentRelationships).filter(relationshipsByType => relationshipsByType.some(relationship => (relationship.ownerSide || relationship.relationshipManyToMany) && relationship.otherEntity.entityAngularName !== entityAngularName))) {
+      const { otherEntity } = relationshipsByType[0];
+_%>
+import { I<%- otherEntity.entityAngularName %> } from 'app/entities/<%= otherEntity.entityClientRootFolder %><%= otherEntity.entityFolderName %>/<%= otherEntity.entityFileName %>.model';
+<%_ } _%>
+<%_ enumImports.forEach((importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ }); _%>
+
+export interface I<%= entityAngularName %> {
+<%_ for (const field of fields) {
+      const { fieldName, fieldValidationRequired, tsType, id } = field;
+_%>
+  <%= fieldName %><% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: <%= tsType %><% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>;
+  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+  <%= fieldName %>ContentType<% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: string<% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>,
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) {
+      const { propertyName, relationshipRequired, otherEntity, id, collection, otherEntityField } = relationship;
+_%>
+  <%= propertyName %>?: Pick<I<%= otherEntity.entityAngularName %>, '<%= otherEntity.primaryKey.name %>'<% if (otherEntity.primaryKey.name !== otherEntityField) { %> | '<%= otherEntityField %>'<% } %>><% if (collection) { %>[]<% } %> | null;
+<%_ } _%>
+}
+<%_ if (primaryKey) { _%>
+
+export type New<%= entityAngularName %> = Omit<I<%= entityAngularName %>, '<%= primaryKey.name %>'> & { <%= primaryKey.name %>: null };
+<%_ } _%>

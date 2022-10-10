@@ -23,8 +23,7 @@
         "jwtSecretKey": "147e04cf224f52908a60d7a2902e19e0648d0a8c52503b4624f1708478dd29ba2885a9bb823c85873a76b27964a90e22f1e8",
         "clientFramework": "angular",
         "testFrameworks": [
-            "gatling",
-            "protractor"
+            "gatling"
         ],
         "jhiPrefix": "jhi",
         "enableTranslation": true,

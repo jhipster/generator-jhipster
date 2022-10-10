@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const { expect } = require('chai');
 const JDLEnum = require('../../../jdl/models/jdl-enum');
 

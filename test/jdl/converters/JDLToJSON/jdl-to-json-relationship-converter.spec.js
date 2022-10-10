@@ -18,7 +18,7 @@
  */
 /* eslint-disable no-unused-expressions */
 
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const { expect } = require('chai');
 const JDLRelationship = require('../../../../jdl/models/jdl-relationship');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-relationship-converter');

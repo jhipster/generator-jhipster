@@ -21,7 +21,7 @@
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
 <&_ if (fragment.customCliSection) { -&>
-[Angular CLI][] with 
+[Angular CLI][] with
 <&_ } -&>
 <&_ if (fragment.developmentSection) { -&>
 ### Using Angular CLI
@@ -37,9 +37,9 @@ ng generate component my-component
 will generate few files:
 
 ```
-create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.html
-create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.ts
-update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
+create <%= this.CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.html
+create <%= this.CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.ts
+update <%= this.CLIENT_MAIN_SRC_DIR %>app/app.module.ts
 ```
 
 <&_ } -&>

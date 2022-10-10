@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-unused-expressions */
-const { expect: jestExpect } = require('expect');
+const { jestExpect } = require('mocha-expect-snapshot');
 const { expect } = require('chai');
 
 const JDLOptions = require('../../../jdl/models/jdl-options');

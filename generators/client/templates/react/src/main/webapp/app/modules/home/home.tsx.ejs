@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import './home.<%= styleSheetExt %>';
+import './home.scss';
 
 <%_ if (authenticationTypeOauth2) { _%>
 import React, { useEffect } from 'react';
 <%_ } else { _%>
 import React from 'react';
-<%_ } _%>  
+<%_ } _%>
 import { Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
 import { Row, Col, Alert } from 'reactstrap';
@@ -50,7 +50,7 @@ export const Home = () => {
         <span className="hipster rounded" />
       </Col>
       <Col md="9">
-        <h2><Translate contentKey="home.title">Welcome, <%= backendName %> Hipster!</Translate></h2>
+        <h2><Translate contentKey="home.title">Welcome, <%= backendType %> Hipster!</Translate></h2>
         <p className="lead"><Translate contentKey="home.subtitle">This is your homepage</Translate></p>
         {
           (account?.login) ? (

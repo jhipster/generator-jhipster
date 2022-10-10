@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const path = require('path');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
-const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
-const { GENERATOR_GRADLE } = require('../generator-list');
+const { skipPrettierHelpers: helpers } = require('../../test/utils/utils.cjs');
+const { GENERATOR_GRADLE } = require('../generator-list.cjs');
 
 const generatorPath = path.join(__dirname, 'index.cjs');
 const generator = path.basename(__dirname);

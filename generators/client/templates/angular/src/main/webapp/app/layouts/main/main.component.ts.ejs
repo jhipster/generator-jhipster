@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 import { Component, OnInit<% if (enableTranslation) { %>, RendererFactory2, Renderer2<% } %> } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import dayjs from 'dayjs/esm';
 <%_ } _%>
 
 import { AccountService } from 'app/core/auth/account.service';
+import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
+import { Router } from '@angular/router';
 <%_ if (enableI18nRTL) { _%>
 import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
@@ -32,6 +32,7 @@ import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-
 @Component({
   selector: '<%= jhiPrefixDashed %>-main',
   templateUrl: './main.component.html',
+  providers: [AppPageTitleStrategy],
 })
 export class MainComponent implements OnInit {
 <%_ if (enableTranslation) { _%>
@@ -39,9 +40,9 @@ export class MainComponent implements OnInit {
 <%_ } _%>
 
   constructor(
-    private accountService: AccountService,
-    private titleService: Title,
     private router: Router,
+    private appPageTitleStrategy: AppPageTitleStrategy,
+    private accountService: AccountService,
 <%_ if (enableI18nRTL) { _%>
     private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,
 <%_ } _%>
@@ -59,15 +60,9 @@ export class MainComponent implements OnInit {
     // try to log in automatically
     this.accountService.identity().subscribe();
 
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.updateTitle();
-      }
-    });
-
 <%_ if (enableTranslation) { _%>
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
-      this.updateTitle();
+      this.appPageTitleStrategy.updateTitle(this.router.routerState.snapshot);
       dayjs.locale(langChangeEvent.lang);
       this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
 
@@ -75,26 +70,6 @@ export class MainComponent implements OnInit {
       this.updatePageDirection();
   <%_ } _%>
     });
-<%_ } _%>
-  }
-
-  private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
-    const title: string = routeSnapshot.data['pageTitle'] ?? '';
-    if (routeSnapshot.firstChild) {
-      return this.getPageTitle(routeSnapshot.firstChild) || title;
-    }
-    return title;
-  }
-
-  private updateTitle(): void {
-    let pageTitle = this.getPageTitle(this.router.routerState.snapshot.root);
-    if (!pageTitle) {
-      pageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= humanizedBaseName %><% } %>';
-    }
-<%_ if (enableTranslation) { _%>
-    this.translateService.get(pageTitle).subscribe(title => this.titleService.setTitle(title));
-<%_ } else { _%>
-    this.titleService.setTitle(pageTitle);
 <%_ } _%>
   }
 

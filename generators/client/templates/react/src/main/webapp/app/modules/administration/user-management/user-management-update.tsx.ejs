@@ -100,7 +100,7 @@ export const UserManagementUpdate = () => {
                 message: translate('register.messages.validate.login.required'),
               },
               pattern: {
-                value: /<%- LOGIN_REGEX %>/,
+                value: /<%- webappLoginRegExp %>/,
                 message: translate('register.messages.validate.login.pattern'),
               },
               minLength: {

@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const path = require('path');
 
-const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
+const { defaultHelpers: helpers } = require('../../test/utils/utils.cjs');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { requiredConfig, defaultConfig } = require('./config.cjs');
-const { GENERATOR_SPRING_BOOT } = require('../generator-list');
+const { GENERATOR_SPRING_BOOT } = require('../generator-list.cjs');
 
 const generatorPath = path.join(__dirname, 'index.cjs');
 const generator = path.basename(__dirname);

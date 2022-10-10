@@ -19,25 +19,18 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
-const {
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-  WRITING_PRIORITY,
-  POST_WRITING_PRIORITY,
-  INSTALL_PRIORITY,
-  END_PRIORITY,
-} = require('../../lib/constants/priorities.cjs');
 
-const { GENERATOR_INIT } = require('../generator-list');
+const { GENERATOR_INIT } = require('../generator-list.cjs');
 const { PRETTIER_DEFAULT_INDENT, PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 const { files, commitHooksFiles } = require('./files.cjs');
 const { dependencyChain } = require('./mixin.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_INIT);
 
+/**
+ * @class
+ * @extends {import('../base/index.mjs')}
+ */
 module.exports = class extends MixedChain {
   constructor(args, options, features) {
     super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });
@@ -86,7 +79,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [MixedChain.INITIALIZING]() {
     if (this.delegateToBlueprint) return;
     return this.initializing;
   }
@@ -110,7 +103,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [MixedChain.PROMPTING]() {
     if (this.delegateToBlueprint) return;
     return this.prompting;
   }
@@ -123,7 +116,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [MixedChain.CONFIGURING]() {
     if (this.delegateToBlueprint) return;
     return this.configuring;
   }
@@ -145,7 +138,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [MixedChain.LOADING]() {
     if (this.delegateToBlueprint) return;
     return this.loading;
   }
@@ -158,7 +151,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [PREPARING_PRIORITY]() {
+  get [MixedChain.PREPARING]() {
     if (this.delegateToBlueprint) return;
     return this.preparing;
   }
@@ -181,7 +174,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [MixedChain.WRITING]() {
     if (this.delegateToBlueprint) return;
     return this.writing;
   }
@@ -203,7 +196,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [POST_WRITING_PRIORITY]() {
+  get [MixedChain.POST_WRITING]() {
     if (this.delegateToBlueprint) return;
     return this.postWriting;
   }
@@ -228,7 +221,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [INSTALL_PRIORITY]() {
+  get [MixedChain.INSTALL]() {
     if (this.delegateToBlueprint) return;
     return this.install;
   }
@@ -273,7 +266,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get [END_PRIORITY]() {
+  get [MixedChain.END]() {
     if (this.delegateToBlueprint) return;
     return this.end;
   }

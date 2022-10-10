@@ -33,7 +33,7 @@ export const files = {
     },
     {
       condition: ctx => ctx.cli,
-      templates: [{ file: 'cli/cli.mjs', renameTo: ctx => (ctx.js ? 'cli/cli.js' : 'cli/cli.mjs') }],
+      templates: [{ file: 'cli/cli.mjs', renameTo: ctx => (ctx.js ? 'cli/cli.cjs' : 'cli/cli.mjs') }],
     },
     {
       condition: ctx => ctx.commands.length > 0,

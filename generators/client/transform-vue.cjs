@@ -28,7 +28,7 @@ const TRANSLATIONS_ATTRIBUTES = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bi
  * @this {import('../generator-base.js')}
  */
 function replaceVueTranslations(body, filePath) {
-  if (this.enableTranslation || !this._getClientTranslation) {
+  if (!this._getClientTranslation) {
     return body;
   }
   if (/\.vue$/.test(filePath)) {

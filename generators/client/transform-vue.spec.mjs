@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect } from 'expect';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
 import { replaceVueTranslations } from './transform-vue.cjs';
@@ -52,7 +52,6 @@ const FULL_BODY = `
 describe('Vue transform', () => {
   describe('replaceVueTranslations', () => {
     let generator;
-    let enableTranslation;
 
     beforeEach(() => {
       let value = 0;
@@ -63,25 +62,10 @@ describe('Vue transform', () => {
           }
           return `${key}${interpolation}-translated-value-${value++}`;
         }),
-        enableTranslation,
       };
     });
 
-    describe('with translation enabled', () => {
-      before(() => {
-        enableTranslation = true;
-      });
-
-      it('should return the original body', () => {
-        expect(replaceVueTranslations.call(generator, FULL_BODY, 'foo.vue')).toBe(FULL_BODY);
-      });
-    });
-
     describe('with translation disabled', () => {
-      before(() => {
-        enableTranslation = false;
-      });
-
       it('should return the body without translation attributes', () => {
         expect(replaceVueTranslations.call(generator, FULL_BODY, 'foo.vue')).toMatchInlineSnapshot(`
 "

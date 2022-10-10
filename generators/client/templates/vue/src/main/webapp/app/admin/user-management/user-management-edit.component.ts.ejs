@@ -8,7 +8,7 @@ const loginValidator = (value: string) => {
   if (!value) {
     return true;
   }
-  return /<%- LOGIN_REGEX %>/.test(value);
+  return /<%- webappLoginRegExp %>/.test(value);
 };
 
 const validations: any = {

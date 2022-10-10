@@ -108,7 +108,6 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/common' \
   'generators/entities' \
   'generators/entity' \
-  'generators/entity-i18n' \
   'generators/gradle' \
   'generators/languages' \
   'generators/maven' \

@@ -2,24 +2,30 @@ const { pathsToModuleNameMapper } = require('ts-jest');
 const config = require('../../../webpack/config');
 const { compilerOptions: { paths = {}, baseUrl = './' } } = require('../../../tsconfig.json');
 
+/** @type {import('ts-jest').InitialOptionsTsJest} */
 module.exports = {
   rootDir: '../../../',
-  roots: ['<rootDir>', `<rootDir>/${baseUrl}`, `<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/app/`],
+  roots: ['<rootDir>', `<rootDir>/${baseUrl}`, `<rootDir>/<%= this.CLIENT_TEST_SRC_DIR %>spec/app/`],
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
-  coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>', '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/router', '.*.json'],
+  coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/<%= this.CLIENT_TEST_SRC_DIR %>', '<rootDir>/<%= this.CLIENT_MAIN_SRC_DIR %>app/router', '.*.json'],
   moduleFileExtensions: ['js', 'json', 'ts', 'vue'],
   transform: {
     '.*\\.(vue)$': '<%= microfrontend ? '@vue/vue2-jest' : 'vue-jest' %>',
-    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tsconfig.spec.json',
+      },
+    ],
   },
   moduleNameMapper: {
     rxjs: '<rootDir>/node_modules/rxjs/dist/bundles/rxjs.umd.js',
-    '^@/(.*)$': '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/$1',
+    '^@/(.*)$': '<rootDir>/<%= this.CLIENT_MAIN_SRC_DIR %>app/$1',
     ...pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-    '^@(<%= microfrontends.map(remote => remote.lowercaseBaseName).join('|') %>)/(.*)$': '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/app/microfrontends/$2',
+    '^@(<%= microfrontends.map(remote => remote.lowercaseBaseName).join('|') %>)/(.*)$': '<rootDir>/<%= this.CLIENT_TEST_SRC_DIR %>spec/app/microfrontends/$2',
 <%_ } _%>
   },
   reporters: [
@@ -27,7 +33,7 @@ module.exports = {
     ['jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }],
     ['jest-sonar', { outputDirectory: './<%= BUILD_DIR %>test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
   ],
-  testMatch: ['<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/**/@(*.)@(spec.ts)'],
+  testMatch: ['<rootDir>/<%= this.CLIENT_TEST_SRC_DIR %>spec/**/@(*.)@(spec.ts)'],
   testEnvironmentOptions: {
     url: 'https://jhipster.tech',
   },
@@ -38,9 +44,6 @@ module.exports = {
 <%_ } _%>
     SERVER_API_URL: config.serverApiUrl,
     VERSION: config.version,
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-    },
   },
   coverageThreshold: {
     global: {

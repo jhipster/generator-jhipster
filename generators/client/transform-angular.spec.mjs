@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect } from 'expect';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
 import { replaceAngularTranslations } from './transform-angular.cjs';
@@ -24,35 +24,15 @@ import { replaceAngularTranslations } from './transform-angular.cjs';
 describe('Angular transform', () => {
   describe('replaceAngularTranslations', () => {
     let generator;
-    let enableTranslation;
 
     beforeEach(() => {
       let value = 0;
       generator = {
         _getClientTranslation: jest.fn().mockImplementation(key => `translated-value-${key}-${value++}`),
-        enableTranslation,
       };
     });
 
-    describe('with translation enabled', () => {
-      before(() => {
-        enableTranslation = true;
-      });
-
-      it('should return the original body', () => {
-        const body = `
-<h1 jhiTranslate="activate.title">activate.title</h1>
-<h1 [translateValues]="{ max: 50 }">translate-values1</h1>
-`;
-        expect(replaceAngularTranslations.call(generator, body)).toBe(body);
-      });
-    });
-
-    describe('with translation enabled', () => {
-      before(() => {
-        enableTranslation = false;
-      });
-
+    describe('with translation disabled', () => {
       describe('.html files', () => {
         const extension = '.html';
 
@@ -151,15 +131,15 @@ describe('Angular transform', () => {
       describe('.route.ts files', () => {
         const extension = '.route.ts';
 
-        it('should replace pageTitle fields with translation values', () => {
+        it('should replace title fields with translation values', () => {
           const body = `
-pageTitle: 'activate.title1',
-pageTitle: 'activate.title2',
+title: 'activate.title1',
+title: 'activate.title2',
 `;
           expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
 "
-pageTitle: 'translated-value-activate.title1-0',
-pageTitle: 'translated-value-activate.title2-1',
+title: 'translated-value-activate.title1-0',
+title: 'translated-value-activate.title2-1',
 "
 `);
         });
@@ -168,15 +148,15 @@ pageTitle: 'translated-value-activate.title2-1',
       describe('.module.ts files', () => {
         const extension = '.module.ts';
 
-        it('should replace pageTitle fields with translation values', () => {
+        it('should replace title fields with translation values', () => {
           const body = `
-pageTitle: 'activate.title1',
-pageTitle: 'activate.title2',
+title: 'activate.title1',
+title: 'activate.title2',
 `;
           expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
 "
-pageTitle: 'translated-value-activate.title1-0',
-pageTitle: 'translated-value-activate.title2-1',
+title: 'translated-value-activate.title1-0',
+title: 'translated-value-activate.title2-1',
 "
 `);
         });

@@ -145,12 +145,12 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                         }
                     }
     <%_ if (reactive) { _%>
-                    testValues = testValues.and("spring.r2dbc.url=" + devTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (devDatabaseTypeMysql) { %>.replace("mysql", "mariadb")<% } else if (devDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- getDBCExtraOption(devDatabaseType) %>");
+                    testValues = testValues.and("spring.r2dbc.url=" + devTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (devDatabaseTypeMysql) { %>.replace("mysql", "mariadb")<% } else if (devDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- this.getDBCExtraOption(devDatabaseType) %>");
                     testValues = testValues.and("spring.r2dbc.username=" + devTestContainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.r2dbc.password=" + devTestContainer.getTestContainer().getPassword());
-                    testValues = testValues.and("spring.liquibase.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- getDBCExtraOption(devDatabaseType) %>" );
+                    testValues = testValues.and("spring.liquibase.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- this.getDBCExtraOption(devDatabaseType) %>" );
     <%_ } else { _%>
-                    testValues = testValues.and("spring.datasource.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- getDBCExtraOption(devDatabaseType) %>");
+                    testValues = testValues.and("spring.datasource.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- this.getDBCExtraOption(devDatabaseType) %>");
                     testValues = testValues.and("spring.datasource.username=" + devTestContainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.datasource.password=" + devTestContainer.getTestContainer().getPassword());
     <%_ } _%>
@@ -169,12 +169,12 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                         }
                     }
     <%_ if (reactive) { _%>
-                    testValues = testValues.and("spring.r2dbc.url=" + prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMysql) { %>.replace("mysql", "mariadb")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- getDBCExtraOption(prodDatabaseType) %>");
+                    testValues = testValues.and("spring.r2dbc.url=" + prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMysql) { %>.replace("mysql", "mariadb")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- this.getDBCExtraOption(prodDatabaseType) %>");
                     testValues = testValues.and("spring.r2dbc.username=" + prodTestContainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.r2dbc.password=" + prodTestContainer.getTestContainer().getPassword());
-                    testValues = testValues.and("spring.liquibase.url=" + prodTestContainer.getTestContainer().getJdbcUrl()  + "<%- getDBCExtraOption(prodDatabaseType) %>");
+                    testValues = testValues.and("spring.liquibase.url=" + prodTestContainer.getTestContainer().getJdbcUrl()  + "<%- this.getDBCExtraOption(prodDatabaseType) %>");
     <%_ } else { _%>
-                    testValues = testValues.and("spring.datasource.url=" + prodTestContainer.getTestContainer().getJdbcUrl() + "<%- getDBCExtraOption(prodDatabaseType) %>");
+                    testValues = testValues.and("spring.datasource.url=" + prodTestContainer.getTestContainer().getJdbcUrl() + "<%- this.getDBCExtraOption(prodDatabaseType) %>");
                     testValues = testValues.and("spring.datasource.username=" + prodTestContainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.datasource.password=" + prodTestContainer.getTestContainer().getPassword());
     <%_ } _%>

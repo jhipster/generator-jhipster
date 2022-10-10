@@ -12,16 +12,8 @@ updates:
       - 'skip-changelog'
     ignore:
       # ESM only version
-      - dependency-name: 'p-queue'
-        versions: ['>=7']
       - dependency-name: 'os-locale'
         versions: ['>=6']
-      - dependency-name: 'sort-keys'
-        versions: ['>=5']
-      - dependency-name: 'escape-string-regexp'
-        versions: ['>=5']
-      - dependency-name: 'isbinaryfile'
-        versions: ['>=5']
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/angular/'

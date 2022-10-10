@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const path = require('path');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { defaultConfig, requiredConfig, reproducibleConfigForTests } = require('./config.cjs');
-const { GENERATOR_PROJECT_NAME } = require('../generator-list');
+const { GENERATOR_PROJECT_NAME } = require('../generator-list.cjs');
 
-const generatorPath = path.join(__dirname, 'index.cjs');
+const generatorPath = path.join(__dirname, 'generator.cjs');
 const generator = path.basename(__dirname);
 
 describe(`JHipster ${generator} generator`, () => {

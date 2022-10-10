@@ -18,24 +18,10 @@
  */
 import chalk from 'chalk';
 import lodash from 'lodash';
-import { readFile } from 'fs/promises';
 
-import BaseBlueprintGenerator from '../generator-base-blueprint.js';
+import BaseGenerator from '../base/index.cjs';
 import { SKIP_COMMIT_HOOK } from '../init/constants.cjs';
-import {
-  PRIORITY_PREFIX,
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-  WRITING_PRIORITY,
-  POST_WRITING_PRIORITY,
-  POST_INSTALL_PRIORITY,
-  END_PRIORITY,
-  COMPOSING_PRIORITY,
-  BASE_PRIORITY_NAMES,
-} from '../../lib/constants/priorities.mjs';
+import { BASE_PRIORITY_NAMES } from '../../lib/constants/priorities.mjs';
 
 import {
   options,
@@ -57,15 +43,16 @@ import {
   ALL_PRIORITIES,
 } from './constants.mjs';
 
-import GENERATOR_LIST from '../generator-list.js';
+import GENERATOR_LIST from '../generator-list.cjs';
 import { files, generatorFiles } from './files.mjs';
+import { packageJson } from '../../lib/index.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
 
-export default class extends BaseBlueprintGenerator {
+export default class extends BaseGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { jhipsterModular: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
+    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
 
     // Register options available to cli.
     if (!this.fromBlueprint) {
@@ -111,7 +98,7 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
     return this.initializing;
   }
@@ -151,7 +138,7 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
     return this.prompting;
   }
@@ -171,7 +158,7 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
     return this.configuring;
   }
@@ -185,7 +172,7 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [COMPOSING_PRIORITY]() {
+  get [BaseGenerator.COMPOSING]() {
     if (this.delegateToBlueprint) return {};
     return this.composing;
   }
@@ -196,12 +183,12 @@ export default class extends BaseBlueprintGenerator {
         this.application = { ...defaultConfig(), ...this.config.getAll() };
       },
       async load() {
-        this.application.packagejs = JSON.parse(await readFile(new URL('../../package.json', import.meta.url)));
+        this.application.packagejs = packageJson;
       },
     };
   }
 
-  get [LOADING_PRIORITY]() {
+  get [BaseGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
     return this.loading;
   }
@@ -224,7 +211,7 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [PREPARING_PRIORITY]() {
+  get [BaseGenerator.PREPARING]() {
     if (this.delegateToBlueprint) return {};
     return this.preparing;
   }
@@ -245,7 +232,7 @@ export default class extends BaseBlueprintGenerator {
           const subGeneratorConfig = subGeneratorStorage.getAll();
           const priorities = (subGeneratorConfig[PRIORITIES] || []).map(priority => ({
             name: priority,
-            constant: `${snakeCase(priority).toUpperCase()}_PRIORITY`,
+            constant: `${snakeCase(priority).toUpperCase()}`,
           }));
           const customGenerator = !Object.values(GENERATOR_LIST).includes(generator);
           const jhipsterGenerator = customGenerator ? 'base' : generator;
@@ -270,7 +257,7 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this.writing;
   }
@@ -306,7 +293,6 @@ export default class extends BaseBlueprintGenerator {
             'eslint-plugin-import': `${packagejs.devDependencies['eslint-plugin-import']}`,
             'eslint-plugin-mocha': `${packagejs.devDependencies['eslint-plugin-mocha']}`,
             'eslint-plugin-prettier': `${packagejs.devDependencies['eslint-plugin-prettier']}`,
-            expect: `${packagejs.devDependencies.expect}`,
             mocha: `${packagejs.devDependencies.mocha}`,
             'mocha-expect-snapshot': `${packagejs.devDependencies['mocha-expect-snapshot']}`,
             prettier: `${packagejs.dependencies.prettier}`,
@@ -353,7 +339,7 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [POST_WRITING_PRIORITY]() {
+  get [BaseGenerator.POST_WRITING]() {
     if (this.delegateToBlueprint) return {};
     return this.postWriting;
   }
@@ -389,7 +375,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
     };
   }
 
-  get [POST_INSTALL_PRIORITY]() {
+  get [BaseGenerator.POST_INSTALL]() {
     if (this.delegateToBlueprint) return {};
     return this.postInstall;
   }
@@ -414,7 +400,7 @@ To begin to work:
     };
   }
 
-  get [END_PRIORITY]() {
+  get [BaseGenerator.END]() {
     if (this.delegateToBlueprint) return {};
     return this.end;
   }

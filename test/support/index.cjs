@@ -1,10 +1,10 @@
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const path = require('path');
 const sinon = require('sinon');
 const { existsSync } = require('fs');
 
-const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
-const { skipPrettierHelpers: helpers } = require('../utils/utils');
+const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants.cjs');
+const { skipPrettierHelpers: helpers } = require('../utils/utils.cjs');
 const {
   BASE_PRIORITY_NAMES,
   BASE_ENTITY_PRIORITY_NAMES,
@@ -44,7 +44,7 @@ const basicTests = data => {
   describe('with default options', () => {
     let runResult;
     before(async () => {
-      runResult = await contextBuilder().withOptions({ skipPrompts: true, configure: true }).run();
+      runResult = await contextBuilder().withOptions({ skipPrompts: true, configure: true, baseName: 'jhipster' }).run();
     });
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -172,6 +172,9 @@ const testBlueprintSupport = (generatorName, options = {}) => {
     generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.js`);
   }
   if (!existsSync(generatorPath)) {
+    generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.mts`);
+  }
+  if (!existsSync(generatorPath)) {
     generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.mjs`);
   }
   const addSpies = generator => {
@@ -220,7 +223,7 @@ const testBlueprintSupport = (generatorName, options = {}) => {
       result = await helpers
         .run(generatorPath)
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
-        .withOptions({ blueprint: 'foo', skipChecks: true })
+        .withOptions({ blueprint: 'foo', skipChecks: true, baseName: 'jhipster' })
         .on('ready', generator => {
           spy = addSpies(generator);
         });
@@ -239,7 +242,7 @@ const testBlueprintSupport = (generatorName, options = {}) => {
       if (skipSbsBlueprint) {
         this.skip();
       }
-      let options = { blueprint: 'foo-sbs', skipChecks: true };
+      let options = { blueprint: 'foo-sbs', skipChecks: true, baseName: 'jhipster' };
       if (entity) {
         options = {
           ...options,
@@ -319,8 +322,17 @@ const testBlueprintSupport = (generatorName, options = {}) => {
   });
 };
 
+const getTemplatePath = (...templatePath) => path.resolve(__dirname, '../templates', ...templatePath);
+
+const getEntityTemplatePath = entityName => getTemplatePath(`.jhipster/${entityName}.json`);
+
+const getGenerator = generatorName => path.resolve(__dirname, '../../generators', generatorName, 'index.mjs');
+
 module.exports = {
   basicTests,
   testBlueprintSupport,
   testOptions,
+  getTemplatePath,
+  getEntityTemplatePath,
+  getGenerator,
 };

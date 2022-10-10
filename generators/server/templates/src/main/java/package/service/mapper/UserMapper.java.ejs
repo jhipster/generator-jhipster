@@ -21,9 +21,9 @@ package <%= packageName %>.service.mapper;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
+import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 /**
- * Mapper for the entity {@link <%= asEntity('User') %>} and its DTO called {@link <%= asDto('User') %>}.
+ * Mapper for the entity {@link <%= user.persistClass %>} and its DTO called {@link <%= user.dtoClass %>}.
  *
  * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
  * support is still in beta, and requires a manual step with an IDE.
@@ -43,40 +43,40 @@ import org.mapstruct.Named;
 @Service
 public class UserMapper {
 
-    public List<<%= asDto('User') %>> usersToUserDTOs(List<<%= asEntity('User') %>> users) {
+    public List<<%= user.dtoClass %>> usersToUserDTOs(List<<%= user.persistClass %>> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToUserDTO)
             .collect(Collectors.toList());
     }
 
-    public <%= asDto('User') %> userToUserDTO(<%= asEntity('User') %> user) {
-        return new <%= asDto('User') %>(user);
+    public <%= user.dtoClass %> userToUserDTO(<%= user.persistClass %> user) {
+        return new <%= user.dtoClass %>(user);
     }
 
-    public List<<%= asDto('AdminUser') %>> usersToAdminUserDTOs(List<<%= asEntity('User') %>> users) {
+    public List<<%= user.adminUserDto %>> usersToAdminUserDTOs(List<<%= user.persistClass %>> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToAdminUserDTO)
             .collect(Collectors.toList());
     }
 
-    public <%= asDto('AdminUser') %> userToAdminUserDTO(<%= asEntity('User') %> user) {
-        return new <%= asDto('AdminUser') %>(user);
+    public <%= user.adminUserDto %> userToAdminUserDTO(<%= user.persistClass %> user) {
+        return new <%= user.adminUserDto %>(user);
     }
 
-    public List<<%= asEntity('User') %>> userDTOsToUsers(List<<%= asDto('AdminUser') %>> userDTOs) {
+    public List<<%= user.persistClass %>> userDTOsToUsers(List<<%= user.adminUserDto %>> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
             .collect(Collectors.toList());
     }
 
-    public <%= asEntity('User') %> userDTOToUser(<%= asDto('AdminUser') %> userDTO) {
+    public <%= user.persistClass %> userDTOToUser(<%= user.adminUserDto %> userDTO) {
         if (userDTO == null) {
             return null;
         } else {
-            <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+            <%= user.persistClass %> user = new <%= user.persistClass %>();
             user.setId(userDTO.getId());
             user.setLogin(userDTO.getLogin());
             user.setFirstName(userDTO.getFirstName());
@@ -130,11 +130,11 @@ public class UserMapper {
     }
 <%_ } _%>
 
-    public <%= asEntity('User') %> userFromId(<%= user.primaryKey.type %> id) {
+    public <%= user.persistClass %> userFromId(<%= user.primaryKey.type %> id) {
         if (id == null) {
             return null;
         }
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
         user.setId(id);
         return user;
     }
@@ -142,11 +142,11 @@ public class UserMapper {
     @Named("id")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    public <%= asDto('User') %> toDtoId(<%= asEntity('User') %> user) {
+    public <%= user.dtoClass %> toDtoId(<%= user.persistClass %> user) {
         if (user == null) {
             return null;
         }
-        <%= asDto('User') %> userDto = new <%= asDto('User') %>();
+        <%= user.dtoClass %> userDto = new <%= user.dtoClass %>();
         userDto.setId(user.getId());
         return userDto;
     }
@@ -154,13 +154,13 @@ public class UserMapper {
     @Named("idSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    public Set<<%= asDto('User') %>> toDtoIdSet(Set<<%= asEntity('User') %>> users) {
+    public Set<<%= user.dtoClass %>> toDtoIdSet(Set<<%= user.persistClass %>> users) {
         if ( users == null ) {
             return Collections.emptySet();
         }
 
-        Set<<%= asDto('User') %>> userSet = new HashSet<>();
-        for ( <%= asEntity('User') %> userEntity : users ) {
+        Set<<%= user.dtoClass %>> userSet = new HashSet<>();
+        for ( <%= user.persistClass %> userEntity : users ) {
             userSet.add( this.toDtoId( userEntity ) );
         }
 
@@ -171,11 +171,11 @@ public class UserMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "login", source = "login")
-    public <%= asDto('User') %> toDtoLogin(<%= asEntity('User') %> user) {
+    public <%= user.dtoClass %> toDtoLogin(<%= user.persistClass %> user) {
         if (user == null) {
             return null;
         }
-        <%= asDto('User') %> userDto = new <%= asDto('User') %>();
+        <%= user.dtoClass %> userDto = new <%= user.dtoClass %>();
         userDto.setId(user.getId());
         userDto.setLogin(user.getLogin());
         return userDto;
@@ -185,13 +185,13 @@ public class UserMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "login", source = "login")
-    public Set<<%= asDto('User') %>> toDtoLoginSet(Set<<%= asEntity('User') %>> users) {
+    public Set<<%= user.dtoClass %>> toDtoLoginSet(Set<<%= user.persistClass %>> users) {
         if ( users == null ) {
             return Collections.emptySet();
         }
 
-        Set<<%= asDto('User') %>> userSet = new HashSet<>();
-        for ( <%= asEntity('User') %> userEntity : users ) {
+        Set<<%= user.dtoClass %>> userSet = new HashSet<>();
+        for ( <%= user.persistClass %> userEntity : users ) {
             userSet.add( this.toDtoLogin( userEntity ) );
         }
 

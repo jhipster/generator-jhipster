@@ -75,7 +75,7 @@ module.exports = async (config, options, targetOptions) => {
           port: 9000,
           https: tls,
           proxy: {
-            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%= devServerPort %>' : '<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>'}`,
+            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%= devServerPort %>' : '<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>'}`,
             ws: true,
             proxyOptions: {
               changeOrigin: false, //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
@@ -125,7 +125,7 @@ module.exports = async (config, options, targetOptions) => {
       from: require.resolve('axios/dist/axios.min.js'),
       to: 'swagger-ui/',
     },
-    { from: './<%= CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
+    { from: './<%= this.CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
     // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
   ];
 

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const { OptionNames } = require('../../../jdl/jhipster/application-options');
 const { createApplicationConfigurationFromObject } = require('../../../jdl/models/jdl-application-configuration-factory');
 

@@ -19,14 +19,14 @@
 package <%= packageName %>.web.rest;
 
 import <%= packageName %>.config.Constants;
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.MailService;
 import org.springframework.data.domain.Sort;
 import java.util.Collections;
 import <%= packageName %>.service.UserService;
-import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import <%= packageName %>.web.rest.errors.BadRequestAlertException;
 import <%= packageName %>.web.rest.errors.EmailAlreadyUsedException;
 import <%= packageName %>.web.rest.errors.LoginAlreadyUsedException;
@@ -150,7 +150,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public <% if (reactive) { %>Mono<ResponseEntity<<%= asEntity('User') %>>><% } else { %>ResponseEntity<<%= asEntity('User') %>><% } %> createUser(@Valid @RequestBody <%= asDto('AdminUser') %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%= user.persistClass %>>><% } else { %>ResponseEntity<<%= user.persistClass %>><% } %> createUser(@Valid @RequestBody <%= user.adminUserDto %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
         log.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
@@ -189,7 +189,7 @@ public class UserResource {
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            <%= asEntity('User') %> newUser = userService.createUser(userDTO);
+            <%= user.persistClass %> newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
@@ -209,7 +209,7 @@ public class UserResource {
     @PutMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 <%_ if (reactive) { _%>
-    public Mono<ResponseEntity<<%= asDto('AdminUser') %>>> updateUser(@Valid @RequestBody <%= asDto('AdminUser') %> userDTO) {
+    public Mono<ResponseEntity<<%= user.adminUserDto %>>> updateUser(@Valid @RequestBody <%= user.adminUserDto %> userDTO) {
         log.debug("REST request to update User : {}", userDTO);
         return userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
             .filter(user -> !user.getId().equals(userDTO.getId()))
@@ -234,9 +234,9 @@ public class UserResource {
                 .body(user)
             );
 <%_ } else { _%>
-    public ResponseEntity<<%= asDto('AdminUser') %>> updateUser(@Valid @RequestBody <%= asDto('AdminUser') %> userDTO) {
+    public ResponseEntity<<%= user.adminUserDto %>> updateUser(@Valid @RequestBody <%= user.adminUserDto %> userDTO) {
         log.debug("REST request to update User : {}", userDTO);
-        Optional<<%= asEntity('User') %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<<%= user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }
@@ -244,7 +244,7 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
-        Optional<<%= asDto('AdminUser') %>> updatedUser = userService.updateUser(userDTO);
+        Optional<<%= user.adminUserDto %>> updatedUser = userService.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
             HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %>"userManagement.updated"<% } else { %>"A user is updated with identifier " + userDTO.getLogin()<% } %>, userDTO.getLogin()));
@@ -264,7 +264,7 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (reactive) { _%>
-    public Mono<ResponseEntity<Flux<<%= asDto('AdminUser') %>>>> getAllUsers(@org.springdoc.api.annotations.ParameterObject ServerHttpRequest request, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public Mono<ResponseEntity<Flux<<%= user.adminUserDto %>>>> getAllUsers(@org.springdoc.api.annotations.ParameterObject ServerHttpRequest request, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all User for an admin");
         if (!onlyContainsAllowedProperties(pageable)) {
             return Mono.just(ResponseEntity.badRequest().build());
@@ -275,13 +275,13 @@ public class UserResource {
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
   <%_ } else { _%>
-    public ResponseEntity<List<<%= asDto('AdminUser') %>>> getAllUsers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<<%= user.adminUserDto %>>> getAllUsers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all User for an admin");
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
 
-        final Page<<%= asDto('AdminUser') %>> page = userService.getAllManagedUsers(pageable);
+        final Page<<%= user.adminUserDto %>> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
   <%_ } _%>
@@ -292,7 +292,7 @@ public class UserResource {
     }
 
 <%_ } else { /* Cassandra */ _%>
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('AdminUser') %>> getAllUsers() {
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= user.adminUserDto %>> getAllUsers() {
         log.debug("REST request to get all User for an admin");
         return userService.getAllManagedUsers();
     }
@@ -308,17 +308,17 @@ public class UserResource {
     @GetMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 <%_ if (reactive) { _%>
-    public Mono<<%= asDto('AdminUser') %>> getUser(@PathVariable String login) {
+    public Mono<<%= user.adminUserDto %>> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
-            .map(<%= asDto('AdminUser') %>::new)
+            .map(<%= user.adminUserDto %>::new)
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
 <%_ } else { _%>
-    public ResponseEntity<<%= asDto('AdminUser') %>> getUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
+    public ResponseEntity<<%= user.adminUserDto %>> getUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(
             userService.getUserWithAuthoritiesByLogin(login)
-                .map(<%= asDto('AdminUser') %>::new));
+                .map(<%= user.adminUserDto %>::new));
 <%_ } _%>
     }
 

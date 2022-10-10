@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(user.primaryKey.type);
+const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
 jest.mock('app/core/auth/account.service');
 

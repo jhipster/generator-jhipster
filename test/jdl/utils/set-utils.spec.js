@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { expect } = require('expect');
+const { jestExpect: expect } = require('mocha-expect-snapshot');
 const { addAll, join } = require('../../../jdl/utils/set-utils');
 
 describe('SetUtils', () => {
