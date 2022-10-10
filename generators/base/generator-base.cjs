@@ -1305,105 +1305,6 @@ class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Copy templates with all the custom logic applied according to the type.
-   *
-   * @param {string} source - path of the source file to copy from
-   * @param {string} dest - path of the destination file to copy to
-   * @param {string} action - type of the action to be performed on the template file, i.e: stripHtml | stripJs | template | copy
-   * @param {object} generator - context that can be used as the generator instance or data to process template
-   * @param {object} opt - options that can be passed to template method
-   * @param {boolean} template - flag to use template method instead of copy method
-   */
-  copyTemplate(source, dest, action, generator, opt = {}, template) {
-    const _this = generator || this;
-    let regex;
-    switch (action) {
-      case 'stripHtml':
-        regex = new RegExp(
-          [
-            /([\s\n\r]+[a-z][a-zA-Z]*Translate="[a-zA-Z0-9 +{}'_!?.]+")/, // jhiTranslate
-            /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|\(|\)|\||-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
-            /([\s\n\r]+translate-compile)/, // translate-compile
-            /([\s\n\r]+translate-value-max="[0-9{}()|]*")/, // translate-value-max
-          ]
-            .map(r => r.source)
-            .join('|'),
-          'g'
-        );
-
-        jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
-        break;
-      case 'stripJs':
-        jhipsterUtils.copyWebResource(source, dest, null, 'js', _this, opt, template);
-        break;
-      case 'stripJsx':
-        regex = new RegExp(
-          [
-            /(import { ?Translate, ?translate ?} from 'react-jhipster';?)/, // Translate imports
-            /(import { ?translate, ?Translate ?} from 'react-jhipster';?)/, // translate imports
-            /( Translate,|, ?Translate|import { ?Translate ?} from 'react-jhipster';?)/, // Translate import
-            /( translate,|, ?translate|import { ?translate ?} from 'react-jhipster';?)/, // translate import
-            /<Translate(\s*)?((component="[a-z]+")(\s*)|(contentKey=("[a-zA-Z0-9.\-_]+"|\{.*\}))(\s*)|(interpolate=\{.*\})(\s*))*(\s*)\/?>|<\/Translate>/, // Translate component tag
-          ]
-            .map(r => r.source)
-            .join('|'),
-          'g'
-        );
-
-        jhipsterUtils.copyWebResource(source, dest, regex, 'jsx', _this, opt, template);
-        break;
-      case 'copy':
-        _this.copy(source, dest);
-        break;
-      default:
-        _this.template(source, dest, _this, opt);
-    }
-  }
-
-  /**
-   * @deprecated
-   * Copy html templates after stripping translation keys when translation is disabled.
-   *
-   * @param {string} source - path of the source file to copy from
-   * @param {string} dest - path of the destination file to copy to
-   * @param {object} generator - context that can be used as the generator instance or data to process template
-   * @param {object} opt - options that can be passed to template method
-   * @param {boolean} template - flag to use template method instead of copy
-   */
-  processHtml(source, dest, generator, opt, template) {
-    this.copyTemplate(source, dest, 'stripHtml', generator, opt, template);
-  }
-
-  /**
-   * @deprecated
-   * Copy Js templates after stripping translation keys when translation is disabled.
-   *
-   * @param {string} source - path of the source file to copy from
-   * @param {string} dest - path of the destination file to copy to
-   * @param {object} generator - context that can be used as the generator instance or data to process template
-   * @param {object} opt - options that can be passed to template method
-   * @param {boolean} template - flag to use template method instead of copy
-   */
-  processJs(source, dest, generator, opt, template) {
-    this.copyTemplate(source, dest, 'stripJs', generator, opt, template);
-  }
-
-  /**
-   * @deprecated
-   * Copy JSX templates after stripping translation keys when translation is disabled.
-   *
-   * @param {string} source - path of the source file to copy from
-   * @param {string} dest - path of the destination file to copy to
-   * @param {object} generator - context that can be used as the generator instance or data to process template
-   * @param {object} opt - options that can be passed to template method
-   * @param {boolean} template - flag to use template method instead of copy
-   */
-  processJsx(source, dest, generator, opt, template) {
-    this.copyTemplate(source, dest, 'stripJsx', generator, opt, template);
-  }
-
-  /**
-   * @private
    * Rewrite the specified file with provided content at the needle location
    *
    * @param {string} filePath - path of the source file to rewrite
@@ -1414,34 +1315,6 @@ class JHipsterBaseGenerator extends PrivateBase {
   rewriteFile(filePath, needle, content) {
     const rewriteFileModel = this.needleApi.base.generateFileModel(filePath, needle, content);
     return this.needleApi.base.addBlockContentToFile(rewriteFileModel);
-  }
-
-  /**
-   * @private
-   * Replace the pattern/regex with provided content
-   *
-   * @param {string} filePath - path of the source file to rewrite
-   * @param {string} pattern - pattern to look for where content will be replaced
-   * @param {string} content - content to be written
-   * @param {string} regex - true if pattern is regex
-   * @returns {boolean} true if the body has changed.
-   */
-  replaceContent(filePath, pattern, content, regex) {
-    try {
-      return jhipsterUtils.replaceContent(
-        {
-          file: filePath,
-          pattern,
-          content,
-          regex,
-        },
-        this
-      );
-    } catch (e) {
-      this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
-      this.debug('Error:', e);
-      return false;
-    }
   }
 
   /**
@@ -1486,25 +1359,6 @@ class JHipsterBaseGenerator extends PrivateBase {
       }
     } catch (err) {
       this.log(`\n${chalk.bold.red('Could not add jhipster module configuration')}`);
-      this.debug('Error:', err);
-    }
-  }
-
-  /**
-   * @private
-   * Add configuration to Entity.json files
-   *
-   * @param {string} file - configuration file name for the entity
-   * @param {string} key - key to be added or updated
-   * @param {object} value - value to be added
-   */
-  updateEntityConfig(file, key, value) {
-    try {
-      const entityJson = this.fs.readJSON(file);
-      entityJson[key] = value;
-      this.fs.writeJSON(file, entityJson, null, 4);
-    } catch (err) {
-      this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
       this.debug('Error:', err);
     }
   }
@@ -1733,21 +1587,6 @@ class JHipsterBaseGenerator extends PrivateBase {
       .sort(isBefore);
     this.jhipsterConfig.entities = entities.map(({ name }) => name);
     return entities;
-  }
-
-  /**
-   * @deprecated
-   * Copy i18 files for given language
-   *
-   * @param {object} generator - context that can be used as the generator instance or data to process template
-   * @param {string} webappDir - webapp directory path
-   * @param {string} fileToCopy - file name to copy
-   * @param {string} lang - language for which file needs to be copied
-   */
-  copyI18nFilesByName(generator, webappDir, fileToCopy, lang) {
-    const _this = generator || this;
-    const prefix = this.fetchFromInstalledJHipster('languages/templates');
-    _this.copy(`${prefix}/${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
   }
 
   /**
@@ -3143,23 +2982,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   fetchFromInstalledJHipster(...subpath) {
     return path.join(__dirname, '..', ...subpath);
-  }
-
-  /**
-   * Construct the entity name by appending the entity suffix.
-   * @param {String} name entity name
-   */
-  asEntity(name) {
-    return name + (this.entitySuffix || this.jhipsterConfig.entitySuffix || '');
-  }
-
-  /**
-   * @private
-   * Construct the entity's dto name by appending the dto suffix.
-   * @param {String} name entity name
-   */
-  asDto(name, application) {
-    return name + (application.dtoSuffix ?? '');
   }
 
   /**
