@@ -47,15 +47,7 @@ public class MysqlTestContainer implements SqlTestContainer {
                 .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))
-                .withReuse(true)
-                .withPrivilegedMode(true)
-                .withConfigurationOverride("testcontainers/mysql")
-                .withCreateContainerCmdModifier(cmd ->
-                    cmd.getHostConfig()
-                        .withMemory(memoryInBytes)
-                        .withMemorySwap(memorySwapInBytes)
-                );
-
+                .withReuse(true);
         }
         if (!mysqlContainer.isRunning()) {
             mysqlContainer.start();
