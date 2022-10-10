@@ -1464,9 +1464,6 @@ Object {
   "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -4247,9 +4244,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
     "stateCleared": "modified",
   },
 }
@@ -7917,9 +7911,6 @@ Object {
   "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -8385,9 +8376,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
     "stateCleared": "modified",
   },
 }
@@ -12893,9 +12881,6 @@ Object {
   "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -13418,9 +13403,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
     "stateCleared": "modified",
   },
 }
@@ -18121,9 +18103,6 @@ Object {
   "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -18595,9 +18574,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
     "stateCleared": "modified",
   },
 }
@@ -23355,9 +23331,6 @@ Object {
   "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -23934,9 +23907,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
     "stateCleared": "modified",
   },
 }
@@ -28496,9 +28466,6 @@ Object {
   "src/test/resources/testcontainers.properties": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -28967,9 +28934,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers/mysql/my.cnf": Object {
     "stateCleared": "modified",
   },
 }
