@@ -70,7 +70,7 @@
     "sass-loader": "13.1.0",
     "simple-progress-webpack-plugin": "2.0.0",
     "sinon": "14.0.1",
-    "source-map-loader": "4.0.0",
+    "source-map-loader": "4.0.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "style-loader": "3.3.1",
     "terser-webpack-plugin": "5.3.6",
