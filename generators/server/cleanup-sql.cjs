@@ -21,25 +21,29 @@
  * need to be removed.
  *
  * @param {any} generator - reference to generator
+ * @param {import('../bootstrap-application-server/types.js').SpringBootApplication} application
  * @param {string} javaDir - Java directory
  * @param {string} testDir - Java tests directory
  * @param {string} mainResourceDir - Main resources directory
  * @param {string} testResourceDir - Test resources directory
  */
-function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
+function cleanupOldServerFiles(generator, application, javaDir, testDir, mainResourceDir, testResourceDir) {
   if (generator.isJhipsterVersionLessThan('4.0.0')) {
-    if (generator.devDatabaseTypeH2Any) {
+    if (application.devDatabaseTypeH2Any) {
       generator.removeFile(`${javaDir}domain/util/FixedH2Dialect.java`);
     }
-    if (generator.devDatabaseTypePostgres || generator.prodDatabaseTypePostgres) {
+    if (application.devDatabaseTypePostgres || application.prodDatabaseTypePostgres) {
       generator.removeFile(`${javaDir}domain/util/FixedPostgreSQL82Dialect`);
     }
   }
   if (generator.isJhipsterVersionLessThan('7.8.2')) {
     generator.removeFile(`${testResourceDir}config/application-testcontainers.yml`);
-    if (generator.reactive) {
+    if (application.reactive) {
       generator.removeFile(`${testDir}ReactiveSqlTestContainerExtension.java`);
     }
+  }
+  if (application.prodDatabaseTypeMysql && generator.isJhipsterVersionLessThan('7.9.0')) {
+    generator.removeFile(`${testResourceDir}testcontainers/mysql/my.cnf`);
   }
 }
 
