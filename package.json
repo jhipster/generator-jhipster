@@ -126,7 +126,7 @@
     "chai": "4.3.6",
     "ejs-lint": "1.2.2",
     "esbuild": "0.15.10",
-    "eslint": "8.24.0",
+    "eslint": "8.25.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-chai-friendly": "0.7.2",
