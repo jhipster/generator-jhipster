@@ -284,7 +284,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         application.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
         application.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
         application.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-        application.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
         application.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
 
         application.JAVA_VERSION = constants.JAVA_VERSION;

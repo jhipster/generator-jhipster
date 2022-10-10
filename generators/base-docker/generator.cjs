@@ -75,7 +75,6 @@ module.exports = class extends BlueprintBaseGenerator {
         this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
         this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
         this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-        this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
 
         this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
         this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
