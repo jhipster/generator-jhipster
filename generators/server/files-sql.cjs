@@ -157,10 +157,6 @@ const mysqlFiles = {
       ],
     },
     {
-      path: SERVER_TEST_RES_DIR,
-      templates: [{ file: 'testcontainers/mysql/my.cnf', noEjs: true }],
-    },
-    {
       path: DOCKER_DIR,
       templates: [{ file: 'config/mysql/my.cnf', noEjs: true }],
     },

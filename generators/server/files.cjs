@@ -1834,6 +1834,7 @@ function writeFiles() {
     cleanupOldServerFiles({ application }) {
       serverCleanup.cleanupOldServerFiles(
         this,
+        application,
         `${SERVER_MAIN_SRC_DIR}${application.javaDir}`,
         `${SERVER_TEST_SRC_DIR}${application.testDir}`,
         SERVER_MAIN_RES_DIR,

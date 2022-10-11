@@ -29,8 +29,6 @@ import java.util.Collections;
 public class MysqlTestContainer implements SqlTestContainer {
 
     private static final Logger log = LoggerFactory.getLogger(MysqlTestContainer.class);
-    private long memoryInBytes = 100 * 1024 * 1024;
-    private long memorySwapInBytes = 200 * 1024 * 1024;
 
     private MySQLContainer<?> mysqlContainer;
 
@@ -43,19 +41,11 @@ public class MysqlTestContainer implements SqlTestContainer {
     @Override
     public void afterPropertiesSet() {
         if (null == mysqlContainer) {
-            mysqlContainer = new MySQLContainer<>("<%= DOCKER_MYSQL %>-debian")
+            mysqlContainer = new MySQLContainer<>("<%= DOCKER_MYSQL %>")
                 .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))
-                .withReuse(true)
-                .withPrivilegedMode(true)
-                .withConfigurationOverride("testcontainers/mysql")
-                .withCreateContainerCmdModifier(cmd ->
-                    cmd.getHostConfig()
-                        .withMemory(memoryInBytes)
-                        .withMemorySwap(memorySwapInBytes)
-                );
-
+                .withReuse(true);
         }
         if (!mysqlContainer.isRunning()) {
             mysqlContainer.start();
