@@ -24,7 +24,7 @@ let header = [];
 const fieldsToGenerate = [...allFields.filter(f => f.id), ...fields.filter(f => !f.id)];
 for (field of fieldsToGenerate) {
   header.push(field.columnName);
-  if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
+  if (field.shouldCreateContentType) {
     header.push(field.columnName + '_content_type');
   }
 }
@@ -59,7 +59,7 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
     }
 
     line.push(data);
-    if (field.columnType === 'blob' || field.columnType === 'longblob') {
+    if (field.shouldCreateContentType) {
       line.push('image/png');
     }
   }

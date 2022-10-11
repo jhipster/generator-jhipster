@@ -18,7 +18,7 @@
  */
 const { defaults } = require('lodash');
 
-const { GENERATOR_MAVEN, GENERATOR_GRADLE } = require('../generator-list');
+const { GENERATOR_MAVEN, GENERATOR_GRADLE } = require('../generator-list.cjs');
 const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
 const {
@@ -36,7 +36,7 @@ const {
   BUILD_DESTINATION,
 } = require('./constants.cjs');
 
-const { GENERATOR_INIT } = require('../generator-list');
+const { GENERATOR_INIT } = require('../generator-list.cjs');
 
 module.exports.dependencyChain = [GENERATOR_INIT];
 

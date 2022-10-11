@@ -21,7 +21,7 @@ import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import testSupport from '../../test/support/index.cjs';
 import Generator from './generator.cjs';
 import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
@@ -35,13 +35,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorPath = `${__dirname}/index.mjs`;
+const generatorPath = `${__dirname}/index.mts`;
 
 const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });

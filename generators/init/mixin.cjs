@@ -22,7 +22,7 @@ const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
 const { NODE_VERSION, PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 
-const { GENERATOR_PROJECT_NAME } = require('../generator-list');
+const { GENERATOR_PROJECT_NAME } = require('../generator-list.cjs');
 
 module.exports.dependencyChain = [GENERATOR_PROJECT_NAME];
 

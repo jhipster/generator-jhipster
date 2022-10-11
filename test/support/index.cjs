@@ -3,8 +3,8 @@ const path = require('path');
 const sinon = require('sinon');
 const { existsSync } = require('fs');
 
-const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
-const { skipPrettierHelpers: helpers } = require('../utils/utils');
+const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants.cjs');
+const { skipPrettierHelpers: helpers } = require('../utils/utils.cjs');
 const {
   BASE_PRIORITY_NAMES,
   BASE_ENTITY_PRIORITY_NAMES,
@@ -322,8 +322,17 @@ const testBlueprintSupport = (generatorName, options = {}) => {
   });
 };
 
+const getTemplatePath = (...templatePath) => path.resolve(__dirname, '../templates', ...templatePath);
+
+const getEntityTemplatePath = entityName => getTemplatePath(`.jhipster/${entityName}.json`);
+
+const getGenerator = generatorName => path.resolve(__dirname, '../../generators', generatorName, 'index.mjs');
+
 module.exports = {
   basicTests,
   testBlueprintSupport,
   testOptions,
+  getTemplatePath,
+  getEntityTemplatePath,
+  getGenerator,
 };

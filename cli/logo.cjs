@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const { packageJson: packagejs } = require('../lib/index.js');
+const { packageJson: packagejs } = require('../lib/index.cjs');
 
 module.exports.logo = `${chalk.green('        ██╗')}${chalk.red(' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗')}
 ${chalk.green('        ██║')}${chalk.red(' ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗')}

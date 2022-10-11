@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "14.2.4",
+    "@angular/common": "14.2.5",
     "@fortawesome/angular-fontawesome": "0.11.1",
     "@fortawesome/fontawesome-svg-core": "6.2.0",
     "@fortawesome/free-solid-svg-icons": "6.2.0",
@@ -18,17 +18,17 @@
     "zone.js": "0.11.6"
   },
   "devDependencies": {
-    "@angular/cli": "14.2.4",
+    "@angular/cli": "14.2.5",
     "@angular-builders/custom-webpack": "14.0.1",
     "@angular-builders/jest": "14.0.1",
     "@angular-eslint/eslint-plugin": "14.1.2",
-    "@types/node": "16.11.64",
+    "@types/node": "16.11.65",
     "@types/jest": "28.1.8",
-    "@typescript-eslint/eslint-plugin": "5.39.0",
+    "@typescript-eslint/eslint-plugin": "5.40.0",
     "browser-sync": "2.27.10",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "11.0.0",
-    "eslint": "8.24.0",
+    "eslint": "8.25.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-webpack-plugin": "3.2.0",
     "folder-hash": "4.0.2",

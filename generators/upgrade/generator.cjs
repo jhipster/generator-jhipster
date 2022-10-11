@@ -25,14 +25,13 @@ const gitignore = require('parse-gitignore');
 const path = require('path');
 const childProcess = require('child_process');
 
-const BaseGenerator = require('../generator-base');
-const { INITIALIZING_PRIORITY, CONFIGURING_PRIORITY, DEFAULT_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+const BaseGenerator = require('../base/index.cjs');
 
-const cleanup = require('../cleanup');
-const constants = require('../generator-constants');
-const statistics = require('../statistics');
-const { parseBluePrints } = require('../../utils/blueprint');
-const { packageJson: packagejs } = require('../../lib/index.js');
+const cleanup = require('../cleanup.cjs');
+const constants = require('../generator-constants.cjs');
+const statistics = require('../statistics.cjs');
+const { parseBluePrints } = require('../../utils/blueprint.cjs');
+const { packageJson: packagejs } = require('../../lib/index.cjs');
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -99,7 +98,7 @@ module.exports = class extends BaseGenerator {
     }
   }
 
-  get [INITIALIZING_PRIORITY]() {
+  get [BaseGenerator.INITIALIZING]() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -221,7 +220,7 @@ module.exports = class extends BaseGenerator {
     else this.error(`Something went wrong while installing ${npmPackage}! ${npmIntall.stdout} ${npmIntall.stderr}`);
   }
 
-  get [CONFIGURING_PRIORITY]() {
+  get [BaseGenerator.CONFIGURING]() {
     return {
       assertJHipsterProject() {
         if (!this.config.get('baseName')) {
@@ -412,7 +411,7 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get [DEFAULT_PRIORITY]() {
+  get [BaseGenerator.DEFAULT]() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', 'upgrade');

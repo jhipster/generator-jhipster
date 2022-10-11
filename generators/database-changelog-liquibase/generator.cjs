@@ -21,19 +21,19 @@ const _ = require('lodash');
 
 const BaseApplication = require('../base-application/generator.cjs');
 const { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } = require('./files.cjs');
-const { stringify } = require('../../utils/index.js');
+const { stringify } = require('../../utils/index.cjs');
 const { CommonDBTypes } = require('../../jdl/jhipster/field-types.js');
-const { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list.js');
+const { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list.cjs');
 
 const TYPE_LONG = CommonDBTypes.LONG;
 
-const constants = require('../generator-constants');
+const constants = require('../generator-constants.cjs');
 
 // TODO v8: Remove this constant
 const { LIQUIBASE_DTD_VERSION } = constants;
-const { prepareFieldForTemplates } = require('../../utils/field');
-const { prepareRelationshipForTemplates } = require('../../utils/relationship');
-const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
+const { prepareFieldForTemplates } = require('../../utils/field.cjs');
+const { prepareRelationshipForTemplates } = require('../../utils/relationship.cjs');
+const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase.cjs');
 
 module.exports = class DatabaseChangelogLiquibase extends BaseApplication {
   constructor(args, options, features) {
@@ -64,7 +64,7 @@ module.exports = class DatabaseChangelogLiquibase extends BaseApplication {
     return this.asPreparingTaskGroup({
       prepareEntityForTemplates({ application }) {
         const databaseChangelog = this.databaseChangelog;
-        const entity = this.configOptions.sharedEntities[databaseChangelog.entityName];
+        const entity = this.sharedData.getEntity(databaseChangelog.entityName);
         if (!entity) {
           throw new Error(`Shared entity ${databaseChangelog.entityName} was not found`);
         }
@@ -163,7 +163,7 @@ module.exports = class DatabaseChangelogLiquibase extends BaseApplication {
           entityChanges.addedRelationships = databaseChangelog.addedRelationships
             .map(relationship => {
               const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-              relationship.otherEntity = this.configOptions.sharedEntities[otherEntityName];
+              relationship.otherEntity = this.sharedData.getEntity(otherEntityName);
               if (!relationship.otherEntity) {
                 throw new Error(`Error at entity ${entity.name}: could not find the entity of the relationship ${stringify(relationship)}`);
               }

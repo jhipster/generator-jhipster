@@ -16,4 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './index.js';
+export { default } from './generator.cjs';

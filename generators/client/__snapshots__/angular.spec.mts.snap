@@ -5,37 +5,13 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "angular.json": Object {
@@ -48,9 +24,6 @@ Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/404.html": Object {
@@ -508,37 +481,13 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "angular.json": Object {
@@ -551,9 +500,6 @@ Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/404.html": Object {
@@ -1179,37 +1125,13 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "angular.json": Object {
@@ -1222,9 +1144,6 @@ Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/404.html": Object {
@@ -1850,37 +1769,13 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "angular.json": Object {
@@ -1893,9 +1788,6 @@ Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/404.html": Object {
@@ -2347,37 +2239,13 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "angular.json": Object {
@@ -2390,9 +2258,6 @@ Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/404.html": Object {
@@ -3213,37 +3078,13 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "angular.json": Object {
@@ -3256,9 +3097,6 @@ Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": Object {
@@ -3704,37 +3542,13 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintignore": Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
-  ".gitattributes": Object {
-    "stateCleared": "modified",
-  },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
-    "stateCleared": "modified",
-  },
-  "README.md": Object {
     "stateCleared": "modified",
   },
   "angular.json": Object {
@@ -3747,9 +3561,6 @@ Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": Object {

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseGenerator = require('../base/generator.cjs');
+const BaseGenerator = require('../base/index.cjs');
 const { CUSTOM_PRIORITIES_ENTITIES, PRIORITY_NAMES, QUEUES, PRIORITY_PREFIX } = require('../../lib/constants/priorities.cjs');
 const SharedData = require('../../lib/support/shared-data.cjs');
 

@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { preparePostEntityClientDerivedProperties } from '../../utils/entity.js';
+import { preparePostEntityClientDerivedProperties } from '../../utils/entity.cjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 import type { ClientApplication } from './types.js';
 

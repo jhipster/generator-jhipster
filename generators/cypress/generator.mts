@@ -19,10 +19,10 @@
 import faker from '@faker-js/faker';
 import _ from 'lodash';
 
-import utils from '../utils.js';
+import utils from '../utils.cjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { cypressFiles, cypressEntityFiles } from './files.mjs';
-import constants from '../generator-constants.js';
+import constants from '../generator-constants.cjs';
 import { GENERATOR_CYPRESS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 
 import type { CypressApplication } from './types.js';
