@@ -37,7 +37,7 @@ const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase.cjs
 
 module.exports = class DatabaseChangelogLiquibase extends BaseApplication {
   constructor(args, options, features) {
-    super(args, options, features);
+    super(args, options, { unique: undefined, ...features });
 
     if (this.options.help) return;
 

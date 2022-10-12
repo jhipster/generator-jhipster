@@ -55,7 +55,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<Liquibas
   }
 
   async _postConstruct() {
-    this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DATABASE_CHANGELOG);
     }

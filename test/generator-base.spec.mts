@@ -614,7 +614,6 @@ describe('Generator Base', () => {
       'default',
       'writing',
       'postWriting',
-      'preConflicts',
       'install',
       'end',
     ];
@@ -693,14 +692,6 @@ describe('Generator Base', () => {
           return {
             mocked() {
               mockedPriorities.postWriting();
-            },
-          };
-        }
-
-        get [Base.PRE_CONFLICTS]() {
-          return {
-            mocked() {
-              mockedPriorities.preConflicts();
             },
           };
         }

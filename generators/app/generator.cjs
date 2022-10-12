@@ -431,22 +431,18 @@ module.exports = class JHipsterAppGenerator extends BaseGenerator {
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
        */
       async compose() {
-        await this.composeWithJHipster(GENERATOR_COMMON, true);
+        await this.composeWithJHipster(GENERATOR_COMMON);
         if (!this.jhipsterConfig.skipServer) {
-          await this.composeWithJHipster(GENERATOR_SERVER, true);
+          await this.composeWithJHipster(GENERATOR_SERVER);
         }
         if (this.jhipsterConfig.clientFramework !== CLIENT_FRAMEWORK_NO) {
-          await this.composeWithJHipster(GENERATOR_CLIENT, true);
+          await this.composeWithJHipster(GENERATOR_CLIENT);
         }
         if (!this.configOptions.skipI18n) {
-          await this.composeWithJHipster(
-            GENERATOR_LANGUAGES,
-            {
-              regenerate: true,
-              skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
-            },
-            true
-          );
+          await this.composeWithJHipster(GENERATOR_LANGUAGES, {
+            regenerate: true,
+            skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
+          });
         }
       },
       askForTestOpts: prompts.askForTestOpts,

@@ -22,14 +22,19 @@ import pTransform from 'p-transform';
 import { stat } from 'fs/promises';
 import { isBinaryFile } from 'isbinaryfile';
 
+import type { Transform, Readable } from 'stream';
+import type Environment from 'yeoman-environment';
+
 import BaseGenerator from '../base/index.mjs';
 import MultiStepTransform from './multi-step-transform/index.mjs';
 import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
 import constants from '../generator-constants.cjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import generatorUtils from '../utils.cjs';
+import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
 import type { PreConflictsTaskGroup } from '../base/tasks.cjs';
 
+const { TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const {
   createConflicterCheckTransform,
   createConflicterStatusTransform,
@@ -45,9 +50,16 @@ const { hasState, setModifiedFileState } = State;
 const { PRETTIER_EXTENSIONS } = constants;
 const { detectCrLf, normalizeLineEndings } = generatorUtils;
 
+const TRANSFORM_PRIORITY = BaseGenerator.asPriority(TRANSFORM);
+const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
+
 export default class BootstrapGenerator extends BaseGenerator {
+  static TRANSFORM = TRANSFORM_PRIORITY;
+
+  static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
+
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', customCommitTask: true, ...features });
+    super(args, options, { unique: 'namespace', uniqueGlobally: true, customCommitTask: true, ...features });
 
     if (this.options.help) return;
 
@@ -86,8 +98,18 @@ export default class BootstrapGenerator extends BaseGenerator {
 
     // Force npm override later if needed
     this.env.options.nodePackageManager = 'npm';
+  }
 
-    this.queueMultistepTransform();
+  get transform() {
+    return this.asWritingTaskGroup({
+      queueTransform() {
+        this.queueMultistepTransform();
+      },
+    });
+  }
+
+  get [TRANSFORM_PRIORITY]() {
+    return this.transform;
   }
 
   get preConflicts(): PreConflictsTaskGroup<this> {
@@ -113,7 +135,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.PRE_CONFLICTS]() {
+  get [PRE_CONFLICTS_PRIORITY]() {
     return this.preConflicts;
   }
 
@@ -121,7 +143,17 @@ export default class BootstrapGenerator extends BaseGenerator {
    * Queue multi step templates transform
    */
   queueMultistepTransform() {
-    this.queueTransformStream(new MultiStepTransform() as any);
+    this.queueTask({
+      method() {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const env: Environment = (this as any).env;
+        const stream = env.sharedFs.stream().pipe(patternFilter('**/*.jhi{,.*}', { dot: true })) as Readable;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return env.applyTransforms([new MultiStepTransform() as unknown as Transform], { stream } as any);
+      },
+      taskName: 'jhipster:transformStream',
+      queueName: 'transform',
+    });
   }
 
   /**
