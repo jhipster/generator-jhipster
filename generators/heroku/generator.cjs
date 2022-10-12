@@ -25,7 +25,7 @@ const util = require('util');
 const chalk = require('chalk');
 const glob = require('glob');
 
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const statistics = require('../statistics.cjs');
 const constants = require('../generator-constants.cjs');
@@ -41,7 +41,7 @@ const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 const NO_CACHE_PROVIDER = cacheProviderOptions.NO;
 const execCmd = util.promisify(ChildProcess.exec);
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -72,7 +72,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -102,12 +102,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       askForApp() {
         const done = this.async();
@@ -251,12 +251,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       checkInstallation() {
         if (this.abort) return;
@@ -283,13 +283,13 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _loading() {
+  get loading() {
     return {
       loadSharedConfig() {
         this.loadAppConfig();
@@ -303,12 +303,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.LOADING]() {
+  get [BaseGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.loading;
   }
 
-  _default() {
+  get default() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_HEROKU);
@@ -579,12 +579,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.DEFAULT]() {
+  get [BaseGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
-    return this._default();
+    return this.default;
   }
 
-  _writing() {
+  get writing() {
     return {
       copyHerokuFiles() {
         if (this.abort) return;
@@ -626,12 +626,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
-  _end() {
+  get end() {
     return {
       makeScriptExecutable() {
         if (this.abort) return;
@@ -854,8 +854,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.END]() {
+  get [BaseGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 };

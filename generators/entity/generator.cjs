@@ -22,7 +22,7 @@ const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
 
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const { isReservedClassName } = require('../../jdl/jhipster/reserved-keywords');
 
@@ -37,7 +37,7 @@ const { GENERATOR_ENTITIES, GENERATOR_ENTITY } = require('../generator-list.cjs'
 const { JHIPSTER_CONFIG_DIR } = constants;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-class EntityGenerator extends BaseBlueprintGenerator {
+class EntityGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'argument', ...features });
 
@@ -143,7 +143,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -264,13 +264,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _prompting() {
+  get prompting() {
     return {
       /* ask question to user if s/he wants to update entity */
       askForUpdate: prompts.askForUpdate,
@@ -286,13 +286,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _composing() {
+  get composing() {
     return {
       async composeEntities() {
         // We need to compose with others entities to update relationships.
@@ -312,13 +312,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.COMPOSING]() {
+  get [BaseGenerator.COMPOSING]() {
     if (this.delegateToBlueprint) return {};
-    return this._composing();
+    return this.composing;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _writing() {
+  get writing() {
     if (this.options.skipWriting) {
       return {};
     }
@@ -336,13 +336,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _install() {
+  get install() {
     return {
       afterRunHook() {
         try {
@@ -366,13 +366,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INSTALL]() {
+  get [BaseGenerator.INSTALL]() {
     if (this.delegateToBlueprint) return {};
-    return this._install();
+    return this.install;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _end() {
+  get end() {
     return {
       end() {
         this.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
@@ -380,9 +380,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.END]() {
+  get [BaseGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 
   /**

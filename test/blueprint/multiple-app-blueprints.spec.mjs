@@ -32,47 +32,47 @@ const createMockBlueprint = function (parent, spy) {
 
 const mockAppBlueprintSubGen = class extends AppGenerator {
   get [AppGenerator.INITIALIZING]() {
-    return super._initializing();
+    return super.initializing;
   }
 
   get [AppGenerator.PROMPTING]() {
-    return super._prompting();
+    return super.prompting;
   }
 
   get [AppGenerator.CONFIGURING]() {
-    return super._configuring();
+    return super.configuring;
   }
 
   get [AppGenerator.COMPOSING]() {
-    return super._composing();
+    return super.composing;
   }
 
   get [AppGenerator.LOADING]() {
-    return super._loading();
+    return super.loading;
   }
 
   get [AppGenerator.PREPARING]() {
-    return super._preparing();
+    return super.preparing;
   }
 
   get [AppGenerator.DEFAULT]() {
-    return super._default();
+    return super.default;
   }
 
   get [AppGenerator.POST_WRITING]() {
-    return super._postWriting();
+    return super.postWriting;
   }
 
   get [AppGenerator.INSTALL]() {
-    return super._install();
+    return super.install;
   }
 
   get [AppGenerator.POST_INSTALL]() {
-    return super._postInstall();
+    return super.postInstall;
   }
 
   get [AppGenerator.END]() {
-    return super._end();
+    return super.end;
   }
 };
 

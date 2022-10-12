@@ -172,14 +172,14 @@ function prepareEntityForTemplates(entityWithConfig, generator, application) {
   const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
   if (dto) {
     _.defaults(entityWithConfig, {
-      dtoClass: generator.asDto(entityWithConfig.entityClass, application),
-      dtoInstance: generator.asDto(entityWithConfig.entityInstance, application),
+      dtoClass: `${entityWithConfig.entityClass}${application.dtoSuffix ?? ''}`,
+      dtoInstance: `${entityWithConfig.entityInstance}${application.dtoSuffix ?? ''}`,
     });
   }
 
   _.defaults(entityWithConfig, {
-    persistClass: generator.asEntity(entityWithConfig.entityClass),
-    persistInstance: generator.asEntity(entityWithConfig.entityInstance),
+    persistClass: `${entityWithConfig.entityClass}${application.entitySuffix ?? ''}`,
+    persistInstance: `${entityWithConfig.entityInstance}${application.entitySuffix ?? ''}`,
   });
 
   _.defaults(entityWithConfig, {

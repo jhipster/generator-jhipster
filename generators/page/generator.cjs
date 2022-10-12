@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const prompts = require('./prompts.cjs');
 const { customizeFiles: customizeVueFiles, vueFiles } = require('./files-vue.cjs');
@@ -33,9 +33,9 @@ const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
  * Base class for a generator that can be extended through a blueprint.
  *
  * @class
- * @extends {BaseBlueprintGenerator}
+ * @extends {BaseGenerator}
  */
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -75,7 +75,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -90,23 +90,23 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       askForPage: prompts.askForPage,
     };
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       save() {
         const pages = this.jhipsterConfig.pages || [];
@@ -119,12 +119,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _default() {
+  get default() {
     return {
       prepareForTemplates() {
         this.jhiPrefix = this.page.jhiPrefix || this.jhipsterConfig.jhiPrefix;
@@ -139,12 +139,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.DEFAULT]() {
+  get [BaseGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
-    return this._default();
+    return this.default;
   }
 
-  _writing() {
+  get writing() {
     return this.asWritingTaskGroup({
       writeClientPageFiles() {
         if (this.skipClient) return;
@@ -159,13 +159,13 @@ module.exports = class extends BaseBlueprintGenerator {
     });
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _postWriting() {
+  get postWriting() {
     return {
       customizeFiles() {
         if (this.skipClient) return;
@@ -177,12 +177,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.POST_WRITING]() {
+  get [BaseGenerator.POST_WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._postWriting();
+    return this.postWriting;
   }
 
-  _end() {
+  get end() {
     return {
       end() {
         if (!this.rootGenerator || this.options.skipInstall || this.skipClient) return;
@@ -195,8 +195,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.END]() {
+  get [BaseGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 };

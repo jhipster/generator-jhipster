@@ -26,12 +26,7 @@ const { packageNameToNamespace } = require('../utils.cjs');
 const JHipsterBaseGenerator = require('./generator-base.cjs');
 const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../../utils/blueprint.cjs');
 
-const { compat, PRIORITY_NAMES } = require('../../lib/constants/priorities.cjs');
-
-const { PRIORITY_PREFIX } = compat;
-
-const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
-  PRIORITY_NAMES;
+const { PRIORITY_NAMES } = require('./priorities.cjs');
 
 /**
  * Base class for a generator that can be extended through a blueprint.
@@ -43,34 +38,8 @@ const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEF
  * @property {import('yeoman-generator')} jhipsterContext - JHipster parent generator (Blueprints only).
  */
 module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerator {
-  static asPriority = priorityName => `${PRIORITY_PREFIX}${priorityName}`;
-
-  static INITIALIZING = JHipsterBaseBlueprintGenerator.asPriority(INITIALIZING);
-
-  static PROMPTING = JHipsterBaseBlueprintGenerator.asPriority(PROMPTING);
-
-  static CONFIGURING = JHipsterBaseBlueprintGenerator.asPriority(CONFIGURING);
-
-  static COMPOSING = JHipsterBaseBlueprintGenerator.asPriority(COMPOSING);
-
-  static LOADING = JHipsterBaseBlueprintGenerator.asPriority(LOADING);
-
-  static PREPARING = JHipsterBaseBlueprintGenerator.asPriority(PREPARING);
-
-  static DEFAULT = JHipsterBaseBlueprintGenerator.asPriority(DEFAULT);
-
-  static WRITING = JHipsterBaseBlueprintGenerator.asPriority(WRITING);
-
-  static POST_WRITING = JHipsterBaseBlueprintGenerator.asPriority(POST_WRITING);
-
-  static INSTALL = JHipsterBaseBlueprintGenerator.asPriority(INSTALL);
-
-  static POST_INSTALL = JHipsterBaseBlueprintGenerator.asPriority(POST_INSTALL);
-
-  static END = JHipsterBaseBlueprintGenerator.asPriority(END);
-
   constructor(args, options, features) {
-    super(args, options, { taskPrefix: PRIORITY_PREFIX, ...features });
+    super(args, options, features);
 
     if (this.options.help) {
       return;
@@ -263,20 +232,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
    */
   asPreparingTaskGroup(taskGroup) {
     return taskGroup;
-  }
-
-  /**
-   * Public API method used by the getter and also by Blueprints
-   */
-  _preparingFields() {
-    return {};
-  }
-
-  /**
-   * Public API method used by the getter and also by Blueprints
-   */
-  _preparingRelationships() {
-    return {};
   }
 
   /**
@@ -484,7 +439,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
     const { taskPrefix: baseGeneratorTaskPrefix = '' } = this.features;
     const { taskPrefix: blueprintTaskPrefix = '' } = blueprintGenerator.features;
     // v8 remove deprecated priorities
-    const DEPRECATED_PRIORITIES = ['preparingFields', 'preparingRelationships', 'preConflicts'];
+    const DEPRECATED_PRIORITIES = ['preConflicts'];
     for (const priorityName of Object.values(PRIORITY_NAMES).filter(p => !DEPRECATED_PRIORITIES.includes(p))) {
       const baseGeneratorPriorityName = `${baseGeneratorTaskPrefix}${priorityName}`;
       if (baseGeneratorPriorityName in this) {

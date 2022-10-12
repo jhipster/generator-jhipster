@@ -508,7 +508,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   }
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
-    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this.configuringEachEntity);
+    return this.asConfiguringEachEntityTaskGroup(this.delegateToBlueprint ? {} : this.configuringEachEntity);
   }
 
   /** @inheritdoc */
