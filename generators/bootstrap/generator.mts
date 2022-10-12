@@ -47,7 +47,7 @@ const { detectCrLf, normalizeLineEndings } = generatorUtils;
 
 export default class BootstrapGenerator extends BaseGenerator {
   constructor(args: any, options: any, features: any) {
-    super(args, options, { unique: 'namespace', customCommitTask: true, ...features });
+    super(args, options, { unique: 'namespace', uniqueGlobally: true, customCommitTask: true, ...features });
 
     if (this.options.help) return;
 

@@ -74,7 +74,7 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   static END = asPriority(END);
 
   constructor(args, options, features) {
-    super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, ...features });
+    super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
   }
 
   /**
