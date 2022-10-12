@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const _ = require('lodash');
 
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const constants = require('../generator-constants.cjs');
 const statistics = require('../statistics.cjs');
@@ -29,7 +29,7 @@ const { GENERATOR_SPRING_SERVICE } = require('../generator-list.cjs');
 const { BASE_NAME, PACKAGE_NAME, PACKAGE_FOLDER, DATABASE_TYPE } = OptionNames;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -51,7 +51,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -68,13 +68,13 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _prompting() {
+  get prompting() {
     return {
       prompting() {
         const prompts = [
@@ -98,13 +98,13 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _loading() {
+  get loading() {
     return {
       loadSharedConfig() {
         this.loadDerivedServerConfig();
@@ -112,13 +112,13 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.LOADING]() {
+  get [BaseGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.loading;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _default() {
+  get default() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_SPRING_SERVICE, { interface: this.useInterface });
@@ -126,13 +126,13 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.DEFAULT]() {
+  get [BaseGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
-    return this._default();
+    return this.default;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _writing() {
+  get writing() {
     return {
       write() {
         this.serviceClass = _.upperFirst(this.name) + (this.name.endsWith('Service') ? '' : 'Service');
@@ -155,8 +155,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 };

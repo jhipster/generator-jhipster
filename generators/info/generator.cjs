@@ -18,7 +18,7 @@
  */
 const chalk = require('chalk');
 const shelljs = require('shelljs');
-const BaseGenerator = require('../base/generator-base.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 // We use console.log() in this generator because we want to print on stdout not on
 // stderr unlike yeoman's log() so that user can easily redirect output to a file.

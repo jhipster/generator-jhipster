@@ -35,45 +35,46 @@ const constants = require('../generator-constants.cjs');
  * need to be removed.
  *
  * @param {any} generator - reference to generator
+ * @param {import('../bootstrap-application-server/types.js').SpringBootApplication} application
  * @param {string} javaDir - Java directory
  * @param {string} testDir - Java tests directory
  * @param {string} mainResourceDir - Main resources directory
  * @param {string} testResourceDir - Test resources directory
  */
-function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
-  if (generator.databaseTypeSql) {
-    cleanupSql.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
+function cleanupOldServerFiles(generator, application, javaDir, testDir, mainResourceDir, testResourceDir) {
+  if (application.databaseTypeSql) {
+    cleanupSql.cleanupOldServerFiles(generator, application, javaDir, testDir, mainResourceDir, testResourceDir);
   }
-  if (generator.databaseTypeCassandra) {
+  if (application.databaseTypeCassandra) {
     cleanupCassandra.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
-  if (generator.databaseTypeMongodb) {
+  if (application.databaseTypeMongodb) {
     cleanupMongodb.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
   cleanupCacheProvider.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
-  if (generator.clientFrameworkAngular) {
+  if (application.clientFrameworkAngular) {
     cleanupAngular.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
-  if (generator.searchEngineElasticsearch) {
+  if (application.searchEngineElasticsearch) {
     cleanupElasticsearch.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
-  if (generator.buildToolGradle) {
+  if (application.buildToolGradle) {
     cleanupGradle.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
-  if (generator.buildToolMaven) {
+  if (application.buildToolMaven) {
     cleanupMaven.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
-  if (generator.authenticationTypeOauth2) {
+  if (application.authenticationTypeOauth2) {
     cleanupOauth2.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
-  if (generator.messageBrokerKafka) {
+  if (application.messageBrokerKafka) {
     cleanupKafka.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
-  if (generator.reactive) {
+  if (application.reactive) {
     cleanupReactive.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
 
-  if (generator.cucumberTests) {
+  if (application.cucumberTests) {
     cleanupCucumber.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
 

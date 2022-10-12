@@ -7,12 +7,13 @@ import { skipPrettierHelpers as helpers } from '../utils/utils.mjs';
 
 const BLUEPRINT_NS = 'jhipster:app';
 const BLUEPRINT_CONTENTS = `export async function createGenerator(env){
-  return class extends (await env.requireGenerator('${BLUEPRINT_NS}')) {
+  const BaseGenerator = (await env.requireGenerator('${BLUEPRINT_NS}'));
+  return class extends BaseGenerator {
     constructor(args, opts, features) {
       super(args, opts, features);
     }
 
-    get writing() {
+    get [BaseGenerator.WRITING]() {
       return {
         write() {
           this.writeDestination('local-blueprint.txt', 'This is a local blueprint');

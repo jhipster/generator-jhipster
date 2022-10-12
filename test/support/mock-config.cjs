@@ -2,7 +2,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const { writeFileSync, mkdirSync, readFileSync } = require('fs');
 
-const GeneratorBase = require('../../generators/base/generator-base.cjs');
+const GeneratorBase = require('../../generators/base/index.cjs');
 
 const { loadDerivedAppConfig, loadDerivedServerConfig } = GeneratorBase.prototype;
 

@@ -21,7 +21,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const statistics = require('../statistics.cjs');
 const { defaultConfig } = require('../generator-defaults.cjs');
@@ -38,7 +38,7 @@ const AZURE_WEBAPP_RUNTIME = 'JAVA|11-java11';
 const AZURE_APP_INSIGHTS_STARTER_VERSION = '2.5.1';
 
 /* eslint-disable consistent-return */
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -71,7 +71,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       sayHello() {
         if (!this.options.fromCli) {
@@ -103,12 +103,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       checkBuildTool() {
         if (this.abort) return;
@@ -250,12 +250,12 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
     };
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       saveConfig() {
         if (this.abort) return;
@@ -269,12 +269,12 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _default() {
+  get default() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', 'azure-app-service');
@@ -489,9 +489,9 @@ which is free for the first 30 days`);
     };
   }
 
-  get [BaseBlueprintGenerator.DEFAULT]() {
+  get [BaseGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
-    return this._default();
+    return this.default;
   }
 
   _computeDerivedConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
@@ -502,7 +502,7 @@ which is free for the first 30 days`);
   }
 
   // Public API method used by the getter and also by Blueprints
-  _loading() {
+  get loading() {
     return {
       loadSharedConfig() {
         this._computeDerivedConfig();
@@ -510,12 +510,12 @@ which is free for the first 30 days`);
     };
   }
 
-  get [BaseBlueprintGenerator.LOADING]() {
+  get [BaseGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.loading;
   }
 
-  _writing() {
+  get writing() {
     return {
       writeFiles() {
         if (this.abort) return;
@@ -528,12 +528,12 @@ which is free for the first 30 days`);
     };
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
-  _end() {
+  get end() {
     return {
       gitHubAction() {
         if (this.abort) return;
@@ -652,8 +652,8 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
     };
   }
 
-  get [BaseBlueprintGenerator.END]() {
+  get [BaseGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 };

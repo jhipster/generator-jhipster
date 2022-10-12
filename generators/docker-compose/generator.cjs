@@ -46,9 +46,9 @@ module.exports = class extends BaseDockerGenerator {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
-      ...super._initializing(),
+      ...super.initializing,
 
       checkDockerCompose() {
         if (this.skipChecks) return;
@@ -85,26 +85,26 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
-    return super._prompting();
+  get prompting() {
+    return super.prompting;
   }
 
   get [BaseDockerGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       sayHello() {
         this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
         this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
-      ...super._configuring(),
+      ...super.configuring,
 
       saveConfig() {
         this.config.set({
@@ -122,10 +122,10 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _preparing() {
+  get preparing() {
     return {
       loadConfig() {
         this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
@@ -265,10 +265,10 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.PREPARING]() {
     if (this.delegateToBlueprint) return {};
-    return this._preparing();
+    return this.preparing;
   }
 
-  _loading() {
+  get loading() {
     return {
       loadPlatformConfig() {
         this.loadDeploymentConfig(this);
@@ -278,40 +278,44 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.loading;
   }
 
-  _writing() {
+  get writing() {
     return writeFiles();
   }
 
   get [BaseDockerGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
-  _end() {
-    if (this.hasWarning) {
-      this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
-      this.log('If you forgot to generate the Docker image for this application, please run:');
-      this.log(chalk.red(this.warningMessage));
-    } else {
-      this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
-    }
-    this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
-    if (this.gatewayNb + this.monolithicNb > 1) {
-      this.log('\nYour applications will be accessible on these URLs:');
-      this.appConfigs.forEach(appConfig => {
-        if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-          this.log(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
+  get end() {
+    return {
+      end() {
+        if (this.hasWarning) {
+          this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
+          this.log('If you forgot to generate the Docker image for this application, please run:');
+          this.log(chalk.red(this.warningMessage));
+        } else {
+          this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
-      });
-      this.log('\n');
-    }
+        this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
+        if (this.gatewayNb + this.monolithicNb > 1) {
+          this.log('\nYour applications will be accessible on these URLs:');
+          this.appConfigs.forEach(appConfig => {
+            if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
+              this.log(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
+            }
+          });
+          this.log('\n');
+        }
+      },
+    };
   }
 
-  end() {
+  get [BaseDockerGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 };

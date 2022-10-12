@@ -21,7 +21,7 @@ import lodash from 'lodash';
 
 import BaseGenerator from '../base/index.cjs';
 import { SKIP_COMMIT_HOOK } from '../init/constants.cjs';
-import { BASE_PRIORITY_NAMES } from '../../lib/constants/priorities.mjs';
+import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.mjs';
 
 import {
   options,
@@ -115,7 +115,7 @@ export default class extends BaseGenerator {
         for (const subGenerator of subGenerators) {
           const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
           if (allPriorities) {
-            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES });
+            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
           await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, options: this.options }), subGeneratorStorage);
         }
@@ -130,7 +130,7 @@ export default class extends BaseGenerator {
           .filter(Boolean)) {
           const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
           if (allPriorities) {
-            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES });
+            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
           await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: true }), subGeneratorStorage);
         }

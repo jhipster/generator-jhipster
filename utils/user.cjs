@@ -49,7 +49,7 @@ function createUserEntity(customUserData = {}, application) {
     relationships: [],
     fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
     dto: true,
-    adminUserDto: this.asDto('AdminUser', application),
+    adminUserDto: `AdminUser${application.dtoSuffix ?? ''}`,
     ...customUserData,
   };
 

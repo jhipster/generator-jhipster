@@ -45,6 +45,41 @@ relationship ManyToOne {
 }
 `;
 
+const jdlApplicationEntitieWithByteTypes = `
+${jdlApplication}
+entity Smarty {
+  name String required unique minlength(2) maxlength(10)
+  price Float required min(0)
+  description TextBlob required
+  picture ImageBlob required
+  specification Blob
+  category ProductCategory
+  inventory Integer required min(0)
+}
+enum ProductCategory {
+  Laptop, Desktop, Phone, Tablet, Accessory
+}`;
+
+const jdlApplicationEntitieWithoutByteTypes = `
+${jdlApplication}
+entity Smarty {
+  name String
+  age Integer
+  height Long
+  income BigDecimal
+  expense Double
+  savings Float
+  category ProductCategory
+  happy Boolean
+  dob LocalDate
+  exactTime ZonedDateTime
+  travelTime Duration
+  moment Instant
+}
+enum ProductCategory {
+  Laptop, Desktop, Phone, Tablet, Accessory
+}`;
+
 const generatorPath = join(__dirname, '../app/index.cjs');
 
 describe('jhipster:app --incremental-changelog', function () {
@@ -639,6 +674,62 @@ relationship OneToOne {
     });
     it('should match snapshot', () => {
       expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
+  });
+  context('entities with/without byte fields should create fake data', () => {
+    [
+      {
+        entity: jdlApplicationEntitieWithByteTypes,
+        bytesFields: true,
+        testContent:
+          '1;Integratio;13255;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Laptop;89202',
+        contentRequired: true,
+      },
+      {
+        entity: jdlApplicationEntitieWithoutByteTypes,
+        bytesFields: false,
+        testContent: 'content_type',
+        contentRequired: false,
+      },
+    ].forEach(eachEntityConfig => {
+      describe(`testing ${eachEntityConfig.bytesFields ? 'with' : 'without'} byte fields`, () => {
+        let runResult;
+        before(async () => {
+          const baseName = 'JhipsterApp';
+          const initialState = createImporterFromContent(eachEntityConfig.entity, {
+            ...options,
+            skipFileGeneration: true,
+            creationTimestampConfig: options.creationTimestamp,
+          }).import();
+          const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
+          expect(applicationWithEntities).toBeTruthy();
+          expect(applicationWithEntities.entities.length).toBe(1);
+          runResult = await helpers
+            .create(generatorPath)
+            .withOptions({ ...options, applicationWithEntities })
+            .run();
+        });
+
+        after(() => runResult.cleanup());
+
+        it('should create entity config file', () => {
+          runResult.assertFile([join('.jhipster', 'Smarty.json')]);
+        });
+        it('should create entity initial fake data file', () => {
+          runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`]);
+        });
+        it('should create fake data file with required content', () => {
+          eachEntityConfig.contentRequired
+            ? runResult.assertFileContent(
+                `${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`,
+                eachEntityConfig.testContent
+              )
+            : runResult.assertNoFileContent(
+                `${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`,
+                eachEntityConfig.testContent
+              );
+        });
+      });
     });
   });
 });
