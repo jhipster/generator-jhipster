@@ -20,21 +20,8 @@ const JHipsterBaseBlueprintGenerator = require('./generator-base-blueprint.cjs')
 
 const { PRIORITY_NAMES, PRIORITY_PREFIX } = require('./priorities.cjs');
 
-const {
-  INITIALIZING,
-  PROMPTING,
-  CONFIGURING,
-  COMPOSING,
-  LOADING,
-  PREPARING,
-  DEFAULT,
-  WRITING,
-  POST_WRITING,
-  PRE_CONFLICTS,
-  INSTALL,
-  POST_INSTALL,
-  END,
-} = PRIORITY_NAMES;
+const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
+  PRIORITY_NAMES;
 
 const asPriority = priorityName => `${PRIORITY_PREFIX}${priorityName}`;
 
@@ -64,8 +51,6 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   static WRITING = asPriority(WRITING);
 
   static POST_WRITING = asPriority(POST_WRITING);
-
-  static PRE_CONFLICTS = asPriority(PRE_CONFLICTS);
 
   static INSTALL = asPriority(INSTALL);
 
