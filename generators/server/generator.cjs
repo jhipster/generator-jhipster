@@ -209,13 +209,13 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   get composing() {
     return this.asComposingTaskGroup({
       async composeCommon() {
-        await this.composeWithJHipster(GENERATOR_COMMON, true);
+        await this.composeWithJHipster(GENERATOR_COMMON);
       },
 
       async composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (this.jhipsterConfig.enableTranslation === false) return;
-        await this.composeWithJHipster(GENERATOR_LANGUAGES, true);
+        await this.composeWithJHipster(GENERATOR_LANGUAGES);
       },
     });
   }

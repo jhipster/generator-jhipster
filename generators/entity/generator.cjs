@@ -296,18 +296,14 @@ class EntityGenerator extends BaseGenerator {
     return {
       async composeEntities() {
         // We need to compose with others entities to update relationships.
-        await this.composeWithJHipster(
-          GENERATOR_ENTITIES,
-          {
-            entities: this.options.singleEntity ? [this.context.name] : undefined,
-            regenerate: true,
-            writeEveryEntity: false,
-            composedEntities: [this.context.name],
-            skipDbChangelog: this.options.skipDbChangelog,
-            skipInstall: this.options.skipInstall,
-          },
-          true
-        );
+        await this.composeWithJHipster(GENERATOR_ENTITIES, {
+          entities: this.options.singleEntity ? [this.context.name] : undefined,
+          regenerate: true,
+          writeEveryEntity: false,
+          composedEntities: [this.context.name],
+          skipDbChangelog: this.options.skipDbChangelog,
+          skipInstall: this.options.skipInstall,
+        });
       },
     };
   }
