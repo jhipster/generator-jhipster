@@ -67,8 +67,8 @@ function shouldBeV3DockerfileCompatible(databaseType) {
 }
 
 function getJHipsterCli() {
-  const cmdPath = path.join(__dirname, '../../cli/jhipster.mjs');
-  let cmd = `tsx ${cmdPath} `;
+  const cmdPath = path.join(__dirname, '../../dist/cli/jhipster.mjs');
+  let cmd = `node ${cmdPath} `;
   if (os.platform() === 'win32') {
     // corrected test for windows user
     cmd = cmd.replace(/\\/g, '/');

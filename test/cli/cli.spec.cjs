@@ -39,7 +39,7 @@ describe('jhipster cli', () => {
   const cmd = getJHipsterCli();
 
   it('verify correct cmd format', () => {
-    expect(cmd).to.match(/tsx (.*)\/cli\/jhipster/g);
+    expect(cmd).to.match(/node (.*)\/cli\/jhipster/g);
   });
 
   it('--help should run without errors', done => {
