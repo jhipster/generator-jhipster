@@ -1,8 +1,9 @@
-const path = require('path');
-const fse = require('fs-extra');
-const { writeFileSync, mkdirSync, readFileSync } = require('fs');
+import path from 'path';
+import fse from 'fs-extra';
+import { writeFileSync, mkdirSync, readFileSync } from 'fs';
+import { getTemplatePath } from './get-template-path.mjs';
 
-const GeneratorBase = require('../../generators/base/index.cjs');
+import GeneratorBase from '../../generators/base/index.mjs';
 
 const { loadDerivedAppConfig, loadDerivedServerConfig } = GeneratorBase.prototype;
 
@@ -20,7 +21,7 @@ const writeCallbacks = (filePath, ...callbacks) => {
   return (...callbacks) => writeCallbacks(filePath, ...callbacks);
 };
 
-const applications = {
+export const deploymentTestSamples = {
   '01-gateway': {
     applicationType: 'gateway',
     baseName: 'jhgate',
@@ -124,7 +125,7 @@ const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config = {
 
   mkdirSync(`${appDir}target/jib-cache`, { recursive: true });
 
-  let appConfig = applications[sampleDir];
+  let appConfig = deploymentTestSamples[sampleDir];
   if (!appConfig) {
     throw new Error(`Sample ${sampleDir} not found`);
   }
@@ -137,10 +138,10 @@ const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config = {
   if (appConfig.mockAppConfig) {
     appConfig.mockAppConfig(generator, appDir, testDir);
   } else {
-    fse.copySync(path.join(__dirname, `../templates/compose/${sampleDir}`), path.join(testDir, appDir));
+    fse.copySync(getTemplatePath(`compose/${sampleDir}`), path.join(testDir, appDir));
   }
 
   return generator;
 };
 
-module.exports = createMockedConfig;
+export default createMockedConfig;

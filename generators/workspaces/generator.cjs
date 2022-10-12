@@ -159,7 +159,7 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.DEFAULT]() {
+  get [BaseGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
     return this.default;
   }

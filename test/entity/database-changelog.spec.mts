@@ -3,7 +3,7 @@ import fse from 'fs-extra';
 import helpers from 'yeoman-test';
 
 import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
-import createMockedConfig from '../support/mock-config.cjs';
+import createMockedConfig from '../support/mock-config.mjs';
 import { getEntityTemplatePath, getGenerator } from '../support/index.mjs';
 
 describe('jhipster:entity database changelogs', () => {

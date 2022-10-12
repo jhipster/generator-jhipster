@@ -586,8 +586,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   get postWriting() {
     return this.asPostWritingTaskGroup({
       async dockerServices({ application }) {
-        const { createDockerExtendedServices } = await import('./docker-services.mjs');
-        const { createDockerComposeFile } = await import('../base-docker/utils.mjs');
+        const { createDockerComposeFile, createDockerExtendedServices } = await import('../base-docker/utils.mjs');
 
         const dockerFile = createDockerComposeFile(application.lowercaseBaseName);
         this.writeDestination(`${application.dockerServicesDir}services.yml`, dockerFile);
@@ -607,7 +606,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         if (application.databaseTypeCassandra) {
           const extendedCassandraServices = createDockerExtendedServices(
             { serviceName: 'cassandra' },
-            { extendedFile: './cassandra.yml', serviceName: 'cassandra-migration' }
+            { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' }
           );
           this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCassandraServices);
           this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCassandraServices);
@@ -645,7 +644,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         if (application.serviceDiscoveryConsul) {
           const extendedConsulServices = createDockerExtendedServices(
             { serviceName: 'consul' },
-            { extendedFile: './consul.yml', serviceName: 'consul-config-loader' }
+            { serviceFile: './consul.yml', serviceName: 'consul-config-loader' }
           );
           this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedConsulServices);
           this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedConsulServices);
@@ -653,7 +652,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         if (application.messageBrokerKafka) {
           const extendedKafkaServices = createDockerExtendedServices(
             { serviceName: 'kafka' },
-            { extendedFile: './kafka.yml', serviceName: 'zookeeper' }
+            { serviceFile: './kafka.yml', serviceName: 'zookeeper' }
           );
           this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedKafkaServices);
           this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedKafkaServices);

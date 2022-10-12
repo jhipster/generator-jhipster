@@ -1,10 +1,9 @@
-import assert from 'yeoman-assert';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { join } from 'path';
 
 import monitoringTypes from '../jdl/jhipster/monitoring-types';
 import applicationTypes from '../jdl/jhipster/application-types';
-import createMockedConfig from './support/mock-config.cjs';
+import { deploymentTestSamples } from './support/mock-config.mjs';
 import { getGenerator } from './support/index.mjs';
 import { skipPrettierHelpers as helpers } from './utils/utils.mjs';
 
@@ -13,44 +12,51 @@ const { MICROSERVICE, MONOLITH } = applicationTypes;
 
 const NO_MONITORING = monitoringTypes.NO;
 
+const mockedComposedGenerators = ['jhipster:common', 'jhipster:client', 'jhipster:languages', 'jhipster:cypress'];
+
 const expectedFiles = {
   dockercompose: ['docker-compose.yml', 'central-server-config/application.yml'],
   prometheus: ['prometheus-conf/alert_rules.yml', 'prometheus-conf/prometheus.yml', 'alertmanager-conf/config.yml'],
   monolith: ['docker-compose.yml'],
 };
 
+const getTestApplicationWithEntities = (...appNames) =>
+  Object.fromEntries(
+    Object.entries(deploymentTestSamples)
+      .filter(([appName]) => appNames.includes(appName))
+      .map(([appName, config]) => [appName, { config }])
+  );
+
+const createWithEnvironment =
+  (...appNames) =>
+  env => {
+    appNames.forEach(appName => {
+      env.fs.write(
+        join(env.cwd, appName, '.yo-resolve'),
+        `.yo-rc.json=force
+!src/main/docker/**=skip
+`
+      );
+    });
+  };
+
 describe('JHipster Docker Compose Sub Generator', () => {
   describe('only gateway', () => {
     let runResult;
+    const chosenApps = ['01-gateway'];
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(env => {
-          env.fs.write(
-            join(env.cwd, '01-gateway', '.yo-resolve'),
-            `.yo-rc.json=force
-!src/main/docker/**=skip
-`
-          );
-        })
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
           skipChecks: true,
           reproducibleTests: true,
           generateApplications: true,
           generateWorkspaces: true,
+          skipPriorities: ['prompting'],
           importState: {
-            exportedApplicationsWithEntities: {
-              '01-gateway': {
-                config: {
-                  applicationType: 'gateway',
-                  baseName: 'jhgate',
-                  databaseType: 'sql',
-                  prodDatabaseType: 'mysql',
-                  serviceDiscoveryType: 'eureka',
-                  serverPort: 8080,
-                },
-              },
-            },
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
         })
         .run();
@@ -61,7 +67,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['01-gateway'],
+          chosenApps,
           clusteredDbApps: [],
           monitoring: NO_MONITORING,
         })
@@ -71,31 +77,45 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('only one microservice', () => {
     let runResult;
+    const chosenApps = ['02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('02-mysql', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['02-mysql'],
+          chosenApps,
           clusteredDbApps: [],
           monitoring: NO_MONITORING,
         })
@@ -105,31 +125,45 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('one microservice and a directory path without a trailing slash', () => {
     let runResult;
+    const chosenApps = ['02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('02-mysql', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: '.',
-          chosenApps: ['02-mysql'],
+          chosenApps,
           clusteredDbApps: [],
           monitoring: NO_MONITORING,
         })
@@ -139,27 +173,40 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('Correct the directory path by appending a trailing slash', () => {
-      assert.fileContent('.yo-rc.json', '"directoryPath": "./"');
+      runResult.assertFileContent('.yo-rc.json', '"directoryPath": "./"');
     });
   });
 
   describe('gateway and one microservice, without monitoring', () => {
     let runResult;
+    const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql'],
+          chosenApps,
           clusteredDbApps: [],
           monitoring: NO_MONITORING,
         })
@@ -169,32 +216,45 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('gateway and one microservice', () => {
     let runResult;
+    const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql'],
+          chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -203,35 +263,48 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('no prometheus files', () => {
-      assert.noFile(expectedFiles.prometheus);
+      runResult.assertNoFile(expectedFiles.prometheus);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('gateway and one microservice, with curator', () => {
     let runResult;
+    const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql'],
+          chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -240,35 +313,48 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('no prometheus files', () => {
-      assert.noFile(expectedFiles.prometheus);
+      runResult.assertNoFile(expectedFiles.prometheus);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('gateway and one microservice, with prometheus', () => {
     let runResult;
+    const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql'],
+          chosenApps,
           clusteredDbApps: [],
           monitoring: PROMETHEUS,
         })
@@ -278,38 +364,48 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates expected prometheus files', () => {
-      assert.file(expectedFiles.prometheus);
+      runResult.assertFile(expectedFiles.prometheus);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('gateway and multi microservices', () => {
     let runResult;
+    const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
-          createMockedConfig('03-psql', dir);
-          createMockedConfig('04-mongo', dir);
-          createMockedConfig('07-mariadb', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
+          chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -318,34 +414,45 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('gateway and multi microservices, with 1 mongodb cluster', () => {
     let runResult;
+    const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
-          createMockedConfig('03-psql', dir);
-          createMockedConfig('04-mongo', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo'],
+          chosenApps,
           clusteredDbApps: ['04-mongo'],
         })
         .run();
@@ -354,32 +461,45 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('gateway and 1 microservice, with Cassandra', () => {
     let runResult;
+    const chosenApps = ['01-gateway', '05-cassandra'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('05-cassandra', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['01-gateway', '05-cassandra'],
+          chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -388,31 +508,45 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      // runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('monolith', () => {
     let runResult;
+    const chosenApps = ['08-monolith'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('08-monolith', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MONOLITH,
           directoryPath: './',
-          chosenApps: ['08-monolith'],
+          chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -421,32 +555,42 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.monolith);
+      runResult.assertFile(expectedFiles.monolith);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('gateway and multi microservices, with couchbase', () => {
     let runResult;
+    const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('02-mysql', dir);
-          createMockedConfig('03-psql', dir);
-          createMockedConfig('10-couchbase', dir);
-          createMockedConfig('07-mariadb', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'],
+          chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -455,32 +599,45 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('gateway and 1 microservice, with 1 couchbase cluster', () => {
     let runResult;
+    const chosenApps = ['01-gateway', '10-couchbase'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('01-gateway', dir);
-          createMockedConfig('10-couchbase', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps: ['01-gateway', '10-couchbase'],
+          chosenApps,
           clusteredDbApps: ['10-couchbase'],
         })
         .run();
@@ -489,31 +646,45 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
+      runResult.assertFile(expectedFiles.dockercompose);
     });
     it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
     });
   });
 
   describe('oracle monolith', () => {
     let runResult;
+    const chosenApps = ['12-oracle'];
     before(async () => {
       runResult = await helpers
-        .create(getGenerator('docker-compose'))
-        .doInDir(dir => {
-          createMockedConfig('12-oracle', dir);
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
+          },
         })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: MONOLITH,
           directoryPath: './',
-          chosenApps: ['12-oracle'],
+          chosenApps,
           clusteredDbApps: [],
           monitoring: NO_MONITORING,
         })
@@ -523,7 +694,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
-      assert.file(expectedFiles.monolith);
+      runResult.assertFile(expectedFiles.monolith);
     });
   });
 });
