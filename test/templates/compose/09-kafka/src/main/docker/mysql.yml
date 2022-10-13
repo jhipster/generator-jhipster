@@ -1,6 +1,6 @@
-version: '2'
+name: 'samplekafka'
 services:
-    samplekafka-mysql:
+    mysql:
         image: mysql:8.0.30
         # volumes:
         #     - ~/volumes/jhipster/sampleKafka/mysql/:/var/lib/mysql/

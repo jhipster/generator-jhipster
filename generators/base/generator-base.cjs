@@ -2385,23 +2385,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (this.configOptions.optionsParsed) return;
     this.configOptions.optionsParsed = true;
 
-    // Write new definitions to memfs
-    if (options.applicationWithEntities) {
-      this.config.set({
-        ...this.config.getAll(),
-        ...options.applicationWithEntities.config,
-      });
-      if (options.applicationWithEntities.entities) {
-        const entities = options.applicationWithEntities.entities.map(entity => {
-          const entityName = _.upperFirst(entity.name);
-          const file = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
-          this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
-          return entityName;
-        });
-        this.jhipsterConfig.entities = [...new Set((this.jhipsterConfig.entities || []).concat(entities))];
-      }
-    }
-
     // Load stored options
     if (options.withGeneratedFlag !== undefined) {
       this.jhipsterConfig.withGeneratedFlag = options.withGeneratedFlag;
@@ -2972,10 +2955,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
   }
 
-  /**
-   * @private
-   * Get default config based on applicationType
-   */
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
     return {
       ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
@@ -2983,9 +2962,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     };
   }
 
-  /**
-   * @private
-   */
   setConfigDefaults(defaults = this.jhipsterDefaults) {
     const jhipsterVersion = packagejs.version;
     const baseName = this.getDefaultAppName();
@@ -3170,6 +3146,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       }
       // allow to edit non existing files
       content = '';
+    }
+    if (isWin32 && content.match(/\r\n/)) {
+      transformCallbacks = [content => content.replace(/\r\n/g, '\n')].concat(transformCallbacks, content =>
+        content.replace(/\n/g, '\r\n')
+      );
     }
 
     const writeCallback = (...callbacks) => {

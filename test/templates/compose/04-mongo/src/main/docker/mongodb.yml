@@ -1,6 +1,6 @@
-version: '2'
+name: 'msmongodb'
 services:
-    msmongodb-mongodb:
+    mongodb:
         image: mongo:4.4.15
         ports:
             - "27017:27017"

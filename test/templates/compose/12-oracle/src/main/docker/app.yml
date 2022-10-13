@@ -1,6 +1,6 @@
-version: '2'
+name: 'oracle-mono'
 services:
-  oracle-mono-app:
+  app:
     image: oracle-mono
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
