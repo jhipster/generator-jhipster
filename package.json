@@ -72,7 +72,7 @@
     "pretest": "npm run lint",
     "test": "mocha test generators --no-insight --forbid-only --parallel --max-old-space-size=4096",
     "update-snapshot": "mocha --no-insight --no-parallel --updateSnapshot --",
-    "update-snapshots": "UPDATE_SNAPSHOT=all npm test",
+    "update-snapshots": "UPDATE_SNAPSHOT=all mocha test generators --no-insight --forbid-only",
     "watch": "tsc --watch"
   },
   "dependencies": {
