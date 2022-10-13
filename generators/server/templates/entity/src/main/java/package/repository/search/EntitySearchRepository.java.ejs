@@ -31,8 +31,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.elasticsearch.core.SearchHits;
   <%_ } _%>
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.elasticsearch.search.sort.SortBuilder;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 
@@ -40,9 +40,9 @@ import org.springframework.data.domain.PageRequest;
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
 <%_ } else { _%>
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 <%_ } _%>
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
@@ -60,7 +60,7 @@ import java.util.stream.Stream;
 import java.util.UUID;
 <% } %>
 
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.queryStringQuery;
 
 /**
  * Spring Data Elasticsearch repository for the {@link <%= persistClass %>} entity.
@@ -85,11 +85,11 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
 
     @Override
     public Flux<<%= persistClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
+        NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
   <%_ if (!paginationNo) { _%>
-        nativeSearchQuery.setPageable(pageable);
+        nativeQuery.setPageable(pageable);
   <%_ }_%>
-        return search(nativeSearchQuery);
+        return search(nativeQuery);
     }
 
     @Override
@@ -117,10 +117,10 @@ interface <%= entityClass %>SearchRepositoryInternal {
 
 class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
 
-    private final ElasticsearchRestTemplate elasticsearchTemplate;
+    private final ElasticsearchTemplate elasticsearchTemplate;
     private final <%= entityClass %>Repository repository;
 
-    <%= entityClass %>SearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate, <%= entityClass %>Repository repository) {
+    <%= entityClass %>SearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate, <%= entityClass %>Repository repository) {
         this.elasticsearchTemplate = elasticsearchTemplate;
         this.repository = repository;
     }
@@ -128,8 +128,8 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
   <%_ if (paginationNo) { _%>
     @Override
     public Stream<<%= persistClass %>> search(String query) {
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
-        return search(nativeSearchQuery);
+        NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
+        return search(nativeQuery);
     }
 
     @Override
@@ -142,8 +142,8 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
   <%_ } else { _%>
     @Override
     public Page<<%= persistClass %>> search(String query, Pageable pageable) {
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
-        return search(nativeSearchQuery.setPageable(pageable));
+        NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
+        return search(nativeQuery.setPageable(pageable));
     }
 
     @Override
