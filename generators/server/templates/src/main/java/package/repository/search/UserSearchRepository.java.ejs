@@ -20,7 +20,7 @@ package <%= packageName %>.repository.search;
 
 import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ if (reactive) { _%>
-import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
+import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchTemplate;
 <%_ } else { _%>
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 <%_ } _%>
