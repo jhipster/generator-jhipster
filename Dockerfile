@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM eclipse-temurin:11-focal
+FROM eclipse-temurin:17-focal
 
 # copy sources
 COPY . /home/jhipster/generator-jhipster
