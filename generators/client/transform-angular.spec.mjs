@@ -19,7 +19,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
-import { replaceAngularTranslations } from './transform-angular.cjs';
+import { replaceAngularTranslations } from './transform-angular.mjs';
 
 describe('Angular transform', () => {
   describe('replaceAngularTranslations', () => {

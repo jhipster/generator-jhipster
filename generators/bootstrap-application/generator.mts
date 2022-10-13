@@ -19,7 +19,7 @@
 import assert from 'assert';
 import lodash from 'lodash';
 
-import BaseApplicationGenerator from '../base-application/generator.cjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import validations from '../../jdl/jhipster/validations.js';
 import fieldTypes from '../../jdl/jhipster/field-types.js';

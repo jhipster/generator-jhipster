@@ -3,7 +3,7 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import fse from 'fs-extra';
 import { fileURLToPath } from 'url';
-import ServerGenerator from '../../generators/server/index.cjs';
+import ServerGenerator from '../../generators/server/index.mjs';
 import constants from '../../generators/generator-constants.cjs';
 import { getGenerator } from '../support/index.mjs';
 
