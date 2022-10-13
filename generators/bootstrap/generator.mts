@@ -32,7 +32,7 @@ import constants from '../generator-constants.cjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import generatorUtils from '../utils.cjs';
 import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
-import type { PreConflictsTaskGroup } from '../base/tasks.js';
+import type { PreConflictsTaskGroup } from '../base/tasks.cjs';
 
 const { TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const {

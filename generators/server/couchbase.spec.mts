@@ -31,8 +31,8 @@ const samplesBuilder = (): [string, any][] =>
       defaults: true,
       applicationWithEntities: {
         config: {
-          ...sample,
           ...commonConfig,
+          ...sample,
         },
         entities,
       },

@@ -16,19 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
+import chalk from 'chalk';
 
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.mjs';
 
-const statistics = require('../statistics.cjs');
-const { GENERATOR_EXPORT_JDL } = require('../generator-list.cjs');
-const { OptionNames } = require('../../jdl/jhipster/application-options');
-const JSONToJDLConverter = require('../../jdl/converters/json-to-jdl-converter');
+import statistics from '../statistics.cjs';
+import { GENERATOR_EXPORT_JDL } from '../generator-list.mjs';
+import applicationOptions from '../../jdl/jhipster/application-options.js';
+import JSONToJDLConverter from '../../jdl/converters/json-to-jdl-converter.js';
+import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures } from '../base/api.cjs';
+
+const { OptionNames } = applicationOptions;
 
 const { BASE_NAME } = OptionNames;
 
-module.exports = class extends BaseGenerator {
-  constructor(args, options, features) {
+export default class extends BaseGenerator {
+  baseName!: string;
+
+  jdlFile!: string;
+
+  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);
 
     this.argument('jdlFile', { type: String, required: false });
@@ -41,7 +48,7 @@ module.exports = class extends BaseGenerator {
   }
 
   get [BaseGenerator.DEFAULT]() {
-    return {
+    return this.asDefaultTaskGroup({
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_EXPORT_JDL);
       },
@@ -49,18 +56,19 @@ module.exports = class extends BaseGenerator {
       convertToJDL() {
         try {
           JSONToJDLConverter.convertToJDL('.', this.jdlFile);
-        } catch (error) {
-          this.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
+        } catch (error: unknown) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          throw new Error(`An error occurred while exporting to JDL: ${(error as any).message}\n${error}`);
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.END]() {
-    return {
+    return this.asEndTaskGroup({
       end() {
         this.log(chalk.green.bold('\nThe JDL export is complete!\n'));
       },
-    };
+    });
   }
-};
+}

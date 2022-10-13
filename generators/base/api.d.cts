@@ -1,4 +1,19 @@
-import type { OptionConfig } from 'yeoman-generator';
+import type { OptionConfig, GeneratorOptions, GeneratorFeatures } from 'yeoman-generator';
+
+export type ApplicationWithConfig = {
+  config: {
+    [key: string]: string | boolean | number | string[];
+  };
+  entities: Record<string, unknown>;
+};
+
+export interface JHipsterGeneratorOptions extends GeneratorOptions {
+  applicationWithConfig?: ApplicationWithConfig;
+}
+
+export interface JHipsterGeneratorFeatures extends GeneratorFeatures {
+  priorityArgs?: boolean;
+}
 
 // eslint-disable-next-line no-use-before-define
 export type EditFileCallback<Generator> = (this: Generator, content: string, filePath: string) => CascatedEditFileCallback<Generator>;

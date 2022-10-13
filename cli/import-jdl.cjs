@@ -25,15 +25,13 @@ const { fork: forkProcess } = require('child_process');
 
 const EnvironmentBuilder = require('./environment-builder.cjs');
 const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArgs } = require('./utils.cjs');
-const { createImporterFromContent, createImporterFromFiles } = require('../jdl/jdl-importer');
 
 const { packageJson: packagejs } = require('../lib/index.cjs');
 const statistics = require('../generators/statistics.cjs');
 const { JHIPSTER_CONFIG_DIR } = require('../generators/generator-constants.cjs');
 
 const jhipsterCli = require.resolve('./cli.cjs');
-const { writeConfigFile } = require('../jdl/exporters/export-utils');
-const { createFolderIfItDoesNotExist } = require('../jdl/utils/file-utils');
+const { writeConfigFile } = require('./export-utils.cjs');
 
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 
@@ -117,7 +115,9 @@ const shouldRunInteractively = processor => {
  */
 function writeEntityConfig(entity, basePath) {
   const entitiesPath = path.join(basePath, JHIPSTER_CONFIG_DIR);
-  createFolderIfItDoesNotExist(entitiesPath);
+  if (!fs.existsSync(entitiesPath)) {
+    fs.mkdirSync(entitiesPath, { recursive: true });
+  }
   const filePath = path.join(entitiesPath, `${_.upperFirst(entity.name)}.json`);
   fs.writeFileSync(filePath, JSON.stringify(entity, null, 2).concat('\n'));
 }
@@ -128,7 +128,9 @@ function writeEntityConfig(entity, basePath) {
  * @param {string} basePath
  */
 function writeApplicationConfig(applicationWithEntities, basePath) {
-  createFolderIfItDoesNotExist(basePath);
+  if (!fs.existsSync(basePath)) {
+    fs.mkdirSync(basePath, { recursive: true });
+  }
   writeConfigFile({ 'generator-jhipster': applicationWithEntities.config }, path.join(basePath, '.yo-rc.json'));
   applicationWithEntities.entities.forEach(entity => writeEntityConfig(entity, basePath));
 }
@@ -358,7 +360,7 @@ class JDLProcessor {
     this.createEnvBuilder = createEnvBuilder;
   }
 
-  importJDL() {
+  async importJDL() {
     const configuration = {
       applicationName: this.options.baseName,
       databaseType: this.options.db,
@@ -371,6 +373,7 @@ class JDLProcessor {
     };
 
     let importer;
+    const { createImporterFromContent, createImporterFromFiles } = await import('../jdl/jdl-importer.js');
     if (this.jdlContent) {
       importer = createImporterFromContent(this.jdlContent, configuration);
     } else {
@@ -521,12 +524,12 @@ class JDLProcessor {
  * @param {any} [options] options passed from CLI
  * @param {any} [env] the yeoman environment
  */
-module.exports = (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
+module.exports = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
   logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
   logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
   try {
     const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options, createEnvBuilder);
-    jdlImporter.importJDL();
+    await jdlImporter.importJDL();
     jdlImporter.sendInsight();
     jdlImporter.config();
 

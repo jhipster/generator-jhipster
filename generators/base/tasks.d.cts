@@ -1,4 +1,4 @@
-export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => any;
+export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
 
 export type GenericTaskGroup<ThisType, Arg1Type> = Record<string, GenericTask<ThisType, Arg1Type>>;
 
@@ -13,6 +13,7 @@ export {
   NoArgTaskGroup as ComposingTaskGroup,
   NoArgTaskGroup as LoadingTaskGroup,
   NoArgTaskGroup as PreparingTaskGroup,
+  NoArgTaskGroup as DefaultTaskGroup,
   NoArgTaskGroup as WritingTaskGroup,
   NoArgTaskGroup as PostWritingTaskGroup,
   NoArgTaskGroup as PreConflictsTaskGroup,

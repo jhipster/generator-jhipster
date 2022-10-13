@@ -18,7 +18,7 @@
  */
 import constants from '../generator-constants.cjs';
 
-import type { WriteFileSection } from '../base/api.js';
+import type { WriteFileSection } from '../base/api.cjs';
 import type CypressGenerator from './generator.mjs';
 import type { CypressApplication } from './types.js';
 
