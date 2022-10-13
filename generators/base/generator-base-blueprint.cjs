@@ -545,7 +545,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenera
     if (blueprintGenerator instanceof Error) {
       throw blueprintGenerator;
     }
-    this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
+    this._debug(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
     return blueprintGenerator;
   }
 
