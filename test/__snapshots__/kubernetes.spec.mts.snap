@@ -1111,7 +1111,7 @@ spec:
             claimName: mspsql-postgresql-pvc
       containers:
         - name: postgres
-          image: postgres:14.5
+          image: \\"POSTGRESQL_VERSION\\"
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -5209,7 +5209,7 @@ spec:
             claimName: mspsql-postgresql-pvc
       containers:
         - name: postgres
-          image: postgres:14.5
+          image: \\"POSTGRESQL_VERSION\\"
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -11400,7 +11400,7 @@ spec:
             claimName: mspsql-postgresql-pvc
       containers:
         - name: postgres
-          image: postgres:14.5
+          image: \\"POSTGRESQL_VERSION\\"
           env:
             - name: POSTGRES_USER
               value: mspsql

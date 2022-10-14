@@ -60,6 +60,13 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         application.buildDir = `${application.temporaryDir}${application.buildTool === 'gradle' ? 'resources/main/' : 'classes/'}`;
         application.clientDistDir = `${application.buildDir}${constants.CLIENT_DIST_DIR}`;
 
+        application.javaDependencies = this.prepareDependencies(
+          constants.javaDependencies,
+          // Gradle doesn't allows snakeCase
+          value => `'${_.kebabCase(value).toUpperCase()}-VERSION'`
+        );
+        application.dockerContainers = this.prepareDependencies(constants.dockerContainers);
+
         // TODO v8 drop the following variables
         const applicationAsAny = application as any;
         applicationAsAny.DIST_DIR = application.clientDistDir;

@@ -410,7 +410,7 @@ eureka:
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:14.5
+    image: POSTGRESQL_VERSION
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -605,7 +605,7 @@ eureka:
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:14.5
+    image: POSTGRESQL_VERSION
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -805,7 +805,7 @@ eureka:
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:14.5
+    image: POSTGRESQL_VERSION
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=

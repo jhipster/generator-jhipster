@@ -25,6 +25,18 @@ const commonPackageJson = require('./common/templates/package.json');
 // Version of Java
 const JAVA_VERSION = '11';
 const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17', '18'];
+
+const javaDependencies = {
+  'org.liquibase:liquibase': '4.17.0',
+};
+Object.freeze(javaDependencies);
+
+const dockerContainers = {
+  keycloak: 'quay.io/keycloak/keycloak:19.0.3',
+  postgresql: 'postgres:14.5',
+};
+Object.freeze(dockerContainers);
+
 const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
 
 // Version of Node, NPM
@@ -36,9 +48,6 @@ const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 const JHIPSTER_DEPENDENCIES_VERSION = '7.9.4-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.7.3';
-const LIQUIBASE_VERSION = '4.16.0';
-// TODO v8: Remove this constant
-const LIQUIBASE_DTD_VERSION = 'latest';
 const HIBERNATE_VERSION = '5.6.10.Final';
 const JACOCO_VERSION = '0.8.8';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.3';
@@ -55,8 +64,6 @@ const DOCKER_MYSQL_VERSION = '8.0.30';
 const DOCKER_MYSQL = `mysql:${DOCKER_MYSQL_VERSION}`;
 const DOCKER_MARIADB_VERSION = '10.8.3';
 const DOCKER_MARIADB = `mariadb:${DOCKER_MARIADB_VERSION}`;
-const DOCKER_POSTGRESQL_VERSION = '14.5';
-const DOCKER_POSTGRESQL = `postgres:${DOCKER_POSTGRESQL_VERSION}`;
 const DOCKER_MONGODB_VERSION = '4.4.15';
 const DOCKER_MONGODB = `mongo:${DOCKER_MONGODB_VERSION}`;
 const DOCKER_COUCHBASE_VERSION = '7.0.3';
@@ -73,8 +80,6 @@ const DOCKER_MEMCACHED_VERSION = '1.6.16-alpine';
 const DOCKER_MEMCACHED = `memcached:${DOCKER_MEMCACHED_VERSION}`;
 const DOCKER_REDIS_VERSION = '6.2.7';
 const DOCKER_REDIS = `redis:${DOCKER_REDIS_VERSION}`;
-const DOCKER_KEYCLOAK_VERSION = '19.0.1';
-const DOCKER_KEYCLOAK = `quay.io/keycloak/keycloak:${DOCKER_KEYCLOAK_VERSION}`;
 const DOCKER_ELASTICSEARCH_CONTAINER = 'docker.elastic.co/elasticsearch/elasticsearch';
 // TODO V8 Rename ELASTICSEARCH_VERSION to DOCKER_ELASTICSEARCH_VERSION
 const ELASTICSEARCH_VERSION = '7.17.4'; // The version should be coherent with the one from spring-data-elasticsearch project
@@ -404,9 +409,6 @@ const constants = {
   // Libraries
   JHIPSTER_DEPENDENCIES_VERSION,
   SPRING_BOOT_VERSION,
-  LIQUIBASE_VERSION,
-  // TODO v8: Remove this constant
-  LIQUIBASE_DTD_VERSION,
   HIBERNATE_VERSION,
   JIB_VERSION,
   JACOCO_VERSION,
@@ -420,8 +422,6 @@ const constants = {
   DOCKER_MYSQL_VERSION,
   DOCKER_MARIADB,
   DOCKER_MARIADB_VERSION,
-  DOCKER_POSTGRESQL,
-  DOCKER_POSTGRESQL_VERSION,
   DOCKER_MONGODB,
   DOCKER_MONGODB_VERSION,
   DOCKER_COUCHBASE,
@@ -438,8 +438,6 @@ const constants = {
   DOCKER_ELASTICSEARCH,
   DOCKER_ELASTICSEARCH_CONTAINER,
   ELASTICSEARCH_VERSION,
-  DOCKER_KEYCLOAK,
-  DOCKER_KEYCLOAK_VERSION,
   DOCKER_KAFKA,
   KAFKA_VERSION,
   DOCKER_ZOOKEEPER,
@@ -474,6 +472,9 @@ const constants = {
   HELM_POSTGRESQL,
   HELM_MOGODB_REPLICASET,
   HELM_COUCHBASE_OPERATOR,
+
+  javaDependencies,
+  dockerContainers,
 };
 
 module.exports = constants;

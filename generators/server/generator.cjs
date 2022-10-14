@@ -261,7 +261,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         application.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
         application.DOCKER_MYSQL = constants.DOCKER_MYSQL;
         application.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-        application.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
         application.DOCKER_MONGODB = constants.DOCKER_MONGODB;
         application.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
         application.DOCKER_MSSQL = constants.DOCKER_MSSQL;
@@ -273,8 +272,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         application.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
         application.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
         application.ELASTICSEARCH_VERSION = constants.ELASTICSEARCH_VERSION;
-        application.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
-        application.DOCKER_KEYCLOAK_VERSION = constants.DOCKER_KEYCLOAK_VERSION;
         application.DOCKER_KAFKA = constants.DOCKER_KAFKA;
         application.KAFKA_VERSION = constants.KAFKA_VERSION;
         application.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
@@ -295,9 +292,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
 
         application.JHIPSTER_DEPENDENCIES_VERSION = application.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         application.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
-        application.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
-        // TODO v8: Remove this constant
-        application.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
         application.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
         application.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
         application.JACOCO_VERSION = constants.JACOCO_VERSION;

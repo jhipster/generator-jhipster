@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   postgresql:
-    image: <%= DOCKER_POSTGRESQL %>
+    image: <%- dockerContainers.postgresql %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/postgresql/:/var/lib/postgresql/data/
     environment:
