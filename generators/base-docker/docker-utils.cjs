@@ -18,8 +18,6 @@
  */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
-const dockerCLI = require('./docker-cli.cjs');
-const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
@@ -29,8 +27,6 @@ const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
  */
 module.exports = {
   checkDocker,
-  checkImageExist,
-  checkAndBuildImages,
 };
 
 /**
@@ -68,57 +64,4 @@ function checkDocker() {
     }
     done();
   });
-}
-
-/**
- * Check that a Docker image exists in a JHipster app.
- *
- * @param opts Options to pass.
- * @property pwd JHipster app directory. default is './'
- * @property appConfig Configuration for the current application
- */
-function checkImageExist(opts = { cwd: './', appConfig: null }) {
-  if (this.abort) return;
-
-  let imagePath = '';
-  this.hasWarning = false;
-  this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
-  if (opts.appConfig.buildTool === MAVEN) {
-    imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/target/docker`);
-    this.dockerBuildCommand = './mvnw -ntp -Pprod verify jib:dockerBuild';
-  } else {
-    imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/build/docker`);
-    this.dockerBuildCommand = './gradlew bootJar -Pprod jibDockerBuild';
-  }
-
-  if (shelljs.ls(imagePath).length === 0) {
-    this.hasWarning = true;
-    this.warningMessage += `  ${chalk.cyan(this.dockerBuildCommand)} in ${this.destinationPath(this.directoryPath + opts.cwd)}\n`;
-  }
-}
-
-/**
- * Check that a Docker image exists (using {@link #checkImageExists} and if the user agrees, rebuild it.
- * @param opts
- * @property pwd JHipster app directory. default is './'
- * @property forceBuild flag to force the image build.
- * @property appConfig Configuration for the current application
- * @returns {Promise.<TResult>|Promise}
- */
-function checkAndBuildImages(opts = { cwd: './', forceBuild: false, appConfig: { buildTool: GRADLE } }) {
-  if (this.abort) return null;
-  checkImageExist.call(this, opts);
-  const pwd = shelljs.pwd();
-  shelljs.cd(opts.cwd);
-  return new Promise((resolve, reject) =>
-    dockerCLI.command(`${opts.cwd}${this.dockerBuildCommand}`, err => {
-      shelljs.cd(pwd);
-      if (err) {
-        this.log.error(chalk.red(`The Docker image build failed. ${err}`));
-        this.abort = true;
-        reject();
-      }
-      resolve();
-    })
-  );
 }

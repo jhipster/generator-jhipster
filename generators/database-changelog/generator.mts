@@ -55,7 +55,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<Liquibas
   }
 
   async _postConstruct() {
-    this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DATABASE_CHANGELOG);
     }
@@ -63,7 +63,10 @@ export default class DatabaseChangelogGenerator extends BaseApplication<Liquibas
 
   override get default(): DefaultTaskGroup<this, LiquibaseApplication> {
     return {
-      async calculateChangelogs({ application }) {
+      async calculateChangelogs({ application, entities }) {
+        if (!this.options.entities) {
+          this.options.entities = entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
+        }
         const diffs = this._generateChangelogFromFiles(application);
         for (const [fieldChanges] of diffs) {
           if (fieldChanges.type === 'entity-new') {

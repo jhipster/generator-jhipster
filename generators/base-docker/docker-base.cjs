@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const shelljs = require('shelljs');
+const { existsSync } = require('fs');
 const chalk = require('chalk');
 const _ = require('lodash');
 
@@ -55,7 +55,7 @@ function checkImages() {
       imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/jib-cache`);
       runCommand = './gradlew bootJar -Pprod jibDockerBuild';
     }
-    if (shelljs.ls(imagePath).length === 0) {
+    if (!existsSync(imagePath)) {
       this.hasWarning = true;
       this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + appsFolder)}\n`;
     }

@@ -1,7 +1,8 @@
-version: '2'
+name: 'mscassandra'
 services:
-    mscassandra-cassandra:
+    cassandra:
         image: cassandra:3.11.13
+        container-name: mscassandra-cassandra
         # volumes:
         #     - ~/volumes/jhipster/mscassandra/cassandra/:/var/lib/cassandra/data
         ports:
@@ -10,7 +11,7 @@ services:
             - 7199:7199
             - 9042:9042
             - 9160:9160
-    mscassandra-cassandra-migration:
+    cassandra-migration:
         environment:
             - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
             - USER=docker-cassandra-migration

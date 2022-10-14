@@ -23,7 +23,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 const _ = require('lodash');
 
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const { GENERATOR_GAE } = require('../generator-list.cjs');
 const statistics = require('../statistics.cjs');
@@ -37,14 +37,14 @@ const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
 
 const NO_CACHE_PROVIDER = cacheProviders.NO;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_GAE);
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       sayHello() {
         this.log(chalk.bold('Welcome to Google App Engine Generator'));
@@ -122,12 +122,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       askForPath() {
         if (this.abort) return undefined;
@@ -608,12 +608,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_GAE);
@@ -749,12 +749,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _loading() {
+  get loading() {
     return {
       loadSharedConfig() {
         this.loadDerivedAppConfig();
@@ -762,12 +762,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.LOADING]() {
+  get [BaseGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.loading;
   }
 
-  _writing() {
+  get writing() {
     return {
       copyFiles() {
         if (this.abort) return;
@@ -832,12 +832,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
-  _end() {
+  get end() {
     return {
       productionBuild() {
         if (this.abort) return;
@@ -878,9 +878,9 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.END]() {
+  get [BaseGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 
   _defaultProjectId() {

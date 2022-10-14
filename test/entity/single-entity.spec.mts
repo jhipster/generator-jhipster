@@ -3,7 +3,7 @@ import fse from 'fs-extra';
 import helpers from 'yeoman-test';
 
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
-import createMockedConfig from '../support/mock-config.cjs';
+import createMockedConfig from '../support/mock-config.mjs';
 import { getTemplatePath, getEntityTemplatePath, getGenerator } from '../support/index.mjs';
 
 const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };

@@ -16,25 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { parse: parseYaml, stringify: stringifyYaml } = require('yaml');
+const _ = require('lodash');
+
 const JHipsterBaseBlueprintGenerator = require('./generator-base-blueprint.cjs');
 
-const { PRIORITY_NAMES, PRIORITY_PREFIX } = require('../../lib/constants/priorities.cjs');
+const { PRIORITY_NAMES, PRIORITY_PREFIX } = require('./priorities.cjs');
 
-const {
-  INITIALIZING,
-  PROMPTING,
-  CONFIGURING,
-  COMPOSING,
-  LOADING,
-  PREPARING,
-  DEFAULT,
-  WRITING,
-  POST_WRITING,
-  PRE_CONFLICTS,
-  INSTALL,
-  POST_INSTALL,
-  END,
-} = PRIORITY_NAMES;
+const { merge } = _;
+const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
+  PRIORITY_NAMES;
 
 const asPriority = priorityName => `${PRIORITY_PREFIX}${priorityName}`;
 
@@ -65,16 +56,63 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   static POST_WRITING = asPriority(POST_WRITING);
 
-  static PRE_CONFLICTS = asPriority(PRE_CONFLICTS);
-
   static INSTALL = asPriority(INSTALL);
 
   static POST_INSTALL = asPriority(POST_INSTALL);
 
   static END = asPriority(END);
 
+  /**
+   * @param {string | string[]} args
+   * @param {import('./api.cjs').JHipsterGeneratorOptions} options
+   * @param {import('./api.cjs').JHipsterGeneratorFeatures} features
+   */
   constructor(args, options, features) {
-    super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, ...features });
+    super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
+  }
+
+  /**
+   * Convert value to a yaml and write to destination
+   * @param {string} filepath
+   * @param {Record<string | number, any>} value
+   */
+  writeDestinationYaml(filepath, value) {
+    this.writeDestination(filepath, stringifyYaml(value));
+  }
+
+  /**
+   * Merge value to an existing yaml and write to destination
+   * Removes every comment (due to parsing/merging process) except the at the top of the file.
+   * @param {string} filepath
+   * @param {Record<string | number, any>} value
+   */
+  mergeDestinationYaml(filepath, value) {
+    this.editFile(filepath, content => {
+      const lines = content.split('\n');
+      const headerComments = [];
+      lines.find(line => {
+        if (line.startsWith('#')) {
+          headerComments.push(line);
+          return false;
+        }
+        return true;
+      });
+      return headerComments.join('\n').concat('\n', stringifyYaml(merge(parseYaml(content), value)));
+    });
+  }
+
+  /**
+   * Convert dependencies to placeholder if needed
+   *
+   * @param {Record<string,string>} map
+   * @param {(value: string) => string} [valuePlaceholder]
+   * @returns {Record<string,string>}
+   */
+  prepareDependencies(map, valuePlaceholder = value => `'${_.snakeCase(value).toUpperCase()}_VERSION'`) {
+    if (process.env.VERSION_PLACEHOLDERS === 'true') {
+      return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
+    }
+    return map;
   }
 
   /**

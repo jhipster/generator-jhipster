@@ -1,4 +1,4 @@
-import type { GenericDerivedProperty, OptionalGenericDerivedProperty } from '../base/application';
+import type { GenericDerivedProperty, OptionalGenericDerivedProperty } from '../base/application.js';
 
 export type BaseApplication = {
   jhipsterVersion: string;
@@ -83,11 +83,14 @@ export type CommonClientServerApplication = BaseApplication &
     clientSrcDir: string;
     clientTestDir?: string;
     clientDistDir?: string;
-    backendType?: string;
-    serverPort: number;
     devServerPort: number;
     pages: string[];
+
+    serverPort: number;
+    backendType?: string;
     temporaryDir?: string;
+
+    dockerServicesDir?: string;
     prettierExtensions?: string;
   };
 

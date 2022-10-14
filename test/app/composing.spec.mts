@@ -278,43 +278,4 @@ describe('jhipster:app composing', () => {
       });
     });
   });
-  describe(`when mocking ${mockedComposedGenerators}`, () => {
-    describe('with default options', () => {
-      let runContext;
-      let runResult;
-      before(async () => {
-        runContext = helpers.create(getGenerator('app'));
-        runResult = await runContext
-          .withOptions({
-            baseName: 'jhipster',
-            defaults: true,
-          })
-          .withMockedGenerators(mockedComposedGenerators)
-          .run();
-      });
-
-      after(() => runContext.cleanup());
-
-      it('should compose with common generator once', () => {
-        const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
-        assert(CommonGenerator.calledOnce);
-      });
-      it('should compose with languages generator once', () => {
-        const LanguagesGenerator = runResult.mockedGenerators['jhipster:languages'];
-        assert(LanguagesGenerator.calledOnce);
-      });
-      it('should not compose with entities generator', () => {
-        const EntityGenerator = runResult.mockedGenerators['jhipster:entities'];
-        assert.equal(EntityGenerator.callCount, 0);
-      });
-      it('should not compose with entity generator', () => {
-        const EntityGenerator = runResult.mockedGenerators['jhipster:entity'];
-        assert.equal(EntityGenerator.callCount, 0);
-      });
-      it('should not compose with database-changelog generator', () => {
-        const IncrementalChangelogGenerator = runResult.mockedGenerators['jhipster:database-changelog'];
-        assert.equal(IncrementalChangelogGenerator.callCount, 0);
-      });
-    });
-  });
 });

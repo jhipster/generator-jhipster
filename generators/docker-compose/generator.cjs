@@ -46,9 +46,9 @@ module.exports = class extends BaseDockerGenerator {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
-      ...super._initializing(),
+      ...super.initializing,
 
       checkDockerCompose() {
         if (this.skipChecks) return;
@@ -85,26 +85,26 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
-    return super._prompting();
+  get prompting() {
+    return super.prompting;
   }
 
   get [BaseDockerGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       sayHello() {
         this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
         this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
-      ...super._configuring(),
+      ...super.configuring,
 
       saveConfig() {
         this.config.set({
@@ -122,10 +122,10 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _preparing() {
+  get preparing() {
     return {
       loadConfig() {
         this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
@@ -142,7 +142,7 @@ module.exports = class extends BaseDockerGenerator {
           const path = this.destinationPath(this.directoryPath + appConfig.appFolder);
           // Add application configuration
           const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
-          const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
+          const yamlConfig = yaml.services.app;
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
             this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {
@@ -168,7 +168,7 @@ module.exports = class extends BaseDockerGenerator {
             yamlConfig.environment.push('SERVER_PORT=80'); // to simplify service resolution in docker/k8s
           }
 
-          parentConfiguration[`${lowercaseBaseName}`] = yamlConfig;
+          parentConfiguration[lowercaseBaseName] = yamlConfig;
 
           // Add database configuration
           const database = appConfig.databaseTypeSql ? appConfig.prodDatabaseType : appConfig.databaseType;
@@ -176,19 +176,14 @@ module.exports = class extends BaseDockerGenerator {
             const relativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`));
             const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
-            let databaseYamlConfig = databaseYaml.services[databaseServiceName];
+            let databaseYamlConfig = databaseYaml.services[database];
             // Don't export database ports
             delete databaseYamlConfig.ports;
 
             if (database === CASSANDRA) {
               // migration service config
-              const cassandraMigrationConfig = databaseYaml.services[`${databaseServiceName}-migration`];
-
-              // replace script with prod
-              cassandraMigrationConfig.environment = [
-                ...cassandraMigrationConfig.environment.filter(envVariable => !envVariable.includes('CREATE_KEYSPACE_SCRIPT=')),
-                'CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql',
-              ];
+              const cassandraMigrationYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/cassandra-migration.yml`));
+              const cassandraMigrationConfig = cassandraMigrationYaml.services[`${database}-migration`];
               cassandraMigrationConfig.build.context = relativePath;
               const cqlFilesRelativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/resources/config/cql`));
               cassandraMigrationConfig.volumes[0] = `${cqlFilesRelativePath}:/cql:ro`;
@@ -202,16 +197,16 @@ module.exports = class extends BaseDockerGenerator {
 
             if (appConfig.clusteredDb) {
               const clusterDbYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`));
-              const dbNodeConfig = clusterDbYaml.services[`${databaseServiceName}-node`];
+              const dbNodeConfig = clusterDbYaml.services[`${database}-node`];
               dbNodeConfig.build.context = relativePath;
-              databaseYamlConfig = clusterDbYaml.services[databaseServiceName];
+              databaseYamlConfig = clusterDbYaml.services[database];
               delete databaseYamlConfig.ports;
               if (database === COUCHBASE) {
                 databaseYamlConfig.build.context = relativePath;
               }
               parentConfiguration[`${databaseServiceName}-node`] = dbNodeConfig;
               if (database === MONGODB) {
-                parentConfiguration[`${databaseServiceName}-config`] = clusterDbYaml.services[`${databaseServiceName}-config`];
+                parentConfiguration[`${databaseServiceName}-config`] = clusterDbYaml.services[`${database}-config`];
               }
             }
 
@@ -221,7 +216,7 @@ module.exports = class extends BaseDockerGenerator {
           const searchEngine = appConfig.searchEngine;
           if (searchEngine === ELASTICSEARCH) {
             const searchEngineYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${searchEngine}.yml`));
-            const searchEngineConfig = searchEngineYaml.services[`${lowercaseBaseName}-${searchEngine}`];
+            const searchEngineConfig = searchEngineYaml.services[searchEngine];
             delete searchEngineConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-${searchEngine}`] = searchEngineConfig;
           }
@@ -230,7 +225,7 @@ module.exports = class extends BaseDockerGenerator {
           if (cacheProvider === MEMCACHED) {
             this.useMemcached = true;
             const memcachedYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/memcached.yml`));
-            const memcachedConfig = memcachedYaml.services[`${lowercaseBaseName}-memcached`];
+            const memcachedConfig = memcachedYaml.services.memcached;
             delete memcachedConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
           }
@@ -239,7 +234,7 @@ module.exports = class extends BaseDockerGenerator {
           if (cacheProvider === REDIS) {
             this.useRedis = true;
             const redisYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/redis.yml`));
-            const redisConfig = redisYaml.services[`${lowercaseBaseName}-redis`];
+            const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
           }
@@ -265,10 +260,10 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.PREPARING]() {
     if (this.delegateToBlueprint) return {};
-    return this._preparing();
+    return this.preparing;
   }
 
-  _loading() {
+  get loading() {
     return {
       loadPlatformConfig() {
         this.loadDeploymentConfig(this);
@@ -278,40 +273,44 @@ module.exports = class extends BaseDockerGenerator {
 
   get [BaseDockerGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.loading;
   }
 
-  _writing() {
+  get writing() {
     return writeFiles();
   }
 
   get [BaseDockerGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
-  _end() {
-    if (this.hasWarning) {
-      this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
-      this.log('If you forgot to generate the Docker image for this application, please run:');
-      this.log(chalk.red(this.warningMessage));
-    } else {
-      this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
-    }
-    this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
-    if (this.gatewayNb + this.monolithicNb > 1) {
-      this.log('\nYour applications will be accessible on these URLs:');
-      this.appConfigs.forEach(appConfig => {
-        if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-          this.log(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
+  get end() {
+    return {
+      end() {
+        if (this.hasWarning) {
+          this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
+          this.log('If you forgot to generate the Docker image for this application, please run:');
+          this.log(chalk.red(this.warningMessage));
+        } else {
+          this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
-      });
-      this.log('\n');
-    }
+        this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
+        if (this.gatewayNb + this.monolithicNb > 1) {
+          this.log('\nYour applications will be accessible on these URLs:');
+          this.appConfigs.forEach(appConfig => {
+            if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
+              this.log(`\t- ${appConfig.baseName}: http://localhost:${appConfig.composePort}`);
+            }
+          });
+          this.log('\n');
+        }
+      },
+    };
   }
 
-  end() {
+  get [BaseDockerGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 };

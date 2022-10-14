@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 const { platform } = require('os');
-const { normalizeLineEndings } = require('../../generators/utils.cjs');
+const { normalizeLineEndings } = require('../utils.cjs');
 
 const isWin32 = platform() === 'win32';
 
 /**
  * Converts multiples EditFileCallback callbacks into one.
  *
- * @param {...import('../../generators/base/generator-base.cjs').EditFileCallback} callbacks
- * @returns {import('../../generators/base/generator-base.cjs').EditFileCallback}
+ * @param {...import('./index.cjs').EditFileCallback} callbacks
+ * @returns {import('./index.cjs').EditFileCallback}
  */
 const joinCallbacks = (...callbacks) => {
   return function (content, filePath) {

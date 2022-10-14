@@ -59,7 +59,7 @@ describe(`JHipster ${generator} generator`, () => {
       before(async () => {
         runResult = await helpers.run(generatorPath).withOptions({ allGenerators: true });
       });
-      it('should write java files with gradle build tool and match snapshot', () => {
+      it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
     });
@@ -68,7 +68,7 @@ describe(`JHipster ${generator} generator`, () => {
       before(async () => {
         runResult = await helpers.run(generatorPath).withOptions({ localBlueprint: true });
       });
-      it('should write java files with gradle build tool and match snapshot', () => {
+      it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
 Object {
   ".yo-rc.json": Object {

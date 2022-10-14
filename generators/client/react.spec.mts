@@ -3,7 +3,7 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport, buildClientSamples } from '../../test/support/index.mjs';
+import { testBlueprintSupport, buildClientSamples, entitiesClientSamples as entities } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
@@ -29,9 +29,10 @@ const samplesBuilder = () =>
       skipInstall: true,
       applicationWithEntities: {
         config: {
-          ...sample,
           ...commonConfig,
+          ...sample,
         },
+        entities,
       },
     },
   ]);

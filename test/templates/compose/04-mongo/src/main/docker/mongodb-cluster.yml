@@ -1,15 +1,15 @@
-version: '2'
+name: 'msmongodb'
 services:
-    msmongodb-mongodb:
+    mongodb:
         image: mongo:4.4.15
         ports:
             - "27017:27017"
         command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
-    msmongodb-mongodb-node:
+    mongodb-node:
         build:
             context: .
             dockerfile: mongodb/MongoDB.Dockerfile
         command: mongod --shardsvr --replSet rs1
-    msmongodb-mongodb-config:
+    mongodb-config:
         image: mongo:4.4.15
         command: mongod --configsvr --dbpath /data/db --replSet csvr

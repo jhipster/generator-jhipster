@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base-application/index.cjs');
 
 const cleanup = require('../cleanup.cjs');
 const prompts = require('./prompts.cjs');
@@ -35,7 +35,7 @@ const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = OptionNames;
 const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT, GENERATOR_PAGE, GENERATOR_SERVER } = require('../generator-list.cjs');
 
-module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
+module.exports = class JHipsterAppGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -316,7 +316,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -361,14 +361,14 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) {
       return;
     }
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       askForInsightOptIn: prompts.askForInsightOptIn,
       askForApplicationType: prompts.askForApplicationType,
@@ -376,12 +376,12 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return;
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       setup() {
         // Update jhipsterVersion.
@@ -412,12 +412,12 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return;
-    return this._configuring();
+    return this.configuring;
   }
 
-  _composing() {
+  get composing() {
     return {
       /**
        * Composing with others generators, must be executed after `configuring` priority to let others
@@ -431,22 +431,18 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
        */
       async compose() {
-        await this.composeWithJHipster(GENERATOR_COMMON, true);
+        await this.composeWithJHipster(GENERATOR_COMMON);
         if (!this.jhipsterConfig.skipServer) {
-          await this.composeWithJHipster(GENERATOR_SERVER, true);
+          await this.composeWithJHipster(GENERATOR_SERVER);
         }
         if (this.jhipsterConfig.clientFramework !== CLIENT_FRAMEWORK_NO) {
-          await this.composeWithJHipster(GENERATOR_CLIENT, true);
+          await this.composeWithJHipster(GENERATOR_CLIENT);
         }
         if (!this.configOptions.skipI18n) {
-          await this.composeWithJHipster(
-            GENERATOR_LANGUAGES,
-            {
-              regenerate: true,
-              skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
-            },
-            true
-          );
+          await this.composeWithJHipster(GENERATOR_LANGUAGES, {
+            regenerate: true,
+            skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
+          });
         }
       },
       askForTestOpts: prompts.askForTestOpts,
@@ -484,12 +480,12 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.COMPOSING]() {
+  get [BaseGenerator.COMPOSING]() {
     if (this.delegateToBlueprint) return;
-    return this._composing();
+    return this.composing;
   }
 
-  _default() {
+  get default() {
     return {
       insight() {
         const yorc = {
@@ -501,12 +497,12 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.DEFAULT]() {
+  get [BaseGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return;
-    return this._default();
+    return this.default;
   }
 
-  _writing() {
+  get writing() {
     return {
       cleanup() {
         cleanup.cleanupOldFiles(this);
@@ -515,13 +511,13 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return;
-    return this._writing();
+    return this.writing;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _install() {
+  get install() {
     return {
       /** Initialize git repository before package manager install for commit hooks */
       initGitRepo() {
@@ -532,12 +528,12 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INSTALL]() {
+  get [BaseGenerator.INSTALL]() {
     if (this.delegateToBlueprint) return;
-    return this._install();
+    return this.install;
   }
 
-  _end() {
+  get end() {
     return {
       /** Initial commit to git repository after package manager install for package-lock.json */
       gitCommit() {
@@ -576,9 +572,9 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.END]() {
+  get [BaseGenerator.END]() {
     if (this.delegateToBlueprint) return;
-    return this._end();
+    return this.end;
   }
 
   _validateAppConfiguration(config = this.jhipsterConfig) {
