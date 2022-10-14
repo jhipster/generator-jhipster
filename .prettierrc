@@ -11,8 +11,12 @@ arrowParens: avoid
 # jsx and tsx rules:
 bracketSameLine: false
 
-# java rules:
 overrides:
+  # java rules:
   - files: "*.java"
+    options:
+      tabWidth: 4
+  # xml rules:
+  - files: "*.xml"
     options:
       tabWidth: 4

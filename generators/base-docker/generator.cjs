@@ -63,8 +63,13 @@ module.exports = class extends BlueprintBaseGenerator {
         this.checkInvocationFromCLI();
       },
 
-      setupServerConsts() {
-        this.dockerContainers = this.prepareDependencies(constants.dockerContainers);
+      async setupServerConsts() {
+        const { getDockerfileContainers } = await import('../server/index.mjs');
+        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
+        this.dockerContainers = this.prepareDependencies({
+          ...constants.dockerContainers,
+          ...getDockerfileContainers(dockerfile),
+        });
 
         // Make constants available in templates
         this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
@@ -85,7 +90,6 @@ module.exports = class extends BlueprintBaseGenerator {
         this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
         this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
         this.DOCKER_REDIS = constants.DOCKER_REDIS;
-        this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
         this.DOCKER_PROMETHEUS_OPERATOR = constants.DOCKER_PROMETHEUS_OPERATOR;
         this.DOCKER_GRAFANA_WATCHER = constants.DOCKER_GRAFANA_WATCHER;
         this.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;

@@ -180,8 +180,11 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @private
+   * @protected
    * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
+   *
+   * @param {...string} args
+   * @returns {string}
    */
   jhipsterTemplatePath(...args) {
     try {

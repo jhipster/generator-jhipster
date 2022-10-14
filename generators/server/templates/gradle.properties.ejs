@@ -39,7 +39,7 @@ caffeineVersion=3.1.1
 typesafeConfigVersion=1.4.2
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
-liquibaseHibernate5Version=<%- javaDependencies['org.liquibase:liquibase'] %>
+liquibaseHibernate5Version=<%- javaDependencies.liquibase %>
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
 
@@ -62,7 +62,7 @@ cassandraDriverVersion=4.14.1
 <%_ } _%>
 
 # gradle plugin version
-jibPluginVersion=<%= JIB_VERSION %>
+jibPluginVersion=<%- javaDependencies['jib-maven-plugin'] %>
 gitPropertiesPluginVersion=2.4.1
 <%_ if (!skipClient) { _%>
 gradleNodePluginVersion=3.4.0
