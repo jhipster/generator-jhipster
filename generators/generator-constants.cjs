@@ -35,7 +35,7 @@ const dockerContainers = {
   keycloak: 'quay.io/keycloak/keycloak:19.0.3',
   postgresql: 'postgres:14.5',
 };
-Object.freeze(javaDependencies);
+Object.freeze(dockerContainers);
 
 const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
 
