@@ -72,8 +72,8 @@
     "@typescript-eslint/no-empty-function": "off",
     "comma-dangle": "off",
     "max-len": "off",
-    // TODO: Investigate if we can avoid the issue instead of
-    // deactivating the lint rule.
+    // TODO: Fix the duplicate imports issue and then activate the rule again
+    // See: https://github.com/jhipster/generator-jhipster/issues/20015
     "import/no-duplicates": "off",
     "func-names": "off",
     "class-methods-use-this": "off",
