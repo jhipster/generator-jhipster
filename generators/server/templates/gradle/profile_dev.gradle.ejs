@@ -61,9 +61,9 @@ dependencies {
     implementation "io.r2dbc:r2dbc-mssql"
     <%_ } _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
-    implementation "org.liquibase.ext:liquibase-mssql:<%- javaDependencies['org.liquibase:liquibase'] %>"
+    implementation "org.liquibase.ext:liquibase-mssql:<%- javaDependencies.liquibase %>"
     liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
-    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%- javaDependencies['org.liquibase:liquibase'] %>"
+    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%- javaDependencies.liquibase %>"
   <%_ } _%>
   <%_ if (devDatabaseTypeOracle) { _%>
     implementation "com.oracle.database.jdbc:ojdbc8"
