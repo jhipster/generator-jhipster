@@ -47,6 +47,6 @@ runs:
         git -c color.ui=always diff -R --cached -- '.yo-rc.json' '**/.yo-rc.json' '.jhipster/**' '**/.jhipster/**'
         echo "Showing source diff changes (will trigger builds)"
         git -c color.ui=always diff -R --cached --exit-code -- . ':!.yo-rc.json' ':!**/.yo-rc.json' ':!.jhipster/**' ':!**/.jhipster/**' ':!package-lock.json' ':!**/package-lock.json' ':!**/keystore.p12' \
-          && echo "::set-output name=equals::true" \
-          || echo "::set-output name=has-changes::true"
+          && echo "equals=true" >> $GITHUB_OUTPUT \
+          || echo "has-changes=true" >> $GITHUB_OUTPUT
       shell: bash

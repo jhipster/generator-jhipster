@@ -68,7 +68,7 @@ runs:
       id: base
       run: |
         $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --skip-git ${{ inputs.extra-args }}
-        echo "::set-output name=application-path::${{inputs.application-path}}"
+        echo "application-path=${{inputs.application-path}}" >> $GITHUB_OUTPUT
       env:
         JHI_FOLDER_APP: ${{ inputs.application-path }}
         JHI_JDL_SAMPLES: "${{ github.workspace }}/base/${{ env.JHI_CLI_PACKAGE || 'generator-jhipster' }}/test-integration/jdl-samples"

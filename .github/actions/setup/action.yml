@@ -156,11 +156,11 @@ runs:
         # Use java backward compatible locale values https://bugs.openjdk.java.net/browse/JDK-8267069
         echo "java.locale.useOldISOCodes=true" >> $GITHUB_ENV
 
-        echo "::set-output name=application-path::${{inputs.application-path}}"
-        echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
-        echo "::set-output name=java-version::$JHI_JDK"
-        echo "::set-output name=node-version::$JHI_NODE_VERSION"
-        echo "::set-output name=npm-version::$JHI_NPM_VERSION"
+        echo "application-path=${{inputs.application-path}}" >> $GITHUB_OUTPUT
+        echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+        echo "java-version=$JHI_JDK" >> $GITHUB_OUTPUT
+        echo "node-version=$JHI_NODE_VERSION" >> $GITHUB_OUTPUT
+        echo "npm-version=$JHI_NPM_VERSION" >> $GITHUB_OUTPUT
 
         echo "Variables added to environment"
         cat $GITHUB_ENV

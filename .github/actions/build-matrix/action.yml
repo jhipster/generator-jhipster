@@ -136,5 +136,5 @@ runs:
         MATRIX="${MATRIX//'%'/'%25'}"
         MATRIX="${MATRIX//$'\n'/'%0A'}"
         MATRIX="${MATRIX//$'\r'/'%0D'}"
-        echo "::set-output name=matrix::$MATRIX"
+        echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
       shell: bash
