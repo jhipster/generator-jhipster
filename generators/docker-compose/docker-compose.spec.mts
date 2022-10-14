@@ -1,11 +1,11 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { join } from 'path';
 
-import monitoringTypes from '../jdl/jhipster/monitoring-types';
-import applicationTypes from '../jdl/jhipster/application-types';
-import { deploymentTestSamples } from './support/mock-config.mjs';
-import { getGenerator } from './support/index.mjs';
-import { skipPrettierHelpers as helpers } from './utils/utils.mjs';
+import monitoringTypes from '../../jdl/jhipster/monitoring-types';
+import applicationTypes from '../../jdl/jhipster/application-types';
+import { deploymentTestSamples } from '../../test/support/mock-config.mjs';
+import { getGenerator } from '../../test/support/index.mjs';
+import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE, MONOLITH } = applicationTypes;

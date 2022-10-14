@@ -102,6 +102,20 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
+   * Convert dependencies to placeholder if needed
+   *
+   * @param {Record<string,string>} map
+   * @param {(value: string) => string} [valuePlaceholder]
+   * @returns {Record<string,string>}
+   */
+  prepareDependencies(map, valuePlaceholder = value => `'${_.snakeCase(value).toUpperCase()}_VERSION'`) {
+    if (process.env.VERSION_PLACEHOLDERS === 'true') {
+      return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
+    }
+    return map;
+  }
+
+  /**
    * @private
    * Override yeoman-generator method that gets methods to be queued, filtering the result.
    *

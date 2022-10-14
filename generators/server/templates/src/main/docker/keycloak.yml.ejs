@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   keycloak:
-    image: <%= DOCKER_KEYCLOAK %>
+    image: <%- dockerContainers.keycloak %>
     command: ['start-dev --import-realm']
     volumes:
       - ./realm-config:/opt/keycloak/data/import

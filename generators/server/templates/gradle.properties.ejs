@@ -39,7 +39,7 @@ caffeineVersion=3.1.1
 typesafeConfigVersion=1.4.2
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
-liquibaseHibernate5Version=<%= LIQUIBASE_VERSION %>
+liquibaseHibernate5Version=<%- javaDependencies['org.liquibase:liquibase'] %>
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
 

@@ -64,12 +64,13 @@ module.exports = class extends BlueprintBaseGenerator {
       },
 
       setupServerConsts() {
+        this.dockerContainers = this.prepareDependencies(constants.dockerContainers);
+
         // Make constants available in templates
         this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
         this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
         this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
         this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
-        this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
         this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
         this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
         this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
@@ -79,7 +80,6 @@ module.exports = class extends BlueprintBaseGenerator {
         this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
         this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
         this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-        this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
         this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
         this.DOCKER_NEO4J = constants.DOCKER_NEO4J;
         this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
