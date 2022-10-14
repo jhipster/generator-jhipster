@@ -177,12 +177,8 @@ public class SecurityConfiguration {
             .addFilterBefore(corsFilter, CsrfFilter.class)
   <%_ } _%>
 <%_ } _%>
-        /*.exceptionHandling()
-                .authenticationEntryPoint(problemSupport)
-                .accessDeniedHandler(problemSupport)*/
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (!skipUserManagement) { _%>
-        .and()
             .rememberMe()
             .rememberMeServices(rememberMeServices)
             .rememberMeParameter("remember-me")
@@ -201,7 +197,7 @@ public class SecurityConfiguration {
             .permitAll()
 <%_ } _%>
 <%_ if (!skipClient) { _%>
-        //.and()
+        .and()
             .headers()
                 .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
             .and()
