@@ -8,7 +8,7 @@
 
     <properties>
       <liquibase.version>4.17.0</liquibase.version>
-      <jib-maven-plugin.version>4.17.0</jib-maven-plugin.version>
+      <jib-maven-plugin.version>3.2.1</jib-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
