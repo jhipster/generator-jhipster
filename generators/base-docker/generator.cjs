@@ -63,8 +63,13 @@ module.exports = class extends BlueprintBaseGenerator {
         this.checkInvocationFromCLI();
       },
 
-      setupServerConsts() {
-        this.dockerContainers = this.prepareDependencies(constants.dockerContainers);
+      async setupServerConsts() {
+        const { getDockerfileContainers } = await import('../server/index.mjs');
+        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
+        this.dockerContainers = this.prepareDependencies({
+          ...constants.dockerContainers,
+          ...getDockerfileContainers(dockerfile),
+        });
 
         // Make constants available in templates
         this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
