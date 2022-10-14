@@ -73,7 +73,7 @@ function getJDLObjectFromMultipleApplications(directory) {
   subDirectories.forEach(subDirectory => {
     const applicationDirectory = path.join(directory, subDirectory);
     const yoRcFileContent = readJSONFile(path.join(applicationDirectory, '.yo-rc.json'));
-    let entities;
+    let entities: Map<string, Entity> = new Map();
     if (doesDirectoryExist(path.join(applicationDirectory, '.jhipster'))) {
       entities = getJSONEntityFiles(applicationDirectory);
     }
@@ -116,7 +116,7 @@ function cleanYoRcFileContent(yoRcFileContent) {
 }
 
 function getJSONEntityFiles(applicationDirectory: string) {
-  const entities = new Map();
+  const entities: Map<string, Entity> = new Map();
   fs.readdirSync(path.join(applicationDirectory, '.jhipster')).forEach(file => {
     const jsonFilePath = path.join(applicationDirectory, '.jhipster', file);
     if (fs.statSync(jsonFilePath).isFile() && file.endsWith('.json')) {
