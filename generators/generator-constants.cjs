@@ -43,7 +43,7 @@ const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 const dockerContainers = {
   elasticsearchTag: ELATICSEARCH_TAG,
   elasticsearchImage: ELATICSEARCH_IMAGE,
-  elasticsearch: `${ELATICSEARCH_IMAGE}${ELATICSEARCH_TAG}`,
+  elasticsearch: `${ELATICSEARCH_IMAGE}:${ELATICSEARCH_TAG}`,
 };
 Object.freeze(dockerContainers);
 
