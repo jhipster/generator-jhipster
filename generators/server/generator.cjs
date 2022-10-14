@@ -269,9 +269,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         application.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
         application.DOCKER_REDIS = constants.DOCKER_REDIS;
         application.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-        application.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
-        application.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
-        application.ELASTICSEARCH_VERSION = constants.ELASTICSEARCH_VERSION;
         application.DOCKER_KAFKA = constants.DOCKER_KAFKA;
         application.KAFKA_VERSION = constants.KAFKA_VERSION;
         application.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
@@ -295,7 +292,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         application.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
         application.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
         application.JACOCO_VERSION = constants.JACOCO_VERSION;
-        application.JIB_VERSION = constants.JIB_VERSION;
 
         application.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
         application.VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;

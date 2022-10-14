@@ -92,6 +92,26 @@ updates:
       - dependency-name: '@types/node'
         versions: ['>=17']
 
+  - package-ecosystem: 'docker'
+    directory: '/generators/server/templates/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 5
+    labels:
+      - 'theme: dependencies'
+      - 'theme: docker :whale:'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'maven'
+    directory: '/generators/server/templates/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 5
+    labels:
+      - 'theme: dependencies'
+      - 'theme: java'
+      - 'skip-changelog'
+
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:

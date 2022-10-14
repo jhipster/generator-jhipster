@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   elasticsearch:
-    image: <%= DOCKER_ELASTICSEARCH %>
+    image: <%- dockerContainers.elasticsearch %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
     # If you want to expose these ports outside your dev PC,

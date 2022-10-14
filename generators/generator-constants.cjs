@@ -26,14 +26,24 @@ const commonPackageJson = require('./common/templates/package.json');
 const JAVA_VERSION = '11';
 const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17', '18'];
 
-const javaDependencies = {
-  'org.liquibase:liquibase': '4.17.0',
-};
+/**
+ * Manually updated java dependencies
+ * @type {Record<string,string>}
+ */
+const javaDependencies = {};
 Object.freeze(javaDependencies);
 
+// The version should be coherent with the one from spring-data-elasticsearch project
+const ELATICSEARCH_TAG = '7.17.4';
+const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
+
+/**
+ * Manually updated docker containers
+ */
 const dockerContainers = {
-  keycloak: 'quay.io/keycloak/keycloak:19.0.3',
-  postgresql: 'postgres:14.5',
+  elasticsearchTag: ELATICSEARCH_TAG,
+  elasticsearchImage: ELATICSEARCH_IMAGE,
+  elasticsearch: `${ELATICSEARCH_IMAGE}:${ELATICSEARCH_TAG}`,
 };
 Object.freeze(dockerContainers);
 
@@ -51,7 +61,6 @@ const SPRING_BOOT_VERSION = '2.7.3';
 const HIBERNATE_VERSION = '5.6.10.Final';
 const JACOCO_VERSION = '0.8.8';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.3';
-const JIB_VERSION = '3.2.1';
 
 // const DOCKER_JHIPSTER_REGISTRY = 'ghcr.io/jhipster/jhipster-registry:main';
 const DOCKER_JHIPSTER_REGISTRY_VERSION = 'v7.4.0';
@@ -80,10 +89,6 @@ const DOCKER_MEMCACHED_VERSION = '1.6.16-alpine';
 const DOCKER_MEMCACHED = `memcached:${DOCKER_MEMCACHED_VERSION}`;
 const DOCKER_REDIS_VERSION = '6.2.7';
 const DOCKER_REDIS = `redis:${DOCKER_REDIS_VERSION}`;
-const DOCKER_ELASTICSEARCH_CONTAINER = 'docker.elastic.co/elasticsearch/elasticsearch';
-// TODO V8 Rename ELASTICSEARCH_VERSION to DOCKER_ELASTICSEARCH_VERSION
-const ELASTICSEARCH_VERSION = '7.17.4'; // The version should be coherent with the one from spring-data-elasticsearch project
-const DOCKER_ELASTICSEARCH = `${DOCKER_ELASTICSEARCH_CONTAINER}:${ELASTICSEARCH_VERSION}`;
 // TODO V8 Rename KAFKA_VERSION to DOCKER_KAFKA_VERSION
 const KAFKA_VERSION = '7.2.1';
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
@@ -410,7 +415,6 @@ const constants = {
   JHIPSTER_DEPENDENCIES_VERSION,
   SPRING_BOOT_VERSION,
   HIBERNATE_VERSION,
-  JIB_VERSION,
   JACOCO_VERSION,
   JACKSON_DATABIND_NULLABLE_VERSION,
 
@@ -435,9 +439,6 @@ const constants = {
   DOCKER_HAZELCAST_MANAGEMENT_CENTER,
   DOCKER_MEMCACHED,
   DOCKER_REDIS,
-  DOCKER_ELASTICSEARCH,
-  DOCKER_ELASTICSEARCH_CONTAINER,
-  ELASTICSEARCH_VERSION,
   DOCKER_KAFKA,
   KAFKA_VERSION,
   DOCKER_ZOOKEEPER,

@@ -102,7 +102,7 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
-   * Convert dependencies to placeholder if needed
+   * Shallow clone or convert dependencies to placeholder if needed.
    *
    * @param {Record<string,string>} map
    * @param {(value: string) => string} [valuePlaceholder]
@@ -112,7 +112,9 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     if (process.env.VERSION_PLACEHOLDERS === 'true') {
       return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
     }
-    return map;
+    return {
+      ...map,
+    };
   }
 
   /**
