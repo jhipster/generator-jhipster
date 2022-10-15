@@ -55,13 +55,23 @@ eureka:
       defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
-<%_ if (searchEngineElasticsearch) { _%>
+<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice || searchEngineElasticsearch) { _%>
 management:
+  <%_ if (searchEngineElasticsearch) { _%>
   health:
     elasticsearch:
       enabled: false
-
+  <%_ } _%>
+  <%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
+  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    sampling:
+      probability: 1.0 # report 100% of traces
+  <%_ } _%>
 <%_ } _%>
+
 <%_ if (databaseTypeNeo4j) { _%>
 org:
   neo4j:
@@ -241,22 +251,6 @@ spring:
 <%_ } _%>
   thymeleaf:
     cache: false
-<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
-  sleuth:
-    # https://github.com/spring-projects/spring-framework/issues/27844#issuescomment-1002866885
-    # https://github.com/spring-cloud/spring-cloud-sleuth/issues/2094
-    async:
-      enabled: false
-    enabled: false
-    sampler:
-      probability: 1 # report 100% of traces
-  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
-    base-url: http://localhost:9411
-    enabled: false
-    locator:
-      discovery:
-        enabled: true
-<%_ } _%>
 
 server:
   port: <%= serverPort %>

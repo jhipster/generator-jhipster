@@ -42,6 +42,9 @@ typesafeConfigVersion=1.4.2
 liquibaseHibernate5Version=<%- javaDependencies.liquibase %>
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
+<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
+micrometerTracingVersion=<%- javaDependencies['micrometer-tracing'] %>
+<%_ } _%>
 
 <%_ if (databaseTypeSql && reactive) { _%>
 commonsBeanutilsVersion=1.9.4
