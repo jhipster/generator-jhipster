@@ -373,7 +373,7 @@ class JDLProcessor {
     };
 
     let importer;
-    const { createImporterFromContent, createImporterFromFiles } = await import('../jdl/jdl-importer.js');
+    const { createImporterFromContent, createImporterFromFiles } = await import('../jdl/jdl-importer.ts');
     if (this.jdlContent) {
       importer = createImporterFromContent(this.jdlContent, configuration);
     } else {
