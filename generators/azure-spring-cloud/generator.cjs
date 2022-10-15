@@ -19,7 +19,7 @@
 const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const statistics = require('../statistics.cjs');
 
@@ -34,7 +34,7 @@ const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { GENERATOR_AZURE_SPRING_CLOUD } = require('../generator-list.cjs');
 
 /* eslint-disable consistent-return */
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -60,7 +60,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       sayHello() {
         if (!this.options.fromCli) {
@@ -93,12 +93,12 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       checkBuildTool() {
         if (this.abort) return;
@@ -259,12 +259,12 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       saveConfig() {
         if (this.abort) return;
@@ -276,12 +276,12 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
-  _default() {
+  get default() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_AZURE_SPRING_CLOUD);
@@ -319,12 +319,12 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get [BaseBlueprintGenerator.DEFAULT]() {
+  get [BaseGenerator.DEFAULT]() {
     if (this.delegateToBlueprint) return {};
-    return this._default();
+    return this.default;
   }
 
-  _loading() {
+  get loading() {
     return {
       derivedProperties() {
         this.isPackageNameJhipsterTech = this.packageName !== 'tech.jhipster';
@@ -335,12 +335,12 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get [BaseBlueprintGenerator.LOADING]() {
+  get [BaseGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.loading;
   }
 
-  _writing() {
+  get writing() {
     return {
       copyAzureSpringCloudFiles() {
         if (this.abort) return;
@@ -363,12 +363,12 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 
-  _end() {
+  get end() {
     return {
       gitHubAction() {
         if (this.abort) return;
@@ -489,8 +489,8 @@ for more detailed information.`
     };
   }
 
-  get [BaseBlueprintGenerator.END]() {
+  get [BaseGenerator.END]() {
     if (this.delegateToBlueprint) return {};
-    return this._end();
+    return this.end;
   }
 };

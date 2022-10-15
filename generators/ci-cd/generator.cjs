@@ -20,7 +20,7 @@
 const _ = require('lodash');
 const chalk = require('chalk');
 
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const { defaultConfig } = require('../generator-defaults.cjs');
 const prompts = require('./prompts.cjs');
@@ -31,7 +31,7 @@ const { GENERATOR_CI_CD } = require('../generator-list.cjs');
 
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -85,7 +85,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -133,26 +133,26 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.INITIALIZING]() {
+  get [BaseGenerator.INITIALIZING]() {
     if (this.delegateToBlueprint) return {};
-    return this._initializing();
+    return this.initializing;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _prompting() {
+  get prompting() {
     return {
       askPipeline: prompts.askPipeline,
       askIntegrations: prompts.askIntegrations,
     };
   }
 
-  get [BaseBlueprintGenerator.PROMPTING]() {
+  get [BaseGenerator.PROMPTING]() {
     if (this.delegateToBlueprint) return {};
-    return this._prompting();
+    return this.prompting;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _configuring() {
+  get configuring() {
     return {
       insight() {
         if (this.abort) return;
@@ -175,9 +175,9 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.CONFIGURING]() {
+  get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
-    return this._configuring();
+    return this.configuring;
   }
 
   _loadCiCdConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
@@ -191,7 +191,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
-  _loading() {
+  get loading() {
     return {
       loadSharedConfig() {
         this.loadAppConfig();
@@ -206,13 +206,13 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.LOADING]() {
+  get [BaseGenerator.LOADING]() {
     if (this.delegateToBlueprint) return {};
-    return this._loading();
+    return this.loading;
   }
 
   // Public API method used by the getter and also by Blueprints
-  _writing() {
+  get writing() {
     return {
       writeFiles() {
         if (this.pipeline === 'jenkins') {
@@ -258,8 +258,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     if (this.delegateToBlueprint) return {};
-    return this._writing();
+    return this.writing;
   }
 };

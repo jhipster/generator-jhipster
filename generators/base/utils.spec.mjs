@@ -19,7 +19,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
-import { joinCallbacks } from './base.cjs';
+import { joinCallbacks } from './utils.cjs';
 
 describe('base support', () => {
   describe('joinCallbacks', () => {

@@ -1026,7 +1026,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -1111,7 +1111,7 @@ spec:
             claimName: mspsql-postgresql-pvc
       containers:
         - name: postgres
-          image: postgres:14.5
+          image: \\"POSTGRESQL_VERSION\\"
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -5124,7 +5124,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -5209,7 +5209,7 @@ spec:
             claimName: mspsql-postgresql-pvc
       containers:
         - name: postgres
-          image: postgres:14.5
+          image: \\"POSTGRESQL_VERSION\\"
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -5749,7 +5749,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -11315,7 +11315,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -11400,7 +11400,7 @@ spec:
             claimName: mspsql-postgresql-pvc
       containers:
         - name: postgres
-          image: postgres:14.5
+          image: \\"POSTGRESQL_VERSION\\"
           env:
             - name: POSTGRES_USER
               value: mspsql

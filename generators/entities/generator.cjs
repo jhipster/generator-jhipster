@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseBlueprintGenerator = require('../base/generator-base-blueprint.cjs');
+const BaseGenerator = require('../base/index.cjs');
 
 const { JHIPSTER_CONFIG_DIR } = require('../generator-constants.cjs');
 const { GENERATOR_ENTITIES, GENERATOR_APP } = require('../generator-list.cjs');
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -117,7 +117,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
-  _composing() {
+  get composing() {
     return {
       async composeApp() {
         await this.composeWithJHipster(GENERATOR_APP, { skipPriorities: ['writing', 'postWriting'] });
@@ -125,8 +125,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get [BaseBlueprintGenerator.COMPOSING]() {
+  get [BaseGenerator.COMPOSING]() {
     if (this.delegateToBlueprint) return {};
-    return this._composing();
+    return this.composing;
   }
 };

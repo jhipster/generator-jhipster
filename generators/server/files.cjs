@@ -1822,8 +1822,11 @@ const serverFiles = mergeSections(
   addSectionsCondition(cassandraFiles, context => context.databaseTypeCassandra)
 );
 
+/**
+ * @this {import('./index.cjs')}
+ */
 function writeFiles() {
-  return {
+  return this.asWritingTaskGroup({
     setUp({ application }) {
       application.javaDir = `${application.packageFolder}/`;
       application.testDir = `${application.packageFolder}/`;
@@ -1842,7 +1845,7 @@ function writeFiles() {
       );
     },
 
-    writeFiles({ application }) {
+    async writeFiles({ application }) {
       const recreateInitialChangelog = this.configOptions.recreateInitialChangelog;
       return this.writeFiles({
         sections: serverFiles,
@@ -1852,9 +1855,9 @@ function writeFiles() {
         },
       });
     },
-    ...writeCouchbaseFiles(),
-    ...writeSqlFiles(),
-  };
+    ...writeCouchbaseFiles.call(this),
+    ...writeSqlFiles.call(this),
+  });
 }
 
 module.exports = {

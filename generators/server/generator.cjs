@@ -209,13 +209,13 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   get composing() {
     return this.asComposingTaskGroup({
       async composeCommon() {
-        await this.composeWithJHipster(GENERATOR_COMMON, true);
+        await this.composeWithJHipster(GENERATOR_COMMON);
       },
 
       async composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (this.jhipsterConfig.enableTranslation === false) return;
-        await this.composeWithJHipster(GENERATOR_LANGUAGES, true);
+        await this.composeWithJHipster(GENERATOR_LANGUAGES);
       },
     });
   }
@@ -261,7 +261,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         application.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
         application.DOCKER_MYSQL = constants.DOCKER_MYSQL;
         application.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-        application.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
         application.DOCKER_MONGODB = constants.DOCKER_MONGODB;
         application.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
         application.DOCKER_MSSQL = constants.DOCKER_MSSQL;
@@ -270,11 +269,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         application.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
         application.DOCKER_REDIS = constants.DOCKER_REDIS;
         application.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-        application.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
-        application.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
-        application.ELASTICSEARCH_VERSION = constants.ELASTICSEARCH_VERSION;
-        application.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
-        application.DOCKER_KEYCLOAK_VERSION = constants.DOCKER_KEYCLOAK_VERSION;
         application.DOCKER_KAFKA = constants.DOCKER_KAFKA;
         application.KAFKA_VERSION = constants.KAFKA_VERSION;
         application.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
@@ -284,7 +278,6 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
         application.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
         application.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
         application.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-        application.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
         application.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
 
         application.JAVA_VERSION = constants.JAVA_VERSION;
@@ -296,13 +289,9 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
 
         application.JHIPSTER_DEPENDENCIES_VERSION = application.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         application.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
-        application.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
-        // TODO v8: Remove this constant
-        application.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
         application.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
         application.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
         application.JACOCO_VERSION = constants.JACOCO_VERSION;
-        application.JIB_VERSION = constants.JIB_VERSION;
 
         application.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
         application.VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
@@ -508,7 +497,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
   }
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
-    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this.configuringEachEntity);
+    return this.asConfiguringEachEntityTaskGroup(this.delegateToBlueprint ? {} : this.configuringEachEntity);
   }
 
   /** @inheritdoc */
@@ -552,7 +541,7 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
       resetFakeDataSeed() {
         this.resetEntitiesFakeData('server');
       },
-      ...writeFiles(),
+      ...writeFiles.call(this),
     });
   }
 
@@ -586,6 +575,79 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      async dockerServices({ application }) {
+        const { createDockerComposeFile, createDockerExtendedServices } = await import('../base-docker/utils.mjs');
+
+        const dockerFile = createDockerComposeFile(application.lowercaseBaseName);
+        this.writeDestination(`${application.dockerServicesDir}services.yml`, dockerFile);
+
+        if (application.databaseTypeCouchbase) {
+          const extendedCouchbaseServices = createDockerExtendedServices({ serviceName: application.databaseType });
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCouchbaseServices);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCouchbaseServices);
+        }
+
+        if (application.databaseTypeSql && !application.prodDatabaseTypeOracle) {
+          const extendedDatabaseServices = createDockerExtendedServices({ serviceName: application.prodDatabaseType });
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedDatabaseServices);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedDatabaseServices);
+        }
+
+        if (application.databaseTypeCassandra) {
+          const extendedCassandraServices = createDockerExtendedServices(
+            { serviceName: 'cassandra' },
+            { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' }
+          );
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCassandraServices);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCassandraServices);
+        } else if (!application.databaseTypeSql && !application.databaseTypeCouchbase) {
+          const extendedDatabaseServices = createDockerExtendedServices({ serviceName: application.databaseType });
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedDatabaseServices);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedDatabaseServices);
+        }
+        if (application.searchEngineElasticsearch) {
+          const extendedElasticsearchServices = createDockerExtendedServices({ serviceName: application.searchEngine });
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedElasticsearchServices);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedElasticsearchServices);
+        }
+        if (application.cacheProviderMemcached || application.cacheProviderRedis) {
+          const extendedCacheProviderServices = createDockerExtendedServices({ serviceName: application.cacheProvider });
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCacheProviderServices);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCacheProviderServices);
+        }
+        if (application.authenticationTypeOauth2) {
+          const extendedOauth2Services = createDockerExtendedServices({ serviceName: 'keycloak' });
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedOauth2Services);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedOauth2Services);
+        }
+        if (application.serviceDiscoveryEureka) {
+          const extendedEurekaServices = createDockerExtendedServices({
+            serviceName: 'jhipster-registry',
+            additionalConfig: {
+              environment: [application.authenticationTypeOauth2 ? 'JHIPSTER_SLEEP=40' : 'JHIPSTER_SLEEP=20'],
+            },
+          });
+
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedEurekaServices);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedEurekaServices);
+        }
+        if (application.serviceDiscoveryConsul) {
+          const extendedConsulServices = createDockerExtendedServices(
+            { serviceName: 'consul' },
+            { serviceFile: './consul.yml', serviceName: 'consul-config-loader' }
+          );
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedConsulServices);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedConsulServices);
+        }
+        if (application.messageBrokerKafka) {
+          const extendedKafkaServices = createDockerExtendedServices(
+            { serviceName: 'kafka' },
+            { serviceFile: './kafka.yml', serviceName: 'zookeeper' }
+          );
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedKafkaServices);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedKafkaServices);
+        }
+      },
       packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
@@ -688,9 +750,9 @@ module.exports = class JHipsterServerGenerator extends BaseApplicationGenerator 
           'predocker:others:up': dockerBuild.join(' && '),
           'docker:others:up': dockerOthersUp.join(' && '),
           'docker:others:down': dockerOthersDown.join(' && '),
-          'ci:e2e:prepare:docker': 'npm run docker:db:up && npm run docker:others:up && docker ps -a',
+          'ci:e2e:prepare:docker': 'docker compose -f src/main/docker/services.yml up -d && docker ps -a',
           'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',
-          'ci:e2e:teardown:docker': 'npm run docker:db:down --if-present && npm run docker:others:down && docker ps -a',
+          'ci:e2e:teardown:docker': 'docker compose -f src/main/docker/services.yml down -v && docker ps -a',
           'ci:e2e:teardown': 'npm run ci:e2e:teardown:docker',
         });
       },

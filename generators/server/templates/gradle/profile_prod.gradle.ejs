@@ -57,9 +57,9 @@ dependencies {
     <%_ } _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
     testImplementation "org.testcontainers:mssqlserver"
-    implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
+    implementation "org.liquibase.ext:liquibase-mssql:<%- javaDependencies.liquibase %>"
     liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
-    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
+    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%- javaDependencies.liquibase %>"
   <%_ } _%>
   <%_ if (prodDatabaseTypeOracle) { _%>
     implementation "com.oracle.database.jdbc:ojdbc8"

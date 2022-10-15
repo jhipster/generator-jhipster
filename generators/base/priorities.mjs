@@ -16,4 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.cjs';
+import priorities from './priorities.cjs';
+
+const { PRIORITY_PREFIX, QUEUE_PREFIX, PRIORITY_NAMES, PRIORITY_NAMES_LIST, QUEUES, CUSTOM_PRIORITIES } = priorities;
+
+export { PRIORITY_PREFIX, QUEUE_PREFIX, PRIORITY_NAMES, PRIORITY_NAMES_LIST, QUEUES, CUSTOM_PRIORITIES };

@@ -16,9 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const _ = require('lodash');
+
 const BaseGenerator = require('../base/index.cjs');
-const { CUSTOM_PRIORITIES_ENTITIES, PRIORITY_NAMES, QUEUES, PRIORITY_PREFIX } = require('../../lib/constants/priorities.cjs');
+const { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } = require('./priorities.cjs');
 const SharedData = require('../../lib/support/shared-data.cjs');
+const { JHIPSTER_CONFIG_DIR } = require('../generator-constants.cjs');
 
 const {
   LOADING,
@@ -26,9 +29,7 @@ const {
   CONFIGURING_EACH_ENTITY,
   LOADING_ENTITIES,
   PREPARING_EACH_ENTITY,
-  PREPARING_FIELDS,
   PREPARING_EACH_ENTITY_FIELD,
-  PREPARING_RELATIONSHIPS,
   PREPARING_EACH_ENTITY_RELATIONSHIP,
   POST_PREPARING_EACH_ENTITY,
   DEFAULT,
@@ -82,19 +83,37 @@ class BaseApplicationGenerator extends BaseGenerator {
   #sharedData;
 
   constructor(args, options, features) {
-    super(args, options, { priorityArgs: true, taskPrefix: PRIORITY_PREFIX, ...features });
+    super(args, options, features);
 
     if (this.options.help) {
       return;
     }
 
-    this.registerPriorities(CUSTOM_PRIORITIES_ENTITIES);
+    this.registerPriorities(CUSTOM_PRIORITIES);
 
     /* Add tasks allowing entities priorities to match normal priorities pattern */
     this.on('queueOwnTasks', () => {
       this.debug('Queueing entity tasks');
       this.queueEntityTasks();
     });
+
+    if (this.options.applicationWithEntities) {
+      // Write new definitions to memfs
+      this.config.set({
+        ...this.config.getAll(),
+        ...this.options.applicationWithEntities.config,
+      });
+      if (this.options.applicationWithEntities.entities) {
+        const entities = this.options.applicationWithEntities.entities.map(entity => {
+          const entityName = _.upperFirst(entity.name);
+          const file = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
+          this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
+          return entityName;
+        });
+        this.jhipsterConfig.entities = [...new Set((this.jhipsterConfig.entities || []).concat(entities))];
+      }
+      delete this.options.applicationWithEntities;
+    }
   }
 
   /**
@@ -108,7 +127,7 @@ class BaseApplicationGenerator extends BaseGenerator {
    * @returns {import('./tasks.js').WritingTaskGroup<this, ApplicationType>}
    */
   get writing() {
-    return this.asWritingTaskGroup(this._writing());
+    return this.asWritingTaskGroup({});
   }
 
   /**
@@ -431,9 +450,7 @@ class BaseApplicationGenerator extends BaseGenerator {
         CONFIGURING_EACH_ENTITY,
         LOADING_ENTITIES,
         PREPARING_EACH_ENTITY,
-        PREPARING_FIELDS,
         PREPARING_EACH_ENTITY_FIELD,
-        PREPARING_RELATIONSHIPS,
         PREPARING_EACH_ENTITY_RELATIONSHIP,
         POST_PREPARING_EACH_ENTITY,
 

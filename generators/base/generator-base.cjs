@@ -43,7 +43,7 @@ const defaultApplicationOptions = require('../../jdl/jhipster/default-applicatio
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const { databaseData } = require('../sql-constants.cjs');
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
-const { joinCallbacks } = require('../../lib/support/base.cjs');
+const { joinCallbacks } = require('./utils.cjs');
 
 const {
   JHIPSTER_CONFIG_DIR,
@@ -71,7 +71,7 @@ const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types')
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { CUSTOM_PRIORITIES } = require('../../lib/constants/priorities.cjs');
+const { CUSTOM_PRIORITIES } = require('./priorities.cjs');
 const cacheTypes = require('../../jdl/jhipster/cache-types');
 const serviceDiscoveryTypes = require('../../jdl/jhipster/service-discovery-types');
 const searchEngineTypes = require('../../jdl/jhipster/search-engine-types');
@@ -106,6 +106,11 @@ class JHipsterBaseGenerator extends PrivateBase {
 
   sbsBlueprint;
 
+  /**
+   * @param {string | string[]} args
+   * @param {import('./base/api.cjs').JHipsterGeneratorOptions} options
+   * @param {import('./base/api.cjs').JHipsterGeneratorFeatures} features
+   */
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -157,9 +162,6 @@ class JHipsterBaseGenerator extends PrivateBase {
     // TODO v8 rename to existingProject.
     this.existingModularProject = this.configOptions.existingProject;
 
-    /* Register generator for compose once */
-    this.registerComposedGenerator(this.options.namespace);
-
     this.loadRuntimeOptions();
     this.loadStoredAppOptions();
 
@@ -173,13 +175,16 @@ class JHipsterBaseGenerator extends PrivateBase {
         this.env.queueGenerator(generator, true);
       }
       */
-      this.composeWithJHipster(GENERATOR_BOOTSTRAP, { ...this.options, configOptions: this.configOptions }, true);
+      this.composeWithJHipster(GENERATOR_BOOTSTRAP, { ...this.options, configOptions: this.configOptions });
     }
   }
 
   /**
-   * @private
+   * @protected
    * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
+   *
+   * @param {...string} args
+   * @returns {string}
    */
   jhipsterTemplatePath(...args) {
     try {
@@ -1305,105 +1310,6 @@ class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Copy templates with all the custom logic applied according to the type.
-   *
-   * @param {string} source - path of the source file to copy from
-   * @param {string} dest - path of the destination file to copy to
-   * @param {string} action - type of the action to be performed on the template file, i.e: stripHtml | stripJs | template | copy
-   * @param {object} generator - context that can be used as the generator instance or data to process template
-   * @param {object} opt - options that can be passed to template method
-   * @param {boolean} template - flag to use template method instead of copy method
-   */
-  copyTemplate(source, dest, action, generator, opt = {}, template) {
-    const _this = generator || this;
-    let regex;
-    switch (action) {
-      case 'stripHtml':
-        regex = new RegExp(
-          [
-            /([\s\n\r]+[a-z][a-zA-Z]*Translate="[a-zA-Z0-9 +{}'_!?.]+")/, // jhiTranslate
-            /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|\(|\)|\||-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
-            /([\s\n\r]+translate-compile)/, // translate-compile
-            /([\s\n\r]+translate-value-max="[0-9{}()|]*")/, // translate-value-max
-          ]
-            .map(r => r.source)
-            .join('|'),
-          'g'
-        );
-
-        jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
-        break;
-      case 'stripJs':
-        jhipsterUtils.copyWebResource(source, dest, null, 'js', _this, opt, template);
-        break;
-      case 'stripJsx':
-        regex = new RegExp(
-          [
-            /(import { ?Translate, ?translate ?} from 'react-jhipster';?)/, // Translate imports
-            /(import { ?translate, ?Translate ?} from 'react-jhipster';?)/, // translate imports
-            /( Translate,|, ?Translate|import { ?Translate ?} from 'react-jhipster';?)/, // Translate import
-            /( translate,|, ?translate|import { ?translate ?} from 'react-jhipster';?)/, // translate import
-            /<Translate(\s*)?((component="[a-z]+")(\s*)|(contentKey=("[a-zA-Z0-9.\-_]+"|\{.*\}))(\s*)|(interpolate=\{.*\})(\s*))*(\s*)\/?>|<\/Translate>/, // Translate component tag
-          ]
-            .map(r => r.source)
-            .join('|'),
-          'g'
-        );
-
-        jhipsterUtils.copyWebResource(source, dest, regex, 'jsx', _this, opt, template);
-        break;
-      case 'copy':
-        _this.copy(source, dest);
-        break;
-      default:
-        _this.template(source, dest, _this, opt);
-    }
-  }
-
-  /**
-   * @deprecated
-   * Copy html templates after stripping translation keys when translation is disabled.
-   *
-   * @param {string} source - path of the source file to copy from
-   * @param {string} dest - path of the destination file to copy to
-   * @param {object} generator - context that can be used as the generator instance or data to process template
-   * @param {object} opt - options that can be passed to template method
-   * @param {boolean} template - flag to use template method instead of copy
-   */
-  processHtml(source, dest, generator, opt, template) {
-    this.copyTemplate(source, dest, 'stripHtml', generator, opt, template);
-  }
-
-  /**
-   * @deprecated
-   * Copy Js templates after stripping translation keys when translation is disabled.
-   *
-   * @param {string} source - path of the source file to copy from
-   * @param {string} dest - path of the destination file to copy to
-   * @param {object} generator - context that can be used as the generator instance or data to process template
-   * @param {object} opt - options that can be passed to template method
-   * @param {boolean} template - flag to use template method instead of copy
-   */
-  processJs(source, dest, generator, opt, template) {
-    this.copyTemplate(source, dest, 'stripJs', generator, opt, template);
-  }
-
-  /**
-   * @deprecated
-   * Copy JSX templates after stripping translation keys when translation is disabled.
-   *
-   * @param {string} source - path of the source file to copy from
-   * @param {string} dest - path of the destination file to copy to
-   * @param {object} generator - context that can be used as the generator instance or data to process template
-   * @param {object} opt - options that can be passed to template method
-   * @param {boolean} template - flag to use template method instead of copy
-   */
-  processJsx(source, dest, generator, opt, template) {
-    this.copyTemplate(source, dest, 'stripJsx', generator, opt, template);
-  }
-
-  /**
-   * @private
    * Rewrite the specified file with provided content at the needle location
    *
    * @param {string} filePath - path of the source file to rewrite
@@ -1414,34 +1320,6 @@ class JHipsterBaseGenerator extends PrivateBase {
   rewriteFile(filePath, needle, content) {
     const rewriteFileModel = this.needleApi.base.generateFileModel(filePath, needle, content);
     return this.needleApi.base.addBlockContentToFile(rewriteFileModel);
-  }
-
-  /**
-   * @private
-   * Replace the pattern/regex with provided content
-   *
-   * @param {string} filePath - path of the source file to rewrite
-   * @param {string} pattern - pattern to look for where content will be replaced
-   * @param {string} content - content to be written
-   * @param {string} regex - true if pattern is regex
-   * @returns {boolean} true if the body has changed.
-   */
-  replaceContent(filePath, pattern, content, regex) {
-    try {
-      return jhipsterUtils.replaceContent(
-        {
-          file: filePath,
-          pattern,
-          content,
-          regex,
-        },
-        this
-      );
-    } catch (e) {
-      this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
-      this.debug('Error:', e);
-      return false;
-    }
   }
 
   /**
@@ -1486,25 +1364,6 @@ class JHipsterBaseGenerator extends PrivateBase {
       }
     } catch (err) {
       this.log(`\n${chalk.bold.red('Could not add jhipster module configuration')}`);
-      this.debug('Error:', err);
-    }
-  }
-
-  /**
-   * @private
-   * Add configuration to Entity.json files
-   *
-   * @param {string} file - configuration file name for the entity
-   * @param {string} key - key to be added or updated
-   * @param {object} value - value to be added
-   */
-  updateEntityConfig(file, key, value) {
-    try {
-      const entityJson = this.fs.readJSON(file);
-      entityJson[key] = value;
-      this.fs.writeJSON(file, entityJson, null, 4);
-    } catch (err) {
-      this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
       this.debug('Error:', err);
     }
   }
@@ -1560,52 +1419,19 @@ class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @deprecated
-   * Register the composed generator for compose once.
-   * @param {string} namespace - jhipster generator.
-   * @return {boolean} false if already composed
-   */
-  registerComposedGenerator(namespace) {
-    this.configOptions.composedWith = this.configOptions.composedWith || [];
-    if (this.configOptions.composedWith.includes(namespace)) {
-      return false;
-    }
-    this.configOptions.composedWith.push(namespace);
-    return true;
-  }
-
-  /**
    * Compose with a jhipster generator using default jhipster config.
    * @param {string} generator - jhipster generator.
-   * @param {object} args - args to pass
+   * @param {object} [args] - args to pass
    * @param {object} [options] - options to pass
-   * @param {boolean} [once] - compose once with the generator
+   * @param {object} [composeOptions] - compose options
    * @return {object} the composed generator
    */
-  composeWithJHipster(generator, args, options, once = false) {
+  composeWithJHipster(generator, args, options, { immediately = false } = {}) {
     assert(typeof generator === 'string', 'generator should to be a string');
     const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
-    let immediately = false;
-    if (typeof once === 'object') {
-      immediately = once.immediately;
-      once = false;
-    }
-    if (typeof args === 'boolean') {
-      once = args;
-      args = [];
-      options = {};
-    } else if (!Array.isArray(args)) {
-      once = options;
+    if (!Array.isArray(args)) {
       options = args;
       args = [];
-    } else if (typeof options === 'boolean') {
-      once = options;
-      options = {};
-    }
-    if (once) {
-      if (!this.registerComposedGenerator(namespace)) {
-        return undefined;
-      }
     }
 
     if (this.env.get(namespace)) {
@@ -1733,21 +1559,6 @@ class JHipsterBaseGenerator extends PrivateBase {
       .sort(isBefore);
     this.jhipsterConfig.entities = entities.map(({ name }) => name);
     return entities;
-  }
-
-  /**
-   * @deprecated
-   * Copy i18 files for given language
-   *
-   * @param {object} generator - context that can be used as the generator instance or data to process template
-   * @param {string} webappDir - webapp directory path
-   * @param {string} fileToCopy - file name to copy
-   * @param {string} lang - language for which file needs to be copied
-   */
-  copyI18nFilesByName(generator, webappDir, fileToCopy, lang) {
-    const _this = generator || this;
-    const prefix = this.fetchFromInstalledJHipster('languages/templates');
-    _this.copy(`${prefix}/${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
   }
 
   /**
@@ -2260,7 +2071,7 @@ class JHipsterBaseGenerator extends PrivateBase {
    * write the given files using provided options.
    *
    * @template DataType
-   * @param {import('./base/api.js').WriteFileOptions<this, DataType>} options
+   * @param {import('./api.cjs').WriteFileOptions<this, DataType>} options
    * @return {Promise<string[]>}
    */
   async writeFiles(options) {
@@ -2581,23 +2392,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     // Parse options only once.
     if (this.configOptions.optionsParsed) return;
     this.configOptions.optionsParsed = true;
-
-    // Write new definitions to memfs
-    if (options.applicationWithEntities) {
-      this.config.set({
-        ...this.config.getAll(),
-        ...options.applicationWithEntities.config,
-      });
-      if (options.applicationWithEntities.entities) {
-        const entities = options.applicationWithEntities.entities.map(entity => {
-          const entityName = _.upperFirst(entity.name);
-          const file = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
-          this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
-          return entityName;
-        });
-        this.jhipsterConfig.entities = [...new Set((this.jhipsterConfig.entities || []).concat(entities))];
-      }
-    }
 
     // Load stored options
     if (options.withGeneratedFlag !== undefined) {
@@ -3091,7 +2885,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   /**
    * @param {Object} config - config to load config from
-   * @param {import('./bootstrap-application-base/types.js').PlatformApplication} dest - destination context to use default is context
+   * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
@@ -3101,7 +2895,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   /**
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
-   * @param {import('./bootstrap-application-base/types.js').PlatformApplication} dest - destination context to use default is context
+   * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
   loadDerivedPlatformConfig(dest = this) {
     dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
@@ -3146,23 +2940,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Construct the entity name by appending the entity suffix.
-   * @param {String} name entity name
-   */
-  asEntity(name) {
-    return name + (this.entitySuffix || this.jhipsterConfig.entitySuffix || '');
-  }
-
-  /**
-   * @private
-   * Construct the entity's dto name by appending the dto suffix.
-   * @param {String} name entity name
-   */
-  asDto(name, application) {
-    return name + (application.dtoSuffix ?? '');
-  }
-
-  /**
    * @private
    */
   get needleApi() {
@@ -3186,10 +2963,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
   }
 
-  /**
-   * @private
-   * Get default config based on applicationType
-   */
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
     return {
       ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
@@ -3197,9 +2970,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     };
   }
 
-  /**
-   * @private
-   */
   setConfigDefaults(defaults = this.jhipsterDefaults) {
     const jhipsterVersion = packagejs.version;
     const baseName = this.getDefaultAppName();
@@ -3319,7 +3089,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./base/api').JHipsterOptions} [options] - Object containing options.
+   * @param {import('./base/api.cjs').JHipsterOptions} [options] - Object containing options.
    */
   jhipsterOptions(options = {}) {
     options = _.cloneDeep(options);
@@ -3365,8 +3135,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * Edit file content
    * @param {string} file
-   * @param {...import('./base/api.js').EditFileCallback} transformCallbacks
-   * @returns {import('./base/api.js').CascatedEditFileCallback}
+   * @param {...import('./api.cjs').EditFileCallback} transformCallbacks
+   * @returns {import('./api.cjs').CascatedEditFileCallback}
    */
   editFile(file, ...transformCallbacks) {
     let filePath = this.destinationPath(file);
@@ -3384,6 +3154,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       }
       // allow to edit non existing files
       content = '';
+    }
+    if (isWin32 && content.match(/\r\n/)) {
+      transformCallbacks = [content => content.replace(/\r\n/g, '\n')].concat(transformCallbacks, content =>
+        content.replace(/\n/g, '\r\n')
+      );
     }
 
     const writeCallback = (...callbacks) => {

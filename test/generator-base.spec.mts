@@ -5,7 +5,7 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import Environment from 'yeoman-environment';
 
-import Base from '../generators/base/generator-base.cjs';
+import Base from '../generators/base/index.cjs';
 import { testInTempDir, revertTempDir } from './utils/utils.mjs';
 import liquibaseUtils from '../utils/liquibase.cjs';
 import databaseTypes from '../jdl/jhipster/database-types';
@@ -611,12 +611,9 @@ describe('Generator Base', () => {
       'composing',
       'loading',
       'preparing',
-      'preparingFields',
-      'preparingRelationships',
       'default',
       'writing',
       'postWriting',
-      'preConflicts',
       'install',
       'end',
     ];
@@ -627,7 +624,7 @@ describe('Generator Base', () => {
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const mockBlueprintSubGen: any = class extends Base {
-        get initializing() {
+        get [Base.INITIALIZING]() {
           return {
             mocked() {
               mockedPriorities.initializing();
@@ -635,7 +632,7 @@ describe('Generator Base', () => {
           };
         }
 
-        get prompting() {
+        get [Base.PROMPTING]() {
           return {
             mocked() {
               mockedPriorities.prompting();
@@ -643,7 +640,7 @@ describe('Generator Base', () => {
           };
         }
 
-        get configuring() {
+        get [Base.CONFIGURING]() {
           return {
             mocked() {
               mockedPriorities.configuring();
@@ -651,7 +648,7 @@ describe('Generator Base', () => {
           };
         }
 
-        get composing() {
+        get [Base.COMPOSING]() {
           return {
             mocked() {
               mockedPriorities.composing();
@@ -659,7 +656,7 @@ describe('Generator Base', () => {
           };
         }
 
-        get loading() {
+        get [Base.LOADING]() {
           return {
             mocked() {
               mockedPriorities.loading();
@@ -667,7 +664,7 @@ describe('Generator Base', () => {
           };
         }
 
-        get preparing() {
+        get [Base.PREPARING]() {
           return {
             mocked() {
               mockedPriorities.preparing();
@@ -675,23 +672,7 @@ describe('Generator Base', () => {
           };
         }
 
-        get preparingFields() {
-          return {
-            mocked() {
-              mockedPriorities.preparingFields();
-            },
-          };
-        }
-
-        get preparingRelationships() {
-          return {
-            mocked() {
-              mockedPriorities.preparingRelationships();
-            },
-          };
-        }
-
-        get default() {
+        get [Base.DEFAULT]() {
           return {
             mocked() {
               mockedPriorities.default();
@@ -699,7 +680,7 @@ describe('Generator Base', () => {
           };
         }
 
-        get writing() {
+        get [Base.WRITING]() {
           return {
             mocked() {
               mockedPriorities.writing();
@@ -707,7 +688,7 @@ describe('Generator Base', () => {
           };
         }
 
-        get postWriting() {
+        get [Base.POST_WRITING]() {
           return {
             mocked() {
               mockedPriorities.postWriting();
@@ -715,15 +696,7 @@ describe('Generator Base', () => {
           };
         }
 
-        get preConflicts() {
-          return {
-            mocked() {
-              mockedPriorities.preConflicts();
-            },
-          };
-        }
-
-        get install() {
+        get [Base.INSTALL]() {
           return {
             mocked() {
               mockedPriorities.install();
@@ -731,7 +704,7 @@ describe('Generator Base', () => {
           };
         }
 
-        get end() {
+        get [Base.END]() {
           return {
             mocked() {
               mockedPriorities.end();

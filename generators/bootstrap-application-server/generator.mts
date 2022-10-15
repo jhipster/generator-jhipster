@@ -17,14 +17,17 @@
  * limitations under the License.
  */
 import _ from 'lodash';
+
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 import constants from '../generator-constants.cjs';
+import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
 import entityUtils from '../../utils/entity.cjs';
 import type { SpringBootApplication } from './types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.cjs';
 import AuthentitcationTypes from '../../jdl/jhipster/authentication-types.js';
 import FieldTypes from '../../jdl/jhipster/field-types.js';
+import { getDockerfileContainers, getPomVersionProperties } from '../server/index.mjs';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG },
@@ -52,13 +55,29 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadApplication({ application }) {
+      async loadApplication({ application }) {
         this.loadServerConfig(undefined, application);
 
         application.backendType = 'Java';
         application.temporaryDir = application.buildTool === 'gradle' ? 'build/' : 'target/';
         application.buildDir = `${application.temporaryDir}${application.buildTool === 'gradle' ? 'resources/main/' : 'classes/'}`;
         application.clientDistDir = `${application.buildDir}${constants.CLIENT_DIST_DIR}`;
+
+        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
+        application.javaDependencies = this.prepareDependencies(
+          {
+            ...javaDependencies,
+            ...getPomVersionProperties(pomFile),
+          },
+          // Gradle doesn't allows snakeCase
+          value => `'${_.kebabCase(value).toUpperCase()}-VERSION'`
+        );
+
+        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
+        application.dockerContainers = this.prepareDependencies({
+          ...dockerContainers,
+          ...getDockerfileContainers(dockerfile),
+        });
 
         // TODO v8 drop the following variables
         const applicationAsAny = application as any;

@@ -223,8 +223,11 @@ const serverFiles = mergeSections(
   addSectionsCondition(postgresFiles, context => context.devDatabaseTypePostgres || context.prodDatabaseTypePostgres)
 );
 
+/**
+ * @this {import('./index.cjs')}
+ */
 function writeSqlFiles() {
-  return {
+  return this.asWritingTaskGroup({
     async writeSqlFiles({ application }) {
       if (!application.databaseTypeSql) return;
 
@@ -234,7 +237,7 @@ function writeSqlFiles() {
         context: application,
       });
     },
-  };
+  });
 }
 
 module.exports = {

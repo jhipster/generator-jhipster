@@ -80,7 +80,7 @@ enum ProductCategory {
   Laptop, Desktop, Phone, Tablet, Accessory
 }`;
 
-const generatorPath = join(__dirname, '../app/index.cjs');
+const generatorPath = join(__dirname, '../server/index.mjs');
 
 describe('jhipster:app --incremental-changelog', function () {
   this.timeout(45000);

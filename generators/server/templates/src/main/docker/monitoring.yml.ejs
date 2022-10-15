@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+name: <%= baseName.toLowerCase() %>
 services:
-  <%= baseName.toLowerCase() %>-prometheus:
+  prometheus:
     image: <%= DOCKER_PROMETHEUS %>
     volumes:
       - ./prometheus/:/etc/prometheus/
@@ -32,7 +32,7 @@ services:
     # On MacOS, remove next line and replace localhost by host.docker.internal in prometheus/prometheus.yml and
     # grafana/provisioning/datasources/datasource.yml
     network_mode: "host" # to test locally running service
-  <%= baseName.toLowerCase() %>-grafana:
+  grafana:
     image: <%= DOCKER_GRAFANA %>
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/

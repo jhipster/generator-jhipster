@@ -1,6 +1,6 @@
-version: '2'
+name: 'msmysql'
 services:
-    msmysql-mysql:
+    mysql:
         image: mysql:8.0.30
         # volumes:
         #     - ~/volumes/jhipster/msmysql/mysql/:/var/lib/mysql/

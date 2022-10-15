@@ -17,10 +17,10 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+name: <%= baseName.toLowerCase() %>
 services:
-  <%= baseName.toLowerCase() %>-postgresql:
-    image: <%= DOCKER_POSTGRESQL %>
+  postgresql:
+    image: <%- dockerContainers.postgresql %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/postgresql/:/var/lib/postgresql/data/
     environment:
