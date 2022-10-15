@@ -682,7 +682,7 @@ relationship OneToOne {
         entity: jdlApplicationEntitieWithByteTypes,
         bytesFields: true,
         testContent:
-          '1;Integratio;13255;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Laptop;89202',
+          '1;geez;4178;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Laptop;17242',
         contentRequired: true,
       },
       {

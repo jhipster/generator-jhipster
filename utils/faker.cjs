@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const Faker = require('@faker-js/faker/lib');
+const { Faker } = require('@faker-js/faker');
 const Randexp = require('randexp');
 
-const { languageToJavaLanguage } = require('../generators/utils.cjs');
+const { languageToJavaLanguage, stringHashCode } = require('../generators/utils.cjs');
 
 class RandexpWithFaker extends Randexp {
   constructor(regexp, m, faker) {
@@ -42,24 +42,35 @@ class RandexpWithFaker extends Randexp {
  * @param {string} nativeLanguage - native language
  * @returns {object} Faker instance
  */
-function createFaker(nativeLanguage = 'en') {
+async function createFaker(nativeLanguage = 'en') {
   nativeLanguage = languageToJavaLanguage(nativeLanguage);
-  // Fallback language
-  // eslint-disable-next-line global-require
-  const locales = { en: require('@faker-js/faker/lib/locales/en') };
-  if (nativeLanguage !== 'en') {
-    try {
-      // eslint-disable-next-line global-require, import/no-dynamic-require
-      const nativeLanguageLocale = require(`@faker-js/faker/lib/locales/${nativeLanguage}`);
-      locales[nativeLanguage] = nativeLanguageLocale;
-    } catch (error) {
-      // Faker not implemented for the native language, fallback to en.
-      nativeLanguage = 'en';
-    }
+  let nativeFakerInstance;
+  // Faker >=6 doesn't exports locales by itself, it exports a faker instance with the locale.
+  // We need a Faker instance for each entity, to build additional fake instances, use the locale from the exported localized faker instance.
+  // See https://github.com/faker-js/faker/pull/642
+  try {
+    // eslint-disable-next-line import/no-dynamic-require
+    nativeFakerInstance = (await import(`@faker-js/faker/locale/${nativeLanguage}`)).faker;
+  } catch (error) {
+    // Faker not implemented for the native language, fallback to en.
+    // eslint-disable-next-line import/no-unresolved, import/no-dynamic-require
+    nativeFakerInstance = (await import('@faker-js/faker/locale/en')).faker;
   }
-  const faker = new Faker({ locales, locale: nativeLanguage, localeFallback: 'en' });
+
+  const faker = new Faker({
+    locales: nativeFakerInstance.locales,
+    locale: nativeFakerInstance.locale,
+    localeFallback: nativeFakerInstance.localeFallback,
+  });
   faker.createRandexp = (pattern, m) => new RandexpWithFaker(pattern, m, faker);
   return faker;
 }
 
-module.exports = { createFaker };
+async function addFakerToEntity(entityWithConfig, nativeLanguage = 'en') {
+  entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
+  entityWithConfig.resetFakerSeed = (suffix = '') =>
+    entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
+  entityWithConfig.resetFakerSeed();
+}
+
+module.exports = { createFaker, addFakerToEntity };

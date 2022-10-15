@@ -76,7 +76,7 @@
     "watch": "tsc --watch"
   },
   "dependencies": {
-    "@faker-js/faker": "5.5.3",
+    "@faker-js/faker": "7.6.0",
     "@types/lodash": "4.14.186",
     "@types/yeoman-generator": "5.2.11",
     "@types/yeoman-test": "4.0.3",

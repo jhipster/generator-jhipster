@@ -19,6 +19,9 @@ export type BaseApplication = {
 
   nodePackageManager: string;
   nodeDestinationVersion: string;
+
+  nativeLanguage: string;
+  languages?: string[];
 };
 
 /* ApplicationType Start */

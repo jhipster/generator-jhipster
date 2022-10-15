@@ -159,7 +159,7 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
   } else if (field.fieldType === BYTES && field.fieldTypeBlobContent === TEXT) {
     data = '../fake-data/blob/hipster.txt';
   } else if (field.fieldType === STRING) {
-    data = field.id ? faker.datatype.uuid() : faker.fake(fakeStringTemplateForFieldName(field.columnName));
+    data = field.id ? faker.datatype.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName(field.columnName));
   } else if (field.fieldType === UUID) {
     data = faker.datatype.uuid();
   } else if (field.fieldType === BOOLEAN) {
