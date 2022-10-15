@@ -27,7 +27,7 @@ import userUtils from '../../utils/user.cjs';
 import { DOCKER_DIR, NODE_VERSION } from '../generator-constants.mjs';
 import type { CommonClientServerApplication } from './types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
-import { addFakerToEntity } from '../../utils/faker.cjs';
+import { addFakerToEntity } from './faker.mjs';
 
 const { prepareEntityForTemplates } = entityUtils;
 const { prepareFieldForTemplates } = fieldUtils;

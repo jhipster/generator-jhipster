@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /**
  * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
@@ -16,24 +17,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { Faker } = require('@faker-js/faker');
-const Randexp = require('randexp');
+import { Faker } from '@faker-js/faker';
+import Randexp from 'randexp';
 
-const { languageToJavaLanguage, stringHashCode } = require('../generators/utils.cjs');
+import { languageToJavaLanguage, stringHashCode } from '../utils.cjs';
 
 class RandexpWithFaker extends Randexp {
-  constructor(regexp, m, faker) {
-    super(regexp, m);
+  faker: Faker;
+
+  constructor(regexp: string | RegExp, flags: string | undefined, faker: Faker) {
+    super(regexp, flags);
     this.max = 5;
     this.faker = faker;
     if (this.faker === undefined) {
       throw new Error('Faker is required');
     }
+    // In order to have consistent results with RandExp, the RNG is seeded.
+    this.randInt = (from: number, to: number): number => {
+      return faker.datatype.number({ min: from, max: to });
+    };
   }
+}
 
-  // In order to have consistent results with RandExp, the RNG is seeded.
-  randInt(min, max) {
-    return this.faker.datatype.number({ min, max });
+class FakerWithRandexp extends Faker {
+  createRandexp(regexp: string | RegExp, flags?: string) {
+    return new RandexpWithFaker(regexp, flags, this);
   }
 }
 
@@ -42,7 +50,7 @@ class RandexpWithFaker extends Randexp {
  * @param {string} nativeLanguage - native language
  * @returns {object} Faker instance
  */
-async function createFaker(nativeLanguage = 'en') {
+export async function createFaker(nativeLanguage = 'en') {
   nativeLanguage = languageToJavaLanguage(nativeLanguage);
   let nativeFakerInstance;
   // Faker >=6 doesn't exports locales by itself, it exports a faker instance with the locale.
@@ -57,7 +65,7 @@ async function createFaker(nativeLanguage = 'en') {
     nativeFakerInstance = (await import('@faker-js/faker/locale/en')).faker;
   }
 
-  const faker = new Faker({
+  const faker = new FakerWithRandexp({
     locales: nativeFakerInstance.locales,
     locale: nativeFakerInstance.locale,
     localeFallback: nativeFakerInstance.localeFallback,
@@ -66,11 +74,9 @@ async function createFaker(nativeLanguage = 'en') {
   return faker;
 }
 
-async function addFakerToEntity(entityWithConfig, nativeLanguage = 'en') {
+export async function addFakerToEntity(entityWithConfig: any, nativeLanguage = 'en') {
   entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
   entityWithConfig.resetFakerSeed();
 }
-
-module.exports = { createFaker, addFakerToEntity };
