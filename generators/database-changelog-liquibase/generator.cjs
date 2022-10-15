@@ -27,17 +27,13 @@ const { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION 
 
 const TYPE_LONG = CommonDBTypes.LONG;
 
-const constants = require('../generator-constants.cjs');
-
-// TODO v8: Remove this constant
-const { LIQUIBASE_DTD_VERSION } = constants;
 const { prepareFieldForTemplates } = require('../../utils/field.cjs');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship.cjs');
 const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase.cjs');
 
 module.exports = class DatabaseChangelogLiquibase extends BaseApplication {
   constructor(args, options, features) {
-    super(args, options, features);
+    super(args, options, { unique: undefined, ...features });
 
     if (this.options.help) return;
 
@@ -183,11 +179,6 @@ module.exports = class DatabaseChangelogLiquibase extends BaseApplication {
             .map(relationship => prepareRelationshipForTemplates(entity, relationship, this, true))
             .map(relationship => this._prepareRelationshipForTemplates(entity, relationship));
         }
-      },
-      setupConstants() {
-        // Make constants available in templates
-        // TODO v8: Remove this constant
-        this.LIQUIBASE_DTD_VERSION = LIQUIBASE_DTD_VERSION;
       },
     };
   }

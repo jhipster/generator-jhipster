@@ -1,6 +1,6 @@
-version: '2'
+name: 'samplemysql'
 services:
-    samplemysql-mysql:
+    mysql:
         image: mysql:8.0.30
         # volumes:
         #     - ~/volumes/jhipster/sampleMysql/mysql/:/var/lib/mysql/

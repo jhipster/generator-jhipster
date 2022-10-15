@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+name: <%= baseName.toLowerCase() %>
 services:
-  <%= baseName.toLowerCase() %>-cassandra-migration:
+  cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
       - USER=docker-cassandra-migration

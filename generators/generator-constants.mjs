@@ -20,11 +20,17 @@ import constants from './generator-constants.cjs';
 
 export const {
   GENERATOR_JHIPSTER,
+  JHIPSTER_CONFIG_DIR,
+  NODE_VERSION,
+
   SERVER_MAIN_SRC_DIR,
   SERVER_MAIN_RES_DIR,
   SERVER_TEST_SRC_DIR,
   SERVER_TEST_RES_DIR,
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
-  JHIPSTER_CONFIG_DIR,
+  DOCKER_DIR,
+
+  javaDependencies,
+  dockerContainers,
 } = constants;

@@ -104,6 +104,9 @@ Object {
   "src/main/docker/prometheus/prometheus.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -637,6 +640,9 @@ Object {
   "src/main/docker/realm-config/jhipster-realm.json": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -1102,6 +1108,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -1673,6 +1682,9 @@ Object {
   "src/main/docker/prometheus/prometheus.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -2060,6 +2072,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -2562,6 +2577,9 @@ Object {
   "src/main/docker/prometheus/prometheus.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -3012,6 +3030,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -3562,6 +3583,9 @@ Object {
   "src/main/docker/prometheus/prometheus.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -3958,6 +3982,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/realm-config/jhipster-realm.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -4451,6 +4478,9 @@ Object {
   "src/main/docker/realm-config/jhipster-realm.json": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -4922,6 +4952,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -5458,6 +5491,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {

@@ -1,5 +1,5 @@
-import type { OptionalGenericDerivedProperty, GenericDerivedProperty } from '../base/application';
-import type { CommonClientServerApplication } from '../bootstrap-application-base/types';
+import type { OptionalGenericDerivedProperty, GenericDerivedProperty } from '../base/application.js';
+import type { CommonClientServerApplication } from '../bootstrap-application-base/types.js';
 
 declare const CACHE_PROVIDER = 'cacheProvider';
 
@@ -73,6 +73,9 @@ export type SpringBootApplication = CommonClientServerApplication &
     srcTestJavascript: string;
 
     buildDir: string;
+
+    javaDependencies: Record<string, string>;
+    dockerContainers: Record<string, string>;
 
     enableSwaggerCodegen: boolean;
     embeddableLaunchScript: boolean;

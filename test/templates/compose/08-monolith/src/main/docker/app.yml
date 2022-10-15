@@ -1,6 +1,6 @@
-version: '2'
+name: 'samplemysql'
 services:
-    samplemysql-app:
+    app:
         image: samplemysql
         environment:
             - SPRING_PROFILES_ACTIVE=prod,api-docs
@@ -8,7 +8,7 @@ services:
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
         ports:
             - 8080:8080
-    samplemysql-mysql:
+    mysql:
         image: <%= DOCKER_MYSQL %>
         # volumes:
         #     - ~/volumes/jhipster/sampleMysql/mysql/:/var/lib/mysql/

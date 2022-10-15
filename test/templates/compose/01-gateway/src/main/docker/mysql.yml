@@ -1,6 +1,6 @@
-version: '2'
+name: 'jhgate'
 services:
-    jhgate-mysql:
+    mysql:
         image: mysql:8.0.30
         # volumes:
         #     - ~/volumes/jhipster/jhgate/mysql/:/var/lib/mysql/

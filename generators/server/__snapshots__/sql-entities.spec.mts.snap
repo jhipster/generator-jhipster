@@ -1,0 +1,2558 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster sql generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-enableHibernateCache(true)-h2Disk-hazelcast should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-postgresql-enableHibernateCache(false)-h2Disk-infinispan should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityCallback.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/rowmapper/SimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-enableHibernateCache(false)-mysql-caffeine should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-mysql-enableHibernateCache(true)-h2Memory should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Microservice.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/MicroserviceResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/MicroserviceTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mariadb-enableHibernateCache(true)-h2Memory-memcached should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-mssql-enableHibernateCache(false)-h2Memory should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Microservice.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/MicroserviceResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/MicroserviceTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-postgresql-enableHibernateCache(true)-h2Memory-redis should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-oracle-enableHibernateCache(false)-h2Memory should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Microservice.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/MicroserviceResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/MicroserviceTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-enableHibernateCache(false)-postgresql-cacheProvider(no) should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-oracle-enableHibernateCache(true)-oracle should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Microservice.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/MicroserviceResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/MicroserviceTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-enableHibernateCache(false)-mariadb-ehcache should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-mssql-enableHibernateCache(true)-mssql should match generated files snapshot 1`] = `
+Object {
+  ".jhipster/AnotherSimple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/domain/EntityWithCustomIdCallback.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/EntityWithCustomIdSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/custom/web/rest/EntityWithCustomIdResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/AnotherSimple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Microservice.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/AnotherSimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/MicroserviceSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepository.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleRepositoryInternalImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/SimpleSqlHelper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/AnotherSimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/MicroserviceRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/repository/rowmapper/SimpleRowMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/AnotherSimpleService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/service/mapper/EntityMapper.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/MicroserviceResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/AnotherSimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/MicroserviceTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/MicroserviceResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster sql generator samples matrix should match snapshot 1`] = `
+Object {
+  "gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-enableHibernateCache(true)-h2Disk-hazelcast": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "gateway",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "cacheProvider": "hazelcast",
+        "databaseType": "sql",
+        "devDatabaseType": "h2Disk",
+        "dtoSuffix": "Rest",
+        "enableHibernateCache": true,
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "prodDatabaseType": "oracle",
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": true,
+        "skipUserManagement": false,
+        "testFrameworks": Array [],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-postgresql-enableHibernateCache(false)-h2Disk-infinispan": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "gateway",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "cacheProvider": "infinispan",
+        "databaseType": "sql",
+        "devDatabaseType": "h2Disk",
+        "dtoSuffix": "DTO",
+        "enableHibernateCache": false,
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "prodDatabaseType": "postgresql",
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": false,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+        "websocket": true,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-enableHibernateCache(false)-mysql-caffeine": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "cacheProvider": "caffeine",
+        "databaseType": "sql",
+        "devDatabaseType": "mysql",
+        "dtoSuffix": "DTO",
+        "enableHibernateCache": false,
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "prodDatabaseType": "mysql",
+        "reactive": false,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-mysql-enableHibernateCache(true)-h2Memory": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "sql",
+        "devDatabaseType": "h2Memory",
+        "dtoSuffix": "Rest",
+        "enableHibernateCache": true,
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "prodDatabaseType": "mysql",
+        "reactive": true,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": Array [],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mariadb-enableHibernateCache(true)-h2Memory-memcached": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "cacheProvider": "memcached",
+        "databaseType": "sql",
+        "devDatabaseType": "h2Memory",
+        "dtoSuffix": "DTO",
+        "enableHibernateCache": true,
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "prodDatabaseType": "mariadb",
+        "reactive": false,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": false,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+        "websocket": true,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-mssql-enableHibernateCache(false)-h2Memory": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "microservice",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "sql",
+        "devDatabaseType": "h2Memory",
+        "dtoSuffix": "Rest",
+        "enableHibernateCache": false,
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "prodDatabaseType": "mssql",
+        "reactive": true,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": true,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-postgresql-enableHibernateCache(true)-h2Memory-redis": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "cacheProvider": "redis",
+        "databaseType": "sql",
+        "devDatabaseType": "h2Memory",
+        "dtoSuffix": "DTO",
+        "enableHibernateCache": true,
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "prodDatabaseType": "postgresql",
+        "reactive": false,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": Array [],
+        "websocket": true,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-oracle-enableHibernateCache(false)-h2Memory": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "jwt",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "sql",
+        "devDatabaseType": "h2Memory",
+        "dtoSuffix": "Rest",
+        "enableHibernateCache": false,
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "prodDatabaseType": "oracle",
+        "reactive": true,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-enableHibernateCache(false)-postgresql-cacheProvider(no)": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "cacheProvider": "no",
+        "databaseType": "sql",
+        "devDatabaseType": "postgresql",
+        "dtoSuffix": "DTO",
+        "enableHibernateCache": false,
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "prodDatabaseType": "postgresql",
+        "reactive": false,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "testFrameworks": Array [],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-oracle-enableHibernateCache(true)-oracle": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "oauth2",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "sql",
+        "devDatabaseType": "oracle",
+        "dtoSuffix": "Rest",
+        "enableHibernateCache": true,
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "prodDatabaseType": "oracle",
+        "reactive": true,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "eureka",
+        "skipCommitHook": true,
+        "testFrameworks": Array [
+          "cucumber",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-enableHibernateCache(false)-mariadb-ehcache": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "session",
+        "baseName": "jhipster",
+        "buildTool": "maven",
+        "cacheProvider": "ehcache",
+        "databaseType": "sql",
+        "devDatabaseType": "mariadb",
+        "dtoSuffix": "DTO",
+        "enableHibernateCache": false,
+        "enableTranslation": false,
+        "entitySuffix": "Entity",
+        "jhiPrefix": "jhi",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "tech.jhipster",
+        "prodDatabaseType": "mariadb",
+        "reactive": false,
+        "serverSideOptions": Array [],
+        "serviceDiscoveryType": "no",
+        "skipCommitHook": false,
+        "skipUserManagement": false,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+        "websocket": false,
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+  "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-mssql-enableHibernateCache(true)-mssql": Object {
+    "applicationWithEntities": Object {
+      "config": Object {
+        "applicationType": "monolith",
+        "authenticationType": "session",
+        "baseName": "jhipster",
+        "buildTool": "gradle",
+        "databaseType": "sql",
+        "devDatabaseType": "mssql",
+        "dtoSuffix": "Rest",
+        "enableHibernateCache": true,
+        "enableTranslation": true,
+        "entitySuffix": "",
+        "jhiPrefix": "fix",
+        "languages": Array [
+          "fr",
+          "en",
+        ],
+        "nativeLanguage": "en",
+        "packageName": "com.package",
+        "prodDatabaseType": "mssql",
+        "reactive": true,
+        "serverSideOptions": Array [
+          "enableSwaggerCodegen:true",
+        ],
+        "serviceDiscoveryType": "consul",
+        "skipCommitHook": true,
+        "skipUserManagement": true,
+        "testFrameworks": Array [
+          "gatling",
+        ],
+      },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129000200",
+          "clientRootFolder": "test-root",
+          "dto": "mapstruct",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "AnotherSimple",
+          "pagination": "pagination",
+          "service": "serviceImpl",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+      ],
+    },
+    "defaults": true,
+    "skipPriorities": Array [
+      "writing",
+      "postWriting",
+    ],
+  },
+}
+`;

@@ -17,9 +17,10 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+name: <%= baseName.toLowerCase() %>
 services:
-  <%= baseName.toLowerCase() %>-cassandra:
+  cassandra:
+    container_name: <%= baseName.toLowerCase() %>-cassandra
     image: <%= DOCKER_CASSANDRA %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
@@ -31,11 +32,11 @@ services:
       - 127.0.0.1:7199:7199
       - 127.0.0.1:9042:9042
       - 127.0.0.1:9160:9160
-  <%= baseName.toLowerCase() %>-cassandra-node:
+  cassandra-node:
     image: <%= DOCKER_CASSANDRA %>
     environment:
       - CASSANDRA_SEEDS=<%= baseName.toLowerCase() %>-cassandra
-  <%= baseName.toLowerCase() %>-cassandra-migration:
+  cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
       - USER=docker-cassandra-migration
