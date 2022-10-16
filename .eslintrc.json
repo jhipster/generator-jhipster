@@ -23,6 +23,10 @@
       "files": ["**/*.spec.{c,m,}{js,ts}", "test/**/*.{c,m,}{js,ts}"],
       "env": {
         "mocha": true
+      },
+      "rules": {
+        "@typescript-eslint/ban-ts-comment": "off",
+        "import/first": "off"
       }
     },
     {
@@ -62,12 +66,15 @@
     "no-restricted-exports": "off",
     "no-use-before-define": [2, "nofunc"],
     "no-confusing-arrow": "off",
-    "no-unused-vars": [2, { "vars": "local", "args": "none" }],
     "no-multi-str": 2,
     "no-promise-executor-return": "off",
     "no-irregular-whitespace": 2,
+    "@typescript-eslint/no-empty-function": "off",
     "comma-dangle": "off",
     "max-len": "off",
+    // TODO: Fix the duplicate imports issue and then activate the rule again
+    // See: https://github.com/jhipster/generator-jhipster/issues/20015
+    "import/no-duplicates": "off",
     "func-names": "off",
     "class-methods-use-this": "off",
     "no-underscore-dangle": "off",
@@ -77,6 +84,7 @@
     "prefer-destructuring": "off",
     "no-multi-assign": "off",
     "no-param-reassign": "off",
+    "lines-between-class-members": [2, "always", { "exceptAfterSingleLine": true }],
     "import/no-extraneous-dependencies": "off",
     "no-await-in-loop": "off",
     "no-restricted-syntax": [

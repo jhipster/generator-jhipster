@@ -24,15 +24,16 @@ import constants from '../generator-constants.cjs';
 import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
 import entityUtils from '../../utils/entity.cjs';
 import type { SpringBootApplication } from './types.js';
+import fieldTypes from '../../jdl/jhipster/field-types.js';
+import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.cjs';
-import AuthentitcationTypes from '../../jdl/jhipster/authentication-types.js';
-import FieldTypes from '../../jdl/jhipster/field-types.js';
 import { getDockerfileContainers, getPomVersionProperties } from '../server/index.mjs';
 
-const {
-  CommonDBTypes: { LONG: TYPE_LONG },
-} = FieldTypes;
-const { OAUTH2 } = AuthentitcationTypes;
+const { CommonDBTypes } = fieldTypes;
+const { OAUTH2 } = authenticationTypes;
+
+const { LONG: TYPE_LONG } = CommonDBTypes;
+
 const {
   loadRequiredConfigIntoEntity,
   loadRequiredConfigDerivedProperties,
