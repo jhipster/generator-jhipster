@@ -70,7 +70,9 @@ export const <%= entityReactName %> = () => {
   const dispatch = useAppDispatch();
 
   const location = useLocation();
+<%_ if (!paginationInfiniteScroll) { _%>
   const navigate = useNavigate();
+<%_ } _%>
 
 <%_ if (searchEngine) { _%>
   const [search, setSearch] = useState('');
@@ -86,12 +88,11 @@ export const <%= entityReactName %> = () => {
 
   const <%= entityInstance %>List = useAppSelector(state => state.<%= entityReactState %>.entities);
   const loading = useAppSelector(state => state.<%= entityReactState %>.loading);
-<%_ if (!paginationNo) { _%>
+<%_ if (paginationPagination) { _%>
   const totalItems = useAppSelector(state => state.<%= entityReactState %>.totalItems);
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   const links = useAppSelector(state => state.<%= entityReactState %>.links);
-  const entity = useAppSelector(state => state.<%= entityReactState %>.entity);
   const updateSuccess = useAppSelector(state => state.<%= entityReactState %>.updateSuccess);
 <%_ } _%>
 
@@ -430,7 +431,6 @@ _%>
   const relationshipFieldName = relationship.relationshipFieldName;
   const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
   const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
-  const otherEntityStateName = relationship.otherEntityStateName;
   const otherEntityField = relationship.otherEntityField; _%>
   <%_ if (relationship.relationshipManyToOne
   || (relationship.relationshipOneToOne && ownerSide)
