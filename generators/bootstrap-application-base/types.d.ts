@@ -16,6 +16,7 @@ export type BaseApplication = {
 
   skipCommitHook: boolean;
   skipJhipsterDependencies: boolean;
+  fakerSeed?: string;
 
   nodePackageManager: string;
   nodeDestinationVersion: string;
