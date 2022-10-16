@@ -221,7 +221,7 @@ export const files = {
         // util
         'shared/util/date-utils.ts',
         'shared/util/pagination.constants.ts',
-        'shared/util/entity-utils.ts',
+        'shared/util/entity-utils.ts', // TODO can be moved to react-jhipster library
         // components
         'shared/auth/private-route.tsx',
         'shared/error/error-boundary.tsx',
