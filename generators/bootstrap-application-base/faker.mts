@@ -47,8 +47,8 @@ class FakerWithRandexp extends Faker {
 
 /**
  * Create a faker instance.
- * @param {string} nativeLanguage - native language
- * @returns {object} Faker instance
+ * @param nativeLanguage - native language
+ * @returns Faker instance
  */
 export async function createFaker(nativeLanguage = 'en') {
   nativeLanguage = languageToJavaLanguage(nativeLanguage);
