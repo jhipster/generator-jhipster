@@ -27,6 +27,7 @@ on:
     branches-ignore:
       - 'dependabot/**'
       - 'skip_ci*'
+      - 'spring-boot-3.0-m4'
     paths-ignore:
       - 'package*.json'
       - 'generators/*client/templates/react/**'
