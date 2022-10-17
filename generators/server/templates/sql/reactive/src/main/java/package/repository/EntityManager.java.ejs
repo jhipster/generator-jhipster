@@ -207,7 +207,7 @@ public class EntityManager {
                                 .rowsUpdated();
                             })
                         .collectList()
-                        .map((List<Long> updates) -> updates.stream().reduce(Long::sum).orElse(0L)));
+                        .map((List<Long> updates) -> updates.stream().reduce(Long::sum).orElse(0l)));
     }
 
     public Mono<Void> deleteFromLinkTable(LinkTable table, Object entityId) {

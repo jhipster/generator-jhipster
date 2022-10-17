@@ -90,7 +90,7 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 <%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
-import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
+// import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @Configuration
 @EnableWebSecurity
@@ -162,13 +162,13 @@ public class SecurityConfiguration {
         http
             .csrf()
 <%_ if (devDatabaseTypeH2Any) { _%>
-            .ignoringAntMatchers("/h2-console/**")
+                .ignoringAntMatchers("/h2-console/**")
 <%_ } _%>
 <%_ if ((authenticationTypeOauth2 || authenticationTypeSession) && !applicationTypeMicroservice) { _%>
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
 <%_ } else { _%>
-            .disable()
+                .disable()
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
   <%_ if (authenticationTypeJwt) { _%>
@@ -177,27 +177,7 @@ public class SecurityConfiguration {
             .addFilterBefore(corsFilter, CsrfFilter.class)
   <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationTypeSession) { _%>
-  <%_ if (!skipUserManagement) { _%>
-            .rememberMe()
-            .rememberMeServices(rememberMeServices)
-            .rememberMeParameter("remember-me")
-            .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
-  <%_ } _%>
-        .and()
-            .formLogin()
-            .loginProcessingUrl("/api/authentication")
-            .successHandler(ajaxAuthenticationSuccessHandler())
-            .failureHandler(ajaxAuthenticationFailureHandler())
-            .permitAll()
-        .and()
-            .logout()
-            .logoutUrl("/api/logout")
-            .logoutSuccessHandler(ajaxLogoutSuccessHandler())
-            .permitAll()
-<%_ } _%>
 <%_ if (!skipClient) { _%>
-        .and()
             .headers()
                 .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
             .and()
@@ -206,12 +186,33 @@ public class SecurityConfiguration {
                 .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
             .and()
                 .frameOptions().sameOrigin()
+        .and()
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
+  <%_ if (!skipUserManagement) { _%>
+            .rememberMe()
+                .rememberMeServices(rememberMeServices)
+                .rememberMeParameter("remember-me")
+                .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
+        .and()
+  <%_ } _%>
+            .formLogin()
+                .loginProcessingUrl("/api/authentication")
+                .successHandler(ajaxAuthenticationSuccessHandler())
+                .failureHandler(ajaxAuthenticationFailureHandler())
+                .permitAll()
+        .and()
+            .logout()
+                .logoutUrl("/api/logout")
+                .logoutSuccessHandler(ajaxLogoutSuccessHandler())
+                .permitAll()
+        .and()
 <%_ } _%>
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-<%_ } _%>
         .and()
+<%_ } _%>
             .authorizeRequests()
 <%_ if (!applicationTypeMicroservice) { _%>
             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -246,19 +247,18 @@ public class SecurityConfiguration {
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)<%_ if (authenticationTypeSession) { %>;<% } %>
+        .and()
 <%_ if (authenticationTypeJwt) { _%>
   <%_ if (applicationTypeMonolith) { _%>
-        .and()
             .httpBasic()
-  <%_ } _%>
         .and()
+  <%_ } _%>
             .apply(securityConfigurerAdapter());
 <%_ } else if (authenticationTypeOauth2) { _%>
   <%_ if (applicationTypeMonolith) { _%>
-        .and()
             .oauth2Login()
-  <%_ } _%>
         .and()
+  <%_ } _%>
             .oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(authenticationConverter())

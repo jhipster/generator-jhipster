@@ -99,7 +99,7 @@ const databaseData = {
     protocolSuffix: 'h2:file:',
     getData: options => h2GetProdDatabaseData(H2_DISK, { extraOptions: ';DB_CLOSE_DELAY=-1' }, options),
     r2dbc: {
-      protocolSuffix: 'h2:file://',
+      protocolSuffix: 'h2:file:///',
     },
   },
   [H2_MEMORY]: {
