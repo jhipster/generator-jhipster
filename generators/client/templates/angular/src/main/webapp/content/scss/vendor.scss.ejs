@@ -23,14 +23,14 @@ put Sass variables here:
 eg $input-color: red;
 ****************************/
 <%_ if (!clientThemeNone) { _%>
-@import 'node_modules/bootswatch/dist/<%= clientTheme %>/variables';
+@import 'bootswatch/dist/<%= clientTheme %>/variables';
 <%_ } _%>
 // Override Bootstrap variables
 @import 'bootstrap-variables';
 // Import Bootstrap source files from node_modules
-@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 <%_ if (!clientThemeNone) { _%>
-@import 'node_modules/bootswatch/dist/<%= clientTheme %>/bootswatch';
+@import 'bootswatch/dist/<%= clientTheme %>/bootswatch';
 <%_ } _%>
 
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */

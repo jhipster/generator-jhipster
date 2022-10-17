@@ -28,12 +28,12 @@ eg $input-color: red;
 <%_ } _%>
 // Import Bootstrap source files from node_modules
 <%_ if (!clientThemeNone) { _%>
-@import 'node_modules/bootswatch/dist/<%= clientTheme %>/variables';
+@import 'bootswatch/dist/<%= clientTheme %>/variables';
 <%_ } _%>
-@import 'node_modules/bootstrap/scss/bootstrap';
-@import 'node_modules/bootstrap-vue/src/index.scss';
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-vue/src/index.scss';
 <%_ if (!clientThemeNone) { _%>
-@import 'node_modules/bootswatch/dist/<%= clientTheme %>/bootswatch';
+@import 'bootswatch/dist/<%= clientTheme %>/bootswatch';
 /* Dirty fix on navbar active link with bootswatch theme */
 nav li.router-link-active .navbar-dropdown-menu {
   color: $navbar-<%_ if (clientThemeLight) { _%>light<%_ } else { _%>dark<%_ } _%>-active-color;
