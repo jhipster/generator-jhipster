@@ -199,7 +199,7 @@ class AuthorizationHeaderUtilTest {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .clientId("web-app")
                 .clientSecret("secret")
-                .redirectUriTemplate("/login/oauth2/code/oidc")
+                .redirectUri("/login/oauth2/code/oidc")
                 .authorizationUri("http://localhost:8080/auth/realms/master/protocol/openid-connect/auth")
                 .tokenUri("https://localhost:8080/auth/realms/master/protocol/openid-connect/token")
                 .build(),
