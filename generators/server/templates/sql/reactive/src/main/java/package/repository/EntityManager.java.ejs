@@ -157,7 +157,7 @@ public class EntityManager {
      * @param entityType the entity type which holds the table name.
      * @return the number of deleted entity
      */
-    public Mono<Integer> deleteAll(Class<?> entityType) {
+    public Mono<Long> deleteAll(Class<?> entityType) {
         return r2dbcEntityTemplate.delete(entityType).all();
     }
 
@@ -166,7 +166,7 @@ public class EntityManager {
      * @param tableName the name of the table to delete.
      * @return the number of deleted rows.
      */
-    public Mono<Integer> deleteAll(String tableName) {
+    public Mono<Long> deleteAll(String tableName) {
         StatementMapper.DeleteSpec delete = statementMapper.createDelete(tableName);
         return r2dbcEntityTemplate.getDatabaseClient().sql(statementMapper.getMappedObject(delete)).fetch().rowsUpdated();
     }
@@ -188,7 +188,7 @@ public class EntityManager {
      * @param referencedIds the id of the referred entities.
      * @return the number of inserted rows.
      */
-    public Mono<Integer> updateLinkTable(LinkTable table, Object entityId, Stream<?> referencedIds) {
+    public Mono<Long> updateLinkTable(LinkTable table, Object entityId, Stream<?> referencedIds) {
         return deleteFromLinkTable(table, entityId)
                 .then(
                     Flux.fromStream(referencedIds)
@@ -207,7 +207,7 @@ public class EntityManager {
                                 .rowsUpdated();
                             })
                         .collectList()
-                        .map((List<Integer> updates) -> updates.stream().reduce(Integer::sum).orElse(0)));
+                        .map((List<Long> updates) -> updates.stream().reduce(Long::sum).orElse(0l)));
     }
 
     public Mono<Void> deleteFromLinkTable(LinkTable table, Object entityId) {
