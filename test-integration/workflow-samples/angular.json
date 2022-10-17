@@ -4,50 +4,59 @@
       "name": "ngx-default",
       "app-sample": "ngx-default",
       "entity": "sqlfull",
+      "skip-backend-tests": 1,
       "sonar-analyse": "true"
     },
     {
       "name": "ngx-default-additional",
       "entity": "none",
       "app-sample": "ngx-default",
+      "skip-backend-tests": 1,
       "jdl-entity": "*"
     },
     {
       "name": "ngx-mysql-es-noi18n-mapsid",
       "app-sample": "ngx-mysql-es-noi18n-mapsid",
+      "skip-backend-tests": 1,
       "entity": "sql"
     },
     {
       "name": "ngx-mongodb-kafka-cucumber",
       "app-sample": "ngx-mongodb-kafka-cucumber",
       "entity": "mongodb",
+      "skip-backend-tests": 1,
       "environment": "dev"
     },
     {
       "name": "ngx-h2mem-ws-nol2",
       "app-sample": "ngx-h2mem-ws-nol2",
       "entity": "sql",
+      "skip-backend-tests": 1,
       "environment": "dev"
     },
     {
       "name": "ngx-couchbase",
       "app-sample": "ngx-couchbase",
+      "skip-backend-tests": 1,
       "entity": "couchbase"
     },
     {
       "name": "ngx-gradle-couchbase-search",
       "app-sample": "ngx-gradle-couchbase-search",
+      "skip-backend-tests": 1,
       "entity": "couchbase"
     },
     {
       "name": "ngx-gradle-fr",
       "app-sample": "ngx-gradle-fr",
+      "skip-backend-tests": 1,
       "entity": "sql"
     },
     {
       "name": "ngx-gradle-mariadb-oauth2-infinispan",
       "app-sample": "ngx-gradle-mariadb-oauth2-infinispan",
       "entity": "sql",
+      "skip-backend-tests": 1,
       "environment": "dev"
     },
     {
@@ -56,21 +65,25 @@
       "entity": "sql",
       "environment": "dev",
       "war": 1,
+      "skip-backend-tests": 1,
       "testcontainers": "false"
     },
     {
       "name": "ngx-webflux-mongodb",
       "app-sample": "webflux-mongodb",
+      "skip-backend-tests": 1,
       "entity": "mongodb"
     },
     {
       "name": "ngx-webflux-gradle-mongodb-oauth2",
       "app-sample": "webflux-mongodb-oauth2",
+      "skip-backend-tests": 1,
       "entity": "mongodb"
     },
     {
       "name": "ngx-webflux-psql-default",
       "app-sample": "webflux-psql",
+      "skip-backend-tests": 1,
       "entity": "sql"
     },
     {
@@ -81,29 +94,34 @@
       "name": "ngx-webflux-gradle-session-h2mem-es",
       "app-sample": "webflux-gradle-session-h2mem-es",
       "environment": "dev",
+      "skip-backend-tests": 1,
       "entity": "sqllight"
     },
     {
       "name": "ngx-webflux-couchbase",
       "app-sample": "webflux-couchbase",
+      "skip-backend-tests": 1,
       "entity": "couchbase"
     },
     {
       "name": "ms-ngx-eureka-oauth2-mongodb-caffeine",
       "jdl-samples": "ms-ngx-eureka-oauth2-mongodb-caffeine",
       "extra-args": "--workspaces --monorepository",
+      "skip-backend-tests": 1,
       "workspaces": "true"
     },
     {
       "name": "mf-ngx-eureka-jwt-psql-ehcache",
       "jdl-samples": "mf-ngx-eureka-jwt-psql-ehcache",
       "extra-args": "--workspaces --monorepository",
+      "skip-backend-tests": 1,
       "workspaces": "true"
     },
     {
       "name": "ms-mf-ngx-consul-oauth2-neo4j",
       "jdl-samples": "ms-mf-ngx-consul-oauth2-neo4j",
       "extra-args": "--workspaces --monorepository",
+      "skip-backend-tests": 1,
       "workspaces": "true"
     }
   ]
