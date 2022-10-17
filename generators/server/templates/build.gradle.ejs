@@ -258,17 +258,20 @@ repositories {
     // Local maven repository is required for libraries built locally with maven like development jhipster-bom.
     <%= !JHIPSTER_DEPENDENCIES_VERSION.includes('-SNAPSHOT') && !JHIPSTER_DEPENDENCIES_VERSION.includes('-CICD') ? '// ' : '' %>mavenLocal()
     mavenCentral()
-    <%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
+<%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     maven { url 'https://repo.spring.io/milestone' }
-    <%_ } _%>
-    <%_ if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
+<%_ } _%>
+<%_ if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
         mavenContent {
             snapshotsOnly()
         }
     }
-    <%_ } _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
+    maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
+<%_ } _%>
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
