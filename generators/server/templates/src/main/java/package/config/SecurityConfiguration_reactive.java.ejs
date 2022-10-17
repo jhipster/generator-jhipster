@@ -44,6 +44,7 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
@@ -126,7 +127,7 @@ import org.springframework.security.web.server.util.matcher.OrServerWebExchangeM
 import org.springframework.util.StringUtils;
 <%_ } _%>
 import org.springframework.web.cors.reactive.CorsWebFilter;
-import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
+// import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
 <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
@@ -151,9 +152,10 @@ import java.util.function.Consumer;
 
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
 
+@Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-@Import(SecurityProblemSupport.class)
+// @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
@@ -183,10 +185,10 @@ public class SecurityConfiguration {
 
   <%_ } _%>
 <%_ } _%>
-    private final SecurityProblemSupport problemSupport;
+//    private final SecurityProblemSupport problemSupport;
     private final CorsWebFilter corsWebFilter;
 
-    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && !applicationTypeMicroservice) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport, CorsWebFilter corsWebFilter) {
+    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && !applicationTypeMicroservice) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, CorsWebFilter corsWebFilter) {
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
         this.clientRegistrationRepository = clientRegistrationRepository;
 <%_ } _%>
@@ -197,7 +199,7 @@ public class SecurityConfiguration {
         this.tokenProvider = tokenProvider;
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
-        this.problemSupport = problemSupport;
+//        this.problemSupport = problemSupport;
         this.corsWebFilter = corsWebFilter;
     }
 
@@ -259,11 +261,10 @@ public class SecurityConfiguration {
 <%_ if (!skipUserManagement && !authenticationTypeOauth2) { _%>
             .authenticationManager(reactiveAuthenticationManager())
 <%_ } _%>
-            .exceptionHandling()
-                .accessDeniedHandler(problemSupport)
-                .authenticationEntryPoint(problemSupport)
+//            .exceptionHandling()
+//                .accessDeniedHandler(problemSupport)
+//                .authenticationEntryPoint(problemSupport)
 <%_ if (authenticationTypeSession) { _%>
-        .and()
             .formLogin()
             .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
             .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.OK))
@@ -274,7 +275,6 @@ public class SecurityConfiguration {
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(new HttpStatusReturningServerLogoutSuccessHandler())
 <%_ } _%>
-        .and()
             .headers()
                 .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
             .and()
