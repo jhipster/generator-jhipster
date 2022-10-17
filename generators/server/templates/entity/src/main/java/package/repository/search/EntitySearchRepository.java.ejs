@@ -32,7 +32,6 @@ import org.springframework.data.elasticsearch.core.SearchHits;
   <%_ } _%>
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
-import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 
@@ -42,6 +41,7 @@ import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchTe
 <%_ } else { _%>
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 <%_ } _%>
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.SearchHit;
