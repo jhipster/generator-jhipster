@@ -189,6 +189,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+<%_ if (reactive && (devDatabaseTypeMariadb || devDatabaseTypeMysql)) { _%>
+            <!-- TODO drop spring-data-r2dbc is not managing r2dbc-mariadb version -->
+            <dependency>
+                <groupId>org.mariadb</groupId>
+                <artifactId>r2dbc-mariadb</artifactId>
+            </dependency>
+<%_ } _%>
             <!-- jhipster-needle-maven-add-dependency-management -->
         </dependencies>
     </dependencyManagement>
