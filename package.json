@@ -73,7 +73,7 @@
     "test": "mocha test generators --no-insight --forbid-only --parallel --max-old-space-size=4096",
     "update-snapshot": "mocha --no-insight --no-parallel --updateSnapshot --",
     "update-snapshots": "UPDATE_SNAPSHOT=all mocha test generators --no-insight --forbid-only",
-    "watch": "tsc --watch"
+    "watch": "concurrently 'tsc --watch' 'node ./watch.mjs'"
   },
   "dependencies": {
     "@faker-js/faker": "5.5.3",
@@ -131,6 +131,8 @@
     "@typescript-eslint/eslint-plugin": "5.40.0",
     "@typescript-eslint/parser": "5.40.0",
     "chai": "4.3.6",
+    "chokidar": "3.5.3",
+    "concurrently": "7.4.0",
     "ejs-lint": "2.0.0",
     "esbuild": "0.15.11",
     "eslint": "8.25.0",
