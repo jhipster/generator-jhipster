@@ -140,7 +140,7 @@ spec:
               value: 'org.apache.kafka.common.serialization.StringDeserializer'
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
-            - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
+            - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
               value: 'true'
 <%_ } _%>
 <%_ if (deploymentApplicationTypeMicroservice) { _%>

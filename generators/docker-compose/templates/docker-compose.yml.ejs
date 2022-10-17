@@ -64,7 +64,7 @@ services:
       - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
   <%_ } _%>
   <%_ if (monitoringPrometheus) { _%>
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
   <%_ } _%>
   <%_ if (usesOauth2) { _%>
       # For Keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
