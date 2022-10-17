@@ -23,7 +23,8 @@
 <&_ if (fragment.importSection) { -&>
 import jakarta.persistence.*;
 <%_ if ((databaseTypePostgres && fieldsContainTextBlob) || (fieldsContainUUID && (databaseTypeMysql || databaseTypeMariadb))) { _%>
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 <%_ } _%>
 <&_ } -&>
 
@@ -56,7 +57,7 @@ import org.hibernate.annotations.Type;
   <%_ } else if (field.fieldTypeBigDecimal) { _%>
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", precision = 21, scale = 2<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
   <%_ } else if (field.fieldTypeUUID && (databaseTypeMysql || databaseTypeMariadb)) { _%>
-    @Type(type = "uuid-char")
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
   <%_ } else { _%>
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidate === true) { %><% if (field.fieldValidationMaxLength) { %>, length = <%= field.fieldValidateRulesMaxlength %><% } %><% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %><% } %>)
