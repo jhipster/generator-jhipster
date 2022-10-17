@@ -2177,7 +2177,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             throw new Error('baseName is require at templates context');
           }
           const basename = path.basename(sourceFileFrom);
-          const seed = `${context.entityClass}-${basename}`;
+          const seed = `${context.entityClass}-${basename}${context.fakerSeed ?? ''}`;
           Object.values(this.configOptions?.sharedEntities ?? {}).forEach(entity => {
             entity.resetFakerSeed(seed);
           });
@@ -2641,6 +2641,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.authenticationType = config.authenticationType;
     dest.rememberMeKey = config.rememberMeKey;
     dest.jwtSecretKey = config.jwtSecretKey;
+    dest.fakerSeed = config.fakerSeed;
   }
 
   /**

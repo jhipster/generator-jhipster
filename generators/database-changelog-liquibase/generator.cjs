@@ -22,7 +22,7 @@ const _ = require('lodash');
 const BaseApplication = require('../base-application/generator.cjs');
 const { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } = require('./files.cjs');
 const { stringify } = require('../../utils/index.cjs');
-const { CommonDBTypes } = require('../../jdl/jhipster/field-types.js');
+const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
 const { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list.cjs');
 
 const TYPE_LONG = CommonDBTypes.LONG;
