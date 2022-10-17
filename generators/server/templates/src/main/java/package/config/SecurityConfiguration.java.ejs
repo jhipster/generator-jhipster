@@ -188,26 +188,6 @@ public class SecurityConfiguration {
                 .frameOptions().sameOrigin()
         .and()
 <%_ } _%>
-<%_ if (authenticationTypeSession) { _%>
-  <%_ if (!skipUserManagement) { _%>
-            .rememberMe()
-                .rememberMeServices(rememberMeServices)
-                .rememberMeParameter("remember-me")
-                .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
-        .and()
-  <%_ } _%>
-            .formLogin()
-                .loginProcessingUrl("/api/authentication")
-                .successHandler(ajaxAuthenticationSuccessHandler())
-                .failureHandler(ajaxAuthenticationFailureHandler())
-                .permitAll()
-        .and()
-            .logout()
-                .logoutUrl("/api/logout")
-                .logoutSuccessHandler(ajaxLogoutSuccessHandler())
-                .permitAll()
-        .and()
-<%_ } _%>
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -246,9 +226,27 @@ public class SecurityConfiguration {
             .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)<%_ if (authenticationTypeSession) { %>;<% } %>
+            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
         .and()
-<%_ if (authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeSession) { _%>
+  <%_ if (!skipUserManagement) { _%>
+            .rememberMe()
+                .rememberMeServices(rememberMeServices)
+                .rememberMeParameter("remember-me")
+                .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
+        .and()
+  <%_ } _%>
+            .formLogin()
+                .loginProcessingUrl("/api/authentication")
+                .successHandler(ajaxAuthenticationSuccessHandler())
+                .failureHandler(ajaxAuthenticationFailureHandler())
+                .permitAll()
+        .and()
+            .logout()
+                .logoutUrl("/api/logout")
+                .logoutSuccessHandler(ajaxLogoutSuccessHandler())
+                .permitAll();
+<%_ } else if (authenticationTypeJwt) { _%>
   <%_ if (applicationTypeMonolith) { _%>
             .httpBasic()
         .and()
