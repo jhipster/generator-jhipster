@@ -85,6 +85,15 @@ const modelFiles = {
 const entityFiles = {
   server: [
     {
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.jakarta_validation',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.jakarta_validation`,
+        },
+      ],
+    },
+    {
       condition: generator => generator.databaseTypeSql && generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -141,6 +150,16 @@ const entityFiles = {
         {
           file: 'package/domain/Entity.java.jhi.spring_data_neo4j',
           renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.spring_data_neo4j`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.jakarta_persistence',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.jakarta_persistence`,
         },
       ],
     },
