@@ -13,6 +13,7 @@
     "enableHibernateCache": false,
     "enableSwaggerCodegen": true,
     "enableTranslation": true,
+    "fakerSeed": "1",
     "jhiPrefix": "jhi",
     "languages": ["en", "fr"],
     "nativeLanguage": "en",

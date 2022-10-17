@@ -22,10 +22,8 @@ const path = require('path');
 
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
 const { hibernateSnakeCase } = require('./db.cjs');
-const { createFaker } = require('./faker.cjs');
 const { parseLiquibaseChangelogDate } = require('./liquibase.cjs');
 const { entityDefaultConfig } = require('../generators/generator-defaults.cjs');
-const { stringHashCode } = require('../generators/utils.cjs');
 const { fieldToReference } = require('./field.cjs');
 const { PaginationTypes, ServiceTypes } = require('../jdl/jhipster/entity-options');
 const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
@@ -139,10 +137,6 @@ function prepareEntityForTemplates(entityWithConfig, generator, application) {
   if (entityWithConfig.changelogDate) {
     entityWithConfig.changelogDateForRecent = parseLiquibaseChangelogDate(entityWithConfig.changelogDate);
   }
-  entityWithConfig.faker = entityWithConfig.faker || createFaker(generator.jhipsterConfig.nativeLanguage);
-  entityWithConfig.resetFakerSeed = (suffix = '') =>
-    entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
-  entityWithConfig.resetFakerSeed();
 
   entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
   if (entityWithConfig.entityAngularJSSuffix && !entityWithConfig.entityAngularJSSuffix.startsWith('-')) {

@@ -16,9 +16,13 @@ export type BaseApplication = {
 
   skipCommitHook: boolean;
   skipJhipsterDependencies: boolean;
+  fakerSeed?: string;
 
   nodePackageManager: string;
   nodeDestinationVersion: string;
+
+  nativeLanguage: string;
+  languages?: string[];
 };
 
 /* ApplicationType Start */
