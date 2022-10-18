@@ -455,7 +455,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (messageBrokerKafka) { _%>
     implementation "org.springframework.cloud:spring-cloud-stream"
     implementation "org.springframework.cloud:spring-cloud-starter-stream-kafka"
-    testImplementation "org.springframework.cloud:spring-cloud-stream-test-support"
     testImplementation "org.testcontainers:kafka"
 <%_ } _%>
     implementation "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>"
