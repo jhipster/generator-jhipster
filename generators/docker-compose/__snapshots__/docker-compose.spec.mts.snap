@@ -68,7 +68,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -91,7 +91,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
@@ -209,7 +209,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -232,7 +232,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=mscassandra-cassandra
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
@@ -357,7 +357,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -380,7 +380,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -401,7 +401,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
@@ -426,7 +426,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
       - JHIPSTER_SLEEP=30
@@ -439,7 +439,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - JHIPSTER_SLEEP=30
@@ -552,7 +552,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -575,7 +575,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -596,7 +596,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
@@ -621,7 +621,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
       - JHIPSTER_SLEEP=30
@@ -752,7 +752,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -775,7 +775,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -796,7 +796,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
@@ -821,7 +821,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
@@ -840,7 +840,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - JHIPSTER_SLEEP=30
@@ -948,7 +948,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -971,7 +971,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -1081,7 +1081,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -1104,7 +1104,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -1222,9 +1222,9 @@ jhipster:
       jwt:
         base64-secret: SECRET--50
 management:
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
 eureka:
   client:
@@ -1240,7 +1240,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -1263,7 +1263,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -1297,7 +1297,7 @@ eureka:
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
     ports:
       - 8761:8761
 
@@ -1463,7 +1463,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -1486,7 +1486,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -1573,7 +1573,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://samplemysql-mysql:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://samplemysql-mysql:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_SLEEP=30
@@ -1665,7 +1665,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -1773,7 +1773,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -1883,7 +1883,7 @@ eureka:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
@@ -1969,7 +1969,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
       - SPRING_LIQUIBASE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
       - JHIPSTER_SLEEP=30

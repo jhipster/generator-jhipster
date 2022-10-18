@@ -301,8 +301,8 @@ ROLE_USER
     <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"h2\\"/>
     <property name=\\"now\\" value=\\"current_timestamp\\" dbms=\\"postgresql\\"/>
     <property name=\\"floatType\\" value=\\"float4\\" dbms=\\"postgresql\\"/>
-    <property name=\\"clobType\\" value=\\"longvarchar\\" dbms=\\"postgresql\\"/>
-    <property name=\\"blobType\\" value=\\"bytea\\" dbms=\\"postgresql\\"/>
+    <property name=\\"clobType\\" value=\\"clob\\" dbms=\\"postgresql\\"/>
+    <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"postgresql\\"/>
     <property name=\\"uuidType\\" value=\\"uuid\\" dbms=\\"postgresql\\"/>
     <property name=\\"datetimeType\\" value=\\"datetime\\" dbms=\\"postgresql\\"/>
 
@@ -636,8 +636,8 @@ ROLE_USER
     <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"h2\\"/>
     <property name=\\"now\\" value=\\"current_timestamp\\" dbms=\\"postgresql\\"/>
     <property name=\\"floatType\\" value=\\"float4\\" dbms=\\"postgresql\\"/>
-    <property name=\\"clobType\\" value=\\"longvarchar\\" dbms=\\"postgresql\\"/>
-    <property name=\\"blobType\\" value=\\"bytea\\" dbms=\\"postgresql\\"/>
+    <property name=\\"clobType\\" value=\\"clob\\" dbms=\\"postgresql\\"/>
+    <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"postgresql\\"/>
     <property name=\\"uuidType\\" value=\\"uuid\\" dbms=\\"postgresql\\"/>
     <property name=\\"datetimeType\\" value=\\"datetime\\" dbms=\\"postgresql\\"/>
 
@@ -957,8 +957,8 @@ ROLE_USER
     <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"h2\\"/>
     <property name=\\"now\\" value=\\"current_timestamp\\" dbms=\\"postgresql\\"/>
     <property name=\\"floatType\\" value=\\"float4\\" dbms=\\"postgresql\\"/>
-    <property name=\\"clobType\\" value=\\"longvarchar\\" dbms=\\"postgresql\\"/>
-    <property name=\\"blobType\\" value=\\"bytea\\" dbms=\\"postgresql\\"/>
+    <property name=\\"clobType\\" value=\\"clob\\" dbms=\\"postgresql\\"/>
+    <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"postgresql\\"/>
     <property name=\\"uuidType\\" value=\\"uuid\\" dbms=\\"postgresql\\"/>
     <property name=\\"datetimeType\\" value=\\"datetime\\" dbms=\\"postgresql\\"/>
 
@@ -1354,8 +1354,8 @@ ROLE_USER
     <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"h2\\"/>
     <property name=\\"now\\" value=\\"current_timestamp\\" dbms=\\"postgresql\\"/>
     <property name=\\"floatType\\" value=\\"float4\\" dbms=\\"postgresql\\"/>
-    <property name=\\"clobType\\" value=\\"longvarchar\\" dbms=\\"postgresql\\"/>
-    <property name=\\"blobType\\" value=\\"bytea\\" dbms=\\"postgresql\\"/>
+    <property name=\\"clobType\\" value=\\"clob\\" dbms=\\"postgresql\\"/>
+    <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"postgresql\\"/>
     <property name=\\"uuidType\\" value=\\"uuid\\" dbms=\\"postgresql\\"/>
     <property name=\\"datetimeType\\" value=\\"datetime\\" dbms=\\"postgresql\\"/>
 
@@ -1538,8 +1538,8 @@ ROLE_USER
     <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"h2\\"/>
     <property name=\\"now\\" value=\\"current_timestamp\\" dbms=\\"postgresql\\"/>
     <property name=\\"floatType\\" value=\\"float4\\" dbms=\\"postgresql\\"/>
-    <property name=\\"clobType\\" value=\\"longvarchar\\" dbms=\\"postgresql\\"/>
-    <property name=\\"blobType\\" value=\\"bytea\\" dbms=\\"postgresql\\"/>
+    <property name=\\"clobType\\" value=\\"clob\\" dbms=\\"postgresql\\"/>
+    <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"postgresql\\"/>
     <property name=\\"uuidType\\" value=\\"uuid\\" dbms=\\"postgresql\\"/>
     <property name=\\"datetimeType\\" value=\\"datetime\\" dbms=\\"postgresql\\"/>
 
@@ -1717,8 +1717,8 @@ ROLE_USER
     <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"h2\\"/>
     <property name=\\"now\\" value=\\"current_timestamp\\" dbms=\\"postgresql\\"/>
     <property name=\\"floatType\\" value=\\"float4\\" dbms=\\"postgresql\\"/>
-    <property name=\\"clobType\\" value=\\"longvarchar\\" dbms=\\"postgresql\\"/>
-    <property name=\\"blobType\\" value=\\"bytea\\" dbms=\\"postgresql\\"/>
+    <property name=\\"clobType\\" value=\\"clob\\" dbms=\\"postgresql\\"/>
+    <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"postgresql\\"/>
     <property name=\\"uuidType\\" value=\\"uuid\\" dbms=\\"postgresql\\"/>
     <property name=\\"datetimeType\\" value=\\"datetime\\" dbms=\\"postgresql\\"/>
 
@@ -2021,8 +2021,8 @@ ROLE_USER
     <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"h2\\"/>
     <property name=\\"now\\" value=\\"current_timestamp\\" dbms=\\"postgresql\\"/>
     <property name=\\"floatType\\" value=\\"float4\\" dbms=\\"postgresql\\"/>
-    <property name=\\"clobType\\" value=\\"longvarchar\\" dbms=\\"postgresql\\"/>
-    <property name=\\"blobType\\" value=\\"bytea\\" dbms=\\"postgresql\\"/>
+    <property name=\\"clobType\\" value=\\"clob\\" dbms=\\"postgresql\\"/>
+    <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"postgresql\\"/>
     <property name=\\"uuidType\\" value=\\"uuid\\" dbms=\\"postgresql\\"/>
     <property name=\\"datetimeType\\" value=\\"datetime\\" dbms=\\"postgresql\\"/>
 
@@ -2294,8 +2294,8 @@ ROLE_USER
     <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"h2\\"/>
     <property name=\\"now\\" value=\\"current_timestamp\\" dbms=\\"postgresql\\"/>
     <property name=\\"floatType\\" value=\\"float4\\" dbms=\\"postgresql\\"/>
-    <property name=\\"clobType\\" value=\\"longvarchar\\" dbms=\\"postgresql\\"/>
-    <property name=\\"blobType\\" value=\\"bytea\\" dbms=\\"postgresql\\"/>
+    <property name=\\"clobType\\" value=\\"clob\\" dbms=\\"postgresql\\"/>
+    <property name=\\"blobType\\" value=\\"blob\\" dbms=\\"postgresql\\"/>
     <property name=\\"uuidType\\" value=\\"uuid\\" dbms=\\"postgresql\\"/>
     <property name=\\"datetimeType\\" value=\\"datetime\\" dbms=\\"postgresql\\"/>
 
