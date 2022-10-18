@@ -73,7 +73,7 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
                 "select <%= entityInstance %> from <%= persistClass %> <%= entityInstance %> left join fetch <%= entityInstance %>.<%= relationship.relationshipFieldNamePlural %> where <%= entityInstance %>.<%= primaryKey.name %> = :<%= primaryKey.name %>",
                 <%= persistClass %>.class
             )
-            .setParameter("<%= primaryKey.name %>", result.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>())
+            .setParameter("<%= primaryKey.name %>", result.get<%= primaryKey.nameCapitalized %>())
             .getSingleResult();
     }
 
