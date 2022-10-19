@@ -77,7 +77,7 @@ import java.util.*;
 <%_ if (searchEngineElasticsearch && !reactive) { _%>
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.*;
 <%_ } _%>
 
 @RestController

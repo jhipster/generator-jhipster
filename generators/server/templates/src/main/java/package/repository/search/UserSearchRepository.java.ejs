@@ -20,11 +20,12 @@ package <%= packageName %>.repository.search;
 
 import <%= packageName %>.domain.<%= user.persistClass %>;
 <%_ if (reactive) { _%>
-import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
+import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchTemplate;
 <%_ } else { _%>
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 <%_ } _%>
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
 
@@ -38,7 +39,7 @@ import java.util.stream.Stream;
 import java.util.UUID;
 <%_ } _%>
 
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.queryStringQuery;
 
 /**
  * Spring Data Elasticsearch repository for the User entity.
@@ -61,8 +62,8 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 
     @Override
     public Flux<User> search(String query) {
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
-        return reactiveElasticsearchTemplate.search(nativeSearchQuery, User.class).map(SearchHit::getContent);
+        NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
+        return reactiveElasticsearchTemplate.search(nativeQuery, User.class).map(SearchHit::getContent);
     }
 }
 <%_ } else { _%>
@@ -73,17 +74,17 @@ interface UserSearchRepositoryInternal {
 
 class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 
-    private final ElasticsearchRestTemplate elasticsearchTemplate;
+    private final ElasticsearchTemplate elasticsearchTemplate;
 
-    UserSearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate) {
+    UserSearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate) {
         this.elasticsearchTemplate = elasticsearchTemplate;
     }
 
     @Override
     public Stream<User> search(String query) {
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
+        NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
         return elasticsearchTemplate
-            .search(nativeSearchQuery, User.class)
+            .search(nativeQuery, User.class)
             .map(SearchHit::getContent)
             .stream();
     }
