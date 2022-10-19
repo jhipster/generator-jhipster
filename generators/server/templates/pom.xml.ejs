@@ -683,10 +683,6 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
-        <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>problem-spring-web<% if (reactive) { %>flux<%_ } _%></artifactId>
-        </dependency>
 <%_ if (!reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -1384,7 +1380,6 @@
                                 <apiPackage><%= packageName %>.web.api</apiPackage>
                                 <modelPackage><%= packageName %>.service.api.dto</modelPackage>
                                 <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
-                                <importMappings>Problem=org.zalando.problem.Problem</importMappings>
                                 <skipValidateSpec>false</skipValidateSpec>
                                 <configOptions>
   <%_ if (reactive) { _%>

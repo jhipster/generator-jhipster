@@ -18,15 +18,15 @@
 -%>
 package <%= packageName %>.web.rest.errors;
 
-import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.Status;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.ErrorResponseException;
 
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("java:S110") // Inheritance tree of classes should not be too deep
-public class BadRequestAlertException extends AbstractThrowableProblem {
+public class BadRequestAlertException extends ErrorResponseException {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +39,11 @@ public class BadRequestAlertException extends AbstractThrowableProblem {
     }
 
     public BadRequestAlertException(URI type, String defaultMessage, String entityName, String errorKey) {
-        super(type, defaultMessage, Status.BAD_REQUEST, null, null, null, getAlertParameters(entityName, errorKey));
+        super(HttpStatus.BAD_REQUEST);
+        this.getBody().setProperty("message", "error." + errorKey);
+        this.getBody().setProperty("params", entityName);
+        this.setType(type);
+        this.setTitle(defaultMessage);
         this.entityName = entityName;
         this.errorKey = errorKey;
     }

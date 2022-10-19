@@ -18,6 +18,8 @@
 -%>
 package <%= packageName %>.web.rest.errors;
 
+import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
+
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.web.util.HeaderUtil;
 
@@ -48,26 +50,26 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.context.request.NativeWebRequest;
 <%_ } _%>
 import org.springframework.core.env.Environment;
-import org.zalando.problem.DefaultProblem;
-import org.zalando.problem.Problem;
-import org.zalando.problem.ProblemBuilder;
-import org.zalando.problem.Status;
-import org.zalando.problem.StatusType;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.annotation.ResponseStatus;
+<%_ if (reactive) { _%>
 import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.ProblemHandling;
 import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.security.SecurityAdviceTrait;
-import org.zalando.problem.violations.ConstraintViolationProblem;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 <%_ if (!reactive) { _%>
 import jakarta.servlet.http.HttpServletRequest;
 <%_ } _%>
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -76,11 +78,11 @@ import java.util.stream.Collectors;
  * Controller advice to translate the server side exceptions to client-friendly json structures.
  * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807).
  */
-// @ControllerAdvice
+@ControllerAdvice
 <%_ if (databaseTypeSql && reactive) { _%>
 // @Component("jhiExceptionTranslator")
 <%_ } _%>
-public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
+public class ExceptionTranslator {
 
 <%_
 let returnType;
@@ -89,7 +91,7 @@ if (reactive) {
     returnType = 'Mono<ResponseEntity<Problem>>';
     requestClass = 'ServerWebExchange';
 } else {
-    returnType = 'ResponseEntity<Problem>';
+    returnType = 'ResponseEntity<ProblemDetail>';
     requestClass = 'NativeWebRequest';
 }
 _%>
@@ -110,107 +112,124 @@ _%>
     /**
      * Post-process the Problem payload to add the message key for the front-end if needed.
      */
-    @Override
-    public <%- returnType %> process(@Nullable ResponseEntity<Problem> entity, <%= requestClass %> request) {
-        if (entity == null) {
-<%_ if (reactive) { _%>
-            return Mono.empty();
-<%_ } else { _%>
-            return null;
-<%_ } _%>
-        }
-        Problem problem = entity.getBody();
-        if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {
-<%_ if (reactive) { _%>
-            return Mono.just(entity);
-<%_ } else { _%>
-            return entity;
-<%_ } _%>
-        }
+    public <%- returnType %> process(ProblemDetail problemDetail, HttpHeaders headers, URI pathURI) {
+        ProblemDetail problem = ProblemDetail.forStatus(problemDetail.getStatus());
+        problem.setType(problemDetail.getType() != null ? problemDetail.getType() : ErrorConstants.DEFAULT_TYPE);
+        problem.setTitle(problemDetail.getTitle());
+        problem.setDetail(problemDetail.getDetail());
+        if(problemDetail.getProperties() == null || !problemDetail.getProperties().containsKey(PATH_KEY) && pathURI != null)
+            problem.setProperty(PATH_KEY, pathURI);
 
-<%_ if (!reactive) { _%>
-        HttpServletRequest nativeRequest = request.getNativeRequest(HttpServletRequest.class);
-        String requestUri = nativeRequest != null ? nativeRequest.getRequestURI() : StringUtils.EMPTY;
-<%_ } _%>
-        ProblemBuilder builder = Problem.builder()
-            .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
-            .withStatus(problem.getStatus())
-            .withTitle(problem.getTitle())
-<%_ if (reactive) { _%>
-            .with(PATH_KEY, request.getRequest().getPath().value());
-<%_ } else { _%>
-            .with(PATH_KEY, requestUri);
-<%_ } _%>
-
-        if (problem instanceof ConstraintViolationProblem) {
-            builder
-                .with(VIOLATIONS_KEY, ((ConstraintViolationProblem) problem).getViolations())
-                .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION);
-        } else {
-            builder
-                .withCause(((DefaultProblem) problem).getCause())
-                .withDetail(problem.getDetail())
-                .withInstance(problem.getInstance());
-            problem.getParameters().forEach(builder::with);
-            if (!problem.getParameters().containsKey(MESSAGE_KEY) && problem.getStatus() != null) {
-                builder.with(MESSAGE_KEY, "error.http." + problem.getStatus().getStatusCode());
-            }
-        }
-        return <% if (reactive) { %>Mono.just(<% } %>new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode())<% if (reactive) { %>)<% } %>;
+        if(problemDetail.getProperties() != null)
+            problemDetail.getProperties().forEach(problem::setProperty);
+        // builder.withCause(((DefaultProblem) problem).getCause()).withDetail(problem.getDetail()).withInstance(problem.getInstance());
+            
+        if (problemDetail.getProperties() == null || !problemDetail.getProperties().containsKey(MESSAGE_KEY)) {
+            problem.setProperty(MESSAGE_KEY, "error.http." + problemDetail.getStatus());
+        }   
+        return new ResponseEntity<>(problem, headers, HttpStatus.valueOf(problem.getStatus()));
     }
 
-    @Override
+    @ExceptionHandler
     public <%- returnType %> handle<%_ if (reactive) { _%>BindingResult(WebExchangeBindException<% } else { %>MethodArgumentNotValid(MethodArgumentNotValidException<% } %> ex, @Nonnull <%= requestClass %> request) {
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
             .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""), f.getField(), StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()))
             .collect(Collectors.toList());
-
-        Problem problem = Problem.builder()
-            .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
-            .withTitle("<%_ if (reactive) { _%>Data binding and validation failure<% } else { %>Method argument not valid<% } %>")
-            .withStatus(<% if (reactive) { %>Status.BAD_REQUEST<% } else { %>defaultConstraintViolationStatus()<% } %>)
-            .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION)
-            .with(FIELD_ERRORS_KEY, fieldErrors)
-            .build();
-        return create(ex, problem, request);
+        
+        ProblemDetail problem = ProblemDetail.forStatus(<% if (reactive) { %>Status.BAD_REQUEST<% } else { %>HttpStatus.BAD_REQUEST<% } %>);
+        problem.setType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE);
+        problem.setTitle("<%_ if (reactive) { _%>Data binding and validation failure<% } else { %>Method argument not valid<% } %>");
+        problem.setProperty(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION);
+        problem.setProperty(FIELD_ERRORS_KEY, fieldErrors);
+        return process(problem, null, null);
     }
     <%_ if (!skipUserManagement) { _%>
 
     @ExceptionHandler
     public <%- returnType %> handleEmailAlreadyUsedException(<%= packageName %>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+        return process(problem.getBody(), HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()), null);
     }
 
     @ExceptionHandler
     public <%- returnType %> handleUsernameAlreadyUsedException(<%= packageName %>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+        return process(problem.getBody(), HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()), null);
     }
 
     @ExceptionHandler
     public <%- returnType %> handleInvalidPasswordException(<%= packageName %>.service.InvalidPasswordException ex, <%= requestClass %> request) {
-        return create(new InvalidPasswordException(), request);
+        return process(new InvalidPasswordException().getBody(), null, null);
     }
     <%_ } _%>
 
     @ExceptionHandler
     public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
-        return create(ex, request, HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+        return process(ex.getBody(), HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()), null);
     }
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 
     @ExceptionHandler
     public <%- returnType %> handleConcurrencyFailure(ConcurrencyFailureException ex, <%= requestClass %> request) {
-        Problem problem = Problem.builder()
-            .withStatus(Status.CONFLICT)
-            .with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
-            .build();
-        return create(ex, problem, request);
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.CONFLICT);
+        problem.setProperty(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE);
+        return process(problem, null, URI.create(extractURI(request)));
     }
 <%_ } _%>
 
+    @ExceptionHandler
+    public ResponseEntity<ProblemDetail> handleBadCredentialsException(AuthenticationException ex, NativeWebRequest request) {
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED.value());
+        problem.setTitle(HttpStatus.UNAUTHORIZED.getReasonPhrase());
+        problem.setType(ErrorConstants.DEFAULT_TYPE);
+        problem.setDetail(ex.getMessage());
+        return process(problem, null, URI.create(extractURI(request)));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ProblemDetail> handleAnyException(Exception ex, NativeWebRequest request
+    ) {
+        ProblemDetail problem = ProblemDetail.forStatus(toStatus(ex));
+        problem.setType(ErrorConstants.DEFAULT_TYPE);
+        ResponseStatus specialStatus = extractResponseStatus(ex);
+        String title = specialStatus == null ? HttpStatus.valueOf(problem.getStatus()).getReasonPhrase() : specialStatus.reason();
+        problem.setTitle(title);
+        problem.setDetail(ex.getMessage());
+        return process(problem, null, null);
+    }
+
+    private String extractURI(NativeWebRequest request) {
+        HttpServletRequest nativeRequest = request.getNativeRequest(HttpServletRequest.class);
+        String requestUri = nativeRequest != null ? nativeRequest.getRequestURI() : StringUtils.EMPTY;
+        return requestUri;
+    }
+
+    private HttpStatus toStatus(final Throwable throwable) {
+        // Let the ErrorResponse take this responsibility
+        if(throwable instanceof ErrorResponse err)
+            return HttpStatus.valueOf(err.getBody().getStatus());
+        
+        // This is derived from zalando
+        if(throwable instanceof AccessDeniedException accDenied)
+            return HttpStatus.FORBIDDEN;
+
+        return Optional.ofNullable(resolveResponseStatus(throwable))
+                .map(response -> response.value())
+                .orElse(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private ResponseStatus extractResponseStatus(final Throwable throwable) {
+        return Optional.ofNullable(resolveResponseStatus(throwable))
+                .orElse(null);
+    }
+
+
+    private ResponseStatus resolveResponseStatus(final Throwable type) {
+        final ResponseStatus candidate = findMergedAnnotation(type.getClass(), ResponseStatus.class);
+        return candidate == null && type.getCause() != null ? resolveResponseStatus(type.getCause()) : candidate;
+    }
+/*
     @Override
     public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
@@ -269,4 +288,5 @@ _%>
         // This list is for sure not complete
         return StringUtils.containsAny(message, "org.", "java.", "net.", "jakarta.", "javax.", "com.", "io.", "de.", "<%= packageName %>");
     }
+*/
 }
