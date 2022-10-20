@@ -16,30 +16,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const shelljs = require('shelljs');
-const jsyaml = require('js-yaml');
-const pathjs = require('path');
-const normalize = require('normalize-path');
+import chalk from 'chalk';
+import shelljs from 'shelljs';
+import jsyaml from 'js-yaml';
+import pathjs from 'path';
+import normalize from 'normalize-path';
 
-const BaseDockerGenerator = require('../base-docker/index.cjs');
+import BaseDockerGenerator from '../base-docker/index.cjs';
 
-const writeFiles = require('./files.cjs').writeFiles;
-const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
-const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
-const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const { CASSANDRA, COUCHBASE, MONGODB, ORACLE, NO: NO_DATABASE } = require('../../jdl/jhipster/database-types');
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
-const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
-const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list.cjs');
+import { writeFiles } from './files.mjs';
+import {
+  applicationTypes,
+  cacheTypes,
+  databaseTypes,
+  messageBrokerTypes,
+  monitoringTypes,
+  serviceDiscoveryTypes,
+  searchEngineTypes,
+} from '../../jdl/jhipster/index.mjs';
+import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
+
+const { GATEWAY, MONOLITH } = applicationTypes;
+const { PROMETHEUS } = monitoringTypes;
+const { EUREKA } = serviceDiscoveryTypes;
+const { CASSANDRA, COUCHBASE, MONGODB, ORACLE, NO: NO_DATABASE } = databaseTypes;
+const { ELASTICSEARCH } = searchEngineTypes;
+const { KAFKA } = messageBrokerTypes;
+const { MEMCACHED, REDIS } = cacheTypes;
 
 /* eslint-disable consistent-return */
 /**
  * @class
  * @extends {import('../base/index.mjs')}
  */
-module.exports = class extends BaseDockerGenerator {
+export default class DockerComposeGenerator extends BaseDockerGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DOCKER_COMPOSE);
@@ -313,4 +323,4 @@ module.exports = class extends BaseDockerGenerator {
     if (this.delegateToBlueprint) return {};
     return this.end;
   }
-};
+}

@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const _ = require('lodash');
+import chalk from 'chalk';
+import _ from 'lodash';
 
-module.exports = {
+export default {
   prompting,
 };
 

@@ -16,25 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const fs = require('fs');
-const exec = require('child_process').exec;
-const chalk = require('chalk');
-const BaseGenerator = require('../base/index.cjs');
+import fs from 'fs';
+import { exec } from 'child_process';
+import chalk from 'chalk';
+import BaseGenerator from '../base/index.cjs';
 
-const statistics = require('../statistics.cjs');
+import statistics from '../statistics.cjs';
 
-const constants = require('../generator-constants.cjs');
+import constants from '../generator-constants.cjs';
 
-const cacheTypes = require('../../jdl/jhipster/cache-types');
-const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
+import { cacheTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
+import { GENERATOR_AZURE_SPRING_CLOUD } from '../generator-list.mjs';
+
+const { MEMCACHED } = cacheTypes;
 
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { GENERATOR_AZURE_SPRING_CLOUD } = require('../generator-list.cjs');
-
+const { MAVEN } = buildToolTypes;
 /* eslint-disable consistent-return */
-module.exports = class extends BaseGenerator {
+export default class AzureSpringCloudGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -493,4 +493,4 @@ for more detailed information.`
     if (this.delegateToBlueprint) return {};
     return this.end;
   }
-};
+}

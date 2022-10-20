@@ -23,7 +23,7 @@ import chalk from 'chalk';
 import BaseGenerator from '../base/index.cjs';
 
 import { GENERATOR_OPENAPI_CLIENT } from '../generator-list.mjs';
-import prompts from './prompts.mjs';
+import { askActionType, askExistingAvailableDocs, askGenerationInfos } from './prompts.mjs';
 import { writeFiles, customizeFiles } from './files.mjs';
 import { openapiOptions } from '../../jdl/jhipster/index.mjs';
 
@@ -70,9 +70,9 @@ export default class OpenapiClientGenerator extends BaseGenerator {
 
   get prompting() {
     return {
-      askActionType: prompts.askActionType,
-      askExistingAvailableDocs: prompts.askExistingAvailableDocs,
-      askGenerationInfos: prompts.askGenerationInfos,
+      askActionType,
+      askExistingAvailableDocs,
+      askGenerationInfos,
     };
   }
 

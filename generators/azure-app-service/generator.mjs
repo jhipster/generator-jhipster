@@ -17,28 +17,30 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const _ = require('lodash');
-const fs = require('fs');
-const exec = require('child_process').exec;
-const chalk = require('chalk');
-const BaseGenerator = require('../base/index.cjs');
+import _ from 'lodash';
+import fs from 'fs';
+import { exec } from 'child_process';
+import chalk from 'chalk';
+import BaseGenerator from '../base/index.cjs';
 
-const statistics = require('../statistics.cjs');
-const { defaultConfig } = require('../generator-defaults.cjs');
+import statistics from '../statistics.cjs';
+import generatorDefaults from '../generator-defaults.cjs';
 
 // Global constants
-const constants = require('../generator-constants.cjs');
+import constants from '../generator-constants.cjs';
 
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { GENERATOR_AZURE_APP_SERVICE } = require('../generator-list.cjs');
+import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.cjs';
+import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
 
+const { defaultConfig } = generatorDefaults;
+const { MAVEN } = buildToolTypes;
 // Local constants
 const AZURE_WEBAPP_MAVEN_PLUGIN_VERSION = '1.8.0';
 const AZURE_WEBAPP_RUNTIME = 'JAVA|11-java11';
 const AZURE_APP_INSIGHTS_STARTER_VERSION = '2.5.1';
 
 /* eslint-disable consistent-return */
-module.exports = class extends BaseGenerator {
+export default class AzureAppServiceGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -656,4 +658,4 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
     if (this.delegateToBlueprint) return {};
     return this.end;
   }
-};
+}

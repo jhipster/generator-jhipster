@@ -16,21 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const os = require('os');
-const childProcess = require('child_process');
-const chalk = require('chalk');
-const glob = require('glob');
+import os from 'os';
+import childProcess from 'child_process';
+import chalk from 'chalk';
+import glob from 'glob';
 
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.cjs';
 
-const prompts = require('./prompts.cjs');
-const statistics = require('../statistics.cjs');
-const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
-const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const cacheProviders = require('../../jdl/jhipster/cache-types');
-const databaseTypes = require('../../jdl/jhipster/database-types');
-const constants = require('../generator-constants.cjs');
-const { GENERATOR_CLOUDFOUNDRY } = require('../generator-list.cjs');
+import prompts from './prompts.mjs';
+import statistics from '../statistics.cjs';
+import constants from '../generator-constants.cjs';
+import { GENERATOR_CLOUDFOUNDRY } from '../generator-list.mjs';
+import { cacheTypes, buildToolTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
+
+const { MEMCACHED } = cacheTypes;
+const { GRADLE, MAVEN } = buildToolTypes;
+const cacheProviders = cacheTypes;
 
 const NO_CACHE_PROVIDER = cacheProviders.NO;
 const NO_DATABASE_TYPE = databaseTypes.NO;
@@ -38,7 +39,7 @@ const NO_DATABASE_TYPE = databaseTypes.NO;
 const exec = childProcess.exec;
 
 /* eslint-disable consistent-return */
-module.exports = class extends BaseGenerator {
+export default class CloudfoundryGenerator extends BaseGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLOUDFOUNDRY);
@@ -237,4 +238,4 @@ module.exports = class extends BaseGenerator {
     if (this.delegateToBlueprint) return {};
     return this.end;
   }
-};
+}

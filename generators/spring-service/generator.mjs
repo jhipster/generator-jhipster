@@ -160,4 +160,4 @@ export default class SpringServiceGenerator extends BaseGenerator {
     if (this.delegateToBlueprint) return {};
     return this.writing;
   }
-};
+}

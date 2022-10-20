@@ -16,15 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
-const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
-const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
+import { applicationTypes, authenticationTypes, monitoringTypes } from '../../jdl/jhipster/index.mjs';
 
-module.exports = {
-  writeFiles,
-};
+const { PROMETHEUS } = monitoringTypes;
+const { MICROSERVICE } = applicationTypes;
+const { OAUTH2 } = authenticationTypes;
 
-function writeFiles() {
+// eslint-disable-next-line import/prefer-default-export
+export function writeFiles() {
   return {
     cleanup() {
       this.removeFile('realm-config/jhipster-users-0.json');

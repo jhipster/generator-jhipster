@@ -25,11 +25,12 @@ import path from 'path';
 import BaseGenerator from '../base/index.mjs';
 
 import prompts from './prompts.mjs';
-import { defaultConfig } from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.cjs';
 import constants from '../generator-constants.cjs';
 import { applicationTypes, clientFrameworkTypes, reservedKeywords } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
 
+const { defaultConfig } = generatorDefaults;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { isReservedClassName } = reservedKeywords;
