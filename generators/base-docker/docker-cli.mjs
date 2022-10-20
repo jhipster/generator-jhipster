@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
-const exec = require('child_process').exec;
+import _ from 'lodash';
+import { exec } from 'child_process';
 
 /**
  * This is the DockerCli object. it allows Yeoman to interact with Docker via Docker CLI.
  * NB: It is vital that these functions are bound to the generator context.
  */
-module.exports = {
+export default {
   setOutputs,
   command,
   getImageID,
@@ -34,7 +34,7 @@ module.exports = {
 
 let stdOut = data => console.log(data.toString().trim()); // eslint-disable-line
 let stdErr = data => console.error(data.toString().trim()); // eslint-disable-line
-function setOutputs(stdout, stderr) {
+export function setOutputs(stdout, stderr) {
   stdOut = stdout;
   stdErr = stderr;
 }
@@ -48,7 +48,7 @@ function setOutputs(stdout, stderr) {
  * @attr silent flag to deactivate the live stderr and stdout. Default to false
  * @attr maxBuffer value of the buffer to store the live outputs. Default to 10240000
  */
-function command(cmd, cb, opts = {}) {
+export function command(cmd, cb, opts = {}) {
   const options = {
     silent: false,
     maxBuffer: 10240000,
@@ -68,7 +68,7 @@ function command(cmd, cb, opts = {}) {
  * @param tag the image tag (optional)
  * @returns {Promise} returns the image ID on success, an error message on failure (exception or noId).
  */
-function getImageID(imageName, tag) {
+export function getImageID(imageName, tag) {
   const dockerNameTag = `${imageName}${_.isNil(tag) ? '' : `:${tag}`}`;
   const commandLine = `docker image ls --quiet ${dockerNameTag}`;
 
@@ -91,7 +91,7 @@ function getImageID(imageName, tag) {
   );
 }
 
-function tagImage(from, to) {
+export function tagImage(from, to) {
   const commandLine = `docker tag ${from} ${to}`;
 
   return new Promise((resolve, reject) =>
@@ -116,7 +116,7 @@ function tagImage(from, to) {
  * @param password
  * @returns {Promise}
  */
-function loginToAws(region, accountId, username, password) {
+export function loginToAws(region, accountId, username, password) {
   const commandLine = `docker login --username AWS --password ${password} https://${accountId}.dkr.ecr.${region}.amazonaws.com`;
   return new Promise(
     (resolve, reject) =>
@@ -135,7 +135,7 @@ function loginToAws(region, accountId, username, password) {
  * @param repository tag, for example: 111111111.dkr.ecr.us-east-1.amazonaws.com/sample
  * @returns {Promise<any>}
  */
-function pushImage(repository) {
+export function pushImage(repository) {
   const commandLine = `docker push ${repository}`;
   return new Promise((resolve, reject) =>
     command(commandLine, (err, stdout) => {

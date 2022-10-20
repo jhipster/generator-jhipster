@@ -16,32 +16,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
-const chalk = require('chalk');
-const fs = require('fs');
+/* eslint-disable consistent-return, import/no-named-as-default-member */
+import chalk from 'chalk';
+import fs from 'fs';
 
-const BaseDockerGenerator = require('../base-docker/index.cjs');
+import BaseDockerGenerator from '../base-docker/index.mjs';
 
-const prompts = require('./prompts.cjs');
-const { writeFiles } = require('./files.cjs');
-const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
-const { GENERATOR_KUBERNETES } = require('../generator-list.cjs');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../base-docker/docker-base.cjs');
-const {
+import prompts from './prompts.mjs';
+import { writeFiles } from './files.mjs';
+import { buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
+import { GENERATOR_KUBERNETES } from '../generator-list.mjs';
+import statistics from '../statistics.cjs';
+
+import { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } from '../base-docker/docker-base.mjs';
+import {
   checkKubernetes,
   loadConfig,
   saveConfig,
   setupKubernetesConstants,
   derivedKubernetesPlatformProperties,
-} = require('./kubernetes-base.cjs');
-const statistics = require('../statistics.cjs');
+} from './kubernetes-base.mjs';
+
+const { KAFKA } = messageBrokerTypes;
+const { MAVEN } = buildToolTypes;
 
 /**
  * @class
  * @extends {BaseDockerGenerator}
  */
-module.exports = class KubernetesGenerator extends BaseDockerGenerator {
+export default class KubernetesGenerator extends BaseDockerGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_KUBERNETES);
@@ -216,4 +219,4 @@ module.exports = class KubernetesGenerator extends BaseDockerGenerator {
     if (this.delegateToBlueprint) return {};
     return this.end;
   }
-};
+}

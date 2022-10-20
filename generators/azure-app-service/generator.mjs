@@ -29,7 +29,7 @@ import generatorDefaults from '../generator-defaults.cjs';
 // Global constants
 import constants from '../generator-constants.cjs';
 
-import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.cjs';
+import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
 
 const { defaultConfig } = generatorDefaults;

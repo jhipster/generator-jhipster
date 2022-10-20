@@ -16,23 +16,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
-const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const { COUCHBASE } = require('../../jdl/jhipster/database-types');
-const databaseType = require('../../jdl/jhipster/database-types');
-const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+import {
+  applicationTypes,
+  authenticationTypes,
+  databaseTypes,
+  kubernetesPlatformTypes,
+  monitoringTypes,
+  searchEngineTypes,
+  serviceDiscoveryTypes,
+} from '../../jdl/jhipster/index.mjs';
+
+const { ELASTICSEARCH } = searchEngineTypes;
+const { GATEWAY, MONOLITH } = applicationTypes;
+const { JWT } = authenticationTypes;
+const { PROMETHEUS } = monitoringTypes;
+const { CONSUL, EUREKA } = serviceDiscoveryTypes;
+const { COUCHBASE } = databaseTypes;
+const databaseType = databaseTypes;
+const { GeneratorTypes } = kubernetesPlatformTypes;
 
 const NO_DATABASE_TYPE = databaseType.NO;
 const { K8S } = GeneratorTypes;
 
-module.exports = {
-  writeFiles,
-};
-
-function writeFiles() {
+// eslint-disable-next-line import/prefer-default-export
+export function writeFiles() {
   const suffix = 'knative';
   return {
     writeGeneratorFiles() {

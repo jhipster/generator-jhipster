@@ -16,21 +16,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {
+  applicationTypes,
+  authenticationTypes,
+  databaseTypes,
+  monitoringTypes,
+  searchEngineTypes,
+  serviceDiscoveryTypes,
+} from '../../jdl/jhipster/index.mjs';
 
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
-const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const databaseTypes = require('../../jdl/jhipster/database-types');
+const { ELASTICSEARCH } = searchEngineTypes;
+const { GATEWAY, MONOLITH } = applicationTypes;
+const { JWT } = authenticationTypes;
+const { PROMETHEUS } = monitoringTypes;
+const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 
 const NO_DATABASE = databaseTypes.NO;
 
-module.exports = {
+export default {
   writeFiles,
 };
 
-function writeFiles() {
+export function writeFiles() {
   const suffix = 'k8s';
   return {
     writeDeployments() {

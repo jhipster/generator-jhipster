@@ -16,22 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
+import _ from 'lodash';
 
-const shelljs = require('shelljs');
-const chalk = require('chalk');
-const crypto = require('crypto');
-const { defaultKubernetesConfig } = require('./kubernetes-constants.cjs');
-const { loadFromYoRc } = require('../base-docker/docker-base.cjs');
-const constants = require('../generator-constants.cjs');
-const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
-const { GeneratorTypes, IngressTypes, ServiceTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+import shelljs from 'shelljs';
+import chalk from 'chalk';
+import crypto from 'crypto';
+import { defaultKubernetesConfig } from './kubernetes-constants.mjs';
+import { loadFromYoRc } from '../base-docker/docker-base.mjs';
+import constants from '../generator-constants.cjs';
+import { applicationTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.mjs';
+
+const { MICROSERVICE } = applicationTypes;
+const { GeneratorTypes, IngressTypes, ServiceTypes } = kubernetesPlatformTypes;
 
 const { INGRESS } = ServiceTypes;
 const { GKE, NGINX } = IngressTypes;
 const { K8S, HELM } = GeneratorTypes;
 
-module.exports = {
+export default {
   checkKubernetes,
   checkHelm,
   loadConfig,
@@ -41,7 +43,7 @@ module.exports = {
   derivedKubernetesPlatformProperties,
 };
 
-function checkKubernetes() {
+export function checkKubernetes() {
   if (this.skipChecks) return;
   const done = this.async();
 
@@ -56,7 +58,7 @@ function checkKubernetes() {
   });
 }
 
-function checkHelm() {
+export function checkHelm() {
   if (this.skipChecks) return;
   const done = this.async();
 
@@ -75,7 +77,7 @@ function checkHelm() {
   );
 }
 
-function loadConfig() {
+export function loadConfig() {
   loadFromYoRc.call(this);
   this.kubernetesNamespace = this.config.get('kubernetesNamespace');
   this.kubernetesServiceType = this.config.get('kubernetesServiceType');
@@ -88,7 +90,7 @@ function loadConfig() {
   this.generatorType = this.config.get('generatorType');
 }
 
-function saveConfig() {
+export function saveConfig() {
   this.config.set(
     _.defaults(
       {
@@ -114,7 +116,7 @@ function saveConfig() {
   );
 }
 
-function setupKubernetesConstants() {
+export function setupKubernetesConstants() {
   // Make constants available in templates
   this.KUBERNETES_CORE_API_VERSION = constants.KUBERNETES_CORE_API_VERSION;
   this.KUBERNETES_BATCH_API_VERSION = constants.KUBERNETES_BATCH_API_VERSION;
@@ -125,7 +127,7 @@ function setupKubernetesConstants() {
   this.KUBERNETES_RBAC_API_VERSION = constants.KUBERNETES_RBAC_API_VERSION;
 }
 
-function derivedKubernetesPlatformProperties(dest = _.defaults({}, this, defaultKubernetesConfig)) {
+export function derivedKubernetesPlatformProperties(dest = _.defaults({}, this, defaultKubernetesConfig)) {
   dest.deploymentApplicationTypeMicroservice = dest.deploymentApplicationType === MICROSERVICE;
   dest.ingressTypeNginx = dest.ingressType === NGINX;
   dest.ingressTypeGke = dest.ingressType === GKE;
@@ -135,7 +137,7 @@ function derivedKubernetesPlatformProperties(dest = _.defaults({}, this, default
   dest.generatorTypeHelm = dest.generatorType === HELM;
 }
 
-function setupHelmConstants() {
+export function setupHelmConstants() {
   this.HELM_KAFKA = constants.HELM_KAFKA;
   this.HELM_ELASTICSEARCH = constants.HELM_ELASTICSEARCH;
   this.HELM_PROMETHEUS = constants.HELM_PROMETHEUS;

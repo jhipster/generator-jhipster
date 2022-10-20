@@ -16,18 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
-const chalk = require('chalk');
-const fs = require('fs');
+/* eslint-disable consistent-return, import/no-named-as-default-member */
+import chalk from 'chalk';
+import fs from 'fs';
 
-const BaseDockerGenerator = require('../base-docker/index.cjs');
+import BaseDockerGenerator from '../base-docker/index.mjs';
 
-const prompts = require('../kubernetes/prompts.cjs');
-const { writeFiles } = require('./files.cjs');
-const { GENERATOR_KUBERNETES_HELM } = require('../generator-list.cjs');
-const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
-const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../base-docker/docker-base.cjs');
-const {
+import prompts from '../kubernetes/prompts.mjs';
+import { writeFiles } from './files.mjs';
+import { GENERATOR_KUBERNETES_HELM } from '../generator-list.mjs';
+import { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } from '../base-docker/docker-base.mjs';
+import {
   checkKubernetes,
   checkHelm,
   loadConfig,
@@ -35,14 +34,17 @@ const {
   setupKubernetesConstants,
   setupHelmConstants,
   derivedKubernetesPlatformProperties,
-} = require('../kubernetes/kubernetes-base.cjs');
-const statistics = require('../statistics.cjs');
+} from '../kubernetes/kubernetes-base.mjs';
+import statistics from '../statistics.cjs';
+import { messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
+
+const { KAFKA } = messageBrokerTypes;
 
 /**
  * @class
  * @extends {BaseDockerGenerator}
  */
-module.exports = class extends BaseDockerGenerator {
+export default class KubernetesHelmGenerator extends BaseDockerGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_KUBERNETES_HELM);
@@ -194,4 +196,4 @@ module.exports = class extends BaseDockerGenerator {
     if (this.delegateToBlueprint) return {};
     return this.end;
   }
-};
+}

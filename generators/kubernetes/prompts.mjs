@@ -16,19 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const execSync = require('child_process').execSync;
-const dockerPrompts = require('../base-docker/docker-prompts.cjs');
-const { MONOLITH } = require('../../jdl/jhipster/application-types');
-const { IngressTypes, ServiceTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+import { execSync } from 'child_process';
+import dockerPrompts from '../base-docker/docker-prompts.mjs';
+import { defaultKubernetesConfig, ingressDefaultConfig } from './kubernetes-constants.mjs';
 
-const databaseTypes = require('../../jdl/jhipster/database-types');
-const { defaultKubernetesConfig, ingressDefaultConfig } = require('./kubernetes-constants.cjs');
+import { applicationTypes, databaseTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.mjs';
+
+const { MONOLITH } = applicationTypes;
+const { IngressTypes, ServiceTypes } = kubernetesPlatformTypes;
 
 const NO_DATABASE = databaseTypes.NO;
 const { LOAD_BALANCER, INGRESS, NODE_PORT } = ServiceTypes;
 const { GKE, NGINX } = IngressTypes;
 
-module.exports = {
+export default {
   askForKubernetesNamespace,
   askForKubernetesServiceType,
   askForIngressType,
@@ -39,7 +40,7 @@ module.exports = {
   ...dockerPrompts,
 };
 
-async function askForKubernetesNamespace() {
+export async function askForKubernetesNamespace() {
   if (this.regenerate) return;
 
   const prompts = [
@@ -55,7 +56,7 @@ async function askForKubernetesNamespace() {
   this.kubernetesNamespace = props.kubernetesNamespace;
 }
 
-async function askForKubernetesServiceType() {
+export async function askForKubernetesServiceType() {
   if (this.regenerate) return;
 
   const istio = this.istio;
@@ -88,7 +89,7 @@ async function askForKubernetesServiceType() {
   this.kubernetesServiceType = props.kubernetesServiceType;
 }
 
-async function askForIngressType() {
+export async function askForIngressType() {
   if (this.regenerate) return;
   const kubernetesServiceType = this.kubernetesServiceType;
 
@@ -116,7 +117,7 @@ async function askForIngressType() {
   this.ingressType = props.ingressType;
 }
 
-async function askForIngressDomain() {
+export async function askForIngressDomain() {
   if (this.regenerate) return;
   const kubernetesServiceType = this.kubernetesServiceType;
   const istio = this.istio;
@@ -184,7 +185,7 @@ async function askForIngressDomain() {
   }
 }
 
-async function askForIstioSupport() {
+export async function askForIstioSupport() {
   if (this.regenerate) return;
   if (this.deploymentApplicationType === MONOLITH) {
     this.istio = false;
@@ -214,7 +215,7 @@ async function askForIstioSupport() {
   this.istio = props.istio;
 }
 
-async function askForPersistentStorage() {
+export async function askForPersistentStorage() {
   if (this.regenerate) return;
   let usingDataBase = false;
   this.appConfigs.forEach((appConfig, index) => {
@@ -247,7 +248,7 @@ async function askForPersistentStorage() {
   this.kubernetesUseDynamicStorage = props.kubernetesUseDynamicStorage;
 }
 
-async function askForStorageClassName() {
+export async function askForStorageClassName() {
   if (this.regenerate) return;
   const kubernetesUseDynamicStorage = this.kubernetesUseDynamicStorage;
 

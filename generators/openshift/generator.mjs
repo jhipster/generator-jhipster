@@ -16,25 +16,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const shelljs = require('shelljs');
+/* eslint-disable import/no-named-as-default-member */
+import chalk from 'chalk';
+import shelljs from 'shelljs';
 
-const BaseDockerGenerator = require('../base-docker/index.cjs');
+import BaseDockerGenerator from '../base-docker/index.mjs';
 
-const prompts = require('./prompts.cjs');
-const { GENERATOR_OPENSHIFT } = require('../generator-list.cjs');
-const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
-const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
-const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const serviceDiscoveryTypes = require('../../jdl/jhipster/service-discovery-types');
-const { StorageTypes } = require('../../jdl/jhipster/openshift-platform-types');
-const databaseTypes = require('../../jdl/jhipster/database-types');
-const writeFiles = require('./files.cjs').writeFiles;
-const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../base-docker/docker-base.cjs');
-const { setupKubernetesConstants } = require('../kubernetes/kubernetes-base.cjs');
-const statistics = require('../statistics.cjs');
+import prompts from './prompts.mjs';
+import { GENERATOR_OPENSHIFT } from '../generator-list.mjs';
+import { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } from '../base-docker/docker-base.mjs';
+import { setupKubernetesConstants } from '../kubernetes/kubernetes-base.mjs';
+import statistics from '../statistics.cjs';
+
+import {
+  applicationTypes,
+  databaseTypes,
+  messageBrokerTypes,
+  monitoringTypes,
+  openshiftPlatformTypes,
+  searchEngineTypes,
+  serviceDiscoveryTypes,
+} from '../../jdl/jhipster/index.mjs';
+
+const { KAFKA } = messageBrokerTypes;
+const { PROMETHEUS } = monitoringTypes;
+const { ELASTICSEARCH } = searchEngineTypes;
+const { GATEWAY, MONOLITH } = applicationTypes;
+const { EUREKA } = serviceDiscoveryTypes;
+const { StorageTypes } = openshiftPlatformTypes;
+const writeFiles = require('./files.mjs').writeFiles;
 
 const NO_DATABASE = databaseTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
@@ -45,7 +55,7 @@ const { EPHEMERAL, PERSISTENT } = StorageTypes;
  * @class
  * @extends {BaseDockerGenerator}
  */
-module.exports = class extends BaseDockerGenerator {
+export default class OpenshiftGenerator extends BaseDockerGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_OPENSHIFT);
@@ -274,4 +284,4 @@ module.exports = class extends BaseDockerGenerator {
     dest.storageTypeEphemeral = dest.storageType === EPHEMERAL;
     dest.storageTypePersistent = dest.storageType === PERSISTENT;
   }
-};
+}

@@ -16,23 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const dockerPrompts = require('../base-docker/docker-prompts.cjs');
-const databaseTypes = require('../../jdl/jhipster/database-types');
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
-const { StorageTypes } = require('../../jdl/jhipster/openshift-platform-types');
+import { databaseTypes, monitoringTypes, searchEngineTypes, openshiftPlatformTypes } from '../../jdl/jhipster/index.mjs';
+import dockerPrompts from '../base-docker/docker-prompts.mjs';
+
+const { ELASTICSEARCH } = searchEngineTypes;
+const { PROMETHEUS } = monitoringTypes;
+const { StorageTypes } = openshiftPlatformTypes;
 
 const { EPHEMERAL, PERSISTENT } = StorageTypes;
 
 const NO_DATABASE = databaseTypes.NO;
 
-module.exports = {
+export default {
   askForOpenShiftNamespace,
   askForStorageType,
   ...dockerPrompts,
 };
 
-async function askForOpenShiftNamespace() {
+export async function askForOpenShiftNamespace() {
   if (this.regenerate) return;
 
   const prompts = [
@@ -48,7 +49,7 @@ async function askForOpenShiftNamespace() {
   this.openshiftNamespace = props.openshiftNamespace;
 }
 
-async function askForStorageType() {
+export async function askForStorageType() {
   if (this.regenerate) return;
 
   let storageEnabled = false;

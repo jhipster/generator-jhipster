@@ -16,18 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const databaseTypes = require('../../jdl/jhipster/database-types');
-const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
-const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+import { databaseTypes, monitoringTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
+
+const { ELASTICSEARCH } = searchEngineTypes;
+const { PROMETHEUS } = monitoringTypes;
+const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 
 const NO_DATABASE = databaseTypes.NO;
 
-module.exports = {
+export default {
   writeFiles,
 };
 
-function writeFiles() {
+export function writeFiles() {
   return {
     writeDeployments() {
       for (let i = 0; i < this.appConfigs.length; i++) {

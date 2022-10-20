@@ -17,31 +17,40 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const crypto = require('crypto');
-const _ = require('lodash');
-const fs = require('fs');
-const ChildProcess = require('child_process');
-const util = require('util');
-const chalk = require('chalk');
-const glob = require('glob');
+import crypto from 'crypto';
+import _ from 'lodash';
+import fs from 'fs';
+import ChildProcess from 'child_process';
+import util from 'util';
+import chalk from 'chalk';
+import glob from 'glob';
 
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.cjs';
 
-const statistics = require('../statistics.cjs');
-const constants = require('../generator-constants.cjs');
-const cacheProviderOptions = require('../../jdl/jhipster/cache-types');
-const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
-const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
-const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { GENERATOR_HEROKU } = require('../generator-list.cjs');
-const { MARIADB, MYSQL, POSTGRESQL } = require('../../jdl/jhipster/database-types');
-const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+import statistics from '../statistics.cjs';
+import constants from '../generator-constants.cjs';
+import { GENERATOR_HEROKU } from '../generator-list.mjs';
+import {
+  authenticationTypes,
+  buildToolTypes,
+  cacheTypes,
+  databaseTypes,
+  searchEngineTypes,
+  serviceDiscoveryTypes,
+} from '../../jdl/jhipster/index.mjs';
+
+const cacheProviderOptions = cacheTypes;
+const { MEMCACHED, REDIS } = cacheTypes;
+const { OAUTH2 } = authenticationTypes;
+const { GRADLE, MAVEN } = buildToolTypes;
+const { ELASTICSEARCH } = searchEngineTypes;
+const { MARIADB, MYSQL, POSTGRESQL } = databaseTypes;
+const { EUREKA } = serviceDiscoveryTypes;
 
 const NO_CACHE_PROVIDER = cacheProviderOptions.NO;
 const execCmd = util.promisify(ChildProcess.exec);
 
-module.exports = class extends BaseGenerator {
+export default class HerokuGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -858,4 +867,4 @@ module.exports = class extends BaseGenerator {
     if (this.delegateToBlueprint) return {};
     return this.end;
   }
-};
+}

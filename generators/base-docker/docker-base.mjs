@@ -16,17 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { existsSync } = require('fs');
-const chalk = require('chalk');
-const _ = require('lodash');
+import { existsSync } from 'fs';
+import chalk from 'chalk';
+import _ from 'lodash';
 
-const dockerUtils = require('./docker-utils.cjs');
-const { getBase64Secret } = require('../utils.cjs');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../jdl/jhipster/application-types');
+import { getBase64Secret } from '../utils.cjs';
+import { applicationTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
 
-module.exports = {
-  checkDocker: dockerUtils.checkDocker,
+const { MAVEN } = buildToolTypes;
+const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
+
+export { checkDocker } from './docker-utils.mjs';
+
+export default {
   checkImages,
   generateJwtSecret,
   configureImageNames,
@@ -39,7 +41,7 @@ module.exports = {
 /**
  * Check Images
  */
-function checkImages() {
+export function checkImages() {
   this.log('\nChecking Docker images in applications directories...');
 
   let imagePath = '';
@@ -65,7 +67,7 @@ function checkImages() {
 /**
  * Generate Jwt Secret
  */
-function generateJwtSecret() {
+export function generateJwtSecret() {
   if (this.jwtSecretKey === undefined) {
     this.jwtSecretKey = getBase64Secret.call(this);
   }
@@ -74,7 +76,7 @@ function generateJwtSecret() {
 /**
  * Configure Image Names
  */
-function configureImageNames() {
+export function configureImageNames() {
   for (let i = 0; i < this.appsFolders.length; i++) {
     const originalImageName = this.appConfigs[i].baseName.toLowerCase();
     const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
@@ -85,7 +87,7 @@ function configureImageNames() {
 /**
  * Set Apps Folder Paths
  */
-function setAppsFolderPaths() {
+export function setAppsFolderPaths() {
   if (this.applicationType) return;
   this.appsFolderPaths = [];
   for (let i = 0; i < this.appsFolders.length; i++) {
@@ -97,7 +99,7 @@ function setAppsFolderPaths() {
 /**
  * Load config from this.appFolders
  */
-function loadConfigs() {
+export function loadConfigs() {
   this.appConfigs = [];
   this.gatewayNb = 0;
   this.monolithicNb = 0;
@@ -135,7 +137,7 @@ function loadConfigs() {
   });
 }
 
-function setClusteredApps() {
+export function setClusteredApps() {
   for (let i = 0; i < this.appsFolders.length; i++) {
     for (let j = 0; j < this.clusteredDbApps.length; j++) {
       this.appConfigs[i].clusteredDb = this.appsFolders[i] === this.clusteredDbApps[j];
@@ -143,7 +145,7 @@ function setClusteredApps() {
   }
 }
 
-function loadFromYoRc() {
+export function loadFromYoRc() {
   this.loadDeploymentConfig();
 
   this.useKafka = false;

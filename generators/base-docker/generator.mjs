@@ -16,18 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
+import _ from 'lodash';
 
-const prompts = require('./docker-prompts.cjs');
-const BlueprintBaseGenerator = require('../base/index.cjs');
-const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list.cjs');
-const { loadFromYoRc, checkDocker, checkImages, generateJwtSecret, setAppsFolderPaths } = require('./docker-base.cjs');
-const statistics = require('../statistics.cjs');
+import prompts from './docker-prompts.mjs';
+import BlueprintBaseGenerator from '../base/index.cjs';
+import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
+import { loadFromYoRc, checkDocker, checkImages, generateJwtSecret, setAppsFolderPaths } from './docker-base.mjs';
+import statistics from '../statistics.cjs';
+import { applicationOptions, deploymentOptions } from '../../jdl/jhipster/index.mjs';
 
-const constants = require('../generator-constants.cjs');
+import constants from '../generator-constants.cjs';
 
-const { OptionNames } = require('../../jdl/jhipster/application-options');
-const { Options: DeploymentOptions } = require('../../jdl/jhipster/deployment-options');
+const { OptionNames } = applicationOptions;
+const { Options: DeploymentOptions } = deploymentOptions;
 
 const { JWT_SECRET_KEY } = OptionNames;
 
@@ -35,7 +36,7 @@ const { JWT_SECRET_KEY } = OptionNames;
  * @class
  * @extends {BlueprintBaseGenerator}
  */
-module.exports = class extends BlueprintBaseGenerator {
+export default class BaseDockerGenerator extends BlueprintBaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -146,4 +147,4 @@ module.exports = class extends BlueprintBaseGenerator {
     dest.jwtSecretKey = config[JWT_SECRET_KEY];
     this.loadPlatformConfig(config, dest);
   }
-};
+}

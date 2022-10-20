@@ -16,21 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const BaseGenerator = require('../base/index.cjs');
+import chalk from 'chalk';
+import BaseGenerator from '../base/index.cjs';
 
-const prompts = require('./prompts.cjs');
-const AwsFactory = require('./lib/aws.cjs');
-const statistics = require('../statistics.cjs');
-const { OptionNames } = require('../../jdl/jhipster/application-options');
-const { GENERATOR_AWS } = require('../generator-list.cjs');
+import prompts from './prompts.mjs';
+import AwsFactory from './lib/aws.cjs';
+import statistics from '../statistics.cjs';
+import { GENERATOR_AWS } from '../generator-list.mjs';
+import { applicationOptions, databaseTypes } from '../../jdl/jhipster/index.mjs';
 
+const { OptionNames } = applicationOptions;
 const { BUILD_TOOL, BASE_NAME, PROD_DATABASE_TYPE } = OptionNames;
 
-const { MYSQL, POSTGRESQL, MARIADB } = require('../../jdl/jhipster/database-types');
+const { MYSQL, POSTGRESQL, MARIADB } = databaseTypes;
 
 /* eslint-disable consistent-return */
-module.exports = class extends BaseGenerator {
+export default class AwsGenerator extends BaseGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_AWS);
@@ -290,4 +291,4 @@ module.exports = class extends BaseGenerator {
     if (this.delegateToBlueprint) return {};
     return this.default;
   }
-};
+}

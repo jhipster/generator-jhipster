@@ -16,14 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const statistics = require('../statistics.cjs');
-const { packageJson: packagejs } = require('../../lib/index.cjs');
-const { appDefaultConfig, defaultConfigMicroservice } = require('../generator-defaults.cjs');
-const { GATEWAY, MONOLITH, MICROSERVICE } = require('../../jdl/jhipster/application-types');
-const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../../jdl/jhipster/test-framework-types');
+import chalk from 'chalk';
+import statistics from '../statistics.cjs';
+import { packageJson as packagejs } from '../../lib/index.mjs';
+import generatorsDefaults from '../generator-defaults.cjs';
+import { applicationTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-module.exports = {
+const { appDefaultConfig, defaultConfigMicroservice } = generatorsDefaults;
+const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
+const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = testFrameworkTypes;
+
+export default {
   askForInsightOptIn,
   askForApplicationType,
   askForModuleName,
@@ -31,7 +34,7 @@ module.exports = {
   askForMoreModules,
 };
 
-async function askForInsightOptIn() {
+export async function askForInsightOptIn() {
   if (!statistics.shouldWeAskForOptIn()) return;
   const answers = await this.prompt({
     type: 'confirm',
@@ -54,7 +57,7 @@ const promptValueToMicrofrontends = answer =>
         .map(baseName => ({ baseName }))
     : [];
 
-async function askForApplicationType() {
+export async function askForApplicationType() {
   if (this.existingProject && this.options.askAnswered !== true) return;
 
   const applicationTypeChoices = [
@@ -121,12 +124,12 @@ async function askForApplicationType() {
   this.applicationType = applicationType;
 }
 
-function askForModuleName() {
+export function askForModuleName() {
   if (this.existingProject || this.jhipsterConfig.baseName) return undefined;
   return this.askModuleName(this);
 }
 
-async function askForTestOpts() {
+export async function askForTestOpts() {
   if (this.existingProject) return undefined;
 
   const choices = [];
@@ -152,7 +155,7 @@ async function askForTestOpts() {
   return answers;
 }
 
-function askForMoreModules() {
+export function askForMoreModules() {
   if (this.existingProject) {
     return undefined;
   }
@@ -170,7 +173,7 @@ function askForMoreModules() {
   });
 }
 
-function askModulesToBeInstalled(done, generator) {
+export function askModulesToBeInstalled(done, generator) {
   const jHipsterMajorVersion = packagejs.version.match(/^(\d+)/g);
 
   generator.httpsGet(

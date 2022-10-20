@@ -22,7 +22,7 @@ import jsyaml from 'js-yaml';
 import pathjs from 'path';
 import normalize from 'normalize-path';
 
-import BaseDockerGenerator from '../base-docker/index.cjs';
+import BaseDockerGenerator from '../base-docker/index.mjs';
 
 import { writeFiles } from './files.mjs';
 import {

@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
+/* eslint-disable consistent-return, import/no-named-as-default-member */
 import chalk from 'chalk';
 import _ from 'lodash';
 import BaseGenerator from '../base-application/index.mjs';
 
 import { cleanupOldFiles, upgradeFiles } from '../cleanup.mjs';
-import prompts from './prompts.cjs';
+import prompts from './prompts.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import statistics from '../statistics.cjs';
 import generatorDefaults from '../generator-defaults.cjs';

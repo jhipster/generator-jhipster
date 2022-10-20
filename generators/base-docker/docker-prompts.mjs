@@ -16,18 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const shelljs = require('shelljs');
-const { loadConfigs, setClusteredApps } = require('./docker-base.cjs');
-const { getBase64Secret } = require('../utils.cjs');
-const { MICROSERVICE, MONOLITH, GATEWAY } = require('../../jdl/jhipster/application-types');
-const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
-const monitoring = require('../../jdl/jhipster/monitoring-types');
+import chalk from 'chalk';
+import shelljs from 'shelljs';
+import { loadConfigs, setClusteredApps } from './docker-base.mjs';
+import { getBase64Secret } from '../utils.cjs';
+import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
+
+const { MICROSERVICE, MONOLITH, GATEWAY } = applicationTypes;
+const { PROMETHEUS } = monitoringTypes;
+const monitoring = monitoringTypes;
 
 const NO_MONITORING = monitoring.NO;
-const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 
-module.exports = {
+export default {
   askForApplicationType,
   askForGatewayType,
   askForPath,
@@ -359,7 +361,7 @@ async function askForDockerPushCommand() {
  * @param deploymentApplicationType type of application being composed
  * @returns {Array} array of string representing app folders
  */
-function getAppFolders(input, deploymentApplicationType) {
+export function getAppFolders(input, deploymentApplicationType) {
   const destinationPath = this.destinationPath(input);
   const files = shelljs.ls('-l', destinationPath);
   const appsFolders = [];

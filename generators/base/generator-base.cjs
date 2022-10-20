@@ -39,8 +39,21 @@ const { commonOptions } = require('../options.cjs');
 const { detectLanguage } = require('../languages/detect-language.cjs');
 const { formatDateForChangelog } = require('../../utils/liquibase.cjs');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../../utils/db.cjs');
-const defaultApplicationOptions = require('../../jdl/jhipster/default-application-options');
-const databaseTypes = require('../../jdl/jhipster/database-types');
+const {
+  defaultApplicationOptions,
+  databaseTypes,
+  monitoringTypes,
+  authenticationTypes,
+  buildToolTypes,
+  cacheTypes,
+  websocketTypes,
+  messageBrokerTypes,
+  testFrameworkTypes,
+  applicationTypes,
+  serviceDiscoveryTypes,
+  searchEngineTypes,
+} = require('../../jdl/jhipster/index.cjs');
+
 const { databaseData } = require('../sql-constants.cjs');
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
 const { joinCallbacks } = require('./utils.cjs');
@@ -56,27 +69,23 @@ const {
 } = constants;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
+const { CUSTOM_PRIORITIES } = require('./priorities.cjs');
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
 const { GENERATOR_BOOTSTRAP } = require('../generator-list.cjs');
-const { PROMETHEUS, ELK } = require('../../jdl/jhipster/monitoring-types');
-const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
-const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = require('../../jdl/jhipster/cache-types');
-const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
-const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
-const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../../jdl/jhipster/test-framework-types');
-const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { CUSTOM_PRIORITIES } = require('./priorities.cjs');
-const cacheTypes = require('../../jdl/jhipster/cache-types');
-const serviceDiscoveryTypes = require('../../jdl/jhipster/service-discovery-types');
-const searchEngineTypes = require('../../jdl/jhipster/search-engine-types');
-const messageBrokerTypes = require('../../jdl/jhipster/message-broker-types');
-const websocketTypes = require('../../jdl/jhipster/websocket-types');
+
+const { PROMETHEUS, ELK } = monitoringTypes;
+const { JWT, OAUTH2, SESSION } = authenticationTypes;
+const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
+const { GRADLE, MAVEN } = buildToolTypes;
+const { SPRING_WEBSOCKET } = websocketTypes;
+const { KAFKA } = messageBrokerTypes;
+const { CONSUL, EUREKA } = serviceDiscoveryTypes;
+const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = testFrameworkTypes;
+const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+const { ELASTICSEARCH } = searchEngineTypes;
 
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;

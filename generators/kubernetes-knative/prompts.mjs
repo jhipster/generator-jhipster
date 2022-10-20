@@ -16,13 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const k8sPrompts = require('../kubernetes/prompts.cjs');
-const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
-const { generatorDefaultConfig } = require('../kubernetes/kubernetes-constants.cjs');
+import k8sPrompts from '../kubernetes/prompts.mjs';
+import { kubernetesPlatformTypes } from '../../jdl/jhipster/index.mjs';
+import { generatorDefaultConfig } from '../kubernetes/kubernetes-constants.mjs';
 
+const { GeneratorTypes } = kubernetesPlatformTypes;
 const { HELM, K8S } = GeneratorTypes;
 
-module.exports = {
+export default {
   askForGeneratorType,
   ...k8sPrompts,
 };

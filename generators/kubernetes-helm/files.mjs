@@ -16,20 +16,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
-const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
-const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const { ServiceTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+import {
+  applicationTypes,
+  authenticationTypes,
+  kubernetesPlatformTypes,
+  monitoringTypes,
+  searchEngineTypes,
+  serviceDiscoveryTypes,
+} from '../../jdl/jhipster/index.mjs';
+
+const { ELASTICSEARCH } = searchEngineTypes;
+const { GATEWAY, MONOLITH } = applicationTypes;
+const { JWT } = authenticationTypes;
+const { PROMETHEUS } = monitoringTypes;
+const { CONSUL, EUREKA } = serviceDiscoveryTypes;
+const { ServiceTypes } = kubernetesPlatformTypes;
 
 const { INGRESS } = ServiceTypes;
 
-module.exports = {
+export default {
   writeFiles,
 };
 
-function writeFiles() {
+export function writeFiles() {
   const suffix = 'helm';
   return {
     writeAppChart() {

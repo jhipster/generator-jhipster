@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const shelljs = require('shelljs');
-const chalk = require('chalk');
+import shelljs from 'shelljs';
+import chalk from 'chalk';
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
@@ -25,14 +25,14 @@ const chalk = require('chalk');
  *
  * The method signatures in public API should not be changed without a major version change
  */
-module.exports = {
+export default {
   checkDocker,
 };
 
 /**
  * Check that Docker exists.
  */
-function checkDocker() {
+export function checkDocker() {
   if (this.abort || this.skipChecks) return;
   const done = this.async();
 

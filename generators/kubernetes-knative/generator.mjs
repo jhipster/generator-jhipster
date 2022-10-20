@@ -17,19 +17,17 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
-const shelljs = require('shelljs');
-const fs = require('fs');
+import chalk from 'chalk';
+import shelljs from 'shelljs';
+import fs from 'fs';
 
-const BaseDockerGenerator = require('../base-docker/index.cjs');
+import BaseDockerGenerator from '../base-docker/index.mjs';
 
-const prompts = require('./prompts.cjs');
-const { writeFiles } = require('./files.cjs');
-const { GENERATOR_KUBERNETES_KNATIVE } = require('../generator-list.cjs');
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
-const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../base-docker/docker-base.cjs');
-const {
+import prompts from './prompts.mjs';
+import { writeFiles } from './files.mjs';
+import { GENERATOR_KUBERNETES_KNATIVE } from '../generator-list.mjs';
+import { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } from '../base-docker/docker-base.mjs';
+import {
   checkHelm,
   checkKubernetes,
   loadConfig,
@@ -37,9 +35,13 @@ const {
   setupKubernetesConstants,
   setupHelmConstants,
   derivedKubernetesPlatformProperties,
-} = require('../kubernetes/kubernetes-base.cjs');
-const statistics = require('../statistics.cjs');
-const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+} from '../kubernetes/kubernetes-base.mjs';
+import statistics from '../statistics.cjs';
+import { kubernetesPlatformTypes, buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
+
+const { GeneratorTypes } = kubernetesPlatformTypes;
+const { MAVEN } = buildToolTypes;
+const { KAFKA } = messageBrokerTypes;
 
 const { K8S } = GeneratorTypes;
 
@@ -47,7 +49,7 @@ const { K8S } = GeneratorTypes;
  * @class
  * @extends {BaseDockerGenerator}
  */
-module.exports = class extends BaseDockerGenerator {
+export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_KUBERNETES_KNATIVE);
@@ -244,4 +246,4 @@ module.exports = class extends BaseDockerGenerator {
     if (this.delegateToBlueprint) return {};
     return this.end;
   }
-};
+}

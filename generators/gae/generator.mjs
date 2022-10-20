@@ -17,27 +17,29 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const os = require('os');
-const shelljs = require('shelljs');
-const fs = require('fs');
-const chalk = require('chalk');
-const _ = require('lodash');
+import os from 'os';
+import shelljs from 'shelljs';
+import fs from 'fs';
+import chalk from 'chalk';
+import _ from 'lodash';
 
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.cjs';
 
-const { GENERATOR_GAE } = require('../generator-list.cjs');
-const statistics = require('../statistics.cjs');
-const dockerPrompts = require('../base-docker/docker-prompts.cjs');
-const constants = require('../generator-constants.cjs');
-const cacheProviders = require('../../jdl/jhipster/cache-types');
-const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
-const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
-const { MARIADB, MYSQL, POSTGRESQL } = require('../../jdl/jhipster/database-types');
-const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
+import { GENERATOR_GAE } from '../generator-list.mjs';
+import statistics from '../statistics.cjs';
+import dockerPrompts from '../base-docker/docker-prompts.mjs';
+import constants from '../generator-constants.cjs';
+import { applicationTypes, buildToolTypes, cacheTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
+
+const cacheProviders = cacheTypes;
+const { MEMCACHED } = cacheTypes;
+const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+const { MARIADB, MYSQL, POSTGRESQL } = databaseTypes;
+const { MAVEN, GRADLE } = buildToolTypes;
 
 const NO_CACHE_PROVIDER = cacheProviders.NO;
 
-module.exports = class extends BaseGenerator {
+export default class GaeGenerator extends BaseGenerator {
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_GAE);
@@ -931,4 +933,4 @@ module.exports = class extends BaseGenerator {
 
     return appsFolders;
   }
-};
+}
