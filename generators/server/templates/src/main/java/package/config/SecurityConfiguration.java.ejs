@@ -19,9 +19,6 @@
 package <%= packageName %>.config;
 
 import <%= packageName %>.security.*;
-<%_ if (authenticationTypeJwt) { _%>
-import <%= packageName %>.security.jwt.*;
-<%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
 <%_ if (authenticationTypeSession) { _%>
 import tech.jhipster.security.*;
@@ -76,8 +73,16 @@ import org.springframework.security.web.csrf.CsrfFilter;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
 <%_ } _%>
-<%_ if (authenticationTypeJwt && !applicationTypeMicroservice) { _%>
+<%_ if (authenticationTypeJwt) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+  <%_ } _%>
+  <%_ if (applicationTypeMonolith) { _%>
+import org.springframework.security.config.Customizer;
+  <%_ } _%>
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
+import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 && applicationTypeMonolith) { _%>
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -103,10 +108,6 @@ public class SecurityConfiguration {
 
     private final RememberMeServices rememberMeServices;
 <%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
-
-    private final TokenProvider tokenProvider;
-<%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
 
     private final CorsFilter corsFilter;
@@ -118,12 +119,9 @@ public class SecurityConfiguration {
     <%_ } _%>
     // private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (authenticationTypeSession && !skipUserManagement) { %>RememberMeServices rememberMeServices, <% } if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (!applicationTypeMicroservice) { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties) {
+    public SecurityConfiguration(<% if (authenticationTypeSession && !skipUserManagement) { %>RememberMeServices rememberMeServices, <% } %><% if (!applicationTypeMicroservice) { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties) {
 <%_ if (authenticationTypeSession && !skipUserManagement) { _%>
         this.rememberMeServices = rememberMeServices;
-<%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
-        this.tokenProvider = tokenProvider;
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
         this.corsFilter = corsFilter;
@@ -188,11 +186,6 @@ public class SecurityConfiguration {
                 .frameOptions().sameOrigin()
         .and()
 <%_ } _%>
-<%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
-            .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-<%_ } _%>
             .authorizeRequests()
 <%_ if (!applicationTypeMicroservice) { _%>
             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -207,7 +200,7 @@ public class SecurityConfiguration {
 <%_ if (devDatabaseTypeH2Any) { _%>
             .antMatchers("/h2-console/**").permitAll()
 <%_ } _%>
-            .antMatchers("/api/authenticate").permitAll()
+            .antMatchers(<% if (authenticationTypeJwt) { %>HttpMethod.POST, <% } %>"/api/authenticate").permitAll()
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
@@ -247,15 +240,21 @@ public class SecurityConfiguration {
                 .logoutSuccessHandler(ajaxLogoutSuccessHandler())
                 .permitAll();
 <%_ } else if (authenticationTypeJwt) { _%>
-  <%_ if (applicationTypeMonolith) { _%>
-            .httpBasic()
+            .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+            .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-  <%_ } _%>
-            .apply(securityConfigurerAdapter());
+            .exceptionHandling((exceptions) -> exceptions
+				.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+				.accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+			);
 <%_ } else if (authenticationTypeOauth2) { _%>
   <%_ if (applicationTypeMonolith) { _%>
             .oauth2Login()
         .and()
+  <%_ } else if (applicationTypeMicroservice) { _%>
+            .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
   <%_ } _%>
             .oauth2ResourceServer()
                 .jwt()
@@ -267,12 +266,6 @@ public class SecurityConfiguration {
         return http.build();
         // @formatter:on
     }
-<%_ if (authenticationTypeJwt) { _%>
-
-    private JWTConfigurer securityConfigurerAdapter() {
-        return new JWTConfigurer(tokenProvider);
-    }
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 
     Converter<Jwt, AbstractAuthenticationToken> authenticationConverter() {

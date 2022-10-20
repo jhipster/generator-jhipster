@@ -195,6 +195,18 @@ function cleanupOldServerFiles(generator, application, javaDir, testDir, mainRes
     generator.removeFile(`${constants.DOCKER_DIR}realm-config/jhipster-users-0.json`);
     generator.removeFile(`${testDir}NoOpMailConfiguration.java`);
   }
+  if (generator.isJhipsterVersionLessThan('7.10.0')) {
+    if (application.authenticationTypeJwt) {
+      generator.removeFile(`${application.javaPackageSrcDir}web/rest/UserJWTController.java`);
+      generator.removeFile(`${application.javaPackageSrcDir}security/jwt/JWTConfigurer.java`);
+      generator.removeFile(`${application.javaPackageSrcDir}security/jwt/JWTFilter.java`);
+      generator.removeFile(`${application.javaPackageSrcDir}security/jwt/TokenProvider.java`);
+      generator.removeFile(`${application.javaPackageTestDir}web/rest/UserJWTControllerIT.java`);
+      generator.removeFile(`${application.javaPackageTestDir}security/jwt/JWTFilterTest.java`);
+      generator.removeFile(`${application.javaPackageTestDir}security/jwt/TokenProviderSecurityMetersTests.java`);
+      generator.removeFile(`${application.javaPackageTestDir}security/jwt/TokenProviderTest.java`);
+    }
+  }
 }
 
 module.exports = {

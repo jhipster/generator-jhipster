@@ -72,6 +72,9 @@ export type SpringBootApplication = CommonClientServerApplication &
     srcTestResources: string;
     srcTestJavascript: string;
 
+    javaPackageSrcDir: string;
+    javaPackageTestDir: string;
+
     buildDir: string;
 
     javaDependencies: Record<string, string>;

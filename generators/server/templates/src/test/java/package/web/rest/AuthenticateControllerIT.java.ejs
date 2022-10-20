@@ -63,7 +63,7 @@ import static org.hamcrest.Matchers.not;
 <%_ } _%>
 
 /**
- * Integration tests for the {@link UserJWTController} REST controller.
+ * Integration tests for the {@link AuthenticateController} REST controller.
  */
 <%_ if (reactive) { _%>
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
@@ -71,7 +71,7 @@ import static org.hamcrest.Matchers.not;
 @AutoConfigureMockMvc
 <%_ } _%>
 @IntegrationTest
-class UserJWTControllerIT {
+class AuthenticateControllerIT {
 
 <%_ if (!skipUserManagement) { _%>
     @Autowired

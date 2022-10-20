@@ -469,16 +469,9 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
     implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
+<%_ } _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
-<%_ } else if (authenticationTypeJwt) { _%>
-    implementation "io.jsonwebtoken:jjwt-api"
-    if (!project.hasProperty("gae")) {
-    runtimeOnly "io.jsonwebtoken:jjwt-impl"
-    <% if (reactive) { %>implementation<% } else { %>runtimeOnly<% } %> "io.jsonwebtoken:jjwt-jackson"
-    } else {
-    implementation "io.jsonwebtoken:jjwt-impl"
-    implementation "io.jsonwebtoken:jjwt-jackson"
-    }
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
     implementation "com.datastax.oss:java-driver-mapper-runtime"

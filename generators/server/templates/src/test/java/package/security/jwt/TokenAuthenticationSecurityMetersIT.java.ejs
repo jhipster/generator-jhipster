@@ -1,0 +1,114 @@
+package <%= packageName %>.security.jwt;
+
+import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import java.util.Collection;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
+<%_ if (reactive) { _%>
+import com.mycompany.myapp.IntegrationTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
+<%_ } else { _%>
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+@AutoConfigureMockMvc
+<%_ } _%>
+@AuthenticationIntegrationTest
+class TokenAuthenticationSecurityMetersIT {
+
+    private static final String INVALID_TOKENS_METER_EXPECTED_NAME = "security.authentication.invalid-tokens";
+
+    @Autowired
+<%_ if (reactive) { _%>
+    private WebTestClient webTestClient;
+<%_ } else { _%>
+    private MockMvc mvc;
+<%_ } _%>
+
+    @Value("${jhipster.security.authentication.jwt.base64-secret}")
+    private String jwtKey;
+
+    @Autowired
+    private MeterRegistry meterRegistry;
+
+    @Test
+    public void testValidTokenShouldNotCountAnything() throws Exception {
+        Collection<Counter> counters = meterRegistry.find(INVALID_TOKENS_METER_EXPECTED_NAME).counters();
+
+        var count = aggregate(counters);
+
+        tryToAuthenticate(createValidToken(jwtKey));
+
+        assertThat(aggregate(counters)).isEqualTo(count);
+    }
+
+    @Test
+    public void testTokenExpiredCount() throws Exception {
+        var count = meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "expired").counter().count();
+
+        tryToAuthenticate(createExpiredToken(jwtKey));
+
+        assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "expired").counter().count()).isEqualTo(count + 1);
+    }
+
+    @Test
+    public void testTokenSignatureInvalidCount() throws Exception {
+        var count = meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "invalid-signature").counter().count();
+
+        tryToAuthenticate(createTokenWithDifferentSignature());
+
+        assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "invalid-signature").counter().count())
+            .isEqualTo(count + 1);
+    }
+
+    @Test
+    public void testTokenMalformedCount() throws Exception {
+        var count = meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "malformed").counter().count();
+
+        tryToAuthenticate(createSignedInvalidJwt(jwtKey));
+
+        assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "malformed").counter().count()).isEqualTo(count + 1);
+    }
+
+    @Test
+    public void testTokenInvalidCount() throws Exception {
+        var count = meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "malformed").counter().count();
+
+        tryToAuthenticate(createInvalidToken(jwtKey));
+
+        assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "malformed").counter().count()).isEqualTo(count + 1);
+    }
+<%_ if (reactive) { _%>
+
+    private void tryToAuthenticate(String token) {
+        webTestClient
+            .get()
+            .uri("/api/authenticate")
+            .headers(headers -> headers.setBearerAuth(token))
+            .exchange()
+            .returnResult(String.class)
+            .getResponseBody()
+            .blockLast();
+    }
+<%_ } else { _%>
+
+    private void tryToAuthenticate(String token) throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/authenticate").header(AUTHORIZATION, BEARER + token));
+    }
+<%_ } _%>
+
+    private double aggregate(Collection<Counter> counters) {
+        return counters.stream().mapToDouble(Counter::count).sum();
+    }
+}
