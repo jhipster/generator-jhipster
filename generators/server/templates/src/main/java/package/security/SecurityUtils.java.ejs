@@ -23,6 +23,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 <%_ if (!reactive) { _%>
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+<%_ } else { _%>
 import org.springframework.security.core.context.SecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.core.userdetails.UserDetails;
