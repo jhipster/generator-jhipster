@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseGenerator = require('../base/index.cjs');
-const { GENERATOR_ADD } = require('../generator-list.cjs');
+import BaseGenerator from '../base/index.mjs';
+import { GENERATOR_ADD } from '../generator-list.mjs';
 
 /**
  * @experimental
  */
-module.exports = class extends BaseGenerator {
+export default class AddGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
