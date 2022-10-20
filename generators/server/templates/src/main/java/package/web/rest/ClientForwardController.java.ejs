@@ -24,14 +24,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ClientForwardController {
     // File names with extension.
-    public static final String EXTENSION_PATTERN = "/{file:[^\\.]*}";
+    public static final String FORBID_EXTENSION_PATTERN = "/{file:[^\\.]*}";
 
     // Folders with trailing separator.
-    public static final String TRAILING_PATTERN = "/{trailingDir:.*}/";
+    public static final String TRAILING_DIR_PATTERN = "/{traillingDir:.*}/";
 <%_ if (communicationSpringWebsocket) { _%>
 
-    // Root folders allow list. Folders that should not be forwarded to index.html.
-    public static final String ALLOW_LIST_PATTERN = "/{rootDir:^(?!websocket).*}";
+    // Root folders allow list. Folders that shouls not be forwarded to index.hml.
+    public static final String ALLOW_ROOT_PATTERN = "/{rootDir:^(?!websocket).*}";
 <%_ } _%>
 
     /**
@@ -40,22 +40,22 @@ public class ClientForwardController {
      */
 <%_ if (communicationSpringWebsocket) { _%>
     @GetMapping(value = {
-        EXTENSION_PATTERN,
-        ALLOW_LIST_PATTERN + EXTENSION_PATTERN,
-        ALLOW_LIST_PATTERN + "/*" + EXTENSION_PATTERN,
-        TRAILING_PATTERN,
-        "/*" + TRAILING_PATTERN,
-        "/*/*" + TRAILING_PATTERN,
-        ALLOW_LIST_PATTERN + "/*/*/*/{*remaining}",
+        FORBID_EXTENSION_PATTERN,
+        ALLOW_ROOT_PATTERN + FORBID_EXTENSION_PATTERN,
+        ALLOW_ROOT_PATTERN + "/*" + FORBID_EXTENSION_PATTERN,
+        TRAILING_DIR_PATTERN,
+        "/*" + TRAILING_DIR_PATTERN,
+        "/*/*" + TRAILING_DIR_PATTERN,
+        ALLOW_ROOT_PATTERN + "/*/*/*/{*remaining}",
 })
 <%_ } else { _%>
     @GetMapping(value = {
-        EXTENSION_PATTERN,
-        "/*" + EXTENSION_PATTERN,
-        "/*/*" + EXTENSION_PATTERN,
-        TRAILING_PATTERN,
-        "/*" + TRAILING_PATTERN,
-        "/*/*" + TRAILING_PATTERN,
+        FORBID_EXTENSION_PATTERN,
+        "/*" + FORBID_EXTENSION_PATTERN,
+        "/*/*" + FORBID_EXTENSION_PATTERN,
+        TRAILING_DIR_PATTERN,
+        "/*" + TRAILING_DIR_PATTERN,
+        "/*/*" + TRAILING_DIR_PATTERN,
         "/*/*/*/*/{*remaining}",
     })
 <%_ } _%>
