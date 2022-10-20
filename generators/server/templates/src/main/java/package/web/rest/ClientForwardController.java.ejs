@@ -27,10 +27,10 @@ public class ClientForwardController {
     public static final String EXTENSION_PATTERN = "/{file:[^\\.]*}";
 
     // Folders with trailing separator.
-    public static final String TRAILING_PATTERN = "/{traillingDir:.*}/";
+    public static final String TRAILING_PATTERN = "/{trailingDir:.*}/";
 <%_ if (communicationSpringWebsocket) { _%>
 
-    // Root folders allow list. Folders that shouls not be forwarded to index.hml.
+    // Root folders allow list. Folders that should not be forwarded to index.html.
     public static final String ALLOW_LIST_PATTERN = "/{rootDir:^(?!websocket).*}";
 <%_ } _%>
 
