@@ -20,25 +20,20 @@ package <%= packageName %>.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-<%_ if (authenticationTypeOauth2) { _%>
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-<%_ } _%>
-<%_ if (reactive) { _%>
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-<%_ } _%>
 import org.springframework.security.core.context.SecurityContext;
 <%_ if (!reactive) { _%>
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.core.userdetails.UserDetails;
 <%_ if (authenticationTypeJwt) { _%>
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-<%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
 import java.util.*;
 import java.util.stream.Collectors;
   <%_ if (reactive) { _%>
