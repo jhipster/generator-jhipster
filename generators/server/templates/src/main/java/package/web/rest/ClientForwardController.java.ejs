@@ -23,22 +23,40 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ClientForwardController {
+    // File names with extension.
+    public static final String EXTENSION_PATTERN = "/{file:[^\\.]*}";
+
+    // Folders with trailing separator.
+    public static final String TRAILING_PATTERN = "/{traillingDir:.*}/";
+<%_ if (communicationSpringWebsocket) { _%>
+
+    // Root folders allow list. Folders that shouls not be forwarded to index.hml.
+    public static final String ALLOW_LIST_PATTERN = "/{rootDir:^(?!websocket).*}";
+<%_ } _%>
 
     /**
-     * Forwards any unmapped paths (except those containing a period) to the client {@code index.html}.
+     * Forwards any unmapped paths (except file names containing a period) to the client {@code index.html}.
      * @return forward to client {@code index.html}.
      */
 <%_ if (communicationSpringWebsocket) { _%>
     @GetMapping(value = {
-        "/{path:[^\\.]*}", "/{path:[^\\.]*}/", "/{path:^(?!websocket).*}[^\\.]*}", "/{path:^(?!websocket).*}[^\\.]*}/",
-        "/*/{path:[^\\.]*}", "/*/{path:[^\\.]*}/", "/*/{path:^(?!websocket).*}[^\\.]*}", "/*/{path:^(?!websocket).*}[^\\.]*}/",
-        "/*/*/{path:[^\\.]*}", "/*/*/{path:[^\\.]*}/", "/*/*/{path:^(?!websocket).*}[^\\.]*}", "/*/*/{path:^(?!websocket).*}[^\\.]*}/"
-    })
+        EXTENSION_PATTERN,
+        ALLOW_LIST_PATTERN + EXTENSION_PATTERN,
+        ALLOW_LIST_PATTERN + "/*" + EXTENSION_PATTERN,
+        TRAILING_PATTERN,
+        "/*" + TRAILING_PATTERN,
+        "/*/*" + TRAILING_PATTERN,
+        ALLOW_LIST_PATTERN + "/*/*/*/{*remaining}",
+})
 <%_ } else { _%>
     @GetMapping(value = {
-        "/{path:[^\\.]*}", "/{path:[^\\.]*}/",
-        "/*/{path:[^\\.]*}", "/*/{path:[^\\.]*}/",
-        "/*/*/{path:[^\\.]*}", "/*/*/{path:[^\\.]*}/"
+        EXTENSION_PATTERN,
+        "/*" + EXTENSION_PATTERN,
+        "/*/*" + EXTENSION_PATTERN,
+        TRAILING_PATTERN,
+        "/*" + TRAILING_PATTERN,
+        "/*/*" + TRAILING_PATTERN,
+        "/*/*/*/*/{*remaining}",
     })
 <%_ } _%>
     public String forward() {
