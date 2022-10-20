@@ -72,4 +72,4 @@ export default class AddGenerator extends BaseGenerator {
     if (this.fromBlueprint) return {};
     return this.composing;
   }
-};
+}

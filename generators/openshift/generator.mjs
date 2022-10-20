@@ -37,6 +37,7 @@ import {
   searchEngineTypes,
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
+import { writeFiles } from './files.mjs';
 
 const { KAFKA } = messageBrokerTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -44,7 +45,6 @@ const { ELASTICSEARCH } = searchEngineTypes;
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { EUREKA } = serviceDiscoveryTypes;
 const { StorageTypes } = openshiftPlatformTypes;
-const writeFiles = require('./files.mjs').writeFiles;
 
 const NO_DATABASE = databaseTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
