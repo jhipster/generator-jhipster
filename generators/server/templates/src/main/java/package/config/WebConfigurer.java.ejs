@@ -72,8 +72,8 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver;
 import org.springframework.web.server.WebExceptionHandler;
-import org.zalando.problem.spring.webflux.advice.ProblemExceptionHandler;
-import org.zalando.problem.spring.webflux.advice.ProblemHandling;
+import tech.jhipster.sample.web.rest.errors.ExceptionTranslator;
+import tech.jhipster.web.rest.errors.ReactiveWebExceptionHandler;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 
@@ -215,13 +215,12 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     }
   <%_ } _%>
 
-  /*
     @Bean
     @Order(-2) // The handler must have precedence over WebFluxResponseStatusExceptionHandler and Spring Boot's ErrorWebExceptionHandler
-    public WebExceptionHandler problemExceptionHandler(ObjectMapper mapper, ProblemHandling problemHandling) {
-        return new ProblemExceptionHandler(mapper, problemHandling);
+    public WebExceptionHandler problemExceptionHandler(ObjectMapper mapper, ExceptionTranslator problemHandling) {
+        return new ReactiveWebExceptionHandler(problemHandling, mapper);
     }
-    */
+
   <%_ if (!skipClient) { _%>
 
     @Bean

@@ -45,6 +45,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 <%_ if (reactive) { _%>
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.http.MediaType;
+import tech.jhipster.web.rest.errors.ExceptionTranslation;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.web.context.request.NativeWebRequest;
@@ -57,10 +59,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ResponseStatus;
-<%_ if (reactive) { _%>
-import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.ProblemHandling;
-import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.security.SecurityAdviceTrait;
-<%_ } _%>
+
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
@@ -80,15 +79,15 @@ import java.util.stream.Collectors;
  */
 @ControllerAdvice
 <%_ if (databaseTypeSql && reactive) { _%>
-// @Component("jhiExceptionTranslator")
+@Component("jhiExceptionTranslator")
 <%_ } _%>
-public class ExceptionTranslator {
+public class ExceptionTranslator <% if (reactive) { %> implements ExceptionTranslation <% } %> {
 
 <%_
 let returnType;
 let requestClass;
 if (reactive) {
-    returnType = 'Mono<ResponseEntity<Problem>>';
+    returnType = 'Mono<ResponseEntity<ProblemDetail>>';
     requestClass = 'ServerWebExchange';
 } else {
     returnType = 'ResponseEntity<ProblemDetail>';
@@ -126,8 +125,12 @@ _%>
             
         if (problemDetail.getProperties() == null || !problemDetail.getProperties().containsKey(MESSAGE_KEY)) {
             problem.setProperty(MESSAGE_KEY, "error.http." + problemDetail.getStatus());
-        }   
-        return new ResponseEntity<>(problem, headers, HttpStatus.valueOf(problem.getStatus()));
+        }
+        <%_ if (reactive) { _%>
+        return Mono.just(new ResponseEntity<>(problem, updateContentType(headers), HttpStatus.valueOf(problem.getStatus())));
+        <%_ } else { _%>
+        return new ResponseEntity<>(problem, headers, HttpStatus.valueOf(problem.getStatus()));    
+        <%_ } _%>
     }
 
     @ExceptionHandler
@@ -137,7 +140,7 @@ _%>
             .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""), f.getField(), StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()))
             .collect(Collectors.toList());
         
-        ProblemDetail problem = ProblemDetail.forStatus(<% if (reactive) { %>Status.BAD_REQUEST<% } else { %>HttpStatus.BAD_REQUEST<% } %>);
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problem.setType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE);
         problem.setTitle("<%_ if (reactive) { _%>Data binding and validation failure<% } else { %>Method argument not valid<% } %>");
         problem.setProperty(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION);
@@ -174,21 +177,22 @@ _%>
     public <%- returnType %> handleConcurrencyFailure(ConcurrencyFailureException ex, <%= requestClass %> request) {
         ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.CONFLICT);
         problem.setProperty(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE);
-        return process(problem, null, URI.create(extractURI(request)));
+        return process(problem, null, <%_ if (reactive) { _%>request.getRequest().getURI()<% } else { %>URI.create(extractURI(request))<% } %>);
     }
 <%_ } _%>
 
     @ExceptionHandler
-    public ResponseEntity<ProblemDetail> handleBadCredentialsException(AuthenticationException ex, NativeWebRequest request) {
+    public <%- returnType %> handleBadCredentialsException(AuthenticationException ex, <%= requestClass %> request) {
         ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED.value());
         problem.setTitle(HttpStatus.UNAUTHORIZED.getReasonPhrase());
         problem.setType(ErrorConstants.DEFAULT_TYPE);
         problem.setDetail(ex.getMessage());
-        return process(problem, null, URI.create(extractURI(request)));
+        return process(problem, null, <%_ if (reactive) { _%>request.getRequest().getURI()<% } else { %>URI.create(extractURI(request))<% } %>);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ProblemDetail> handleAnyException(Exception ex, NativeWebRequest request
+    <%_ if (reactive) { _%>@Override<%_ } _%>
+    public <%- returnType %> handleAnyException(Throwable ex, <%= requestClass %> request
     ) {
         ProblemDetail problem = ProblemDetail.forStatus(toStatus(ex));
         problem.setType(ErrorConstants.DEFAULT_TYPE);
@@ -198,13 +202,13 @@ _%>
         problem.setDetail(ex.getMessage());
         return process(problem, null, null);
     }
-
-    private String extractURI(NativeWebRequest request) {
+<%_ if (!reactive) { _%>
+    private String extractURI(<%= requestClass %> request) {
         HttpServletRequest nativeRequest = request.getNativeRequest(HttpServletRequest.class);
         String requestUri = nativeRequest != null ? nativeRequest.getRequestURI() : StringUtils.EMPTY;
         return requestUri;
     }
-
+<%_ } _%>
     private HttpStatus toStatus(final Throwable throwable) {
         // Let the ErrorResponse take this responsibility
         if(throwable instanceof ErrorResponse err)
@@ -229,6 +233,15 @@ _%>
         final ResponseStatus candidate = findMergedAnnotation(type.getClass(), ResponseStatus.class);
         return candidate == null && type.getCause() != null ? resolveResponseStatus(type.getCause()) : candidate;
     }
+<%_ if (reactive) { _%>
+    private HttpHeaders updateContentType(HttpHeaders headers) {
+        headers = headers != null ? headers : new HttpHeaders();
+        if(headers.getContentType() == null) {
+            headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+        }
+        return headers;
+    }
+<%_ } _%>
 /*
     @Override
     public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
