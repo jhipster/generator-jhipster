@@ -301,11 +301,11 @@ public class SecurityConfiguration {
   <%_ if (!applicationTypeMicroservice) { _%>
             .oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))
   <% } %>
+            .oauth2Client()
+        .and()
             .oauth2ResourceServer()
                 .jwt()
-                .jwtAuthenticationConverter(jwtAuthenticationConverter())
-        .and()
-            .oauth2Client();
+                    .jwtAuthenticationConverter(jwtAuthenticationConverter());
 <%_ } else if (authenticationTypeJwt) { _%>
             .httpBasic()
                 .disable()
