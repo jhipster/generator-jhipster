@@ -23,6 +23,7 @@ export const GENERATOR_AWS = 'aws';
 export const GENERATOR_AZURE_APP_SERVICE = 'azure-app-service';
 export const GENERATOR_AZURE_SPRING_CLOUD = 'azure-spring-cloud';
 export const GENERATOR_BASE = 'base';
+export const GENERATOR_BASE_APPLICATION = 'base-application';
 export const GENERATOR_BOOTSTRAP = 'bootstrap';
 export const GENERATOR_BOOTSTRAP_APPLICATION = 'bootstrap-application';
 export const GENERATOR_BOOTSTRAP_APPLICATION_BASE = 'bootstrap-application-base';
