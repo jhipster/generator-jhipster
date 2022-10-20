@@ -17,19 +17,20 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const _ = require('lodash');
+import _ from 'lodash';
 
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.cjs';
 
-const constants = require('../generator-constants.cjs');
-const statistics = require('../statistics.cjs');
-const { OptionNames } = require('../../jdl/jhipster/application-options');
-const { GENERATOR_SPRING_SERVICE } = require('../generator-list.cjs');
+import constants from '../generator-constants.cjs';
+import statistics from '../statistics.cjs';
+import { GENERATOR_SPRING_SERVICE } from '../generator-list.mjs';
+import { applicationOptions } from '../../jdl/jhipster/index.mjs';
 
+const { OptionNames } = applicationOptions;
 const { BASE_NAME, PACKAGE_NAME, PACKAGE_FOLDER, DATABASE_TYPE } = OptionNames;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-module.exports = class extends BaseGenerator {
+export default class SpringServiceGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 

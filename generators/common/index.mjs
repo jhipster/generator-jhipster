@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 export { default } from './generator.mjs';
-export { files } from './files.cjs';
+export { commonFiles as files } from './files.mjs';

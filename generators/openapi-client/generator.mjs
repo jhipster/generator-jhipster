@@ -17,17 +17,19 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const shelljs = require('shelljs');
-const chalk = require('chalk');
+import shelljs from 'shelljs';
+import chalk from 'chalk';
 
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.cjs';
 
-const { GENERATOR_OPENAPI_CLIENT } = require('../generator-list.cjs');
-const { OpenAPIOptionsNames, OpenAPIDefaultValues } = require('../../jdl/jhipster/openapi-options');
-const prompts = require('./prompts.cjs');
-const { writeFiles, customizeFiles } = require('./files.cjs');
+import { GENERATOR_OPENAPI_CLIENT } from '../generator-list.mjs';
+import prompts from './prompts.mjs';
+import { writeFiles, customizeFiles } from './files.mjs';
+import { openapiOptions } from '../../jdl/jhipster/index.mjs';
 
-module.exports = class extends BaseGenerator {
+const { OpenAPIOptionsNames, OpenAPIDefaultValues } = openapiOptions;
+
+export default class OpenapiClientGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
     this.option(OpenAPIOptionsNames.REGEN, {
@@ -169,4 +171,4 @@ module.exports = class extends BaseGenerator {
     if (this.delegateToBlueprint) return {};
     return this.end;
   }
-};
+}

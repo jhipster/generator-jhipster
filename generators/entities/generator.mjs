@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.mjs';
 
-const { JHIPSTER_CONFIG_DIR } = require('../generator-constants.cjs');
-const { GENERATOR_ENTITIES, GENERATOR_APP } = require('../generator-list.cjs');
+import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
+import { GENERATOR_ENTITIES, GENERATOR_APP } from '../generator-list.mjs';
 
-module.exports = class extends BaseGenerator {
+export default class EntitiesGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -129,4 +129,4 @@ module.exports = class extends BaseGenerator {
     if (this.delegateToBlueprint) return {};
     return this.composing;
   }
-};
+}

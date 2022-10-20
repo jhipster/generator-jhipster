@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 
-const { isReservedFieldName } = require('../../jdl/jhipster/reserved-keywords');
+import { reservedKeywords } from '../../jdl/jhipster/index.mjs';
 
-module.exports = {
-  askForControllerActions,
-};
+const { isReservedFieldName } = reservedKeywords;
 
-function askForControllerActions() {
+// eslint-disable-next-line import/prefer-default-export
+export function askForControllerActions() {
   const askForControllerAction = done => {
     const prompts = [
       {

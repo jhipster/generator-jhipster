@@ -17,23 +17,20 @@
  * limitations under the License.
  */
 
-const path = require('path');
-const _ = require('lodash');
-const chalk = require('chalk');
-const constants = require('../generator-constants.cjs');
-const { OptionNames } = require('../../jdl/jhipster/application-options');
-const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
-const { JWT, SESSION } = require('../../jdl/jhipster/authentication-types');
+import path from 'path';
+import _ from 'lodash';
+import chalk from 'chalk';
+import constants from '../generator-constants.cjs';
+import { applicationOptions, buildToolTypes, applicationTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';
+
+const { OptionNames } = applicationOptions;
+const { GRADLE, MAVEN } = buildToolTypes;
+const { GATEWAY, MICROSERVICE } = applicationTypes;
+const { JWT, SESSION } = authenticationTypes;
 
 const { REACTIVE } = OptionNames;
 
-module.exports = {
-  writeFiles,
-  customizeFiles,
-};
-
-function writeFiles() {
+export function writeFiles() {
   return {
     addOpenAPIIgnoreFile() {
       const basePath = this.config.get(REACTIVE) ? 'java' : 'spring';
@@ -42,7 +39,7 @@ function writeFiles() {
   };
 }
 
-function customizeFiles() {
+export function customizeFiles() {
   return {
     callOpenApiGenerator() {
       if (Object.keys(this.clientsToGenerate).length === 0) {

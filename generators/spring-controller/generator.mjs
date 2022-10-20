@@ -17,19 +17,20 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const _ = require('lodash');
-const chalk = require('chalk');
+import _ from 'lodash';
+import chalk from 'chalk';
 
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.cjs';
 
-const constants = require('../generator-constants.cjs');
-const prompts = require('./prompts.cjs');
-const statistics = require('../statistics.cjs');
-const { OptionNames } = require('../../jdl/jhipster/application-options');
-const cacheProviders = require('../../jdl/jhipster/cache-types');
-const messageBrokers = require('../../jdl/jhipster/message-broker-types');
-const { GENERATOR_SPRING_CONTROLLER } = require('../generator-list.cjs');
+import constants from '../generator-constants.cjs';
+import { askForControllerActions } from './prompts.mjs';
+import statistics from '../statistics.cjs';
+import { GENERATOR_SPRING_CONTROLLER } from '../generator-list.mjs';
+import { applicationOptions, cacheTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
 
+const { OptionNames } = applicationOptions;
+const cacheProviders = cacheTypes;
+const messageBrokers = messageBrokerTypes;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const {
@@ -47,7 +48,7 @@ const {
 const NO_CACHE_PROVIDER = cacheProviders.NO;
 const NO_MESSAGE_BROKER = messageBrokers.NO;
 
-module.exports = class extends BaseGenerator {
+export default class SpringControllerGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -105,7 +106,7 @@ module.exports = class extends BaseGenerator {
   // Public API method used by the getter and also by Blueprints
   get prompting() {
     return {
-      askForControllerActions: prompts.askForControllerActions,
+      askForControllerActions,
     };
   }
 
@@ -199,4 +200,4 @@ module.exports = class extends BaseGenerator {
     if (this.delegateToBlueprint) return {};
     return this.writing;
   }
-};
+}

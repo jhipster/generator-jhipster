@@ -16,19 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const path = require('path');
-const shelljs = require('shelljs');
-const request = require('then-request');
-const OptionNames = require('../../jdl/jhipster/application-options');
-const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+import path from 'path';
+import shelljs from 'shelljs';
+import request from 'then-request';
+import { applicationOptions, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 
+const { EUREKA } = serviceDiscoveryTypes;
+
+const { OptionNames } = applicationOptions;
 const { REACTIVE, SERVICE_DISCOVERY_TYPE } = OptionNames;
-
-module.exports = {
-  askActionType,
-  askExistingAvailableDocs,
-  askGenerationInfos,
-};
 
 async function fetchSwaggerResources(input) {
   const availableDocs = [];
@@ -51,7 +47,7 @@ async function fetchSwaggerResources(input) {
   return availableDocs;
 }
 
-function askActionType() {
+export function askActionType() {
   if (this.options.regen) {
     return undefined;
   }
@@ -176,7 +172,7 @@ function askActionType() {
   });
 }
 
-function askExistingAvailableDocs() {
+export function askExistingAvailableDocs() {
   if (this.options.regen) {
     return undefined;
   }
@@ -199,7 +195,7 @@ function askExistingAvailableDocs() {
   });
 }
 
-function askGenerationInfos() {
+export function askGenerationInfos() {
   if (this.options.regen) {
     return undefined;
   }

@@ -21,12 +21,10 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import files from './files.cjs';
+import { writeFiles, prettierConfigFiles } from './files.mjs';
 import constants from '../generator-constants.cjs';
 import { packageJson } from '../../lib/index.mjs';
 import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
-
-const { writeFiles, prettierConfigFiles } = files;
 
 /**
  * @class

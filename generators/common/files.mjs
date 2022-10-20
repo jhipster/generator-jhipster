@@ -21,7 +21,7 @@
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
-const prettierConfigFiles = {
+export const prettierConfigFiles = {
   global: [
     {
       templates: ['.prettierrc', '.prettierignore'],
@@ -29,7 +29,7 @@ const prettierConfigFiles = {
   ],
 };
 
-const commonFiles = {
+export const commonFiles = {
   global: [
     {
       templates: [
@@ -62,7 +62,7 @@ const commonFiles = {
   ],
 };
 
-function writeFiles() {
+export function writeFiles() {
   return {
     writeFiles({ application }) {
       return this.writeFiles({
@@ -72,10 +72,3 @@ function writeFiles() {
     },
   };
 }
-
-module.exports = {
-  writeFiles,
-  prettierConfigFiles,
-  commonFiles,
-  files: commonFiles,
-};

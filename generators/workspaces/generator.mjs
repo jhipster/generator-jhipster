@@ -17,16 +17,18 @@
  * limitations under the License.
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const { GENERATOR_APP } = require('../generator-list.cjs');
+import { GENERATOR_APP } from '../generator-list.mjs';
 
-const { GENERATOR_JHIPSTER } = require('../generator-constants.cjs');
+import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
+import BaseGenerator from '../base/index.cjs';
+import { deploymentOptions } from '../../jdl/jhipster/index.mjs';
+
 const {
   DeploymentTypes: { DOCKERCOMPOSE },
-} = require('../../jdl/jhipster/deployment-options');
-const BaseGenerator = require('../base/index.cjs');
+} = deploymentOptions;
 
 /**
  * Base class for a generator that can be extended through a blueprint.
@@ -34,7 +36,7 @@ const BaseGenerator = require('../base/index.cjs');
  * @class
  * @extends {BaseGenerator}
  */
-module.exports = class extends BaseGenerator {
+export default class UpgradeGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -259,4 +261,4 @@ module.exports = class extends BaseGenerator {
   _createWorkspacesScript(...scripts) {
     return Object.fromEntries(scripts.map(script => [`${script}`, `npm run ${script} --workspaces --if-present`]));
   }
-};
+}

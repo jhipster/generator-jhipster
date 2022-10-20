@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const constants = require('../generator-constants.cjs');
-const utils = require('../utils.cjs');
+import constants from '../generator-constants.cjs';
+import utils from '../utils.cjs';
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const VUE_DIR = 'src/main/webapp/app/';
 
-const vueFiles = {
+export const vueFiles = {
   client: [
     {
       path: VUE_DIR,
@@ -81,12 +81,7 @@ const vueFiles = {
   ],
 };
 
-module.exports = {
-  vueFiles,
-  customizeFiles,
-};
-
-function customizeFiles() {
+export function customizeFiles() {
   // Add page paths to routing system
   utils.vueAddPageToRouterImport(this, this.pageName, this.pageFolderName, this.pageFileName);
   utils.vueAddPageToRouter(this, this.pageName, this.pageFileName);

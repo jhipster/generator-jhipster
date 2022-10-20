@@ -17,21 +17,23 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const _ = require('lodash');
-const chalk = require('chalk');
+import _ from 'lodash';
+import chalk from 'chalk';
 
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.mjs';
 
-const { defaultConfig } = require('../generator-defaults.cjs');
-const prompts = require('./prompts.cjs');
-const statistics = require('../statistics.cjs');
-const constants = require('../generator-constants.cjs');
-const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
-const { GENERATOR_CI_CD } = require('../generator-list.cjs');
+import generatorDefaults from '../generator-defaults.cjs';
+import prompts from './prompts.mjs';
+import statistics from '../statistics.cjs';
+import constants from '../generator-constants.cjs';
+import { GENERATOR_CI_CD } from '../generator-list.mjs';
+import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
 
+const { defaultConfig } = generatorDefaults;
+const { MAVEN, GRADLE } = buildToolTypes;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
-module.exports = class extends BaseGenerator {
+export default class CiCdGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -262,4 +264,4 @@ module.exports = class extends BaseGenerator {
     if (this.delegateToBlueprint) return {};
     return this.writing;
   }
-};
+}

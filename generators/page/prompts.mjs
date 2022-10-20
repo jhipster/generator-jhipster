@@ -16,11 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = {
-  askForPage,
-};
 
-function askForPage() {
+// eslint-disable-next-line import/prefer-default-export
+export function askForPage() {
   if (this.pageName) return undefined;
 
   return this.prompt({

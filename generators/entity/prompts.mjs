@@ -16,15 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const fs = require('fs');
-const _ = require('lodash');
-const constants = require('../generator-constants.cjs');
-const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
-const { CASSANDRA, SQL } = require('../../jdl/jhipster/database-types');
-const databaseTypes = require('../../jdl/jhipster/database-types');
-const { GATEWAY } = require('../../jdl/jhipster/application-types');
-const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes } = require('../../jdl/jhipster/entity-options');
+import chalk from 'chalk';
+import fs from 'fs';
+import _ from 'lodash';
+import constants from '../generator-constants.cjs';
+import { reservedKeywords, databaseTypes, applicationTypes, entityOptions, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
+
+const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
+const { CASSANDRA, SQL } = databaseTypes;
+const { GATEWAY } = applicationTypes;
+const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 
 const { JPA_METAMODEL } = FilteringTypes;
 const NO_FILTERING = FilteringTypes.NO;
@@ -39,16 +40,16 @@ const NO_DATABASE = databaseTypes.NO;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
-const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../../jdl/jhipster/field-types');
+const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
 
 const { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, ENUM, FLOAT, INTEGER, INSTANT, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME } =
   CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { ANY, IMAGE, TEXT } = BlobTypes;
 
-const { PATTERN, MINBYTES, MAXBYTES, MINLENGTH, MAXLENGTH, MIN, MAX, REQUIRED, UNIQUE } = require('../../jdl/jhipster/validations');
+const { PATTERN, MINBYTES, MAXBYTES, MINLENGTH, MAXLENGTH, MIN, MAX, REQUIRED, UNIQUE } = validations;
 
-module.exports = {
+const prompts = {
   askForMicroserviceJson,
   askForUpdate,
   askForFields,
@@ -61,6 +62,8 @@ module.exports = {
   askForReadOnly,
   askForPagination,
 };
+
+export default prompts;
 
 const getFieldNameUndercored = fields =>
   ['id'].concat(

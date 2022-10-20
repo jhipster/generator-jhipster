@@ -17,27 +17,28 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
-const fs = require('fs');
-const _ = require('lodash');
-const path = require('path');
+import chalk from 'chalk';
+import fs from 'fs';
+import _ from 'lodash';
+import path from 'path';
 
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.mjs';
 
-const { isReservedClassName } = require('../../jdl/jhipster/reserved-keywords');
+import prompts from './prompts.mjs';
+import { defaultConfig } from '../generator-defaults.cjs';
+import constants from '../generator-constants.cjs';
+import { applicationTypes, clientFrameworkTypes, reservedKeywords } from '../../jdl/jhipster/index.mjs';
+import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
 
-const prompts = require('./prompts.cjs');
-const { defaultConfig } = require('../generator-defaults.cjs');
-const constants = require('../generator-constants.cjs');
-const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
-const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
-const { GENERATOR_ENTITIES, GENERATOR_ENTITY } = require('../generator-list.cjs');
+const { GATEWAY, MICROSERVICE } = applicationTypes;
+const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
+const { isReservedClassName } = reservedKeywords;
 
 /* constants used throughout */
 const { JHIPSTER_CONFIG_DIR } = constants;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-class EntityGenerator extends BaseGenerator {
+export default class EntityGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'argument', ...features });
 
@@ -446,5 +447,3 @@ class EntityGenerator extends BaseGenerator {
     return true;
   }
 }
-
-module.exports = EntityGenerator;

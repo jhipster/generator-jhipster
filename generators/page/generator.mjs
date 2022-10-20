@@ -17,15 +17,17 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
+import chalk from 'chalk';
 
-const BaseGenerator = require('../base/index.cjs');
+import BaseGenerator from '../base/index.cjs';
 
-const prompts = require('./prompts.cjs');
-const { customizeFiles: customizeVueFiles, vueFiles } = require('./files-vue.cjs');
-const constants = require('../generator-constants.cjs');
-const { GENERATOR_PAGE } = require('../generator-list.cjs');
-const { PROTRACTOR } = require('../../jdl/jhipster/test-framework-types');
+import { askForPage } from './prompts.mjs';
+import { customizeFiles as customizeVueFiles, vueFiles } from './files-vue.mjs';
+import constants from '../generator-constants.cjs';
+import { GENERATOR_PAGE } from '../generator-list.mjs';
+import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+
+const { PROTRACTOR } = testFrameworkTypes;
 
 const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
@@ -35,7 +37,7 @@ const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
  * @class
  * @extends {BaseGenerator}
  */
-module.exports = class extends BaseGenerator {
+export default class PageGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -97,7 +99,7 @@ module.exports = class extends BaseGenerator {
 
   get prompting() {
     return {
-      askForPage: prompts.askForPage,
+      askForPage,
     };
   }
 
@@ -199,4 +201,4 @@ module.exports = class extends BaseGenerator {
     if (this.delegateToBlueprint) return {};
     return this.end;
   }
-};
+}
