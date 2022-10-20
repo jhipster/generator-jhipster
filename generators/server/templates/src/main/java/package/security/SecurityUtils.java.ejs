@@ -63,6 +63,11 @@ import java.util.stream.Stream;
 public final class SecurityUtils {
 <%_ if (authenticationTypeOauth2) { _%>
     public static final String CLAIMS_NAMESPACE = "https://www.jhipster.tech/";
+<%_ } else if (authenticationTypeJwt) { _%>
+
+    public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
+
+    public static final String AUTHORITIES_KEY = "auth";
 <%_ } _%>
 
     private SecurityUtils() {

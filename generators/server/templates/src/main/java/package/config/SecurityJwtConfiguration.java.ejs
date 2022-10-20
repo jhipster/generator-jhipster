@@ -18,7 +18,9 @@
 -%>
 package <%= packageName %>.config;
 
-import <%= packageName %>.web.rest.AuthenticateController;
+import static <%= packageName %>.security.SecurityUtils.AUTHORITIES_KEY;
+import static <%= packageName %>.security.SecurityUtils.JWT_ALGORITHM;
+
 import <%= packageName %>.management.SecurityMetersService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
@@ -49,7 +51,7 @@ public class SecurityJwtConfiguration {
 
     @Bean
     public <%= reactive ? 'Reactive' : '' %>JwtDecoder jwtDecoder(SecurityMetersService metersService) {
-        Nimbus<%= reactive ? 'Reactive' : '' %>JwtDecoder jwtDecoder = Nimbus<%= reactive ? 'Reactive' : '' %>JwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(AuthenticateController.JWT_ALGORITHM).build();
+        Nimbus<%= reactive ? 'Reactive' : '' %>JwtDecoder jwtDecoder = Nimbus<%= reactive ? 'Reactive' : '' %>JwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(JWT_ALGORITHM).build();
         return token -> {
 <%_ if (reactive) { %>
             try {
@@ -94,7 +96,7 @@ public class SecurityJwtConfiguration {
     public <%= reactive ? 'Reactive' : '' %>JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthorityPrefix("");
-        grantedAuthoritiesConverter.setAuthoritiesClaimName(AuthenticateController.AUTHORITIES_KEY);
+        grantedAuthoritiesConverter.setAuthoritiesClaimName(AUTHORITIES_KEY);
 
         <%= reactive ? 'Reactive' : '' %>JwtAuthenticationConverter jwtAuthenticationConverter = new <%= reactive ? 'Reactive' : '' %>JwtAuthenticationConverter();
 <%_ if (reactive) { %>
@@ -116,6 +118,6 @@ public class SecurityJwtConfiguration {
 <%_ } _%>
     private SecretKey getSecretKey() {
         byte[] keyBytes = Base64.from(jwtKey).decode();
-        return new SecretKeySpec(keyBytes, 0, keyBytes.length, AuthenticateController.JWT_ALGORITHM.getName());
+        return new SecretKeySpec(keyBytes, 0, keyBytes.length, JWT_ALGORITHM.getName());
     }
 }

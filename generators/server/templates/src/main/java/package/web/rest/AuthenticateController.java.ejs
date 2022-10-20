@@ -18,6 +18,9 @@
 -%>
 package <%= packageName %>.web.rest;
 
+import static <%= packageName %>.security.SecurityUtils.AUTHORITIES_KEY;
+import static <%= packageName %>.security.SecurityUtils.JWT_ALGORITHM;
+
 import <%= packageName %>.web.rest.vm.LoginVM;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -58,10 +61,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @RestController
 @RequestMapping("/api")
 public class AuthenticateController {
-
-    public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
-
-    public static final String AUTHORITIES_KEY = "auth";
 
     private final Logger log = LoggerFactory.getLogger(AuthenticateController.class);
 

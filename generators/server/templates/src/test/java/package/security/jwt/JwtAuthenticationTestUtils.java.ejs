@@ -1,6 +1,7 @@
 package <%= packageName %>.security.jwt;
 
-import <%= packageName %>.web.rest.AuthenticateController;
+import static <%= packageName %>.security.SecurityUtils.JWT_ALGORITHM;
+
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -49,7 +50,7 @@ public class JwtAuthenticationTestUtils {
 
         JwtClaimsSet claims = JwtClaimsSet.builder().issuedAt(now).expiresAt(now.plusSeconds(60)).subject("anonymous").build();
 
-        JwsHeader jwsHeader = JwsHeader.with(AuthenticateController.JWT_ALGORITHM).build();
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return encoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
@@ -61,7 +62,7 @@ public class JwtAuthenticationTestUtils {
 
         JwtClaimsSet claims = JwtClaimsSet.builder().issuedAt(now).expiresAt(past).subject("anonymous").build();
 
-        JwsHeader jwsHeader = JwsHeader.with(AuthenticateController.JWT_ALGORITHM).build();
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return encoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
@@ -73,7 +74,7 @@ public class JwtAuthenticationTestUtils {
 
         JwtClaimsSet claims = JwtClaimsSet.builder().issuedAt(past).expiresAt(past.plusSeconds(1)).subject("anonymous").build();
 
-        JwsHeader jwsHeader = JwsHeader.with(AuthenticateController.JWT_ALGORITHM).build();
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return encoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
@@ -91,7 +92,7 @@ public class JwtAuthenticationTestUtils {
 
     private static SecretKey getSecretKey(String jwtKey) {
         byte[] keyBytes = Base64.from(jwtKey).decode();
-        return new SecretKeySpec(keyBytes, 0, keyBytes.length, AuthenticateController.JWT_ALGORITHM.getName());
+        return new SecretKeySpec(keyBytes, 0, keyBytes.length, JWT_ALGORITHM.getName());
     }
 
     private static String calculateHMAC(String data, String key) throws Exception {
