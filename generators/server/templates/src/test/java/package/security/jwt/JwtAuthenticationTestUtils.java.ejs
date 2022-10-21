@@ -19,7 +19,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
 <%_ if (reactive) { _%>
-import com.mycompany.myapp.repository.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 <%_ } _%>

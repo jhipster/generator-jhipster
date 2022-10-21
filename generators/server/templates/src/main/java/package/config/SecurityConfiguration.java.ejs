@@ -255,6 +255,7 @@ public class SecurityConfiguration {
   <%_ } else if (applicationTypeMicroservice) { _%>
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
   <%_ } _%>
             .oauth2ResourceServer()
                 .jwt()
