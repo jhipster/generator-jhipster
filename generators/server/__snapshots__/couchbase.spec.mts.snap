@@ -1293,9 +1293,6 @@ Object {
   "src/main/java/tech/jhipster/service/package-info.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
     "stateCleared": "modified",
   },
@@ -1492,9 +1489,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
@@ -2248,9 +2242,6 @@ Object {
   "src/main/java/tech/jhipster/service/package-info.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
     "stateCleared": "modified",
   },
@@ -2411,9 +2402,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
@@ -2739,9 +2727,6 @@ Object {
   "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AccountResource.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
     "stateCleared": "modified",
   },
@@ -2893,9 +2878,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/mapper/UserMapperTest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {

@@ -3012,6 +3012,33 @@ contributor(nodeCtx) {
 
 exports[`JHipster CI-CD Sub Generator Jenkins tests Jenkins: Maven Angular NPM should match files snapshot 1`] = `
 Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"applicationType\\": \\"monolith\\",
+    \\"baseName\\": \\"sampleMysql\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"authenticationType\\": \\"session\\",
+    \\"cacheProvider\\": \\"ehcache\\",
+    \\"enableHibernateCache\\": true,
+    \\"websocket\\": \\"no\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"searchEngine\\": \\"no\\",
+    \\"enableTranslation\\": true,
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"buildTool\\": \\"maven\\",
+    \\"clientFramework\\": \\"angular\\",
+    \\"clientPackageManager\\": \\"npm\\",
+    \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
+    \\"languages\\": [\\"en\\"]
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "Jenkinsfile": Object {
     "contents": "#!/usr/bin/env groovy
 
@@ -3068,7 +3095,7 @@ node {
     "stateCleared": "modified",
   },
   "src/main/docker/jenkins.yml": Object {
-    "contents": "version: '2'
+    "contents": "version: \\"2\\"
 services:
   jenkins:
     image: jenkins/jenkins:lts-jdk11
@@ -3078,11 +3105,11 @@ services:
     # uncomment for docker in docker
     #privileged: true
     #volumes:
-        # enable persistent volume (warning: make sure that the local jenkins_home folder is created)
-        #- ~/volumes/jenkins_home:/var/jenkins_home
-        # mount docker sock and binary for docker in docker (only works on linux)
-        #- /var/run/docker.sock:/var/run/docker.sock
-        #- /usr/bin/docker:/usr/bin/docker
+    # enable persistent volume (warning: make sure that the local jenkins_home folder is created)
+    #- ~/volumes/jenkins_home:/var/jenkins_home
+    # mount docker sock and binary for docker in docker (only works on linux)
+    #- /var/run/docker.sock:/var/run/docker.sock
+    #- /usr/bin/docker:/usr/bin/docker
 ",
     "stateCleared": "modified",
   },
