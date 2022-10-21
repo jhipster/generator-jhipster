@@ -39,7 +39,7 @@
     ".": "./dist/lib/index.mjs",
     "./cli": "./dist/cli/index.mjs",
     "./package.json": "./package.json",
-    "./generators": "./dist/lib/constants/generators.mjs",
+    "./generators": "./dist/generators/generator-list.mjs",
     "./generators/*": "./dist/generators/*/index.mjs",
     "./jdl/": "./dist/jdl/"
   },

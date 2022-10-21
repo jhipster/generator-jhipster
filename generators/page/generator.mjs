@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 import chalk from 'chalk';
 
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 
 import { askForPage } from './prompts.mjs';
 import { customizeFiles as customizeVueFiles, vueFiles } from './files-vue.mjs';

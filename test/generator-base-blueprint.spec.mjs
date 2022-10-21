@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 
-import BaseBlueprint from '../generators/base/generator-base-blueprint.cjs';
+import BaseBlueprint from '../generators/base/index.mjs';
 
 const BaseGenerator = BaseBlueprint.prototype;
 

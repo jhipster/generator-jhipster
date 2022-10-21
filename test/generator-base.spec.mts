@@ -5,7 +5,7 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import Environment from 'yeoman-environment';
 
-import Base from '../generators/base/index.cjs';
+import Base from '../generators/base/index.mjs';
 import { testInTempDir, revertTempDir } from './utils/utils.mjs';
 import liquibaseUtils from '../utils/liquibase.cjs';
 import databaseTypes from '../jdl/jhipster/database-types';

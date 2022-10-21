@@ -23,7 +23,7 @@ import fs from 'fs';
 import chalk from 'chalk';
 import _ from 'lodash';
 
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 
 import { GENERATOR_GAE } from '../generator-list.mjs';
 import statistics from '../statistics.cjs';

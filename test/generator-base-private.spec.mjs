@@ -1,7 +1,7 @@
 import path from 'path';
 import { expect } from 'chai';
 import { jestExpect } from 'mocha-expect-snapshot';
-import BaseGeneratorClass from '../generators/base/index.cjs';
+import BaseGeneratorClass from '../generators/base/index.mjs';
 import databaseTypes from '../jdl/jhipster/database-types';
 import entityOptions from '../jdl/jhipster/entity-options';
 import fieldTypes from '../jdl/jhipster/field-types';

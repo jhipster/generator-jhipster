@@ -21,7 +21,7 @@ import { expect } from 'chai';
 import entityUtils from '../utils/entity.cjs';
 import liquibaseUtils from '../utils/liquibase.cjs';
 import generatorDefaults from '../generators/generator-defaults.cjs';
-import BaseGenerator from '../generators/base/index.cjs';
+import BaseGenerator from '../generators/base/index.mjs';
 
 const { prepareEntityPrimaryKeyForTemplates } = entityUtils;
 const { formatDateForChangelog } = liquibaseUtils;

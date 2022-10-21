@@ -21,7 +21,7 @@ import childProcess from 'child_process';
 import chalk from 'chalk';
 import glob from 'glob';
 
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 
 import prompts from './prompts.mjs';
 import statistics from '../statistics.cjs';
