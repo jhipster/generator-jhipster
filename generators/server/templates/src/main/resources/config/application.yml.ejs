@@ -271,7 +271,6 @@ spring:
   <% if (reactive) { %>webflux<% } else { %>mvc<% } %>:
     problemdetails:
       enabled: true
-  <%_ } _%>
 <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && !authenticationTypeOauth2) { _%>
   security:
     user:
