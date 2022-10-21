@@ -263,7 +263,7 @@ Object {
   "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/AuthenticationController.java": Object {
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/ClientForwardController.java": Object {
@@ -1328,7 +1328,7 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/AuthenticationControllerIT.java": Object {
+  "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/ClientForwardControllerTest.java": Object {
@@ -1678,7 +1678,7 @@ Object {
   "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/AuthenticationController.java": Object {
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/ClientForwardController.java": Object {
@@ -2743,7 +2743,7 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/AuthenticationControllerIT.java": Object {
+  "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/ClientForwardControllerTest.java": Object {
