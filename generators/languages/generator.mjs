@@ -330,40 +330,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   /**
-   * Update Languages In Language Constant
-   *
-   * @param languages
-   */
-  updateLanguagesInLanguageConstant(languages, application) {
-    const fullPath = `${application.clientSrcDir}app/components/language/language.js`;
-    try {
-      let content = ".constant('LANGUAGES', [\n";
-      languages.forEach((language, i) => {
-        content += `            '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
-      });
-      content += '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n        ]';
-
-      jhipsterUtils.replaceContent(
-        {
-          file: fullPath,
-          pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
-          content,
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        chalk.yellow('\nUnable to find ') +
-          fullPath +
-          chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
-          languages +
-          chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-      );
-      this.debug('Error:', e);
-    }
-  }
-
-  /**
    * Update Languages In Language Constant NG2
    *
    * @param languages
@@ -372,7 +338,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     if (!application.clientFrameworkAngular) {
       return;
     }
-    const fullPath = `${application.clientSrcDir}app/config/language.ts`;
+    const fullPath = `${application.clientSrcDir}app/config/language.constants.ts`;
     try {
       let content = 'export const LANGUAGES: string[] = [\n';
       languages.forEach((language, i) => {
