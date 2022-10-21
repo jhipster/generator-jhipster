@@ -190,11 +190,14 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
 <%_ } _%>
-            .authorizeHttpRequests()
+            .authorizeRequests()
 <%_ if (!applicationTypeMicroservice) { _%>
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
   <%_ if (!skipClient) { _%>
-            .requestMatchers("/app/**/*.{js,html}").permitAll()
+            .requestMatchers("/app/*.html").permitAll()
+            .requestMatchers("/app/*/*.html").permitAll()
+            .requestMatchers("/app/*.js").permitAll()
+            .requestMatchers("/app/*/*.js").permitAll()
             .requestMatchers("/i18n/**").permitAll()
             .requestMatchers("/content/**").permitAll()
   <%_ } _%>
