@@ -132,7 +132,7 @@ runs:
         fi
 
         MATRIX=$(cat matrix.json)
-        echo "matrix<<EOF' >> $GITHUB_OUTPUT
+        echo 'matrix<<EOF' >> $GITHUB_OUTPUT
         cat matrix.json >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
         rm matrix.json
