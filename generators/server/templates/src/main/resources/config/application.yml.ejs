@@ -268,6 +268,10 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
+  <% if (reactive) { %>webflux<% } else { %>mvc<% } %>:
+    problemdetails:
+      enabled: true
+  <%_ } _%>
 <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && !authenticationTypeOauth2) { _%>
   security:
     user:
