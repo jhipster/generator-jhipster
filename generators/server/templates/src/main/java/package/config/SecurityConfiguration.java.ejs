@@ -32,7 +32,7 @@ import org.springframework.core.convert.converter.Converter;
 <%_ if (!applicationTypeMicroservice || !authenticationTypeOauth2) { _%>
 import org.springframework.http.HttpMethod;
 <%_ } _%>
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -95,12 +95,10 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 <%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
-// import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-// @Import(SecurityProblemSupport.class)
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
@@ -126,7 +124,6 @@ public class SecurityConfiguration {
 <%_ if (!applicationTypeMicroservice) { _%>
         this.corsFilter = corsFilter;
 <%_ } _%>
-        // this.problemSupport = problemSupport;
         this.jHipsterProperties = jHipsterProperties;
     }
 <%_ if (authenticationTypeSession) { _%>
@@ -160,7 +157,7 @@ public class SecurityConfiguration {
         http
             .csrf()
 <%_ if (devDatabaseTypeH2Any) { _%>
-                .ignoringAntMatchers("/h2-console/**")
+                .ignoringRequestMatchers("/h2-console/**")
 <%_ } _%>
 <%_ if ((authenticationTypeOauth2 || authenticationTypeSession) && !applicationTypeMicroservice) { _%>
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -188,38 +185,41 @@ public class SecurityConfiguration {
 <%_ } _%>
             .authorizeRequests()
 <%_ if (!applicationTypeMicroservice) { _%>
-            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
   <%_ if (!skipClient) { _%>
-            .antMatchers("/app/**/*.{js,html}").permitAll()
-            .antMatchers("/i18n/**").permitAll()
-            .antMatchers("/content/**").permitAll()
+            .requestMatchers("/app/*.html").permitAll()
+            .requestMatchers("/app/*/*.html").permitAll()
+            .requestMatchers("/app/*.js").permitAll()
+            .requestMatchers("/app/*/*.js").permitAll()
+            .requestMatchers("/i18n/**").permitAll()
+            .requestMatchers("/content/**").permitAll()
   <%_ } _%>
-            .antMatchers("/swagger-ui/**").permitAll()
-            .antMatchers("/test/**").permitAll()
+            .requestMatchers("/swagger-ui/**").permitAll()
+            .requestMatchers("/test/**").permitAll()
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
-            .antMatchers("/h2-console/**").permitAll()
+            .requestMatchers("/h2-console/**").permitAll()
 <%_ } _%>
-            .antMatchers(<% if (authenticationTypeJwt) { %>HttpMethod.POST, <% } %>"/api/authenticate").permitAll()
+            .requestMatchers(<% if (authenticationTypeJwt) { %>HttpMethod.POST, <% } %>"/api/authenticate").permitAll()
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
-            .antMatchers("/api/register").permitAll()
-            .antMatchers("/api/activate").permitAll()
-            .antMatchers("/api/account/reset-password/init").permitAll()
-            .antMatchers("/api/account/reset-password/finish").permitAll()
+            .requestMatchers("/api/register").permitAll()
+            .requestMatchers("/api/activate").permitAll()
+            .requestMatchers("/api/account/reset-password/init").permitAll()
+            .requestMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-            .antMatchers("/api/auth-info").permitAll()
+            .requestMatchers("/api/auth-info").permitAll()
 <%_ } _%>
-            .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/**").authenticated()
+            .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .requestMatchers("/api/**").authenticated()
 <%_ if (communicationSpringWebsocket) { _%>
-            .antMatchers("/websocket/**").authenticated()
+            .requestMatchers("/websocket/**").authenticated()
 <%_ } _%>
-            .antMatchers("/management/health").permitAll()
-            .antMatchers("/management/health/**").permitAll()
-            .antMatchers("/management/info").permitAll()
-            .antMatchers("/management/prometheus").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .requestMatchers("/management/health").permitAll()
+            .requestMatchers("/management/health/**").permitAll()
+            .requestMatchers("/management/info").permitAll()
+            .requestMatchers("/management/prometheus").permitAll()
+            .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
         .and()
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (!skipUserManagement) { _%>
