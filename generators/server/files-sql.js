@@ -241,5 +241,6 @@ function writeSqlFiles() {
 }
 
 module.exports = {
+  serverFiles,
   writeSqlFiles,
 };
