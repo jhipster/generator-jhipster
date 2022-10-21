@@ -11,7 +11,9 @@ import <%= packageName %>.config.SecurityConfiguration;
 import <%= packageName %>.config.SecurityJwtConfiguration;
 import <%= packageName %>.config.WebConfigurer;
 import <%= packageName %>.management.SecurityMetersService;
+<%_ if (!applicationTypeMicroservice) { _%>
 import <%= packageName %>.web.rest.AuthenticateController;
+<%_ } _%>
 
 import tech.jhipster.config.JHipsterProperties;
 
@@ -38,11 +40,13 @@ import org.springframework.boot.test.context.SpringBootTest;
     }
 )
 @WebFluxTest(
+<%_ if (!applicationTypeMicroservice) { _%>
     controllers = { AuthenticateController.class },
     properties = {
         "jhipster.security.authentication.jwt.base64-secret=fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8",
         "jhipster.security.authentication.jwt.token-validity-in-seconds=60000",
     }
+<%_ } _%>
 )
 @ComponentScan({})
 <%_ } else { _%>
@@ -53,13 +57,17 @@ import org.springframework.boot.test.context.SpringBootTest;
         SecurityConfiguration.class,
         SecurityJwtConfiguration.class,
         SecurityMetersService.class,
+<%_ if (!applicationTypeMicroservice) { _%>
         AuthenticateController.class,
+<%_ } _%>
         JwtAuthenticationTestUtils.class
     },
+<%_ if (!applicationTypeMicroservice) { _%>
     properties = {
         "jhipster.security.authentication.jwt.base64-secret=fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8",
         "jhipster.security.authentication.jwt.token-validity-in-seconds=60000",
     }
+<%_ } _%>
 )
 <%_ } _%>
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
