@@ -1,0 +1,10 @@
+{
+  "include": ["./generators/base/*"],
+  "exclude": ["**/*.spec.*", "**/__*/**"],
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declarationDir": "./dist/types",
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}

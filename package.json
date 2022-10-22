@@ -54,11 +54,13 @@
     "!**/*.spec.?(c|m)js"
   ],
   "scripts": {
-    "build": "npm run compile && npm run copy-files",
+    "build": "npm run compile && npm run copy-files && npm run compile-types && npm run copy-types",
     "clean": "rimraf dist",
     "compile": "tsc",
+    "compile-types": "tsc -p tsconfig.types.json",
     "completion": "tabtab install --name jhipster --auto",
     "copy-files": "cpy 'jdl/*.json' 'dist/jdl' && cpy 'generators/**' '!**/*.(js|cjs|mjs|ts|cts|mts|snap)' '!**/__*/*' dist/generators",
+    "copy-types": "cpy 'generators/**/*.d.(|c|m)ts' dist/types/generators",
     "ejslint": "ejslint generators/**/*.ejs",
     "eslint": "eslint . --ext .js,.cjs,.mjs,.ts,.cts,.mts",
     "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
