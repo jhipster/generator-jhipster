@@ -22,6 +22,7 @@ export type BaseApplication = {
   skipJhipsterDependencies: boolean;
   fakerSeed?: string;
 
+  nodeVersion: string;
   nodePackageManager: string;
   nodeDestinationVersion: string;
 
