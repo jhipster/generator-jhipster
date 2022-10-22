@@ -1,5 +1,5 @@
 import type { RunResult } from 'yeoman-test';
-import type BaseApplicationGenerator from '../../base-application/generator.cjs';
+import type BaseApplicationGenerator from '../../base-application/index.mjs';
 import type { SpringBootApplication } from '../../bootstrap-application-server/types.js';
 
 import constants from '../../generator-constants.cjs';

@@ -8,9 +8,7 @@ import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 
-import DatabaseTypes from '../../jdl/jhipster/database-types.js';
-import CacheTypes from '../../jdl/jhipster/cache-types.js';
-import ServiceDiscoveryTypes from '../../jdl/jhipster/service-discovery-types.js';
+import { databaseTypes, cacheTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -20,10 +18,10 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mjs');
 
-const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = DatabaseTypes;
+const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
-const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = CacheTypes;
-const { CONSUL, EUREKA } = ServiceDiscoveryTypes;
+const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
+const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 
 let sqlSamples = buildServerMatrix({
   prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE],
