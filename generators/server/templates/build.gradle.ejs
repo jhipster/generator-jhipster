@@ -565,7 +565,7 @@ task cleanResources(type: Delete) {
 }
 
 wrapper {
-    gradleVersion = "<%= GRADLE_VERSION %>"
+    gradleVersion = "<%= gradleVersion %>"
 }
 
 <%_ if (!skipClient) { _%>

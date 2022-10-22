@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 <&_
+  TODO v8 remove??
   // Register sections and max allowed fragments, 0 for unlimited.
   fragments.registerSections({
     parentSection: 1,
@@ -40,7 +41,7 @@
     <artifactId><%= dasherizedBaseName %></artifactId>
     <version><%= JAVA_APP_VERSION %></version>
     <name><%= humanizedBaseName %></name>
-    <description><%= projectName %> generated with generator-jhipster@<%= jhipsterVersion %></description>
+    <description><%= projectDescription %></description>
     <packaging>jar</packaging>
 
 <&- fragments.parentSection('\n\n') -&>

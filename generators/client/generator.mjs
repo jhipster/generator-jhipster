@@ -47,7 +47,7 @@ import {
 } from '../generator-list.mjs';
 
 import { testFrameworkTypes, authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
-import entityUtils from '../../utils/entity.cjs';
+import { prepareReactEntity } from '../../utils/entity.mjs';
 
 const { CYPRESS } = testFrameworkTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -56,7 +56,6 @@ const { CommonDBTypes } = fieldTypes;
 const { NO: NO_DATABASE } = databaseTypes;
 const TYPE_STRING = CommonDBTypes.STRING;
 const TYPE_UUID = CommonDBTypes.UUID;
-const { prepareReactEntity } = entityUtils;
 const { clientDefaultConfig } = generatorDefaults;
 
 /**

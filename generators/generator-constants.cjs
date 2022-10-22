@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const validationOptions = require('../jdl/jhipster/validations');
-const gradleOptions = require('./gradle/constants.cjs');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
 const commonPackageJson = require('./common/templates/package.json');
@@ -46,8 +45,6 @@ const dockerContainers = {
   elasticsearch: `${ELATICSEARCH_IMAGE}:${ELATICSEARCH_TAG}`,
 };
 Object.freeze(dockerContainers);
-
-const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
 
 // Version of Node, NPM
 const NODE_VERSION = '16.17.0';
@@ -404,7 +401,6 @@ const constants = {
 
   JAVA_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
-  GRADLE_VERSION,
 
   // NPM
   NODE_VERSION,

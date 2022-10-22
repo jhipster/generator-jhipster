@@ -7,10 +7,9 @@ import Environment from 'yeoman-environment';
 
 import Base from '../generators/base/index.mjs';
 import { testInTempDir, revertTempDir } from './utils/utils.mjs';
-import liquibaseUtils from '../utils/liquibase.cjs';
-import databaseTypes from '../jdl/jhipster/database-types';
+import { parseChangelog } from '../generators/base/utils.mjs';
+import { databaseTypes } from '../jdl/jhipster/index.mjs';
 
-const { parseLiquibaseChangelogDate } = liquibaseUtils;
 const { H2_MEMORY, H2_DISK, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 
 const BaseGenerator: any = Base.prototype;
@@ -280,7 +279,7 @@ describe('Generator Base', () => {
         expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
       });
       it('should save lastLiquibaseTimestamp', () => {
-        expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseLiquibaseChangelogDate(firstChangelogDate).getTime());
+        expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseChangelog(firstChangelogDate).getTime());
       });
     });
     describe('when a past lastLiquibaseTimestamp is configured', () => {
@@ -298,7 +297,7 @@ describe('Generator Base', () => {
         expect(firstChangelogDate.startsWith('2000')).to.be.false;
       });
       it('should save lastLiquibaseTimestamp', () => {
-        expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseLiquibaseChangelogDate(firstChangelogDate).getTime());
+        expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseChangelog(firstChangelogDate).getTime());
       });
     });
     describe('when a future lastLiquibaseTimestamp is configured', () => {
@@ -322,7 +321,7 @@ describe('Generator Base', () => {
         expect(secondChangelogDate).to.be.equal('20300101000002');
       });
       it('should save lastLiquibaseTimestamp', () => {
-        expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseLiquibaseChangelogDate('20300101000002').getTime());
+        expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseChangelog('20300101000002').getTime());
       });
     });
     describe('with withEntities option', () => {
@@ -347,7 +346,7 @@ describe('Generator Base', () => {
           expect(firstChangelogDate).to.not.be.equal(secondChangelogDate);
         });
         it('should save lastLiquibaseTimestamp', () => {
-          expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseLiquibaseChangelogDate(secondChangelogDate).getTime());
+          expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseChangelog(secondChangelogDate).getTime());
         });
       });
       describe('with a past creationTimestamp option', () => {
@@ -371,7 +370,7 @@ describe('Generator Base', () => {
           expect(secondChangelogDate).to.be.equal('20000101000200');
         });
         it('should save lastLiquibaseTimestamp', () => {
-          expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseLiquibaseChangelogDate('20000101000200').getTime());
+          expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseChangelog('20000101000200').getTime());
         });
       });
       describe('with a future creationTimestamp option', () => {

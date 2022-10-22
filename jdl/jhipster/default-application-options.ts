@@ -81,6 +81,11 @@ const {
   GRADLE_ENTERPRISE_HOST,
 } = OptionNames;
 
+const commonDefaultOptions = {
+  [AUTHENTICATION_TYPE]: JWT,
+  [BUILD_TOOL]: MAVEN,
+};
+
 export function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
   if (applicationType === MONOLITH) {
     return getConfigForMonolithApplication(customOptions);
@@ -96,7 +101,7 @@ export function getConfigForApplicationType(applicationType = undefined, customO
 
 export function getConfigForMonolithApplication(customOptions: any = {}): any {
   const options = {
-    [AUTHENTICATION_TYPE]: JWT,
+    ...commonDefaultOptions,
     [CACHE_PROVIDER]: EHCACHE,
     [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
@@ -125,7 +130,7 @@ export function getConfigForMonolithApplication(customOptions: any = {}): any {
 
 export function getConfigForGatewayApplication(customOptions: any = {}): any {
   const options = {
-    [AUTHENTICATION_TYPE]: JWT,
+    ...commonDefaultOptions,
     [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: EUREKA,
@@ -160,7 +165,7 @@ export function getConfigForGatewayApplication(customOptions: any = {}): any {
 export function getConfigForMicroserviceApplication(customOptions: any = {}): any {
   const DEFAULT_SERVER_PORT = '8081';
   const options = {
-    [AUTHENTICATION_TYPE]: JWT,
+    ...commonDefaultOptions,
     [CACHE_PROVIDER]: HAZELCAST,
     [SERVER_PORT]: DEFAULT_SERVER_PORT,
     [SERVICE_DISCOVERY_TYPE]: EUREKA,
@@ -194,8 +199,8 @@ export function getConfigForMicroserviceApplication(customOptions: any = {}): an
 
 export function getDefaultConfigForNewApplication(customOptions: any = {}): any {
   const options = {
+    ...commonDefaultOptions,
     [BASE_NAME]: OptionValues[BASE_NAME],
-    [BUILD_TOOL]: MAVEN,
     [DATABASE_TYPE]: SQL,
     [DEV_DATABASE_TYPE]: H2_DISK,
     [CACHE_PROVIDER]: EHCACHE,

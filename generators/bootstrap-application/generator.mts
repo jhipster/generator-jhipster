@@ -24,9 +24,14 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import validations from '../../jdl/jhipster/validations.js';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import constants from '../generator-constants.cjs';
-import utils from '../../utils/index.cjs';
-import entityUtils from '../../utils/entity.cjs';
-import fieldUtils from '../../utils/field.cjs';
+import { stringify } from '../../utils/index.mjs';
+import {
+  derivedPrimaryKeyProperties,
+  preparePostEntitiesCommonDerivedProperties,
+  preparePostEntityCommonDerivedProperties,
+  preparePostEntityServerDerivedProperties,
+} from '../../utils/entity.mjs';
+import { fieldIsEnum } from '../../utils/field.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
 import type { ClientServerApplication } from './types.js';
@@ -39,17 +44,8 @@ const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TI
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = BlobTypes;
 
-const {
-  derivedPrimaryKeyProperties,
-  preparePostEntitiesCommonDerivedProperties,
-  preparePostEntityCommonDerivedProperties,
-  preparePostEntityServerDerivedProperties,
-} = entityUtils;
-const { fieldIsEnum } = fieldUtils;
-
 const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations.default;
 const { SUPPORTED_VALIDATION_RULES } = constants;
-const { stringify } = utils;
 
 /**
  * @class

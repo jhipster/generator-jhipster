@@ -203,19 +203,6 @@ Object {
         },
         "gradle/war.gradle",
         "gradle/zipkin.gradle",
-        Object {
-          "file": "gradlew",
-          "noEjs": true,
-        },
-        Object {
-          "file": "gradlew.bat",
-          "noEjs": true,
-        },
-        Object {
-          "file": "gradle/wrapper/gradle-wrapper.jar",
-          "noEjs": true,
-        },
-        "gradle/wrapper/gradle-wrapper.properties",
       ],
     },
     Object {
@@ -227,26 +214,6 @@ Object {
     Object {
       "condition": [Function],
       "templates": Array [
-        Object {
-          "file": "mvnw",
-          "noEjs": true,
-        },
-        Object {
-          "file": "mvnw.cmd",
-          "noEjs": true,
-        },
-        Object {
-          "file": ".mvn/jvm.config",
-          "noEjs": true,
-        },
-        Object {
-          "file": ".mvn/wrapper/maven-wrapper.jar",
-          "noEjs": true,
-        },
-        Object {
-          "file": ".mvn/wrapper/maven-wrapper.properties",
-          "noEjs": true,
-        },
         Object {
           "file": "pom.xml",
           "options": Object {

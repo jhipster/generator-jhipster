@@ -6,6 +6,10 @@ export type BaseApplication = {
   capitalizedBaseName: string;
   dasherizedBaseName: string;
   humanizedBaseName: string;
+  camelizedBaseName: string;
+  hipster: string;
+  lowercaseBaseName: string;
+  upperFirstCamelCaseBaseName: string;
 
   projectVersion: string;
   projectDescription: string;
