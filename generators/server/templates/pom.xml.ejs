@@ -176,9 +176,6 @@
 <%_ if (searchEngineElasticsearch) { _%>
         <awaitility.version>4.2.0</awaitility.version>
 <%_ } _%>
-<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
-        <micrometer-tracing.version><%- javaDependencies['micrometer-tracing'] %></micrometer-tracing.version>
-<%_ } _%>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -2099,17 +2096,6 @@
                 Profile for tracing requests with Zipkin.
             -->
             <id>zipkin</id>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>io.micrometer</groupId>
-                        <artifactId>micrometer-tracing-bom</artifactId>
-                        <version>${micrometer-tracing.version}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <dependencies>
                 <dependency>
                     <groupId>io.micrometer</groupId>

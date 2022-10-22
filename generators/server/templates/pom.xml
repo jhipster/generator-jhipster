@@ -9,7 +9,6 @@
     <properties>
       <liquibase.version>4.17.0</liquibase.version>
       <jib-maven-plugin.version>3.3.0</jib-maven-plugin.version>
-      <micrometer-tracing.version>1.0.0-RC1</micrometer-tracing.version>
     </properties>
 
     <dependencyManagement>
@@ -23,13 +22,6 @@
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>${jib-maven-plugin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-tracing-bom</artifactId>
-                <version>${micrometer-tracing.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
