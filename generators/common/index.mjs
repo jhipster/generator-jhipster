@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './index.cjs';
-export { files } from './files.cjs';
+export { default } from './generator.mjs';
+export { commonFiles as files } from './files.mjs';

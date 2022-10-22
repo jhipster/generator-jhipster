@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 const path = require('path');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
@@ -25,6 +24,8 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
 const https = require('https');
+
+const { databaseTypes, buildToolTypes } = require('../../jdl/jhipster/index.cjs');
 
 const { reproducibleConfigForTests: projectNameReproducibleConfigForTests } = require('../project-name/config.cjs');
 const { packageJson: packagejs } = require('../../lib/index.cjs');
@@ -56,11 +57,9 @@ const {
 const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
 
-const databaseTypes = require('../../jdl/jhipster/database-types');
-
 const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL, ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databaseTypes;
 
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { MAVEN } = buildToolTypes;
 
 /**
  * @typedef {import('./api.cjs').JHipsterGeneratorOptions} JHipsterGeneratorOptions

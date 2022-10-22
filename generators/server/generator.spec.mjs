@@ -43,7 +43,7 @@ describe(`JHipster ${generator} generator`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('exported files', () => {
     it('should match snapshot', async () => {
-      expect((await import('./files.cjs')).serverFiles).toMatchSnapshot();
+      expect((await import('./files.mjs')).serverFiles).toMatchSnapshot();
     });
   });
 });

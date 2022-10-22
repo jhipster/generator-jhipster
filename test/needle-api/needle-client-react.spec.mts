@@ -1,6 +1,6 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
-import ClientGenerator from '../../generators/client/index.cjs';
+import ClientGenerator from '../../generators/client/index.mjs';
 import constants from '../../generators/generator-constants.cjs';
 import { getGenerator } from '../support/index.mjs';
 

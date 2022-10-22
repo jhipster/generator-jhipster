@@ -19,7 +19,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
-import { replaceVueTranslations } from './transform-vue.cjs';
+import { replaceVueTranslations } from './transform-vue.mjs';
 
 const FULL_BODY = `
 <span v-html="$t('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>

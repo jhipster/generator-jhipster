@@ -7,7 +7,7 @@ import { testBlueprintSupport, buildServerMatrix, entitiesSimple as entities } f
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
-import DatabaseTypes from '../../jdl/jhipster/database-types.js';
+import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -17,7 +17,7 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mjs');
 
-const { MONGODB: databaseType } = DatabaseTypes;
+const { MONGODB: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 
 const samplesBuilder = (): [string, any][] =>
