@@ -37,9 +37,7 @@ import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.stereotype.Component;
 <%_ } _%>
 import org.springframework.validation.BindingResult;
-<%_ if (!reactive) { _%>
-import org.springframework.web.bind.MethodArgumentNotValidException;
-<%_ } _%>
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 <%_ if (reactive) { _%>
@@ -47,18 +45,26 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.http.MediaType;
 import tech.jhipster.web.rest.errors.ExceptionTranslation;
+import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 <%_ } _%>
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
@@ -81,17 +87,20 @@ import java.util.stream.Collectors;
 <%_ if (databaseTypeSql && reactive) { _%>
 @Component("jhiExceptionTranslator")
 <%_ } _%>
-public class ExceptionTranslator <% if (reactive) { %> implements ExceptionTranslation <% } %> {
+public class ExceptionTranslator extends ResponseEntityExceptionHandler <% if (reactive) { %> implements ExceptionTranslation <% }  %>{
 
 <%_
 let returnType;
 let requestClass;
+let requestEntityRequestClass;
 if (reactive) {
-    returnType = 'Mono<ResponseEntity<ProblemDetail>>';
+    returnType = 'Mono<ResponseEntity<Object>>';
     requestClass = 'ServerWebExchange';
+    requestEntityRequestClass = 'ServerWebExchange'
 } else {
-    returnType = 'ResponseEntity<ProblemDetail>';
+    returnType = 'ResponseEntity<Object>';
     requestClass = 'NativeWebRequest';
+    requestEntityRequestClass = 'WebRequest';
 }
 _%>
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
@@ -107,101 +116,103 @@ _%>
     public ExceptionTranslator(Environment env) {
         this.env = env;
     }
-
-    /**
-     * Post-process the Problem payload to add the message key for the front-end if needed.
-     */
-    public <%- returnType %> process(ProblemDetail problemDetail, HttpHeaders headers, URI pathURI) {
-        ProblemDetail problem = ProblemDetail.forStatus(problemDetail.getStatus());
-        problem.setType(problemDetail.getType() != null ? problemDetail.getType() : ErrorConstants.DEFAULT_TYPE);
-        problem.setTitle(problemDetail.getTitle());
-        problem.setDetail(problemDetail.getDetail());
-        if(problemDetail.getProperties() == null || !problemDetail.getProperties().containsKey(PATH_KEY) && pathURI != null)
-            problem.setProperty(PATH_KEY, pathURI);
-
-        if(problemDetail.getProperties() != null)
-            problemDetail.getProperties().forEach(problem::setProperty);
-        // builder.withCause(((DefaultProblem) problem).getCause()).withDetail(problem.getDetail()).withInstance(problem.getInstance());
-            
-        if (problemDetail.getProperties() == null || !problemDetail.getProperties().containsKey(MESSAGE_KEY)) {
-            problem.setProperty(MESSAGE_KEY, "error.http." + problemDetail.getStatus());
-        }
-        <%_ if (reactive) { _%>
-        return Mono.just(new ResponseEntity<>(problem, updateContentType(headers), HttpStatus.valueOf(problem.getStatus())));
-        <%_ } else { _%>
-        return new ResponseEntity<>(problem, headers, HttpStatus.valueOf(problem.getStatus()));    
-        <%_ } _%>
-    }
-
-    @ExceptionHandler
-    public <%- returnType %> handle<%_ if (reactive) { _%>BindingResult(WebExchangeBindException<% } else { %>MethodArgumentNotValid(MethodArgumentNotValidException<% } %> ex, @Nonnull <%= requestClass %> request) {
-        BindingResult result = ex.getBindingResult();
-        List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
-            .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""), f.getField(), StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()))
-            .collect(Collectors.toList());
-        
-        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
-        problem.setType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE);
-        problem.setTitle("<%_ if (reactive) { _%>Data binding and validation failure<% } else { %>Method argument not valid<% } %>");
-        problem.setProperty(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION);
-        problem.setProperty(FIELD_ERRORS_KEY, fieldErrors);
-        return process(problem, null, null);
-    }
-    <%_ if (!skipUserManagement) { _%>
-
-    @ExceptionHandler
-    public <%- returnType %> handleEmailAlreadyUsedException(<%= packageName %>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
-        EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
-        return process(problem.getBody(), HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()), null);
-    }
-
-    @ExceptionHandler
-    public <%- returnType %> handleUsernameAlreadyUsedException(<%= packageName %>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
-        LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
-        return process(problem.getBody(), HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()), null);
-    }
-
-    @ExceptionHandler
-    public <%- returnType %> handleInvalidPasswordException(<%= packageName %>.service.InvalidPasswordException ex, <%= requestClass %> request) {
-        return process(new InvalidPasswordException().getBody(), null, null);
-    }
-    <%_ } _%>
-
-    @ExceptionHandler
-    public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
-        return process(ex.getBody(), HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()), null);
-    }
-<%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
-
-    @ExceptionHandler
-    public <%- returnType %> handleConcurrencyFailure(ConcurrencyFailureException ex, <%= requestClass %> request) {
-        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.CONFLICT);
-        problem.setProperty(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE);
-        return process(problem, null, <%_ if (reactive) { _%>request.getRequest().getURI()<% } else { %>URI.create(extractURI(request))<% } %>);
-    }
-<%_ } _%>
-
-    @ExceptionHandler
-    public <%- returnType %> handleBadCredentialsException(AuthenticationException ex, <%= requestClass %> request) {
-        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED.value());
-        problem.setTitle(HttpStatus.UNAUTHORIZED.getReasonPhrase());
-        problem.setType(ErrorConstants.DEFAULT_TYPE);
-        problem.setDetail(ex.getMessage());
-        return process(problem, null, <%_ if (reactive) { _%>request.getRequest().getURI()<% } else { %>URI.create(extractURI(request))<% } %>);
-    }
-
+    
     @ExceptionHandler
     <%_ if (reactive) { _%>@Override<%_ } _%>
     public <%- returnType %> handleAnyException(Throwable ex, <%= requestClass %> request
     ) {
-        ProblemDetail problem = ProblemDetail.forStatus(toStatus(ex));
-        problem.setType(ErrorConstants.DEFAULT_TYPE);
-        ResponseStatus specialStatus = extractResponseStatus(ex);
-        String title = specialStatus == null ? HttpStatus.valueOf(problem.getStatus()).getReasonPhrase() : specialStatus.reason();
-        problem.setTitle(title);
-        problem.setDetail(ex.getMessage());
-        return process(problem, null, null);
+        ErrorResponse err = wrapAndCustemizeErrorResponse(ex, request);
+        return handleExceptionInternal((Exception) err, null, buildHeaders(err, request), err.getStatusCode(), request);
     }
+
+    @Nullable
+    @Override
+    protected <%- returnType %> handleExceptionInternal(
+            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, <%= requestEntityRequestClass %> request) {
+        ErrorResponse err = wrapAndCustemizeErrorResponse((Throwable) ex, (<%= requestClass %>) request);
+    <%_ if (reactive) { _%>
+        if (request.getResponse().isCommitted()) {
+            return Mono.error(ex);
+        }
+        return Mono.just(new ResponseEntity<>(err.getBody(), updateContentType(headers), err.getStatusCode()));
+    <%_ } else { _%>
+        return super.handleExceptionInternal(ex, body, headers, statusCode, request);
+    <%_ } _%>
+    }
+
+    protected ErrorResponse wrapAndCustemizeErrorResponse(Throwable ex, <%= requestClass %> request) {
+        return custemizeErrorResponseException(ex instanceof ErrorResponse err ? err : wrapWithErrorResponse(ex), request);
+    }
+
+    private ErrorResponseException wrapWithErrorResponse(Throwable ex) {
+<%_ if (!skipUserManagement) { _%>
+        if(ex instanceof tech.jhipster.sample.service.EmailAlreadyUsedException)
+            return new EmailAlreadyUsedException();
+        if(ex instanceof tech.jhipster.sample.service.UsernameAlreadyUsedException )
+            return new LoginAlreadyUsedException();
+        if(ex instanceof tech.jhipster.sample.service.InvalidPasswordException )
+            return new InvalidPasswordException();
+<%_ } _%>
+        if(ex instanceof ErrorResponseException exp)
+            return exp;
+        return new ErrorResponseException(toStatus(ex), ex);
+    }
+
+    protected ErrorResponse custemizeErrorResponseException(ErrorResponse err, <%= requestClass %> request) {
+        if(err.getStatusCode() == null)
+            err.getBody().setStatus(toStatus((Throwable) err));
+        
+        if(err.getBody().getType() == null)
+            err.getBody().setType(getMappedType((Throwable) err));
+        
+        // higher precedence to Custom/ResponseStatus types
+        String title = extractTitle(err);
+        if(err.getBody().getTitle() == null || !err.getBody().getTitle().equals(title)) {
+            err.getBody().setTitle(title);
+        }
+        
+        if(err.getBody().getDetail() == null) {
+         // higher precedence to cause
+            err.getBody().setDetail(((Throwable) err).getCause() != null ? ((Throwable) err).getCause().getMessage() : ((Throwable) err).getMessage());
+        }
+        
+        if(err.getBody().getProperties() == null || !err.getBody().getProperties().containsKey(MESSAGE_KEY))
+            err.getBody().setProperty(MESSAGE_KEY, getMappedMessageKey((Throwable) err) != null ? getMappedMessageKey((Throwable) err) : "error.http." + err.getStatusCode().value());
+        
+        if(err.getBody().getProperties() == null || !err.getBody().getProperties().containsKey(PATH_KEY))
+            err.getBody().setProperty(PATH_KEY, getPathValue(request));
+        
+        if((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %>) && 
+                (err.getBody().getProperties() == null || !err.getBody().getProperties().containsKey(FIELD_ERRORS_KEY)))
+            err.getBody().setProperty(FIELD_ERRORS_KEY, getFieldErrors((<% if (reactive) { %>WebExchangeBindException<% } else { %>MethodArgumentNotValidException<% } %>) err));
+        
+        return err;
+    }
+
+    private String extractTitle(ErrorResponse err) {
+        return getCustemizedTitle((Throwable) err) != null ? getCustemizedTitle((Throwable) err) : extractTitleForResponseStatus(err);
+    }
+
+    private List<FieldErrorVM> getFieldErrors(<% if (reactive) { %>WebExchangeBindException<% } else { %>MethodArgumentNotValidException<% } %> ex) {
+        return ex.getBindingResult()
+            .getFieldErrors()
+            .stream()
+            .map(f ->
+                new FieldErrorVM(
+                    f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""),
+                    f.getField(),
+                    StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()
+                )
+            )
+            .collect(Collectors.toList());
+    }
+
+    private String extractTitleForResponseStatus(ErrorResponse err) {
+        ResponseStatus specialStatus = extractResponseStatus((Throwable) err);
+        String title = specialStatus == null ? HttpStatus.valueOf(err.getStatusCode().value()).getReasonPhrase() : specialStatus.reason();
+        return title;
+    }
+
 <%_ if (!reactive) { _%>
     private String extractURI(<%= requestClass %> request) {
         HttpServletRequest nativeRequest = request.getNativeRequest(HttpServletRequest.class);
@@ -211,16 +222,14 @@ _%>
 <%_ } _%>
     private HttpStatus toStatus(final Throwable throwable) {
         // Let the ErrorResponse take this responsibility
-        if(throwable instanceof ErrorResponse err)
-            return HttpStatus.valueOf(err.getBody().getStatus());
-        
-        // This is derived from zalando
-        if(throwable instanceof AccessDeniedException accDenied)
-            return HttpStatus.FORBIDDEN;
+        if (throwable instanceof ErrorResponse err) return HttpStatus.valueOf(err.getBody().getStatus());
 
-        return Optional.ofNullable(resolveResponseStatus(throwable))
-                .map(response -> response.value())
-                .orElse(HttpStatus.INTERNAL_SERVER_ERROR);
+        return Optional
+                .ofNullable(getMappedStatus(throwable))
+                .orElse(Optional
+                        .ofNullable(resolveResponseStatus(throwable))
+                        .map(response -> response.value())
+                        .orElse(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     private ResponseStatus extractResponseStatus(final Throwable throwable) {
@@ -228,15 +237,64 @@ _%>
                 .orElse(null);
     }
 
-
     private ResponseStatus resolveResponseStatus(final Throwable type) {
         final ResponseStatus candidate = findMergedAnnotation(type.getClass(), ResponseStatus.class);
         return candidate == null && type.getCause() != null ? resolveResponseStatus(type.getCause()) : candidate;
     }
+
+    private URI getMappedType(Throwable err) {
+        if(err instanceof MethodArgumentNotValidException exp)
+            return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
+        return ErrorConstants.DEFAULT_TYPE;
+    }
+    
+    private String getMappedMessageKey(Throwable err) {
+        if(err instanceof MethodArgumentNotValidException)
+            return ErrorConstants.ERR_VALIDATION;
+    <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
+        else if(err instanceof ConcurrencyFailureException 
+                || err.getCause() != null && err.getCause() instanceof ConcurrencyFailureException)
+            return ErrorConstants.ERR_CONCURRENCY_FAILURE;
+    <%_ } _%>
+    <%_ if (reactive) { _%>
+        else if (err instanceof WebExchangeBindException) return ErrorConstants.ERR_VALIDATION;
+    <%_ } _%>
+        return null;
+    }
+    
+    private String getCustemizedTitle(Throwable err) {
+        if(err instanceof MethodArgumentNotValidException exp)
+            return "Method argument not valid";
+        return null;
+    }
+    
+    private HttpStatus getMappedStatus(Throwable err) {
+        // Where we disagree with Spring defaults
+        if (err instanceof AccessDeniedException accDenied) return HttpStatus.FORBIDDEN;
+    <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
+        if(err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
+    <%_ } _%>    
+        if(err instanceof BadCredentialsException) return HttpStatus.UNAUTHORIZED;
+    <%_ if (reactive) { _%>
+        if (err instanceof UsernameNotFoundException) return HttpStatus.UNAUTHORIZED;
+    <%_ } _%>
+        return null;
+    }
+    
+    private URI getPathValue(<%= requestClass %> request) {
+        if(request == null) return URI.create("about:blank");
+        return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI((NativeWebRequest) request))<% } %>;
+    }
+
+    private HttpHeaders buildHeaders(ErrorResponse err, <%= requestClass %> request) {
+        return err instanceof BadRequestAlertException ? 
+                HeaderUtil.createFailureAlert(applicationName, true, ((BadRequestAlertException) err).getEntityName(),
+                        ((BadRequestAlertException) err).getErrorKey(), ((BadRequestAlertException) err).getMessage()) : null;
+    }
 <%_ if (reactive) { _%>
     private HttpHeaders updateContentType(HttpHeaders headers) {
-        headers = headers != null ? headers : new HttpHeaders();
-        if(headers.getContentType() == null) {
+        if(headers == null) {
+            headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
         }
         return headers;
