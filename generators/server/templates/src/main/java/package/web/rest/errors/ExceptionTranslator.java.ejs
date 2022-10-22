@@ -146,11 +146,11 @@ _%>
 
     private ErrorResponseException wrapWithErrorResponse(Throwable ex) {
 <%_ if (!skipUserManagement) { _%>
-        if(ex instanceof tech.jhipster.sample.service.EmailAlreadyUsedException)
+        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException)
             return new EmailAlreadyUsedException();
-        if(ex instanceof tech.jhipster.sample.service.UsernameAlreadyUsedException )
+        if(ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException )
             return new LoginAlreadyUsedException();
-        if(ex instanceof tech.jhipster.sample.service.InvalidPasswordException )
+        if(ex instanceof <%= packageName %>.service.InvalidPasswordException )
             return new InvalidPasswordException();
 <%_ } _%>
         if(ex instanceof ErrorResponseException exp)
