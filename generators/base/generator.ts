@@ -17,35 +17,7 @@
  * limitations under the License.
  */
 
-export const SQL = 'sql';
-export const MYSQL = 'mysql';
-export const MARIADB = 'mariadb';
-export const POSTGRESQL = 'postgresql';
-export const MSSQL = 'mssql';
-export const ORACLE = 'oracle';
-export const MONGODB = 'mongodb';
-export const CASSANDRA = 'cassandra';
-export const COUCHBASE = 'couchbase';
-export const NEO4J = 'neo4j';
-export const H2_DISK = 'h2Disk';
-export const H2_MEMORY = 'h2Memory';
-export const NO = 'no';
-
-const isSql = type => [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL, H2_DISK, H2_MEMORY].includes(type);
-
-export default {
-  SQL,
-  MYSQL,
-  MARIADB,
-  POSTGRESQL,
-  MSSQL,
-  ORACLE,
-  MONGODB,
-  CASSANDRA,
-  COUCHBASE,
-  NEO4J,
-  H2_DISK,
-  H2_MEMORY,
-  NO,
-  isSql,
-};
+// Workaround https://github.com/esbuild-kit/esm-loader/issues/41
+// requires extension-less to import typescript at javascript files.
+// eslint-disable-next-line import/prefer-default-export
+export { default } from './generator.mjs';

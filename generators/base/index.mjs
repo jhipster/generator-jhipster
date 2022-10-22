@@ -17,7 +17,11 @@
  * limitations under the License.
  */
 
-/*
- * Register generator-base at yeoman-environment
+// Workaround https://github.com/esbuild-kit/esm-loader/issues/41
+// requires extension-less to import typescript at javascript files.
+// For tsc to load types, we need to
+
+/**
+ * @type {typeof import('./generator.mjs').default}
  */
-export { default } from './generator.mjs';
+export default (await import('./generator')).default;
