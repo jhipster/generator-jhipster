@@ -25,7 +25,7 @@ import gitignore from 'parse-gitignore';
 import path from 'path';
 import childProcess from 'child_process';
 
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 
 import { upgradeFiles } from '../cleanup.mjs';
 import constants from '../generator-constants.cjs';

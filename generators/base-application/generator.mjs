@@ -449,7 +449,7 @@ export default class BaseApplicationGenerator extends BaseGenerator {
       throw new Error(`${priorityName} data not available`);
     }
     if (!this.jhipsterConfig.baseName) {
-      throw new Error(`BaseName (${this.jhipsterConfig.baseName}) application not available for priotity ${priorityName}`);
+      throw new Error(`BaseName (${this.jhipsterConfig.baseName}) application not available for priority ${priorityName}`);
     }
     const application = this.sharedData.getApplication();
     if (LOADING_ENTITIES === priorityName) {

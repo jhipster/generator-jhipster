@@ -19,8 +19,7 @@
 import chalk from 'chalk';
 import lodash from 'lodash';
 
-import BaseGenerator from '../base/index.cjs';
-import { SKIP_COMMIT_HOOK } from '../init/constants.cjs';
+import BaseGenerator from '../base/index.mjs';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.mjs';
 
 import {
@@ -46,6 +45,7 @@ import {
 import * as GENERATOR_LIST from '../generator-list.mjs';
 import { files, generatorFiles } from './files.mjs';
 import { packageJson } from '../../lib/index.mjs';
+import { SKIP_COMMIT_HOOK } from '../init/constants.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
@@ -85,13 +85,6 @@ export default class extends BaseGenerator {
 
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-      sayHello() {
-        if (!this.showHello()) return;
-        this.log(chalk.white('⬢ Welcome to the JHipster Generate Blueprint ⬢'));
-      },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
       },
@@ -166,8 +159,8 @@ export default class extends BaseGenerator {
   get composing() {
     return {
       async compose() {
-        const configure = this.options.configure || !this.shouldComposeModular() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION];
-        await this.composeWithJHipster(GENERATOR_INIT, [], { configure });
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        await this.composeWithJHipster(GENERATOR_INIT);
       },
     };
   }

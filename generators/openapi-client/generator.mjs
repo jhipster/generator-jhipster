@@ -20,7 +20,7 @@
 import shelljs from 'shelljs';
 import chalk from 'chalk';
 
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 
 import { GENERATOR_OPENAPI_CLIENT } from '../generator-list.mjs';
 import { askActionType, askExistingAvailableDocs, askGenerationInfos } from './prompts.mjs';

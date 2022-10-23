@@ -324,10 +324,6 @@ export const baseServerFiles = {
         { file: 'gradle/profile_prod.gradle', options: { interpolate: INTERPOLATE_REGEX } },
         'gradle/war.gradle',
         'gradle/zipkin.gradle',
-        { file: 'gradlew', noEjs: true },
-        { file: 'gradlew.bat', noEjs: true },
-        { file: 'gradle/wrapper/gradle-wrapper.jar', noEjs: true },
-        'gradle/wrapper/gradle-wrapper.properties',
       ],
     },
     {
@@ -336,14 +332,7 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.buildToolMaven,
-      templates: [
-        { file: 'mvnw', noEjs: true },
-        { file: 'mvnw.cmd', noEjs: true },
-        { file: '.mvn/jvm.config', noEjs: true },
-        { file: '.mvn/wrapper/maven-wrapper.jar', noEjs: true },
-        { file: '.mvn/wrapper/maven-wrapper.properties', noEjs: true },
-        { file: 'pom.xml', options: { interpolate: INTERPOLATE_REGEX } },
-      ],
+      templates: [{ file: 'pom.xml', options: { interpolate: INTERPOLATE_REGEX } }],
     },
     {
       condition: generator => !generator.skipClient,

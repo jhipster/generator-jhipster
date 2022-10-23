@@ -25,7 +25,7 @@ import util from 'util';
 import chalk from 'chalk';
 import glob from 'glob';
 
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 
 import statistics from '../statistics.cjs';
 import constants from '../generator-constants.cjs';

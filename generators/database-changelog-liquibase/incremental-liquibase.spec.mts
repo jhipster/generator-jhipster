@@ -81,6 +81,7 @@ enum ProductCategory {
 }`;
 
 const generatorPath = join(__dirname, '../server/index.mjs');
+const mockedGenerators = ['jhipster:common', 'jhipster:gradle', 'jhipster:maven'];
 
 describe('jhipster:app --incremental-changelog', function () {
   this.timeout(45000);
@@ -97,7 +98,7 @@ describe('jhipster:app --incremental-changelog', function () {
   context('when creating a new application', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorPath).withOptions(options);
+      runResult = await helpers.run(generatorPath).withOptions(options).withMockedGenerators(mockedGenerators);
     });
 
     after(() => runResult.cleanup());
