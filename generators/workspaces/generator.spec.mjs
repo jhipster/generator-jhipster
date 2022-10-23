@@ -22,7 +22,7 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import testSupport from '../../test/support/index.cjs';
-import Generator from './generator.cjs';
+import Generator from './generator.mjs';
 
 const { snakeCase } = lodash;
 const { testBlueprintSupport } = testSupport;

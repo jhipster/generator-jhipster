@@ -3011,12 +3011,6 @@ Object {
   "src/main/webapp/app/account/login.service.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/account/sessions/sessions.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/sessions.vue": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/docs/docs.component.ts": Object {
     "stateCleared": "modified",
   },

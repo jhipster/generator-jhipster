@@ -1,6 +1,6 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
-import ServerGenerator from '../../generators/server/index.cjs';
+import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
-const GeneratorBaseEntity = require('../base-application/generator.cjs');
+const GeneratorBaseEntity = require('../base/index.cjs');
 
 const { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list.cjs');
 const {
@@ -195,42 +195,6 @@ module.exports = class extends MixedChain {
     return this.preparing;
   }
 
-  get configuringEachEntity() {
-    return {};
-  }
-
-  get [MixedChain.CONFIGURING_EACH_ENTITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuringEachEntity;
-  }
-
-  get preparingEachEntity() {
-    return {};
-  }
-
-  get [MixedChain.PREPARING_EACH_ENTITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.preparingEachEntity;
-  }
-
-  get preparingEachEntityField() {
-    return {};
-  }
-
-  get [MixedChain.PREPARING_EACH_ENTITY_FIELD]() {
-    if (this.delegateToBlueprint) return {};
-    return this.preparingEachEntityField;
-  }
-
-  get preparingEachEntityRelationship() {
-    return {};
-  }
-
-  get [MixedChain.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    if (this.delegateToBlueprint) return {};
-    return this.preparingEachEntityRelationship;
-  }
-
   get writing() {
     return {
       async writeFiles() {
@@ -243,15 +207,6 @@ module.exports = class extends MixedChain {
   get [MixedChain.WRITING]() {
     if (this.delegateToBlueprint) return;
     return this.writing;
-  }
-
-  get writingEntities() {
-    return {};
-  }
-
-  get [MixedChain.WRITING_ENTITIES]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writingEntities;
   }
 
   /*

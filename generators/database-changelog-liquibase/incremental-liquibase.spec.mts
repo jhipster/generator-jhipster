@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
 import constants from '../generator-constants.cjs';
-import jdlImporter from '../../jdl/jdl-importer.js';
+import { jdlImporter } from '../../jdl/index.mjs';
 import expectedFiles from '../../test/utils/expected-files.cjs';
 
 const __filename = fileURLToPath(import.meta.url);

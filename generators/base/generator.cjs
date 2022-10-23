@@ -18,6 +18,7 @@
  */
 const { parse: parseYaml, stringify: stringifyYaml } = require('yaml');
 const _ = require('lodash');
+const SharedData = require('../../lib/support/shared-data.cjs');
 
 const JHipsterBaseBlueprintGenerator = require('./generator-base-blueprint.cjs');
 
@@ -62,6 +63,8 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   static END = asPriority(END);
 
+  #sharedData;
+
   /**
    * @param {string | string[]} args
    * @param {import('./api.cjs').JHipsterGeneratorOptions} options
@@ -99,6 +102,27 @@ class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       });
       return headerComments.join('\n').concat('\n', stringifyYaml(merge(parseYaml(content), value)));
     });
+  }
+
+  /**
+   * Shared Data
+   */
+  get sharedData() {
+    if (!this.#sharedData) {
+      const { baseName } = this.jhipsterConfig;
+      if (!baseName) {
+        throw new Error('baseName is required');
+      }
+      if (this.options.sharedData.applications === undefined) {
+        this.options.sharedData.applications = {};
+      }
+      const sharedApplications = this.options.sharedData.applications;
+      if (!sharedApplications[baseName]) {
+        sharedApplications[baseName] = {};
+      }
+      this.#sharedData = new SharedData(sharedApplications[baseName]);
+    }
+    return this.#sharedData;
   }
 
   /**

@@ -26,12 +26,12 @@ import testSupport from '../../test/support/index.cjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 import defaults from '../generator-defaults.cjs';
-import TestFrameworkTypes from '../../jdl/jhipster/test-framework-types.js';
+import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { snakeCase } = lodash;
 const { testBlueprintSupport } = testSupport;
 const { appDefaultConfig } = defaults;
-const { CYPRESS } = TestFrameworkTypes;
+const { CYPRESS } = testFrameworkTypes;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
