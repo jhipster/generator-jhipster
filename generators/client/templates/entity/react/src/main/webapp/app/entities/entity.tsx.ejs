@@ -39,11 +39,13 @@ import {
   , JhiPagination, JhiItemCount
   <%_ } _%>
 <%_ } _%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+  , APP_DATE_FORMAT
+  , APP_LOCAL_DATE_FORMAT
+<%_ } _%>
+
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
-<%_ } _%>
 
 import { ASC, DESC<%_ if (!paginationNo) { _%>, ITEMS_PER_PAGE<%_ } _%>, SORT } from 'app/shared/util/pagination.constants';
 <%_ if (paginationNo) { _%>

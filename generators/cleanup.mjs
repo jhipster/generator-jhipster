@@ -338,6 +338,11 @@ export function cleanupOldFiles(generator) {
       generator.removeFile('.npmrc');
     }
   }
+  if (generator.isJhipsterVersionLessThan('7.9.4') && generator.jhipsterConfig) {
+    if (generator.jhipsterConfig.clientFramework === REACT) {
+      generator.removeFile(`${REACT_DIR}config/constants.ts`);
+    }
+  }
 }
 
 /**
