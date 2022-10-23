@@ -1,0 +1,101 @@
+/* eslint-disable no-console */
+import chalk from 'chalk';
+
+import * as oldConstants from '../generator-constants.cjs';
+import * as newConstants from '../generator-constants.mjs';
+
+const deprecatedProperties = {
+  GRADLE_VERSION: {
+    replacement: 'gradleVersion',
+    get: ({ data }) => data.gradleVersion,
+  },
+  NODE_VERSION: {
+    replacement: 'nodeVersion',
+    get: ({ data }) => data.nodeVersion,
+  },
+  NPM_VERSION: {
+    replacement: 'nodeDependencies.npm',
+    get: ({ data }) => data.nodeDependencies.npm,
+  },
+};
+
+const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
+const javascriptBuiltInProperties = ['parseInt', 'Boolean', 'JSON', 'Object'];
+
+const getProperty = (context, prop) => {
+  if (prop === Symbol.unscopables) {
+    return undefined;
+  }
+  if (prop in deprecatedProperties) {
+    const { replacement, get } = deprecatedProperties[prop];
+    const value = get(context);
+    console.log(
+      `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(replacement)}. Value: ${value}`
+    );
+    return value;
+  }
+  if (prop in oldConstants && !(prop in newConstants)) {
+    console.log(`Template data ${chalk.yellow(String(prop))} is deprecated but a replacement is not yet added.`);
+  }
+  const { generator, data } = context;
+  if (prop in data) {
+    return data[prop];
+  }
+  if (prop in generator) {
+    console.log(`Template data ${chalk.yellow(String(prop))} is a generator property.`);
+    console.log(`Change the template to '${chalk.yellow(`this.${String(prop)}`)}'`);
+    return generator[prop];
+  }
+  // console.log(`Template data '${chalk.yellow(String(prop))}' not found. Check your data.`);
+  // throw new Error(`Template data '${chalk.yellow(String(prop))}' not found. Check your data.`);
+  if (prop === 'undefined') {
+    throw new Error('Check your data');
+  }
+  return undefined;
+};
+
+const handler = {
+  ...Object.fromEntries(['set'].map(method => [method, (...args) => console.log(`Fixme: template data called ${method}(${args.pop()})`)])),
+  ...Object.fromEntries(
+    [
+      'apply',
+      'construct',
+      'defineProperty',
+      'deleteProperty',
+      'getOwnPropertyDescriptor',
+      'getPrototypeOf',
+      'isExtensible',
+      'ownKeys',
+      'preventExtensions',
+      'setPrototypeOf',
+    ].map(method => [method, () => console.log(`Fixme: template data called ${method}`)])
+  ),
+  ownKeys: ({ data }) => {
+    return Reflect.ownKeys(data);
+  },
+  getPrototypeOf: ({ data }) => {
+    return Object.getPrototypeOf(data);
+  },
+  getOwnPropertyDescriptor: ({ data }, prop) => {
+    return Object.getOwnPropertyDescriptor(data, prop);
+  },
+  has: (context, prop) => {
+    if (ejsBuiltInProperties.includes(prop)) {
+      return false;
+    }
+    if (javascriptBuiltInProperties.includes(prop)) {
+      console.log(`${chalk.yellow(prop)} is a javascript built in symbol, its use is discouraged inside templates`);
+      return false;
+    }
+    const propValue = getProperty(context, prop);
+    if (propValue === undefined) {
+      return prop in context.data;
+    }
+    return propValue !== undefined;
+  },
+  get: getProperty,
+};
+
+export default function createProxy(generator, data) {
+  return new Proxy({ generator, data }, handler);
+}

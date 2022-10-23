@@ -30,6 +30,7 @@ import simpleGit from 'simple-git';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
+import jhipster7Proxy from './jhipster7-proxy.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import jhipsterUtils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
@@ -2207,10 +2208,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
         };
+        // TODO drop for v8 final release
+        const data = jhipster7Proxy(this, context);
         if (useAsync) {
-          await this.renderTemplateAsync(sourceFileFrom, destinationFile, context, renderOptions);
+          await this.renderTemplateAsync(sourceFileFrom, destinationFile, data, renderOptions);
         } else {
-          this.renderTemplate(sourceFileFrom, destinationFile, context, renderOptions);
+          this.renderTemplate(sourceFileFrom, destinationFile, data, renderOptions);
         }
       }
       if (!binary && transform && transform.length) {
