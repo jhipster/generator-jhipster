@@ -144,7 +144,7 @@ spec:
               value: 'true'
 <%_ } _%>
 <%_ if (deploymentApplicationTypeMicroservice) { _%>
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: "x-request-id,x-ot-span-context"
 <%_ } _%>
             - name: JAVA_OPTS

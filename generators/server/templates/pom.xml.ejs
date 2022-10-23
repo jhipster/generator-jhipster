@@ -176,7 +176,6 @@
 <%_ if (searchEngineElasticsearch) { _%>
         <awaitility.version>4.2.0</awaitility.version>
 <%_ } _%>
-
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -2099,12 +2098,16 @@
             <id>zipkin</id>
             <dependencies>
                 <dependency>
-                    <groupId>org.springframework.cloud</groupId>
-                    <artifactId>spring-cloud-starter-sleuth</artifactId>
+                    <groupId>io.micrometer</groupId>
+                    <artifactId>micrometer-tracing</artifactId>
                 </dependency>
                 <dependency>
-                    <groupId>org.springframework.cloud</groupId>
-                    <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+                    <groupId>io.micrometer</groupId>
+                    <artifactId>micrometer-tracing-bridge-brave</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.zipkin.reporter2</groupId>
+                    <artifactId>zipkin-reporter-brave</artifactId>
                 </dependency>
             </dependencies>
         </profile>
