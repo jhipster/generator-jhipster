@@ -16,9 +16,9 @@ export interface JHipsterGeneratorFeatures extends GeneratorFeatures {
 }
 
 // eslint-disable-next-line no-use-before-define
-export type EditFileCallback<Generator> = (this: Generator, content: string, filePath: string) => CascatedEditFileCallback<Generator>;
+export type EditFileCallback<Generator> = (this: Generator, content: string, filePath: string) => string;
 
-export type CascatedEditFileCallback<Generator> = (...callbacks: EditFileCallback<Generator>) => CascatedEditFileCallback<Generator>;
+export type CascatedEditFileCallback<Generator> = (...callbacks: EditFileCallback<Generator>[]) => CascatedEditFileCallback<Generator>;
 
 export type WriteFileTemplate<Generator, DataType> =
   | string

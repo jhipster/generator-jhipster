@@ -23,12 +23,14 @@ import SharedData from './shared-data.mjs';
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
 
 import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
+import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures, EditFileCallback, CascatedEditFileCallback } from './api.cjs';
+import { joinCallbacks } from './ts-utils.mjs';
 
 const { merge } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
   PRIORITY_NAMES;
 
-const asPriority = priorityName => `${PRIORITY_PREFIX}${priorityName}`;
+const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`;
 
 /**
  * This is the base class for a generator for every generator.
@@ -65,34 +67,62 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   #sharedData;
 
-  /**
-   * @param {string | string[]} args
-   * @param {import('./api.cjs').JHipsterGeneratorOptions} options
-   * @param {import('./api.cjs').JHipsterGeneratorFeatures} features
-   */
-  constructor(args, options, features) {
+  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
   }
 
   /**
-   * Convert value to a yaml and write to destination
-   * @param {string} filepath
-   * @param {Record<string | number, any>} value
+   * Edit file content
    */
-  writeDestinationYaml(filepath, value) {
+  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> {
+    let filePath = this.destinationPath(file);
+    if (!this.env.sharedFs.existsInMemory(filePath) && this.env.sharedFs.existsInMemory(`${filePath}.jhi`)) {
+      filePath = `${filePath}.jhi`;
+    }
+
+    let content;
+
+    try {
+      content = this.readDestination(filePath);
+    } catch (_error) {
+      if (transformCallbacks.length === 0) {
+        throw new Error(`File ${filePath} doesn't exist`);
+      }
+      // allow to edit non existing files
+      content = '';
+    }
+
+    const writeCallback = (...callbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> => {
+      try {
+        content = joinCallbacks(...callbacks).call(this, content, filePath);
+        this.writeDestination(filePath, content);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
+        }
+        throw new Error(`Unknow Error ${error}`);
+      }
+      return writeCallback;
+    };
+
+    return writeCallback(...transformCallbacks);
+  }
+
+  /**
+   * Convert value to a yaml and write to destination
+   */
+  writeDestinationYaml(filepath: string, value: Record<string | number, any>) {
     this.writeDestination(filepath, stringifyYaml(value));
   }
 
   /**
    * Merge value to an existing yaml and write to destination
    * Removes every comment (due to parsing/merging process) except the at the top of the file.
-   * @param {string} filepath
-   * @param {Record<string | number, any>} value
    */
-  mergeDestinationYaml(filepath, value) {
+  mergeDestinationYaml(filepath: string, value: Record<string | number, any>) {
     this.editFile(filepath, content => {
       const lines = content.split('\n');
-      const headerComments = [];
+      const headerComments: string[] = [];
       lines.find(line => {
         if (line.startsWith('#')) {
           headerComments.push(line);
@@ -127,12 +157,11 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   /**
    * Shallow clone or convert dependencies to placeholder if needed.
-   *
-   * @param {Record<string,string>} map
-   * @param {(value: string) => string} [valuePlaceholder]
-   * @returns {Record<string,string>}
    */
-  prepareDependencies(map, valuePlaceholder = value => `'${_.snakeCase(value).toUpperCase()}_VERSION'`) {
+  prepareDependencies(
+    map: Record<string, string>,
+    valuePlaceholder: (value: string) => string = value => `'${_.snakeCase(value).toUpperCase()}_VERSION'`
+  ): Record<string, string> {
     if (process.env.VERSION_PLACEHOLDERS === 'true') {
       return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
     }
@@ -142,12 +171,9 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
-   * @private
    * Override yeoman-generator method that gets methods to be queued, filtering the result.
-   *
-   * @return {string[]}
    */
-  getTaskNames() {
+  getTaskNames(): string[] {
     let priorities = super.getTaskNames();
     if (this.options.skipPriorities) {
       priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
