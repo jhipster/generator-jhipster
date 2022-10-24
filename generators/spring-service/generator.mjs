@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 import _ from 'lodash';
 
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 
 import constants from '../generator-constants.cjs';
 import statistics from '../statistics.cjs';

@@ -2,28 +2,13 @@
 
 exports[`JHipster generate-blueprint generator with all option should match snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintrc.json": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
     "stateCleared": "modified",
   },
   ".github/workflows/generator.yml": Object {
     "stateCleared": "modified",
   },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
   ".mocharc.cjs": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc.yml": Object {
     "stateCleared": "modified",
   },
   ".yo-rc.json": Object {
@@ -33,18 +18,6 @@ Object {
     "stateCleared": "modified",
   },
   "cli/cli.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/add/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/add/generator.spec.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/add/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/add/templates/template-file-add.ejs": Object {
     "stateCleared": "modified",
   },
   "generators/app/generator.mjs": Object {
@@ -105,6 +78,18 @@ Object {
     "stateCleared": "modified",
   },
   "generators/base-application/templates/template-file-base-application.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-docker/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-docker/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-docker/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-docker/templates/template-file-base-docker.ejs": Object {
     "stateCleared": "modified",
   },
   "generators/base/generator.mjs": Object {
@@ -380,18 +365,6 @@ Object {
   "generators/init/templates/template-file-init.ejs": Object {
     "stateCleared": "modified",
   },
-  "generators/java/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/java/generator.spec.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/java/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/java/templates/template-file-java.ejs": Object {
-    "stateCleared": "modified",
-  },
   "generators/kubernetes-helm/generator.mjs": Object {
     "stateCleared": "modified",
   },
@@ -512,18 +485,6 @@ Object {
   "generators/server/templates/template-file-server.ejs": Object {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/spring-boot/generator.spec.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/spring-boot/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/spring-boot/templates/template-file-spring-boot.ejs": Object {
-    "stateCleared": "modified",
-  },
   "generators/spring-controller/generator.mjs": Object {
     "stateCleared": "modified",
   },
@@ -583,28 +544,13 @@ Object {
 
 exports[`JHipster generate-blueprint generator with default config should write files and match snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintrc.json": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
     "stateCleared": "modified",
   },
   ".github/workflows/generator.yml": Object {
     "stateCleared": "modified",
   },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
   ".mocharc.cjs": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc.yml": Object {
     "stateCleared": "modified",
   },
   ".yo-rc.json": Object {

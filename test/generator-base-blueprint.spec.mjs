@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 
-import BaseBlueprint from '../generators/base/generator-base-blueprint.cjs';
+import BaseBlueprint from '../generators/base/index.mjs';
 
 const BaseGenerator = BaseBlueprint.prototype;
 
@@ -35,8 +35,12 @@ const createPrioritiesFakes = () => {
 };
 
 const createAllBlueprint = mockedPriorities => {
+  /**
+   * @class
+   * @extends {BaseBlueprint}
+   */
   return class extends BaseBlueprint {
-    _initializing() {
+    get initializing() {
       return {
         mockedInitializing() {
           mockedPriorities.initializing();
@@ -44,11 +48,11 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get initializing() {
-      return this._initializing();
+    get [BaseBlueprint.INITIALIZING]() {
+      return this.initializing;
     }
 
-    _prompting() {
+    get prompting() {
       return {
         mockedPrompting() {
           mockedPriorities.prompting();
@@ -56,11 +60,11 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get prompting() {
-      return this._prompting();
+    get [BaseBlueprint.PROMPTING]() {
+      return this.prompting;
     }
 
-    _configuring() {
+    get configuring() {
       return {
         mockedConfiguring() {
           mockedPriorities.configuring();
@@ -68,11 +72,11 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get configuring() {
-      return this._configuring();
+    get [BaseBlueprint.CONFIGURING]() {
+      return this.configuring;
     }
 
-    _composing() {
+    get composing() {
       return {
         mockedComposing() {
           mockedPriorities.composing();
@@ -80,11 +84,11 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get composing() {
-      return this._composing();
+    get [BaseBlueprint.COMPOSING]() {
+      return this.composing;
     }
 
-    _loading() {
+    get loading() {
       return {
         mockedLoading() {
           mockedPriorities.loading();
@@ -92,11 +96,11 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get loading() {
-      return this._loading();
+    get [BaseBlueprint.LOADING]() {
+      return this.loading;
     }
 
-    _preparing() {
+    get preparing() {
       return {
         mockedPreparing() {
           mockedPriorities.preparing();
@@ -104,11 +108,11 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get preparing() {
-      return this._preparing();
+    get [BaseBlueprint.PREPARING]() {
+      return this.preparing;
     }
 
-    _default() {
+    get default() {
       return {
         mockedDefault() {
           mockedPriorities.default();
@@ -116,11 +120,11 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get default() {
-      return this._default();
+    get [BaseBlueprint.DEFAULT]() {
+      return this.default;
     }
 
-    _writing() {
+    get writing() {
       return {
         mockedWriting() {
           mockedPriorities.writing();
@@ -128,11 +132,11 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get writing() {
-      return this._writing();
+    get [BaseBlueprint.WRITING]() {
+      return this.writing;
     }
 
-    _postWriting() {
+    get postWriting() {
       return {
         mockedPostWriting() {
           mockedPriorities.postWriting();
@@ -140,11 +144,11 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get postWriting() {
-      return this._postWriting();
+    get [BaseBlueprint.POST_WRITING]() {
+      return this.postWriting;
     }
 
-    _install() {
+    get install() {
       return {
         mockedInstall() {
           mockedPriorities.install();
@@ -152,11 +156,11 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get install() {
-      return this._install();
+    get [BaseBlueprint.INSTALL]() {
+      return this.install;
     }
 
-    _end() {
+    get end() {
       return {
         mockedEnd() {
           mockedPriorities.end();
@@ -164,8 +168,8 @@ const createAllBlueprint = mockedPriorities => {
       };
     }
 
-    get end() {
-      return this._end();
+    get [BaseBlueprint.END]() {
+      return this.end;
     }
   };
 };
@@ -178,7 +182,7 @@ describe('Generator Base Blueprint', () => {
       before(() => {
         mockedPriorities = createPrioritiesFakes();
         mockBlueprintSubGen = createAllBlueprint(mockedPriorities);
-        return helpers.create(mockBlueprintSubGen).run();
+        return helpers.run(mockBlueprintSubGen);
       });
 
       priorities.forEach((priority, idx) => {
@@ -205,32 +209,32 @@ describe('Generator Base Blueprint', () => {
             this.sbsBlueprint = true;
           }
 
-          get initializing() {
-            return this._initializing();
+          get [BaseBlueprint.INITIALIZING]() {
+            return super.initializing;
           }
 
-          get prompting() {
-            return this._prompting();
+          get [BaseBlueprint.PROMPTING]() {
+            return super.prompting;
           }
 
-          get configuring() {
-            return this._configuring();
+          get [BaseBlueprint.CONFIGURING]() {
+            return super.configuring;
           }
 
-          get default() {
-            return this._default();
+          get [BaseBlueprint.DEFAULT]() {
+            return super.default;
           }
 
-          get writing() {
-            return this._writing();
+          get [BaseBlueprint.WRITING]() {
+            return super.writing;
           }
 
-          get install() {
-            return this._install();
+          get [BaseBlueprint.INSTALL]() {
+            return super.install;
           }
 
-          get end() {
-            return this._end();
+          get [BaseBlueprint.END]() {
+            return super.end;
           }
         };
         return helpers.create(mockBlueprintSubGen).run();

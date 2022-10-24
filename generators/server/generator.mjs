@@ -28,6 +28,8 @@ import {
   GENERATOR_SERVER,
   GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_DATABASE_CHANGELOG,
+  GENERATOR_GRADLE,
+  GENERATOR_MAVEN,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
@@ -52,7 +54,7 @@ import {
   reservedKeywords,
 } from '../../jdl/jhipster/index.mjs';
 
-import { stringify } from '../../utils/index.cjs';
+import { stringify } from '../../utils/index.mjs';
 import generatorUtils from '../utils.cjs';
 
 const { isReservedTableName } = reservedKeywords;
@@ -222,10 +224,20 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         await this.composeWithJHipster(GENERATOR_COMMON);
       },
 
-      async composeLanguages() {
+      async composing() {
+        const { buildTool, enableTranslation } = this.jhipsterConfigWithDefaults;
+        if (buildTool === GRADLE) {
+          await this.composeWithJHipster(GENERATOR_GRADLE);
+        } else if (buildTool === MAVEN) {
+          await this.composeWithJHipster(GENERATOR_MAVEN);
+        } else {
+          throw new Error(`Build tool ${buildTool} is not supported`);
+        }
+
         // We don't expose client/server to cli, composing with languages is used for test purposes.
-        if (this.jhipsterConfig.enableTranslation === false) return;
-        await this.composeWithJHipster(GENERATOR_LANGUAGES);
+        if (enableTranslation) {
+          await this.composeWithJHipster(GENERATOR_LANGUAGES);
+        }
       },
     });
   }
@@ -292,7 +304,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
         application.JAVA_VERSION = constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
-        application.GRADLE_VERSION = constants.GRADLE_VERSION;
 
         application.NODE_VERSION = constants.NODE_VERSION;
         application.NPM_VERSION = constants.NPM_VERSION;

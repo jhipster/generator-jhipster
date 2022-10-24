@@ -23,7 +23,7 @@ import path from 'path';
 import { GENERATOR_APP } from '../generator-list.mjs';
 
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 import { deploymentOptions } from '../../jdl/jhipster/index.mjs';
 
 const {

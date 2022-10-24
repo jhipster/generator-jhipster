@@ -22,24 +22,22 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 import constants from '../generator-constants.cjs';
 import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
-import entityUtils from '../../utils/entity.cjs';
+import {
+  loadRequiredConfigIntoEntity,
+  loadRequiredConfigDerivedProperties,
+  prepareEntityServerForTemplates,
+  prepareEntityPrimaryKeyForTemplates,
+} from '../../utils/entity.mjs';
 import type { SpringBootApplication } from './types.js';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
-import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.cjs';
+import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
 import { getDockerfileContainers, getPomVersionProperties } from '../server/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
 
 const { LONG: TYPE_LONG } = CommonDBTypes;
-
-const {
-  loadRequiredConfigIntoEntity,
-  loadRequiredConfigDerivedProperties,
-  prepareEntityServerForTemplates,
-  prepareEntityPrimaryKeyForTemplates,
-} = entityUtils;
 
 /**
  * @class

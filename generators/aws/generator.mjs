@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 
 import prompts from './prompts.mjs';
 import AwsFactory from './lib/aws.cjs';

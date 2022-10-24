@@ -20,7 +20,7 @@
 import _ from 'lodash';
 import chalk from 'chalk';
 
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 
 import constants from '../generator-constants.cjs';
 import { askForControllerActions } from './prompts.mjs';

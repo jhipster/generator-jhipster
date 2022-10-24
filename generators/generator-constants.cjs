@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const validationOptions = require('../jdl/jhipster/validations');
-const gradleOptions = require('./gradle/constants.cjs');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
 const commonPackageJson = require('./common/templates/package.json');
@@ -388,7 +387,6 @@ const constants = {
 
   JAVA_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
-  GRADLE_VERSION,
 
   // NPM
   NODE_VERSION,

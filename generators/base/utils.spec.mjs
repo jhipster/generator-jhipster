@@ -19,7 +19,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
-import { joinCallbacks } from './utils.cjs';
+import { joinCallbacks, parseChangelog } from './utils.mjs';
 
 describe('base support', () => {
   describe('joinCallbacks', () => {
@@ -50,6 +50,27 @@ describe('base support', () => {
 
       expect(mock2.mock.calls[0][0]).toBe('return1');
       expect(mock2.mock.calls[0][1]).toBe('file');
+    });
+  });
+
+  describe('::parseChangelog', () => {
+    describe('when not passing parameters', () => {
+      it('throws', () => {
+        expect(() => parseChangelog()).toThrow(/^undefined is not a valid changelogDate\.$/);
+      });
+    });
+    describe('when passing an invalid changelogDate', () => {
+      it('throws', () => {
+        expect(() => parseChangelog('1234')).toThrow(/^1234 is not a valid changelogDate\.$/);
+      });
+    });
+    describe('when passing a valid changelogDate', () => {
+      it('returns a date object', () => {
+        expect(parseChangelog('20160208210114') instanceof Date).toBeTruthy();
+      });
+      it('returns the date', () => {
+        expect(parseChangelog('20160208210114').toISOString()).toBe('2016-02-08T21:01:14.000Z');
+      });
     });
   });
 });

@@ -19,7 +19,7 @@
 import fs from 'fs';
 import { exec } from 'child_process';
 import chalk from 'chalk';
-import BaseGenerator from '../base/index.cjs';
+import BaseGenerator from '../base/index.mjs';
 
 import statistics from '../statistics.cjs';
 

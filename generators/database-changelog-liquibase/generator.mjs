@@ -21,20 +21,15 @@ import _ from 'lodash';
 
 import BaseApplication from '../base-application/index.mjs';
 import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './files.mjs';
-import utils from '../../utils/index.cjs';
+import { stringify } from '../../utils/index.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
-import fieldUtils from '../../utils/field.cjs';
-import relationshipUtils from '../../utils/relationship.cjs';
-import liquibaseUtils from '../../utils/liquibase.cjs';
+import { prepareFieldForTemplates } from '../../utils/field.mjs';
+import { prepareRelationshipForTemplates } from '../../utils/relationship.mjs';
+import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
 
-const { stringify } = utils;
 const { CommonDBTypes } = fieldTypes;
 const TYPE_LONG = CommonDBTypes.LONG;
-
-const { prepareFieldForTemplates } = fieldUtils;
-const { prepareRelationshipForTemplates } = relationshipUtils;
-const { prepareFieldForLiquibaseTemplates } = liquibaseUtils;
 
 export default class DatabaseChangelogLiquibase extends BaseApplication {
   constructor(args, options, features) {
