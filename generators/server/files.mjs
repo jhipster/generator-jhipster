@@ -31,6 +31,18 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
+/**
+ * Move the template to `javaPackageSrcDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).
+ * Removes trailing specifiers.
+ */
+const moveToJavaPackageSrcDir = (data, filePath) => `${data.javaPackageSrcDir}${filePath.replace(/_\w*/, '')}`;
+
+/**
+ * Move the template to `javaPackageTestDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).
+ * Removes trailing specifiers.
+ */
+const moveToJavaPackageTestDir = (data, filePath) => `${data.javaPackageTestDir}${filePath.replace(/_\w*/, '')}`;
+
 const shouldSkipUserManagement = generator =>
   generator.skipUserManagement && (!generator.applicationTypeMonolith || !generator.authenticationTypeOauth2);
 
@@ -199,6 +211,58 @@ export const cassandraFiles = {
           renameTo: generator => `${generator.testDir}config/EmbeddedCassandra.java`,
         },
       ],
+    },
+  ],
+};
+
+const jwtFiles = {
+  jwtBaseFiles: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/SecurityJwtConfiguration.java', 'management/SecurityMetersService.java'],
+    },
+    {
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: [
+        'management/SecurityMetersServiceTests.java',
+        'security/jwt/AuthenticationIntegrationTest.java',
+        'security/jwt/JwtAuthenticationTestUtils.java',
+        'security/jwt/AuthenticationIntegrationTest.java',
+        'security/jwt/TokenAuthenticationSecurityMetersIT.java',
+        'security/jwt/TokenAuthenticationIT.java',
+      ],
+    },
+  ],
+  gatewayRelayFiles: [
+    {
+      condition: generator => generator.reactive && generator.applicationTypeGateway,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['security/jwt/JWTRelayGatewayFilterFactory.java'],
+    },
+  ],
+  entrypointFiles: [
+    {
+      condition: generator => !generator.applicationTypeMicroservice,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/vm/LoginVM.java', 'web/rest/AuthenticateController.java'],
+    },
+    {
+      condition: generator => !generator.applicationTypeMicroservice,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/AuthenticateControllerIT.java'],
+    },
+  ],
+  microservice: [
+    {
+      condition: generator => !generator.reactive && generator.applicationTypeMicroservice,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/FeignConfiguration.java', 'client/UserFeignClientInterceptor_jwt.java'],
     },
   ],
 };
@@ -439,44 +503,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeJwt,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/jwt/TokenProvider.java',
-          renameTo: generator => `${generator.javaDir}security/jwt/TokenProvider.java`,
-        },
-        {
-          file: 'package/security/jwt/JWTFilter.java',
-          renameTo: generator => `${generator.javaDir}security/jwt/JWTFilter.java`,
-        },
-        {
-          file: 'package/management/SecurityMetersService.java',
-          renameTo: generator => `${generator.javaDir}management/SecurityMetersService.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.authenticationTypeJwt && !generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/jwt/JWTConfigurer.java',
-          renameTo: generator => `${generator.javaDir}security/jwt/JWTConfigurer.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.reactive && generator.applicationTypeGateway && generator.authenticationTypeJwt,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/jwt/JWTRelayGatewayFilterFactory.java',
-          renameTo: generator => `${generator.testDir}security/jwt/JWTRelayGatewayFilterFactory.java`,
-        },
-      ],
-    },
-    {
       condition: generator => !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -584,20 +610,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.applicationTypeMicroservice && generator.authenticationTypeJwt,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/vm/LoginVM.java',
-          renameTo: generator => `${generator.javaDir}web/rest/vm/LoginVM.java`,
-        },
-        {
-          file: 'package/web/rest/UserJWTController.java',
-          renameTo: generator => `${generator.javaDir}web/rest/UserJWTController.java`,
-        },
-      ],
-    },
-    {
       condition: generator => !!generator.enableSwaggerCodegen,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -696,23 +708,6 @@ export const baseServerFiles = {
     },
   ],
   serverMicroservice: [
-    {
-      condition: generator =>
-        !generator.reactive &&
-        (generator.applicationTypeMicroservice || generator.applicationTypeGateway) &&
-        generator.authenticationTypeJwt,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/FeignConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java`,
-        },
-        {
-          file: 'package/client/JWT_UserFeignClientInterceptor.java',
-          renameTo: generator => `${generator.javaDir}client/UserFeignClientInterceptor.java`,
-        },
-      ],
-    },
     {
       condition: generator =>
         !generator.reactive &&
@@ -1388,6 +1383,44 @@ export const baseServerFiles = {
       ],
     },
   ],
+  accountResource: [
+    {
+      condition: data => data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/AccountResource_skipUserManagement.java'],
+    },
+    {
+      condition: data => data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/AccountResourceIT_skipUserManagement.java'],
+    },
+    {
+      condition: data => data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/AccountResource_oauth2.java'],
+    },
+    {
+      condition: data => data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/AccountResourceIT_oauth2.java'],
+    },
+    {
+      condition: data => !data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/AccountResource.java'],
+    },
+    {
+      condition: data => !data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/AccountResourceIT.java'],
+    },
+  ],
   serverJavaUserManagement: [
     {
       condition: generator => generator.builtInUser,
@@ -1471,16 +1504,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.skipUserManagement && (generator.applicationTypeGateway || generator.applicationTypeMonolith),
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/AccountResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/AccountResource.java`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.authenticationTypeOauth2,
       path: SERVER_TEST_SRC_DIR,
       templates: [
@@ -1505,32 +1528,6 @@ export const baseServerFiles = {
         {
           file: 'package/web/rest/UserResourceIT.java',
           renameTo: generator => `${generator.testDir}web/rest/UserResourceIT.java`,
-        },
-      ],
-    },
-    {
-      condition: generator =>
-        generator.skipUserManagement &&
-        !generator.authenticationTypeOauth2 &&
-        (generator.applicationTypeGateway || generator.applicationTypeMonolith),
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/AccountResourceIT_skipUserManagement.java',
-          renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`,
-        },
-      ],
-    },
-    {
-      condition: generator =>
-        generator.skipUserManagement &&
-        generator.authenticationTypeOauth2 &&
-        (generator.applicationTypeGateway || generator.applicationTypeMonolith),
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/AccountResourceIT_oauth2.java',
-          renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`,
         },
       ],
     },
@@ -1587,10 +1584,6 @@ export const baseServerFiles = {
         {
           file: 'package/web/rest/vm/ManagedUserVM.java',
           renameTo: generator => `${generator.javaDir}web/rest/vm/ManagedUserVM.java`,
-        },
-        {
-          file: 'package/web/rest/AccountResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/AccountResource.java`,
         },
         { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
         {
@@ -1679,38 +1672,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeJwt,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/management/SecurityMetersServiceTests.java',
-          renameTo: generator => `${generator.testDir}management/SecurityMetersServiceTests.java`,
-        },
-        {
-          file: 'package/security/jwt/TokenProviderTest.java',
-          renameTo: generator => `${generator.testDir}security/jwt/TokenProviderTest.java`,
-        },
-        {
-          file: 'package/security/jwt/TokenProviderSecurityMetersTests.java',
-          renameTo: generator => `${generator.testDir}security/jwt/TokenProviderSecurityMetersTests.java`,
-        },
-        {
-          file: 'package/security/jwt/JWTFilterTest.java',
-          renameTo: generator => `${generator.testDir}security/jwt/JWTFilterTest.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.applicationTypeMicroservice && generator.authenticationTypeJwt,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/UserJWTControllerIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/UserJWTControllerIT.java`,
-        },
-      ],
-    },
-    {
       condition: generator =>
         !generator.skipUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
       path: SERVER_TEST_SRC_DIR,
@@ -1772,26 +1733,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && !generator.authenticationTypeOauth2,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/AccountResourceIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.skipUserManagement && generator.authenticationTypeOauth2,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/AccountResourceIT_oauth2.java',
-          renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`,
-        },
-      ],
-    },
-    {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1808,7 +1749,8 @@ export const serverFiles = mergeSections(
   addSectionsCondition(liquibaseFiles, context => context.databaseTypeSql),
   addSectionsCondition(mongoDbFiles, context => context.databaseTypeMongodb),
   addSectionsCondition(neo4jFiles, context => context.databaseTypeNeo4j),
-  addSectionsCondition(cassandraFiles, context => context.databaseTypeCassandra)
+  addSectionsCondition(cassandraFiles, context => context.databaseTypeCassandra),
+  addSectionsCondition(jwtFiles, context => context.authenticationTypeJwt)
 );
 
 /**
