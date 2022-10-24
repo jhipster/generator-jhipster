@@ -62,11 +62,11 @@ const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL, ORACLE, MYSQL, POSTGRESQL, MA
 const { MAVEN } = buildToolTypes;
 
 /**
- * @typedef {import('./api.cjs').JHipsterGeneratorOptions} JHipsterGeneratorOptions
+ * @typedef {import('./api.mjs').JHipsterGeneratorOptions} JHipsterGeneratorOptions
  */
 
 /**
- * @typedef {import('./api.cjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
+ * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
  */
 
 /**

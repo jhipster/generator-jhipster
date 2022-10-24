@@ -1,4 +1,4 @@
-import { NoArgTaskGroup, GenericTaskGroup } from '../base/tasks.cjs';
+import { NoArgTaskGroup, GenericTaskGroup } from '../base/tasks.mjs';
 
 export type Application = Record<string, any>;
 

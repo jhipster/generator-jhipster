@@ -35,7 +35,7 @@ import { DOCKER_DIR } from '../generator-constants.mjs';
  * need to be removed.
  *
  * @param {any} generator - reference to generator
- * @param {import('../bootstrap-application-server/types.js').SpringBootApplication} application
+ * @param {import('./types.mjs').SpringBootApplication} application
  * @param {string} javaDir - Java directory
  * @param {string} testDir - Java tests directory
  * @param {string} mainResourceDir - Main resources directory

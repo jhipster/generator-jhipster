@@ -23,7 +23,7 @@ import SharedData from './shared-data.mjs';
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
 
 import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
-import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures, EditFileCallback, CascatedEditFileCallback } from './api.cjs';
+import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures, EditFileCallback, CascatedEditFileCallback } from './api.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
 
 const { merge } = _;

@@ -34,7 +34,7 @@ import {
 import { fieldIsEnum } from '../../utils/field.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
-import type { ClientServerApplication } from './types.js';
+import type { ClientServerApplication } from '../common/types.mjs';
 
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
 

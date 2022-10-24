@@ -124,8 +124,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @param {string | string[]} args
-   * @param {import('./base/api.cjs').JHipsterGeneratorOptions} options
-   * @param {import('./base/api.cjs').JHipsterGeneratorFeatures} features
+   * @param {import('./base/api.mjs').JHipsterGeneratorOptions} options
+   * @param {import('./base/api.mjs').JHipsterGeneratorFeatures} features
    */
   constructor(args, options, features) {
     super(args, options, features);
@@ -2084,7 +2084,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * write the given files using provided options.
    *
    * @template DataType
-   * @param {import('./api.cjs').WriteFileOptions<this, DataType>} options
+   * @param {import('./api.mjs').WriteFileOptions<this, DataType>} options
    * @return {Promise<string[]>}
    */
   async writeFiles(options) {
@@ -3089,7 +3089,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./base/api.cjs').JHipsterOptions} [options] - Object containing options.
+   * @param {import('./base/api.mjs').JHipsterOptions} [options] - Object containing options.
    */
   jhipsterOptions(options = {}) {
     options = _.cloneDeep(options);

@@ -21,7 +21,7 @@ import jest from 'jest-mock';
 
 import { parseChangelog } from './utils.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
-import { EditFileCallback } from './api.cjs';
+import { EditFileCallback } from './api.mjs';
 
 describe('base support', () => {
   describe('joinCallbacks', () => {

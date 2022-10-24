@@ -113,21 +113,21 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   }
 
   /**
-   * @returns {import('./tasks.js').LoadingTaskGroup<this, ApplicationType>}
+   * @returns {import('./tasks.mjs').LoadingTaskGroup<this, ApplicationType>}
    */
   get loading() {
     return {};
   }
 
   /**
-   * @returns {import('./tasks.js').WritingTaskGroup<this, ApplicationType>}
+   * @returns {import('./tasks.mjs').WritingTaskGroup<this, ApplicationType>}
    */
   get writing() {
     return this.asWritingTaskGroup({});
   }
 
   /**
-   * @returns {import('./tasks.js').PreparingEachEntityTaskGroup<this, ApplicationType>}
+   * @returns {import('./tasks.mjs').PreparingEachEntityTaskGroup<this, ApplicationType>}
    */
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({});
@@ -180,8 +180,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').InitializingTaskGroup<this>} taskGroup
-   * @returns {import('./tasks.js').InitializingTaskGroup<this>}
+   * @param {import('./tasks.mjs').InitializingTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.mjs').InitializingTaskGroup<this>}
    */
   asInitialingTaskGroup(taskGroup) {
     return taskGroup;
@@ -190,8 +190,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').ConfiguringTaskGroup<this>} taskGroup
-   * @returns {import('./tasks.js').ConfiguringTaskGroup<this>}
+   * @param {import('./tasks.mjs').ConfiguringTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.mjs').ConfiguringTaskGroup<this>}
    */
   asConfiguringTaskGroup(taskGroup) {
     return taskGroup;
@@ -200,8 +200,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').PromptingTaskGroup<this>} taskGroup
-   * @returns {import('./tasks.js').PromptingTaskGroup<this>}
+   * @param {import('./tasks.mjs').PromptingTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.mjs').PromptingTaskGroup<this>}
    */
   asPromptingTaskGroup(taskGroup) {
     return taskGroup;
@@ -210,8 +210,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').ComposingTaskGroup<this>} taskGroup
-   * @returns {import('./tasks.js').ComposingTaskGroup<this>}
+   * @param {import('./tasks.mjs').ComposingTaskGroup<this>} taskGroup
+   * @returns {import('./tasks.mjs').ComposingTaskGroup<this>}
    */
   asComposingTaskGroup(taskGroup) {
     return taskGroup;
@@ -220,8 +220,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').LoadingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').LoadingTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').LoadingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').LoadingTaskGroup<this, ApplicationType>}
    */
   asLoadingTaskGroup(taskGroup) {
     return taskGroup;
@@ -230,8 +230,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').PreparingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').PreparingTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').PreparingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').PreparingTaskGroup<this, ApplicationType>}
    */
   asPreparingTaskGroup(taskGroup) {
     return taskGroup;
@@ -240,8 +240,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').ConfiguringEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').ConfiguringEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').ConfiguringEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').ConfiguringEachEntityTaskGroup<this, ApplicationType>}
    */
   asConfiguringEachEntityTaskGroup(taskGroup) {
     return taskGroup;
@@ -250,8 +250,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').LoadingEntitiesTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').LoadingEntitiesTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').LoadingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').LoadingEntitiesTaskGroup<this, ApplicationType>}
    */
   asLoadingEntitiesTaskGroup(taskGroup) {
     return taskGroup;
@@ -260,8 +260,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').PreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').PreparingEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').PreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').PreparingEachEntityTaskGroup<this, ApplicationType>}
    */
   asPreparingEachEntityTaskGroup(taskGroup) {
     return taskGroup;
@@ -270,8 +270,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').PreparingEachEntityFieldTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').PreparingEachEntityFieldTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').PreparingEachEntityFieldTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').PreparingEachEntityFieldTaskGroup<this, ApplicationType>}
    */
   asPreparingEachEntityFieldTaskGroup(taskGroup) {
     return taskGroup;
@@ -280,8 +280,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').PreparingEachEntityRelationshipTaskGroup<this, ApplicationType>}
    */
   asPreparingEachEntityRelationshipTaskGroup(taskGroup) {
     return taskGroup;
@@ -290,8 +290,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').PostPreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').PostPreparingEachEntityTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').PostPreparingEachEntityTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').PostPreparingEachEntityTaskGroup<this, ApplicationType>}
    */
   asPostPreparingEachEntityTaskGroup(taskGroup) {
     return taskGroup;
@@ -300,8 +300,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').DefaultTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').DefaultTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').DefaultTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').DefaultTaskGroup<this, ApplicationType>}
    */
   asDefaultTaskGroup(taskGroup) {
     return taskGroup;
@@ -310,8 +310,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').WritingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').WritingTaskGroup<this, ApplicationType>} taskGroup
+   * @param {import('./tasks.mjs').WritingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').WritingTaskGroup<this, ApplicationType>} taskGroup
    */
   asWritingTaskGroup(taskGroup) {
     return taskGroup;
@@ -320,8 +320,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').WritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').WritingEntitiesTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').WritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').WritingEntitiesTaskGroup<this, ApplicationType>}
    */
   asWritingEntitiesTaskGroup(taskGroup) {
     return taskGroup;
@@ -330,8 +330,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').PostWritingTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').PostWritingTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').PostWritingTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').PostWritingTaskGroup<this, ApplicationType>}
    */
   asPostWritingTaskGroup(taskGroup) {
     return taskGroup;
@@ -340,8 +340,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').PostWritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').PostWritingEntitiesTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').PostWritingEntitiesTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').PostWritingEntitiesTaskGroup<this, ApplicationType>}
    */
   asPostWritingEntitiesTaskGroup(taskGroup) {
     return taskGroup;
@@ -350,8 +350,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').InstallTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').InstallTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').InstallTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').InstallTaskGroup<this, ApplicationType>}
    */
   asInstallTaskGroup(taskGroup) {
     return taskGroup;
@@ -360,8 +360,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').PostInstallTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').PostInstallTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').PostInstallTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').PostInstallTaskGroup<this, ApplicationType>}
    */
   asPostInstallTaskGroup(taskGroup) {
     return taskGroup;
@@ -370,8 +370,8 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   /**
    * Utility method to get typed objects for autocomplete.
    *
-   * @param {import('./tasks.js').EndTaskGroup<this, ApplicationType>} taskGroup
-   * @returns {import('./tasks.js').EndTaskGroup<this, ApplicationType>}
+   * @param {import('./tasks.mjs').EndTaskGroup<this, ApplicationType>} taskGroup
+   * @returns {import('./tasks.mjs').EndTaskGroup<this, ApplicationType>}
    */
   asEndTaskGroup(taskGroup) {
     return taskGroup;

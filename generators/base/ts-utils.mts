@@ -1,7 +1,7 @@
 import { platform } from 'os';
 
 import generatorUtils from '../utils.cjs';
-import type { EditFileCallback } from './api.cjs';
+import type { EditFileCallback } from './api.mjs';
 
 const { normalizeLineEndings } = generatorUtils;
 

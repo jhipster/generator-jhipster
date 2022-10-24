@@ -28,7 +28,7 @@ const { startCase } = _;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-base/types.js').BaseApplication>}
+ * @extends {BaseApplicationGenerator<import('../base-application/types.mjs').BaseApplication>}
  */
 export default class ProjectNameGenerator extends BaseApplicationGenerator {
   async _postConstruct() {

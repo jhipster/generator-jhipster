@@ -25,7 +25,7 @@ import { cypressFiles, cypressEntityFiles } from './files.mjs';
 import constants from '../generator-constants.cjs';
 import { GENERATOR_CYPRESS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 
-import type { CypressApplication } from './types.js';
+import type { CypressApplication } from './types.mjs';
 import type {
   LoadingTaskGroup,
   PostWritingTaskGroup,
@@ -34,7 +34,7 @@ import type {
   PromptingTaskGroup,
   WritingEntitiesTaskGroup,
   WritingTaskGroup,
-} from '../base-application/tasks.js';
+} from '../base-application/tasks.mjs';
 
 const { stringHashCode } = utils;
 
