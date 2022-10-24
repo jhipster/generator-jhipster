@@ -86,7 +86,7 @@ describe('Enforce some developments patterns', () => {
         });
       });
     });
-    ['server'].forEach(generator => {
+    ['server', 'client', 'common'].forEach(generator => {
       const templateFiles = readDir(path.join(__dirname, '..', 'generators', generator))
         .filter(file => file.endsWith('.ejs'))
         .filter(file => {
