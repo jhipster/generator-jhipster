@@ -132,7 +132,7 @@
     "@typescript-eslint/parser": "5.40.0",
     "chai": "4.3.6",
     "chokidar": "3.5.3",
-    "concurrently": "7.4.0",
+    "concurrently": "7.5.0",
     "ejs-lint": "2.0.0",
     "esbuild": "0.15.12",
     "eslint": "8.25.0",
