@@ -20,6 +20,7 @@ const validationOptions = require('../jdl/jhipster/validations');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
 const commonPackageJson = require('./common/templates/package.json');
+const gradleOptions = require('./gradle/constants.mjs');
 
 // Version of Java
 const JAVA_VERSION = '17';
