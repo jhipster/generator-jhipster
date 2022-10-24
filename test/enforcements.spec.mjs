@@ -96,9 +96,17 @@ describe('Enforce some developments patterns', () => {
             !/OAuth2.*RefreshTokensWebFilter.java.ejs/.test(file)
           );
         });
-      const jsFiles = readDir(path.join(__dirname, '..', 'generators', generator)).filter(
-        file => file.endsWith('.mjs') || file.endsWith('.mts') || file.endsWith('.ejs')
-      );
+      const jsFiles = readDir(path.join(__dirname, '..', 'generators', generator))
+        .filter(file => file.endsWith('.mjs') || file.endsWith('.mts') || file.endsWith('.ejs'))
+        .sort((a, b) => {
+          if (a.includes('files')) return -1;
+          if (b.includes('files')) return 1;
+          if (a.includes('generator.')) return -1;
+          if (b.includes('generator.')) return 1;
+          if (a.endsWith('.ejs')) return 1;
+          if (b.endsWith('.ejs')) return -1;
+          return 0;
+        });
       templateFiles.forEach(templateFile => {
         const reference = basename(templateFile, '.ejs');
         it(`${templateFile} must have referenced with ${reference}`, () => {
