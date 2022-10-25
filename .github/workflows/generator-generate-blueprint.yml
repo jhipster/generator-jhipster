@@ -46,7 +46,7 @@ jobs:
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
         with:
-          application-sample: ngx-default
+          application-sample: ng-default
           executable: jhipster-foo
       - uses: actions/setup-node@v3
         with:
