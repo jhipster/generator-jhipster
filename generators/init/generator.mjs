@@ -28,7 +28,7 @@ import generatorOptions from './options.mjs';
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-base/types.js').BaseApplication>}
+ * @extends {BaseApplicationGenerator<import('../base-application/types.mjs').BaseApplication>}
  */
 export default class InitGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {

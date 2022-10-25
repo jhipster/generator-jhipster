@@ -28,7 +28,7 @@ import { MAVEN } from './constants.mjs';
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-server/types.js').SpringBootApplication>}
+ * @extends {BaseApplicationGenerator<import('../server/types.mjs').SpringBootApplication>}
  */
 export default class MavenGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {

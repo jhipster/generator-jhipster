@@ -84,7 +84,7 @@ const { SUPPORTED_VALIDATION_RULES } = constants;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-server/types.js').SpringBootApplication>}
+ * @extends {BaseApplicationGenerator<import('./types.mjs').SpringBootApplication>}
  */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {

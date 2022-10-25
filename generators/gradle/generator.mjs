@@ -28,7 +28,7 @@ import { GRADLE_VERSION } from './constants.mjs';
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-server/types.js').SpringBootApplication>}
+ * @extends {BaseApplicationGenerator<import('../server/types.mjs').SpringBootApplication>}
  */
 export default class GradleGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
