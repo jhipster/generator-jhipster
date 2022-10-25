@@ -24,7 +24,11 @@
 
 const faker = require('@faker-js/faker');
 
+const constants = require('../generator-constants');
+
 const { stringHashCode } = require('../utils');
+
+const CYPRESS_TEMPLATES_DIR = `${constants.CLIENT_TEST_SRC_DIR}cypress/`;
 
 const cypressFiles = {
   common: [
@@ -34,7 +38,8 @@ const cypressFiles = {
   ],
   clientTestFw: [
     {
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATES_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressFolder}${file}`,
       templates: [
         '.eslintrc.json',
         'fixtures/integration-test.png',
@@ -50,12 +55,14 @@ const cypressFiles = {
     },
     {
       condition: generator => !generator.authenticationTypeOauth2,
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATES_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressFolder}${file}`,
       templates: ['e2e/account/login-page.cy.ts'],
     },
     {
       condition: generator => !generator.authenticationTypeOauth2 && !generator.databaseTypeNo && !generator.applicationTypeMicroservice,
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATES_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressFolder}${file}`,
       templates: [
         'e2e/account/register-page.cy.ts',
         'e2e/account/settings-page.cy.ts',
@@ -65,14 +72,16 @@ const cypressFiles = {
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATES_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressFolder}${file}`,
       templates: ['support/oauth2.ts'],
     },
   ],
   audit: [
     {
       condition: generator => generator.cypressAudit,
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATES_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressFolder}${file}`,
       templates: ['e2e/lighthouse.audits.ts'],
     },
     {
@@ -83,7 +92,8 @@ const cypressFiles = {
   coverage: [
     {
       condition: generator => generator.cypressCoverage,
-      path: generator => generator.cypressFolder,
+      path: CYPRESS_TEMPLATES_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressFolder}${file}`,
       templates: ['plugins/global.d.ts'],
     },
   ],
