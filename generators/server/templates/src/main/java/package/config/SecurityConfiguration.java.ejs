@@ -183,10 +183,12 @@ public class SecurityConfiguration {
                 .frameOptions().sameOrigin()
         .and()
 <%_ } _%>
-            .authorizeRequests()
+            .authorizeHttpRequests()
 <%_ if (!applicationTypeMicroservice) { _%>
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
   <%_ if (!skipClient) { _%>
+            .requestMatchers("/*","/*/*","/*/*/*","/*/*/*/*").permitAll()
+            .requestMatchers("/*.css", "/*.js", "/*.ico", "/*.webapp").permitAll()
             .requestMatchers("/app/*.html").permitAll()
             .requestMatchers("/app/*/*.html").permitAll()
             .requestMatchers("/app/*.js").permitAll()
