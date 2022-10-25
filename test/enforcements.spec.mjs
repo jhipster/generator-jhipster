@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
 import fse from 'fs-extra';
-import path, { dirname } from 'path';
+import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } from '../generators/generator-list.mjs';
 
@@ -83,6 +83,38 @@ describe('Enforce some developments patterns', () => {
           it(`should not contain ${notSpected}`, () => {
             assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
           });
+        });
+      });
+    });
+    ['server', 'client', 'common'].forEach(generator => {
+      const templateFiles = readDir(path.join(__dirname, '..', 'generators', generator))
+        .filter(file => file.endsWith('.ejs'))
+        .filter(file => {
+          return (
+            !/DatabaseConfiguration_.*.java.ejs/.test(file) &&
+            !/docker\/.*.yml.ejs/.test(file) &&
+            !/OAuth2.*RefreshTokensWebFilter.java.ejs/.test(file)
+          );
+        });
+      const jsFiles = readDir(path.join(__dirname, '..', 'generators', generator))
+        .filter(file => file.endsWith('.mjs') || file.endsWith('.mts') || file.endsWith('.ejs'))
+        .sort((a, b) => {
+          if (a.includes('files')) return -1;
+          if (b.includes('files')) return 1;
+          if (a.includes('generator.')) return -1;
+          if (b.includes('generator.')) return 1;
+          if (a.endsWith('.ejs')) return 1;
+          if (b.endsWith('.ejs')) return -1;
+          return 0;
+        });
+      templateFiles.forEach(templateFile => {
+        const reference = basename(templateFile, '.ejs');
+        it(`${templateFile} must have referenced with ${reference}`, () => {
+          const found = jsFiles.find(jsFile => {
+            const content = readFileSync(jsFile).toString();
+            return content.includes(`/${reference}`) || content.includes(`'${reference}`);
+          });
+          if (!found) throw new Error(`File ${templateFile} is not referenced`);
         });
       });
     });
