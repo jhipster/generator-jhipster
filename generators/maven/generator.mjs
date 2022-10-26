@@ -57,8 +57,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    if (this.delegateToBlueprint) return;
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
@@ -70,7 +69,6 @@ export default class MavenGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return;
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 }

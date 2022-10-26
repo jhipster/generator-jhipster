@@ -57,8 +57,7 @@ export default class GradleGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return;
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -70,8 +69,7 @@ export default class GradleGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    if (this.delegateToBlueprint) return;
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
@@ -83,7 +81,6 @@ export default class GradleGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return;
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 }

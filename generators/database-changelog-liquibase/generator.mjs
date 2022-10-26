@@ -141,8 +141,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
   }
 
   get [BaseApplication.PREPARING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get default() {
@@ -184,8 +183,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
   }
 
   get [BaseApplication.DEFAULT]() {
-    if (this.delegateToBlueprint) return {};
-    return this.default;
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -245,11 +243,10 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
   }
 
   get [BaseApplication.WRITING_ENTITIES]() {
-    if (this.delegateToBlueprint) return {};
     if (this.options.skipWriting) {
       return {};
     }
-    return this.writingEntities;
+    return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -275,11 +272,10 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
   }
 
   get [BaseApplication.POST_WRITING_ENTITIES]() {
-    if (this.delegateToBlueprint) return {};
     if (this.options.skipWriting) {
       return {};
     }
-    return this.postWritingEntities;
+    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
   /**
