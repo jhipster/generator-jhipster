@@ -267,8 +267,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -289,8 +288,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -311,8 +309,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.COMPOSING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.composing;
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -335,8 +332,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -365,8 +361,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INSTALL]() {
-    if (this.delegateToBlueprint) return {};
-    return this.install;
+    return this.delegateTasksToBlueprint(() => this.install);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -379,8 +374,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   /**

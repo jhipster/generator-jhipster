@@ -92,8 +92,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -132,8 +131,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -152,8 +150,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get composing() {
@@ -166,8 +163,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.COMPOSING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.composing;
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get loading() {
@@ -182,8 +178,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -205,8 +200,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.PREPARING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
@@ -251,8 +245,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get postWriting() {
@@ -333,8 +326,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.POST_WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.postWriting;
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get postInstall() {
@@ -369,8 +361,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
   }
 
   get [BaseGenerator.POST_INSTALL]() {
-    if (this.delegateToBlueprint) return {};
-    return this.postInstall;
+    return this.delegateTasksToBlueprint(() => this.postInstall);
   }
 
   get end() {
@@ -394,8 +385,7 @@ To begin to work:
   }
 
   get [BaseGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   getSubGeneratorStorage(subGenerator) {

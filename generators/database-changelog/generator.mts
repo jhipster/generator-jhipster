@@ -91,8 +91,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<Liquibas
   }
 
   get [BaseApplication.DEFAULT]() {
-    if (this.delegateToBlueprint) return {};
-    return this.default;
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   /* ======================================================================== */

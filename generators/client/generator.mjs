@@ -122,7 +122,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitialingTaskGroup(this.delegateToBlueprint ? {} : this.initializing);
+    return this.asInitialingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get prompting() {
@@ -136,7 +136,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    return this.asPromptingTaskGroup(this.delegateToBlueprint ? {} : this.prompting);
+    return this.asPromptingTaskGroup(this.delegateTasksToBlueprint(() => this.prompting));
   }
 
   get configuring() {
@@ -169,7 +169,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.asConfiguringTaskGroup(this.delegateToBlueprint ? {} : this.configuring);
+    return this.asConfiguringTaskGroup(this.delegateTasksToBlueprint(() => this.configuring));
   }
 
   get composing() {
@@ -192,7 +192,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateToBlueprint ? {} : this.composing);
+    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
   }
 
   get loading() {
@@ -226,7 +226,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.asLoadingTaskGroup(this.delegateToBlueprint ? {} : this.loading);
+    return this.asLoadingTaskGroup(this.delegateTasksToBlueprint(() => this.loading));
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -262,7 +262,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.asPreparingTaskGroup(this.delegateToBlueprint ? {} : this.preparing);
+    return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -277,7 +277,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.asPreparingEachEntityTaskGroup(this.delegateToBlueprint ? {} : this.preparingEachEntity);
+    return this.asPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.preparingEachEntity));
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -314,7 +314,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    return this.asDefaultTaskGroup(this.delegateToBlueprint ? {} : this.default);
+    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -334,7 +334,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this.writing);
+    return this.asWritingTaskGroup(this.delegateTasksToBlueprint(() => this.writing));
   }
 
   get writingEntities() {
@@ -348,7 +348,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.asWritingEntitiesTaskGroup(this.delegateToBlueprint ? {} : this.writingEntities);
+    return this.asWritingEntitiesTaskGroup(this.delegateTasksToBlueprint(() => this.writingEntities));
   }
 
   get postWriting() {
@@ -392,7 +392,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -409,7 +409,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup(this.delegateToBlueprint ? {} : this.end);
+    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 
   /**
