@@ -22,6 +22,8 @@ services:
     depends_on:
       mariadb:
         condition: service_started
+      elasticsearch:
+        condition: service_healthy
       jhipster-registry:
         condition: service_healthy
   mariadb:
@@ -32,6 +34,17 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - --fail
+        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
+        - \\"||\\"
+        - exit
+        - \\"1\\"
+      interval: 5s
+      timeout: 3s
   redis:
     extends:
       file: ./redis.yml
@@ -384,6 +397,8 @@ services:
     depends_on:
       postgresql:
         condition: service_started
+      elasticsearch:
+        condition: service_healthy
       jhipster-registry:
         condition: service_healthy
   postgresql:
@@ -394,6 +409,17 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - --fail
+        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
+        - \\"||\\"
+        - exit
+        - \\"1\\"
+      interval: 5s
+      timeout: 3s
   jhipster-registry:
     extends:
       file: ./jhipster-registry.yml
@@ -624,6 +650,8 @@ services:
     depends_on:
       postgresql:
         condition: service_started
+      elasticsearch:
+        condition: service_healthy
       keycloak:
         condition: service_healthy
   cassandra:
@@ -645,6 +673,17 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - --fail
+        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
+        - \\"||\\"
+        - exit
+        - \\"1\\"
+      interval: 5s
+      timeout: 3s
   keycloak:
     extends:
       file: ./keycloak.yml
@@ -852,6 +891,8 @@ services:
     depends_on:
       mongodb:
         condition: service_started
+      elasticsearch:
+        condition: service_healthy
   mongodb:
     extends:
       file: ./mongodb.yml
@@ -860,6 +901,17 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - --fail
+        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
+        - \\"||\\"
+        - exit
+        - \\"1\\"
+      interval: 5s
+      timeout: 3s
   consul:
     extends:
       file: ./consul.yml
@@ -1060,6 +1112,8 @@ services:
     depends_on:
       neo4j:
         condition: service_started
+      elasticsearch:
+        condition: service_healthy
       keycloak:
         condition: service_healthy
   neo4j:
@@ -1070,6 +1124,17 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - --fail
+        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
+        - \\"||\\"
+        - exit
+        - \\"1\\"
+      interval: 5s
+      timeout: 3s
   keycloak:
     extends:
       file: ./keycloak.yml
@@ -1283,6 +1348,8 @@ services:
     depends_on:
       couchbase:
         condition: service_started
+      elasticsearch:
+        condition: service_healthy
   couchbase:
     extends:
       file: ./couchbase.yml
@@ -1291,6 +1358,17 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - --fail
+        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
+        - \\"||\\"
+        - exit
+        - \\"1\\"
+      interval: 5s
+      timeout: 3s
   consul:
     extends:
       file: ./consul.yml
