@@ -1,6 +1,6 @@
 import { OptionalGenericDerivedProperty } from '../base/application.mjs';
 import type { Application } from '../base-application/tasks.mjs';
-import type { CommonClientServerApplication } from '../bootstrap-application-base/types';
+import type { CommonClientServerApplication } from '../base-application/types.mjs';
 
 type ClientFrameworkType = 'no' | 'angular' | 'react' | 'vue' | 'svelte';
 

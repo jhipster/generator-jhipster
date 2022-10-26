@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
+import { basename } from 'path';
+import { createHash } from 'crypto';
 import _ from 'lodash';
 import SharedData from './shared-data.mjs';
 
@@ -71,6 +73,18 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
+  }
+
+  /**
+   * Get arguments for the priority
+   */
+  getArgsForPriority(priorityName: string) {
+    const control = this.sharedData.getData();
+    if (priorityName === POST_WRITING || priorityName === PREPARING) {
+      const source = this.sharedData.getSource();
+      return [{ control, source }];
+    }
+    return [{ control }];
   }
 
   /**
@@ -148,18 +162,18 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    */
   get sharedData() {
     if (!this.#sharedData) {
-      const { baseName } = this.jhipsterConfig;
-      if (!baseName) {
-        throw new Error('baseName is required');
-      }
+      const destinationPath = this.destinationPath();
+      const dirname = basename(destinationPath);
+      const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
+      const applicationId = `${prefix}-${dirname}`;
       if (this.options.sharedData.applications === undefined) {
         this.options.sharedData.applications = {};
       }
       const sharedApplications = this.options.sharedData.applications;
-      if (!sharedApplications[baseName]) {
-        sharedApplications[baseName] = {};
+      if (!sharedApplications[applicationId]) {
+        sharedApplications[applicationId] = {};
       }
-      this.#sharedData = new SharedData(sharedApplications[baseName]);
+      this.#sharedData = new SharedData(sharedApplications[applicationId]);
     }
     return this.#sharedData;
   }

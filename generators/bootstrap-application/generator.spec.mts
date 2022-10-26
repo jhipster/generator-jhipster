@@ -144,7 +144,7 @@ Object {
 `);
       });
       it('should prepare entities', () => {
-        expect(Object.keys(runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities)).toMatchInlineSnapshot(`
+        expect(Object.keys(runResult.generator.sharedData.getEntitiesMap())).toMatchInlineSnapshot(`
 Array [
   "User",
   "EntityA",
@@ -152,7 +152,7 @@ Array [
 `);
       });
       it('should prepare User', () => {
-        const entity = runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities.User;
+        const entity = runResult.generator.sharedData.getEntitiesMap().User;
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
@@ -642,7 +642,7 @@ Object {
         );
       });
       it('should prepare EntityA', () => {
-        const entity = runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities.EntityA;
+        const entity = runResult.generator.sharedData.getEntitiesMap().EntityA;
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
@@ -959,14 +959,14 @@ Object {
 `);
       });
       it('should prepare entities', () => {
-        expect(Object.keys(runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities)).toMatchInlineSnapshot(`
+        expect(Object.keys(runResult.generator.sharedData.getEntitiesMap())).toMatchInlineSnapshot(`
 Array [
   "EntityA",
 ]
 `);
       });
       it('should prepare EntityA', () => {
-        const entity = runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities.EntityA;
+        const entity = runResult.generator.sharedData.getEntitiesMap().EntityA;
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
