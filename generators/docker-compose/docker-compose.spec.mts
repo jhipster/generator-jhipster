@@ -20,12 +20,14 @@ const expectedFiles = {
   monolith: ['docker-compose.yml'],
 };
 
-const getTestApplicationWithEntities = (...appNames) =>
+const getTestApplicationWithEntitiesWithConfig = (additionalConfig, ...appNames) =>
   Object.fromEntries(
     Object.entries(deploymentTestSamples)
       .filter(([appName]) => appNames.includes(appName))
-      .map(([appName, config]) => [appName, { config }])
+      .map(([appName, config]) => [appName, { config: { ...config, ...additionalConfig } }])
   );
+
+const getTestApplicationWithEntities = (...appNames) => getTestApplicationWithEntitiesWithConfig({}, ...appNames);
 
 const createWithEnvironment =
   (...appNames) =>
@@ -556,6 +558,53 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.monolith);
+    });
+    it('creates compose file without container_name, external_links, links', () => {
+      runResult.assertNoFileContent('docker-compose.yml', /container_name:/);
+      runResult.assertNoFileContent('docker-compose.yml', /external_links:/);
+      runResult.assertNoFileContent('docker-compose.yml', /links:/);
+    });
+  });
+
+  describe('gateway and multi microservices using oauth2', () => {
+    let runResult;
+    const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
+    before(async () => {
+      runResult = await helpers
+        .create(getGenerator('workspaces'))
+        .withEnvironment(createWithEnvironment(...chosenApps))
+        .withMockedGenerators(mockedComposedGenerators)
+        .withOptions({
+          skipChecks: true,
+          reproducibleTests: true,
+          generateApplications: true,
+          generateWorkspaces: true,
+          skipPriorities: ['prompting'],
+          importState: {
+            exportedApplicationsWithEntities: getTestApplicationWithEntitiesWithConfig({ authenticationType: 'oauth2' }, ...chosenApps),
+          },
+        })
+        .run();
+
+      runResult = await runResult
+        .create(getGenerator('docker-compose'))
+        .withOptions({ skipChecks: true, reproducibleTests: true })
+        .withPrompts({
+          deploymentApplicationType: MICROSERVICE,
+          directoryPath: './',
+          chosenApps,
+          clusteredDbApps: [],
+        })
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('creates expected default files', () => {
+      runResult.assertFile(expectedFiles.dockercompose);
+    });
+    it('creates jhipster-registry content', () => {
+      runResult.assertFileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
     });
     it('creates compose file without container_name, external_links, links', () => {
       runResult.assertNoFileContent('docker-compose.yml', /container_name:/);

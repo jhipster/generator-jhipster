@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
@@ -233,6 +234,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         } else {
           throw new Error(`Build tool ${buildTool} is not supported`);
         }
+
+        await this.composeWithJHipster('docker');
 
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (enableTranslation) {
@@ -585,79 +588,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      async dockerServices({ application }) {
-        const { createDockerComposeFile, createDockerExtendedServices } = await import('../base-docker/utils.mjs');
-
-        const dockerFile = createDockerComposeFile(application.lowercaseBaseName);
-        this.writeDestination(`${application.dockerServicesDir}services.yml`, dockerFile);
-
-        if (application.databaseTypeCouchbase) {
-          const extendedCouchbaseServices = createDockerExtendedServices({ serviceName: application.databaseType });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCouchbaseServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCouchbaseServices);
-        }
-
-        if (application.databaseTypeSql && !application.prodDatabaseTypeOracle) {
-          const extendedDatabaseServices = createDockerExtendedServices({ serviceName: application.prodDatabaseType });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedDatabaseServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedDatabaseServices);
-        }
-
-        if (application.databaseTypeCassandra) {
-          const extendedCassandraServices = createDockerExtendedServices(
-            { serviceName: 'cassandra' },
-            { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' }
-          );
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCassandraServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCassandraServices);
-        } else if (!application.databaseTypeSql && !application.databaseTypeCouchbase) {
-          const extendedDatabaseServices = createDockerExtendedServices({ serviceName: application.databaseType });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedDatabaseServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedDatabaseServices);
-        }
-        if (application.searchEngineElasticsearch) {
-          const extendedElasticsearchServices = createDockerExtendedServices({ serviceName: application.searchEngine });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedElasticsearchServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedElasticsearchServices);
-        }
-        if (application.cacheProviderMemcached || application.cacheProviderRedis) {
-          const extendedCacheProviderServices = createDockerExtendedServices({ serviceName: application.cacheProvider });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCacheProviderServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCacheProviderServices);
-        }
-        if (application.authenticationTypeOauth2) {
-          const extendedOauth2Services = createDockerExtendedServices({ serviceName: 'keycloak' });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedOauth2Services);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedOauth2Services);
-        }
-        if (application.serviceDiscoveryEureka) {
-          const extendedEurekaServices = createDockerExtendedServices({
-            serviceName: 'jhipster-registry',
-            additionalConfig: {
-              environment: [application.authenticationTypeOauth2 ? 'JHIPSTER_SLEEP=40' : 'JHIPSTER_SLEEP=20'],
-            },
-          });
-
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedEurekaServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedEurekaServices);
-        }
-        if (application.serviceDiscoveryConsul) {
-          const extendedConsulServices = createDockerExtendedServices(
-            { serviceName: 'consul' },
-            { serviceFile: './consul.yml', serviceName: 'consul-config-loader' }
-          );
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedConsulServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedConsulServices);
-        }
-        if (application.messageBrokerKafka) {
-          const extendedKafkaServices = createDockerExtendedServices(
-            { serviceName: 'kafka' },
-            { serviceFile: './kafka.yml', serviceName: 'zookeeper' }
-          );
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedKafkaServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedKafkaServices);
-        }
-      },
       packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
