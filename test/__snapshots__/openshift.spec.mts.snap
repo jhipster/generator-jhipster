@@ -1560,8 +1560,7 @@ objects:
       type: LoadBalancer
       ports:
         - name: http
-          port: 80
-          targetPort: \${{APP_PORT}}
+          port: \${{APP_PORT}}
   - apiVersion: v1
     kind: Route
     metadata:
@@ -1705,8 +1704,7 @@ objects:
       type: LoadBalancer
       ports:
         - name: http
-          port: 80
-          targetPort: \${{APP_PORT}}
+          port: \${{APP_PORT}}
   - apiVersion: v1
     kind: Route
     metadata:
@@ -2030,8 +2028,7 @@ objects:
       type: LoadBalancer
       ports:
         - name: http
-          port: 80
-          targetPort: \${{APP_PORT}}
+          port: \${{APP_PORT}}
   - apiVersion: v1
     kind: Route
     metadata:
