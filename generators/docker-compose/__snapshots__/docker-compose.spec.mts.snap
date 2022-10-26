@@ -6,6 +6,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"10-couchbase\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": [\\"10-couchbase\\"],
     \\"directoryPath\\": \\"./\\",
@@ -73,12 +74,15 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=60
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -98,11 +102,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=mscouchbase
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      couchbase: service_started
-      jhipster-registry: service_healthy
+      mscouchbase-couchbase:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   mscouchbase-couchbase-node:
     build:
       context: 10-couchbase/src/main/docker
@@ -158,6 +163,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"05-cassandra\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
@@ -225,12 +231,15 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=60
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -249,8 +258,12 @@ eureka:
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=mscassandra-cassandra
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
+    depends_on:
+      mscassandra-cassandra:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   mscassandra-cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
@@ -309,6 +322,7 @@ Object {
       \\"04-mongo\\",
       \\"07-mariadb\\"
     ],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": [],
     \\"directoryPath\\": \\"./\\",
@@ -383,12 +397,15 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=60
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -408,10 +425,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      msmysql-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -431,11 +450,13 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
-      - JHIPSTER_SLEEP=40
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      mspsql-postgresql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   mspsql-postgresql:
     image: POSTGRESQL_VERSION
     environment:
@@ -458,8 +479,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
+    depends_on:
+      msmongodb-mongodb:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmongodb-mongodb:
     image: mongo:4.4.15
 
@@ -473,8 +498,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
+    depends_on:
+      msmariadb-mariadb:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmariadb-mariadb:
     image: mariadb:10.8.3
     volumes:
@@ -528,6 +557,7 @@ Object {
       \\"10-couchbase\\",
       \\"07-mariadb\\"
     ],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": [],
     \\"directoryPath\\": \\"./\\",
@@ -613,13 +643,17 @@ eureka:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
-      - JHIPSTER_SLEEP=80
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      keycloak: service_healthy
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -642,11 +676,14 @@ eureka:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-      - JHIPSTER_SLEEP=60
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      keycloak: service_healthy
-      jhipster-registry: service_healthy
+      msmysql-mysql:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      jhipster-registry:
+        condition: service_healthy
   msmysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -669,20 +706,23 @@ eureka:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-      - JHIPSTER_SLEEP=60
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      keycloak: service_healthy
-      jhipster-registry: service_healthy
+      mspsql-postgresql:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      jhipster-registry:
+        condition: service_healthy
   mspsql-postgresql:
-    image: postgres:14.5
+    image: POSTGRESQL_VERSION
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
       - POSTGRES_HOST_AUTH_METHOD=trust
   mspsql-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+    image: ELASTICSEARCH_VERSION
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
@@ -700,12 +740,14 @@ eureka:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-      - JHIPSTER_SLEEP=60
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      couchbase: service_started
-      keycloak: service_healthy
-      jhipster-registry: service_healthy
+      mscouchbase-couchbase:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      jhipster-registry:
+        condition: service_healthy
   mscouchbase-couchbase:
     build:
       context: 10-couchbase/src/main/docker
@@ -719,15 +761,21 @@ eureka:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-      - JHIPSTER_SLEEP=50
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      keycloak: service_healthy
+      msmariadb-mariadb:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      jhipster-registry:
+        condition: service_healthy
   msmariadb-mariadb:
     image: mariadb:10.8.3
     volumes:
@@ -760,7 +808,8 @@ eureka:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
     depends_on:
-      keycloak: \\"service_healthy\\"
+      keycloak:
+        condition: \\"service_healthy\\"
     ports:
       - 8761:8761
     healthcheck:
@@ -770,7 +819,7 @@ eureka:
       retries: 20
       start_period: 10s
   keycloak:
-    image: quay.io/keycloak/keycloak:19.0.1
+    image: \\"KEYCLOAK_VERSION\\"
     command: [\\"start-dev --import-realm\\"]
     volumes:
       - ./realm-config:/opt/keycloak/data/import
@@ -3282,6 +3331,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\", \\"03-psql\\", \\"04-mongo\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": [\\"04-mongo\\"],
     \\"directoryPath\\": \\"./\\",
@@ -3354,12 +3404,15 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=60
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -3379,10 +3432,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      msmysql-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -3402,11 +3457,13 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
-      - JHIPSTER_SLEEP=40
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      mspsql-postgresql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   mspsql-postgresql:
     image: POSTGRESQL_VERSION
     environment:
@@ -3429,8 +3486,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
+    depends_on:
+      msmongodb-mongodb:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmongodb-mongodb-node:
     build:
       context: 04-mongo/src/main/docker
@@ -3488,6 +3549,7 @@ Object {
       \\"10-couchbase\\",
       \\"07-mariadb\\"
     ],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": [],
     \\"directoryPath\\": \\"./\\",
@@ -3568,12 +3630,15 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=60
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -3593,10 +3658,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      msmysql-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -3616,11 +3683,13 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
-      - JHIPSTER_SLEEP=40
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      mspsql-postgresql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   mspsql-postgresql:
     image: POSTGRESQL_VERSION
     environment:
@@ -3643,11 +3712,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=mscouchbase
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      couchbase: service_started
-      jhipster-registry: service_healthy
+      mscouchbase-couchbase:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   mscouchbase-couchbase:
     build:
       context: 10-couchbase/src/main/docker
@@ -3665,8 +3735,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
+    depends_on:
+      msmariadb-mariadb:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmariadb-mariadb:
     image: mariadb:10.8.3
     volumes:
@@ -3714,6 +3788,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
@@ -3781,12 +3856,15 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=60
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -3806,10 +3884,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      msmysql-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -3857,6 +3937,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
@@ -3924,12 +4005,15 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=60
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -3949,10 +4033,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      msmysql-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -4000,6 +4086,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
@@ -4093,12 +4180,15 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=60
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -4118,10 +4208,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      msmysql-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -4259,6 +4351,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
@@ -4326,12 +4419,15 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=60
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -4351,10 +4447,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      msmysql-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -4402,6 +4500,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"08-monolith\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
@@ -4444,10 +4543,12 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://samplemysql-mysql:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://samplemysql-mysql:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=30
       - SPRING_ELASTICSEARCH_URIS=http://samplemysql-elasticsearch:9200
     ports:
       - \\"8080:8080\\"
+    depends_on:
+      samplemysql-mysql:
+        condition: service_started
   samplemysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -4473,6 +4574,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
@@ -4538,10 +4640,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      msmysql-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -4589,6 +4693,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
@@ -4654,12 +4759,15 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=60
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - \\"8080:8080\\"
     depends_on:
-      jhipster-registry: service_healthy
+      jhgate-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   jhgate-mysql:
     image: mysql:8.0.30
     volumes:
@@ -4707,6 +4815,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
@@ -4772,10 +4881,12 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=40
       - JHIPSTER_REGISTRY_PASSWORD=admin
     depends_on:
-      jhipster-registry: service_healthy
+      msmysql-mysql:
+        condition: service_started
+      jhipster-registry:
+        condition: service_healthy
   msmysql-mysql:
     image: mysql:8.0.30
     volumes:
@@ -4823,6 +4934,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"12-oracle\\"],
+    \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
@@ -4864,7 +4976,6 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
       - SPRING_LIQUIBASE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
-      - JHIPSTER_SLEEP=30
       - SERVER_PORT=80
     ports:
       - \\"8080:8080\\"

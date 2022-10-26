@@ -18,17 +18,69 @@
  */
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import lodash from 'lodash';
-import { basename, dirname } from 'path';
+import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import Generator from './index.mjs';
+import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix } from '../../test/support/matrix-utils.mjs';
+import { dryRunHelpers as helpers } from '../../test/utils/utils.mjs';
+import { matchElasticSearchDocker } from '../server/__test-support/elastic-search-matcher.mjs';
+import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
+
+import {
+  databaseTypes,
+  applicationTypes,
+  searchEngineTypes,
+  serviceDiscoveryTypes,
+  messageBrokerTypes,
+  cacheTypes,
+} from '../../jdl/jhipster/index.mjs';
+import { buildServerMatrix } from '../../test/support/server-samples.mjs';
 
 const { snakeCase } = lodash;
+
+const { MONOLITH, GATEWAY, MICROSERVICE } = applicationTypes;
+const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
+const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
+const { NO: NO_SERVICE_DISCOVERY, EUREKA, CONSUL } = serviceDiscoveryTypes;
+const { NO: NO_MESSAGE_BROKER, KAFKA } = messageBrokerTypes;
+const { NO: NO_CACHE, REDIS, MEMCACHED, HAZELCAST } = cacheTypes;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
+const generatorFile = join(__dirname, 'index.mts');
+
+const NO_SQL = [CASSANDRA, COUCHBASE, MONGODB, NEO4J];
+
+let matrix = buildServerMatrix();
+
+matrix = extendMatrix(matrix, {
+  prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE, ...NO_SQL],
+});
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+Object.entries(matrix).forEach(([_name, config]) => {
+  if (NO_SQL.includes(config.prodDatabaseType)) {
+    config.databaseType = config.prodDatabaseType;
+    delete config.prodDatabaseType;
+  }
+});
+
+matrix = extendMatrix(matrix, {
+  applicationType: [MONOLITH, GATEWAY, MICROSERVICE],
+  searchEngine: [NO_SEARCH_ENGINE, ELASTICSEARCH],
+  serviceDiscoveryType: [NO_SERVICE_DISCOVERY, EUREKA, CONSUL],
+  enableSwaggerCodegen: [false, true],
+  messageBroker: [NO_MESSAGE_BROKER, KAFKA],
+});
+
+matrix = extendFilteredMatrix(matrix, ({ reactive }) => !reactive, {
+  cacheProvider: [NO_CACHE, REDIS, MEMCACHED, HAZELCAST],
+});
+
+const testSamples = buildSamplesFromMatrix(matrix);
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -37,5 +89,34 @@ describe(`JHipster ${generator} generator`, () => {
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });
     expect(instance.features.bar).toBe(true);
+  });
+
+  Object.entries(testSamples).forEach(([name, applicationWithEntities]) => {
+    const { searchEngine, serviceDiscoveryType } = applicationWithEntities.config;
+
+    describe(name, () => {
+      let runResult;
+
+      before(async () => {
+        runResult = await helpers.run(generatorFile).withOptions({ applicationWithEntities });
+      });
+
+      after(() => runResult.cleanup());
+
+      it('should match generated files snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+      it('should match app.yml snapshot', () => {
+        expect(runResult.getSnapshot('**/app.yml')).toMatchSnapshot();
+      });
+      describe('searchEngine', () => {
+        const elasticsearch = searchEngine === ELASTICSEARCH;
+        matchElasticSearchDocker(() => runResult, elasticsearch);
+      });
+      describe('serviceDiscoveryType', () => {
+        matchEureka(() => runResult, serviceDiscoveryType === EUREKA);
+        matchConsul(() => runResult, serviceDiscoveryType === CONSUL);
+      });
+    });
   });
 });

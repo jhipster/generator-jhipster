@@ -284,30 +284,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
         application.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
-        application.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-        application.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
-        application.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
-        application.DOCKER_MYSQL = constants.DOCKER_MYSQL;
-        application.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-        application.DOCKER_MONGODB = constants.DOCKER_MONGODB;
-        application.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
-        application.DOCKER_MSSQL = constants.DOCKER_MSSQL;
-        application.DOCKER_NEO4J = constants.DOCKER_NEO4J;
-        application.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
-        application.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
-        application.DOCKER_REDIS = constants.DOCKER_REDIS;
-        application.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-        application.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-        application.KAFKA_VERSION = constants.KAFKA_VERSION;
-        application.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-        application.DOCKER_SONAR = constants.DOCKER_SONAR;
-        application.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-        application.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-        application.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
-        application.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-        application.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-        application.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
-
         application.JAVA_VERSION = constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
 

@@ -1,5 +1,4 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { join } from 'path';
 
 import monitoringTypes from '../../jdl/jhipster/monitoring-types';
 import applicationTypes from '../../jdl/jhipster/application-types';
@@ -29,18 +28,14 @@ const getTestApplicationWithEntitiesWithConfig = (additionalConfig, ...appNames)
 
 const getTestApplicationWithEntities = (...appNames) => getTestApplicationWithEntitiesWithConfig({}, ...appNames);
 
-const createWithEnvironment =
-  (...appNames) =>
-  env => {
-    appNames.forEach(appName => {
-      env.fs.write(
-        join(env.cwd, appName, '.yo-resolve'),
-        `.yo-rc.json=force
-!src/main/docker/**=skip
-`
-      );
-    });
-  };
+const workspacesOptions = {
+  skipChecks: true,
+  reproducibleTests: true,
+  generateApplications: true,
+  generateWorkspaces: true,
+  generateWith: 'docker',
+  skipPriorities: ['prompting'],
+};
 
 describe('JHipster Docker Compose Sub Generator', () => {
   describe('only gateway', () => {
@@ -49,14 +44,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -97,14 +87,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -145,14 +130,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -188,14 +168,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -236,14 +211,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -286,14 +256,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -336,14 +301,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -387,14 +347,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -434,14 +389,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -481,14 +431,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -528,14 +473,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -572,14 +512,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntitiesWithConfig({ authenticationType: 'oauth2' }, ...chosenApps),
           },
@@ -619,14 +554,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -666,14 +596,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },
@@ -713,14 +638,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(getGenerator('workspaces'))
-        .withEnvironment(createWithEnvironment(...chosenApps))
         .withMockedGenerators(mockedComposedGenerators)
         .withOptions({
-          skipChecks: true,
-          reproducibleTests: true,
-          generateApplications: true,
-          generateWorkspaces: true,
-          skipPriorities: ['prompting'],
+          ...workspacesOptions,
           importState: {
             exportedApplicationsWithEntities: getTestApplicationWithEntities(...chosenApps),
           },

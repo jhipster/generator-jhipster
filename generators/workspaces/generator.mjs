@@ -36,7 +36,7 @@ const {
  * @class
  * @extends {BaseGenerator}
  */
-export default class UpgradeGenerator extends BaseGenerator {
+export default class WorkspacesGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -88,6 +88,19 @@ export default class UpgradeGenerator extends BaseGenerator {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
+  get configuring() {
+    return {
+      async configure() {
+        this.jhipsterConfig.baseName = this.jhipsterConfig.baseName || 'workspaces';
+      },
+    };
+  }
+
+  get [BaseGenerator.CONFIGURING]() {
+    if (this.delegateToBlueprint) return {};
+    return this.configuring;
+  }
+
   get default() {
     return {
       async configureUsingImportState() {
@@ -98,9 +111,10 @@ export default class UpgradeGenerator extends BaseGenerator {
         let clientPackageManager;
         if (applications.length > 0) {
           clientPackageManager = applications[0][1].config.clientPackageManager;
+          const { generateWith = GENERATOR_APP, generateApplications } = this.options;
           if (this.options.generateApplications) {
             for (const [appName, applicationWithEntities] of applications) {
-              await this.composeWithJHipster(GENERATOR_APP, { destinationRoot: this.destinationPath(appName), applicationWithEntities });
+              await this.composeWithJHipster(generateWith, { destinationRoot: this.destinationPath(appName), applicationWithEntities });
             }
           }
         }
