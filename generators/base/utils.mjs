@@ -16,31 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { platform } from 'os';
-import generatorUtils from '../utils.cjs';
-
-const { normalizeLineEndings } = generatorUtils;
-
-const isWin32 = platform() === 'win32';
-
-/**
- * Converts multiples EditFileCallback callbacks into one.
- *
- * @param {...import('./index.cjs').EditFileCallback} callbacks
- * @returns {import('./index.cjs').EditFileCallback}
- */
-export const joinCallbacks = (...callbacks) => {
-  return function (content, filePath) {
-    if (isWin32 && content.match(/\r\n/)) {
-      callbacks = [ct => normalizeLineEndings(ct, '\n')].concat(callbacks).concat(ct => normalizeLineEndings(ct, '\r\n'));
-    }
-    for (const callback of callbacks) {
-      content = callback.call(this, content, filePath);
-    }
-    return content;
-  };
-};
-
 export function formatDateForChangelog(now) {
   const nowUTC = new Date(
     now.getUTCFullYear(),

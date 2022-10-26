@@ -1,5 +1,5 @@
-import type { OptionalGenericDerivedProperty, GenericDerivedProperty } from '../base/application.js';
-import type { CommonClientServerApplication } from '../bootstrap-application-base/types.js';
+import type { OptionalGenericDerivedProperty, GenericDerivedProperty } from '../base/application.mjs';
+import type { CommonClientServerApplication } from '../base-application/types.mjs';
 
 declare const CACHE_PROVIDER = 'cacheProvider';
 

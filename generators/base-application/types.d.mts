@@ -1,4 +1,4 @@
-import type { GenericDerivedProperty, OptionalGenericDerivedProperty } from '../base/application.js';
+import type { GenericDerivedProperty, OptionalGenericDerivedProperty } from '../base/application.mjs';
 
 export type BaseApplication = {
   jhipsterVersion: string;

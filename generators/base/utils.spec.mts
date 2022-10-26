@@ -19,7 +19,9 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
-import { joinCallbacks, parseChangelog } from './utils.mjs';
+import { parseChangelog } from './utils.mjs';
+import { joinCallbacks } from './ts-utils.mjs';
+import { EditFileCallback } from './api.mjs';
 
 describe('base support', () => {
   describe('joinCallbacks', () => {
@@ -28,12 +30,13 @@ describe('base support', () => {
     });
 
     it('without callbacks, should return the original content', () => {
-      expect(joinCallbacks()('original')).toBe('original');
+      expect(joinCallbacks()('original', '')).toBe('original');
     });
 
     it('with a callback, should return the callback return', () => {
       const mock = jest.fn().mockReturnValue('return1');
-      const callback = joinCallbacks(mock);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const callback = joinCallbacks(mock as EditFileCallback<any>);
 
       expect(callback('original', 'file')).toBe('return1');
 
@@ -44,7 +47,8 @@ describe('base support', () => {
     it('with two callbacks, should forward last callback and return the last callback return', () => {
       const mock1 = jest.fn().mockReturnValue('return1');
       const mock2 = jest.fn().mockReturnValue('return2');
-      const callback = joinCallbacks(mock1, mock2);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const callback = joinCallbacks(mock1 as EditFileCallback<any>, mock2 as EditFileCallback<any>);
 
       expect(callback('original', 'file')).toBe('return2');
 
@@ -56,7 +60,8 @@ describe('base support', () => {
   describe('::parseChangelog', () => {
     describe('when not passing parameters', () => {
       it('throws', () => {
-        expect(() => parseChangelog()).toThrow(/^undefined is not a valid changelogDate\.$/);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        expect(() => parseChangelog(undefined as any)).toThrow(/^undefined is not a valid changelogDate\.$/);
       });
     });
     describe('when passing an invalid changelogDate', () => {

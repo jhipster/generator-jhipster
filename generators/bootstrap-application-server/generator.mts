@@ -28,7 +28,7 @@ import {
   prepareEntityServerForTemplates,
   prepareEntityPrimaryKeyForTemplates,
 } from '../../utils/entity.mjs';
-import type { SpringBootApplication } from './types.js';
+import type { SpringBootApplication } from '../server/types.mjs';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';

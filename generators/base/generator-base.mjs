@@ -57,7 +57,6 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 
 import databaseData from '../sql-constants.mjs';
-import { joinCallbacks } from './utils.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 
@@ -125,8 +124,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @param {string | string[]} args
-   * @param {import('./base/api.cjs').JHipsterGeneratorOptions} options
-   * @param {import('./base/api.cjs').JHipsterGeneratorFeatures} features
+   * @param {import('./base/api.mjs').JHipsterGeneratorOptions} options
+   * @param {import('./base/api.mjs').JHipsterGeneratorFeatures} features
    */
   constructor(args, options, features) {
     super(args, options, features);
@@ -2085,7 +2084,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * write the given files using provided options.
    *
    * @template DataType
-   * @param {import('./api.cjs').WriteFileOptions<this, DataType>} options
+   * @param {import('./api.mjs').WriteFileOptions<this, DataType>} options
    * @return {Promise<string[]>}
    */
   async writeFiles(options) {
@@ -3090,7 +3089,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./base/api.cjs').JHipsterOptions} [options] - Object containing options.
+   * @param {import('./base/api.mjs').JHipsterOptions} [options] - Object containing options.
    */
   jhipsterOptions(options = {}) {
     options = _.cloneDeep(options);
@@ -3131,50 +3130,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       ...process.env,
       LANG: 'en',
     });
-  }
-
-  /**
-   * Edit file content
-   * @param {string} file
-   * @param {...import('./api.cjs').EditFileCallback} transformCallbacks
-   * @returns {import('./api.cjs').CascatedEditFileCallback}
-   */
-  editFile(file, ...transformCallbacks) {
-    let filePath = this.destinationPath(file);
-    if (!this.env.sharedFs.existsInMemory(filePath) && this.env.sharedFs.existsInMemory(`${filePath}.jhi`)) {
-      filePath = `${filePath}.jhi`;
-    }
-
-    let content;
-
-    try {
-      content = this.readDestination(filePath);
-    } catch (_error) {
-      if (transformCallbacks.length === 0) {
-        throw new Error(`File ${filePath} doesn't exist`);
-      }
-      // allow to edit non existing files
-      content = '';
-    }
-    if (isWin32 && content.match(/\r\n/)) {
-      transformCallbacks = [content => content.replace(/\r\n/g, '\n')].concat(transformCallbacks, content =>
-        content.replace(/\n/g, '\r\n')
-      );
-    }
-
-    const writeCallback = (...callbacks) => {
-      if (callbacks.length === 0) {
-        return writeCallback;
-      }
-      try {
-        content = joinCallbacks(...callbacks).call(this, content, filePath);
-        this.writeDestination(filePath, content);
-      } catch (error) {
-        throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
-      }
-      return writeCallback;
-    };
-
-    return writeCallback(...transformCallbacks);
   }
 }
