@@ -481,11 +481,11 @@
 <%_ if (databaseTypeMongodb) { _%>
         <dependency>
             <groupId>io.mongock</groupId>
-            <artifactId>mongock-springboot</artifactId>
+            <artifactId>mongock-springboot-3</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mongock</groupId>
-            <artifactId>mongodb-springdata-v3-driver</artifactId>
+            <artifactId>mongodb-springdata-v4-driver</artifactId>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -493,24 +493,15 @@
             <scope>test</scope>
         </dependency>
   <%_ if (reactive) { _%>
-        <!-- Mongock doesn't support reactive yet, so this dependency is necessary. -->
-        <!-- See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
-
-        <!-- Mongo db driver was excluded from starter, adding manually. -->
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-reactivestreams</artifactId>
+            <groupId>io.mongock</groupId>
+            <artifactId>mongodb-reactive-driver</artifactId>
         </dependency>
   <%_ } _%>
-        <!-- Mongo db driver was excluded from starter, adding manually. -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-        </dependency>
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
         <dependency>

@@ -391,19 +391,13 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     liquibaseRuntime "org.liquibase:liquibase-core"
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-    implementation "io.mongock:mongock-springboot"
-    implementation "io.mongock:mongodb-springdata-v3-driver"
+    implementation "io.mongock:mongock-springboot-v3"
+    implementation "io.mongock:mongodb-springdata-v4-driver"
     testImplementation "org.testcontainers:mongodb"
   <%_ if (reactive) { _%>
-    // Mongock doesn't support reactive yet, so this dependency is necessary.
-    // See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information.
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
-
-    // Mongo db driver was excluded from starter, adding manually
-    implementation "org.mongodb:mongodb-driver-reactivestreams"
+    implementation "io.mongock:mongodb-reactive-driver"
   <%_ } _%>
-    // Mongo db driver was excluded from starter, adding manually
-    implementation "org.mongodb:mongodb-driver-sync"
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
     implementation "com.github.differentway:couchmove"
