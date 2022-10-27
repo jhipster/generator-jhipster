@@ -88,7 +88,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateToBlueprint ? {} : this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get loading(): LoadingTaskGroup<this, CypressApplication> {
@@ -102,7 +102,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateToBlueprint ? {} : this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing(): PreparingTaskGroup<this, CypressApplication> {
@@ -117,7 +117,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateToBlueprint ? {} : this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get preparingEachEntity(): PreparingEachEntityTaskGroup<this, CypressApplication> {
@@ -129,7 +129,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateToBlueprint ? {} : this.preparingEachEntity;
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get writing(): WritingTaskGroup<this, CypressApplication> {
@@ -170,7 +170,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateToBlueprint ? {} : this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get writingEntities(): WritingEntitiesTaskGroup<this, CypressApplication> {
@@ -195,7 +195,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateToBlueprint ? {} : this.writingEntities;
+    return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   get postWriting(): PostWritingTaskGroup<this, CypressApplication> {
@@ -284,6 +284,6 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateToBlueprint ? {} : this.postWriting;
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

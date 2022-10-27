@@ -177,7 +177,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitialingTaskGroup(this.delegateToBlueprint ? {} : this.initializing);
+    return this.asInitialingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get prompting() {
@@ -215,7 +215,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.asConfiguringTaskGroup(this.delegateToBlueprint ? {} : this.configuring);
+    return this.asConfiguringTaskGroup(this.delegateTasksToBlueprint(() => this.configuring));
   }
 
   get composing() {
@@ -243,7 +243,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateToBlueprint ? {} : this.composing);
+    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
   }
 
   get preparing() {
@@ -355,7 +355,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.asPreparingTaskGroup(this.delegateToBlueprint ? {} : this.preparing);
+    return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
   }
 
   get configuringEachEntity() {
@@ -518,7 +518,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
-    return this.asConfiguringEachEntityTaskGroup(this.delegateToBlueprint ? {} : this.configuringEachEntity);
+    return this.asConfiguringEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.configuringEachEntity));
   }
 
   /** @inheritdoc */
@@ -553,7 +553,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    return this.asDefaultTaskGroup(this.delegateToBlueprint ? {} : this.default);
+    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
   }
 
   /** @inheritdoc */
@@ -567,7 +567,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this.writing);
+    return this.asWritingTaskGroup(this.delegateTasksToBlueprint(() => this.writing));
   }
 
   get writingEntities() {
@@ -591,7 +591,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.asWritingEntitiesTaskGroup(this.delegateToBlueprint ? {} : this.writingEntities);
+    return this.asWritingEntitiesTaskGroup(this.delegateTasksToBlueprint(() => this.writingEntities));
   }
 
   get postWriting() {
@@ -853,7 +853,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 
   get postWritingEntities() {
@@ -863,7 +863,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.asPostWritingEntitiesTaskGroup(this.delegateToBlueprint ? {} : this.postWritingEntities);
+    return this.asPostWritingEntitiesTaskGroup(this.delegateTasksToBlueprint(() => this.postWritingEntities));
   }
 
   get end() {
@@ -893,7 +893,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup(this.delegateToBlueprint ? {} : this.end);
+    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 
   _configureServer(config = this.jhipsterConfig) {

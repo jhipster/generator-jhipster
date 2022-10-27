@@ -62,6 +62,24 @@ Object {
   "src/app/admin/docs/docs.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/app/admin/gateway/gateway-route.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway-routes.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.route.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/app/app-page-title-strategy.ts": Object {
     "stateCleared": "modified",
   },
@@ -770,6 +788,24 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/admin/docs/docs.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway-route.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway-routes.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.route.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/admin/health/health.component.html": Object {
@@ -2388,9 +2424,6 @@ Object {
   "webpack/webpack.custom.js": Object {
     "stateCleared": "modified",
   },
-  "webpack/webpack.microfrontend.js": Object {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -3066,9 +3099,6 @@ Object {
     "stateCleared": "modified",
   },
   "webpack/webpack.custom.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": Object {
     "stateCleared": "modified",
   },
 }

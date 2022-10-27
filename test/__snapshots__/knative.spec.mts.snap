@@ -578,7 +578,7 @@ spec:
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -862,7 +862,7 @@ spec:
                       key: postgresql-password
                 - name: SPRING_ELASTICSEARCH_REST_URIS
                   value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -1557,7 +1557,7 @@ spec:
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -2266,7 +2266,7 @@ spec:
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -2467,7 +2467,7 @@ spec:
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -3161,7 +3161,7 @@ spec:
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -3921,7 +3921,7 @@ spec:
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -4046,18 +4046,6 @@ mariadb customisation
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/templates/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
-",
-    "stateCleared": "modified",
-  },
   "msmariadb-knative/templates/msmariadb-destination-rule.yml": Object {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
@@ -4119,11 +4107,19 @@ spec:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+                - name: JHIPSTER_REGISTRY_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: jwt-secret
-                      key: secret
+                      name: registry-secret
+                      key: registry-admin-password
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+                - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+                  value: \\"false\\"
+                - name: EUREKA_INSTANCE_HOSTNAME
+                  value: msmariadb
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
                 - name: SPRING_DATASOURCE_PASSWORD
@@ -4131,7 +4127,7 @@ spec:
                     secretKeyRef:
                       name: msmariadb-mariadb
                       key: mariadb-root-password
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -4148,14 +4144,14 @@ spec:
                 - containerPort: 8081
               readinessProbe:
                 httpGet:
-                  path: /services/msmariadb/management/health/readiness
+                  path: /management/health/readiness
                 initialDelaySeconds: 20
                 periodSeconds: 15
                 failureThreshold: 6
                 timeoutSeconds: 5
               livenessProbe:
                 httpGet:
-                  path: /services/msmariadb/management/health/liveness
+                  path: /management/health/liveness
                 initialDelaySeconds: 120
                 timeoutSeconds: 5
   traffic:
@@ -4259,18 +4255,6 @@ mongodb customisation
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/templates/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
-",
-    "stateCleared": "modified",
-  },
   "msmongodb-knative/templates/msmongodb-destination-rule.yml": Object {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
@@ -4332,16 +4316,24 @@ spec:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+                - name: JHIPSTER_REGISTRY_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: jwt-secret
-                      key: secret
+                      name: registry-secret
+                      key: registry-admin-password
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+                - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+                  value: \\"false\\"
+                - name: EUREKA_INSTANCE_HOSTNAME
+                  value: msmongodb
                 - name: SPRING_DATA_MONGODB_DATABASE
                   value: msmongodb
                 - name: SPRING_DATA_MONGODB_URI
                   value: \\"mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017\\"
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -4358,14 +4350,14 @@ spec:
                 - containerPort: 8081
               readinessProbe:
                 httpGet:
-                  path: /services/msmongodb/management/health/readiness
+                  path: /management/health/readiness
                 initialDelaySeconds: 20
                 periodSeconds: 15
                 failureThreshold: 6
                 timeoutSeconds: 5
               livenessProbe:
                 httpGet:
-                  path: /services/msmongodb/management/health/liveness
+                  path: /management/health/liveness
                 initialDelaySeconds: 120
                 timeoutSeconds: 5
   traffic:
@@ -4539,7 +4531,7 @@ spec:
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -4823,7 +4815,7 @@ spec:
                       key: postgresql-password
                 - name: SPRING_ELASTICSEARCH_REST_URIS
                   value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -7861,9 +7853,9 @@ spec:
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
+                - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
                   value: \\"true\\"
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -8513,7 +8505,7 @@ spec:
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -9216,7 +9208,7 @@ spec:
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -9656,7 +9648,7 @@ spec:
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -9947,7 +9939,7 @@ spec:
                       key: postgresql-password
                 - name: SPRING_ELASTICSEARCH_REST_URIS
                   value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -10543,7 +10535,7 @@ spec:
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -11168,7 +11160,7 @@ spec:
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -11394,7 +11386,7 @@ spec:
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -11990,7 +11982,7 @@ spec:
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -12630,7 +12622,7 @@ spec:
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -12721,18 +12713,6 @@ kubectl apply -f msmssqldb-\${suffix}/
 kubectl apply -f istio-\${suffix}/
 
 logSummary
-",
-    "stateCleared": "modified",
-  },
-  "msmariadb-knative/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
 ",
     "stateCleared": "modified",
   },
@@ -12872,11 +12852,19 @@ spec:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+                - name: JHIPSTER_REGISTRY_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: jwt-secret
-                      key: secret
+                      name: registry-secret
+                      key: registry-admin-password
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+                - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+                  value: \\"false\\"
+                - name: EUREKA_INSTANCE_HOSTNAME
+                  value: msmariadb
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
                 - name: SPRING_DATASOURCE_PASSWORD
@@ -12884,7 +12872,7 @@ spec:
                     secretKeyRef:
                       name: msmariadb-mariadb
                       key: mariadb-root-password
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -12901,14 +12889,14 @@ spec:
                 - containerPort: 8081
               readinessProbe:
                 httpGet:
-                  path: /services/msmariadb/management/health/readiness
+                  path: /management/health/readiness
                 initialDelaySeconds: 20
                 periodSeconds: 15
                 failureThreshold: 6
                 timeoutSeconds: 5
               livenessProbe:
                 httpGet:
-                  path: /services/msmariadb/management/health/liveness
+                  path: /management/health/liveness
                 initialDelaySeconds: 120
                 timeoutSeconds: 5
   traffic:
@@ -12943,18 +12931,6 @@ spec:
       retries:
         attempts: 3
         perTryTimeout: 2s
-",
-    "stateCleared": "modified",
-  },
-  "msmongodb-knative/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
 ",
     "stateCleared": "modified",
   },
@@ -13341,16 +13317,24 @@ spec:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+                - name: JHIPSTER_REGISTRY_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: jwt-secret
-                      key: secret
+                      name: registry-secret
+                      key: registry-admin-password
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+                - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+                  value: \\"false\\"
+                - name: EUREKA_INSTANCE_HOSTNAME
+                  value: msmongodb
                 - name: SPRING_DATA_MONGODB_DATABASE
                   value: msmongodb
                 - name: SPRING_DATA_MONGODB_URI
                   value: \\"mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017\\"
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -13367,14 +13351,14 @@ spec:
                 - containerPort: 8081
               readinessProbe:
                 httpGet:
-                  path: /services/msmongodb/management/health/readiness
+                  path: /management/health/readiness
                 initialDelaySeconds: 20
                 periodSeconds: 15
                 failureThreshold: 6
                 timeoutSeconds: 5
               livenessProbe:
                 httpGet:
-                  path: /services/msmongodb/management/health/liveness
+                  path: /management/health/liveness
                 initialDelaySeconds: 120
                 timeoutSeconds: 5
   traffic:
@@ -13409,18 +13393,6 @@ spec:
       retries:
         attempts: 3
         perTryTimeout: 2s
-",
-    "stateCleared": "modified",
-  },
-  "msmssqldb-knative/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
 ",
     "stateCleared": "modified",
   },
@@ -13564,12 +13536,20 @@ spec:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+                - name: JHIPSTER_REGISTRY_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: jwt-secret
-                      key: secret
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                      name: registry-secret
+                      key: registry-admin-password
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+                - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+                  value: \\"false\\"
+                - name: EUREKA_INSTANCE_HOSTNAME
+                  value: msmssqldb
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -13586,14 +13566,14 @@ spec:
                 - containerPort: 8081
               readinessProbe:
                 httpGet:
-                  path: /services/msmssqldb/management/health/readiness
+                  path: /management/health/readiness
                 initialDelaySeconds: 20
                 periodSeconds: 15
                 failureThreshold: 6
                 timeoutSeconds: 5
               livenessProbe:
                 httpGet:
-                  path: /services/msmssqldb/management/health/liveness
+                  path: /management/health/liveness
                 initialDelaySeconds: 120
                 timeoutSeconds: 5
   traffic:
@@ -13767,7 +13747,7 @@ spec:
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -14058,7 +14038,7 @@ spec:
                       key: postgresql-password
                 - name: SPRING_ELASTICSEARCH_REST_URIS
                   value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -17318,9 +17298,9 @@ spec:
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
+                - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
                   value: \\"true\\"
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -17898,7 +17878,7 @@ spec:
                   value: msmysql
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"
@@ -18502,7 +18482,7 @@ spec:
                   value: jhgate
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-                - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+                - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
                   value: \\" -Xmx256m -Xms256m\\"

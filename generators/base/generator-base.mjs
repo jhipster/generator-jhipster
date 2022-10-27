@@ -2612,7 +2612,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
     dest.projectVersion = process.env.JHI_PROJECT_VERSION || '0.0.1-SNAPSHOT';
@@ -2720,7 +2720,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadClientConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.clientPackageManager = config.clientPackageManager;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
@@ -2764,7 +2764,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadTranslationConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.enableTranslation = config.enableTranslation;
     dest.nativeLanguage = config.nativeLanguage;
     dest.languages = config.languages;
@@ -2778,7 +2778,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} config - config to load config from
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
-  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadServerConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
@@ -2901,7 +2901,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} config - config to load config from
    * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
-  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadPlatformConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
     dest.monitoring = config.monitoring;
     this.loadDerivedPlatformConfig(dest);
@@ -2979,12 +2979,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
     return {
-      ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
       ...(applicationType === MICROSERVICE ? defaultConfigMicroservice : defaultConfig),
+      ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
     };
   }
 
-  setConfigDefaults(defaults = this.jhipsterDefaults) {
+  setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {
     const jhipsterVersion = packagejs.version;
     const baseName = this.getDefaultAppName();
     const creationTimestamp = new Date().getTime();
