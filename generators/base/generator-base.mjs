@@ -124,8 +124,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @param {string | string[]} args
-   * @param {import('./base/api.cjs').JHipsterGeneratorOptions} options
-   * @param {import('./base/api.cjs').JHipsterGeneratorFeatures} features
+   * @param {import('./base/api.mjs').JHipsterGeneratorOptions} options
+   * @param {import('./base/api.mjs').JHipsterGeneratorFeatures} features
    */
   constructor(args, options, features) {
     super(args, options, features);
@@ -2084,7 +2084,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * write the given files using provided options.
    *
    * @template DataType
-   * @param {import('./api.cjs').WriteFileOptions<this, DataType>} options
+   * @param {import('./api.mjs').WriteFileOptions<this, DataType>} options
    * @return {Promise<string[]>}
    */
   async writeFiles(options) {
@@ -2612,7 +2612,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
     dest.projectVersion = process.env.JHI_PROJECT_VERSION || '0.0.1-SNAPSHOT';
@@ -2720,7 +2720,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadClientConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.clientPackageManager = config.clientPackageManager;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
@@ -2764,7 +2764,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadTranslationConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.enableTranslation = config.enableTranslation;
     dest.nativeLanguage = config.nativeLanguage;
     dest.languages = config.languages;
@@ -2778,7 +2778,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} config - config to load config from
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
-  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadServerConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
@@ -2901,7 +2901,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} config - config to load config from
    * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
-  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadPlatformConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
     dest.monitoring = config.monitoring;
     this.loadDerivedPlatformConfig(dest);
@@ -2979,12 +2979,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
     return {
-      ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
       ...(applicationType === MICROSERVICE ? defaultConfigMicroservice : defaultConfig),
+      ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
     };
   }
 
-  setConfigDefaults(defaults = this.jhipsterDefaults) {
+  setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {
     const jhipsterVersion = packagejs.version;
     const baseName = this.getDefaultAppName();
     const creationTimestamp = new Date().getTime();
@@ -3089,7 +3089,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./base/api.cjs').JHipsterOptions} [options] - Object containing options.
+   * @param {import('./base/api.mjs').JHipsterOptions} [options] - Object containing options.
    */
   jhipsterOptions(options = {}) {
     options = _.cloneDeep(options);

@@ -28,7 +28,7 @@ import { MAVEN } from './constants.mjs';
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-server/types.js').SpringBootApplication>}
+ * @extends {BaseApplicationGenerator<import('../server/types.mjs').SpringBootApplication>}
  */
 export default class MavenGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
@@ -57,8 +57,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    if (this.delegateToBlueprint) return;
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
@@ -70,7 +69,6 @@ export default class MavenGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return;
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 }

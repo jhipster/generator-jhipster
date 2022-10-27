@@ -28,7 +28,7 @@ const { startCase } = _;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-base/types.js').BaseApplication>}
+ * @extends {BaseApplicationGenerator<import('../base-application/types.mjs').BaseApplication>}
  */
 export default class ProjectNameGenerator extends BaseApplicationGenerator {
   async _postConstruct() {
@@ -57,8 +57,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return;
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -74,8 +73,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return;
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get loading() {
@@ -89,8 +87,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return;
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -113,8 +110,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    if (this.delegateToBlueprint) return;
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   /*

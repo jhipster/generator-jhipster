@@ -64,8 +64,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -77,8 +76,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -110,8 +108,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get writing() {
@@ -119,8 +116,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get postWriting() {
@@ -128,8 +124,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.POST_WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.postWriting;
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get install() {
@@ -155,8 +150,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INSTALL]() {
-    if (this.delegateToBlueprint) return {};
-    return this.install;
+    return this.delegateTasksToBlueprint(() => this.install);
   }
 
   get end() {
@@ -168,7 +162,6 @@ export default class OpenapiClientGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 }

@@ -53,7 +53,7 @@ export function createUserEntity(customUserData = {}, application) {
 
   loadRequiredConfigIntoEntity(user, application);
   // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(user, this.jhipsterDefaults);
+  loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults);
 
   const oauth2 = user.authenticationType === OAUTH2;
   const userIdType = oauth2 || user.databaseType !== SQL ? TYPE_STRING : this.getPkType(user.databaseType);

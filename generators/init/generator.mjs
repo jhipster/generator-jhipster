@@ -28,7 +28,7 @@ import generatorOptions from './options.mjs';
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-base/types.js').BaseApplication>}
+ * @extends {BaseApplicationGenerator<import('../base-application/types.mjs').BaseApplication>}
  */
 export default class InitGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
@@ -51,8 +51,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return;
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get loading() {
@@ -69,8 +68,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return;
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get writing() {
@@ -91,8 +89,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return;
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get postWriting() {
@@ -113,8 +110,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    if (this.delegateToBlueprint) return;
-    return this.postWriting;
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get install() {
@@ -138,8 +134,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INSTALL]() {
-    if (this.delegateToBlueprint) return;
-    return this.install;
+    return this.delegateTasksToBlueprint(() => this.install);
   }
 
   get end() {
@@ -183,8 +178,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.END]() {
-    if (this.delegateToBlueprint) return;
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   /*
