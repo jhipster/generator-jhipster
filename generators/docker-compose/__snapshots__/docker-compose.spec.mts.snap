@@ -455,6 +455,8 @@ eureka:
     depends_on:
       mspsql-postgresql:
         condition: service_started
+      mspsql-elasticsearch:
+        condition: service_healthy
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
@@ -711,6 +713,8 @@ eureka:
     depends_on:
       mspsql-postgresql:
         condition: service_started
+      mspsql-elasticsearch:
+        condition: service_healthy
       keycloak:
         condition: service_healthy
       jhipster-registry:
@@ -3462,6 +3466,8 @@ eureka:
     depends_on:
       mspsql-postgresql:
         condition: service_started
+      mspsql-elasticsearch:
+        condition: service_healthy
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
@@ -3688,6 +3694,8 @@ eureka:
     depends_on:
       mspsql-postgresql:
         condition: service_started
+      mspsql-elasticsearch:
+        condition: service_healthy
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
@@ -4549,6 +4557,8 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
     depends_on:
       samplemysql-mysql:
         condition: service_started
+      samplemysql-elasticsearch:
+        condition: service_healthy
   samplemysql-mysql:
     image: mysql:8.0.30
     volumes:
