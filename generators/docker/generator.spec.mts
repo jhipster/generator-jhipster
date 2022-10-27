@@ -69,7 +69,6 @@ Object.entries(matrix).forEach(([_name, config]) => {
 });
 
 matrix = extendMatrix(matrix, {
-  applicationType: [MONOLITH, GATEWAY, MICROSERVICE],
   searchEngine: [NO_SEARCH_ENGINE, ELASTICSEARCH],
   serviceDiscoveryType: [NO_SERVICE_DISCOVERY, EUREKA, CONSUL],
   enableSwaggerCodegen: [false, true],

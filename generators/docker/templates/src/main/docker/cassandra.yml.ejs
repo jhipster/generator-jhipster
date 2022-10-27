@@ -19,6 +19,14 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: <%= baseName.toLowerCase() %>
 services:
+  # Add a noop container that depends on migration complete to force docker compose wait for migration complete
+  hello:
+    image: hello-world
+    depends_on:
+      cassandra:
+        condition: service_healthy
+      cassandra-migration:
+        condition: service_completed_successfully
   cassandra:
     image: <%= DOCKER_CASSANDRA %>
     container_name: <%= baseName.toLowerCase() %>-cassandra
@@ -32,6 +40,11 @@ services:
       - 127.0.0.1:7199:7199
       - 127.0.0.1:9042:9042
       - 127.0.0.1:9160:9160
+    healthcheck:
+      test: ['CMD-SHELL', '[ $$(nodetool statusgossip) = running ]']
+      interval: 5s
+      timeout: 25s
+      retries: 10
   cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra

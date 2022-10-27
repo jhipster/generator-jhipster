@@ -22,9 +22,9 @@ import { createDockerComposeFile, createDockerExtendedServices } from '../base-d
 import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../generator-list.mjs';
 import { dockerFiles } from './files.mjs';
 import constants from '../generator-constants.cjs';
+import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.mjs';
 
-const SERVICE_HEALTHY = 'service_healthy';
-const SERVICE_STARTED = 'service_started';
+const WAIT_TIMEOUT = 3 * 60000;
 
 /**
  * @class
@@ -72,21 +72,29 @@ export default class DockerGenerator extends BaseApplicationGenerator {
       },
 
       sayHello({ application, source }) {
-        source.addDockerExtendedServiceToApplicationServices = (...services) => {
+        source.addDockerExtendedServiceToApplicationAndServices = (...services) => {
           const extendedServices = createDockerExtendedServices(...services);
           this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedServices);
           this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedServices);
         };
 
-        source.addDockerDependencyToApplication = ({ serviceName, condition }) => {
+        source.addDockerExtendedServiceToServices = (...services) => {
+          const extendedServices = createDockerExtendedServices(...services);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedServices);
+        };
+
+        source.addDockerDependencyToApplication = (...services) => {
           this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, {
             services: {
               app: {
-                depends_on: {
-                  [serviceName]: {
-                    condition,
-                  },
-                },
+                depends_on: Object.fromEntries(
+                  services.map(({ serviceName, condition }) => [
+                    serviceName,
+                    {
+                      condition,
+                    },
+                  ])
+                ),
               },
             },
           });
@@ -120,80 +128,34 @@ export default class DockerGenerator extends BaseApplicationGenerator {
         const dockerFile = createDockerComposeFile(application.lowercaseBaseName);
         this.writeDestination(`${application.dockerServicesDir}services.yml`, dockerFile);
 
-        if (application.prodDatabaseTypePostgresql) {
-          source.addDockerExtendedServiceToApplicationServices({
-            serviceName: application.prodDatabaseType,
-            additionalConfig: {
-              healthcheck: {
-                test: ['CMD-SHELL', 'pg_isready'],
-                interval: '10s',
-                timeout: '5s',
-                retries: 5,
-              },
-            },
-          });
-          source.addDockerDependencyToApplication({ serviceName: application.prodDatabaseType, condition: SERVICE_HEALTHY });
-        } else if (application.databaseTypeSql && !application.prodDatabaseTypeOracle) {
-          source.addDockerExtendedServiceToApplicationServices({ serviceName: application.prodDatabaseType });
-          source.addDockerDependencyToApplication({ serviceName: application.prodDatabaseType, condition: SERVICE_STARTED });
-        } else if (application.databaseTypeCassandra) {
-          source.addDockerExtendedServiceToApplicationServices(
-            {
-              serviceName: 'cassandra',
-              additionalConfig: {
-                healthcheck: {
-                  test: ['CMD-SHELL', '[ $$(nodetool statusgossip) = running ]'],
-                  interval: '30s',
-                  timeout: '10s',
-                  retries: 5,
-                },
-              },
-            },
+        if (application.databaseTypeCassandra) {
+          const serviceName = application.databaseType;
+          source.addDockerExtendedServiceToApplicationAndServices(
+            { serviceName },
             { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' }
           );
-          source.addDockerDependencyToApplication({ serviceName: application.prodDatabaseType, condition: SERVICE_STARTED });
-        } else if (!application.databaseTypeSql) {
-          source.addDockerExtendedServiceToApplicationServices({ serviceName: application.databaseType });
-          source.addDockerDependencyToApplication({ serviceName: application.databaseType, condition: SERVICE_STARTED });
+          source.addDockerExtendedServiceToServices({ serviceFile: './cassandra.yml', serviceName: 'hello' });
+          source.addDockerDependencyToApplication(
+            { serviceName, condition: SERVICE_HEALTHY },
+            { serviceName: 'cassandra-migration', condition: SERVICE_COMPLETED_SUCCESSFULLY }
+          );
+        } else if (!application.databaseTypeSql || !application.prodDatabaseTypeOracle) {
+          const serviceName = application.databaseTypeSql ? application.prodDatabaseType : application.databaseType;
+          source.addDockerExtendedServiceToApplicationAndServices({ serviceName });
+          source.addDockerDependencyToApplication({ serviceName, condition: SERVICE_HEALTHY });
         }
 
         if (application.searchEngineElasticsearch) {
-          source.addDockerExtendedServiceToApplicationServices({
-            serviceName: application.searchEngine,
-            additionalConfig: {
-              healthcheck: {
-                test: [
-                  'CMD',
-                  'curl',
-                  '--fail',
-                  'http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s',
-                  '||',
-                  'exit',
-                  '1',
-                ],
-                interval: '5s',
-                timeout: '3s',
-              },
-            },
-          });
+          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: application.searchEngine });
           source.addDockerDependencyToApplication({ serviceName: application.searchEngine, condition: SERVICE_HEALTHY });
         }
+
         if (application.cacheProviderMemcached || application.cacheProviderRedis) {
-          source.addDockerExtendedServiceToApplicationServices({ serviceName: application.cacheProvider });
+          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: application.cacheProvider });
         }
+
         if (application.authenticationTypeOauth2) {
-          source.addDockerExtendedServiceToApplicationServices({
-            serviceName: 'keycloak',
-            additionalConfig: {
-              healthcheck: {
-                test: ['CMD', 'curl', '-f', 'http://localhost:9080/realms/jhipster'],
-                interval: '5s',
-                timeout: '5s',
-                retries: 20,
-                start_period: '40s',
-              },
-            },
-          });
+          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: 'keycloak' });
           source.addDockerDependencyToApplication({ serviceName: 'keycloak', condition: SERVICE_HEALTHY });
         }
 
@@ -205,16 +167,9 @@ export default class DockerGenerator extends BaseApplicationGenerator {
                 },
               }
             : undefined;
-          source.addDockerExtendedServiceToApplicationServices({
+          source.addDockerExtendedServiceToApplicationAndServices({
             serviceName: 'jhipster-registry',
             additionalConfig: {
-              healthcheck: {
-                test: ['CMD', 'curl', '-f', 'http://localhost:8761/management/health'],
-                interval: '5s',
-                timeout: '5s',
-                retries: 20,
-                start_period: '10s',
-              },
               depends_on,
             },
           });
@@ -223,17 +178,74 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           source.addDockerDependencyToApplication({ serviceName: 'jhipster-registry', condition: SERVICE_HEALTHY });
         }
         if (application.serviceDiscoveryConsul) {
-          source.addDockerExtendedServiceToApplicationServices(
+          source.addDockerExtendedServiceToApplicationAndServices(
             { serviceName: 'consul' },
             { serviceFile: './consul.yml', serviceName: 'consul-config-loader' }
           );
         }
         if (application.messageBrokerKafka) {
-          source.addDockerExtendedServiceToApplicationServices(
+          source.addDockerExtendedServiceToApplicationAndServices(
             { serviceName: 'kafka' },
             { serviceFile: './kafka.yml', serviceName: 'zookeeper' }
           );
         }
+      },
+
+      packageJsonDockerScripts({ application }) {
+        const scriptsStorage = this.packageJson.createStorage('scripts');
+        const { databaseType, databaseTypeSql, prodDatabaseType, prodDatabaseTypeNo, prodDatabaseTypeMysql, prodDatabaseTypeOracle } =
+          application;
+
+        if (databaseTypeSql) {
+          if (prodDatabaseTypeMysql) {
+            scriptsStorage.set({
+              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && sleep 20 && echo "MySQL started"`,
+            });
+          }
+          if (prodDatabaseTypeNo || prodDatabaseTypeOracle) {
+            scriptsStorage.set(
+              'docker:db:up',
+              `echo "Docker for db ${prodDatabaseType} not configured for application ${application.baseName}"`
+            );
+          } else {
+            const dockerFile = `${application.dockerServicesDir}${prodDatabaseType}.yml`;
+            scriptsStorage.set({
+              'docker:db:up': `docker compose -f ${dockerFile} up --wait`,
+              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
+            });
+          }
+        } else {
+          const dockerFile = `${application.dockerServicesDir}${databaseType}.yml`;
+          if (this.fs.exists(this.destinationPath(dockerFile))) {
+            scriptsStorage.set({
+              'docker:db:build': `docker compose -f ${dockerFile} build`,
+              'docker:db:up': `docker compose -f ${dockerFile} up --wait`,
+              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
+            });
+          } else {
+            scriptsStorage.set(
+              'docker:db:up',
+              `echo "Docker for db ${databaseType} not configured for application ${application.baseName}"`
+            );
+          }
+        }
+
+        ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(dockerConfig => {
+          const dockerFile = `${application.dockerServicesDir}${dockerConfig}.yml`;
+          if (this.fs.exists(this.destinationPath(dockerFile))) {
+            scriptsStorage.set(`docker:${dockerConfig}:up`, `docker compose -f ${dockerFile} up --wait`);
+            scriptsStorage.set(`docker:${dockerConfig}:down`, `docker compose -f ${dockerFile} down -v`);
+          }
+        });
+
+        scriptsStorage.set({
+          'services:up': `docker compose -f ${application.dockerServicesDir}services.yml up --wait`,
+          'docker:app:up': `docker compose -f ${application.dockerServicesDir}app.yml up --wait`,
+          'ci:e2e:prepare:docker': 'npm run services:up && docker ps -a',
+          'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',
+          'ci:e2e:teardown:docker': `docker compose -f ${application.dockerServicesDir}services.yml down -v && docker ps -a`,
+          'ci:e2e:teardown': 'npm run ci:e2e:teardown:docker',
+        });
       },
     });
   }

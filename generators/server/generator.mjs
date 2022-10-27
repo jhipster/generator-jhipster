@@ -31,6 +31,7 @@ import {
   GENERATOR_LIQUIBASE,
   GENERATOR_GRADLE,
   GENERATOR_MAVEN,
+  GENERATOR_DOCKER,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
@@ -235,7 +236,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           throw new Error(`Build tool ${buildTool} is not supported`);
         }
 
-        await this.composeWithJHipster('docker');
+        await this.composeWithJHipster(GENERATOR_DOCKER);
 
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (enableTranslation) {
@@ -594,108 +595,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         packageJsonConfigStorage.packaging = application.defaultPackaging;
         packageJsonConfigStorage.default_environment = application.defaultEnvironment;
       },
-      packageJsonDockerScripts({ application }) {
-        const scriptsStorage = this.packageJson.createStorage('scripts');
-        const { databaseType, prodDatabaseType } = this.jhipsterConfig;
-        const { databaseTypeSql, prodDatabaseTypeMysql, authenticationTypeOauth2, applicationTypeMicroservice } = application;
-        const dockerAwaitScripts = [];
-        if (databaseTypeSql) {
-          if (prodDatabaseTypeMysql) {
-            scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && sleep 20 && echo "MySQL started"`,
-            });
-          }
-          if (prodDatabaseType === NO_DATABASE || prodDatabaseType === ORACLE) {
-            scriptsStorage.set(
-              'docker:db:up',
-              `echo "Docker for db ${prodDatabaseType} not configured for application ${application.baseName}"`
-            );
-          } else {
-            scriptsStorage.set({
-              'docker:db:up': `docker compose -f src/main/docker/${prodDatabaseType}.yml up -d`,
-              'docker:db:down': `docker compose -f src/main/docker/${prodDatabaseType}.yml down -v`,
-            });
-          }
-        } else {
-          const dockerFile = `src/main/docker/${databaseType}.yml`;
-          if (databaseType === CASSANDRA) {
-            scriptsStorage.set({
-              'docker:db:await': `wait-on -t ${WAIT_TIMEOUT} tcp:9042 && sleep 20`,
-            });
-          }
-          if (databaseType === COUCHBASE) {
-            scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for Couchbase to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"`,
-            });
-          }
-          if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
-            scriptsStorage.set({
-              'docker:db:build': `docker compose -f ${dockerFile} build`,
-              'docker:db:up': `docker compose -f ${dockerFile} up -d`,
-              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
-            });
-          } else if (this.fs.exists(this.destinationPath(dockerFile))) {
-            scriptsStorage.set({
-              'docker:db:up': `docker compose -f ${dockerFile} up -d`,
-              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
-            });
-          } else {
-            scriptsStorage.set(
-              'docker:db:up',
-              `echo "Docker for db ${databaseType} not configured for application ${application.baseName}"`
-            );
-          }
-        }
-        if (this.jhipsterConfig.searchEngine === ELASTICSEARCH) {
-          dockerAwaitScripts.push(
-            `echo "Waiting for Elasticsearch to start" && wait-on -t ${WAIT_TIMEOUT} "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"`
-          );
-        }
-
-        const dockerOthersUp = [];
-        const dockerOthersDown = [];
-        const dockerBuild = [];
-        ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(dockerConfig => {
-          const dockerFile = `src/main/docker/${dockerConfig}.yml`;
-          if (this.fs.exists(this.destinationPath(dockerFile))) {
-            if (['cassandra', 'couchbase'].includes(dockerConfig)) {
-              scriptsStorage.set(`docker:${dockerConfig}:build`, `docker compose -f ${dockerFile} build`);
-              dockerBuild.push(`npm run docker:${dockerConfig}:build`);
-            } else if (dockerConfig === 'jhipster-registry') {
-              if (authenticationTypeOauth2 && !applicationTypeMicroservice) {
-                dockerOthersUp.push('npm run docker:keycloak:await');
-              }
-              scriptsStorage.set(
-                'docker:jhipster-registry:await',
-                `echo "Waiting for jhipster-registry to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8761/management/health && echo "jhipster-registry started"`
-              );
-              dockerAwaitScripts.push('npm run docker:jhipster-registry:await');
-            } else if (dockerConfig === 'keycloak') {
-              scriptsStorage.set(
-                'docker:keycloak:await',
-                `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
-              );
-              dockerAwaitScripts.push('npm run docker:keycloak:await');
-            }
-
-            scriptsStorage.set(`docker:${dockerConfig}:up`, `docker compose -f ${dockerFile} up -d`);
-            dockerOthersUp.push(`npm run docker:${dockerConfig}:up`);
-            scriptsStorage.set(`docker:${dockerConfig}:down`, `docker compose -f ${dockerFile} down -v`);
-            dockerOthersDown.push(`npm run docker:${dockerConfig}:down`);
-          }
-        });
-        scriptsStorage.set({
-          'docker:app:up': `docker compose -f ${application.DOCKER_DIR}app.yml up -d`,
-          'docker:others:await': dockerAwaitScripts.join(' && '),
-          'predocker:others:up': dockerBuild.join(' && '),
-          'docker:others:up': dockerOthersUp.join(' && '),
-          'docker:others:down': dockerOthersDown.join(' && '),
-          'ci:e2e:prepare:docker': 'docker compose -f src/main/docker/services.yml up -d && docker ps -a',
-          'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',
-          'ci:e2e:teardown:docker': 'docker compose -f src/main/docker/services.yml down -v && docker ps -a',
-          'ci:e2e:teardown': 'npm run ci:e2e:teardown:docker',
-        });
-      },
       packageJsonBackendScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
@@ -750,7 +649,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
-          'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
+          'preci:e2e:server:start': 'npm run services:db:await --if-present && npm run services:others:await --if-present',
           'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=e2e,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
@@ -759,8 +658,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
         if (scriptsStorage.get('e2e')) {
           const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
+          const applicationEndpoint = 'http-get://localhost:$npm_package_config_backend_port/management/health';
           scriptsStorage.set({
-            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"`,
+            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
             'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,

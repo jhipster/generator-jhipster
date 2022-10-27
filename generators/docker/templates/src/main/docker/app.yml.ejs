@@ -76,7 +76,7 @@ _%>
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
-      - JHIPSTER_SLEEP=20 # gives time for microservices to boot before the gateway, the entire stack will be ready to accept incoming requests.
+      - JHIPSTER_SLEEP=10 # Let microservices to start before
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
       - SPRING_ELASTICSEARCH_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
@@ -93,3 +93,8 @@ _%>
     ports:
       - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
 <%_ } _%>
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:<%= serverPort %>/management/health']
+      interval: 5s
+      timeout: 5s
+      retries: 30

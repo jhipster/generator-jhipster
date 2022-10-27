@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster docker generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-microservice-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(false)-redis should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(false)-redis should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -14,14 +14,26 @@ services:
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
-      - SPRING_DATASOURCE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_R2DBC_URL=r2dbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
       - JHIPSTER_CACHE_REDIS_SERVER=redis://jhipster-redis:6379
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
+      - JHIPSTER_SLEEP=10
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
+    ports:
+      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
       elasticsearch:
         condition: service_healthy
       jhipster-registry:
@@ -34,17 +46,6 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - --fail
-        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
-        - \\"||\\"
-        - exit
-        - \\"1\\"
-      interval: 5s
-      timeout: 3s
   redis:
     extends:
       file: ./redis.yml
@@ -53,25 +54,18 @@ services:
     extends:
       file: ./jhipster-registry.yml
       service: jhipster-registry
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8761/management/health
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
 ",
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-microservice-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(false)-redis should match generated files snapshot 1`] = `
+exports[`JHipster docker generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(false)-redis should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -143,7 +137,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-monolith-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -161,12 +155,22 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - JHIPSTER_SLEEP=10
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     ports:
       - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       neo4j:
-        condition: service_started
+        condition: service_healthy
       keycloak:
         condition: service_healthy
       jhipster-registry:
@@ -179,30 +183,10 @@ services:
     extends:
       file: ./keycloak.yml
       service: keycloak
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:9080/realms/jhipster
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 40s
   jhipster-registry:
     extends:
       file: ./jhipster-registry.yml
       service: jhipster-registry
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8761/management/health
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
     depends_on:
       keycloak:
         condition: service_healthy
@@ -220,9 +204,12 @@ services:
 }
 `;
 
-exports[`JHipster docker generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-monolith-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
+exports[`JHipster docker generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -285,7 +272,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-monolith-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -301,8 +288,15 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@jhipster-oracle:1521:jhipster
       - SPRING_LIQUIBASE_URL=jdbc:oracle:thin:@jhipster-oracle:1521:jhipster
-    ports:
-      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8081/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       jhipster-registry:
         condition: service_healthy
@@ -310,25 +304,18 @@ services:
     extends:
       file: ./jhipster-registry.yml
       service: jhipster-registry
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8761/management/health
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
 ",
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-monolith-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`JHipster docker generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -376,7 +363,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-microservice-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -394,9 +381,18 @@ services:
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://jhipster-postgresql:5432/jhipster
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8081/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       postgresql:
-        condition: service_started
+        condition: service_healthy
       elasticsearch:
         condition: service_healthy
       jhipster-registry:
@@ -409,31 +405,10 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - --fail
-        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
-        - \\"||\\"
-        - exit
-        - \\"1\\"
-      interval: 5s
-      timeout: 3s
   jhipster-registry:
     extends:
       file: ./jhipster-registry.yml
       service: jhipster-registry
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8761/management/health
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
   kafka:
     extends:
       file: ./kafka.yml
@@ -448,9 +423,12 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-microservice-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
+exports[`JHipster docker generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -513,7 +491,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-monolith-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -529,14 +507,21 @@ services:
       - SPRING_LIQUIBASE_URL=jdbc:sqlserver://jhipster-mssql:1433;database=jhipster;encrypt=false
       - JHIPSTER_CACHE_MEMCACHED_SERVERS=jhipster-memcached:11211
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
-    ports:
-      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8081/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       mssql:
-        condition: service_started
+        condition: service_healthy
       keycloak:
         condition: service_healthy
   mssql:
@@ -551,16 +536,6 @@ services:
     extends:
       file: ./keycloak.yml
       service: keycloak
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:9080/realms/jhipster
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 40s
   kafka:
     extends:
       file: ./kafka.yml
@@ -575,9 +550,12 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-monolith-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match generated files snapshot 1`] = `
+exports[`JHipster docker generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -598,9 +576,6 @@ Object {
   "src/main/docker/kafka.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/memcached.yml": Object {
     "stateCleared": "modified",
   },
@@ -613,9 +588,6 @@ Object {
   "src/main/docker/prometheus/prometheus.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
@@ -625,10 +597,13 @@ Object {
   "src/main/docker/swagger-editor.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/zipkin.yml": Object {
+    "stateCleared": "modified",
+  },
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-microservice-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(false) should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(false) should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -647,9 +622,20 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=jhipster-cassandra
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8081/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
-      postgresql:
-        condition: service_started
+      cassandra:
+        condition: service_healthy
+      cassandra-migration:
+        condition: service_completed_successfully
       elasticsearch:
         condition: service_healthy
       keycloak:
@@ -658,13 +644,6 @@ services:
     extends:
       file: ./cassandra.yml
       service: cassandra
-    healthcheck:
-      test:
-        - CMD-SHELL
-        - \\"[ $$(nodetool statusgossip) = running ]\\"
-      interval: 30s
-      timeout: 10s
-      retries: 5
   cassandra-migration:
     extends:
       file: ./cassandra.yml
@@ -673,31 +652,10 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - --fail
-        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
-        - \\"||\\"
-        - exit
-        - \\"1\\"
-      interval: 5s
-      timeout: 3s
   keycloak:
     extends:
       file: ./keycloak.yml
       service: keycloak
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:9080/realms/jhipster
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 40s
   consul:
     extends:
       file: ./consul.yml
@@ -712,9 +670,12 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-microservice-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(false) should match generated files snapshot 1`] = `
+exports[`JHipster docker generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(false) should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -786,7 +747,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-monolith-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -803,9 +764,18 @@ services:
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     ports:
       - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
   mariadb:
     extends:
       file: ./mariadb.yml
@@ -824,9 +794,12 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-monolith-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
+exports[`JHipster docker generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -871,7 +844,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-microservice-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(false) should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(false) should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -888,9 +861,20 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://jhipster-mongodb:27017/?waitQueueMultiple=1000
       - SPRING_DATA_MONGODB_DATABASE=jhipster
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
+    ports:
+      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       mongodb:
-        condition: service_started
+        condition: service_healthy
       elasticsearch:
         condition: service_healthy
   mongodb:
@@ -901,17 +885,6 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - --fail
-        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
-        - \\"||\\"
-        - exit
-        - \\"1\\"
-      interval: 5s
-      timeout: 3s
   consul:
     extends:
       file: ./consul.yml
@@ -926,9 +899,12 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-microservice-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(false) should match generated files snapshot 1`] = `
+exports[`JHipster docker generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(false) should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -956,9 +932,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/jhipster-control-center.yml": Object {
@@ -997,7 +970,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-monolith-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1016,9 +989,18 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
     ports:
       - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       postgresql:
-        condition: service_started
+        condition: service_healthy
       keycloak:
         condition: service_healthy
   postgresql:
@@ -1029,25 +1011,18 @@ services:
     extends:
       file: ./keycloak.yml
       service: keycloak
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:9080/realms/jhipster
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 40s
 ",
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-monolith-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`JHipster docker generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(false)-cacheProvider(no) should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -1089,7 +1064,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-microservice-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1105,13 +1080,24 @@ services:
       - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_NEO4J_URI=bolt://jhipster-neo4j:7687
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+    ports:
+      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       neo4j:
-        condition: service_started
+        condition: service_healthy
       elasticsearch:
         condition: service_healthy
       keycloak:
@@ -1124,31 +1110,10 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - --fail
-        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
-        - \\"||\\"
-        - exit
-        - \\"1\\"
-      interval: 5s
-      timeout: 3s
   keycloak:
     extends:
       file: ./keycloak.yml
       service: keycloak
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:9080/realms/jhipster
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 40s
   consul:
     extends:
       file: ./consul.yml
@@ -1171,9 +1136,12 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-microservice-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
+exports[`JHipster docker generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -1203,13 +1171,13 @@ Object {
   "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jhipster-control-center.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/kafka.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/keycloak.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/monitoring.yml": Object {
@@ -1219,6 +1187,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/services.yml": Object {
@@ -1236,7 +1207,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-monolith-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(false)-redis should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(false)-redis should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1254,9 +1225,18 @@ services:
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
     ports:
       - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       mysql:
-        condition: service_started
+        condition: service_healthy
   mysql:
     extends:
       file: ./mysql.yml
@@ -1271,9 +1251,12 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-monolith-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(false)-redis should match generated files snapshot 1`] = `
+exports[`JHipster docker generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(false)-redis should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -1327,7 +1310,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-microservice-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match app.yml snapshot 1`] = `
+exports[`JHipster docker generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1345,9 +1328,20 @@ services:
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=jhipster
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+    ports:
+      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 30
     depends_on:
       couchbase:
-        condition: service_started
+        condition: service_healthy
       elasticsearch:
         condition: service_healthy
   couchbase:
@@ -1358,17 +1352,6 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - --fail
-        - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
-        - \\"||\\"
-        - exit
-        - \\"1\\"
-      interval: 5s
-      timeout: 3s
   consul:
     extends:
       file: ./consul.yml
@@ -1391,9 +1374,12 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-microservice-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match generated files snapshot 1`] = `
+exports[`JHipster docker generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": Object {
@@ -1433,9 +1419,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/jhipster-control-center.yml": Object {

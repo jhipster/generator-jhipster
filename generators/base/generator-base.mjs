@@ -2685,7 +2685,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
       dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
-      dest.endpointPrefix = !dest.applicationType || dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
+      dest.endpointPrefix = dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
     }
 
     if (dest.microfrontends && dest.microfrontends.length > 0) {

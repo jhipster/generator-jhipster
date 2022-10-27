@@ -77,9 +77,8 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
       interval: 5s
-      timeout: 10s
-      retries: 20
-      start_period: 10s
+      timeout: 5s
+      retries: 10
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
   consul:
@@ -117,9 +116,8 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9080/realms/jhipster"]
       interval: 5s
-      timeout: 10s
+      timeout: 5s
       retries: 20
-      start_period: 40s
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
 

@@ -30,3 +30,8 @@ services:
     ports:
       - "127.0.0.1:7474:7474"
       - "127.0.0.1:7687:7687"
+    healthcheck:
+      test: ["CMD", "wget", "http://localhost:7474/", "-O", "-"]
+      interval: 5s
+      timeout: 5s
+      retries: 10

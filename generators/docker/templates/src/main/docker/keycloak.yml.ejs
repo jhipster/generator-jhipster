@@ -36,3 +36,9 @@ services:
     ports:
       - 127.0.0.1:9080:9080
       - 127.0.0.1:9443:9443
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9080/realms/jhipster']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
