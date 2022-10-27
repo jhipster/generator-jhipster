@@ -62,6 +62,7 @@ export const files = {
         'routes.tsx',
         'setup-tests.ts',
         'typings.d.ts',
+        'config/constants.ts',
         'config/dayjs.ts',
         'config/axios-interceptor.ts',
         'config/error-middleware.ts',

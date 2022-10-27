@@ -28,13 +28,14 @@ import {
   byteSize,
 <%_ } _%>
 <%_ if (fieldsContainDate) { _%>
-  TextFormat,
-  APP_DATE_FORMAT,
-  APP_LOCAL_DATE_FORMAT
+  TextFormat
 <%_ } _%>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+<%_ if (fieldsContainDate) { _%>
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+<%_ } _%>
 <%_ if (fieldsContainDuration) { _%>
 import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
