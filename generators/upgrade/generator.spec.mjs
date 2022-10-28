@@ -21,7 +21,7 @@ import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import Generator from './generator.cjs';
+import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -32,7 +32,7 @@ const generator = basename(__dirname);
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });

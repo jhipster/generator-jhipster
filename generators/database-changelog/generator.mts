@@ -19,8 +19,8 @@
 import fs from 'fs';
 
 import BaseApplication from '../base-application/index.mjs';
-import type { DefaultTaskGroup } from '../base-application/tasks.js';
-import type { LiquibaseApplication } from '../bootstrap-application-server/types.js';
+import type { DefaultTaskGroup } from '../base-application/tasks.mjs';
+import type { LiquibaseApplication } from '../server/types.mjs';
 import constants from '../generator-constants.cjs';
 import {
   GENERATOR_DATABASE_CHANGELOG,
@@ -91,8 +91,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<Liquibas
   }
 
   get [BaseApplication.DEFAULT]() {
-    if (this.delegateToBlueprint) return {};
-    return this.default;
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   /* ======================================================================== */

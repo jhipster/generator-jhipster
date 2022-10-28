@@ -20,23 +20,20 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 
-import BaseApplicationGenerator from '../base-application/generator.cjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { askForLanguages, askI18n } from './prompts.mjs';
 import statistics from '../statistics.cjs';
-import constants from '../generator-constants.cjs';
+import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 
 import generatorDefaults from '../generator-defaults.cjs';
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
-import files from './files.cjs';
-import entityFiles from './entity-files.cjs';
+import { clientI18nFiles } from './files.mjs';
+import { writeEntityFiles } from './entity-files.mjs';
+import { languageToJavaLanguage } from './utils.mjs';
 import jhipsterUtils from '../utils.cjs';
 
-const { languageToJavaLanguage } = jhipsterUtils;
-const { clientI18nFiles } = files;
-const { writeEntityFiles } = entityFiles;
 const { translationDefaultConfig } = generatorDefaults;
-const { SERVER_TEST_SRC_DIR } = constants;
 
 /**
  * This is the base class for a generator that generates entities.
@@ -128,8 +125,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -149,8 +145,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -184,8 +179,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -211,8 +205,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get default() {
@@ -224,8 +217,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    if (this.delegateToBlueprint) return {};
-    return this.default;
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -247,7 +239,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       translateFile({ application }) {
         this.languagesToApply.forEach(language => {
           if (!application.skipServer) {
-            this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language, constants.SERVER_TEST_RES_DIR, {
+            this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language, SERVER_TEST_RES_DIR, {
               ...application,
               lang: language,
             });
@@ -259,8 +251,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get writingEntities() {
@@ -270,8 +261,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writingEntities;
+    return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   get postWriting() {
@@ -302,8 +292,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.postWriting;
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   /**
@@ -329,40 +318,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         `${testResourceDir}i18n/messages_${langJavaProp}.properties`,
         data
       );
-    }
-  }
-
-  /**
-   * Update Languages In Language Constant
-   *
-   * @param languages
-   */
-  updateLanguagesInLanguageConstant(languages, application) {
-    const fullPath = `${application.clientSrcDir}app/components/language/language.constants.js`;
-    try {
-      let content = ".constant('LANGUAGES', [\n";
-      languages.forEach((language, i) => {
-        content += `            '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
-      });
-      content += '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n        ]';
-
-      jhipsterUtils.replaceContent(
-        {
-          file: fullPath,
-          pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
-          content,
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        chalk.yellow('\nUnable to find ') +
-          fullPath +
-          chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
-          languages +
-          chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-      );
-      this.debug('Error:', e);
     }
   }
 

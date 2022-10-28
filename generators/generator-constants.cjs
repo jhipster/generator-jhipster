@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const validationOptions = require('../jdl/jhipster/validations');
-const gradleOptions = require('./gradle/constants.cjs');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
 const commonPackageJson = require('./common/templates/package.json');
@@ -25,7 +24,6 @@ const commonPackageJson = require('./common/templates/package.json');
 // Version of Java
 const JAVA_VERSION = '17';
 const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19'];
-const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
 
 /**
  * Manually updated java dependencies
@@ -56,7 +54,7 @@ const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '3.0.0-M5';
+const SPRING_BOOT_VERSION = '3.0.0-RC1';
 const HIBERNATE_VERSION = '6.1.4.Final';
 const JACOCO_VERSION = '0.8.8';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.3';
@@ -388,7 +386,6 @@ const constants = {
 
   JAVA_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
-  GRADLE_VERSION,
 
   // NPM
   NODE_VERSION,

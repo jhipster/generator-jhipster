@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 
 import constants from '../generator-constants.cjs';
 import testSupport from '../../test/support/index.cjs';
-import Generator from './generator.cjs';
+import Generator from './generator.mjs';
 import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
 
 const { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
@@ -41,7 +41,7 @@ const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: tru
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });

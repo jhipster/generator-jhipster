@@ -266,15 +266,6 @@ Object {
   "src/main/webapp/i18n/en/skip.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/fr/bar.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/foo.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/skip.json": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": Object {
     "stateCleared": "modified",
   },
@@ -562,15 +553,6 @@ Object {
   "src/main/webapp/i18n/en/skip.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/fr/bar.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/foo.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/skip.json": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": Object {
     "stateCleared": "modified",
   },
@@ -772,12 +754,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/foo.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/bar.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/foo.json": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": Object {

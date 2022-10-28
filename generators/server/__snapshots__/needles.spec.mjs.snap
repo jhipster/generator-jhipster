@@ -152,6 +152,9 @@ Object {
   "src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -200,15 +203,6 @@ Object {
   "src/main/java/com/mycompany/myapp/security/UserNotActivatedException.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/security/jwt/JWTConfigurer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/security/jwt/JWTFilter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -251,13 +245,13 @@ Object {
   "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/UserJWTController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/UserResource.java": Object {
@@ -455,13 +449,16 @@ Object {
   "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/AuthenticationIntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -476,6 +473,9 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
@@ -483,9 +483,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/UserJWTControllerIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/UserResourceIT.java": Object {

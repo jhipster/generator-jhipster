@@ -19,21 +19,16 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import entityUtils from '../../utils/entity.cjs';
-import fieldUtils from '../../utils/field.cjs';
-import relationshipUtils from '../../utils/relationship.cjs';
-import utils from '../../utils/index.cjs';
-import userUtils from '../../utils/user.cjs';
+import { prepareEntityForTemplates } from '../../utils/entity.mjs';
+import { prepareFieldForTemplates } from '../../utils/field.mjs';
+import { prepareRelationshipForTemplates } from '../../utils/relationship.mjs';
+import { stringify } from '../../utils/index.mjs';
+import { createUserEntity } from './utils.mjs';
 import { DOCKER_DIR, NODE_VERSION } from '../generator-constants.mjs';
-import type { CommonClientServerApplication } from './types.js';
+import type { CommonClientServerApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { addFakerToEntity } from './faker.mjs';
 
-const { prepareEntityForTemplates } = entityUtils;
-const { prepareFieldForTemplates } = fieldUtils;
-const { prepareRelationshipForTemplates } = relationshipUtils;
-const { stringify } = utils;
-const { createUserEntity } = userUtils;
 const { upperFirst } = _;
 
 /**

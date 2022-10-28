@@ -5,17 +5,16 @@ import { fileURLToPath } from 'url';
 import { buildServerMatrix, extendMatrix, extendFilteredMatrix, entitiesServerSamples as entities } from '../../test/support/index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
-import DatabaseTypes from '../../jdl/jhipster/database-types.js';
-import CacheTypes from '../../jdl/jhipster/cache-types.js';
+import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generatorFile = join(__dirname, 'index.mjs');
 
-const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = DatabaseTypes;
+const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
-const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = CacheTypes;
+const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 
 let sqlSamples = buildServerMatrix();
 

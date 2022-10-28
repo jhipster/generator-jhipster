@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
 import constants from '../generator-constants.cjs';
-import jdlImporter from '../../jdl/jdl-importer.js';
+import { jdlImporter } from '../../jdl/index.mjs';
 import expectedFiles from '../../test/utils/expected-files.cjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -81,6 +81,7 @@ enum ProductCategory {
 }`;
 
 const generatorPath = join(__dirname, '../server/index.mjs');
+const mockedGenerators = ['jhipster:common', 'jhipster:gradle', 'jhipster:maven'];
 
 describe('jhipster:app --incremental-changelog', function () {
   this.timeout(45000);
@@ -97,7 +98,7 @@ describe('jhipster:app --incremental-changelog', function () {
   context('when creating a new application', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorPath).withOptions(options);
+      runResult = await helpers.run(generatorPath).withOptions(options).withMockedGenerators(mockedGenerators);
     });
 
     after(() => runResult.cleanup());

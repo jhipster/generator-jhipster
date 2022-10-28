@@ -116,11 +116,6 @@ spring:
     host: localhost
   main:
     allow-bean-definition-overriding: true
-<%_ if (!reactive) { _%>
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-<%_ } _%>
   messages:
     basename: i18n/messages
 <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && authenticationTypeJwt) { _%>

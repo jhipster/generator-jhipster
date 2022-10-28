@@ -756,7 +756,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -950,7 +950,7 @@ spec:
               value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
             - name: SPRING_ELASTICSEARCH_REST_URIS
               value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -1521,7 +1521,9 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -2097,7 +2099,9 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -2361,7 +2365,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -2977,7 +2981,9 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -3617,6 +3623,26 @@ $ kubectl set image deployment/<app-name>-app <app-name>=<new-image>
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availablity of your services. You will need minimum 2 replicas for every application deployment if you want to have zero-downtime deployed.
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
 
+## JHipster registry
+
+The registry is deployed using a headless service in kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:
+
+\`\`\`
+$ kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry
+\`\`\`
+
+and explore the details using
+
+\`\`\`
+$ kubectl get svc exposed-registry
+\`\`\`
+
+For scaling the JHipster registry, use
+
+\`\`\`
+$ kubectl scale statefulset jhipster-registry --replicas 3
+\`\`\`
+
 ## Troubleshooting
 
 > my apps doesn't get pulled, because of 'imagePullBackof'
@@ -3699,7 +3725,9 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -3900,32 +3928,17 @@ resources:
   - msmongodb-k8s/msmongodb-deployment.yml
   - msmongodb-k8s/msmongodb-service.yml
   - msmongodb-k8s/msmongodb-mongodb.yml
-  - msmongodb-k8s/jwt-secret.yml
   - msmariadb-k8s/msmariadb-deployment.yml
   - msmariadb-k8s/msmariadb-service.yml
   - msmariadb-k8s/msmariadb-mariadb.yml
-  - msmariadb-k8s/jwt-secret.yml
   - msmssqldb-k8s/msmssqldb-deployment.yml
   - msmssqldb-k8s/msmssqldb-service.yml
   - msmssqldb-k8s/msmssqldb-mssql.yml
-  - msmssqldb-k8s/jwt-secret.yml
   # service discovery eureka/consul
   - registry-k8s/jhipster-registry.yml
   - registry-k8s/application-configmap.yml
 
 patchesJson6902:
-",
-    "stateCleared": "modified",
-  },
-  "msmariadb-k8s/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
 ",
     "stateCleared": "modified",
   },
@@ -3982,11 +3995,15 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+            - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
-                  key: secret
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
             - name: SPRING_LIQUIBASE_URL
@@ -3996,7 +4013,7 @@ spec:
                 secretKeyRef:
                   name: msmariadb-mariadb
                   key: mariadb-root-password
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -4126,20 +4143,7 @@ spec:
     app: msmariadb
   ports:
     - name: http
-      port: 80
-      targetPort: 8081
-",
-    "stateCleared": "modified",
-  },
-  "msmongodb-k8s/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
+      port: 8081
 ",
     "stateCleared": "modified",
   },
@@ -4196,16 +4200,20 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+            - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
-                  key: secret
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
             - name: SPRING_DATA_MONGODB_DATABASE
               value: msmongodb
             - name: SPRING_DATA_MONGODB_URI
               value: \\"mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017\\"
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -4575,20 +4583,7 @@ spec:
     app: msmongodb
   ports:
     - name: http
-      port: 80
-      targetPort: 8081
-",
-    "stateCleared": "modified",
-  },
-  "msmssqldb-k8s/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
+      port: 8081
 ",
     "stateCleared": "modified",
   },
@@ -4644,12 +4639,16 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+            - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
-                  key: secret
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -4783,8 +4782,7 @@ spec:
     app: msmssqldb
   ports:
     - name: http
-      port: 80
-      targetPort: 8081
+      port: 8081
 ",
     "stateCleared": "modified",
   },
@@ -4854,7 +4852,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -5048,7 +5046,7 @@ spec:
               value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
             - name: SPRING_ELASTICSEARCH_REST_URIS
               value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -8828,7 +8826,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
               value: \\"true\\"
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -9413,7 +9411,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -9808,6 +9806,26 @@ $ kubectl set image deployment/<app-name>-app <app-name>=<new-image>
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availablity of your services. You will need minimum 2 replicas for every application deployment if you want to have zero-downtime deployed.
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
 
+## JHipster registry
+
+The registry is deployed using a headless service in kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:
+
+\`\`\`
+$ kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry
+\`\`\`
+
+and explore the details using
+
+\`\`\`
+$ kubectl get svc exposed-registry
+\`\`\`
+
+For scaling the JHipster registry, use
+
+\`\`\`
+$ kubectl scale statefulset jhipster-registry --replicas 3
+\`\`\`
+
 ## Troubleshooting
 
 > my apps doesn't get pulled, because of 'imagePullBackof'
@@ -9890,7 +9908,9 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -10091,32 +10111,17 @@ resources:
   - msmongodb-k8s/msmongodb-deployment.yml
   - msmongodb-k8s/msmongodb-service.yml
   - msmongodb-k8s/msmongodb-mongodb.yml
-  - msmongodb-k8s/jwt-secret.yml
   - msmariadb-k8s/msmariadb-deployment.yml
   - msmariadb-k8s/msmariadb-service.yml
   - msmariadb-k8s/msmariadb-mariadb.yml
-  - msmariadb-k8s/jwt-secret.yml
   - msmssqldb-k8s/msmssqldb-deployment.yml
   - msmssqldb-k8s/msmssqldb-service.yml
   - msmssqldb-k8s/msmssqldb-mssql.yml
-  - msmssqldb-k8s/jwt-secret.yml
   # service discovery eureka/consul
   - registry-k8s/jhipster-registry.yml
   - registry-k8s/application-configmap.yml
 
 patchesJson6902:
-",
-    "stateCleared": "modified",
-  },
-  "msmariadb-k8s/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
 ",
     "stateCleared": "modified",
   },
@@ -10173,11 +10178,15 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+            - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
-                  key: secret
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
             - name: SPRING_LIQUIBASE_URL
@@ -10187,7 +10196,7 @@ spec:
                 secretKeyRef:
                   name: msmariadb-mariadb
                   key: mariadb-root-password
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -10317,20 +10326,7 @@ spec:
     app: msmariadb
   ports:
     - name: http
-      port: 80
-      targetPort: 8081
-",
-    "stateCleared": "modified",
-  },
-  "msmongodb-k8s/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
+      port: 8081
 ",
     "stateCleared": "modified",
   },
@@ -10387,16 +10383,20 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+            - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
-                  key: secret
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
             - name: SPRING_DATA_MONGODB_DATABASE
               value: msmongodb
             - name: SPRING_DATA_MONGODB_URI
               value: \\"mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017\\"
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -10766,20 +10766,7 @@ spec:
     app: msmongodb
   ports:
     - name: http
-      port: 80
-      targetPort: 8081
-",
-    "stateCleared": "modified",
-  },
-  "msmssqldb-k8s/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
+      port: 8081
 ",
     "stateCleared": "modified",
   },
@@ -10835,12 +10822,16 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+            - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
-                  key: secret
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -10974,8 +10965,7 @@ spec:
     app: msmssqldb
   ports:
     - name: http
-      port: 80
-      targetPort: 8081
+      port: 8081
 ",
     "stateCleared": "modified",
   },
@@ -11045,7 +11035,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -11239,7 +11229,7 @@ spec:
               value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
             - name: SPRING_ELASTICSEARCH_REST_URIS
               value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -11821,7 +11811,9 @@ spec:
               value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"

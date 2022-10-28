@@ -53,6 +53,15 @@ Object {
   "src/app/admin/docs/docs.vue": Object {
     "stateCleared": "modified",
   },
+  "src/app/admin/gateway/gateway.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.vue": Object {
+    "stateCleared": "modified",
+  },
   "src/app/app.component.ts": Object {
     "stateCleared": "modified",
   },
@@ -347,6 +356,9 @@ Object {
   "test/spec/app/account/login-form/login-form.component.spec.ts": Object {
     "stateCleared": "modified",
   },
+  "test/spec/app/admin/gateway/gateway.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "test/spec/app/core/error/error.component.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -485,6 +497,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/admin/docs/docs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.vue": Object {
     "stateCleared": "modified",
   },
   "src/app/admin/health/health-modal.component.ts": Object {
@@ -832,6 +853,9 @@ Object {
   "test/spec/app/admin/configuration/configuration.component.spec.ts": Object {
     "stateCleared": "modified",
   },
+  "test/spec/app/admin/gateway/gateway.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "test/spec/app/admin/health/health-modal.component.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -1173,9 +1197,6 @@ Object {
   "src/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
-  "src/app/index.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/app/main.ts": Object {
     "stateCleared": "modified",
   },
@@ -1431,15 +1452,6 @@ Object {
   "test/spec/app/entities/simple/simple.service.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "test/spec/app/microfrontends/entities-menu.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/microfrontends/entities-menu.vue": Object {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/microfrontends/entities-router.ts": Object {
-    "stateCleared": "modified",
-  },
   "test/spec/app/shared/alert/alert.service.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -1468,9 +1480,6 @@ Object {
     "stateCleared": "modified",
   },
   "webpack/webpack.dev.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": Object {
     "stateCleared": "modified",
   },
   "webpack/webpack.prod.js": Object {
@@ -1644,9 +1653,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/entities/user/user.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/index.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/locale/translation.service.ts": Object {
@@ -1883,15 +1889,6 @@ Object {
   "src/test/javascript2/spec/app/entities/simple/simple.service.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "src/test/javascript2/spec/app/microfrontends/entities-menu.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript2/spec/app/microfrontends/entities-menu.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript2/spec/app/microfrontends/entities-router.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/test/javascript2/spec/app/shared/alert/alert.service.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -1923,9 +1920,6 @@ Object {
     "stateCleared": "modified",
   },
   "webpack/webpack.dev.js": Object {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": Object {
     "stateCleared": "modified",
   },
   "webpack/webpack.prod.js": Object {
@@ -3009,12 +3003,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/login.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/sessions.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/sessions.vue": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.component.ts": Object {

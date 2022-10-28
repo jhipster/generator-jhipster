@@ -17,12 +17,13 @@
  * limitations under the License.
  */
 
-export const GENERATOR_ADD = 'add';
 export const GENERATOR_APP = 'app';
 export const GENERATOR_AWS = 'aws';
 export const GENERATOR_AZURE_APP_SERVICE = 'azure-app-service';
 export const GENERATOR_AZURE_SPRING_CLOUD = 'azure-spring-cloud';
 export const GENERATOR_BASE = 'base';
+export const GENERATOR_BASE_APPLICATION = 'base-application';
+export const GENERATOR_BASE_DOCKER = 'base-docker';
 export const GENERATOR_BOOTSTRAP = 'bootstrap';
 export const GENERATOR_BOOTSTRAP_APPLICATION = 'bootstrap-application';
 export const GENERATOR_BOOTSTRAP_APPLICATION_BASE = 'bootstrap-application-base';
@@ -45,7 +46,6 @@ export const GENERATOR_GRADLE = 'gradle';
 export const GENERATOR_HEROKU = 'heroku';
 export const GENERATOR_INFO = 'info';
 export const GENERATOR_INIT = 'init';
-export const GENERATOR_JAVA = 'java';
 export const GENERATOR_KUBERNETES = 'kubernetes';
 export const GENERATOR_KUBERNETES_HELM = 'kubernetes-helm';
 export const GENERATOR_KUBERNETES_KNATIVE = 'kubernetes-knative';
@@ -56,7 +56,6 @@ export const GENERATOR_OPENSHIFT = 'openshift';
 export const GENERATOR_PAGE = 'page';
 export const GENERATOR_PROJECT_NAME = 'project-name';
 export const GENERATOR_SERVER = 'server';
-export const GENERATOR_SPRING_BOOT = 'spring-boot';
 export const GENERATOR_SPRING_CONTROLLER = 'spring-controller';
 export const GENERATOR_SPRING_SERVICE = 'spring-service';
 export const GENERATOR_UPGRADE = 'upgrade';

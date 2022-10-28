@@ -26,12 +26,12 @@ import testSupport from '../../test/support/index.cjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 import defaults from '../generator-defaults.cjs';
-import TestFrameworkTypes from '../../jdl/jhipster/test-framework-types.js';
+import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { snakeCase } = lodash;
 const { testBlueprintSupport } = testSupport;
 const { appDefaultConfig } = defaults;
-const { CYPRESS } = TestFrameworkTypes;
+const { CYPRESS } = testFrameworkTypes;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,7 +41,7 @@ const generatorFile = join(__dirname, 'index.mjs');
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });

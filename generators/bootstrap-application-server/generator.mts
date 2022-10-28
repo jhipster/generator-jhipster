@@ -22,24 +22,22 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 import constants from '../generator-constants.cjs';
 import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
-import entityUtils from '../../utils/entity.cjs';
-import type { SpringBootApplication } from './types.js';
+import {
+  loadRequiredConfigIntoEntity,
+  loadRequiredConfigDerivedProperties,
+  prepareEntityServerForTemplates,
+  prepareEntityPrimaryKeyForTemplates,
+} from '../../utils/entity.mjs';
+import type { SpringBootApplication } from '../server/types.mjs';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
-import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.cjs';
+import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
 import { getDockerfileContainers, getPomVersionProperties } from '../server/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
 
 const { LONG: TYPE_LONG } = CommonDBTypes;
-
-const {
-  loadRequiredConfigIntoEntity,
-  loadRequiredConfigDerivedProperties,
-  prepareEntityServerForTemplates,
-  prepareEntityPrimaryKeyForTemplates,
-} = entityUtils;
 
 /**
  * @class
@@ -97,6 +95,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
         this.loadDerivedServerConfig(application);
+        application.javaPackageSrcDir = `${constants.SERVER_MAIN_SRC_DIR}${application.packageFolder}/`;
+        application.javaPackageTestDir = `${constants.SERVER_TEST_SRC_DIR}${application.packageFolder}/`;
       },
     });
   }
