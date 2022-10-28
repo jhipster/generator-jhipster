@@ -24,7 +24,7 @@ import {
   TextFormat,
   JhiPagination,
   JhiItemCount,
-  getSortState
+  getPaginationState
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -41,7 +41,7 @@ export const UserManagement = () => {
   const navigate = useNavigate();
 
   const [pagination, setPagination] = useState(
-    overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, 'id'), location.search)
+    overridePaginationStateWithQueryParams(getPaginationState(location, ITEMS_PER_PAGE, 'id'), location.search)
   );
 
   const getUsersFromProps = () => {

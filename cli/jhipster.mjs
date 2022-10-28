@@ -57,7 +57,7 @@ async function requireCLI(preferLocal) {
   /* eslint-disable global-require */
   if (preferLocal) {
     try {
-      const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'cli', 'cli.mjs'));
+      const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'dist', 'cli', 'cli.mjs'));
       if (__dirname === path.dirname(localCLI)) {
         message = LOCAL_VERSION_MESSAGE;
       } else {
