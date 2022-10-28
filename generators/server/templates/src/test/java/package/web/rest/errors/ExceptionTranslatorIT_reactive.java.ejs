@@ -131,7 +131,7 @@ class ExceptionTranslatorIT {
             .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
             .jsonPath("$.message").isEqualTo("error.http.405")
-            .jsonPath("$.detail").isEqualTo("Supported methods: 'GET'");
+            .jsonPath("$.detail").isEqualTo("405 METHOD_NOT_ALLOWED \"Request method 'POST' is not supported.\"");
     }
 
     @Test
