@@ -73,17 +73,6 @@ export const sqlFiles = {
       ],
     },
   ],
-  liquibase: [
-    {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/LiquibaseConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/LiquibaseConfiguration.java`,
-        },
-      ],
-    },
-  ],
   hibernate: [
     {
       condition: generator => !generator.reactive,

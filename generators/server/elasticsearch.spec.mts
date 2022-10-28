@@ -58,7 +58,7 @@ describe('JHipster elasticsearch generator', () => {
         runResult = await helpers
           .run(generatorFile)
           .withOptions(sample)
-          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:database-changelog']);
+          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:liquibase']);
       });
 
       after(() => runResult.cleanup());

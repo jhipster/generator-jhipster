@@ -2826,6 +2826,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.packageFolder = dest.packageName.replace(/\./g, '/');
     }
 
+    dest.javaPackageSrcDir = `${dest.srcMainJava}${dest.packageFolder}/`;
+    dest.javaPackageTestDir = `${dest.srcMainJava}${dest.packageFolder}/`;
+
     dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     // Convert to false for templates.
     if (dest.serviceDiscoveryType === NO_SERVICE_DISCOVERY || !dest.serviceDiscoveryType) {
@@ -2883,6 +2886,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseTypeMysql = dest.databaseType === SQL && (dest.devDatabaseType === MYSQL || dest.prodDatabaseType === MYSQL);
     dest.databaseTypeMariadb = dest.databaseType === SQL && (dest.devDatabaseType === MARIADB || dest.prodDatabaseType === MARIADB);
     dest.databaseTypePostgres = dest.databaseType === SQL && (dest.devDatabaseType === POSTGRESQL || dest.prodDatabaseType === POSTGRESQL);
+
+    dest.enableLiquibase = dest.databaseTypeSql;
 
     dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
 

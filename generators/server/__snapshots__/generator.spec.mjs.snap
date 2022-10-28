@@ -872,21 +872,6 @@ Object {
     },
     Object {
       "condition": [Function],
-      "path": "src/main/resources/",
-      "templates": Array [
-        "config/liquibase/data/user.csv",
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/resources/",
-      "templates": Array [
-        "config/liquibase/data/authority.csv",
-        "config/liquibase/data/user_authority.csv",
-      ],
-    },
-    Object {
-      "condition": [Function],
       "path": "src/main/java/",
       "templates": Array [
         Object {
@@ -1505,24 +1490,6 @@ Object {
         "config/application-tls.yml",
         "config/application-prod.yml",
         "i18n/messages.properties",
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/resources/",
-      "templates": Array [
-        Object {
-          "file": "config/liquibase/changelog/initial_schema.xml",
-          "options": Object {
-            "interpolate": /<%:\\(\\[\\\\s\\\\S\\]\\+\\?\\)%>/g,
-          },
-          "override": [Function],
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "config/liquibase/master.xml",
-          "override": [Function],
-        },
       ],
     },
     Object {

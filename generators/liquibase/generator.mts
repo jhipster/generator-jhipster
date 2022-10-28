@@ -20,13 +20,10 @@ import fs from 'fs';
 
 import BaseApplication from '../base-application/index.mjs';
 import type { DefaultTaskGroup } from '../base-application/tasks.mjs';
-import type { LiquibaseApplication } from '../server/types.mjs';
+import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
 import constants from '../generator-constants.cjs';
-import {
-  GENERATOR_DATABASE_CHANGELOG,
-  GENERATOR_DATABASE_CHANGELOG_LIQUIBASE,
-  GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
-} from '../generator-list.mjs';
+import { GENERATOR_LIQUIBASE, GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
+import { liquibaseFiles } from './files.mjs';
 
 const { JHIPSTER_CONFIG_DIR } = constants;
 
@@ -37,7 +34,7 @@ const BASE_CHANGELOG = {
   removedRelationships: [],
 };
 
-export default class DatabaseChangelogGenerator extends BaseApplication<LiquibaseApplication> {
+export default class DatabaseChangelogGenerator extends BaseApplication<SpringBootApplication> {
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -57,13 +54,16 @@ export default class DatabaseChangelogGenerator extends BaseApplication<Liquibas
   async _postConstruct() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_DATABASE_CHANGELOG);
+      await this.composeWithBlueprints(GENERATOR_LIQUIBASE);
     }
   }
 
-  override get default(): DefaultTaskGroup<this, LiquibaseApplication> {
+  override get default(): DefaultTaskGroup<this, SpringBootApplication> {
     return {
       async calculateChangelogs({ application, entities }) {
+        if (!application.databaseTypeSql || this.options.skipDbChangelog) {
+          return;
+        }
         if (!this.options.entities) {
           this.options.entities = entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
         }
@@ -92,6 +92,24 @@ export default class DatabaseChangelogGenerator extends BaseApplication<Liquibas
 
   get [BaseApplication.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
+  }
+
+  get writing() {
+    return this.asWritingTaskGroup({
+      async writing({ application }) {
+        await this.writeFiles<SpringBootApplication & Record<string, any>>({
+          sections: liquibaseFiles,
+          context: {
+            ...application,
+            recreateInitialChangelog: this.configOptions.recreateInitialChangelog,
+          },
+        });
+      },
+    });
+  }
+
+  get [BaseApplication.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   /* ======================================================================== */

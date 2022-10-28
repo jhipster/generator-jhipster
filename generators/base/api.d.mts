@@ -37,6 +37,7 @@ export type WriteFileTemplate<Generator, DataType> =
       binary?: boolean;
       /** ejs options. Refer to https://ejs.co/#docs */
       options?: Record<string, object>;
+      override?: (this: Generator, data: DataType) => boolean;
     };
 
 export type WriteFileBlock<Generator, DataType> = {
@@ -48,7 +49,7 @@ export type WriteFileBlock<Generator, DataType> = {
   /** generate destinationFile based on sourceFile */
   renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
   /** condition to enable to write the block */
-  condition?: (this: Generator, data: DataType) => boolean | boolean;
+  condition?: (this: Generator, data: DataType) => boolean;
   /** transforms (files processing) to be applied */
   transform?: (() => string)[];
   templates: WriteFileTemplate<Generator, DataType>[];

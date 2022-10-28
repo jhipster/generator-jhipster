@@ -236,18 +236,6 @@ Object {
   "generators/database-changelog-liquibase/templates/template-file-database-changelog-liquibase.ejs": Object {
     "stateCleared": "modified",
   },
-  "generators/database-changelog/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/database-changelog/generator.spec.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/database-changelog/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/database-changelog/templates/template-file-database-changelog.ejs": Object {
-    "stateCleared": "modified",
-  },
   "generators/docker-compose/generator.mjs": Object {
     "stateCleared": "modified",
   },
@@ -411,6 +399,18 @@ Object {
     "stateCleared": "modified",
   },
   "generators/languages/templates/template-file-languages.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase/templates/template-file-liquibase.ejs": Object {
     "stateCleared": "modified",
   },
   "generators/maven/generator.mjs": Object {
