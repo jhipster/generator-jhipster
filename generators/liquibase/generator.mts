@@ -22,7 +22,7 @@ import BaseApplication from '../base-application/index.mjs';
 import type { DefaultTaskGroup } from '../base-application/tasks.mjs';
 import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
 import constants from '../generator-constants.cjs';
-import { GENERATOR_LIQUIBASE, GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
+import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
 
 const { JHIPSTER_CONFIG_DIR } = constants;
@@ -118,7 +118,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
 
   _composeWithIncrementalChangelogProvider(databaseChangelog: any) {
     const skipWriting = this.options.entities.length !== 0 && !this.options.entities.includes(databaseChangelog.entityName);
-    return this.composeWithJHipster(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, {
+    return this.composeWithJHipster(GENERATOR_LIQUIBASE_CHANGELOGS, {
       databaseChangelog,
       skipWriting,
       configOptions: this.configOptions,
