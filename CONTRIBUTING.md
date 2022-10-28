@@ -241,6 +241,8 @@ You can execute `jhipster --install-path` to check where jhipster is been execut
 
 You can test your setup by making a small change in your cloned generator, and running again on an existing JHipster project:
 
+For projects with jhipster third party library (i.e. react-jhipster, ng-jhipster, etc.) you need to run `npm link` on the library project as well, then npm link the original framework (i.e. react) from the generated project to the library project `cd react-jhipster && npm link <path-to-generated-project>/node_modules/react`.
+
 ```shell
 jhipster
 ```
