@@ -474,9 +474,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.springframework.cloud:spring-cloud-starter-gateway"
     implementation "com.github.vladimir-bukhtoyarov:bucket4j-core"
     implementation "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
-  <%_ if (authenticationTypeOauth2 && reactive) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-security"
-  <%_ } _%>
 <%_ } _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
