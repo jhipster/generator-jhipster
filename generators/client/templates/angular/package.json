@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "14.2.7",
+    "@angular/common": "14.2.8",
     "@fortawesome/angular-fontawesome": "0.11.1",
     "@fortawesome/fontawesome-svg-core": "6.2.0",
     "@fortawesome/free-solid-svg-icons": "6.2.0",
@@ -18,7 +18,7 @@
     "zone.js": "0.11.6"
   },
   "devDependencies": {
-    "@angular/cli": "14.2.6",
+    "@angular/cli": "14.2.7",
     "@angular-builders/custom-webpack": "14.0.1",
     "@angular-builders/jest": "14.0.1",
     "@angular-eslint/eslint-plugin": "14.1.2",
@@ -43,7 +43,7 @@
     "ts-jest": "28.0.8",
     "typescript": "4.8.4",
     "webpack": "5.74.0",
-    "webpack-bundle-analyzer": "4.6.1",
+    "webpack-bundle-analyzer": "4.7.0",
     "webpack-merge": "5.8.0",
     "webpack-notifier": "1.15.0"
   }
