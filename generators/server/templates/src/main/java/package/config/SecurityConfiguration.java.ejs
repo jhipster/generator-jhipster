@@ -200,7 +200,12 @@ public class SecurityConfiguration {
 <%_ if (devDatabaseTypeH2Any) { _%>
             .requestMatchers("/h2-console/**").permitAll()
 <%_ } _%>
-            .requestMatchers(<% if (authenticationTypeJwt) { %>HttpMethod.POST, <% } %>"/api/authenticate").permitAll()
+<% if (authenticationTypeJwt) { %>
+            .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
+<% } else { %>
+            .requestMatchers("/api/authenticate").permitAll()
+<% } %>
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
             .requestMatchers("/api/register").permitAll()
             .requestMatchers("/api/activate").permitAll()

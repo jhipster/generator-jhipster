@@ -178,6 +178,7 @@ jhipster:
         base64-secret: <%= jwtSecretKey %>
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 86400
 <%_ } _%>
 <%_ if (authenticationTypeSession && !reactive) { _%>
   security:

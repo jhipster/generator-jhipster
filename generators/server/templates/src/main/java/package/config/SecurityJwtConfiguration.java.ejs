@@ -80,6 +80,8 @@ public class SecurityJwtConfiguration {
                     metersService.trackTokenExpired();
                 } else if (e.getMessage().contains("Invalid JWT serialization")) {
                     metersService.trackTokenMalformed();
+                } else if (e.getMessage().contains("Invalid unsecured/JWS/JWE")) {
+                    metersService.trackTokenMalformed();
                 }
                 throw e;
             }
