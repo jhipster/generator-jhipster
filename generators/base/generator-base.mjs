@@ -25,7 +25,6 @@ import shelljs from 'shelljs';
 import semver from 'semver';
 import { exec } from 'child_process';
 import os from 'os';
-import normalize from 'normalize-path';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -60,6 +59,12 @@ import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
+import locateGenerator from './generator/blueprint-structure/generator-locator.mjs';
+import isBuiltInUser from './generator/config/user.mjs';
+import isUsingBuiltInAuthority from './generator/config/authority.mjs';
+import entityIsAuthority from './generator/entity/authority-checker.mjs';
+import getOutputPathCustomizer from './generator/output/resolver.mjs';
+import { applyPathCustomizer, normalizeOutputPath } from './generator/output/path.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -203,12 +208,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @returns {string}
    */
   jhipsterTemplatePath(...args) {
-    try {
-      this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
-    } catch (error) {
-      const split = this.options.namespace.split(':', 2);
-      this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
-    }
+    this._jhipsterGenerator = locateGenerator(this._jhipsterGenerator, this.env, this.options);
     return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
   }
 
@@ -255,11 +255,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @return {boolean} true if the User is built-in.
    */
   isUsingBuiltInUser() {
-    return (
-      !this.jhipsterConfig ||
-      (!this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.databaseType !== NO_DATABASE) ||
-      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
-    );
+    return isBuiltInUser(this.jhipsterConfig);
   }
 
   /**
@@ -288,11 +284,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @return {boolean} true if the Authority is built-in.
    */
   isUsingBuiltInAuthority() {
-    return (
-      !this.jhipsterConfig ||
-      (!this.jhipsterConfig.skipUserManagement && [SQL, MONGODB, COUCHBASE, NEO4J].includes(this.jhipsterConfig.databaseType)) ||
-      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
-    );
+    return isUsingBuiltInAuthority(this.jhipsterConfig);
   }
 
   /**
@@ -302,7 +294,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @return {boolean} true if the entity is Authority.
    */
   isAuthorityEntity(entityName) {
-    return _.upperFirst(entityName) === 'Authority';
+    return entityIsAuthority(entityName);
   }
 
   /**
@@ -322,21 +314,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} outputPath - Path to customize.
    */
   applyOutputPathCustomizer(outputPath) {
-    let outputPathCustomizer = this.options.outputPathCustomizer;
-    if (!outputPathCustomizer && this.configOptions) {
-      outputPathCustomizer = this.configOptions.outputPathCustomizer;
-    }
+    const outputPathCustomizer = getOutputPathCustomizer(this.options, this.jhipsterConfig);
     if (!outputPathCustomizer) {
       return outputPath;
     }
-    outputPath = outputPath ? normalize(outputPath) : outputPath;
-    if (Array.isArray(outputPathCustomizer)) {
-      outputPathCustomizer.forEach(customizer => {
-        outputPath = customizer.call(this, outputPath);
-      });
-      return outputPath;
-    }
-    return outputPathCustomizer.call(this, outputPath);
+    outputPath = normalizeOutputPath(outputPath);
+    return applyPathCustomizer(this, outputPath, outputPathCustomizer);
   }
 
   /**
