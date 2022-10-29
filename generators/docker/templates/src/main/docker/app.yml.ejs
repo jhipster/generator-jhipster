@@ -75,7 +75,9 @@ _%>
 <%_ if (databaseTypeCassandra) { _%>
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
 <%_ } _%>
-<%_ if (applicationTypeGateway) { _%>
+<%_ if (databaseTypeCassandra) { _%>
+      - JHIPSTER_SLEEP=10 # Let migration complete
+<%_ } else if (applicationTypeGateway) { _%>
       - JHIPSTER_SLEEP=10 # Let microservices to start before
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>

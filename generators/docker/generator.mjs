@@ -71,7 +71,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
         application.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
       },
 
-      sayHello({ application, source }) {
+      addAppServices({ application, source }) {
         source.addDockerExtendedServiceToApplicationAndServices = (...services) => {
           const extendedServices = createDockerExtendedServices(...services);
           this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedServices);
@@ -134,7 +134,6 @@ export default class DockerGenerator extends BaseApplicationGenerator {
             { serviceName },
             { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' }
           );
-          source.addDockerExtendedServiceToServices({ serviceFile: './cassandra.yml', serviceName: 'hello' });
           source.addDockerDependencyToApplication(
             { serviceName, condition: SERVICE_HEALTHY },
             { serviceName: 'cassandra-migration', condition: SERVICE_COMPLETED_SUCCESSFULLY }
