@@ -57,7 +57,6 @@ if [ -f "mvnw" ]; then
     ./mvnw -ntp -P-webapp verify $JHI_MAVEN_ENABLE_TESTCONTAINERS --batch-mode \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.testcontainers=INFO \
-        -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.tech.jhipster=OFF \
         -Dlogging.level.tech.jhipster.sample=OFF \
         -Dlogging.level.org.springframework=OFF \
@@ -68,7 +67,6 @@ elif [ -f "gradlew" ]; then
     ./gradlew test integrationTest $JHI_GRADLE_EXCLUDE_WEBPACK $JHI_GRADLE_ENABLE_TESTCONTAINERS \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.testcontainers=INFO \
-        -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.tech.jhipster=OFF \
         -Dlogging.level.tech.jhipster.sample=OFF \
         -Dlogging.level.org.springframework=OFF \
