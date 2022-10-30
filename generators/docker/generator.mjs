@@ -172,7 +172,6 @@ export default class DockerGenerator extends BaseApplicationGenerator {
               depends_on,
             },
           });
-          // extendedEurekaServices.services['jhipster-registry'].environment = ['JHIPSTER_SLEEP=20'];
 
           source.addDockerDependencyToApplication({ serviceName: 'jhipster-registry', condition: SERVICE_HEALTHY });
         }
