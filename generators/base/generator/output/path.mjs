@@ -18,17 +18,16 @@
  */
 import normalize from 'normalize-path';
 
-export const normalizeOutputPath = (outputPath: any): any => {
+export const normalizeOutputPath = outputPath => {
   return outputPath ? normalize(outputPath) : outputPath;
 };
 
-export const applyPathCustomizer = (context: any, outputPath: any, outputPathCustomizer: any): any => {
+export const applyPathCustomizer = (context, outputPath, outputPathCustomizer) => {
   if (Array.isArray(outputPathCustomizer)) {
-    let outputhPathApplied = outputPath;
     outputPathCustomizer.forEach(customizer => {
-      outputhPathApplied = customizer.call(context, outputhPathApplied);
+      outputPath = customizer.call(context, outputPath);
     });
-    return outputhPathApplied;
+    return outputPath;
   }
   return outputPathCustomizer.call(context, outputPath);
 };

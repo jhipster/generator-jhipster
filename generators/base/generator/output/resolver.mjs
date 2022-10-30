@@ -16,17 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { OAUTH2 } from '../../../../jdl/jhipster/authentication-types.js';
-import databaseTypes from '../../../../jdl/jhipster/database-types.js';
-
-const { COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
-
-const isUsingBuiltInAuthorityConfiguration = (config: any): boolean => {
-  return (
-    config ||
-    (!config.skipUserManagement && [SQL, MONGODB, COUCHBASE, NEO4J].includes(config.databaseType)) ||
-    (config.authenticationType === OAUTH2 && config.databaseType !== NO_DATABASE)
-  );
+const getOutputPathCustomizer = (options, configOptions) => {
+  let outputPathCustomizer = options.outputPathCustomizer;
+  if (!outputPathCustomizer && configOptions) {
+    outputPathCustomizer = configOptions.outputPathCustomizer;
+  }
+  return outputPathCustomizer;
 };
 
-export default isUsingBuiltInAuthorityConfiguration;
+export default getOutputPathCustomizer;

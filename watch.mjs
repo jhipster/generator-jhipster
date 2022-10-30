@@ -18,7 +18,6 @@ const chokidarConfig = {
 const copy = (event, path) => {
   if (['add', 'change'].includes(event)) {
     copyFileSync(join(__dirname, path), join(__dirname, 'dist', path));
-    // eslint-disable-next-line no-console
     console.log(event, path);
   }
 };

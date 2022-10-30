@@ -16,12 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const getOutputPathCustomizer = (options: any, configOptions: any): any => {
-  let outputPathCustomizer = options.outputPathCustomizer;
-  if (!outputPathCustomizer && configOptions) {
-    outputPathCustomizer = configOptions.outputPathCustomizer;
-  }
-  return outputPathCustomizer;
+import isUsingBuiltInCommonEntityConfiguration from './entities.mjs';
+
+const isBuiltInUserConfiguration = config => {
+  return isUsingBuiltInCommonEntityConfiguration(config);
 };
 
-export default getOutputPathCustomizer;
+export default isBuiltInUserConfiguration;

@@ -59,12 +59,16 @@ import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
-import locateGenerator from './generator/blueprint-structure/generator-locator.mjs';
-import isBuiltInUserConfiguration from './generator/config/user.mjs';
-import isUsingBuiltInAuthorityConfiguration from './generator/config/authority.mjs';
-import entityIsAuthority from './generator/entity/authority-checker.mjs';
-import getOutputPathCustomizer from './generator/output/resolver.mjs';
 import { applyPathCustomizer, normalizeOutputPath } from './generator/output/path.mjs';
+import {
+  applyPathCustomizer,
+  locateGenerator,
+  normalizeOutputPath,
+  getOutputPathCustomizer,
+  isBuiltInUserConfiguration,
+  isUsingBuiltInAuthorityConfiguration,
+  entityIsAuthority,
+} from './generator/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -314,7 +318,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} outputPath - Path to customize.
    */
   applyOutputPathCustomizer(outputPath) {
-    const outputPathCustomizer = getOutputPathCustomizer(this.options, this.jhipsterConfig);
+    const outputPathCustomizer = getOutputPathCustomizer(this.options, this.configOptions);
     if (!outputPathCustomizer) {
       return outputPath;
     }

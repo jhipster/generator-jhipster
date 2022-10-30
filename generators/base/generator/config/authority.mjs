@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import isUsingBuiltInCommonEntityConfiguration from './entities.mjs';
 
-const entityIsAuthority = (entityName: string): boolean => {
-  return _.upperFirst(entityName) === 'Authority';
+const isUsingBuiltInAuthorityConfiguration = config => {
+  return isUsingBuiltInCommonEntityConfiguration(config);
 };
-export default entityIsAuthority;
+
+export default isUsingBuiltInAuthorityConfiguration;

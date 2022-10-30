@@ -25,7 +25,7 @@ import { fileURLToPath } from 'url';
 
 import EnvironmentBuilder from '../../cli/environment-builder.cjs';
 import Generator from './index.mjs';
-import type { BaseApplication } from './types.d.mjs';
+import type BaseApplication from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 const { snakeCase } = lodash;

@@ -16,18 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import authenticationTypes from '../../../../jdl/jhipster/authentication-types.js';
-import databaseTypes from '../../../../jdl/jhipster/database-types.js';
-
-const { NO: NO_DATABASE } = databaseTypes;
-const { OAUTH2 } = authenticationTypes;
-
-const isBuiltInUserConfiguration = (config: any): boolean => {
-  return (
-    !config ||
-    (!config.skipUserManagement && config.databaseType !== NO_DATABASE) ||
-    (config.authenticationType === OAUTH2 && config.databaseType !== NO_DATABASE)
-  );
+const locateGenerator = (generator, env, options) => {
+  let existingGenerator;
+  try {
+    existingGenerator = generator || env.requireNamespace(options.namespace).generator;
+  } catch (error) {
+    const split = options.namespace.split(':', 2);
+    existingGenerator = split.length === 1 ? split[0] : split[1];
+  }
+  return existingGenerator;
 };
 
-export default isBuiltInUserConfiguration;
+export default locateGenerator;

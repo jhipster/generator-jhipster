@@ -76,7 +76,6 @@ export const extendMatrix = (matrix, configMatrix) => {
 
 export const extendFilteredMatrix = (matrix, filter, extendedConfig) => {
   const matrixEntries = Object.entries(matrix);
-  // eslint-disable-next-line no-unused-vars
   const filteredEntries = matrixEntries.filter(([_name, sample]) => filter(sample));
   applyExtendedMatrix(filteredEntries, extendedConfig);
   return Object.fromEntries(matrixEntries);

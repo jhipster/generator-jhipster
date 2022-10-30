@@ -117,6 +117,7 @@
     "shelljs": "0.8.5",
     "simple-git": "3.14.1",
     "then-request": "6.0.2",
+    "ts-node": "^10.9.1",
     "uuid": "9.0.0",
     "winston": "3.8.2",
     "yaml": "2.1.3",
