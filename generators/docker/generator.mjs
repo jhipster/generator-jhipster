@@ -190,17 +190,13 @@ export default class DockerGenerator extends BaseApplicationGenerator {
         }
       },
 
-      packageJsonDockerScripts({ application }) {
+      packageJsonScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const { databaseType, databaseTypeSql, prodDatabaseType, prodDatabaseTypeNo, prodDatabaseTypeMysql, prodDatabaseTypeOracle } =
           application;
+        let postServicesSleep;
 
         if (databaseTypeSql) {
-          if (prodDatabaseTypeMysql) {
-            scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && sleep 20 && echo "MySQL started"`,
-            });
-          }
           if (prodDatabaseTypeNo || prodDatabaseTypeOracle) {
             scriptsStorage.set(
               'docker:db:up',
@@ -217,10 +213,13 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           const dockerFile = `${application.dockerServicesDir}${databaseType}.yml`;
           if (this.fs.exists(this.destinationPath(dockerFile))) {
             scriptsStorage.set({
-              'docker:db:build': `docker compose -f ${dockerFile} build`,
               'docker:db:up': `docker compose -f ${dockerFile} up --wait`,
               'docker:db:down': `docker compose -f ${dockerFile} down -v`,
             });
+            if (application.databaseTypeCassandra) {
+              // Wait for migration
+              postServicesSleep = 5;
+            }
           } else {
             scriptsStorage.set(
               'docker:db:up',
@@ -237,9 +236,14 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           }
         });
 
+        if (postServicesSleep) {
+          scriptsStorage.set({
+            'postservices:up': `sleep ${postServicesSleep}`,
+          });
+        }
         scriptsStorage.set({
           'services:up': `docker compose -f ${application.dockerServicesDir}services.yml up --wait`,
-          'docker:app:up': `docker compose -f ${application.dockerServicesDir}app.yml up --wait`,
+          'app:up': `docker compose -f ${application.dockerServicesDir}app.yml up --wait`,
           'ci:e2e:prepare:docker': 'npm run services:up && docker ps -a',
           'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',
           'ci:e2e:teardown:docker': `docker compose -f ${application.dockerServicesDir}services.yml down -v && docker ps -a`,
