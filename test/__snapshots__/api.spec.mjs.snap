@@ -45,6 +45,7 @@ Object {
   "GENERATOR_SPRING_CONTROLLER": "spring-controller",
   "GENERATOR_SPRING_SERVICE": "spring-service",
   "GENERATOR_UPGRADE": "upgrade",
+  "GENERATOR_VUE": "vue",
   "GENERATOR_WORKSPACES": "workspaces",
 }
 `;
