@@ -277,7 +277,7 @@
 <%_ if (cacheProviderInfinispan) { _%>
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-hibernate-cache-v53</artifactId>
+            <artifactId>infinispan-hibernate-cache-v60</artifactId>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
@@ -285,7 +285,7 @@
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-core</artifactId>
+            <artifactId>infinispan-core-jakarta</artifactId>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
@@ -673,10 +673,6 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
-        <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>problem-spring-web<% if (reactive) { %>flux<%_ } _%></artifactId>
-        </dependency>
 <%_ if (!reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -1355,7 +1351,6 @@
                                 <apiPackage><%= packageName %>.web.api</apiPackage>
                                 <modelPackage><%= packageName %>.service.api.dto</modelPackage>
                                 <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
-                                <importMappings>Problem=org.zalando.problem.Problem</importMappings>
                                 <skipValidateSpec>false</skipValidateSpec>
                                 <configOptions>
   <%_ if (reactive) { _%>

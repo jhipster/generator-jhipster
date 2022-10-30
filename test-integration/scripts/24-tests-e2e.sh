@@ -78,7 +78,6 @@ if [ "$JHI_RUN_APP" == 1 ]; then
             -jar app.war \
             --spring.profiles.active="$JHI_PROFILE" \
             --logging.level.ROOT=OFF \
-            --logging.level.org.zalando=OFF \
             --logging.level.org.springframework.web=ERROR \
             --logging.level.tech.jhipster=OFF \
             --logging.level.tech.jhipster.sample=OFF &
@@ -88,7 +87,6 @@ if [ "$JHI_RUN_APP" == 1 ]; then
             -jar app.jar \
             --spring.profiles.active="$JHI_PROFILE" \
             --logging.level.ROOT=OFF \
-            --logging.level.org.zalando=OFF \
             --logging.level.org.springframework.web=ERROR \
             --logging.level.tech.jhipster=OFF \
             --logging.level.tech.jhipster.sample=OFF &

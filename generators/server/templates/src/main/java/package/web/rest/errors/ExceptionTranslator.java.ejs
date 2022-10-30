@@ -18,6 +18,8 @@
 -%>
 package <%= packageName %>.web.rest.errors;
 
+import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
+
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.web.util.HeaderUtil;
 
@@ -35,40 +37,48 @@ import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.stereotype.Component;
 <%_ } _%>
 import org.springframework.validation.BindingResult;
-<%_ if (!reactive) { _%>
-import org.springframework.web.bind.MethodArgumentNotValidException;
-<%_ } _%>
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 <%_ if (reactive) { _%>
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.http.MediaType;
+import tech.jhipster.web.rest.errors.ExceptionTranslation;
+import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 <%_ } _%>
 import org.springframework.core.env.Environment;
-import org.zalando.problem.DefaultProblem;
-import org.zalando.problem.Problem;
-import org.zalando.problem.ProblemBuilder;
-import org.zalando.problem.Status;
-import org.zalando.problem.StatusType;
-import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.ProblemHandling;
-import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.security.SecurityAdviceTrait;
-import org.zalando.problem.violations.ConstraintViolationProblem;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import tech.jhipster.web.rest.errors.ProblemDetailWithCause;
+import tech.jhipster.web.rest.errors.ProblemDetailWithCause.ProblemDetailWithCauseBuilder;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 <%_ if (!reactive) { _%>
 import jakarta.servlet.http.HttpServletRequest;
 <%_ } _%>
 import java.net.URI;
+import java.util.List;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -76,21 +86,24 @@ import java.util.stream.Collectors;
  * Controller advice to translate the server side exceptions to client-friendly json structures.
  * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807).
  */
-// @ControllerAdvice
+@ControllerAdvice
 <%_ if (databaseTypeSql && reactive) { _%>
-// @Component("jhiExceptionTranslator")
+@Component("jhiExceptionTranslator")
 <%_ } _%>
-public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
+public class ExceptionTranslator extends ResponseEntityExceptionHandler <% if (reactive) { %> implements ExceptionTranslation <% }  %>{
 
 <%_
 let returnType;
 let requestClass;
+let requestEntityRequestClass;
 if (reactive) {
-    returnType = 'Mono<ResponseEntity<Problem>>';
+    returnType = 'Mono<ResponseEntity<Object>>';
     requestClass = 'ServerWebExchange';
+    requestEntityRequestClass = 'ServerWebExchange'
 } else {
-    returnType = 'ResponseEntity<Problem>';
+    returnType = 'ResponseEntity<Object>';
     requestClass = 'NativeWebRequest';
+    requestEntityRequestClass = 'WebRequest';
 }
 _%>
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
@@ -106,162 +119,216 @@ _%>
     public ExceptionTranslator(Environment env) {
         this.env = env;
     }
+    
+    @ExceptionHandler
+    <%_ if (reactive) { _%>@Override<%_ } _%>
+    public <%- returnType %> handleAnyException(Throwable ex, <%= requestClass %> request
+    ) {
+        ProblemDetailWithCause pdCause = wrapAndCustemizeProblem(ex, request);
+        return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex, request), HttpStatusCode.valueOf(pdCause.getStatus()), request);
+    }
 
-    /**
-     * Post-process the Problem payload to add the message key for the front-end if needed.
-     */
+    @Nullable
     @Override
-    public <%- returnType %> process(@Nullable ResponseEntity<Problem> entity, <%= requestClass %> request) {
-        if (entity == null) {
-<%_ if (reactive) { _%>
-            return Mono.empty();
-<%_ } else { _%>
-            return null;
-<%_ } _%>
+    protected <%- returnType %> handleExceptionInternal(
+            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, <%= requestEntityRequestClass %> request) {
+        body = body == null ? wrapAndCustemizeProblem((Throwable) ex, (<%= requestClass %>) request) : body;
+    <%_ if (reactive) { _%>
+        if (request.getResponse().isCommitted()) {
+            return Mono.error(ex);
         }
-        Problem problem = entity.getBody();
-        if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {
-<%_ if (reactive) { _%>
-            return Mono.just(entity);
-<%_ } else { _%>
-            return entity;
+        return Mono.just(new ResponseEntity<>(body, updateContentType(headers), HttpStatusCode.valueOf(((ProblemDetailWithCause) body).getStatus())));
+    <%_ } else { _%>
+        return super.handleExceptionInternal(ex, body, headers, statusCode, request);
+    <%_ } _%>
+    }
+
+    protected ProblemDetailWithCause wrapAndCustemizeProblem(Throwable ex, <%= requestClass %> request) {
+        return custemizeProblem(getProblemDetailWithCause(ex), ex, request);
+    }
+
+    private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
+<%_ if (!skipUserManagement) { _%>
+        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException)
+            return new EmailAlreadyUsedException().getProblemDetailWithCause();
+        if(ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException )
+            return new LoginAlreadyUsedException().getProblemDetailWithCause();
+        if(ex instanceof <%= packageName %>.service.InvalidPasswordException )
+            return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
 <%_ } _%>
+        if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause)
+            return (ProblemDetailWithCause) exp.getBody();
+        return ProblemDetailWithCauseBuilder.instance().withStatus(toStatus(ex).value()).build();
+    }
+
+    protected ProblemDetailWithCause custemizeProblem(ProblemDetailWithCause problem, Throwable err, <%= requestClass %> request) {
+        if (problem.getStatus() <= 0) problem.setStatus(toStatus(err));
+        
+        if (problem.getType() == null || problem.getType().equals(URI.create("about:blank"))) problem.setType(getMappedType(err));
+        
+        // higher precedence to Custom/ResponseStatus types
+        String title = extractTitle(err, problem.getStatus());
+        if (problem.getTitle() == null || !problem.getTitle().equals(title)) {
+        	problem.setTitle(title);
         }
+        
+        if (problem.getDetail() == null) {
+            // higher precedence to cause
+        	problem.setDetail(getCustemizedErrorDetails(err));
+        }
+        
+        if (problem.getProperties() == null || !problem.getProperties().containsKey(MESSAGE_KEY)) 
+        	problem.setProperty(MESSAGE_KEY,
+                getMappedMessageKey((Throwable) err) != null
+                    ? getMappedMessageKey(err)
+                    : "error.http." + problem.getStatus());
+        
+        if (problem.getProperties() == null || !problem.getProperties().containsKey(PATH_KEY)) 
+            problem.setProperty(PATH_KEY, getPathValue(request));
+        
+        if((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %>) && 
+                (problem.getProperties() == null || !problem.getProperties().containsKey(FIELD_ERRORS_KEY)))
+            problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors((<% if (reactive) { %>WebExchangeBindException<% } else { %>MethodArgumentNotValidException<% } %>) err));
+    
+        problem.setCause(buildCause(err.getCause(), request).orElse(null));
+
+        return problem;
+    }
+
+    private String extractTitle(Throwable err, int statusCode) {
+        return getCustemizedTitle(err) != null ? getCustemizedTitle(err) : extractTitleForResponseStatus(err, statusCode);
+    }
+
+    private List<FieldErrorVM> getFieldErrors(<% if (reactive) { %>WebExchangeBindException<% } else { %>MethodArgumentNotValidException<% } %> ex) {
+        return ex.getBindingResult()
+            .getFieldErrors()
+            .stream()
+            .map(f ->
+                new FieldErrorVM(
+                    f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""),
+                    f.getField(),
+                    StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()
+                )
+            )
+            .collect(Collectors.toList());
+    }
+
+    private String extractTitleForResponseStatus(Throwable err, int statusCode) {
+        ResponseStatus specialStatus = extractResponseStatus(err);
+        String title = specialStatus == null ? HttpStatus.valueOf(statusCode).getReasonPhrase() : specialStatus.reason();
+        return title;
+    }
 
 <%_ if (!reactive) { _%>
+    private String extractURI(<%= requestClass %> request) {
         HttpServletRequest nativeRequest = request.getNativeRequest(HttpServletRequest.class);
         String requestUri = nativeRequest != null ? nativeRequest.getRequestURI() : StringUtils.EMPTY;
+        return requestUri;
+    }
 <%_ } _%>
-        ProblemBuilder builder = Problem.builder()
-            .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
-            .withStatus(problem.getStatus())
-            .withTitle(problem.getTitle())
-<%_ if (reactive) { _%>
-            .with(PATH_KEY, request.getRequest().getPath().value());
-<%_ } else { _%>
-            .with(PATH_KEY, requestUri);
-<%_ } _%>
+    private HttpStatus toStatus(final Throwable throwable) {
+        // Let the ErrorResponse take this responsibility
+        if (throwable instanceof ErrorResponse err) return HttpStatus.valueOf(err.getBody().getStatus());
 
-        if (problem instanceof ConstraintViolationProblem) {
-            builder
-                .with(VIOLATIONS_KEY, ((ConstraintViolationProblem) problem).getViolations())
-                .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION);
-        } else {
-            builder
-                .withCause(((DefaultProblem) problem).getCause())
-                .withDetail(problem.getDetail())
-                .withInstance(problem.getInstance());
-            problem.getParameters().forEach(builder::with);
-            if (!problem.getParameters().containsKey(MESSAGE_KEY) && problem.getStatus() != null) {
-                builder.with(MESSAGE_KEY, "error.http." + problem.getStatus().getStatusCode());
-            }
-        }
-        return <% if (reactive) { %>Mono.just(<% } %>new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode())<% if (reactive) { %>)<% } %>;
+        return Optional
+                .ofNullable(getMappedStatus(throwable))
+                .orElse(Optional
+                        .ofNullable(resolveResponseStatus(throwable))
+                        .map(response -> response.value())
+                        .orElse(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-    @Override
-    public <%- returnType %> handle<%_ if (reactive) { _%>BindingResult(WebExchangeBindException<% } else { %>MethodArgumentNotValid(MethodArgumentNotValidException<% } %> ex, @Nonnull <%= requestClass %> request) {
-        BindingResult result = ex.getBindingResult();
-        List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
-            .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""), f.getField(), StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()))
-            .collect(Collectors.toList());
-
-        Problem problem = Problem.builder()
-            .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
-            .withTitle("<%_ if (reactive) { _%>Data binding and validation failure<% } else { %>Method argument not valid<% } %>")
-            .withStatus(<% if (reactive) { %>Status.BAD_REQUEST<% } else { %>defaultConstraintViolationStatus()<% } %>)
-            .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION)
-            .with(FIELD_ERRORS_KEY, fieldErrors)
-            .build();
-        return create(ex, problem, request);
-    }
-    <%_ if (!skipUserManagement) { _%>
-
-    @ExceptionHandler
-    public <%- returnType %> handleEmailAlreadyUsedException(<%= packageName %>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
-        EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+    private ResponseStatus extractResponseStatus(final Throwable throwable) {
+        return Optional.ofNullable(resolveResponseStatus(throwable))
+                .orElse(null);
     }
 
-    @ExceptionHandler
-    public <%- returnType %> handleUsernameAlreadyUsedException(<%= packageName %>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
-        LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+    private ResponseStatus resolveResponseStatus(final Throwable type) {
+        final ResponseStatus candidate = findMergedAnnotation(type.getClass(), ResponseStatus.class);
+        return candidate == null && type.getCause() != null ? resolveResponseStatus(type.getCause()) : candidate;
     }
 
-    @ExceptionHandler
-    public <%- returnType %> handleInvalidPasswordException(<%= packageName %>.service.InvalidPasswordException ex, <%= requestClass %> request) {
-        return create(new InvalidPasswordException(), request);
+    private URI getMappedType(Throwable err) {
+        if(err instanceof MethodArgumentNotValidException exp)
+            return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
+        return ErrorConstants.DEFAULT_TYPE;
     }
+    
+    private String getMappedMessageKey(Throwable err) {
+        if(err instanceof MethodArgumentNotValidException)
+            return ErrorConstants.ERR_VALIDATION;
+    <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
+        else if(err instanceof ConcurrencyFailureException 
+                || err.getCause() != null && err.getCause() instanceof ConcurrencyFailureException)
+            return ErrorConstants.ERR_CONCURRENCY_FAILURE;
     <%_ } _%>
-
-    @ExceptionHandler
-    public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
-        return create(ex, request, HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+    <%_ if (reactive) { _%>
+        else if (err instanceof WebExchangeBindException) return ErrorConstants.ERR_VALIDATION;
+    <%_ } _%>
+        return null;
     }
-<%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
-
-    @ExceptionHandler
-    public <%- returnType %> handleConcurrencyFailure(ConcurrencyFailureException ex, <%= requestClass %> request) {
-        Problem problem = Problem.builder()
-            .withStatus(Status.CONFLICT)
-            .with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
-            .build();
-        return create(ex, problem, request);
+    
+    private String getCustemizedTitle(Throwable err) {
+        if(err instanceof MethodArgumentNotValidException exp)
+            return "Method argument not valid";
+        return null;
     }
-<%_ } _%>
 
-    @Override
-    public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
-        Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-
-        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
-            if (throwable instanceof HttpMessageConversionException) {
-                return Problem.builder()
-                    .withType(type)
-                    .withTitle(status.getReasonPhrase())
-                    .withStatus(status)
-                    .withDetail("Unable to convert http message")
-                    .withCause(Optional.ofNullable(throwable.getCause())
-                        .filter(cause -> isCausalChainsEnabled())
-                        .map(this::toProblem)
-                        .orElse(null));
-            }
-<%_ if (!databaseTypeNo) { _%>
-            if (throwable instanceof DataAccessException) {
-                return Problem.builder()
-                    .withType(type)
-                    .withTitle(status.getReasonPhrase())
-                    .withStatus(status)
-                    .withDetail("Failure during data access")
-                    .withCause(Optional.ofNullable(throwable.getCause())
-                        .filter(cause -> isCausalChainsEnabled())
-                        .map(this::toProblem)
-                        .orElse(null));
-            }
-<%_ } _%>
-            if (containsPackageName(throwable.getMessage())) {
-                return Problem.builder()
-                    .withType(type)
-                    .withTitle(status.getReasonPhrase())
-                    .withStatus(status)
-                    .withDetail("Unexpected runtime exception")
-                    .withCause(Optional.ofNullable(throwable.getCause())
-                        .filter(cause -> isCausalChainsEnabled())
-                        .map(this::toProblem)
-                        .orElse(null));
-            }
+    private String getCustemizedErrorDetails(Throwable err) {
+    	Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
+    	if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+	        if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
+    <%_ if (!databaseTypeNo) { _%>
+	        if (err instanceof DataAccessException) return "Failure during data access";
+    <%_ } _%>
+	        if (containsPackageName(err.getMessage())) return "Unexpected runtime exception";
         }
+    	return err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
+    }
+    
+    private HttpStatus getMappedStatus(Throwable err) {
+        // Where we disagree with Spring defaults
+        if (err instanceof AccessDeniedException accDenied) return HttpStatus.FORBIDDEN;
+    <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
+        if(err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
+    <%_ } _%>    
+        if(err instanceof BadCredentialsException) return HttpStatus.UNAUTHORIZED;
+    <%_ if (reactive) { _%>
+        if (err instanceof UsernameNotFoundException) return HttpStatus.UNAUTHORIZED;
+    <%_ } _%>
+        return null;
+    }
+    
+    private URI getPathValue(<%= requestClass %> request) {
+        if(request == null) return URI.create("about:blank");
+        return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI((NativeWebRequest) request))<% } %>;
+    }
 
-        return Problem.builder()
-            .withType(type)
-            .withTitle(status.getReasonPhrase())
-            .withStatus(status)
-            .withDetail(throwable.getMessage())
-            .withCause(Optional.ofNullable(throwable.getCause())
-                .filter(cause -> isCausalChainsEnabled())
-                .map(this::toProblem)
-                .orElse(null));
+    private HttpHeaders buildHeaders(Throwable err, <%= requestClass %> request) {
+        return err instanceof BadRequestAlertException ? 
+                HeaderUtil.createFailureAlert(applicationName, true, ((BadRequestAlertException) err).getEntityName(),
+                        ((BadRequestAlertException) err).getErrorKey(), ((BadRequestAlertException) err).getMessage()) : null;
+    }
+<%_ if (reactive) { _%>
+    private HttpHeaders updateContentType(HttpHeaders headers) {
+        if(headers == null) {
+            headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+        }
+        return headers;
+    }
+<%_ } _%>
+
+    public Optional<ProblemDetailWithCause> buildCause(final Throwable throwable, <%= requestClass %> request) {
+        if(throwable != null && isCasualChainEnabled()) {
+            return Optional.of(custemizeProblem(getProblemDetailWithCause(throwable), throwable, request));
+        }
+        return Optional.ofNullable(null);
+    }
+
+    private boolean isCasualChainEnabled() {
+        // Customize as per the needs
+        return false;
     }
 
     private boolean containsPackageName(String message) {
@@ -269,4 +336,5 @@ _%>
         // This list is for sure not complete
         return StringUtils.containsAny(message, "org.", "java.", "net.", "jakarta.", "javax.", "com.", "io.", "de.", "<%= packageName %>");
     }
+
 }

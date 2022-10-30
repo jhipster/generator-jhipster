@@ -17,7 +17,9 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-
+<%_ if (!reactive) { _%>
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import <%= packageName %>.repository.UserRepository;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,6 +30,11 @@ public class JwtAuthenticationTestUtils {
 <%_ if (!reactive) { _%>
 
     public static final String BEARER = "Bearer ";
+
+    @Bean
+    private HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
+        return new HandlerMappingIntrospector();
+    } 
 <%_ } _%>
 
     @Bean
