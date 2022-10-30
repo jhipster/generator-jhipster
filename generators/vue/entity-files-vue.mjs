@@ -18,7 +18,6 @@
  */
 import constants from '../generator-constants.cjs';
 import { replaceVueTranslations } from './transform-vue.mjs';
-import { addEnumerationFiles } from '../client/entity-files.mjs';
 
 const { CLIENT_TEST_SRC_DIR, VUE_DIR } = constants;
 
@@ -109,8 +108,6 @@ export const entityFiles = {
 
 export async function writeEntityFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
-    await addEnumerationFiles.call(this, { application, entity }, VUE_DIR);
-
     await this.writeFiles({
       sections: entityFiles,
       transform: !application.enableTranslation ? [replaceVueTranslations] : undefined,

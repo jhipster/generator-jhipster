@@ -17,15 +17,11 @@
  * limitations under the License.
  */
 import utils from '../utils.cjs';
-import constants from '../generator-constants.cjs';
-
-/* Constants use throughout */
-const { ANGULAR } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 
 const CLIENT_COMMON_TEMPLATES_DIR = 'entity/common';
 
-// eslint-disable-next-line import/prefer-default-export
-export async function addEnumerationFiles({ application, entity }, clientFolder) {
+async function addEnumerationFiles({ application, entity }) {
   for (const field of entity.fields) {
     if (field.fieldIsEnum === true) {
       const { enumFileName } = field;
@@ -33,21 +29,26 @@ export async function addEnumerationFiles({ application, entity }, clientFolder)
         ...utils.getEnumInfo(field, entity.clientRootFolder),
         frontendAppName: application.frontendAppName,
         packageName: application.packageName,
+        clientEnumerationsDir: application.clientEnumerationsDir,
       };
-      if (!entity.skipClient) {
-        const modelPath = application.clientFramework === ANGULAR ? 'entities' : 'shared/model';
-        const destinationFile = this.destinationPath(`${clientFolder}${modelPath}/enumerations/${enumFileName}.model.ts`);
-        await this.writeFiles({
-          templates: [
-            {
-              sourceFile: `${clientFolder}entities/enumerations/enum.model.ts`,
-              destinationFile,
-            },
-          ],
-          rootTemplatesPath: [CLIENT_COMMON_TEMPLATES_DIR],
-          context: enumInfo,
-        });
-      }
+      await this.writeFiles({
+        templates: [
+          {
+            sourceFile: `${CLIENT_MAIN_SRC_DIR}app/entities/enumerations/enum.model.ts`,
+            destinationFile: ctx => `${application.clientEnumerationsDir}${enumFileName}.model.ts`,
+          },
+        ],
+        rootTemplatesPath: [CLIENT_COMMON_TEMPLATES_DIR],
+        context: enumInfo,
+      });
     }
+  }
+}
+
+// eslint-disable-next-line import/prefer-default-export
+export async function writeEnumerationFiles({ application, entities }) {
+  if (!application.clientEnumerationsDir) return;
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+    await addEnumerationFiles.call(this, { application, entity });
   }
 }

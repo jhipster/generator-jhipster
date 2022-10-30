@@ -47,6 +47,18 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     return this.asLoadingTaskGroup(this.delegateTasksToBlueprint(() => this.loading));
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      prepareForTemplates({ application }) {
+        application.clientEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
+      },
+    });
+  }
+
+  get [BaseApplication.PREPARING]() {
+    return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
+  }
+
   get writing() {
     return {
       cleanup,

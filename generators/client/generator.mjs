@@ -31,6 +31,7 @@ import { entityClientI18nFiles } from '../languages/entity-files.mjs';
 
 import { writeEntitiesAngularFiles, cleanupEntitiesAngular } from './entity-files-angular.mjs';
 import { writeEntitiesReactFiles, cleanupEntitiesReact } from './entity-files-react.mjs';
+import { writeEnumerationFiles } from './entity-files.mjs';
 
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import constants from '../generator-constants.cjs';
@@ -48,10 +49,9 @@ import {
 import { testFrameworkTypes, authenticationTypes, databaseTypes, fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { prepareReactEntity } from '../../utils/entity.mjs';
 
-const { VUE } = clientFrameworkTypes;
+const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 const { OAUTH2 } = authenticationTypes;
-const { ANGULAR } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 const { CommonDBTypes } = fieldTypes;
 const { NO: NO_DATABASE } = databaseTypes;
 const TYPE_STRING = CommonDBTypes.STRING;
@@ -247,6 +247,12 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         if (application.authenticationType === OAUTH2 || application.databaseType === NO_DATABASE) {
           application.skipUserManagement = true;
         }
+        if (application.clientFramework === ANGULAR) {
+          application.clientEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
+        }
+        if (application.clientFramework === REACT) {
+          application.clientEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
+        }
       },
 
       async loadNativeLanguage({ application }) {
@@ -333,6 +339,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
+      writeEnumerationFiles,
       writeEntitiesAngularFiles,
       cleanupEntitiesAngular,
       writeEntitiesReactFiles,
