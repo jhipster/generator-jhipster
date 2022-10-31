@@ -23,7 +23,7 @@ import BaseApplication from '../base-application/index.mjs';
 import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './files.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
-import { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
+import { GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import { prepareFieldForTemplates } from '../../utils/field.mjs';
 import { prepareRelationshipForTemplates } from '../../utils/relationship.mjs';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
@@ -52,7 +52,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     // TODO V8 switch to GENERATOR_BOOTSTRAP_APPLICATION_SERVER
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE);
+      await this.composeWithBlueprints(GENERATOR_LIQUIBASE_CHANGELOGS);
     }
   }
 

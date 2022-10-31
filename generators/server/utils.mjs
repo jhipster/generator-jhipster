@@ -115,3 +115,15 @@ export function mergeSections(...allFiles) {
   }
   return generated;
 }
+
+/**
+ * Move the template to `javaPackageSrcDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).
+ * Removes trailing specifiers.
+ */
+export const moveToJavaPackageSrcDir = (data, filePath) => `${data.javaPackageSrcDir}${filePath.replace(/_\w*/, '')}`;
+
+/**
+ * Move the template to `javaPackageTestDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).
+ * Removes trailing specifiers.
+ */
+export const moveToJavaPackageTestDir = (data, filePath) => `${data.javaPackageTestDir}${filePath.replace(/_\w*/, '')}`;

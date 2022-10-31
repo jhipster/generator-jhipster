@@ -131,9 +131,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -258,12 +255,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -496,9 +487,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -608,12 +596,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -870,9 +852,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -1075,21 +1054,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -1379,9 +1343,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -1584,21 +1545,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -1870,9 +1816,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -2060,21 +2003,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -2373,9 +2301,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -2542,21 +2467,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -2837,9 +2747,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -3006,21 +2913,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -3262,9 +3154,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -3416,21 +3305,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -3681,9 +3555,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -3850,21 +3721,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -4118,9 +3974,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -4287,21 +4140,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -4540,9 +4378,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -4715,21 +4550,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -5025,9 +4845,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -5119,12 +4936,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -5342,9 +5153,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -5511,21 +5319,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -5839,9 +5632,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -5939,12 +5729,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -6186,9 +5970,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -6361,21 +6142,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -6698,9 +6464,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -6798,12 +6561,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -7027,9 +6784,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -7202,21 +6956,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -7494,9 +7233,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -7588,12 +7324,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -7814,9 +7544,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -7983,21 +7710,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -8299,9 +8011,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -8399,12 +8108,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -8646,9 +8349,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -8779,12 +8479,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -9062,9 +8756,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -9207,12 +8898,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -9451,9 +9136,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -9584,12 +9266,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -9837,9 +9513,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -9976,12 +9649,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -10220,9 +9887,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -10347,12 +10011,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -10627,9 +10285,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -10772,12 +10427,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -11016,9 +10665,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -11149,12 +10795,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -11408,9 +11048,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -11553,12 +11190,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -11815,9 +11446,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -11948,12 +11576,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -12213,9 +11835,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -12352,12 +11971,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -12581,9 +12194,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -12762,21 +12372,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -13087,9 +12682,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -13199,12 +12791,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -13461,9 +13047,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -13648,21 +13231,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -13979,9 +13547,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -14091,12 +13656,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -14329,9 +13888,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -14516,21 +14072,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -14823,9 +14364,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -14929,12 +14467,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -15152,9 +14684,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -15333,21 +14862,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -15652,9 +15166,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -15764,12 +15275,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -16005,9 +15510,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -16192,21 +15694,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -16529,9 +16016,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -16641,12 +16125,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -16894,9 +16372,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -17048,21 +16523,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -17340,9 +16800,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -17497,21 +16954,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -17753,9 +17195,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -17901,21 +17340,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -18202,9 +17626,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -18365,21 +17786,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -18633,9 +18039,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -18787,21 +18190,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -19091,9 +18479,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -19254,21 +18639,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -19513,9 +18883,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -19667,21 +19034,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -19953,9 +19305,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -20110,21 +19459,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -20342,9 +19676,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -20490,21 +19821,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -20785,9 +20101,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -20948,21 +20261,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -21198,9 +20496,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -21370,21 +20665,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -21695,9 +20975,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -21795,12 +21072,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -22003,9 +21274,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -22175,21 +21443,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -22476,9 +21729,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -22576,12 +21826,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -22796,9 +22040,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -22968,21 +22209,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -23272,9 +22498,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -23372,12 +22595,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -23580,9 +22797,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -23752,21 +22966,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -24053,9 +23252,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -24153,12 +23349,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -24361,9 +23551,6 @@ Object {
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -24533,21 +23720,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -24852,9 +24024,6 @@ Object {
   "src/main/java/com/package/config/JacksonConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LiquibaseConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LocaleConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -24952,12 +24121,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
