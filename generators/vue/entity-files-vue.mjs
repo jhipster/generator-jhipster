@@ -16,10 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
+import { CLIENT_TEST_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { replaceVueTranslations } from './transform-vue.mjs';
 
-const { CLIENT_TEST_SRC_DIR, VUE_DIR } = constants;
+const VUE_DIR = `${CLIENT_MAIN_SRC_DIR}app/`;
+const ENTITY_TEMPLATES_DIR = `${VUE_DIR}entities/_entity_/`;
+const ENTITY_TEST_TEMPLATES_DIR = `${CLIENT_TEST_SRC_DIR}spec/app/entities/_entity_/`;
+
+const renameTo = (data, filepath) =>
+  `${data.clientSrcDir}app/entities/${data.entityFolderName}/${filepath.replace(/^entity/, data.entityFileName)}`;
+
+const renameTestFile = (data, filepath) =>
+  `${data.clientTestDir}spec/app/entities/${data.entityFolderName}/${filepath.replace(/^entity/, data.entityFileName)}`;
 
 export const entityFiles = {
   client: [
@@ -27,7 +35,7 @@ export const entityFiles = {
       path: VUE_DIR,
       templates: [
         {
-          file: 'entities/entity.model.ts',
+          file: 'entities/_entity_/entity.model.ts',
           // using entityModelFileName so that there is no conflict when generating microservice entities
           renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`,
         },
@@ -35,73 +43,29 @@ export const entityFiles = {
     },
     {
       condition: generator => !generator.embedded,
-      path: VUE_DIR,
-      templates: [
-        {
-          file: 'entities/entity-details.vue',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-details.vue`,
-        },
-        {
-          file: 'entities/entity-details.component.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.ts`,
-        },
-        {
-          file: 'entities/entity.vue',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.vue`,
-        },
-        {
-          file: 'entities/entity.component.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`,
-        },
-        {
-          file: 'entities/entity.service.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.ts`,
-        },
-      ],
+      path: ENTITY_TEMPLATES_DIR,
+      renameTo,
+      templates: ['entity-details.vue', 'entity-details.component.ts', 'entity.vue', 'entity.component.ts', 'entity.service.ts'],
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
-      path: VUE_DIR,
-      templates: [
-        {
-          file: 'entities/entity-update.vue',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.vue`,
-        },
-        {
-          file: 'entities/entity-update.component.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.ts`,
-        },
-      ],
+      path: ENTITY_TEMPLATES_DIR,
+      renameTo,
+      templates: ['entity-update.vue', 'entity-update.component.ts'],
     },
   ],
   test: [
     {
       condition: generator => !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'spec/app/entities/entity.component.spec.ts',
-          renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`,
-        },
-        {
-          file: 'spec/app/entities/entity-details.component.spec.ts',
-          renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.spec.ts`,
-        },
-        {
-          file: 'spec/app/entities/entity.service.spec.ts',
-          renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`,
-        },
-      ],
+      path: ENTITY_TEST_TEMPLATES_DIR,
+      renameTo: renameTestFile,
+      templates: ['entity.component.spec.ts', 'entity-details.component.spec.ts', 'entity.service.spec.ts'],
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'spec/app/entities/entity-update.component.spec.ts',
-          renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`,
-        },
-      ],
+      renameTo: renameTestFile,
+      path: ENTITY_TEST_TEMPLATES_DIR,
+      templates: ['entity-update.component.spec.ts'],
     },
   ],
 };
