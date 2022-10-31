@@ -82,7 +82,7 @@
     "@types/lodash": "4.14.186",
     "@types/yeoman-generator": "5.2.11",
     "@types/yeoman-test": "4.0.3",
-    "aws-sdk": "2.1238.0",
+    "aws-sdk": "2.1243.0",
     "axios": "0.27.2",
     "chalk": "4.1.2",
     "chevrotain": "10.3.0",
