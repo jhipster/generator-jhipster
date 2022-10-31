@@ -29,9 +29,6 @@ const TRANSLATIONS_ATTRIBUTES = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bi
  */
 // eslint-disable-next-line import/prefer-default-export
 export function replaceVueTranslations(body, filePath) {
-  if (!this._getClientTranslation) {
-    return body;
-  }
   if (/\.vue$/.test(filePath)) {
     body = body.replace(new RegExp(`[\\s\\n]*(?:${TRANSLATIONS_ATTRIBUTES})`, 'g'), '');
   }
