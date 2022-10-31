@@ -95,8 +95,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
         this.loadDerivedServerConfig(application);
-        application.javaPackageSrcDir = `${constants.SERVER_MAIN_SRC_DIR}${application.packageFolder}/`;
-        application.javaPackageTestDir = `${constants.SERVER_TEST_SRC_DIR}${application.packageFolder}/`;
       },
     });
   }
