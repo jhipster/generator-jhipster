@@ -19,7 +19,7 @@
 import detectLanguage from './detect-language.mjs';
 
 export async function askI18n() {
-  if (!this.askForMoreLanguages || this.options.skipPrompts) return;
+  if (!this.askForMoreLanguages) return;
   const nativeLanguage = this.jhipsterConfig.nativeLanguage;
   const answers = await this.prompt(
     [
@@ -46,7 +46,7 @@ export async function askI18n() {
 }
 
 export async function askForLanguages() {
-  if (!this.askForMoreLanguages || this.options.skipPrompts || this.options.languages || !this.jhipsterConfig.enableTranslation) {
+  if (!this.askForMoreLanguages) {
     return;
   }
   const answers = await this.prompt([

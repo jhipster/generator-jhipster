@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { replaceReactTranslations } from './transform-react.mjs';
+import { createTranslationReplacer } from './transform-react.mjs';
 
 import { clientApplicationBlock, clientSrcBlock } from './utils.mjs';
 
@@ -329,13 +329,17 @@ export function cleanup({ application }) {
   }
 }
 
-export async function writeFiles({ application }) {
+export async function writeFiles({ application, control }) {
   if (!application.clientFrameworkReact) return;
+
+  if (!application.enableTranslation) {
+    await control.loadClientTranslations?.();
+  }
 
   await this.writeFiles({
     sections: files,
     rootTemplatesPath: 'react',
-    transform: !application.enableTranslation ? [replaceReactTranslations] : undefined,
+    transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
     context: application,
   });
 }

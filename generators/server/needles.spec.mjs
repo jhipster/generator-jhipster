@@ -33,7 +33,7 @@ describe(`JHipster ${generator} needles`, () => {
   describe('generated project', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorPath);
+      runResult = await helpers.run(generatorPath).withMockedGenerators(['jhipster:common', 'jhipster:languages']);
     });
 
     it('should match state snapshot', () => {

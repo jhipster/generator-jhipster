@@ -182,8 +182,7 @@ describe('JHipster generator languages', () => {
   });
   context('should create default i18n files for the native language and an additional language', () => {
     describe('by default', () => {
-      before(() => helpers.run(generatorPath).withOptions({ skipInstall: true, skipPrompts: true, baseName: 'jhipster' }));
-      containsLanguageFiles('fr');
+      before(() => helpers.run(generatorPath).withOptions({ skipInstall: true, reproducible: true, baseName: 'jhipster' }));
       containsLanguageFiles('en');
     });
     describe('using prompts', () => {

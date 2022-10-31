@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { replaceAngularTranslations } from './transform-angular.mjs';
+import { createTranslationReplacer } from './transform-angular.mjs';
 import { clientApplicationBlock } from './utils.mjs';
 
 export const angularFiles = {
@@ -64,14 +64,17 @@ export const angularFiles = {
  * @this {import('./client/index.mjs')}
  * @returns
  */
-export async function writeEntitiesAngularFiles({ application, entities }) {
+export async function writeEntitiesAngularFiles({ application, entities, control }) {
   if (!application.clientFrameworkAngular) return;
+
+  await control.loadClientTranslations?.();
+
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     await this.writeFiles({
       sections: angularFiles,
       rootTemplatesPath: 'entity/angular',
-      transform: !application.enableTranslation ? [replaceAngularTranslations] : undefined,
-      context: { ...application, ...entity },
+      transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
+      context: { ...application, ...entity, getWebappTranslation: control.getWebappTranslation },
     });
 
     if (!entity.embedded) {

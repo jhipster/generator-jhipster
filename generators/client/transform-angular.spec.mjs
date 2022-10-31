@@ -19,17 +19,16 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
-import { replaceAngularTranslations } from './transform-angular.mjs';
+import { createTranslationReplacer } from './transform-angular.mjs';
 
 describe('Angular transform', () => {
   describe('replaceAngularTranslations', () => {
     let generator;
+    let replaceAngularTranslations;
 
     beforeEach(() => {
       let value = 0;
-      generator = {
-        _getClientTranslation: jest.fn().mockImplementation(key => `translated-value-${key}-${value++}`),
-      };
+      replaceAngularTranslations = createTranslationReplacer(jest.fn().mockImplementation(key => `translated-value-${key}-${value++}`));
     });
 
     describe('with translation disabled', () => {
@@ -41,7 +40,7 @@ describe('Angular transform', () => {
 <h1 jhiTranslate="activate.title1">activate.title1</h1>
 <h1 jhiTranslate="activate.title2">activate.title2</h1>
 `;
-          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 <h1>activate.title1</h1>
 <h1>activate.title2</h1>
@@ -54,7 +53,7 @@ describe('Angular transform', () => {
 <h1 [translateValues]="{ max: 50 }">translate-values1</h1>
 <h1 [translateValues]="{ max: 50 }">translate-values2</h1>
 `;
-          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 <h1>translate-values1</h1>
 <h1>translate-values2</h1>
@@ -67,7 +66,7 @@ describe('Angular transform', () => {
 <h1 [translateValues]="{ max: 50 }"><span [translateValues]="{ max: 50 }">translate-values1</span></h1>
 <h1 [translateValues]="{ max: 50 }"><span [translateValues]="{ max: 50 }">translate-values2</span></h1>
 `;
-          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 <h1><span>translate-values1</span></h1>
 <h1><span>translate-values2</span></h1>
@@ -80,7 +79,7 @@ describe('Angular transform', () => {
 <h1 [translateValues]="{  %79kma#@ }">translate-values1</h1>
 <h1 [translateValues]="{  %79kma#@ }">translate-values2</h1>
 `;
-          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 <h1>translate-values1</h1>
 <h1>translate-values2</h1>
@@ -93,7 +92,7 @@ describe('Angular transform', () => {
 <h1 [translateValues]="{ max: 50 }"><span [translateValues]="{ max: 50 }">translate-values1</span></h1>
 <h1 [translateValues]="{ max: 20 }"><span [translateValues]="{ max: 20 }">translate-values2</span></h1>
 `;
-          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 <h1><span>translate-values1</span></h1>
 <h1><span>translate-values2</span></h1>
@@ -106,7 +105,7 @@ describe('Angular transform', () => {
 <input placeholder="{{ 'global.form.currentpassword.placeholder1' | translate }}"/>
 <input placeholder="{{ 'global.form.currentpassword.placeholder2' | translate }}"/>
 `;
-          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 <input placeholder=\\"translated-value-global.form.currentpassword.placeholder1-0\\"/>
 <input placeholder=\\"translated-value-global.form.currentpassword.placeholder2-1\\"/>
@@ -119,7 +118,7 @@ describe('Angular transform', () => {
 <input title="{{ 'global.form.currentpassword.title1' | translate }}"/>
 <input title="{{ 'global.form.currentpassword.title2' | translate }}"/>
 `;
-          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 <input title=\\"translated-value-global.form.currentpassword.title1-0\\"/>
 <input title=\\"translated-value-global.form.currentpassword.title2-1\\"/>
@@ -136,7 +135,7 @@ describe('Angular transform', () => {
 title: 'activate.title1',
 title: 'activate.title2',
 `;
-          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 title: 'translated-value-activate.title1-0',
 title: 'translated-value-activate.title2-1',
@@ -153,7 +152,7 @@ title: 'translated-value-activate.title2-1',
 title: 'activate.title1',
 title: 'activate.title2',
 `;
-          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 title: 'translated-value-activate.title1-0',
 title: 'translated-value-activate.title2-1',
@@ -170,7 +169,7 @@ title: 'translated-value-activate.title2-1',
 errorMessage: 'activate.title1',
 errorMessage: 'activate.title2',
 `;
-          expect(replaceAngularTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 errorMessage: 'translated-value-activate.title1-0',
 errorMessage: 'translated-value-activate.title2-1',

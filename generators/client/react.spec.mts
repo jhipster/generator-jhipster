@@ -9,6 +9,7 @@ import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import constants from '../generator-constants.cjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -47,6 +48,16 @@ const clientAdminFiles = clientSrcDir => [
 
 const testSamples = samplesBuilder();
 
+class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
+  get [BaseApplicationGenerator.PREPARING]() {
+    return {
+      mockTranslations({ control }) {
+        control.getWebappTranslation = () => 'translations';
+      },
+    };
+  }
+}
+
 describe(`JHipster ${clientFramework} generator`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -68,7 +79,11 @@ describe(`JHipster ${clientFramework} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:common', 'jhipster:languages']);
+        runResult = await helpers
+          .run(generatorFile)
+          .withOptions(sample)
+          .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
+          .withMockedGenerators(['jhipster:common']);
       });
 
       after(() => runResult.cleanup());
