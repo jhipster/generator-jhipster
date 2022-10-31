@@ -59,6 +59,7 @@ type SearchEngine = {
 
 export type SpringBootApplication = CommonClientServerApplication &
   (ImperativeApplication | ReactiveApplication) &
+  LiquibaseApplication &
   BuildToolApplication &
   SearchEngine &
   DatabaseTypeApplication & {

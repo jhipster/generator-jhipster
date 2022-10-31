@@ -877,9 +877,6 @@ Object {
   "src/main/resources/config/cql/drop-keyspace.cql": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
@@ -4125,9 +4122,6 @@ Object {
   "src/main/resources/config/cql/drop-keyspace.cql": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
@@ -4626,9 +4620,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/cql/drop-keyspace.cql": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {

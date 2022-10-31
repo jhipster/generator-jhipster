@@ -829,9 +829,6 @@ Object {
   "src/main/resources/config/bootstrap.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
     "stateCleared": "modified",
   },
@@ -3939,9 +3936,6 @@ Object {
   "src/main/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/neo4j/migrations/user__admin.json": Object {
     "stateCleared": "modified",
   },
@@ -4416,9 +4410,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/neo4j/migrations/user__admin.json": Object {

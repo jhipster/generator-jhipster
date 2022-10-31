@@ -889,9 +889,6 @@ Object {
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
@@ -4173,9 +4170,6 @@ Object {
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
@@ -4677,9 +4671,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {

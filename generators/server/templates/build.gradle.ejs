@@ -387,6 +387,8 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
     implementation "org.hibernate.orm:hibernate-core"
     implementation "org.hibernate.validator:hibernate-validator"
+<%_ } _%>
+<%_ if (enableLiquibase) { _%>
     implementation "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase:liquibase-core"
 <%_ } _%>
@@ -513,8 +515,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.junit.platform:junit-platform-console"
     testImplementation "org.testng:testng"
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (enableLiquibase) { _%>
     liquibaseRuntime sourceSets.main.compileClasspath
+<%_ } _%>
+<%_ if (enableLiquibase && databaseTypeSql) { _%>
   <%_ if (!reactive) { _%>
     liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibaseHibernate5Version}"
   <%_ } _%>
