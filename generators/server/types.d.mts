@@ -21,6 +21,10 @@ type DatabaseType = {
   databaseType: 'no' | 'sql' | 'cassandra' | 'couchbase' | 'mongodb' | 'neo4j';
 };
 
+export type LiquibaseApplication = {
+  incrementalChangelog: boolean;
+};
+
 type DatabaseTypeSqlApplication = GenericDerivedProperty<DatabaseType, 'sql'> &
   (
     | ReactiveApplication
@@ -30,11 +34,7 @@ type DatabaseTypeSqlApplication = GenericDerivedProperty<DatabaseType, 'sql'> &
   ) & {
     devDatabaseType: string;
     prodDatabaseType: string;
-  };
-
-export type LiquibaseApplication = DatabaseTypeSqlApplication & {
-  incrementalChangelog: boolean;
-};
+  } & LiquibaseApplication;
 
 type DatabaseTypeApplication =
   | DatabaseTypeSqlApplication
@@ -59,7 +59,6 @@ type SearchEngine = {
 
 export type SpringBootApplication = CommonClientServerApplication &
   (ImperativeApplication | ReactiveApplication) &
-  LiquibaseApplication &
   BuildToolApplication &
   SearchEngine &
   DatabaseTypeApplication & {

@@ -34,7 +34,7 @@ const BASE_CHANGELOG = {
   removedRelationships: [],
 };
 
-export default class DatabaseChangelogGenerator extends BaseApplication<SpringBootApplication> {
+export default class DatabaseChangelogGenerator extends BaseApplication<SpringBootApplication & LiquibaseApplication> {
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -97,7 +97,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
-        await this.writeFiles<SpringBootApplication & Record<string, any>>({
+        await this.writeFiles<SpringBootApplication & LiquibaseApplication & Record<string, any>>({
           sections: liquibaseFiles,
           context: {
             ...application,
