@@ -2827,7 +2827,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     dest.javaPackageSrcDir = `${dest.srcMainJava}${dest.packageFolder}/`;
-    dest.javaPackageTestDir = `${dest.srcMainJava}${dest.packageFolder}/`;
+    dest.javaPackageTestDir = `${dest.srcTestJava}${dest.packageFolder}/`;
 
     dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     // Convert to false for templates.
