@@ -38,7 +38,7 @@ caffeineVersion=3.1.1
 <%_ if (cacheProviderCaffeine) { _%>
 typesafeConfigVersion=1.4.2
 <%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
+<%_ if (enableLiquibase && databaseTypeSql && !reactive) { _%>
 liquibaseHibernate5Version=<%- javaDependencies.liquibase %>
 <%_ } _%>
 <%_ if (enableLiquibase) { _%>

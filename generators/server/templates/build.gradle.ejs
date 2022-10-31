@@ -530,7 +530,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (enableLiquibase) { _%>
     liquibaseRuntime sourceSets.main.compileClasspath
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (enableLiquibase && databaseTypeSql) { _%>
   <%_ if (!reactive) { _%>
     liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibaseHibernate5Version}"
   <%_ } _%>
