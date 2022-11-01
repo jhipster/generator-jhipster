@@ -83,7 +83,6 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
         this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
         this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
 
-        this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
         this.DOCKER_REDIS = constants.DOCKER_REDIS;
         this.DOCKER_PROMETHEUS_OPERATOR = constants.DOCKER_PROMETHEUS_OPERATOR;
         this.DOCKER_GRAFANA_WATCHER = constants.DOCKER_GRAFANA_WATCHER;
