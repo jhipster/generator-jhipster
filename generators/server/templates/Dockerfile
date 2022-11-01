@@ -21,3 +21,5 @@ FROM cassandra:3.11.13
 
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
+
+FROM neo4j:4.4.9

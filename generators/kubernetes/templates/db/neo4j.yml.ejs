@@ -74,7 +74,7 @@ spec:
 <%_ } _%>
       containers:
       - name: neo4j
-        image: <%= DOCKER_NEO4J %>
+        image: <%- dockerContainers.neo4j %>
         env:
         - name: NEO4J_AUTH
           value: 'none'
