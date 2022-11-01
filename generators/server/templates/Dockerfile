@@ -4,6 +4,9 @@
 FROM jhipster/jhipster-registry:v7.4.0
 LABEL ALIAS=jhipster-registry
 
+FROM jhipster/jhipster-control-center:v0.5.0
+LABEL ALIAS=jhipster-control-center
+
 FROM postgres:15.0
 LABEL ALIAS=postgresql
 
