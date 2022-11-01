@@ -18,7 +18,6 @@ services:
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
       - JHIPSTER_CACHE_REDIS_SERVER=redis://jhipster-redis:6379
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
-      - JHIPSTER_SLEEP=20
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
     ports:
       - 127.0.0.1:8080:8080
@@ -155,7 +154,6 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
-      - JHIPSTER_SLEEP=20
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     ports:
       - 127.0.0.1:8080:8080
@@ -522,8 +520,6 @@ services:
     depends_on:
       mssql:
         condition: service_healthy
-      keycloak:
-        condition: service_healthy
   mssql:
     extends:
       file: ./mssql.yml
@@ -532,10 +528,6 @@ services:
     extends:
       file: ./memcached.yml
       service: memcached
-  keycloak:
-    extends:
-      file: ./keycloak.yml
-      service: keycloak
   kafka:
     extends:
       file: ./kafka.yml
@@ -639,8 +631,6 @@ services:
         condition: service_completed_successfully
       elasticsearch:
         condition: service_healthy
-      keycloak:
-        condition: service_healthy
   cassandra:
     extends:
       file: ./cassandra.yml
@@ -653,10 +643,6 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
-  keycloak:
-    extends:
-      file: ./keycloak.yml
-      service: keycloak
   consul:
     extends:
       file: ./consul.yml
