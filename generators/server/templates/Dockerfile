@@ -8,3 +8,5 @@ FROM quay.io/keycloak/keycloak:19.0.3
 LABEL ALIAS=keycloak
 
 FROM mysql:8.0.30
+
+FROM mariadb:10.8.3

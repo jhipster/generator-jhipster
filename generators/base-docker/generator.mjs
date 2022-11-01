@@ -84,7 +84,6 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
         this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
 
         this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
-        this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
         this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
         this.DOCKER_NEO4J = constants.DOCKER_NEO4J;
         this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
