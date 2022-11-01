@@ -240,7 +240,7 @@ objects:
                 path: alert.rules
           containers:
           - name: ${PT_APP_NAME}
-            image: <%= DOCKER_PROMETHEUS %>
+            image: <%- dockerContainers.prometheus %>
             command:
               - '/bin/prometheus'
               - '-config.file=/etc/prometheus/prometheus.yml'

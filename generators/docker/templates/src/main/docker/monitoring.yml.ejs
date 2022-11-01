@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   prometheus:
-    image: <%= DOCKER_PROMETHEUS %>
+    image: <%- dockerContainers.prometheus %>
     volumes:
       - ./prometheus/:/etc/prometheus/
     command:
