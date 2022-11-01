@@ -33,3 +33,6 @@ FROM redis:6.2.7
 
 FROM confluentinc/cp-kafka:7.2.1
 LABEL ALIAS=kafka
+
+FROM confluentinc/cp-zookeeper:7.2.1
+LABEL ALIAS=zookeeper

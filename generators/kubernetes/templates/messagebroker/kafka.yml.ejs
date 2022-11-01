@@ -89,7 +89,7 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: <%= DOCKER_ZOOKEEPER %>
+        image: <%- dockerContainers.zookeeper %>
         env:
         - name: ZOOKEEPER_CLIENT_PORT
           value: '2181'

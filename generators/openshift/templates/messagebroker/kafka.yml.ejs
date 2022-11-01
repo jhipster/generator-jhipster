@@ -132,7 +132,7 @@ objects:
 <%_ } _%>
           containers:
           - name: ${ZK_APPLICATION_NAME}
-            image: <%= DOCKER_ZOOKEEPER %>
+            image: <%- dockerContainers.zookeeper %>
             env:
             - name: ZOOKEEPER_CLIENT_PORT
               value: 2181

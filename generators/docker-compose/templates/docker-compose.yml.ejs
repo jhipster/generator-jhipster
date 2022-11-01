@@ -22,7 +22,7 @@ services:
 <%_ } _%>
 <%_ if (useKafka) { _%>
   zookeeper:
-    image: <%= DOCKER_ZOOKEEPER %>
+    image: <%- dockerContainers.zookeeper %>
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
