@@ -68,7 +68,7 @@ import {
   isBuiltInUserConfiguration,
   isUsingBuiltInAuthorityConfiguration,
   entityIsAuthority,
-} from './generator/index.mjs';
+} from './generator-utils/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
