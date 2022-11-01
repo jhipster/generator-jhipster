@@ -658,7 +658,10 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
         if (scriptsStorage.get('e2e')) {
           const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
-          const applicationEndpoint = 'http-get://localhost:$npm_package_config_backend_port/management/health';
+          const applicationEndpoint = application.applicationTypeMicroservice
+            ? `http-get://localhost:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
+            : 'http-get://localhost:$npm_package_config_backend_port/management/health';
+
           scriptsStorage.set({
             'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
             'pree2e:headless': 'npm run ci:server:await',
@@ -678,6 +681,29 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       customizeFiles,
+
+      packageJsonE2eScripts({ application, entities }) {
+        if (application.applicationTypeGateway) {
+          const { serverPort, lowercaseBaseName } = application;
+          const microservices = [...new Set(entities.map(entity => entity.microserviceName))].filter(Boolean).map(ms => ms.toLowerCase());
+          const scriptsStorage = this.packageJson.createStorage('scripts');
+          const waitServices = microservices
+            .concat(lowercaseBaseName)
+            .map(ms => `npm run ci:server:await:${ms}`)
+            .join(' && ');
+
+          scriptsStorage.set({
+            [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:$npm_package_config_backend_port/management/health`,
+            ...Object.entries(
+              microservices.map(ms => [
+                `ci:server:await:${ms}`,
+                `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:${serverPort}/services/${ms}/management/health/readiness`,
+              ])
+            ),
+            'ci:server:await': `echo "Waiting for services to start" && ${waitServices} && echo "Services started"`,
+          });
+        }
+      },
     });
   }
 

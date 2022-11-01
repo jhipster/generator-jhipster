@@ -17,6 +17,9 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/custom/domain/EntityWithCustomId.java": Object {
     "stateCleared": "modified",
   },
@@ -131,6 +134,9 @@ Object {
     "stateCleared": "modified",
   },
   ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": Object {
