@@ -1,4 +1,4 @@
-FROM <%= DOCKER_REDIS %>
+FROM <%- dockerContainers.redis %>
 RUN apt update && \
     apt install dnsutils -y
 ADD redis/connectRedisCluster.sh /usr/local/bin/connectRedisCluster

@@ -28,3 +28,5 @@ FROM hazelcast/management-center:5.1.4
 LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.16-alpine
+
+FROM redis:6.2.7
