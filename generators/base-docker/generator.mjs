@@ -91,7 +91,6 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
         this.DOCKER_GRAFANA_WATCHER = constants.DOCKER_GRAFANA_WATCHER;
         this.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
 
-        this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
         this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
       },
 

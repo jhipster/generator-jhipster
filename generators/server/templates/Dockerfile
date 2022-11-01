@@ -16,3 +16,5 @@ LABEL ALIAS=mongodb
 
 FROM couchbase/server:7.0.3
 LABEL ALIAS=couchbase
+
+FROM cassandra:3.11.13

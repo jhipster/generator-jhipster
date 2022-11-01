@@ -293,7 +293,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
         application.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
         application.DOCKER_REDIS = constants.DOCKER_REDIS;
-        application.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
         application.DOCKER_KAFKA = constants.DOCKER_KAFKA;
         application.KAFKA_VERSION = constants.KAFKA_VERSION;
         application.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
