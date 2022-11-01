@@ -56,3 +56,6 @@ LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8
 LABEL ALIAS=grafana-watcher
+
+FROM jenkins/jenkins:lts-jdk11
+LABEL ALIAS=jenkins
