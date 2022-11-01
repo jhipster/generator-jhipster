@@ -60,8 +60,8 @@ import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
 import locateGenerator from './generator/blueprint-structure/generator-locator.mjs';
-import isBuiltInUser from './generator/config/user.mjs';
-import isUsingBuiltInAuthority from './generator/config/authority.mjs';
+import isBuiltInUserConfiguration from './generator/config/user.mjs';
+import isUsingBuiltInAuthorityConfiguration from './generator/config/authority.mjs';
 import entityIsAuthority from './generator/entity/authority-checker.mjs';
 import getOutputPathCustomizer from './generator/output/resolver.mjs';
 import { applyPathCustomizer, normalizeOutputPath } from './generator/output/path.mjs';
@@ -255,7 +255,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @return {boolean} true if the User is built-in.
    */
   isUsingBuiltInUser() {
-    return isBuiltInUser(this.jhipsterConfig);
+    return isBuiltInUserConfiguration(this.jhipsterConfig);
   }
 
   /**
@@ -284,7 +284,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @return {boolean} true if the Authority is built-in.
    */
   isUsingBuiltInAuthority() {
-    return isUsingBuiltInAuthority(this.jhipsterConfig);
+    return isUsingBuiltInAuthorityConfiguration(this.jhipsterConfig);
   }
 
   /**
