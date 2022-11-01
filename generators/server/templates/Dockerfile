@@ -62,3 +62,6 @@ LABEL ALIAS=jenkins
 
 FROM eclipse-temurin:11-jre-focal
 LABEL ALIAS=java-jre
+
+FROM swaggerapi/swagger-editor:latest
+LABEL ALIAS=swagger-editor

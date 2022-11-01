@@ -20,6 +20,6 @@
 name: <%= baseName.toLowerCase() %>
 services:
   swagger-editor:
-    image: <%= DOCKER_SWAGGER_EDITOR %>
+    image: <%- dockerContainers.swagger-editor %>
     ports:
       - 127.0.0.1:7742:8080
