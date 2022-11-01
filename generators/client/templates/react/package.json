@@ -23,7 +23,7 @@
     "redux": "4.2.0",
     "redux-thunk": "2.4.1",
     "sonar-scanner": "3.1.0",
-    "tslib": "2.4.0",
+    "tslib": "2.4.1",
     "uuid": "9.0.0"
   },
   "devDependencies": {
