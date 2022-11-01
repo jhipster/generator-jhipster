@@ -285,8 +285,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
         application.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
-        application.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-
         application.JAVA_VERSION = constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
 

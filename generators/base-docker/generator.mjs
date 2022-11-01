@@ -71,9 +71,6 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
           ...constants.dockerContainers,
           ...getDockerfileContainers(dockerfile),
         });
-
-        // Make constants available in templates
-        this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
       },
 
       checkDocker,

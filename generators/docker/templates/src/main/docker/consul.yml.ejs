@@ -30,7 +30,7 @@ services:
     command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
 
   consul-config-loader:
-    image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
+    image: <%- dockerContainers.consul-config-loader %>
     volumes:
       - ./central-server-config:/config
     environment:

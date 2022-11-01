@@ -7,6 +7,9 @@ LABEL ALIAS=jhipster-registry
 FROM jhipster/jhipster-control-center:v0.5.0
 LABEL ALIAS=jhipster-control-center
 
+FROM jhipster/consul-config-loader:v0.4.1
+LABEL ALIAS=consul-config-loader
+
 FROM postgres:15.0
 LABEL ALIAS=postgresql
 
