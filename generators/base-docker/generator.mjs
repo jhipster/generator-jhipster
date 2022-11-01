@@ -76,8 +76,6 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
         this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
         this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
         this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-
-        this.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
       },
 
       checkDocker,

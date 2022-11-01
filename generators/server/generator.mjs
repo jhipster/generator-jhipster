@@ -288,7 +288,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
         application.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
         application.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-        application.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
 
         application.JAVA_VERSION = constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
