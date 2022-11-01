@@ -141,7 +141,7 @@ services:
       - '--storage.path=/alertmanager'
 
   grafana:
-    image: <%= DOCKER_GRAFANA %>
+    image: <%- dockerContainers.grafana %>
     ports:
       - 3000:3000
     volumes:

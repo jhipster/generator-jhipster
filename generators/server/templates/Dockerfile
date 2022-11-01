@@ -50,3 +50,6 @@ LABEL ALIAS=prometheus-alertmanager
 
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
+
+FROM grafana/grafana:9.1.0
+LABEL ALIAS=grafana
