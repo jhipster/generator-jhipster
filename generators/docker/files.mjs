@@ -9,12 +9,12 @@ export const dockerFiles = {
       templates: [{ file: ctx => `${ctx.prodDatabaseType}.yml` }],
     },
     {
-      condition: ctx => ctx.databaseTypeSql && ctx.prodDatabaseTypeMysql,
+      condition: ctx => ctx.prodDatabaseTypeMysql,
       path: DOCKER_DIR,
       templates: [{ file: 'config/mysql/my.cnf', noEjs: true }],
     },
     {
-      condition: ctx => ctx.databaseTypeSql && ctx.prodDatabaseTypeMariadb,
+      condition: ctx => ctx.prodDatabaseTypeMariadb,
       path: DOCKER_DIR,
       templates: [{ file: 'config/mariadb/my.cnf', noEjs: true }],
     },
@@ -81,7 +81,7 @@ export const dockerFiles = {
       templates: [{ file: 'config/README.md', renameTo: () => 'central-server-config/README.md' }],
     },
     {
-      condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryConsul,
+      condition: generator => generator.serviceDiscoveryConsul,
       path: DOCKER_DIR,
       templates: [
         'consul.yml',
@@ -90,7 +90,7 @@ export const dockerFiles = {
       ],
     },
     {
-      condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryEureka,
+      condition: generator => generator.serviceDiscoveryEureka,
       path: DOCKER_DIR,
       templates: [
         'jhipster-registry.yml',
