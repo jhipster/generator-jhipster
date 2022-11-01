@@ -82,7 +82,7 @@ services:
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
   consul:
-    image: <%= DOCKER_CONSUL %>
+    image: <%- dockerContainers.consul %>
     ports:
       - 8300:8300
       - 8500:8500

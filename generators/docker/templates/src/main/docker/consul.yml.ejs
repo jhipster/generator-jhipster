@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   consul:
-    image: <%= DOCKER_CONSUL %>
+    image: <%- dockerContainers.consul %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:

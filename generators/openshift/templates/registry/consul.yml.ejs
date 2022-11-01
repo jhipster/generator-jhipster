@@ -86,7 +86,7 @@ objects:
             fsGroup: 1000
           containers:
           - name: ${APPLICATION_NAME}
-            image: <%= DOCKER_CONSUL %>
+            image: <%- dockerContainers.consul %>
             imagePullPolicy: IfNotPresent
             ports:
             - name: http

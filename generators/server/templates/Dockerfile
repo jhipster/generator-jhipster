@@ -39,3 +39,5 @@ LABEL ALIAS=zookeeper
 
 FROM sonarqube:9.6.1-community
 LABEL ALIAS=sonar
+
+FROM consul:1.13.1
