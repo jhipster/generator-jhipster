@@ -1,6 +1,9 @@
 # Container name and `alias` can be used to retrieve the image with the tag
 # Tags can retrieved using the `alias` with `Tag` suffix
 # Images can be retrieved using the `alias` with `Image` suffix
+FROM jhipster/jhipster-registry:v7.4.0
+LABEL ALIAS=jhipster-registry
+
 FROM postgres:15.0
 LABEL ALIAS=postgresql
 

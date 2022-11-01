@@ -82,7 +82,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: jhipster-registry
-        image: <%= DOCKER_JHIPSTER_REGISTRY %>
+        image: <%- dockerContainers.jhipster-registry %>
         ports:
         - containerPort: 8761
         env:

@@ -80,7 +80,7 @@ objects:
           terminationGracePeriodSeconds: 10
           containers:
           - name: ${APPLICATION_NAME}
-            image: <%= DOCKER_JHIPSTER_REGISTRY %>
+            image: <%- dockerContainers.jhipster-registry %>
             ports:
             - name: http
               containerPort: 8761
