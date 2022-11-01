@@ -47,3 +47,6 @@ LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.24.0
 LABEL ALIAS=prometheus-alertmanager
+
+FROM quay.io/coreos/prometheus-operator:v0.42.1
+LABEL ALIAS=prometheus-operator
