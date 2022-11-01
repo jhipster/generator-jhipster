@@ -69,7 +69,7 @@ couchbase-operator:
           bucket: <%= app.baseName.toLowerCase() %>
   cluster:
     antiAffinity: true
-    image: <%= DOCKER_COUCHBASE %>
+    image: <%- dockerContainers.couchbase %>
     security:
       adminSecret: couchbase-secret
     servers:

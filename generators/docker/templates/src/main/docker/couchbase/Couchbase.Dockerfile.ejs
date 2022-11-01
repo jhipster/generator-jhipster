@@ -1,4 +1,4 @@
-FROM <%= DOCKER_COUCHBASE %>
+FROM <%- dockerContainers.couchbase %>
 
 COPY couchbase/scripts/configure-node.sh /
 

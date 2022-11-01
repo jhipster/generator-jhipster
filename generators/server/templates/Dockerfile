@@ -13,3 +13,6 @@ FROM mariadb:10.8.3
 
 FROM mongo:4.4.15
 LABEL ALIAS=mongodb
+
+FROM couchbase/server:7.0.3
+LABEL ALIAS=couchbase
