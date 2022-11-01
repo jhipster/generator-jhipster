@@ -153,19 +153,20 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           source.addDockerExtendedServiceToApplicationAndServices({ serviceName: application.cacheProvider });
         }
 
-        if (application.authenticationTypeOauth2) {
+        if (application.authenticationTypeOauth2 && !application.applicationTypeMicroservice) {
           source.addDockerExtendedServiceToApplicationAndServices({ serviceName: 'keycloak' });
           source.addDockerDependencyToApplication({ serviceName: 'keycloak', condition: SERVICE_HEALTHY });
         }
 
         if (application.serviceDiscoveryEureka) {
-          const depends_on = application.authenticationTypeOauth2
-            ? {
-                keycloak: {
-                  condition: SERVICE_HEALTHY,
-                },
-              }
-            : undefined;
+          const depends_on =
+            application.authenticationTypeOauth2 && !application.applicationTypeMicroservice
+              ? {
+                  keycloak: {
+                    condition: SERVICE_HEALTHY,
+                  },
+                }
+              : undefined;
           source.addDockerExtendedServiceToApplicationAndServices({
             serviceName: 'jhipster-registry',
             additionalConfig: {
