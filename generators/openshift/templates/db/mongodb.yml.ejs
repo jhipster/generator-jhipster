@@ -158,7 +158,7 @@ objects:
 <%_ } _%>
           containers:
           - name: ${APPLICATION_NAME}
-            image: <%= DOCKER_MONGODB %>
+            image: <%- dockerContainers.mongodb %>
             env:
             - name: MONGODB_DATABASE
               value: ${DATABASE_NAME}

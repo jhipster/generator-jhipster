@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   mongodb:
-    image: <%= DOCKER_MONGODB %>
+    image: <%- dockerContainers.mongodb %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
@@ -32,6 +32,6 @@ services:
       dockerfile: mongodb/MongoDB.Dockerfile
     command: mongod --shardsvr --replSet rs1
   mongodb-config:
-    image: <%= DOCKER_MONGODB %>
+    image: <%- dockerContainers.mongodb %>
     container_name: <%= baseName.toLowerCase() %>-mongodb-config
     command: mongod --configsvr --dbpath /data/db --replSet csvr
