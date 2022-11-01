@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
       - name: kafka
-        image: <%= DOCKER_KAFKA %>
+        image: <%- dockerContainers.kafka %>
         env:
         - name: KAFKA_ADVERTISED_LISTENERS
           value: 'PLAINTEXT://jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'

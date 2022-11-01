@@ -73,7 +73,6 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
         });
 
         // Make constants available in templates
-        this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
         this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
         this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
         this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
