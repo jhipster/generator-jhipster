@@ -41,7 +41,7 @@ public class MysqlTestContainer implements SqlTestContainer {
     @Override
     public void afterPropertiesSet() {
         if (null == mysqlContainer) {
-            mysqlContainer = new MySQLContainer<>("<%= DOCKER_MYSQL %>")
+            mysqlContainer = new MySQLContainer<>("<%- dockerContainers.mysql %>")
                 .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))

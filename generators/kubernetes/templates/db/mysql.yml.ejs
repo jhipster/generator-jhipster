@@ -62,7 +62,7 @@ spec:
 <%_ } _%>
       containers:
       - name: mysql
-        image: <%= DOCKER_MYSQL %>
+        image: <%- dockerContainers.mysql %>
         env:
         - name: MYSQL_ALLOW_EMPTY_PASSWORD
           value: 'yes'

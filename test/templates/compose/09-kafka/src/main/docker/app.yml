@@ -17,7 +17,7 @@ services:
         ports:
             - 8080:8080
     mysql:
-        image: <%= DOCKER_MYSQL %>
+        image: <%- dockerContainers.mysql %>
         # volumes:
         #     - ~/volumes/jhipster/sampleKafka/mysql/:/var/lib/mysql/
         environment:
