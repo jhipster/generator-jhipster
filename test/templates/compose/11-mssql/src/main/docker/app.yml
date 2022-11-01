@@ -11,7 +11,7 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:sqlserver://msmssql-mssql:1433;database=msmssql;encrypt=false
             - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     mssql:
-        image: <%= DOCKER_MSSQL %>
+        image: <%- dockerContainers.mssql %>
         # volumes are not supported on macOS
         # volumes:
         #     - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/
