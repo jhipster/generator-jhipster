@@ -334,7 +334,7 @@ objects:
                 path: config.yml
           containers:
           - name: ${AM_APP_NAME}
-            image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
+            image: <%- dockerContainers.prometheus-alertmanager %>
             ports:
             - containerPort: 9093
               name: tcp

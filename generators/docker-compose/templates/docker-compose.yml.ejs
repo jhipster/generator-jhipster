@@ -131,7 +131,7 @@ services:
     ports:
       - 9090:9090
   alertmanager:
-    image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
+    image: <%- dockerContainers.prometheus-alertmanager %>
     ports:
       - 9093:9093
     volumes:
