@@ -31,12 +31,13 @@ import {
 import type { SpringBootApplication } from '../server/types.mjs';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
-import { GRADLE } from '../../jdl/jhipster/build-tool-types.js';
-import { MANY_TO_MANY, ONE_TO_MANY, ONE_TO_ONE } from '../../jdl/jhipster/relationship-types.js';
+import { buildToolTypes, relationshipTypes } from '../../jdl/jhipster/index.mjs';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
 import { getPomVersionProperties } from '../server/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 
+const { GRADLE } = buildToolTypes;
+const { MANY_TO_MANY, ONE_TO_MANY, ONE_TO_ONE } = relationshipTypes;
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
 

@@ -9,9 +9,6 @@ module.exports = {
   // Resolve absolute path for test with fork and different cwd.
   // `loader` options is passed to forks, but `require` is not.
   // Use node-option instead (it overrides loader option)
-  'node-option': [
-    `require=${require.resolve('@esbuild-kit/cjs-loader')}`,
-    `loader=${require.resolve('@esbuild-kit/esm-loader')}`
-  ],
+  'node-option': [`require=${require.resolve('@esbuild-kit/cjs-loader')}`, `loader=${require.resolve('@esbuild-kit/esm-loader')}`],
   parallel: true,
 };

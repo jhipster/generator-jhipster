@@ -17,9 +17,12 @@
  * limitations under the License.
  */
 import isUsingBuiltInCommonEntityConfiguration from './entities.mjs';
+import { databaseTypes } from '../../../../jdl/jhipster/index.mjs';
+
+const { CASSANDRA } = databaseTypes;
 
 const isUsingBuiltInAuthorityConfiguration = config => {
-  return isUsingBuiltInCommonEntityConfiguration(config);
+  return isUsingBuiltInCommonEntityConfiguration(config) && CASSANDRA !== config.databaseType;
 };
 
 export default isUsingBuiltInAuthorityConfiguration;

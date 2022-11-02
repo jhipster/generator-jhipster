@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { OAUTH2 } from '../../../../jdl/jhipster/authentication-types.js';
-import databaseTypes from '../../../../jdl/jhipster/database-types.js';
+
+import { databaseTypes, authenticationTypes } from '../../../../jdl/jhipster/index.mjs';
 
 const { NO: NO_DATABASE } = databaseTypes;
+const { OAUTH2 } = authenticationTypes;
 
 /**
  * Valid for Authorities and User
