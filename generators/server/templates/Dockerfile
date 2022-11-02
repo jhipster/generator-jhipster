@@ -4,5 +4,5 @@
 FROM postgres:15.0
 LABEL ALIAS=postgresql
 
-FROM quay.io/keycloak/keycloak:19.0.3
+FROM quay.io/keycloak/keycloak:20.0.0
 LABEL ALIAS=keycloak
