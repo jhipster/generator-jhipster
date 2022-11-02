@@ -520,6 +520,8 @@ services:
     depends_on:
       mssql:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
   mssql:
     extends:
       file: ./mssql.yml
@@ -528,6 +530,10 @@ services:
     extends:
       file: ./memcached.yml
       service: memcached
+  keycloak:
+    extends:
+      file: ./keycloak.yml
+      service: keycloak
   kafka:
     extends:
       file: ./kafka.yml
@@ -631,6 +637,8 @@ services:
         condition: service_completed_successfully
       elasticsearch:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
   cassandra:
     extends:
       file: ./cassandra.yml
@@ -643,6 +651,10 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
+  keycloak:
+    extends:
+      file: ./keycloak.yml
+      service: keycloak
   consul:
     extends:
       file: ./consul.yml

@@ -866,6 +866,8 @@ eureka:
     depends_on:
       msmysql-mysql:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
@@ -914,6 +916,8 @@ eureka:
       mspsql-postgresql:
         condition: service_healthy
       mspsql-elasticsearch:
+        condition: service_healthy
+      keycloak:
         condition: service_healthy
       jhipster-registry:
         condition: service_healthy
@@ -971,6 +975,8 @@ eureka:
     depends_on:
       mscouchbase-couchbase:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
       jhipster-registry:
         condition: service_healthy
   mscouchbase-couchbase:
@@ -1014,6 +1020,8 @@ eureka:
       retries: 30
     depends_on:
       msmariadb-mariadb:
+        condition: service_healthy
+      keycloak:
         condition: service_healthy
       jhipster-registry:
         condition: service_healthy
