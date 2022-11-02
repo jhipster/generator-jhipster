@@ -694,7 +694,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
           scriptsStorage.set({
             [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:$npm_package_config_backend_port/management/health`,
-            ...Object.entries(
+            ...Object.fromEntries(
               microservices.map(ms => [
                 `ci:server:await:${ms}`,
                 `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:${serverPort}/services/${ms}/management/health/readiness`,
