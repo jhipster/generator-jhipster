@@ -76,7 +76,7 @@ _%>
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-      - JHIPSTER_SLEEP=5 # Let migration complete
+      - JHIPSTER_SLEEP=10 # Let migration complete
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
       - SPRING_ELASTICSEARCH_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
