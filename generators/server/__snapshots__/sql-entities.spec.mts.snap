@@ -44,6 +44,9 @@ Object {
   "src/main/java/com/package/domain/Simple.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -158,6 +161,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/criteria/SimpleCriteria.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
@@ -279,6 +285,12 @@ Object {
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
     "stateCleared": "modified",
   },
@@ -378,6 +390,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
@@ -520,6 +535,12 @@ Object {
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
     "stateCleared": "modified",
   },
@@ -631,6 +652,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
@@ -785,6 +809,12 @@ Object {
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
     "stateCleared": "modified",
   },
@@ -884,6 +914,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
@@ -1026,6 +1059,12 @@ Object {
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
     "stateCleared": "modified",
   },
@@ -1125,6 +1164,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
@@ -1267,6 +1309,12 @@ Object {
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
     "stateCleared": "modified",
   },
@@ -1378,6 +1426,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/domain/Simple.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/domain/criteria/SimpleCriteria.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
@@ -1525,6 +1576,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -1615,6 +1667,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -1705,6 +1758,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -1793,6 +1847,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -1884,6 +1939,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -1971,6 +2027,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -2061,6 +2118,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -2149,6 +2207,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -2236,6 +2295,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -2325,6 +2385,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -2415,6 +2476,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -2505,6 +2567,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {

@@ -63,6 +63,11 @@ import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.r2dbc.core.RowsFetchSpec;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
+import <%= entityAbsolutePackage %>.repository.rowmapper.ColumnConverter;
+import tech.jhipster.service.ConditionBuilder;
+<%_ }  _%>
 <% relationships.forEach(rel => {
   if (rel.relationshipManyToMany && rel.ownerSide) { _%>
 import <%= rel.otherEntity.entityAbsolutePackage %>.domain.<%= rel.otherEntity.persistClass %>;
@@ -98,6 +103,9 @@ class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%=
 <%_ reactiveUniqueEntityTypes.forEach(element => { _%>
     private final <%= element %>RowMapper <%= element.toLowerCase() %>Mapper;
 <%_ }); _%>
+<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+    private final ColumnConverter columnConverter;
+<%_ } _%>
 
     private final static Table entityTable = Table.aliased("<%= entityTableName %>", EntityManager.ENTITY_ALIAS);
 <%_ reactiveEagerRelations.forEach(rel => { _%>
@@ -113,7 +121,8 @@ _%>
 
     public <%= entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_
             reactiveUniqueEntityTypes.forEach(element => { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>, R2dbcEntityOperations entityOperations,
-        R2dbcConverter converter) {
+        R2dbcConverter converter<% if (jpaMetamodelFiltering && reactive) {  %>,
+        ColumnConverter columnConverter<% } %>) {
         super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%= persistClass %>.class)), entityOperations, converter);
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
@@ -121,6 +130,9 @@ _%>
 <%_ reactiveUniqueEntityTypes.forEach(element => { _%>
         this.<%= element.toLowerCase() %>Mapper = <%= element.toLowerCase() %>Mapper;
 <%_ }); _%>
+<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+        this.columnConverter = columnConverter;
+<%_ } _%>
     }
 
     @Override
@@ -225,5 +237,44 @@ _%>
     <%_ } _%>
   <%_ }); %>;
         }
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+    @Override
+    public Flux<<%= persistClass %>> findByCriteria(<%= entityClass %>Criteria <%= entityInstance %>Criteria, Pageable page) {
+        return createQuery(page, buildConditions(<%= entityInstance %>Criteria)).all();
+    }
+
+    @Override
+    public Mono<Long> countByCriteria(<%= entityClass %>Criteria criteria) {
+        return findByCriteria(criteria, null)
+                    .collectList()
+                        .map(collectedList -> collectedList != null ? (long) collectedList.size() : (long) 0);
+    }
+
+    private Condition buildConditions(<%= entityClass %>Criteria criteria) {
+        ConditionBuilder builder = new ConditionBuilder(this.columnConverter);
+        List<Condition> allConditions = new ArrayList<Condition>();
+        if (criteria != null) {
+            if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
+                builder.buildFilterConditionForField(criteria.get<%= primaryKey.nameCapitalized %>(), entityTable.column("<%= primaryKey.name %>"));
+            }
+<%_
+fields.forEach((field) => {
+  if (field.id || field.transient) return;
+  if (this.isFilterableType(field.fieldType)) { _%>
+            if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
+                builder.buildFilterConditionForField(criteria.get<%= field.fieldInJavaBeanMethod %>(), entityTable.column("<%= field.columnName %>"));
+            }
+<%_ } _%>
+<%_ }); _%>
+<%_ reactiveEagerRelations.forEach((relationship) => {
+  const metamodelFieldName = (relationship.relationshipManyToMany || relationship.relationshipOneToMany) ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
+            if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
+                builder.buildFilterConditionForField(criteria.get<%= relationship.relationshipNameCapitalized %>Id(), <%= relationship.relationshipName %>Table.column("<%= relationship.otherEntity.primaryKey.ownFields[0].columnName %>"));
+            }
+<%_ }); _%>
+        }
+        return builder.buildConditions();
+    }
 <%_ } _%>
 }
