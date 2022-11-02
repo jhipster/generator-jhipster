@@ -1078,7 +1078,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -1577,6 +1577,8 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
@@ -2107,6 +2109,8 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
@@ -2921,6 +2925,8 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
@@ -3582,6 +3588,8 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
@@ -3692,18 +3700,6 @@ mariadb customisation
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-helm/templates/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
-",
-    "stateCleared": "modified",
-  },
   "msmariadb-helm/templates/msmariadb-deployment.yml": Object {
     "contents": "apiVersion: apps/v1
 kind: Deployment
@@ -3757,11 +3753,15 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+            - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
-                  key: secret
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
             - name: SPRING_LIQUIBASE_URL
@@ -3815,8 +3815,7 @@ spec:
     app: msmariadb
   ports:
     - name: http
-      port: 80
-      targetPort: 8081
+      port: 8081
 ",
     "stateCleared": "modified",
   },
@@ -3880,18 +3879,6 @@ mongodb customisation
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-helm/templates/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
-",
-    "stateCleared": "modified",
-  },
   "msmongodb-helm/templates/msmongodb-deployment.yml": Object {
     "contents": "apiVersion: apps/v1
 kind: Deployment
@@ -3945,11 +3932,15 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+            - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
-                  key: secret
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
             - name: SPRING_DATA_MONGODB_DATABASE
               value: msmongodb
             - name: SPRING_DATA_MONGODB_URI
@@ -3998,8 +3989,7 @@ spec:
     app: msmongodb
   ports:
     - name: http
-      port: 80
-      targetPort: 8081
+      port: 8081
 ",
     "stateCleared": "modified",
   },
@@ -4374,7 +4364,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -4740,7 +4730,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -8593,6 +8583,8 @@ spec:
               value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:mariadb://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS

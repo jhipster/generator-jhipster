@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+name: <%= baseName.toLowerCase() %>
 services:
-  <%= baseName.toLowerCase() %>-redis:
+  redis:
     image: <%= DOCKER_REDIS %>
     command:
       - "redis-server"
@@ -30,7 +30,7 @@ services:
       - "--appendonly yes"
     ports:
       - "6379:6379"
-  <%= baseName.toLowerCase() %>-redis-1:
+  redis-1:
     image: <%= DOCKER_REDIS %>
     command:
       - "redis-server"
@@ -41,7 +41,7 @@ services:
       - "--appendonly yes"
     ports:
       - "16379:6379"
-  <%= baseName.toLowerCase() %>-redis-2:
+  redis-2:
     image: <%= DOCKER_REDIS %>
     command:
       - "redis-server"
@@ -52,7 +52,7 @@ services:
       - "--appendonly yes"
     ports:
       - "26379:6379"
-  <%= baseName.toLowerCase() %>-redis-3:
+  redis-3:
     image: <%= DOCKER_REDIS %>
     command:
       - "redis-server"
@@ -63,7 +63,7 @@ services:
       - "--appendonly yes"
     ports:
       - "36379:6379"
-  <%= baseName.toLowerCase() %>-redis-4:
+  redis-4:
     image: <%= DOCKER_REDIS %>
     command:
       - "redis-server"
@@ -74,7 +74,7 @@ services:
       - "--appendonly yes"
     ports:
       - "46379:6379"
-  <%= baseName.toLowerCase() %>-redis-5:
+  redis-5:
     image: <%= DOCKER_REDIS %>
     command:
       - "redis-server"
@@ -85,7 +85,7 @@ services:
       - "--appendonly yes"
     ports:
       - "56379:6379"
-  <%= baseName.toLowerCase() %>-redis-cluster-builder:
+  redis-cluster-builder:
     build:
       context: .
       dockerfile: redis/Redis-Cluster.Dockerfile

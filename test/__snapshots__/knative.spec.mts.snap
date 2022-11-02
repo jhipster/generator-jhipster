@@ -768,7 +768,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -4046,18 +4046,6 @@ mariadb customisation
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/templates/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
-",
-    "stateCleared": "modified",
-  },
   "msmariadb-knative/templates/msmariadb-destination-rule.yml": Object {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
@@ -4119,11 +4107,19 @@ spec:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+                - name: JHIPSTER_REGISTRY_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: jwt-secret
-                      key: secret
+                      name: registry-secret
+                      key: registry-admin-password
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+                - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+                  value: \\"false\\"
+                - name: EUREKA_INSTANCE_HOSTNAME
+                  value: msmariadb
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
                 - name: SPRING_DATASOURCE_PASSWORD
@@ -4148,14 +4144,14 @@ spec:
                 - containerPort: 8081
               readinessProbe:
                 httpGet:
-                  path: /services/msmariadb/management/health/readiness
+                  path: /management/health/readiness
                 initialDelaySeconds: 20
                 periodSeconds: 15
                 failureThreshold: 6
                 timeoutSeconds: 5
               livenessProbe:
                 httpGet:
-                  path: /services/msmariadb/management/health/liveness
+                  path: /management/health/liveness
                 initialDelaySeconds: 120
                 timeoutSeconds: 5
   traffic:
@@ -4259,18 +4255,6 @@ mongodb customisation
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/templates/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
-",
-    "stateCleared": "modified",
-  },
   "msmongodb-knative/templates/msmongodb-destination-rule.yml": Object {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
@@ -4332,11 +4316,19 @@ spec:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+                - name: JHIPSTER_REGISTRY_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: jwt-secret
-                      key: secret
+                      name: registry-secret
+                      key: registry-admin-password
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+                - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+                  value: \\"false\\"
+                - name: EUREKA_INSTANCE_HOSTNAME
+                  value: msmongodb
                 - name: SPRING_DATA_MONGODB_DATABASE
                   value: msmongodb
                 - name: SPRING_DATA_MONGODB_URI
@@ -4358,14 +4350,14 @@ spec:
                 - containerPort: 8081
               readinessProbe:
                 httpGet:
-                  path: /services/msmongodb/management/health/readiness
+                  path: /management/health/readiness
                 initialDelaySeconds: 20
                 periodSeconds: 15
                 failureThreshold: 6
                 timeoutSeconds: 5
               livenessProbe:
                 httpGet:
-                  path: /services/msmongodb/management/health/liveness
+                  path: /management/health/liveness
                 initialDelaySeconds: 120
                 timeoutSeconds: 5
   traffic:
@@ -4729,7 +4721,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -9783,7 +9775,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -9857,7 +9849,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:14.5
+          image: \\"POSTGRESQL_VERSION\\"
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -12724,18 +12716,6 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
-",
-    "stateCleared": "modified",
-  },
   "msmariadb-knative/msmariadb-destination-rule.yml": Object {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
@@ -12872,11 +12852,19 @@ spec:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+                - name: JHIPSTER_REGISTRY_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: jwt-secret
-                      key: secret
+                      name: registry-secret
+                      key: registry-admin-password
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+                - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+                  value: \\"false\\"
+                - name: EUREKA_INSTANCE_HOSTNAME
+                  value: msmariadb
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
                 - name: SPRING_DATASOURCE_PASSWORD
@@ -12901,14 +12889,14 @@ spec:
                 - containerPort: 8081
               readinessProbe:
                 httpGet:
-                  path: /services/msmariadb/management/health/readiness
+                  path: /management/health/readiness
                 initialDelaySeconds: 20
                 periodSeconds: 15
                 failureThreshold: 6
                 timeoutSeconds: 5
               livenessProbe:
                 httpGet:
-                  path: /services/msmariadb/management/health/liveness
+                  path: /management/health/liveness
                 initialDelaySeconds: 120
                 timeoutSeconds: 5
   traffic:
@@ -12943,18 +12931,6 @@ spec:
       retries:
         attempts: 3
         perTryTimeout: 2s
-",
-    "stateCleared": "modified",
-  },
-  "msmongodb-knative/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
 ",
     "stateCleared": "modified",
   },
@@ -13341,11 +13317,19 @@ spec:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+                - name: JHIPSTER_REGISTRY_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: jwt-secret
-                      key: secret
+                      name: registry-secret
+                      key: registry-admin-password
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+                - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+                  value: \\"false\\"
+                - name: EUREKA_INSTANCE_HOSTNAME
+                  value: msmongodb
                 - name: SPRING_DATA_MONGODB_DATABASE
                   value: msmongodb
                 - name: SPRING_DATA_MONGODB_URI
@@ -13367,14 +13351,14 @@ spec:
                 - containerPort: 8081
               readinessProbe:
                 httpGet:
-                  path: /services/msmongodb/management/health/readiness
+                  path: /management/health/readiness
                 initialDelaySeconds: 20
                 periodSeconds: 15
                 failureThreshold: 6
                 timeoutSeconds: 5
               livenessProbe:
                 httpGet:
-                  path: /services/msmongodb/management/health/liveness
+                  path: /management/health/liveness
                 initialDelaySeconds: 120
                 timeoutSeconds: 5
   traffic:
@@ -13409,18 +13393,6 @@ spec:
       retries:
         attempts: 3
         perTryTimeout: 2s
-",
-    "stateCleared": "modified",
-  },
-  "msmssqldb-knative/jwt-secret.yml": Object {
-    "contents": "apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-  namespace: default
-type: Opaque
-data:
-  secret: U0VDUkVULS01MA==
 ",
     "stateCleared": "modified",
   },
@@ -13564,11 +13536,19 @@ spec:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+                - name: JHIPSTER_REGISTRY_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: jwt-secret
-                      key: secret
+                      name: registry-secret
+                      key: registry-admin-password
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/eureka/
+                - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+                  value: \\"false\\"
+                - name: EUREKA_INSTANCE_HOSTNAME
+                  value: msmssqldb
                 - name: SPRING_SLEUTH_PROPAGATION_KEYS
                   value: \\"x-request-id,x-ot-span-context\\"
                 - name: JAVA_OPTS
@@ -13586,14 +13566,14 @@ spec:
                 - containerPort: 8081
               readinessProbe:
                 httpGet:
-                  path: /services/msmssqldb/management/health/readiness
+                  path: /management/health/readiness
                 initialDelaySeconds: 20
                 periodSeconds: 15
                 failureThreshold: 6
                 timeoutSeconds: 5
               livenessProbe:
                 httpGet:
-                  path: /services/msmssqldb/management/health/liveness
+                  path: /management/health/liveness
                 initialDelaySeconds: 120
                 timeoutSeconds: 5
   traffic:
@@ -13894,7 +13874,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: \\"ELASTICSEARCH_VERSION\\"
           env:
             - name: discovery.type
               value: single-node
@@ -13968,7 +13948,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:14.5
+          image: \\"POSTGRESQL_VERSION\\"
           env:
             - name: POSTGRES_USER
               value: mspsql

@@ -19,37 +19,33 @@
 import assert from 'assert';
 import lodash from 'lodash';
 
-import BaseApplicationGenerator from '../base-application/generator.cjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import validations from '../../jdl/jhipster/validations.js';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import constants from '../generator-constants.cjs';
-import utils from '../../utils/index.cjs';
-import entityUtils from '../../utils/entity.cjs';
-import fieldUtils from '../../utils/field.cjs';
+import { stringify } from '../../utils/index.mjs';
+import {
+  derivedPrimaryKeyProperties,
+  preparePostEntitiesCommonDerivedProperties,
+  preparePostEntityCommonDerivedProperties,
+  preparePostEntityServerDerivedProperties,
+} from '../../utils/entity.mjs';
+import { fieldIsEnum } from '../../utils/field.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
-import type { ClientServerApplication } from './types.js';
-
-const { sortedUniq, intersection } = lodash;
+import type { ClientServerApplication } from '../common/types.mjs';
 
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
+
+const { sortedUniq, intersection } = lodash;
 
 const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = BlobTypes;
 
-const {
-  derivedPrimaryKeyProperties,
-  preparePostEntitiesCommonDerivedProperties,
-  preparePostEntityCommonDerivedProperties,
-  preparePostEntityServerDerivedProperties,
-} = entityUtils;
-const { fieldIsEnum } = fieldUtils;
-
-const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations;
+const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations.default;
 const { SUPPORTED_VALIDATION_RULES } = constants;
-const { stringify } = utils;
 
 /**
  * @class

@@ -28,7 +28,7 @@ springBootVersion=<%= SPRING_BOOT_VERSION %>
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
 mapstructVersion=1.5.2.Final
-archunitJunit5Version=0.22.0
+archunitJunit5Version=1.0.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
@@ -38,8 +38,10 @@ caffeineVersion=3.1.1
 <%_ if (cacheProviderCaffeine) { _%>
 typesafeConfigVersion=1.4.2
 <%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-liquibaseHibernate5Version=<%= LIQUIBASE_VERSION %>
+<%_ if (enableLiquibase && databaseTypeSql && !reactive) { _%>
+liquibaseHibernate5Version=<%- javaDependencies.liquibase %>
+<%_ } _%>
+<%_ if (enableLiquibase) { _%>
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
 
@@ -62,7 +64,7 @@ cassandraDriverVersion=4.14.1
 <%_ } _%>
 
 # gradle plugin version
-jibPluginVersion=<%= JIB_VERSION %>
+jibPluginVersion=<%- javaDependencies['jib-maven-plugin'] %>
 gitPropertiesPluginVersion=2.4.1
 <%_ if (!skipClient) { _%>
 gradleNodePluginVersion=3.4.0

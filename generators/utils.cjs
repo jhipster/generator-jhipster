@@ -27,7 +27,6 @@ const crypto = require('crypto');
 const os = require('os');
 
 const constants = require('./generator-constants.cjs');
-const FileUtils = require('../jdl/utils/file-utils');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
 
@@ -53,7 +52,6 @@ module.exports = {
   getRandomHex,
   checkStringInFile,
   checkRegexInFile,
-  loadYoRc,
   packageNameToNamespace,
   stringHashCode,
   gitExec,
@@ -65,8 +63,6 @@ module.exports = {
   vueAddPageProtractorConf,
   languageSnakeCase,
   languageToJavaLanguage,
-  addSectionsCondition,
-  mergeSections,
 };
 
 const databaseTypes = require('../jdl/jhipster/database-types');
@@ -709,13 +705,6 @@ function decodeBase64(string, encoding = 'utf-8') {
   return Buffer.from(string, 'base64').toString(encoding);
 }
 
-function loadYoRc(filePath = '.yo-rc.json') {
-  if (!FileUtils.doesFileExist(filePath)) {
-    return undefined;
-  }
-  return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
-}
-
 /**
  * Get DB type from DB value
  * @param {string} db - db
@@ -939,49 +928,4 @@ function languageToJavaLanguage(language) {
   const langProp = languageSnakeCase(language);
   // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
   return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
-}
-
-/**
- * @private
- * Utility function add condition to every block in addition to the already existing condition.
- */
-function addSectionsCondition(files, commonCondition) {
-  return Object.fromEntries(
-    Object.entries(files).map(([sectionName, sectionValue]) => {
-      sectionValue = sectionValue.map(block => {
-        const { condition } = block;
-        let newCondition = commonCondition;
-        if (typeof condition === 'function') {
-          newCondition = (...args) => {
-            return commonCondition(...args) && condition(...args);
-          };
-        } else if (condition !== undefined) {
-          newCondition = (...args) => commonCondition(...args) && condition;
-        }
-        block = {
-          ...block,
-          condition: newCondition,
-        };
-        return block;
-      });
-      return [sectionName, sectionValue];
-    })
-  );
-}
-
-/**
- * @private
- * Utility function to merge sections (jhipster files structure)
- * Merging { foo: [blocks1], bar: [block2]} and { foo: [blocks3], bar: [block4]}
- * Results in { foo: [blocks1, block3], bar: [block2, block4]}
- */
-function mergeSections(...allFiles) {
-  const generated = {};
-  for (const files of allFiles) {
-    for (const [sectionName, sectionValue] of Object.entries(files)) {
-      generated[sectionName] = generated[sectionName] || [];
-      generated[sectionName].push(...sectionValue);
-    }
-  }
-  return generated;
 }

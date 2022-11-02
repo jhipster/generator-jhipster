@@ -23,7 +23,7 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import EnvironmentBuilder from '../../cli/environment-builder.cjs';
-import Generator from './generator.cjs';
+import BaseGenerator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 const { snakeCase } = lodash;
@@ -35,10 +35,10 @@ const generator = basename(__dirname);
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new BaseGenerator([], { help: true }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
 
@@ -48,7 +48,7 @@ describe(`JHipster ${generator} generator`, () => {
       envBuilder = EnvironmentBuilder.createDefaultBuilder();
     });
     it(`should be registered as jhipster:${generator} at yeoman-environment`, async () => {
-      expect(await envBuilder.getEnvironment().get(`jhipster:${generator}`)).toBe(Generator);
+      expect(await envBuilder.getEnvironment().get(`jhipster:${generator}`)).toBe(BaseGenerator);
     });
   });
 
@@ -58,23 +58,23 @@ describe(`JHipster ${generator} generator`, () => {
     const writing = jestMock.fn();
     const postWriting = jestMock.fn();
 
-    class CustomGenerator extends Generator {
-      get [Generator.INITIALIZING]() {
+    class CustomGenerator extends BaseGenerator {
+      get [BaseGenerator.INITIALIZING]() {
         initializing();
         return {};
       }
 
-      get [Generator.PROMPTING]() {
+      get [BaseGenerator.PROMPTING]() {
         prompting();
         return {};
       }
 
-      get [Generator.WRITING]() {
+      get [BaseGenerator.WRITING]() {
         writing();
         return {};
       }
 
-      get [Generator.POST_WRITING]() {
+      get [BaseGenerator.POST_WRITING]() {
         postWriting();
         return {};
       }

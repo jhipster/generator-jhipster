@@ -8,6 +8,18 @@ Object {
   ".eslintrc.js": Object {
     "stateCleared": "modified",
   },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
+    "stateCleared": "modified",
+  },
   ".postcssrc.js": Object {
     "stateCleared": "modified",
   },
@@ -39,6 +51,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/admin/docs/docs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.vue": Object {
     "stateCleared": "modified",
   },
   "src/app/app.component.ts": Object {
@@ -95,6 +116,69 @@ Object {
   "src/app/entities/entities.vue": Object {
     "stateCleared": "modified",
   },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.vue": Object {
+    "stateCleared": "modified",
+  },
   "src/app/main.ts": Object {
     "stateCleared": "modified",
   },
@@ -141,6 +225,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/shared/model/user.model.ts": Object {
@@ -263,6 +356,9 @@ Object {
   "test/spec/app/account/login-form/login-form.component.spec.ts": Object {
     "stateCleared": "modified",
   },
+  "test/spec/app/admin/gateway/gateway.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "test/spec/app/core/error/error.component.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -273,6 +369,42 @@ Object {
     "stateCleared": "modified",
   },
   "test/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "test/spec/app/shared/alert/alert.service.spec.ts": Object {
@@ -319,6 +451,18 @@ Object {
   ".eslintrc.js": Object {
     "stateCleared": "modified",
   },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
+    "stateCleared": "modified",
+  },
   ".postcssrc.js": Object {
     "stateCleared": "modified",
   },
@@ -353,6 +497,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/admin/docs/docs.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/admin/gateway/gateway.vue": Object {
     "stateCleared": "modified",
   },
   "src/app/admin/health/health-modal.component.ts": Object {
@@ -448,6 +601,69 @@ Object {
   "src/app/entities/entities.vue": Object {
     "stateCleared": "modified",
   },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.vue": Object {
+    "stateCleared": "modified",
+  },
   "src/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -503,6 +719,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/shared/model/user.model.ts": Object {
@@ -628,6 +853,9 @@ Object {
   "test/spec/app/admin/configuration/configuration.component.spec.ts": Object {
     "stateCleared": "modified",
   },
+  "test/spec/app/admin/gateway/gateway.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "test/spec/app/admin/health/health-modal.component.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -656,6 +884,42 @@ Object {
     "stateCleared": "modified",
   },
   "test/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "test/spec/app/shared/alert/alert.service.spec.ts": Object {
@@ -703,6 +967,18 @@ Object {
     "stateCleared": "modified",
   },
   ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
     "stateCleared": "modified",
   },
   ".postcssrc.js": Object {
@@ -855,10 +1131,70 @@ Object {
   "src/app/entities/entities.vue": Object {
     "stateCleared": "modified",
   },
-  "src/app/entities/user/user.service.ts": Object {
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": Object {
     "stateCleared": "modified",
   },
-  "src/app/index.ts": Object {
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/main.ts": Object {
@@ -907,6 +1243,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/shared/model/user.model.ts": Object {
@@ -1071,13 +1416,40 @@ Object {
   "test/spec/app/entities/entities-menu.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "test/spec/app/microfrontends/entities-menu.component.ts": Object {
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "test/spec/app/microfrontends/entities-menu.vue": Object {
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "test/spec/app/microfrontends/entities-router.ts": Object {
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/microservice/microservice.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/spec/app/entities/simple/simple.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "test/spec/app/shared/alert/alert.service.spec.ts": Object {
@@ -1110,9 +1482,6 @@ Object {
   "webpack/webpack.dev.js": Object {
     "stateCleared": "modified",
   },
-  "webpack/webpack.microfrontend.js": Object {
-    "stateCleared": "modified",
-  },
   "webpack/webpack.prod.js": Object {
     "stateCleared": "modified",
   },
@@ -1125,6 +1494,18 @@ Object {
     "stateCleared": "modified",
   },
   ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
     "stateCleared": "modified",
   },
   ".postcssrc.js": Object {
@@ -1208,10 +1589,70 @@ Object {
   "src/main/webapp2/app/entities/entities.vue": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/user/user.service.ts": Object {
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/index.ts": Object {
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/locale/translation.service.ts": Object {
@@ -1266,6 +1707,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/model/user.model.ts": Object {
@@ -1403,13 +1853,40 @@ Object {
   "src/test/javascript2/spec/app/entities/entities-menu.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "src/test/javascript2/spec/app/microfrontends/entities-menu.component.ts": Object {
+  "src/test/javascript2/spec/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "src/test/javascript2/spec/app/microfrontends/entities-menu.vue": Object {
+  "src/test/javascript2/spec/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "src/test/javascript2/spec/app/microfrontends/entities-router.ts": Object {
+  "src/test/javascript2/spec/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/microservice/microservice-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/microservice/microservice-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/microservice/microservice.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/microservice/microservice.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/simple/simple-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/simple/simple-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/simple/simple.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/simple/simple.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/test/javascript2/spec/app/shared/alert/alert.service.spec.ts": Object {
@@ -1445,9 +1922,6 @@ Object {
   "webpack/webpack.dev.js": Object {
     "stateCleared": "modified",
   },
-  "webpack/webpack.microfrontend.js": Object {
-    "stateCleared": "modified",
-  },
   "webpack/webpack.prod.js": Object {
     "stateCleared": "modified",
   },
@@ -1460,6 +1934,18 @@ Object {
     "stateCleared": "modified",
   },
   ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
     "stateCleared": "modified",
   },
   ".postcssrc.js": Object {
@@ -1660,6 +2146,69 @@ Object {
   "src/main/webapp2/app/entities/entities.vue": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple.vue": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -1718,6 +2267,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/model/user.model.ts": Object {
@@ -1900,6 +2458,42 @@ Object {
   "src/test/javascript2/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
     "stateCleared": "modified",
   },
+  "src/test/javascript2/spec/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/microservice/microservice-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/microservice/microservice-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/microservice/microservice.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/microservice/microservice.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/simple/simple-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/simple/simple-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/simple/simple.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript2/spec/app/entities/simple/simple.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/test/javascript2/spec/app/shared/alert/alert.service.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -1945,6 +2539,18 @@ Object {
     "stateCleared": "modified",
   },
   ".eslintrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
     "stateCleared": "modified",
   },
   ".postcssrc.js": Object {
@@ -2028,6 +2634,69 @@ Object {
   "src/main/webapp/app/entities/entities.vue": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.vue": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -2074,6 +2743,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/model/user.model.ts": Object {
@@ -2208,6 +2886,42 @@ Object {
   "src/test/javascript/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
     "stateCleared": "modified",
   },
+  "src/test/javascript/spec/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/microservice/microservice-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/microservice/microservice-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/microservice/microservice.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/microservice/microservice.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/simple/simple-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/simple/simple-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/simple/simple.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/simple/simple.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/test/javascript/spec/app/shared/alert/alert.service.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -2252,6 +2966,18 @@ Object {
   ".eslintrc.js": Object {
     "stateCleared": "modified",
   },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
+    "stateCleared": "modified",
+  },
   ".postcssrc.js": Object {
     "stateCleared": "modified",
   },
@@ -2277,12 +3003,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/login.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/sessions.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/sessions/sessions.vue": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.component.ts": Object {
@@ -2345,6 +3065,69 @@ Object {
   "src/main/webapp/app/entities/entities.vue": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-details.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-details.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-update.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-update.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.vue": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/main.ts": Object {
     "stateCleared": "modified",
   },
@@ -2391,6 +3174,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhi-item-count.vue": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/model/user.model.ts": Object {
@@ -2525,6 +3317,42 @@ Object {
   "src/test/javascript/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
     "stateCleared": "modified",
   },
+  "src/test/javascript/spec/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/microservice/microservice-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/microservice/microservice-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/microservice/microservice.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/microservice/microservice.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/simple/simple-details.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/simple/simple-update.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/simple/simple.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/spec/app/entities/simple/simple.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/test/javascript/spec/app/shared/alert/alert.service.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -2582,6 +3410,55 @@ Object {
         "websocket": true,
         "withAdminUi": false,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2603,6 +3480,55 @@ Object {
         "websocket": true,
         "withAdminUi": true,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2625,6 +3551,55 @@ Object {
         "websocket": false,
         "withAdminUi": false,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2646,6 +3621,55 @@ Object {
         "websocket": false,
         "withAdminUi": true,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2668,6 +3692,55 @@ Object {
         "websocket": true,
         "withAdminUi": true,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2688,6 +3761,55 @@ Object {
         "websocket": false,
         "withAdminUi": false,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2709,6 +3831,55 @@ Object {
         "websocket": true,
         "withAdminUi": false,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },

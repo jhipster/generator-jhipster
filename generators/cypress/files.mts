@@ -18,9 +18,9 @@
  */
 import constants from '../generator-constants.cjs';
 
-import type { WriteFileSection } from '../base/api.js';
+import type { WriteFileSection } from '../base/api.mjs';
 import type CypressGenerator from './generator.mjs';
-import type { CypressApplication } from './types.js';
+import type { CypressApplication } from './types.mjs';
 
 const { CLIENT_TEST_SRC_DIR } = constants;
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;

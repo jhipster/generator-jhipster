@@ -8,6 +8,18 @@ Object {
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
+    "stateCleared": "modified",
+  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
@@ -65,13 +77,76 @@ Object {
   "src/app/config/store.ts": Object {
     "stateCleared": "modified",
   },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/index.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.tsx": Object {
     "stateCleared": "modified",
   },
   "src/app/entities/reducers.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/entities/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.tsx": Object {
     "stateCleared": "modified",
   },
   "src/app/index.tsx": Object {
@@ -87,6 +162,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/modules/administration/docs/docs.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/modules/administration/gateway/gateway.tsx": Object {
     "stateCleared": "modified",
   },
   "src/app/modules/administration/index.tsx": Object {
@@ -180,6 +258,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/shared/layout/password/password-strength-bar.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/shared/model/user.model.ts": Object {
@@ -337,6 +424,18 @@ Object {
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
+    "stateCleared": "modified",
+  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
@@ -397,13 +496,76 @@ Object {
   "src/app/config/translation.ts": Object {
     "stateCleared": "modified",
   },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/index.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.tsx": Object {
     "stateCleared": "modified",
   },
   "src/app/entities/reducers.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/entities/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.tsx": Object {
     "stateCleared": "modified",
   },
   "src/app/index.tsx": Object {
@@ -422,6 +584,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/modules/administration/docs/docs.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/modules/administration/gateway/gateway.tsx": Object {
     "stateCleared": "modified",
   },
   "src/app/modules/administration/health/health-modal.tsx": Object {
@@ -527,6 +692,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/shared/layout/password/password-strength-bar.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/shared/model/user.model.ts": Object {
@@ -699,6 +873,18 @@ Object {
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
+    "stateCleared": "modified",
+  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
@@ -756,7 +942,49 @@ Object {
   "src/app/config/store.ts": Object {
     "stateCleared": "modified",
   },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/entity-with-custom-id/index.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/microservice/microservice.tsx": Object {
     "stateCleared": "modified",
   },
   "src/app/entities/reducers.ts": Object {
@@ -765,10 +993,28 @@ Object {
   "src/app/entities/routes.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/app/index.tsx": Object {
+  "src/app/entities/simple/index.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/app/main.tsx": Object {
+  "src/app/entities/simple/simple-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/entities/simple/simple.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/index.tsx": Object {
     "stateCleared": "modified",
   },
   "src/app/modules/account/activate/activate.reducer.spec.ts": Object {
@@ -897,9 +1143,6 @@ Object {
   "src/app/shared/error/error-boundary.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-loading.tsx": Object {
-    "stateCleared": "modified",
-  },
   "src/app/shared/error/page-not-found.tsx": Object {
     "stateCleared": "modified",
   },
@@ -946,6 +1189,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/shared/layout/password/password-strength-bar.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/shared/model/user.model.ts": Object {
@@ -1089,9 +1341,6 @@ Object {
   "webpack/webpack.dev.js": Object {
     "stateCleared": "modified",
   },
-  "webpack/webpack.microfrontend.js": Object {
-    "stateCleared": "modified",
-  },
   "webpack/webpack.prod.js": Object {
     "stateCleared": "modified",
   },
@@ -1104,6 +1353,18 @@ Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
     "stateCleared": "modified",
   },
   ".yo-rc.json": Object {
@@ -1166,7 +1427,49 @@ Object {
   "src/main/webapp2/app/config/translation.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/index.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/entities/reducers.ts": Object {
@@ -1175,10 +1478,28 @@ Object {
   "src/main/webapp2/app/entities/routes.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/index.tsx": Object {
+  "src/main/webapp2/app/entities/simple/index.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/main.tsx": Object {
+  "src/main/webapp2/app/entities/simple/simple-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/index.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/modules/administration/administration.reducer.spec.ts": Object {
@@ -1235,9 +1556,6 @@ Object {
   "src/main/webapp2/app/shared/error/error-boundary.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/error/error-loading.tsx": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp2/app/shared/error/page-not-found.tsx": Object {
     "stateCleared": "modified",
   },
@@ -1287,6 +1605,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/layout/password/password-strength-bar.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/model/user.model.ts": Object {
@@ -1445,9 +1772,6 @@ Object {
   "webpack/webpack.dev.js": Object {
     "stateCleared": "modified",
   },
-  "webpack/webpack.microfrontend.js": Object {
-    "stateCleared": "modified",
-  },
   "webpack/webpack.prod.js": Object {
     "stateCleared": "modified",
   },
@@ -1460,6 +1784,18 @@ Object {
     "stateCleared": "modified",
   },
   ".eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
     "stateCleared": "modified",
   },
   ".yo-rc.json": Object {
@@ -1522,13 +1858,76 @@ Object {
   "src/main/webapp2/app/config/translation.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/entity-with-custom-id/index.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/microservice/microservice.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/entities/reducers.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/entities/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/entities/simple/simple.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/index.tsx": Object {
@@ -1726,6 +2125,15 @@ Object {
   "src/main/webapp2/app/shared/layout/password/password-strength-bar.tsx": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/model/simple.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/shared/model/user.model.ts": Object {
     "stateCleared": "modified",
   },
@@ -1887,6 +2295,18 @@ Object {
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
+    "stateCleared": "modified",
+  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
@@ -1944,13 +2364,76 @@ Object {
   "src/main/webapp/app/config/store.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/index.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/reducers.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/index.tsx": Object {
@@ -2056,6 +2539,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/model/user.model.ts": Object {
@@ -2222,6 +2714,18 @@ Object {
   ".eslintrc.json": Object {
     "stateCleared": "modified",
   },
+  ".jhipster/EntityWithCustomId.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": Object {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": Object {
+    "stateCleared": "modified",
+  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
@@ -2279,13 +2783,76 @@ Object {
   "src/main/webapp/app/config/store.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/index.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/menu.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/reducers.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/routes.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/index.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-delete-dialog.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-detail.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-reducer.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple-update.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.reducer.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/index.tsx": Object {
@@ -2394,6 +2961,15 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/microservice.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/simple.model.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/model/user.model.ts": Object {
@@ -2564,6 +3140,55 @@ Object {
         "websocket": true,
         "withAdminUi": false,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2585,6 +3210,55 @@ Object {
         "websocket": true,
         "withAdminUi": true,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2607,6 +3281,55 @@ Object {
         "websocket": false,
         "withAdminUi": false,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2628,6 +3351,55 @@ Object {
         "websocket": false,
         "withAdminUi": true,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2650,6 +3422,55 @@ Object {
         "websocket": true,
         "withAdminUi": true,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2670,6 +3491,55 @@ Object {
         "websocket": false,
         "withAdminUi": false,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },
@@ -2691,6 +3561,55 @@ Object {
         "websocket": true,
         "withAdminUi": false,
       },
+      "entities": Array [
+        Object {
+          "changelogDate": "20220129000100",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "jpaMetamodelFiltering": true,
+          "name": "Simple",
+        },
+        Object {
+          "changelogDate": "20220129002000",
+          "entityPackage": "custom",
+          "fields": Array [
+            Object {
+              "fieldName": "id",
+              "fieldType": "UUID",
+            },
+          ],
+          "name": "EntityWithCustomId",
+        },
+        Object {
+          "changelogDate": "20220129000300",
+          "fields": Array [
+            Object {
+              "fieldName": "simpleName",
+              "fieldType": "String",
+            },
+          ],
+          "microserviceName": "microservice1",
+          "name": "Microservice",
+          "pagination": "infiniscroll",
+          "service": "service",
+          "skipFakeData": true,
+        },
+        Object {
+          "changelogDate": "20220129000400",
+          "fields": Array [
+            Object {
+              "fieldName": "skipClientName",
+              "fieldType": "String",
+            },
+          ],
+          "name": "SkipClient",
+          "skipClient": true,
+        },
+      ],
     },
     "skipInstall": true,
   },

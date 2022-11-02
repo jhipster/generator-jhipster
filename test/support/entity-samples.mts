@@ -1,6 +1,8 @@
-import { CommonDBTypes } from '../../jdl/jhipster/field-types.js';
+import fieldTypes from '../../jdl/jhipster/field-types.js';
 
-const { UUID } = CommonDBTypes;
+const {
+  CommonDBTypes: { UUID },
+} = fieldTypes;
 
 export const entitySimple = {
   name: 'Simple',
@@ -54,4 +56,13 @@ export const entitiesMicroservice = {
   pagination: 'infiniscroll',
 };
 
-export const entitiesServerSamples = [entitySimple, entityCustomId, entitiesMicroservice];
+export const entitySkipClient = {
+  name: 'SkipClient',
+  changelogDate: '20220129000400',
+  skipClient: true,
+  fields: [{ fieldName: 'skipClientName', fieldType: 'String' }],
+};
+
+export const entitiesServerSamples = [entitySimple, entityAnotherSimple, entityCustomId, entitiesMicroservice];
+
+export const entitiesClientSamples = [entitySimple, entityCustomId, entitiesMicroservice, entitySkipClient];

@@ -20,11 +20,18 @@ const assert = require('assert');
 const chalk = require('chalk');
 const _ = require('lodash');
 const path = require('path');
-const { existsSync } = require('fs');
+const { existsSync, readFileSync } = require('fs');
 const Environment = require('yeoman-environment');
 const { CLI_NAME, logger } = require('./utils.cjs');
-const { loadYoRc, packageNameToNamespace } = require('../generators/utils.cjs');
+const { packageNameToNamespace } = require('../generators/utils.cjs');
 const { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } = require('../utils/blueprint.cjs');
+
+function loadYoRc(filePath = '.yo-rc.json') {
+  if (!existsSync(filePath)) {
+    return undefined;
+  }
+  return JSON.parse(readFileSync(filePath, { encoding: 'utf-8' }));
+}
 
 const createEnvironment = (args, options = {}, adapter) => {
   // Remove after migration to environment 3.

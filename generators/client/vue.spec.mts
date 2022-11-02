@@ -3,11 +3,11 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport, buildClientSamples } from '../../test/support/index.mjs';
+import { testBlueprintSupport, buildClientSamples, entitiesClientSamples as entities } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
-import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
+import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import constants from '../generator-constants.cjs';
 
 const { snakeCase } = lodash;
@@ -18,7 +18,7 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mjs');
 
-const { VUE: clientFramework } = ClientFrameworkTypes;
+const { VUE: clientFramework } = clientFrameworkTypes;
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } = constants;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
 
@@ -32,6 +32,7 @@ const samplesBuilder = () =>
           ...sample,
           ...commonConfig,
         },
+        entities,
       },
     },
   ]);
@@ -72,7 +73,7 @@ const testSamples = samplesBuilder();
 
 describe(`JHipster ${clientFramework} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });

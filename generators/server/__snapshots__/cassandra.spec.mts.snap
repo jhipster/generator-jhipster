@@ -110,6 +110,9 @@ Object {
   "src/main/docker/prometheus/prometheus.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -625,6 +628,9 @@ Object {
   "src/main/docker/realm-config/jhipster-realm.json": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -871,9 +877,6 @@ Object {
   "src/main/resources/config/cql/drop-keyspace.cql": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
@@ -1044,12 +1047,6 @@ Object {
   "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
-  "npmw": Object {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": Object {
-    "stateCleared": "modified",
-  },
   "package.json": Object {
     "stateCleared": "modified",
   },
@@ -1086,6 +1083,9 @@ Object {
   "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/hazelcast-management-center.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/jhipster-control-center.yml": Object {
     "stateCleared": "modified",
   },
@@ -1096,6 +1096,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -1156,9 +1159,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
@@ -1273,9 +1273,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
@@ -1401,9 +1398,6 @@ Object {
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
@@ -1462,9 +1456,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
@@ -1580,12 +1571,6 @@ Object {
   "gradlew.bat": Object {
     "stateCleared": "modified",
   },
-  "npmw": Object {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": Object {
-    "stateCleared": "modified",
-  },
   "package.json": Object {
     "stateCleared": "modified",
   },
@@ -1631,6 +1616,9 @@ Object {
   "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/hazelcast-management-center.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/jhipster-control-center.yml": Object {
     "stateCleared": "modified",
   },
@@ -1644,6 +1632,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -1758,9 +1749,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
@@ -1972,12 +1960,6 @@ Object {
   "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
-  "npmw": Object {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": Object {
-    "stateCleared": "modified",
-  },
   "package.json": Object {
     "stateCleared": "modified",
   },
@@ -2023,6 +2005,9 @@ Object {
   "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/hazelcast-management-center.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/jhipster-control-center.yml": Object {
     "stateCleared": "modified",
   },
@@ -2036,6 +2021,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -2105,9 +2093,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
@@ -2204,9 +2189,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
@@ -2326,9 +2308,6 @@ Object {
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
@@ -2366,9 +2345,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
@@ -2469,12 +2445,6 @@ Object {
   "gradlew.bat": Object {
     "stateCleared": "modified",
   },
-  "npmw": Object {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": Object {
-    "stateCleared": "modified",
-  },
   "package.json": Object {
     "stateCleared": "modified",
   },
@@ -2523,6 +2493,9 @@ Object {
   "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/hazelcast-management-center.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/jhipster-control-center.yml": Object {
     "stateCleared": "modified",
   },
@@ -2533,6 +2506,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -2677,9 +2653,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
@@ -2979,6 +2952,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -3520,6 +3496,9 @@ Object {
   "src/main/docker/prometheus/prometheus.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -3915,6 +3894,9 @@ Object {
   "src/main/docker/realm-config/jhipster-realm.json": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -4150,9 +4132,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/cql/drop-keyspace.cql": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": Object {
@@ -4409,6 +4388,9 @@ Object {
   "src/main/docker/realm-config/jhipster-realm.json": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/services.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
@@ -4652,9 +4634,6 @@ Object {
   "src/main/resources/config/cql/drop-keyspace.cql": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
@@ -4874,6 +4853,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
@@ -5401,6 +5383,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {

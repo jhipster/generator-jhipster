@@ -1,108 +1,108 @@
 {
   "include": [
     {
-      "name": "ngx-default",
-      "app-sample": "ngx-default",
+      "name": "ng-default",
+      "app-sample": "ng-default",
       "entity": "sqlfull",
       "sonar-analyse": "true"
     },
     {
-      "name": "ngx-default-additional",
+      "name": "ng-default-additional",
       "entity": "none",
-      "app-sample": "ngx-default",
+      "app-sample": "ng-default",
       "jdl-entity": "*"
     },
     {
-      "name": "ngx-mysql-es-noi18n-mapsid",
-      "app-sample": "ngx-mysql-es-noi18n-mapsid",
+      "name": "ng-mysql-es-noi18n-mapsid",
+      "app-sample": "ng-mysql-es-noi18n-mapsid",
       "entity": "sql"
     },
     {
-      "name": "ngx-mongodb-kafka-cucumber",
-      "app-sample": "ngx-mongodb-kafka-cucumber",
+      "name": "ng-mongodb-kafka-cucumber",
+      "app-sample": "ng-mongodb-kafka-cucumber",
       "entity": "mongodb",
       "environment": "dev"
     },
     {
-      "name": "ngx-h2mem-ws-nol2",
-      "app-sample": "ngx-h2mem-ws-nol2",
+      "name": "ng-h2mem-ws-nol2",
+      "app-sample": "ng-h2mem-ws-nol2",
       "entity": "sql",
       "environment": "dev"
     },
     {
-      "name": "ngx-couchbase",
-      "app-sample": "ngx-couchbase",
+      "name": "ng-couchbase",
+      "app-sample": "ng-couchbase",
       "entity": "couchbase"
     },
     {
-      "name": "ngx-gradle-couchbase-search",
-      "app-sample": "ngx-gradle-couchbase-search",
+      "name": "ng-gradle-couchbase-search",
+      "app-sample": "ng-gradle-couchbase-search",
       "entity": "couchbase"
     },
     {
-      "name": "ngx-gradle-fr",
-      "app-sample": "ngx-gradle-fr",
+      "name": "ng-gradle-fr",
+      "app-sample": "ng-gradle-fr",
       "entity": "sql"
     },
     {
-      "name": "ngx-gradle-mariadb-oauth2-infinispan",
-      "app-sample": "ngx-gradle-mariadb-oauth2-infinispan",
+      "name": "ng-gradle-mariadb-oauth2-infinispan",
+      "app-sample": "ng-gradle-mariadb-oauth2-infinispan",
       "entity": "sql",
       "environment": "dev"
     },
     {
-      "name": "ngx-gradle-h2disk-ws-nocache",
-      "app-sample": "ngx-gradle-h2disk-ws-nocache",
+      "name": "ng-gradle-h2disk-ws-nocache",
+      "app-sample": "ng-gradle-h2disk-ws-nocache",
       "entity": "sql",
       "environment": "dev",
       "war": 1,
       "testcontainers": "false"
     },
     {
-      "name": "ngx-webflux-mongodb",
+      "name": "ng-webflux-mongodb",
       "app-sample": "webflux-mongodb",
       "entity": "mongodb"
     },
     {
-      "name": "ngx-webflux-gradle-mongodb-oauth2",
+      "name": "ng-webflux-gradle-mongodb-oauth2",
       "app-sample": "webflux-mongodb-oauth2",
       "entity": "mongodb"
     },
     {
-      "name": "ngx-webflux-psql-default",
+      "name": "ng-webflux-psql-default",
       "app-sample": "webflux-psql",
       "entity": "sql"
     },
     {
-      "name": "ngx-webflux-psql-additional",
+      "name": "ng-webflux-psql-additional",
       "jdl-samples": "webflux-psql,custom-domain"
     },
     {
-      "name": "ngx-webflux-gradle-session-h2mem-es",
+      "name": "ng-webflux-gradle-session-h2mem-es",
       "app-sample": "webflux-gradle-session-h2mem-es",
       "environment": "dev",
       "entity": "sqllight"
     },
     {
-      "name": "ngx-webflux-couchbase",
+      "name": "ng-webflux-couchbase",
       "app-sample": "webflux-couchbase",
       "entity": "couchbase"
     },
     {
-      "name": "ms-ngx-eureka-oauth2-mongodb-caffeine",
-      "jdl-samples": "ms-ngx-eureka-oauth2-mongodb-caffeine",
+      "name": "ms-ng-eureka-oauth2-mongodb-caffeine",
+      "jdl-samples": "ms-ng-eureka-oauth2-mongodb-caffeine",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true"
     },
     {
-      "name": "mf-ngx-eureka-jwt-psql-ehcache",
-      "jdl-samples": "mf-ngx-eureka-jwt-psql-ehcache",
+      "name": "mf-ng-eureka-jwt-psql-ehcache",
+      "jdl-samples": "mf-ng-eureka-jwt-psql-ehcache",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true"
     },
     {
-      "name": "ms-mf-ngx-consul-oauth2-neo4j",
-      "jdl-samples": "ms-mf-ngx-consul-oauth2-neo4j",
+      "name": "ms-mf-ng-consul-oauth2-neo4j",
+      "jdl-samples": "ms-mf-ng-consul-oauth2-neo4j",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true"
     }

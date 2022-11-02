@@ -3,23 +3,12 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import {
-  testBlueprintSupport,
-  buildServerMatrix,
-  extendMatrix,
-  extendFilteredMatrix,
-  entitiesServerSamples as entities,
-} from '../../test/support/index.mjs';
+import { testBlueprintSupport, buildServerMatrix, extendMatrix, extendFilteredMatrix } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
-import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 
-import DatabaseTypes from '../../jdl/jhipster/database-types.js';
-import SearchEngineTypes from '../../jdl/jhipster/search-engine-types.js';
-import CacheTypes from '../../jdl/jhipster/cache-types.js';
-import ServiceDiscoveryTypes from '../../jdl/jhipster/service-discovery-types.js';
-import AuthenticationTypes from '../../jdl/jhipster/authentication-types.js';
+import { databaseTypes, cacheTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -29,19 +18,16 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mjs');
 
-const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = DatabaseTypes;
+const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
-const { ELASTICSEARCH, NO: NO_SEARCH_ENGINE } = SearchEngineTypes;
-const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = CacheTypes;
-const { CONSUL, EUREKA } = ServiceDiscoveryTypes;
-const { OAUTH2 } = AuthenticationTypes;
+const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
+const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 
 let sqlSamples = buildServerMatrix({
   prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE],
 });
 
 sqlSamples = extendMatrix(sqlSamples, {
-  searchEngine: [NO_SEARCH_ENGINE, ELASTICSEARCH],
   enableHibernateCache: [false, true],
 });
 
@@ -76,10 +62,10 @@ const samplesBuilder = (): [string, any][] =>
       defaults: true,
       applicationWithEntities: {
         config: {
-          ...sample,
           ...commonConfig,
+          ...sample,
         },
-        entities,
+        // entities,
       },
     },
   ]);
@@ -88,7 +74,7 @@ const testSamples = samplesBuilder();
 
 describe(`JHipster ${databaseType} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
     const instance = new Generator([], { help: true }, { bar: true });
@@ -102,17 +88,29 @@ describe(`JHipster ${databaseType} generator`, () => {
 
   testSamples.forEach(([name, sample]) => {
     const sampleConfig = sample.applicationWithEntities.config;
-    const { authenticationType } = sampleConfig;
+    const { authenticationType, enableTranslation } = sampleConfig;
 
     describe(name, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:languages', 'jhipster:common']);
+        runResult = await helpers
+          .run(generatorFile)
+          .withOptions(sample)
+          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:liquibase']);
       });
 
       after(() => runResult.cleanup());
 
+      it('should compose with jhipster:common', () => {
+        expect(runResult.mockedGenerators['jhipster:common'].callCount).toBe(1);
+      });
+      it(`should ${enableTranslation ? '' : 'not '}compose with jhipster:languages`, () => {
+        expect(runResult.mockedGenerators['jhipster:languages'].callCount).toBe(enableTranslation ? 1 : 0);
+      });
+      it('should compose with jhipster:liquibase', () => {
+        expect(runResult.mockedGenerators['jhipster:liquibase'].callCount).toBe(1);
+      });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
@@ -121,15 +119,6 @@ describe(`JHipster ${databaseType} generator`, () => {
       });
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
-      });
-
-      describe('searchEngine', () => {
-        const elasticsearch = sampleConfig.searchEngine === ELASTICSEARCH;
-        matchElasticSearch(() => runResult, elasticsearch);
-        matchElasticSearchUser(
-          () => runResult,
-          elasticsearch && (sampleConfig.authenticationType === OAUTH2 || !sampleConfig.skipUserManagement)
-        );
       });
 
       describe('serviceDiscoveryType', () => {

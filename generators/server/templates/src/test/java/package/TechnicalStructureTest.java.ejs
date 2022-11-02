@@ -38,6 +38,7 @@ class TechnicalStructureTest {
     // prettier-ignore
     @ArchTest
     static final ArchRule respectsTechnicalArchitectureLayers = layeredArchitecture()
+        .consideringAllDependencies()
         .layer("Config").definedBy("..config..")
 <%_ if (hasClientLayer) { _%>
         .layer("Client").definedBy("..client..")

@@ -2,13 +2,18 @@
   "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*"],
   "exclude": ["**/*.spec.*", "**/__*/**"],
   "compilerOptions": {
+    "paths": {
+      "chevrotain": ["./jdl/chevrotain"]
+    },
     /* Language and Environment */
     "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     "lib": ["ES2022"] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
+    "types": [],
 
     /* Modules */
     "module": "node16" /* Specify what module code is generated. */,
     "rootDir": "./" /* Specify the root folder within your source files. */,
+    "resolveJsonModule": true,
 
     /* JavaScript Support */
     "allowJs": true /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */,
@@ -23,6 +28,7 @@
 
     /* Type Checking */
     "strict": true /* Enable all strict type-checking options. */,
+    "noImplicitAny": false,
 
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */

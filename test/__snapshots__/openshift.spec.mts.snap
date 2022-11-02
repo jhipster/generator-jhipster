@@ -1560,8 +1560,7 @@ objects:
       type: LoadBalancer
       ports:
         - name: http
-          port: 80
-          targetPort: \${{APP_PORT}}
+          port: \${{APP_PORT}}
   - apiVersion: v1
     kind: Route
     metadata:
@@ -1705,8 +1704,7 @@ objects:
       type: LoadBalancer
       ports:
         - name: http
-          port: 80
-          targetPort: \${{APP_PORT}}
+          port: \${{APP_PORT}}
   - apiVersion: v1
     kind: Route
     metadata:
@@ -2030,8 +2028,7 @@ objects:
       type: LoadBalancer
       ports:
         - name: http
-          port: 80
-          targetPort: \${{APP_PORT}}
+          port: \${{APP_PORT}}
   - apiVersion: v1
     kind: Route
     metadata:
@@ -2760,7 +2757,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+              image: \\"ELASTICSEARCH_VERSION\\"
               ports:
                 - containerPort: 9200
                   name: http
@@ -2896,7 +2893,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:14.5
+              image: \\"POSTGRESQL_VERSION\\"
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
@@ -3551,7 +3548,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+              image: \\"ELASTICSEARCH_VERSION\\"
               ports:
                 - containerPort: 9200
                   name: http
@@ -4950,7 +4947,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+              image: \\"ELASTICSEARCH_VERSION\\"
               ports:
                 - containerPort: 9200
                   name: http
@@ -5086,7 +5083,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:14.5
+              image: \\"POSTGRESQL_VERSION\\"
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}

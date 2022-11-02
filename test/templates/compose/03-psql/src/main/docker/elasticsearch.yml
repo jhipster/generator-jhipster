@@ -1,6 +1,6 @@
-version: '2'
+name: 'mspsql'
 services:
-    mspsql-elasticsearch:
+    elasticsearch:
         image: elasticsearch:2.4.6
         # volumes:
         #     - ~/volumes/jhipster/mspsql/elasticsearch/:/usr/share/elasticsearch/data/

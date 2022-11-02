@@ -1,6 +1,6 @@
-version: '2'
+name: 'mscassandra-cassandra'
 services:
-    mscassandra-cassandra-migration:
+    cassandra-migration:
         environment:
             - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
             - USER=docker-cassandra-migration

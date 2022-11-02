@@ -5,16 +5,18 @@ const { existsSync } = require('fs');
 
 const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants.cjs');
 const { skipPrettierHelpers: helpers } = require('../utils/utils.cjs');
+const { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } = require('../../generators/base-application/priorities.cjs');
+
 const {
-  BASE_PRIORITY_NAMES,
-  BASE_ENTITY_PRIORITY_NAMES,
-  compat: {
-    CONFIGURING_EACH_ENTITY_PRIORITY,
-    PREPARING_EACH_ENTITY_PRIORITY,
-    PREPARING_EACH_ENTITY_FIELD_PRIORITY,
-    PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY,
-  },
-} = require('../../lib/constants/priorities.cjs');
+  CONFIGURING_EACH_ENTITY,
+  LOADING_ENTITIES,
+  PREPARING_EACH_ENTITY,
+  PREPARING_EACH_ENTITY_FIELD,
+  PREPARING_EACH_ENTITY_RELATIONSHIP,
+  POST_PREPARING_EACH_ENTITY,
+  WRITING_ENTITIES,
+  POST_WRITING_ENTITIES,
+} = PRIORITY_NAMES;
 
 const testOptions = data => {
   const { generatorPath, customOptions, contextBuilder = () => helpers.create(generatorPath) } = data;
@@ -29,109 +31,117 @@ const testOptions = data => {
   });
 };
 
+const skipWritingPriorities = ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'];
+
 const basicTests = data => {
   const {
     generatorPath,
     customPrompts,
     requiredConfig,
     defaultConfig,
-    templateContext = 'application',
+    getTemplateData = generator => generator.sharedData.getApplication(),
     contextBuilder = () => helpers.create(generatorPath),
   } = data;
-  const getContext = generator => {
-    return templateContext ? generator[templateContext] : generator;
-  };
   describe('with default options', () => {
     let runResult;
     before(async () => {
-      runResult = await contextBuilder().withOptions({ skipPrompts: true, configure: true, baseName: 'jhipster' }).run();
+      runResult = await contextBuilder()
+        .withOptions({
+          skipPrompts: true,
+          configure: true,
+          skipPriorities: skipWritingPriorities,
+        })
+        .run();
     });
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
     });
     it('should load default config into the context', () => {
-      expect(getContext(runResult.generator)).toEqual(expect.objectContaining(defaultConfig));
+      expect(getTemplateData(runResult.generator)).toEqual(expect.objectContaining(defaultConfig));
     });
   });
   describe('with defaults option', () => {
     let runResult;
     before(async () => {
-      runResult = await contextBuilder().withOptions({ defaults: true, configure: true }).run();
+      runResult = await contextBuilder().withOptions({ defaults: true, skipPriorities: skipWritingPriorities }).run();
     });
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
     });
     it('should load default config into the context', () => {
-      expect(getContext(runResult.generator)).toEqual(expect.objectContaining(requiredConfig));
-    });
-  });
-  describe('with configure option', () => {
-    let runResult;
-    before(async () => {
-      runResult = await contextBuilder().withOptions({ configure: true }).run();
-    });
-    it('should write .yo-rc.json only', () => {
-      expect(runResult.getStateSnapshot()).toEqual({
-        '.yo-rc.json': {
-          stateCleared: 'modified',
-        },
-      });
+      expect(getTemplateData(runResult.generator)).toEqual(expect.objectContaining(requiredConfig));
     });
   });
   describe('with custom prompt values', () => {
     let runResult;
     describe('and default options', () => {
       before(async () => {
-        runResult = await contextBuilder().withOptions({ configure: true }).withPrompts(customPrompts).run();
+        runResult = await contextBuilder()
+          .withOptions({ configure: true, skipPriorities: skipWritingPriorities })
+          .withPrompts(customPrompts)
+          .run();
       });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
       it('should load default config with prompt values into the context', () => {
-        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
+        expect(getTemplateData(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
       });
     });
     describe('and defaults option', () => {
       before(async () => {
-        runResult = await contextBuilder().withOptions({ defaults: true }).withPrompts(customPrompts).run();
+        runResult = await contextBuilder()
+          .withOptions({ defaults: true, skipPriorities: skipWritingPriorities })
+          .withPrompts(customPrompts)
+          .run();
       });
       it('should not show prompts and write default config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
       });
       it('should load default config into the context', () => {
-        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
+        expect(getTemplateData(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
       });
     });
     describe('and skipPrompts option', () => {
       let runResult;
       before(async () => {
-        runResult = await contextBuilder().withOptions({ skipPrompts: true, configure: true }).withPrompts(customPrompts).run();
+        runResult = await contextBuilder()
+          .withOptions({ skipPrompts: true, skipPriorities: skipWritingPriorities })
+          .withPrompts(customPrompts)
+          .run();
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
       });
       it('should load default config and required config into the context', () => {
-        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
+        expect(getTemplateData(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
       });
     });
     describe('and existing config', () => {
       let runResult;
       const existing = { baseName: 'existing' };
       before(async () => {
-        runResult = await contextBuilder().withOptions({ localConfig: existing, configure: true }).withPrompts(customPrompts).run();
+        runResult = await contextBuilder()
+          .withOptions({ localConfig: existing, skipPriorities: skipWritingPriorities })
+          .withPrompts(customPrompts)
+          .run();
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...requiredConfig, ...existing } });
       });
       it('should load default config and required config into the context', () => {
-        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig, ...existing }));
+        expect(getTemplateData(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig, ...existing }));
       });
     });
     describe('and askAnswered option on an existing project', () => {
       let runResult;
       before(async () => {
         runResult = await contextBuilder()
-          .withOptions({ askAnswered: true, configure: true, localConfig: { baseName: 'existing' } })
+          .withOptions({
+            askAnswered: true,
+            skipPriorities: ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'],
+            localConfig: { baseName: 'existing' },
+          })
           .withPrompts(customPrompts)
           .run();
       });
@@ -139,7 +149,7 @@ const basicTests = data => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
       it('should load default config and prompt values into the context', () => {
-        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
+        expect(getTemplateData(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
       });
     });
     describe('and add option on an existing project', () => {
@@ -147,7 +157,11 @@ const basicTests = data => {
       const existingConfig = { baseName: 'existing' };
       before(async () => {
         runResult = await contextBuilder()
-          .withOptions({ add: true, configure: true, localConfig: existingConfig })
+          .withOptions({
+            add: true,
+            skipPriorities: ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'],
+            localConfig: existingConfig,
+          })
           .withPrompts(customPrompts)
           .run();
       });
@@ -155,7 +169,9 @@ const basicTests = data => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...customPrompts, ...existingConfig } });
       });
       it('should load default config and prompt values into the context', () => {
-        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts, ...existingConfig }));
+        expect(getTemplateData(runResult.generator)).toEqual(
+          expect.objectContaining({ ...defaultConfig, ...customPrompts, ...existingConfig })
+        );
       });
     });
   });
@@ -183,7 +199,7 @@ const testBlueprintSupport = (generatorName, options = {}) => {
     const prioritiesSpy = sinon.spy();
     const prioritiesTasks = [];
     let prioritiesCount = 0;
-    [...BASE_PRIORITY_NAMES, ...(entity ? BASE_ENTITY_PRIORITY_NAMES : [])].forEach(priority => {
+    PRIORITY_NAMES_LIST.forEach(priority => {
       let callback;
       if (Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${taskPrefix}${priority}`)) {
         prioritiesCount++;
@@ -296,7 +312,7 @@ const testBlueprintSupport = (generatorName, options = {}) => {
     it('should call every priority', () => {
       expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);
     });
-    BASE_PRIORITY_NAMES.forEach(priority => {
+    PRIORITY_NAMES_LIST.filter(priority => !Object.values(ENTITY_PRIORITY_NAMES).includes(priority)).forEach(priority => {
       it(`should call ${priority} tasks if implemented`, function () {
         if (!spy.prioritiesTasks[priority]) {
           this.skip();
@@ -306,17 +322,37 @@ const testBlueprintSupport = (generatorName, options = {}) => {
       });
     });
     if (entity) {
-      it(`should call ${CONFIGURING_EACH_ENTITY_PRIORITY} tasks twice`, function () {
-        expect(spy.prioritiesTasks[CONFIGURING_EACH_ENTITY_PRIORITY].callCount).toBe(2);
+      [LOADING_ENTITIES, WRITING_ENTITIES, POST_WRITING_ENTITIES].forEach(priority => {
+        it(`should call ${priority} tasks once`, function () {
+          if (!spy.prioritiesTasks[priority]) {
+            this.skip();
+            return;
+          }
+          expect(spy.prioritiesTasks[priority].callCount).toBe(1);
+        });
       });
-      it(`should call ${PREPARING_EACH_ENTITY_PRIORITY} tasks twice`, function () {
-        expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_PRIORITY].callCount).toBe(2);
+      [CONFIGURING_EACH_ENTITY, PREPARING_EACH_ENTITY, POST_PREPARING_EACH_ENTITY].forEach(priority => {
+        it(`should call ${priority} tasks twice`, function () {
+          if (!spy.prioritiesTasks[priority]) {
+            this.skip();
+            return;
+          }
+          expect(spy.prioritiesTasks[priority].callCount).toBe(2);
+        });
       });
-      it(`should call ${PREPARING_EACH_ENTITY_FIELD_PRIORITY} tasks 3 times`, function () {
-        expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_FIELD_PRIORITY].callCount).toBe(3);
+      it(`should call ${PREPARING_EACH_ENTITY_FIELD} tasks 3 times`, function () {
+        if (!spy.prioritiesTasks[PREPARING_EACH_ENTITY_FIELD]) {
+          this.skip();
+          return;
+        }
+        expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_FIELD].callCount).toBe(3);
       });
-      it(`should call ${PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY} tasks 3 times`, function () {
-        expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY].callCount).toBe(3);
+      it(`should call ${PREPARING_EACH_ENTITY_RELATIONSHIP} tasks 3 times`, function () {
+        if (!spy.prioritiesTasks[PREPARING_EACH_ENTITY_RELATIONSHIP]) {
+          this.skip();
+          return;
+        }
+        expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_RELATIONSHIP].callCount).toBe(3);
       });
     }
   });

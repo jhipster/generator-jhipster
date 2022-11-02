@@ -81,7 +81,7 @@
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
-<%_ if (databaseTypeSql) { _%>
+<%_ if (enableLiquibase) { _%>
         <profile.no-liquibase />
 <%_ } _%>
         <profile.api-docs />
@@ -97,11 +97,15 @@
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <hibernate.version><%= HIBERNATE_VERSION %></hibernate.version>
+<%_ } _%>
+<%_ if (enableLiquibase) { _%>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
+        <liquibase.version><%- javaDependencies.liquibase %></liquibase.version>
+<%_ } _%>
+<%_ if (enableLiquibase && databaseTypeSql) { _%>
   <%_ if (!reactive) { _%>
-        <liquibase-hibernate5.version><%= LIQUIBASE_VERSION %></liquibase-hibernate5.version>
+        <liquibase-hibernate5.version><%- javaDependencies.liquibase %></liquibase-hibernate5.version>
   <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
   <%_ if (reactive) { _%>
@@ -119,7 +123,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <cassandra-driver.version>4.14.1</cassandra-driver.version>
 <%_ } _%>
-        <archunit-junit5.version>0.22.0</archunit-junit5.version>
+        <archunit-junit5.version>1.0.0</archunit-junit5.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
@@ -154,7 +158,7 @@
         <git-commit-id-plugin.version>5.0.0</git-commit-id-plugin.version>
         <modernizer-maven-plugin.version>2.4.0</modernizer-maven-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
-        <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
+        <jib-maven-plugin.version><%- javaDependencies['jib-maven-plugin'] %></jib-maven-plugin.version>
         <jib-maven-plugin.image><%= DOCKER_JAVA_JRE %></jib-maven-plugin.image>
         <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
@@ -443,6 +447,8 @@
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
+<%_ } _%>
+<%_ if (enableLiquibase) { _%>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
@@ -1411,7 +1417,7 @@
         </pluginManagement>
     </build>
     <profiles>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (enableLiquibase) { _%>
         <profile>
             <id>no-liquibase</id>
             <properties>
@@ -1565,7 +1571,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev<%_ if (databaseTypeSql) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>dev<%_ if (enableLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
 <%_ } _%>

@@ -2,7 +2,7 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import { getGenerator } from '../support/index.mjs';
 
-import ClientGenerator from '../../generators/client/index.cjs';
+import ClientGenerator from '../../generators/client/index.mjs';
 import constants from '../../generators/generator-constants.cjs';
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;

@@ -1,6 +1,6 @@
-version: '2'
+name: 'samplekafka'
 services:
-    samplekafka-app:
+    app:
         image: samplekafka
         environment:
             - SPRING_PROFILES_ACTIVE=prod,api-docs
@@ -16,7 +16,7 @@ services:
             - KAFKA_PRODUCER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
         ports:
             - 8080:8080
-    samplekafka-mysql:
+    mysql:
         image: <%= DOCKER_MYSQL %>
         # volumes:
         #     - ~/volumes/jhipster/sampleKafka/mysql/:/var/lib/mysql/
