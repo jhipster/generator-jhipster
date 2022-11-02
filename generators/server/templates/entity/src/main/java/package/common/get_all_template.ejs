@@ -23,17 +23,36 @@
     const entityListToDtoListReference = mapper + '.' + 'toDto';
     const entityToDtoReference = mapper + '::'+ 'toDto';
     const reactiveEntityToDto = (dtoMapstruct && !viaService) ? `.map(${entityToDtoReference})` : '';
+    const reactiveNoPagination = reactive && paginationNo;
+    const reactivePagination = reactive && !paginationNo;
 _%>
 <%_ if (jpaMetamodelFiltering) { _%>
-    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (!paginationNo) { %>, @org.springdoc.api.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% } %>) {
+    public <% if (reactiveNoPagination) { %>Flux<<%= instanceType %>><% } else if (reactivePagination) { %>Mono<ResponseEntity<List<<%= instanceType %>>>><% } else { %>ResponseEntity<List<<%= instanceType %>>><% } %> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (!paginationNo) { %>, @org.springdoc.api.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% } %>) {
         log.debug("REST request to get <%= entityClassPlural %> by criteria: {}", criteria);
-  <%_ if (paginationNo) { _%>
+  <% if(!reactive) { %>
+    <%_ if (paginationNo) { _%>
         List<<%= instanceType %>> entityList = <%= entityInstance %>QueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
-  <%_ } else { _%>
+    <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>QueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    <%_ } _%>
+  <%_ } else { _%>
+    <%_ if (paginationNo) { _%>
+      return <%= entityInstance %>Service.findByCriteria(criteria);
+    <%_ } else { _%>
+      return <%= entityInstance %><%= viaService ? 'Service.countByCriteria' : 'Repository.countByCriteria' %>(criteria).zipWith(<%= entityInstance %><%= viaService ? 'Service.findByCriteria' : 'Repository.findByCriteria' %>(criteria, pageable)<%= reactiveEntityToDto %>.collectList())
+      .map(countWithEntities ->
+          ResponseEntity.ok()
+              .headers(
+                  PaginationUtil.generatePaginationHttpHeaders(
+                      UriComponentsBuilder.fromHttpRequest(request),
+                      new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
+                  )
+              ).body(countWithEntities.getT2())
+      );
+    <%_ } _%>
   <%_ } _%>
     }
 
@@ -44,9 +63,15 @@ _%>
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/<%= entityApiUrl %>/count")
-    public ResponseEntity<Long> count<%= entityClassPlural %>(<%= entityClass %>Criteria criteria) {
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Long><% if (reactive) { %>><% } %> count<%= entityClassPlural %>(<%= entityClass %>Criteria criteria) {
+    <% if (!reactive) { %>
         log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
         return ResponseEntity.ok().body(<%= entityInstance %>QueryService.countByCriteria(criteria));
+    <% } else { %>
+        log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
+        return <%= entityInstance %>Service.countByCriteria(criteria)
+                .map(count -> ResponseEntity.status(HttpStatus.OK).body(count));
+    <% } %>
     }
 <%_ } else { _%>
   <%_ if (paginationNo) { _%>

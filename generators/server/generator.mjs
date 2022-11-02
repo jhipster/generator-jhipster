@@ -27,7 +27,7 @@ import {
   GENERATOR_LANGUAGES,
   GENERATOR_SERVER,
   GENERATOR_BOOTSTRAP_APPLICATION,
-  GENERATOR_DATABASE_CHANGELOG,
+  GENERATOR_LIQUIBASE,
   GENERATOR_GRADLE,
   GENERATOR_MAVEN,
 } from '../generator-list.mjs';
@@ -225,7 +225,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
 
       async composing() {
-        const { buildTool, enableTranslation } = this.jhipsterConfigWithDefaults;
+        const { buildTool, enableTranslation, databaseType } = this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
           await this.composeWithJHipster(GENERATOR_GRADLE);
         } else if (buildTool === MAVEN) {
@@ -237,6 +237,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
+        }
+        if (databaseType === SQL) {
+          await this.composeWithJHipster(GENERATOR_LIQUIBASE);
         }
       },
     });
@@ -405,12 +408,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
       configureModelFiltering({ application, entityConfig }) {
-        const { databaseTypeSql, applicationTypeGateway, reactive } = application;
+        const { databaseTypeSql, applicationTypeGateway } = application;
         if (
           // Don't touch the configuration for microservice entities published at gateways
           !(applicationTypeGateway && entityConfig.microserviceName) &&
           entityConfig.jpaMetamodelFiltering &&
-          (!databaseTypeSql || entityConfig.service === NO_SERVICE || reactive)
+          (!databaseTypeSql || entityConfig.service === NO_SERVICE)
         ) {
           this.warning('Not compatible with jpaMetamodelFiltering, disabling');
           entityConfig.jpaMetamodelFiltering = false;
@@ -573,20 +576,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
       ...writeEntityFiles(),
-
-      async databaseChangelog({ application, entities }) {
-        if (!application.databaseTypeSql || this.options.skipDbChangelog) {
-          return;
-        }
-        const filteredEntities = entities.filter(entity => !entity.builtIn && !entity.skipServer);
-        if (filteredEntities.length === 0) {
-          return;
-        }
-        await this.composeWithJHipster(
-          GENERATOR_DATABASE_CHANGELOG,
-          filteredEntities.map(entity => entity.name)
-        );
-      },
     });
   }
 

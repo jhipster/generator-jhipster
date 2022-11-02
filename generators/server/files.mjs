@@ -34,26 +34,6 @@ const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 const shouldSkipUserManagement = generator =>
   generator.skipUserManagement && (!generator.applicationTypeMonolith || !generator.authenticationTypeOauth2);
 
-export const liquibaseFiles = {
-  serverResource: [
-    {
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        {
-          override: generator => !generator.incrementalChangelog || generator.recreateInitialChangelog,
-          file: 'config/liquibase/changelog/initial_schema.xml',
-          renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
-          options: { interpolate: INTERPOLATE_REGEX },
-        },
-        {
-          override: generator => !generator.incrementalChangelog || generator.recreateInitialChangelog,
-          file: 'config/liquibase/master.xml',
-        },
-      ],
-    },
-  ],
-};
-
 export const mongoDbFiles = {
   docker: [
     {
@@ -1411,20 +1391,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator =>
-        (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice) ||
-        (!generator.skipUserManagement && generator.databaseTypeSql),
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['config/liquibase/data/user.csv'],
-    },
-    {
-      condition: generator =>
-        (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice && generator.databaseTypeSql) ||
-        (!generator.skipUserManagement && generator.databaseTypeSql),
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['config/liquibase/data/authority.csv', 'config/liquibase/data/user_authority.csv'],
-    },
-    {
       condition: generator => generator.authenticationTypeOauth2,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -1805,7 +1771,6 @@ export const baseServerFiles = {
 
 export const serverFiles = mergeSections(
   baseServerFiles,
-  addSectionsCondition(liquibaseFiles, context => context.databaseTypeSql),
   addSectionsCondition(mongoDbFiles, context => context.databaseTypeMongodb),
   addSectionsCondition(neo4jFiles, context => context.databaseTypeNeo4j),
   addSectionsCondition(cassandraFiles, context => context.databaseTypeCassandra)

@@ -24,8 +24,9 @@ import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 <%_ if (paginationInfiniteScroll) { _%>
 import { loadMoreDataWhenScrolled, parseHeaderForLinks } from 'react-jhipster';
+<%_ } else if (paginationNo) { _%>
+import { ASC } from 'app/shared/util/pagination.constants';
 <%_ } _%>
-
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -66,12 +67,12 @@ export const searchEntities = createAsyncThunk(
 );
 
 <%_ } _%>
-export const getEntities = createAsyncThunk('<%= entityInstance %>/fetch_entity_list', async ({ page, size, sort }: IQueryParams) => {
-  <%_ if (!paginationNo) { _%>
-  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}cacheBuster=${new Date().getTime()}`;
-  <%_ } else { _%>
-  const requestUrl = `${apiUrl}?cacheBuster=${new Date().getTime()}`;
-  <%_ } _%>
+export const getEntities = createAsyncThunk('<%= entityInstance %>/fetch_entity_list', async ({ <%_ if(!paginationNo) { _%>page, size, <%_ } _%>sort }: IQueryParams) => {
+<%_ if (!paginationNo) { _%>
+  const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+<%_ } else { _%>
+  const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+<%_ } _%>
   return axios.get<I<%= entityReactName %>[]>(requestUrl);
 });
 
@@ -88,13 +89,13 @@ export const getEntity = createAsyncThunk(
 export const createEntity = createAsyncThunk(
   '<%= entityInstance %>/create_entity',
   async (entity: I<%= entityReactName %>, thunkAPI) => {
-    <%_ if (!paginationInfiniteScroll) { _%>
+  <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.post<I<%= entityReactName %>>(apiUrl, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
     return result;
-    <%_ } else { _%>
+  <%_ } else { _%>
     return axios.post<I<%= entityReactName %>>(apiUrl, cleanEntity(entity));
-    <%_ } _%>
+  <%_ } _%>
   },
   { serializeError: serializeAxiosError }
 );
@@ -102,13 +103,13 @@ export const createEntity = createAsyncThunk(
 export const updateEntity = createAsyncThunk(
   '<%= entityInstance %>/update_entity',
   async (entity: I<%= entityReactName %>, thunkAPI) => {
-    <%_ if (!paginationInfiniteScroll) { _%>
+  <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.put<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
     return result;
-    <%_ } else { _%>
+  <%_ } else { _%>
     return axios.put<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
-    <%_ } _%>
+  <%_ } _%>
   },
   { serializeError: serializeAxiosError }
 );
@@ -116,13 +117,13 @@ export const updateEntity = createAsyncThunk(
 export const partialUpdateEntity = createAsyncThunk(
   '<%= entityInstance %>/partial_update_entity',
   async (entity: I<%= entityReactName %>, thunkAPI) => {
-    <%_ if (!paginationInfiniteScroll) { _%>
+  <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.patch<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
     return result;
-    <%_ } else { _%>
+  <%_ } else { _%>
     return axios.patch<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
-    <%_ } _%>
+  <%_ } _%>
   },
   { serializeError: serializeAxiosError }
 );
@@ -131,13 +132,13 @@ export const deleteEntity = createAsyncThunk(
   '<%= entityInstance %>/delete_entity',
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
-    <%_ if (!paginationInfiniteScroll) { _%>
+  <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.delete<I<%= entityReactName %>>(requestUrl);
     thunkAPI.dispatch(getEntities({}));
     return result;
-    <%_ } else { _%>
+  <%_ } else { _%>
     return await axios.delete<I<%= entityReactName %>>(requestUrl);
-    <%_ } _%>
+  <%_ } _%>
   },
   { serializeError: serializeAxiosError }
 );
@@ -154,68 +155,75 @@ export const <%= entityReactName %>Slice = createEntitySlice({
         state.loading = false;
         state.entity = action.payload.data;
       })
-      <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
       .addCase(deleteEntity.fulfilled, state => {
         state.updating = false;
         state.updateSuccess = true;
         state.entity = {};
       })
-      <%_ } _%>
+<%_ } _%>
       .addMatcher(isFulfilled(
         getEntities,
-        <%_ if (searchEngine) { _%>
+<%_ if (searchEngine) { _%>
         searchEntities,
-        <%_ } _%>
+<%_ } _%>
         ), (state, action) => {
           const { data<% if (!paginationNo) { %>, headers<% } %> } = action.payload;
-        <%_ if (paginationInfiniteScroll) { _%>
+<%_ if (paginationInfiniteScroll) { _%>
           const links = parseHeaderForLinks(headers.link);
-        <%_ } _%>
+<%_ } _%>
 
           return {
             ...state,
             loading: false,
-        <%_ if (paginationInfiniteScroll) { _%>
-          <%_ if (!databaseTypeCassandra) { _%>
+<%_ if (paginationInfiniteScroll) { _%>
+  <%_ if (!databaseTypeCassandra) { _%>
             links,
             entities: loadMoreDataWhenScrolled(state.entities, data, links),
-          <%_ } _%>
-        <%_ } else { _%>
-            entities: data,
-        <%_ } _%>
-        <%_ if (!paginationNo) { _%>
-          <%_ if (!databaseTypeCassandra) { _%>
+  <%_ } _%>
+<%_ } else { _%>
+            entities: data<%_ if (paginationNo) { _%>.sort((a, b) => {
+              if (!action.meta?.arg?.sort) {
+                return 1;
+              }
+              const order = action.meta.arg.sort.split(',')[1];
+              const predicate = action.meta.arg.sort.split(',')[0];
+              return order === ASC ? (a[predicate] < b[predicate] ? -1 : 1) : b[predicate] < a[predicate] ? -1 : 1;
+            })<%_ } _%>,
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+  <%_ if (!databaseTypeCassandra) { _%>
             totalItems: parseInt(headers['x-total-count'], 10)
-          <%_ } _%>
-        <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
           };
       })
-      <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
       .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      <%_ } _%>
+<%_ } _%>
       .addMatcher(isPending(
         getEntities,
         getEntity,
-        <%_ if (searchEngine) { _%>
+<%_ if (searchEngine) { _%>
         searchEntities,
-        <%_ } _%>
+<%_ } _%>
         ), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
       })
-      <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
       .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;
       })
-      <%_ } _%>
+<%_ } _%>
   },
 });
 

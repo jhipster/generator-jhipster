@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "14.2.7",
+    "@angular/common": "14.2.8",
     "@fortawesome/angular-fontawesome": "0.11.1",
     "@fortawesome/fontawesome-svg-core": "6.2.0",
     "@fortawesome/free-solid-svg-icons": "6.2.0",
@@ -14,17 +14,17 @@
     "ngx-infinite-scroll": "14.0.0",
     "ngx-webstorage": "10.0.1",
     "rxjs": "7.5.7",
-    "tslib": "2.4.0",
+    "tslib": "2.4.1",
     "zone.js": "0.11.6"
   },
   "devDependencies": {
-    "@angular/cli": "14.2.6",
+    "@angular/cli": "14.2.7",
     "@angular-builders/custom-webpack": "14.0.1",
-    "@angular-builders/jest": "14.0.1",
+    "@angular-builders/jest": "14.0.2",
     "@angular-eslint/eslint-plugin": "14.1.2",
-    "@types/node": "16.18.2",
+    "@types/node": "16.18.3",
     "@types/jest": "28.1.8",
-    "@typescript-eslint/eslint-plugin": "5.41.0",
+    "@typescript-eslint/eslint-plugin": "5.42.0",
     "browser-sync": "2.27.10",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "11.0.0",
@@ -43,7 +43,7 @@
     "ts-jest": "28.0.8",
     "typescript": "4.8.4",
     "webpack": "5.74.0",
-    "webpack-bundle-analyzer": "4.6.1",
+    "webpack-bundle-analyzer": "4.7.0",
     "webpack-merge": "5.8.0",
     "webpack-notifier": "1.15.0"
   }
