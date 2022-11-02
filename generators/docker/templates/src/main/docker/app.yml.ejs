@@ -75,8 +75,10 @@ _%>
 <%_ if (databaseTypeCassandra) { _%>
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
 <%_ } _%>
-<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeCassandra) { _%>
       - JHIPSTER_SLEEP=10 # Let migration complete
+<%_ } else if (databaseTypeCouchbase) { _%>
+      - JHIPSTER_SLEEP=20 # Let database to start
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
       - SPRING_ELASTICSEARCH_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
