@@ -34,7 +34,7 @@ services:
     environment:
       - BUCKET=<%= baseName %>
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8091/pools']
+      test: ['CMD', 'curl', '-f', 'http://localhost:8091/ui/index.html']
       interval: 5s
       timeout: 5s
       retries: 10
