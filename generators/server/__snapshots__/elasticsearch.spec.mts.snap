@@ -1344,10 +1344,16 @@ Object {
   "src/main/java/tech/jhipster/service/MailService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
@@ -4452,7 +4458,13 @@ Object {
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
@@ -5518,10 +5530,16 @@ Object {
   "src/main/java/tech/jhipster/service/MailService.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
@@ -6316,6 +6334,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6399,6 +6418,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6482,6 +6502,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6564,6 +6585,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6648,6 +6670,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6729,6 +6752,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6812,6 +6836,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6894,6 +6919,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6974,6 +7000,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -7057,6 +7084,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -7140,6 +7168,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -7224,6 +7253,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {

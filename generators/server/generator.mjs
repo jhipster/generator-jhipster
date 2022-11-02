@@ -408,12 +408,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
       configureModelFiltering({ application, entityConfig }) {
-        const { databaseTypeSql, applicationTypeGateway, reactive } = application;
+        const { databaseTypeSql, applicationTypeGateway } = application;
         if (
           // Don't touch the configuration for microservice entities published at gateways
           !(applicationTypeGateway && entityConfig.microserviceName) &&
           entityConfig.jpaMetamodelFiltering &&
-          (!databaseTypeSql || entityConfig.service === NO_SERVICE || reactive)
+          (!databaseTypeSql || entityConfig.service === NO_SERVICE)
         ) {
           this.warning('Not compatible with jpaMetamodelFiltering, disabling');
           entityConfig.jpaMetamodelFiltering = false;
