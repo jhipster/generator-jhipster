@@ -153,7 +153,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
           if (yamlConfig.depends_on) {
             yamlConfig.depends_on = Object.fromEntries(
               Object.entries(yamlConfig.depends_on).map(([serviceName, config]) => {
-                if (['keycloak', 'jhipster-registry', 'consult'].includes(serviceName)) {
+                if (['keycloak', 'jhipster-registry', 'consul'].includes(serviceName)) {
                   return [serviceName, config];
                 }
                 return [`${lowercaseBaseName}-${serviceName}`, config];
