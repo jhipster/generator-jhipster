@@ -7,7 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-      <liquibase.version>4.17.1</liquibase.version>
+      <liquibase.version>4.17.2</liquibase.version>
       <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
     </properties>
 
