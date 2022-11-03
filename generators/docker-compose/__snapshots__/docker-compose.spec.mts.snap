@@ -85,7 +85,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -119,6 +119,7 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=mscouchbase
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
@@ -128,7 +129,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mscouchbase-couchbase:
         condition: service_healthy
@@ -267,7 +268,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -310,7 +311,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mscassandra-cassandra:
         condition: service_healthy
@@ -468,7 +469,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -511,7 +512,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmysql-mysql:
         condition: service_healthy
@@ -555,7 +556,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mspsql-postgresql:
         condition: service_healthy
@@ -610,7 +611,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmongodb-mongodb:
         condition: service_healthy
@@ -650,7 +651,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmariadb-mariadb:
         condition: service_healthy
@@ -814,7 +815,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -862,7 +863,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmysql-mysql:
         condition: service_healthy
@@ -911,7 +912,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mspsql-postgresql:
         condition: service_healthy
@@ -962,6 +963,7 @@ eureka:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
@@ -971,7 +973,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mscouchbase-couchbase:
         condition: service_healthy
@@ -1017,7 +1019,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmariadb-mariadb:
         condition: service_healthy
@@ -3671,7 +3673,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -3714,7 +3716,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmysql-mysql:
         condition: service_healthy
@@ -3758,7 +3760,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mspsql-postgresql:
         condition: service_healthy
@@ -3813,7 +3815,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmongodb-mongodb:
         condition: service_healthy
@@ -3967,7 +3969,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -4010,7 +4012,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmysql-mysql:
         condition: service_healthy
@@ -4054,7 +4056,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mspsql-postgresql:
         condition: service_healthy
@@ -4100,6 +4102,7 @@ eureka:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=mscouchbase
+      - JHIPSTER_SLEEP=20
       - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
       test:
@@ -4109,7 +4112,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mscouchbase-couchbase:
         condition: service_healthy
@@ -4150,7 +4153,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmariadb-mariadb:
         condition: service_healthy
@@ -4290,7 +4293,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -4333,7 +4336,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmysql-mysql:
         condition: service_healthy
@@ -4473,7 +4476,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -4516,7 +4519,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmysql-mysql:
         condition: service_healthy
@@ -4682,7 +4685,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -4725,7 +4728,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmysql-mysql:
         condition: service_healthy
@@ -4955,7 +4958,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -4998,7 +5001,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmysql-mysql:
         condition: service_healthy
@@ -5113,7 +5116,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       samplemysql-mysql:
         condition: service_healthy
@@ -5237,7 +5240,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmysql-mysql:
         condition: service_healthy
@@ -5375,7 +5378,7 @@ eureka:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhgate-mysql:
         condition: service_healthy
@@ -5511,7 +5514,7 @@ eureka:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       msmysql-mysql:
         condition: service_healthy
@@ -5625,7 +5628,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
 ",
     "stateCleared": "modified",
   },

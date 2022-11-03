@@ -29,7 +29,7 @@ services:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mariadb:
         condition: service_healthy
@@ -165,7 +165,7 @@ services:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       neo4j:
         condition: service_healthy
@@ -294,7 +294,7 @@ services:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       jhipster-registry:
         condition: service_healthy
@@ -387,7 +387,7 @@ services:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       postgresql:
         condition: service_healthy
@@ -516,7 +516,7 @@ services:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mssql:
         condition: service_healthy
@@ -629,7 +629,7 @@ services:
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       cassandra:
         condition: service_healthy
@@ -771,7 +771,7 @@ services:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mariadb:
         condition: service_healthy
@@ -870,7 +870,7 @@ services:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mongodb:
         condition: service_healthy
@@ -996,7 +996,7 @@ services:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       postgresql:
         condition: service_healthy
@@ -1093,7 +1093,7 @@ services:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       neo4j:
         condition: service_healthy
@@ -1232,7 +1232,7 @@ services:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       mysql:
         condition: service_healthy
@@ -1325,6 +1325,7 @@ services:
       - SPRING_CLOUD_CONSUL_PORT=8500
       - SPRING_COUCHBASE_CONNECTION_STRING=jhipster-couchbase
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=jhipster
+      - JHIPSTER_SLEEP=20
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     ports:
@@ -1337,7 +1338,7 @@ services:
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
-      retries: 30
+      retries: 40
     depends_on:
       couchbase:
         condition: service_healthy
