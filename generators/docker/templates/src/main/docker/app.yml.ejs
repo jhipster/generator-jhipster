@@ -60,8 +60,6 @@ _%>
 <%_ if (cacheProviderRedis) { _%>
       - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
-      # - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
-      # - JHIPSTER_CACHE_REDIS_CLUSTER=true
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
@@ -77,25 +75,11 @@ _%>
 <%_ if (databaseTypeCassandra) { _%>
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
 <%_ } _%>
-<%_
-  let jhipsterSleep = 30;
-  let jhipsterSleepComment = 'database, other services';
-  if (serviceDiscoveryAny) {
-    jhipsterSleep += 10;
-    jhipsterSleepComment = `${jhipsterSleepComment}, serviceDiscovery`;
-  }
-  if (authenticationTypeOauth2) {
-    jhipsterSleep += 20;
-    jhipsterSleepComment = `${jhipsterSleepComment}, keycloak`;
-  }
-  if (applicationTypeGateway) {
-    jhipsterSleep += 20;
-    jhipsterSleepComment = `gives time for microservices, ${jhipsterSleepComment} to boot before the gateway, the entire stack will be ready to accept incoming requests.`;
-  } else {
-    jhipsterSleepComment = `gives time for ${jhipsterSleepComment} to boot before the application.`;
-  }
-_%>
-      - JHIPSTER_SLEEP=<%= jhipsterSleep %> # <%= jhipsterSleepComment %>
+<%_ if (databaseTypeCassandra) { _%>
+      - JHIPSTER_SLEEP=10 # Let migration complete
+<%_ } else if (databaseTypeCouchbase) { _%>
+      - JHIPSTER_SLEEP=20 # Let database to start
+<%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
       - SPRING_ELASTICSEARCH_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
 <%_ } _%>
@@ -111,3 +95,8 @@ _%>
     ports:
       - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
 <%_ } _%>
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:<%= serverPort %>/management/health']
+      interval: 5s
+      timeout: 5s
+      retries: 40

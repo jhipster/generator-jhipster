@@ -37,6 +37,8 @@ const samplesBuilder = (): [string, any][] =>
 
 const testSamples = samplesBuilder();
 
+const mockedGenerators = ['jhipster:languages', 'jhipster:common', 'jhipster:docker'];
+
 describe(`JHipster ${databaseType} generator`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -59,7 +61,7 @@ describe(`JHipster ${databaseType} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:languages', 'jhipster:common']);
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());

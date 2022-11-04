@@ -19,19 +19,16 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: <%= baseName.toLowerCase() %>
 services:
-  couchbase:
-    build:
-      context: .
-      dockerfile: couchbase/Couchbase.Dockerfile
+  mongodb:
+    image: <%= DOCKER_MONGODB %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:8091:8091
-      - 127.0.0.1:8092:8092
-      - 127.0.0.1:8093:8093
-      - 127.0.0.1:8094:8094
-      - 127.0.0.1:11210:11210
-    environment:
-      - BUCKET=<%= baseName %>
+      - 127.0.0.1:27017:27017
     # volumes:
-    #   - ~/volumes/jhipster/<%= baseName.toLowerCase() %>/couchbase/:/opt/couchbase/var
+    #   - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
+    healthcheck:
+      test: ['CMD', 'echo', "'db.runCommand(\"ping\").ok'", '|', 'mongo', 'localhost:27017/test', '--quiet']
+      interval: 5s
+      timeout: 5s
+      retries: 10

@@ -2194,7 +2194,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           Object.values(this.configOptions?.sharedEntities ?? {}).forEach(entity => {
             entity.resetFakerSeed(seed);
           });
-          Object.values(this.options.sharedData.applications?.[context.baseName]?.sharedEntities ?? {}).forEach(entity => {
+          Object.values(this.sharedData.getApplication()?.sharedEntities ?? {}).forEach(entity => {
             entity.resetFakerSeed(seed);
           });
           // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
@@ -2685,7 +2685,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
       dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
-      dest.endpointPrefix = !dest.applicationType || dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
+      dest.endpointPrefix = dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
     }
 
     if (dest.microfrontends && dest.microfrontends.length > 0) {
@@ -3117,13 +3117,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         delete this.options[optionName];
       }
     });
-  }
-
-  /**
-   * @protected
-   */
-  getArgsForPriority(priorityName) {
-    return this.args;
   }
 
   /**

@@ -48,9 +48,6 @@ services:
     # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-  <%_ if (usesOauth2) { _%>
-      - JHIPSTER_SLEEP=80
-  <%_ } _%>
       - SPRING_PROFILES_ACTIVE=dev<% if (usesOauth2) { %>,oauth2<% } %>
       - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
       - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
@@ -71,9 +68,17 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
+    depends_on:
+      keycloak:
+        condition: 'service_healthy'
   <%_ } _%>
     ports:
       - 8761:8761
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
   consul:
@@ -108,6 +113,11 @@ services:
     ports:
       - 9080:9080
       - 9443:9443
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9080/realms/jhipster"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
 

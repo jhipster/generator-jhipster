@@ -47,12 +47,6 @@ const shouldSkipUserManagement = generator =>
   generator.skipUserManagement && (!generator.applicationTypeMonolith || !generator.authenticationTypeOauth2);
 
 export const mongoDbFiles = {
-  docker: [
-    {
-      path: DOCKER_DIR,
-      templates: ['mongodb.yml', 'mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
-    },
-  ],
   serverResource: [
     {
       path: SERVER_MAIN_SRC_DIR,
@@ -90,12 +84,6 @@ export const mongoDbFiles = {
 };
 
 export const neo4jFiles = {
-  docker: [
-    {
-      path: DOCKER_DIR,
-      templates: ['neo4j.yml'],
-    },
-  ],
   serverResource: [
     {
       condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
@@ -135,22 +123,6 @@ export const neo4jFiles = {
 };
 
 export const cassandraFiles = {
-  docker: [
-    {
-      path: DOCKER_DIR,
-      templates: [
-        // docker-compose files
-        'cassandra.yml',
-        'cassandra-cluster.yml',
-        'cassandra-migration.yml',
-        // dockerfiles
-        'cassandra/Cassandra-Migration.Dockerfile',
-        // scripts
-        'cassandra/scripts/autoMigrate.sh',
-        'cassandra/scripts/execute-cql.sh',
-      ],
-    },
-  ],
   serverResource: [
     {
       path: SERVER_MAIN_RES_DIR,
@@ -262,90 +234,6 @@ export const baseServerFiles = {
     {
       condition: generator => generator.skipClient,
       templates: ['package.json'],
-    },
-  ],
-  docker: [
-    {
-      path: DOCKER_DIR,
-      templates: [
-        'app.yml',
-        'jhipster-control-center.yml',
-        'sonar.yml',
-        'monitoring.yml',
-        'prometheus/prometheus.yml',
-        'grafana/provisioning/dashboards/dashboard.yml',
-        'grafana/provisioning/dashboards/JVM.json',
-        'grafana/provisioning/datasources/datasource.yml',
-      ],
-    },
-    {
-      condition: generator => generator.cacheProviderHazelcast,
-      path: DOCKER_DIR,
-      templates: ['hazelcast-management-center.yml'],
-    },
-    {
-      condition: generator => generator.cacheProviderMemcached,
-      path: DOCKER_DIR,
-      templates: ['memcached.yml'],
-    },
-    {
-      condition: generator => generator.cacheProviderRedis,
-      path: DOCKER_DIR,
-      templates: ['redis.yml', 'redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh'],
-    },
-    {
-      condition: generator => generator.searchEngineElasticsearch,
-      path: DOCKER_DIR,
-      templates: ['elasticsearch.yml'],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka,
-      path: DOCKER_DIR,
-      templates: ['kafka.yml'],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny,
-      path: DOCKER_DIR,
-      templates: [{ file: 'config/README.md', renameTo: () => 'central-server-config/README.md' }],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryConsul,
-      path: DOCKER_DIR,
-      templates: [
-        'consul.yml',
-        'config/git2consul.json',
-        { file: 'config/consul-config/application.yml', renameTo: () => 'central-server-config/application.yml' },
-      ],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryEureka,
-      path: DOCKER_DIR,
-      templates: [
-        'jhipster-registry.yml',
-        {
-          file: 'config/docker-config/application.yml',
-          renameTo: () => 'central-server-config/docker-config/application.yml',
-        },
-        {
-          file: 'config/localhost-config/application.yml',
-          renameTo: () => 'central-server-config/localhost-config/application.yml',
-        },
-      ],
-    },
-    {
-      condition: generator => !!generator.enableSwaggerCodegen,
-      path: DOCKER_DIR,
-      templates: ['swagger-editor.yml'],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
-      path: DOCKER_DIR,
-      templates: ['keycloak.yml', { file: 'config/realm-config/jhipster-realm.json', renameTo: () => 'realm-config/jhipster-realm.json' }],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny || generator.applicationTypeGateway || generator.applicationTypeMicroservice,
-      path: DOCKER_DIR,
-      templates: ['zipkin.yml'],
     },
   ],
   serverBuild: [

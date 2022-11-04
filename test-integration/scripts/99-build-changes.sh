@@ -93,7 +93,11 @@ echo "::endgroup::"
 
 echo "::group::Check Server"
 git -c color.ui=always diff --exit-code @~1 -- \
-  'generators/*server/**' \
+  'generators/bootstrap-application-server' \
+  'generators/docker' \
+  'generators/gradle' \
+  'generators/maven' \
+  'generators/server' \
   'generators/database-changelog' \
   'generators/database-changelog-liquibase' \
   || SERVER=true ANY=true
@@ -104,13 +108,11 @@ git -c color.ui=always diff --exit-code @~1 -- \
   '.github/actions' \
   '.github/workflows' \
   'generators/app' \
-  'generators/bootstrap' \
+  'generators/base-application' \
+  'generators/bootstrap-application' \
+  'generators/bootstrap-application-base' \
   'generators/common' \
-  'generators/entities' \
-  'generators/entity' \
-  'generators/gradle' \
   'generators/languages' \
-  'generators/maven' \
   'jdl' \
   'lib' \
   'test-integration' \
@@ -119,7 +121,10 @@ git -c color.ui=always diff --exit-code @~1 -- \
 echo "::endgroup::"
 
 echo "::group::Check Base"
-git -c color.ui=always diff --exit-code @~1 -- $(ls generators/*.*) \
+git -c color.ui=always diff --exit-code @~1 -- \
+  'generators/base' \
+  'generators/bootstrap' \
+  $(ls generators/*.*) \
   || CLIENT=true SERVER=true COMMON=true ANY=true
 echo "::endgroup::"
 

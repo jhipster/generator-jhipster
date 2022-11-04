@@ -42,6 +42,8 @@ const samplesBuilder = (): [string, any][] =>
 
 const testSamples = samplesBuilder();
 
+const mockedGenerators = ['jhipster:languages', 'jhipster:common', 'jhipster:liquibase', 'jhipster:docker'];
+
 describe('JHipster elasticsearch generator', () => {
   it('samples matrix should match snapshot', () => {
     expect(Object.fromEntries(testSamples)).toMatchSnapshot();
@@ -55,10 +57,7 @@ describe('JHipster elasticsearch generator', () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers
-          .run(generatorFile)
-          .withOptions(sample)
-          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:liquibase']);
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());

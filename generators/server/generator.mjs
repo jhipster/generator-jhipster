@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
@@ -30,6 +31,7 @@ import {
   GENERATOR_LIQUIBASE,
   GENERATOR_GRADLE,
   GENERATOR_MAVEN,
+  GENERATOR_DOCKER,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
@@ -233,6 +235,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         } else {
           throw new Error(`Build tool ${buildTool} is not supported`);
         }
+
+        await this.composeWithJHipster(GENERATOR_DOCKER);
 
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (enableTranslation) {
@@ -585,186 +589,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      async dockerServices({ application }) {
-        const { createDockerComposeFile, createDockerExtendedServices } = await import('../base-docker/utils.mjs');
-
-        const dockerFile = createDockerComposeFile(application.lowercaseBaseName);
-        this.writeDestination(`${application.dockerServicesDir}services.yml`, dockerFile);
-
-        if (application.databaseTypeCouchbase) {
-          const extendedCouchbaseServices = createDockerExtendedServices({ serviceName: application.databaseType });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCouchbaseServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCouchbaseServices);
-        }
-
-        if (application.databaseTypeSql && !application.prodDatabaseTypeOracle) {
-          const extendedDatabaseServices = createDockerExtendedServices({ serviceName: application.prodDatabaseType });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedDatabaseServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedDatabaseServices);
-        }
-
-        if (application.databaseTypeCassandra) {
-          const extendedCassandraServices = createDockerExtendedServices(
-            { serviceName: 'cassandra' },
-            { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' }
-          );
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCassandraServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCassandraServices);
-        } else if (!application.databaseTypeSql && !application.databaseTypeCouchbase) {
-          const extendedDatabaseServices = createDockerExtendedServices({ serviceName: application.databaseType });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedDatabaseServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedDatabaseServices);
-        }
-        if (application.searchEngineElasticsearch) {
-          const extendedElasticsearchServices = createDockerExtendedServices({ serviceName: application.searchEngine });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedElasticsearchServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedElasticsearchServices);
-        }
-        if (application.cacheProviderMemcached || application.cacheProviderRedis) {
-          const extendedCacheProviderServices = createDockerExtendedServices({ serviceName: application.cacheProvider });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCacheProviderServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCacheProviderServices);
-        }
-        if (application.authenticationTypeOauth2) {
-          const extendedOauth2Services = createDockerExtendedServices({ serviceName: 'keycloak' });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedOauth2Services);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedOauth2Services);
-        }
-        if (application.serviceDiscoveryEureka) {
-          const extendedEurekaServices = createDockerExtendedServices({
-            serviceName: 'jhipster-registry',
-            additionalConfig: {
-              environment: [application.authenticationTypeOauth2 ? 'JHIPSTER_SLEEP=40' : 'JHIPSTER_SLEEP=20'],
-            },
-          });
-
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedEurekaServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedEurekaServices);
-        }
-        if (application.serviceDiscoveryConsul) {
-          const extendedConsulServices = createDockerExtendedServices(
-            { serviceName: 'consul' },
-            { serviceFile: './consul.yml', serviceName: 'consul-config-loader' }
-          );
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedConsulServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedConsulServices);
-        }
-        if (application.messageBrokerKafka) {
-          const extendedKafkaServices = createDockerExtendedServices(
-            { serviceName: 'kafka' },
-            { serviceFile: './kafka.yml', serviceName: 'zookeeper' }
-          );
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedKafkaServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedKafkaServices);
-        }
-      },
       packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
         packageJsonConfigStorage.packaging = application.defaultPackaging;
         packageJsonConfigStorage.default_environment = application.defaultEnvironment;
-      },
-      packageJsonDockerScripts({ application }) {
-        const scriptsStorage = this.packageJson.createStorage('scripts');
-        const { databaseType, prodDatabaseType } = this.jhipsterConfig;
-        const { databaseTypeSql, prodDatabaseTypeMysql, authenticationTypeOauth2, applicationTypeMicroservice } = application;
-        const dockerAwaitScripts = [];
-        if (databaseTypeSql) {
-          if (prodDatabaseTypeMysql) {
-            scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && sleep 20 && echo "MySQL started"`,
-            });
-          }
-          if (prodDatabaseType === NO_DATABASE || prodDatabaseType === ORACLE) {
-            scriptsStorage.set(
-              'docker:db:up',
-              `echo "Docker for db ${prodDatabaseType} not configured for application ${application.baseName}"`
-            );
-          } else {
-            scriptsStorage.set({
-              'docker:db:up': `docker compose -f src/main/docker/${prodDatabaseType}.yml up -d`,
-              'docker:db:down': `docker compose -f src/main/docker/${prodDatabaseType}.yml down -v`,
-            });
-          }
-        } else {
-          const dockerFile = `src/main/docker/${databaseType}.yml`;
-          if (databaseType === CASSANDRA) {
-            scriptsStorage.set({
-              'docker:db:await': `wait-on -t ${WAIT_TIMEOUT} tcp:9042 && sleep 20`,
-            });
-          }
-          if (databaseType === COUCHBASE) {
-            scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for Couchbase to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"`,
-            });
-          }
-          if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
-            scriptsStorage.set({
-              'docker:db:build': `docker compose -f ${dockerFile} build`,
-              'docker:db:up': `docker compose -f ${dockerFile} up -d`,
-              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
-            });
-          } else if (this.fs.exists(this.destinationPath(dockerFile))) {
-            scriptsStorage.set({
-              'docker:db:up': `docker compose -f ${dockerFile} up -d`,
-              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
-            });
-          } else {
-            scriptsStorage.set(
-              'docker:db:up',
-              `echo "Docker for db ${databaseType} not configured for application ${application.baseName}"`
-            );
-          }
-        }
-        if (this.jhipsterConfig.searchEngine === ELASTICSEARCH) {
-          dockerAwaitScripts.push(
-            `echo "Waiting for Elasticsearch to start" && wait-on -t ${WAIT_TIMEOUT} "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"`
-          );
-        }
-
-        const dockerOthersUp = [];
-        const dockerOthersDown = [];
-        const dockerBuild = [];
-        ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(dockerConfig => {
-          const dockerFile = `src/main/docker/${dockerConfig}.yml`;
-          if (this.fs.exists(this.destinationPath(dockerFile))) {
-            if (['cassandra', 'couchbase'].includes(dockerConfig)) {
-              scriptsStorage.set(`docker:${dockerConfig}:build`, `docker compose -f ${dockerFile} build`);
-              dockerBuild.push(`npm run docker:${dockerConfig}:build`);
-            } else if (dockerConfig === 'jhipster-registry') {
-              if (authenticationTypeOauth2 && !applicationTypeMicroservice) {
-                dockerOthersUp.push('npm run docker:keycloak:await');
-              }
-              scriptsStorage.set(
-                'docker:jhipster-registry:await',
-                `echo "Waiting for jhipster-registry to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8761/management/health && echo "jhipster-registry started"`
-              );
-              dockerAwaitScripts.push('npm run docker:jhipster-registry:await');
-            } else if (dockerConfig === 'keycloak') {
-              scriptsStorage.set(
-                'docker:keycloak:await',
-                `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
-              );
-              dockerAwaitScripts.push('npm run docker:keycloak:await');
-            }
-
-            scriptsStorage.set(`docker:${dockerConfig}:up`, `docker compose -f ${dockerFile} up -d`);
-            dockerOthersUp.push(`npm run docker:${dockerConfig}:up`);
-            scriptsStorage.set(`docker:${dockerConfig}:down`, `docker compose -f ${dockerFile} down -v`);
-            dockerOthersDown.push(`npm run docker:${dockerConfig}:down`);
-          }
-        });
-        scriptsStorage.set({
-          'docker:app:up': `docker compose -f ${application.DOCKER_DIR}app.yml up -d`,
-          'docker:others:await': dockerAwaitScripts.join(' && '),
-          'predocker:others:up': dockerBuild.join(' && '),
-          'docker:others:up': dockerOthersUp.join(' && '),
-          'docker:others:down': dockerOthersDown.join(' && '),
-          'ci:e2e:prepare:docker': 'docker compose -f src/main/docker/services.yml up -d && docker ps -a',
-          'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',
-          'ci:e2e:teardown:docker': 'docker compose -f src/main/docker/services.yml down -v && docker ps -a',
-          'ci:e2e:teardown': 'npm run ci:e2e:teardown:docker',
-        });
       },
       packageJsonBackendScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');
@@ -820,7 +649,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
-          'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
+          'preci:e2e:server:start': 'npm run services:db:await --if-present && npm run services:others:await --if-present',
           'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=e2e,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
@@ -829,8 +658,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
         if (scriptsStorage.get('e2e')) {
           const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
+          const applicationEndpoint = application.applicationTypeMicroservice
+            ? `http-get://localhost:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
+            : 'http-get://localhost:$npm_package_config_backend_port/management/health';
+
           scriptsStorage.set({
-            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"`,
+            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
             'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
@@ -848,6 +681,29 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       customizeFiles,
+
+      packageJsonE2eScripts({ application, entities }) {
+        if (application.applicationTypeGateway) {
+          const { serverPort, lowercaseBaseName } = application;
+          const microservices = [...new Set(entities.map(entity => entity.microserviceName))].filter(Boolean).map(ms => ms.toLowerCase());
+          const scriptsStorage = this.packageJson.createStorage('scripts');
+          const waitServices = microservices
+            .concat(lowercaseBaseName)
+            .map(ms => `npm run ci:server:await:${ms}`)
+            .join(' && ');
+
+          scriptsStorage.set({
+            [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:$npm_package_config_backend_port/management/health`,
+            ...Object.fromEntries(
+              microservices.map(ms => [
+                `ci:server:await:${ms}`,
+                `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:${serverPort}/services/${ms}/management/health/readiness`,
+              ])
+            ),
+            'ci:server:await': `echo "Waiting for services to start" && ${waitServices} && echo "Services started"`,
+          });
+        }
+      },
     });
   }
 

@@ -41,58 +41,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/memcached.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
@@ -415,40 +364,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
@@ -768,55 +684,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -1259,52 +1127,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -1747,40 +1570,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -2208,61 +1998,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -2657,58 +2393,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -3073,52 +2758,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
@@ -3459,67 +3099,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/Redis-Cluster.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/connectRedisCluster.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
@@ -3884,58 +3464,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
@@ -4288,55 +3817,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -4761,46 +4242,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -5066,40 +4508,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -5527,55 +4936,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -5844,67 +5205,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/Redis-Cluster.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/connectRedisCluster.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -6350,58 +5651,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -6667,52 +5917,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/memcached.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -7128,40 +6333,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -7427,43 +6599,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -7879,55 +7015,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -8202,55 +7290,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -8624,58 +7664,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -8995,52 +7984,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -9396,43 +8340,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -9752,46 +8660,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/memcached.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -10150,58 +9019,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -10521,49 +9339,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -10922,52 +9698,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -11293,64 +10024,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/Redis-Cluster.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/connectRedisCluster.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -11718,43 +10392,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -12074,43 +10712,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -12547,55 +11149,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -12900,64 +11454,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/Redis-Cluster.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/connectRedisCluster.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -13415,52 +11912,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -13753,55 +12205,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -14241,40 +12645,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -14564,34 +12935,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -15028,49 +13372,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -15363,52 +13665,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -15875,52 +14132,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -16207,73 +14419,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/Redis-Cluster.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/connectRedisCluster.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -16665,46 +14811,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -17057,46 +15164,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/memcached.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -17476,58 +15544,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -17883,61 +15900,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -18329,61 +16292,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -18736,55 +16645,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -19176,40 +17037,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -19544,43 +17372,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -19951,58 +17743,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -20364,40 +18105,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -20831,55 +18539,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mariadb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -21142,40 +18802,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -21588,52 +19215,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mssql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -21905,40 +19487,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -22354,55 +19903,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mysql/my.cnf": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mysql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -22674,34 +20175,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -23114,49 +20588,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -23419,40 +20851,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/memcached.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -23883,52 +21282,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/postgresql.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {

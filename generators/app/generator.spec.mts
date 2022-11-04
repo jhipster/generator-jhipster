@@ -55,7 +55,7 @@ describe(`JHipster ${generator} generator`, () => {
       });
 
       it('should match snapshot', () => {
-        expect(runResult.env.sharedOptions.sharedData.applications.jhipster.sharedApplication).toMatchSnapshot({
+        expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
@@ -75,7 +75,7 @@ describe(`JHipster ${generator} generator`, () => {
       });
 
       it('should match snapshot', () => {
-        expect(runResult.env.sharedOptions.sharedData.applications.jhipster.sharedApplication).toMatchSnapshot({
+        expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
@@ -95,7 +95,7 @@ describe(`JHipster ${generator} generator`, () => {
       });
 
       it('should match snapshot', () => {
-        expect(runResult.env.sharedOptions.sharedData.applications.jhipster.sharedApplication).toMatchSnapshot({
+        expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
         });
