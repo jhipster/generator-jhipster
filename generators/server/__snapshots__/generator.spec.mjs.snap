@@ -2,11 +2,125 @@
 
 exports[`JHipster server generator exported files should match snapshot 1`] = `
 Object {
+  "accountResource": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "web/rest/AccountResource_skipUserManagement.java",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "web/rest/AccountResourceIT_skipUserManagement.java",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "web/rest/AccountResource_oauth2.java",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "web/rest/AccountResourceIT_oauth2.java",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "web/rest/AccountResource.java",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "web/rest/AccountResourceIT.java",
+      ],
+    },
+  ],
+  "entrypointFiles": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "web/rest/vm/LoginVM.java",
+        "web/rest/AuthenticateController.java",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "web/rest/AuthenticateControllerIT.java",
+      ],
+    },
+  ],
+  "gatewayRelayFiles": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "security/jwt/JWTRelayGatewayFilterFactory.java",
+      ],
+    },
+  ],
   "jib": Array [
     Object {
       "path": "src/main/docker/jib/",
       "templates": Array [
         "entrypoint.sh",
+      ],
+    },
+  ],
+  "jwtBaseFiles": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "config/SecurityJwtConfiguration.java",
+        "management/SecurityMetersService.java",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "management/SecurityMetersServiceTests.java",
+        "security/jwt/AuthenticationIntegrationTest.java",
+        "security/jwt/JwtAuthenticationTestUtils.java",
+        "security/jwt/AuthenticationIntegrationTest.java",
+        "security/jwt/TokenAuthenticationSecurityMetersIT.java",
+        "security/jwt/TokenAuthenticationIT.java",
+      ],
+    },
+  ],
+  "microservice": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "config/FeignConfiguration.java",
+        "client/UserFeignClientInterceptor_jwt.java",
       ],
     },
   ],
@@ -211,44 +325,6 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/security/jwt/TokenProvider.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/security/jwt/JWTFilter.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/management/SecurityMetersService.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/security/jwt/JWTConfigurer.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/security/jwt/JWTRelayGatewayFilterFactory.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
           "file": "package/config/SecurityConfiguration.java",
           "renameTo": [Function],
         },
@@ -340,20 +416,6 @@ Object {
         },
         Object {
           "file": "package/security/UserNotActivatedException.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/vm/LoginVM.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/web/rest/UserJWTController.java",
           "renameTo": [Function],
         },
       ],
@@ -780,16 +842,6 @@ Object {
     },
     Object {
       "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/AccountResource.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
       "path": "src/test/java/",
       "templates": Array [
         Object {
@@ -812,26 +864,6 @@ Object {
         },
         Object {
           "file": "package/web/rest/UserResourceIT.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/AccountResourceIT_skipUserManagement.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/AccountResourceIT_oauth2.java",
           "renameTo": [Function],
         },
       ],
@@ -898,10 +930,6 @@ Object {
         },
         Object {
           "file": "package/web/rest/vm/ManagedUserVM.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/web/rest/AccountResource.java",
           "renameTo": [Function],
         },
         Object {
@@ -983,38 +1011,6 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/management/SecurityMetersServiceTests.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/security/jwt/TokenProviderTest.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/security/jwt/TokenProviderSecurityMetersTests.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/security/jwt/JWTFilterTest.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/UserJWTControllerIT.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
           "file": "package/cucumber/stepdefs/UserStepDefs.java",
           "renameTo": [Function],
         },
@@ -1066,26 +1062,6 @@ Object {
         },
         Object {
           "file": "package/web/rest/UserResourceIT.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/AccountResourceIT.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/AccountResourceIT_oauth2.java",
           "renameTo": [Function],
         },
       ],
@@ -1225,20 +1201,6 @@ Object {
     },
   ],
   "serverMicroservice": Array [
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/FeignConfiguration.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/client/JWT_UserFeignClientInterceptor.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
     Object {
       "condition": [Function],
       "path": "src/main/java/",
