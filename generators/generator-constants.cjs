@@ -47,7 +47,7 @@ const dockerContainers = {
 Object.freeze(dockerContainers);
 
 // Version of Node, NPM
-const NODE_VERSION = '16.17.0';
+const NODE_VERSION = '18.12.1';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 

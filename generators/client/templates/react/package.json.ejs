@@ -84,6 +84,7 @@
     "@types/webpack-env": "<%= this.dependabotPackageJson.devDependencies['@types/webpack-env'] %>",
     "@typescript-eslint/eslint-plugin": "<%= this.dependabotPackageJson.devDependencies['@typescript-eslint/eslint-plugin'] %>",
     "@typescript-eslint/parser": "<%= this.dependabotPackageJson.devDependencies['@typescript-eslint/parser'] %>",
+    "ajv": "<%= this.dependabotPackageJson.devDependencies['ajv'] %>",
     "autoprefixer": "<%= this.dependabotPackageJson.devDependencies['autoprefixer'] %>",
     "browser-sync": "<%= this.dependabotPackageJson.devDependencies['browser-sync'] %>",
     "browser-sync-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['browser-sync-webpack-plugin'] %>",
@@ -122,6 +123,7 @@
 <%_ if (protractorTests) { _%>
     "mocha": "7.1.2",
 <%_ } _%>
+    "postcss-import": "<%= this.dependabotPackageJson.devDependencies['postcss-import'] %>",
     "postcss-loader": "<%= this.dependabotPackageJson.devDependencies['postcss-loader'] %>",
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%= this.dependabotPackageJson.devDependencies['postcss-rtlcss'] %>",
