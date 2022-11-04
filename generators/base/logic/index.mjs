@@ -17,8 +17,5 @@
  * limitations under the License.
  */
 export { default as locateGenerator } from './blueprint-structure/generator-locator.mjs';
-export { default as isUsingBuiltInAuthorityConfiguration } from './config/authority.mjs';
-export { default as isBuiltInUserConfiguration } from './config/user.mjs';
-export { default as entityIsAuthority } from './entity/authority-checker.mjs';
 export { applyPathCustomizer, normalizeOutputPath } from './output/path.mjs';
 export { default as getOutputPathCustomizer } from './output/resolver.mjs';

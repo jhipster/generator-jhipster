@@ -59,16 +59,9 @@ import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
-import { applyPathCustomizer, normalizeOutputPath } from './generator/output/path.mjs';
-import {
-  applyPathCustomizer,
-  locateGenerator,
-  normalizeOutputPath,
-  getOutputPathCustomizer,
-  isBuiltInUserConfiguration,
-  isUsingBuiltInAuthorityConfiguration,
-  entityIsAuthority,
-} from './generator-utils/index.mjs';
+import { applyPathCustomizer, locateGenerator, normalizeOutputPath, getOutputPathCustomizer } from './logic/index.mjs';
+import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../base-application/logic/index.mjs';
+import { entityIsAuthority } from '../entity/logic/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
