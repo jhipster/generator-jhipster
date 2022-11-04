@@ -61,7 +61,6 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs,<%= discoveryProfile %><% if (authenticationTypeOauth2) { %>,oauth2<% } %>
-      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
 <%_ if (authenticationTypeJwt) { _%>
       - SPRING_SECURITY_USER_PASSWORD=admin
       # The token should have the same value than the one declared in you Spring configuration under the jhipster.security.authentication.jwt.base64-secret configuration's entry

@@ -150,6 +150,16 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
           // Add application configuration
           const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
           const yamlConfig = yaml.services.app;
+          if (yamlConfig.depends_on) {
+            yamlConfig.depends_on = Object.fromEntries(
+              Object.entries(yamlConfig.depends_on).map(([serviceName, config]) => {
+                if (['keycloak', 'jhipster-registry', 'consul'].includes(serviceName)) {
+                  return [serviceName, config];
+                }
+                return [`${lowercaseBaseName}-${serviceName}`, config];
+              })
+            );
+          }
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
             this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {

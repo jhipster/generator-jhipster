@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "14.2.8",
+    "@angular/common": "14.2.9",
     "@fortawesome/angular-fontawesome": "0.11.1",
     "@fortawesome/fontawesome-svg-core": "6.2.0",
     "@fortawesome/free-solid-svg-icons": "6.2.0",
@@ -18,7 +18,7 @@
     "zone.js": "0.11.6"
   },
   "devDependencies": {
-    "@angular/cli": "14.2.7",
+    "@angular/cli": "14.2.8",
     "@angular-builders/custom-webpack": "14.0.1",
     "@angular-builders/jest": "14.0.2",
     "@angular-eslint/eslint-plugin": "14.1.2",

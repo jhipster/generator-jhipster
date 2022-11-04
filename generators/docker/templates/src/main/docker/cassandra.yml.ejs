@@ -19,11 +19,32 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: <%= baseName.toLowerCase() %>
 services:
-  mongodb:
-    image: <%= DOCKER_MONGODB %>
+  cassandra:
+    image: <%= DOCKER_CASSANDRA %>
+    container_name: <%= baseName.toLowerCase() %>-cassandra
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:27017:27017
-    # volumes:
-    #   - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
+      - 127.0.0.1:7000:7000
+      - 127.0.0.1:7001:7001
+      - 127.0.0.1:7199:7199
+      - 127.0.0.1:9042:9042
+      - 127.0.0.1:9160:9160
+    healthcheck:
+      test: ['CMD-SHELL', '[ $$(nodetool statusgossip) = running ]']
+      interval: 5s
+      timeout: 25s
+      retries: 10
+  cassandra-migration:
+    environment:
+      - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
+      - USER=docker-cassandra-migration
+      # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
+      - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
+    build:
+      context: .
+      dockerfile: cassandra/Cassandra-Migration.Dockerfile
+    volumes:
+      - ../resources/config/cql:/cql:ro

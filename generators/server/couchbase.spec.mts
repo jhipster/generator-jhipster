@@ -24,6 +24,8 @@ const couchbaseSamples = extendMatrix(buildServerMatrix(), {
   searchEngine: ['no', 'couchbase'],
 });
 
+const mockedGenerators = ['jhipster:languages', 'jhipster:common', 'jhipster:docker'];
+
 const samplesBuilder = (): [string, any][] =>
   Object.entries(couchbaseSamples).map(([name, sample]) => [
     name,
@@ -63,7 +65,7 @@ describe(`JHipster ${databaseType} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:languages', 'jhipster:common']);
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());

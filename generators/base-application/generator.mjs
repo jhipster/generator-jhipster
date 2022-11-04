@@ -413,15 +413,17 @@ export default class BaseApplicationGenerator extends BaseGenerator {
     });
   }
 
-  /**
-   * @protected
-   */
   getArgsForPriority(priorityName) {
-    return [this.getTaskFirstArgForPriority(priorityName)];
+    const args = super.getArgsForPriority(priorityName);
+    let firstArg = this.getTaskFirstArgForPriority(priorityName);
+    if (args.length > 0) {
+      firstArg = { ...args[0], ...firstArg };
+    }
+    return [firstArg];
   }
 
   /**
-   * @protected
+   * @private
    */
   getTaskFirstArgForPriority(priorityName) {
     if (
@@ -446,12 +448,13 @@ export default class BaseApplicationGenerator extends BaseGenerator {
         END,
       ].includes(priorityName)
     ) {
-      throw new Error(`${priorityName} data not available`);
+      return {};
     }
     if (!this.jhipsterConfig.baseName) {
       throw new Error(`BaseName (${this.jhipsterConfig.baseName}) application not available for priority ${priorityName}`);
     }
     const application = this.sharedData.getApplication();
+
     if (LOADING_ENTITIES === priorityName) {
       return {
         application,
@@ -600,10 +603,11 @@ export default class BaseApplicationGenerator extends BaseGenerator {
         const tasks = this.extractTasksFromPriority(CONFIGURING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToConfigure().forEach(({ entityName, entityStorage, entityConfig }) => {
           this.debug(`Queueing entity tasks ${CONFIGURING_EACH_ENTITY} for ${entityName}`);
+          const args = this.getArgsForPriority(CONFIGURING_EACH_ENTITY);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getTaskFirstArgForPriority(CONFIGURING_EACH_ENTITY), entityName, entityStorage, entityConfig }],
+              args: [{ ...args[0], entityName, entityStorage, entityConfig }],
             });
           });
         });
@@ -618,10 +622,11 @@ export default class BaseApplicationGenerator extends BaseGenerator {
         this.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
         const tasks = this.extractTasksFromPriority(LOADING_ENTITIES, { skip: false });
         this.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
+        const args = this.getArgsForPriority(LOADING_ENTITIES);
         tasks.forEach(task => {
           this.queueTask({
             ...task,
-            args: [this.getTaskFirstArgForPriority(LOADING_ENTITIES)],
+            args,
           });
         });
       },
@@ -636,10 +641,11 @@ export default class BaseApplicationGenerator extends BaseGenerator {
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
           this.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY} for ${description}`);
+          const args = this.getArgsForPriority(PREPARING_EACH_ENTITY);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getTaskFirstArgForPriority(PREPARING_EACH_ENTITY), description, ...data }],
+              args: [{ ...args[0], description, ...data }],
             });
           });
         });
@@ -654,10 +660,11 @@ export default class BaseApplicationGenerator extends BaseGenerator {
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY_FIELD, { skip: false });
         this.getEntitiesFieldsDataToPrepare().forEach(({ description, ...data }) => {
           this.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_FIELD} for ${description}`);
+          const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_FIELD);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getTaskFirstArgForPriority(PREPARING_EACH_ENTITY_FIELD), description, ...data }],
+              args: [{ ...args[0], description, ...data }],
             });
           });
         });
@@ -672,10 +679,11 @@ export default class BaseApplicationGenerator extends BaseGenerator {
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY_RELATIONSHIP, { skip: false });
         this.getEntitiesRelationshipsDataToPrepare().forEach(({ description, ...data }) => {
           this.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_RELATIONSHIP} for ${description}`);
+          const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getTaskFirstArgForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP), description, ...data }],
+              args: [{ ...args[0], description, ...data }],
             });
           });
         });
@@ -690,10 +698,11 @@ export default class BaseApplicationGenerator extends BaseGenerator {
         const tasks = this.extractTasksFromPriority(POST_PREPARING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToPostPrepare().forEach(({ description, ...data }) => {
           this.debug(`Queueing entity tasks ${POST_PREPARING_EACH_ENTITY} for ${description}`);
+          const args = this.getArgsForPriority(POST_PREPARING_EACH_ENTITY);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...this.getTaskFirstArgForPriority(POST_PREPARING_EACH_ENTITY), description, ...data }],
+              args: [{ ...args[0], description, ...data }],
             });
           });
         });
@@ -707,10 +716,11 @@ export default class BaseApplicationGenerator extends BaseGenerator {
       method: () => {
         if (this.options.skipWriting) return;
         const tasks = this.extractTasksFromPriority(WRITING_ENTITIES, { skip: false });
+        const args = this.getArgsForPriority(WRITING_ENTITIES);
         tasks.forEach(task => {
           this.queueTask({
             ...task,
-            args: this.getArgsForPriority(WRITING_ENTITIES),
+            args,
           });
         });
       },
@@ -723,10 +733,11 @@ export default class BaseApplicationGenerator extends BaseGenerator {
       method: () => {
         if (this.options.skipWriting) return;
         const tasks = this.extractTasksFromPriority(POST_WRITING_ENTITIES, { skip: false });
+        const args = this.getArgsForPriority(POST_WRITING_ENTITIES);
         tasks.forEach(task => {
           this.queueTask({
             ...task,
-            args: this.getArgsForPriority(POST_WRITING_ENTITIES),
+            args,
           });
         });
       },

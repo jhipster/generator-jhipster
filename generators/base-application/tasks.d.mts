@@ -1,8 +1,16 @@
-import { NoArgTaskGroup, GenericTaskGroup } from '../base/tasks.mjs';
+import {
+  GenerericTaskParam,
+  GenericTaskGroup,
+  InitializingTaskGroup as BaseInitializingTaskGroup,
+  PromptingTaskGroup as BasePromptingTaskGroup,
+  ConfiguringTaskGroup as BaseConfiguringTaskGroup,
+  ComposingTaskGroup as BaseComposingTaskGroup,
+  LoadingTaskGroup as BaseLoadingTaskGroup,
+} from '../base/tasks.mjs';
 
 export type Application = Record<string, any>;
 
-type ApplicationTaskParam<ApplicationType> = { application: ApplicationType };
+type ApplicationTaskParam<ApplicationType> = { application: ApplicationType } & GenerericTaskParam<any, any>;
 type ApplicationTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, ApplicationTaskParam<ApplicationType>>;
 
 type ConfiguringEachEntityTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType> & {
@@ -74,10 +82,10 @@ type EntitiesTaskParam<ApplicationType> = ApplicationTaskParam<ApplicationType> 
 type EntitiesTaskGroup<ThisType, ApplicationType> = GenericTaskGroup<ThisType, EntitiesTaskParam<ApplicationType>>;
 
 export {
-  NoArgTaskGroup as InitializingTaskGroup,
-  NoArgTaskGroup as PromptingTaskGroup,
-  NoArgTaskGroup as ConfiguringTaskGroup,
-  NoArgTaskGroup as ComposingTaskGroup,
+  BaseInitializingTaskGroup as InitializingTaskGroup,
+  BasePromptingTaskGroup as PromptingTaskGroup,
+  BaseConfiguringTaskGroup as ConfiguringTaskGroup,
+  BaseComposingTaskGroup as ComposingTaskGroup,
   ApplicationTaskGroup as LoadingTaskGroup,
   ApplicationTaskGroup as PreparingTaskGroup,
   ConfiguringEachEntityTaskGroup,
