@@ -19,15 +19,22 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: <%= baseName.toLowerCase() %>
 services:
-  postgresql:
-    image: <%- dockerContainers.postgresql %>
+  mariadb:
+    image: <%= DOCKER_MARIADB %>
+    volumes:
+      - ./config/mariadb:/etc/mysql/conf.d
     # volumes:
-    #   - ~/volumes/jhipster/<%= baseName %>/postgresql/:/var/lib/postgresql/data/
+    #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
     environment:
-      - POSTGRES_USER=<%= baseName %>
-      - POSTGRES_PASSWORD=
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:5432:5432
+      - 127.0.0.1:3306:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10

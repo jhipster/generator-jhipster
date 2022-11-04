@@ -312,6 +312,7 @@ public class SecurityConfiguration {
             .pathMatchers("/services/*/*.js").permitAll()
             .pathMatchers("/services/*/*.js.map").permitAll()
   <%_ } _%>
+            .pathMatchers("/services/*/management/health/readiness").permitAll()
             .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>

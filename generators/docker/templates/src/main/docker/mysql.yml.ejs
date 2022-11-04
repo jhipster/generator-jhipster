@@ -19,20 +19,21 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: <%= baseName.toLowerCase() %>
 services:
-  keycloak:
-    image: <%- dockerContainers.keycloak %>
-    command: ['start-dev --import-realm']
+  mysql:
+    image: <%= DOCKER_MYSQL %>
     volumes:
-      - ./realm-config:/opt/keycloak/data/import
+      - ./config/mysql:/etc/mysql/conf.d
+    #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
     environment:
-      - KC_DB=dev-file
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-      - KC_FEATURES=scripts
-      - KC_HTTP_PORT=9080
-      - KC_HTTPS_PORT=9443
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:9080:9080
-      - 127.0.0.1:9443:9443
+      - 127.0.0.1:3306:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+    healthcheck:
+      test: ["CMD", "mysql", "-e", "SHOW DATABASES;"]
+      interval: 5s
+      timeout: 5s
+      retries: 10

@@ -6,9 +6,8 @@ import { fileURLToPath } from 'url';
 import { testBlueprintSupport, buildServerMatrix, extendMatrix, extendFilteredMatrix } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
-import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 
-import { databaseTypes, cacheTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
+import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -21,7 +20,6 @@ const generatorFile = join(__dirname, 'index.mjs');
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
-const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 
 let sqlSamples = buildServerMatrix({
   prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE],
@@ -54,6 +52,8 @@ sqlSamples = extendFilteredMatrix(sqlSamples, ({ prodDatabaseType }) => prodData
 sqlSamples = extendFilteredMatrix(sqlSamples, ({ reactive }) => !reactive, {
   cacheProvider: [NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS],
 });
+
+const mockedGenerators = ['jhipster:languages', 'jhipster:common', 'jhipster:liquibase', 'jhipster:docker'];
 
 const samplesBuilder = (): [string, any][] =>
   Object.entries(sqlSamples).map(([name, sample]) => [
@@ -94,10 +94,7 @@ describe(`JHipster ${databaseType} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers
-          .run(generatorFile)
-          .withOptions(sample)
-          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:liquibase']);
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -119,11 +116,6 @@ describe(`JHipster ${databaseType} generator`, () => {
       });
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
-      });
-
-      describe('serviceDiscoveryType', () => {
-        matchEureka(() => runResult, sampleConfig.serviceDiscoveryType === EUREKA);
-        matchConsul(() => runResult, sampleConfig.serviceDiscoveryType === CONSUL);
       });
     });
   });

@@ -80,3 +80,18 @@ export const extendFilteredMatrix = (matrix, filter, extendedConfig) => {
   applyExtendedMatrix(filteredEntries, extendedConfig);
   return Object.fromEntries(matrixEntries);
 };
+
+export const buildSamplesFromMatrix = (samples, { config = {}, entities = undefined } = {}) =>
+  Object.fromEntries(
+    Object.entries(samples).map(([name, sample]) => [
+      name,
+      {
+        config: {
+          ...config,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ...(sample as any),
+        },
+        entities,
+      },
+    ])
+  );
