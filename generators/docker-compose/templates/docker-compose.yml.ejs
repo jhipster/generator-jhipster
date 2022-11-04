@@ -89,7 +89,7 @@ services:
       - 8600:8600
     command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
   consul-config-loader:
-    image: <%- dockerContainers.consul-config-loader %>
+    image: <%- dockerContainers.consulConfigLoader %>
     volumes:
       - ./central-server-config:/config
     environment:
@@ -131,7 +131,7 @@ services:
     ports:
       - 9090:9090
   alertmanager:
-    image: <%- dockerContainers.prometheus-alertmanager %>
+    image: <%- dockerContainers.prometheusAlertmanager %>
     ports:
       - 9093:9093
     volumes:

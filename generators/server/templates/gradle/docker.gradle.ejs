@@ -18,7 +18,7 @@
 -%>
 jib {
     from {
-        image = "<%- dockerContainers.java-jre %>"
+        image = "<%- dockerContainers.javaJre %>"
         platforms {
             platform {
                 architecture = "${findProperty('jibArchitecture') ?: 'amd64'}"

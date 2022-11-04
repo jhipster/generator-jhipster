@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   jhipster-registry:
-    image: <%- dockerContainers.jhipster-registry %>
+    image: <%- dockerContainers.jhipsterRegistry %>
     volumes:
       - ./central-server-config:/central-config
     # When run with the "dev" Spring profile, the JHipster Registry will

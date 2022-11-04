@@ -190,7 +190,7 @@ objects:
         spec:
           containers:
           - name: ${APPLICATION_NAME}-consul-config-loader
-            image: <%- dockerContainers.consul-config-loader %>
+            image: <%- dockerContainers.consulConfigLoader %>
             imagePullPolicy: IfNotPresent
             env:
             - name: INIT_SLEEP_SECONDS
