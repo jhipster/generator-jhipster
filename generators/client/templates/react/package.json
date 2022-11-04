@@ -14,7 +14,7 @@
     "react-hook-form": "7.39.1",
     "react-jhipster": "jhipster/react-jhipster",
     "react-loadable": "5.5.0",
-    "react-redux": "8.0.4",
+    "react-redux": "8.0.5",
     "react-redux-loading-bar": "5.0.4",
     "react-router-dom": "6.4.3",
     "react-toastify": "9.1.1",
