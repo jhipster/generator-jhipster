@@ -1,7 +1,7 @@
 name: 'samplekafka'
 services:
     mysql:
-        image: mysql:8.0.30
+        image: <%- dockerContainers.mysql %>
         # volumes:
         #     - ~/volumes/jhipster/sampleKafka/mysql/:/var/lib/mysql/
         environment:
