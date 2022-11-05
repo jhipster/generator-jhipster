@@ -83,6 +83,7 @@ describe('/account/settings', () => {
     });
 
     it("should not be able to change 'user' email to same value", () => {
+      cy.get(emailSettingsSelector).invoke('val').should('not.be.empty');
       cy.get(emailSettingsSelector).focus().clear().type('admin@localhost.fr');
       cy.get(submitSettingsSelector).click();
       cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(400));
