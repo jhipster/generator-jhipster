@@ -61,6 +61,7 @@ describe('/account/settings', () => {
   });
 
   it("should be able to change 'user' email settings", () => {
+    cy.get(emailSettingsSelector).invoke('val').should('not.be.empty');
     cy.get(emailSettingsSelector).focus().clear().type('user@localhost.fr');
     cy.get(submitSettingsSelector).click();
     cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(200));
