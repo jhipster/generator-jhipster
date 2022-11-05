@@ -70,6 +70,7 @@ describe('/account/settings', () => {
     before(() => {
       cy.login(adminUsername, adminPassword);
       cy.visit('/account/settings');
+      cy.get(emailSettingsSelector).invoke('val').should('not.be.empty');
       cy.get(emailSettingsSelector).focus().clear().type('admin@localhost.fr');
       cy.intercept({
         method: 'POST',
