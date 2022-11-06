@@ -62,6 +62,12 @@ export function getDockerfileContainers(dockerfileContent) {
       image = split[0];
       tag = split[1];
       containers[image] = imageWithTag;
+      if (/^[a-zA-Z0-9-]*$/.test(image)) {
+        const name = camelCase(image);
+        containers[name] = imageWithTag;
+        containers[`${name}Tag`] = tag;
+        containers[`${name}Image`] = image;
+      }
     } else if (instruction.getKeyword() === 'LABEL') {
       const split = instruction.getArgumentsContent().split('=');
       if (split[0].toUpperCase() === 'ALIAS') {
