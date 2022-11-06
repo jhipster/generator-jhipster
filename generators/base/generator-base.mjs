@@ -60,8 +60,16 @@ import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
 import { applyPathCustomizer, locateGenerator, normalizeOutputPath, getOutputPathCustomizer } from './logic/index.mjs';
+import {
+  applyPathCustomizer,
+  locateGenerator,
+  normalizeOutputPath,
+  getOutputPathCustomizer,
+  parseJson,
+  substituteVersionAccordingToSource,
+} from './logic/index.mjs';
 import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../base-application/logic/index.mjs';
-import { entityIsAuthority } from '../entity/logic/index.mjs';
+import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -262,7 +270,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @return {boolean} true if the entity is User.
    */
   isUserEntity(entityName) {
-    return _.upperFirst(entityName) === 'User';
+    return entityIsUser(entityName);
   }
 
   /**
@@ -326,25 +334,11 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
    */
   replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
-    const packageJsonSource = JSON.parse(fs.readFileSync(packageJsonSourceFile, 'utf-8'));
+    const packageJsonSource = parseJson(packageJsonSourceFile);
     const packageJsonTargetFile = this.destinationPath('package.json');
     const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
-    const replace = section => {
-      if (packageJsonTarget[section]) {
-        Object.entries(packageJsonTarget[section]).forEach(([dependency, dependencyReference]) => {
-          if (dependencyReference.startsWith(keyToReplace)) {
-            const [keyToReplaceAtSource, sectionAtSource = section, dependencyAtSource = dependency] = dependencyReference.split('#');
-            if (keyToReplaceAtSource !== keyToReplace) return;
-            if (!packageJsonSource[sectionAtSource] || !packageJsonSource[sectionAtSource][dependencyAtSource]) {
-              throw new Error(`Error setting ${dependencyAtSource} version, not found at ${sectionAtSource}.${dependencyAtSource}`);
-            }
-            packageJsonTarget[section][dependency] = packageJsonSource[sectionAtSource][dependencyAtSource];
-          }
-        });
-      }
-    };
-    replace('dependencies');
-    replace('devDependencies');
+    substituteVersionAccordingToSource('dependencies');
+    substituteVersionAccordingToSource('devDependencies');
     this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
   }
 

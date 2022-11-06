@@ -16,8 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as locateGenerator } from './blueprint-structure/generator-locator.mjs';
-export { applyPathCustomizer, normalizeOutputPath } from './output/path.mjs';
-export { default as getOutputPathCustomizer } from './output/resolver.mjs';
-export { default as parseJson } from './file-readers/json-reader.mjs';
-export { default as substituteVersionAccordingToSource } from './processors/package-json.mjs';
+import _ from 'lodash';
+
+/**
+ * Checks if the entity is the built-in User entity.
+ * @param entityName the name of the entity to check.
+ * @returns {boolean} true if the entity is the built-in User entity.
+ */
+const entityIsUser = entityName => {
+  return _.upperFirst(entityName) === 'User';
+};
+export default entityIsUser;

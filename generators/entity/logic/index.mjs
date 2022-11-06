@@ -18,3 +18,4 @@
  */
 // eslint-disable-next-line import/prefer-default-export
 export { default as entityIsAuthority } from './entity/authority-checker.mjs';
+export { default as entityIsUser } from './entity/user-checker.mjs';

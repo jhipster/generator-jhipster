@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 /**
  * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
@@ -16,8 +18,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as locateGenerator } from './blueprint-structure/generator-locator.mjs';
-export { applyPathCustomizer, normalizeOutputPath } from './output/path.mjs';
-export { default as getOutputPathCustomizer } from './output/resolver.mjs';
-export { default as parseJson } from './file-readers/json-reader.mjs';
-export { default as substituteVersionAccordingToSource } from './processors/package-json.mjs';
+const parseJson = (filePath, defaultValue = {}) => {
+  return JSON.parse(fs.readFileSync(filePath, 'utf-8')) || defaultValue;
+};
+
+export default parseJson;

@@ -18,6 +18,11 @@
  */
 import _ from 'lodash';
 
+/**
+ * Checks if the entity is the built-in Authority entity.
+ * @param entityName the name of the entity to check.
+ * @returns {boolean} true if the entity is the built-in Authority entity.
+ */
 const entityIsAuthority = entityName => {
   return _.upperFirst(entityName) === 'Authority';
 };
