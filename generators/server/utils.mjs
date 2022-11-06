@@ -56,6 +56,7 @@ export function getDockerfileContainers(dockerfileContent) {
   let image;
   let tag;
   for (const instruction of dockerfile.getInstructions()) {
+    let alias;
     if (instruction.getKeyword() === 'FROM') {
       imageWithTag = instruction.getArgumentsContent();
       const split = instruction.getArgumentsContent().split(':');
@@ -63,19 +64,19 @@ export function getDockerfileContainers(dockerfileContent) {
       tag = split[1];
       containers[image] = imageWithTag;
       if (/^[a-zA-Z0-9-]*$/.test(image)) {
-        const name = camelCase(image);
-        containers[name] = imageWithTag;
-        containers[`${name}Tag`] = tag;
-        containers[`${name}Image`] = image;
+        // If the container name is simple enough, use it as alias
+        alias = camelCase(image);
       }
     } else if (instruction.getKeyword() === 'LABEL') {
       const split = instruction.getArgumentsContent().split('=');
       if (split[0].toUpperCase() === 'ALIAS') {
-        const name = camelCase(split[1]);
-        containers[name] = imageWithTag;
-        containers[`${name}Tag`] = tag;
-        containers[`${name}Image`] = image;
+        alias = camelCase(split[1]);
       }
+    }
+    if (alias) {
+      containers[alias] = imageWithTag;
+      containers[`${alias}Tag`] = tag;
+      containers[`${alias}Image`] = image;
     }
   }
   return containers;
