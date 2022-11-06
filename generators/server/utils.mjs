@@ -18,6 +18,9 @@
  */
 import { XMLParser } from 'fast-xml-parser';
 import { DockerfileParser } from 'dockerfile-ast';
+import _ from 'lodash';
+
+const { camelCase } = _;
 
 /**
  * Extract properties from pom content
@@ -58,13 +61,14 @@ export function getDockerfileContainers(dockerfileContent) {
       const split = instruction.getArgumentsContent().split(':');
       image = split[0];
       tag = split[1];
-      containers[image] = imageWithTag;
+      containers[camelCase(image)] = imageWithTag;
     } else if (instruction.getKeyword() === 'LABEL') {
       const split = instruction.getArgumentsContent().split('=');
       if (split[0].toUpperCase() === 'ALIAS') {
-        containers[split[1]] = imageWithTag;
-        containers[`${split[1]}Tag`] = tag;
-        containers[`${split[1]}Image`] = image;
+        const name = camelCase(split[1]);
+        containers[name] = imageWithTag;
+        containers[`${name}Tag`] = tag;
+        containers[`${name}Image`] = image;
       }
     }
   }
