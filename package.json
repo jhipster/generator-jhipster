@@ -124,7 +124,7 @@
     "yeoman-generator": "5.7.0"
   },
   "devDependencies": {
-    "@chevrotain/types": "10.3.0",
+    "@chevrotain/types": "10.4.1",
     "@esbuild-kit/cjs-loader": "2.4.0",
     "@esbuild-kit/esm-loader": "2.5.0",
     "@types/chai": "4.3.3",
