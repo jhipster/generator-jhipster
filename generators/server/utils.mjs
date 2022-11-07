@@ -17,10 +17,6 @@
  * limitations under the License.
  */
 import { XMLParser } from 'fast-xml-parser';
-import { DockerfileParser } from 'dockerfile-ast';
-import _ from 'lodash';
-
-const { camelCase } = _;
 
 /**
  * Extract properties from pom content
@@ -42,44 +38,6 @@ export function getPomVersionProperties(pomContent) {
       .filter(([property]) => property.endsWith('.version'))
       .map(([property, value]) => [property.slice(0, -8), value])
   );
-}
-
-/**
- * Extract version properties from pom content
- * @param {string} pomContent
- * @returns {Record<string, string>}
- */
-export function getDockerfileContainers(dockerfileContent) {
-  const dockerfile = DockerfileParser.parse(dockerfileContent);
-  const containers = {};
-  let imageWithTag;
-  let image;
-  let tag;
-  for (const instruction of dockerfile.getInstructions()) {
-    let alias;
-    if (instruction.getKeyword() === 'FROM') {
-      imageWithTag = instruction.getArgumentsContent();
-      const split = instruction.getArgumentsContent().split(':');
-      image = split[0];
-      tag = split[1];
-      containers[image] = imageWithTag;
-      if (/^[a-zA-Z0-9-]*$/.test(image)) {
-        // If the container name is simple enough, use it as alias
-        alias = camelCase(image);
-      }
-    } else if (instruction.getKeyword() === 'LABEL') {
-      const split = instruction.getArgumentsContent().split('=');
-      if (split[0].toUpperCase() === 'ALIAS') {
-        alias = camelCase(split[1]);
-      }
-    }
-    if (alias) {
-      containers[alias] = imageWithTag;
-      containers[`${alias}Tag`] = tag;
-      containers[`${alias}Image`] = image;
-    }
-  }
-  return containers;
 }
 
 /**

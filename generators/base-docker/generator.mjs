@@ -26,6 +26,7 @@ import statistics from '../statistics.cjs';
 import { applicationOptions, deploymentOptions } from '../../jdl/jhipster/index.mjs';
 
 import constants from '../generator-constants.cjs';
+import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 
 const { OptionNames } = applicationOptions;
 const { Options: DeploymentOptions } = deploymentOptions;
@@ -65,12 +66,14 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
       },
 
       async setupServerConsts() {
-        const { getDockerfileContainers } = await import('../server/index.mjs');
         const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
-        this.dockerContainers = this.prepareDependencies({
-          ...constants.dockerContainers,
-          ...getDockerfileContainers(dockerfile),
-        });
+        this.dockerContainers = this.prepareDependencies(
+          {
+            ...constants.dockerContainers,
+            ...getDockerfileContainers(dockerfile),
+          },
+          dockerPlaceholderGenerator
+        );
       },
 
       checkDocker,

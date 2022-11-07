@@ -768,7 +768,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: \\"ELASTICSEARCH_VERSION\\"
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -4721,7 +4721,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: \\"ELASTICSEARCH_VERSION\\"
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -9775,7 +9775,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: \\"ELASTICSEARCH_VERSION\\"
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -9849,7 +9849,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: \\"POSTGRESQL_VERSION\\"
+          image: postgresql-placeholder
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -13874,7 +13874,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: \\"ELASTICSEARCH_VERSION\\"
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -13948,7 +13948,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: \\"POSTGRESQL_VERSION\\"
+          image: postgresql-placeholder
           env:
             - name: POSTGRES_USER
               value: mspsql
