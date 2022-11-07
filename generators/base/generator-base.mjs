@@ -59,6 +59,7 @@ import {
 import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
+import { NODE_VERSION } from '../generator-constants.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -2613,6 +2614,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
+    if (process.env.VERSION_PLACEHOLDERS === 'true') {
+      dest.nodeVersion = 'NODE_VERSION';
+    } else {
+      dest.nodeVersion = NODE_VERSION;
+    }
+
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
     dest.projectVersion = process.env.JHI_PROJECT_VERSION || '0.0.1-SNAPSHOT';

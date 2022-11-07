@@ -565,7 +565,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
-    image: POSTGRESQL_VERSION
+    image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -578,7 +578,7 @@ eureka:
       timeout: 5s
       retries: 10
   mspsql-elasticsearch:
-    image: ELASTICSEARCH_VERSION
+    image: elasticsearch-placeholder
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
@@ -923,7 +923,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
-    image: POSTGRESQL_VERSION
+    image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -936,7 +936,7 @@ eureka:
       timeout: 5s
       retries: 10
   mspsql-elasticsearch:
-    image: ELASTICSEARCH_VERSION
+    image: elasticsearch-placeholder
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
@@ -1078,7 +1078,7 @@ eureka:
       timeout: 5s
       retries: 10
   keycloak:
-    image: \\"KEYCLOAK_VERSION\\"
+    image: KEYCLOAK_VERSION
     command: [\\"start-dev --import-realm\\"]
     volumes:
       - ./realm-config:/opt/keycloak/data/import
@@ -3769,7 +3769,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
-    image: POSTGRESQL_VERSION
+    image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -3782,7 +3782,7 @@ eureka:
       timeout: 5s
       retries: 10
   mspsql-elasticsearch:
-    image: ELASTICSEARCH_VERSION
+    image: elasticsearch-placeholder
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
@@ -4065,7 +4065,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
-    image: POSTGRESQL_VERSION
+    image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -4078,7 +4078,7 @@ eureka:
       timeout: 5s
       retries: 10
   mspsql-elasticsearch:
-    image: ELASTICSEARCH_VERSION
+    image: elasticsearch-placeholder
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
@@ -5140,7 +5140,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       timeout: 5s
       retries: 10
   samplemysql-elasticsearch:
-    image: ELASTICSEARCH_VERSION
+    image: elasticsearch-placeholder
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node

@@ -26,8 +26,9 @@ import { stringify } from '../../utils/index.mjs';
 import { createUserEntity } from './utils.mjs';
 import { DOCKER_DIR, NODE_VERSION } from '../generator-constants.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON } from '../generator-list.mjs';
 import { addFakerToEntity } from './faker.mjs';
+import { packageJson } from '../../lib/index.mjs';
 
 const { upperFirst } = _;
 
@@ -68,6 +69,17 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
         this.loadAppConfig(undefined, application);
         this.loadTranslationConfig(undefined, application);
       },
+      loadNodeDependencies({ application }) {
+        const commonDependencies = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json')) as any;
+        application.nodeDependencies = this.prepareDependencies({
+          ...(application.nodeDependencies ?? {}),
+          prettier: packageJson.dependencies.prettier,
+          'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
+          'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
+          ...(commonDependencies.dependencies ?? {}),
+          ...(commonDependencies.devDependencies ?? {}),
+        });
+      },
     });
   }
 
@@ -81,7 +93,6 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
         this.loadDerivedAppConfig(application);
 
         application.nodePackageManager = 'npm';
-        application.nodeDestinationVersion = NODE_VERSION;
         application.dockerServicesDir = DOCKER_DIR;
 
         // TODO v8 drop the following variables
@@ -89,7 +100,6 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
 
         anyApplication.clientPackageManager = application.nodePackageManager;
         anyApplication.protractorTests = false;
-        anyApplication.NODE_VERSION = NODE_VERSION;
       },
     });
   }

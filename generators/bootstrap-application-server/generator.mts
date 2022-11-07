@@ -73,10 +73,14 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         );
 
         const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
-        application.dockerContainers = this.prepareDependencies({
-          ...dockerContainers,
-          ...getDockerfileContainers(dockerfile),
-        });
+        application.dockerContainers = this.prepareDependencies(
+          {
+            ...dockerContainers,
+            ...getDockerfileContainers(dockerfile),
+          },
+          // Value should be yaml safe
+          value => `${_.kebabCase(value)}-placeholder`
+        );
 
         // TODO v8 drop the following variables
         const applicationAsAny = application as any;
