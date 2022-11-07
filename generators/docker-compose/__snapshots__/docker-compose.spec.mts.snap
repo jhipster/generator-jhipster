@@ -1078,7 +1078,7 @@ eureka:
       timeout: 5s
       retries: 10
   keycloak:
-    image: KEYCLOAK_VERSION
+    image: keycloak-placeholder
     command: [\\"start-dev --import-realm\\"]
     volumes:
       - ./realm-config:/opt/keycloak/data/import

@@ -32,7 +32,8 @@ import type { SpringBootApplication } from '../server/types.mjs';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
-import { getDockerfileContainers, getPomVersionProperties } from '../server/index.mjs';
+import { getPomVersionProperties } from '../server/index.mjs';
+import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -78,8 +79,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
             ...dockerContainers,
             ...getDockerfileContainers(dockerfile),
           },
-          // Value should be yaml safe
-          value => `${_.kebabCase(value)}-placeholder`
+          dockerPlaceholderGenerator
         );
 
         // TODO v8 drop the following variables

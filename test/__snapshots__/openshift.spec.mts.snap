@@ -2757,7 +2757,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: \\"ELASTICSEARCH_VERSION\\"
+              image: elasticsearch-placeholder
               ports:
                 - containerPort: 9200
                   name: http
@@ -2893,7 +2893,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: \\"POSTGRESQL_VERSION\\"
+              image: postgresql-placeholder
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
@@ -3548,7 +3548,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: \\"ELASTICSEARCH_VERSION\\"
+              image: elasticsearch-placeholder
               ports:
                 - containerPort: 9200
                   name: http
@@ -4947,7 +4947,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: \\"ELASTICSEARCH_VERSION\\"
+              image: elasticsearch-placeholder
               ports:
                 - containerPort: 9200
                   name: http
@@ -5083,7 +5083,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: \\"POSTGRESQL_VERSION\\"
+              image: postgresql-placeholder
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
