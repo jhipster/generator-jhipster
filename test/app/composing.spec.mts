@@ -40,7 +40,7 @@ describe('jhipster:app composing', () => {
       after(() => runContext.cleanup());
 
       it('should compose with bootstrap generator', () => {
-        assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
+        assert(runResult.mockedGenerators['jhipster:bootstrap'].called);
       });
       it('should compose with common generator', () => {
         const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
@@ -90,7 +90,8 @@ describe('jhipster:app composing', () => {
       after(() => runContext.cleanup());
 
       it('should compose with bootstrap generator', () => {
-        assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
+        const BootstrapGenerator = runResult.mockedGenerators['jhipster:bootstrap'];
+        assert(BootstrapGenerator.called);
       });
       it('should compose with common generator', () => {
         const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
@@ -140,7 +141,7 @@ describe('jhipster:app composing', () => {
       after(() => runContext.cleanup());
 
       it('should compose with bootstrap generator', () => {
-        assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
+        assert(runResult.mockedGenerators['jhipster:bootstrap'].called);
       });
       it('should compose with common generator', () => {
         const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
@@ -193,7 +194,7 @@ describe('jhipster:app composing', () => {
         after(() => runContext.cleanup());
 
         it('should compose with bootstrap generator', () => {
-          assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
+          assert(runResult.mockedGenerators['jhipster:bootstrap'].called);
         });
         it('should compose with common generator', () => {
           const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
@@ -249,7 +250,7 @@ describe('jhipster:app composing', () => {
         after(() => runContext.cleanup());
 
         it('should compose with bootstrap generator', () => {
-          assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
+          assert(runResult.mockedGenerators['jhipster:bootstrap'].called);
         });
         it('should compose with common generator', () => {
           const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
