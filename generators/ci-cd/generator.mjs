@@ -89,10 +89,6 @@ export default class CiCdGenerator extends BaseGenerator {
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       sayHello() {
         this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
       },

@@ -163,7 +163,6 @@ describe('JHipster entity generator with multiple blueprints', () => {
         helpers
           .run(getGenerator('app'))
           .withOptions({
-            fromCli: true,
             skipInstall: true,
             skipChecks: true,
             blueprints,

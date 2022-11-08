@@ -102,10 +102,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitialingTaskGroup({
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       setupConstants() {
         // Make constants available in templates
         this.packagejs = packagejs;

@@ -324,10 +324,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       displayLogo() {
         this.printJHipsterLogo();
       },

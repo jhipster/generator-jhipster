@@ -77,7 +77,6 @@ const mockAppBlueprintSubGen = class extends AppGenerator {
 };
 
 const options = {
-  fromCli: true,
   skipInstall: true,
   skipChecks: true,
   blueprints: 'my-blueprint',

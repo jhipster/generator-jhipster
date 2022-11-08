@@ -60,10 +60,6 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
 
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       async setupServerConsts() {
         const { getDockerfileContainers } = await import('../server/index.mjs');
         const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
