@@ -142,7 +142,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get initializing() {
-    return this.asInitialingTaskGroup({
+    return this.asInitializingTaskGroup({
       displayLogo() {
         if (this.logo) {
           this.printJHipsterLogo();
@@ -158,7 +158,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitialingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
+    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get prompting() {

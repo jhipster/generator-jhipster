@@ -24,7 +24,7 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles, prettierConfigFiles } from './files.mjs';
 import constants from '../generator-constants.cjs';
 import { packageJson } from '../../lib/index.mjs';
-import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
+import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.mjs';
 
 /**
  * @class
@@ -78,6 +78,20 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get composing() {
+    return {
+      async composing() {
+        if (!this.options.skipGit) {
+          await this.composeWithJHipster(GENERATOR_GIT);
+        }
+      },
+    };
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   // Public API method used by the getter and also by Blueprints

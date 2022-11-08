@@ -26,7 +26,6 @@ import semver from 'semver';
 import { exec } from 'child_process';
 import os from 'os';
 import normalize from 'normalize-path';
-import simpleGit from 'simple-git';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -1590,20 +1589,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @deprecated
-   * executes a Git command using shellJS
-   * gitExec(args [, options] [, callback])
-   *
-   * @param {string|array} args - can be an array of arguments or a string command
-   * @param {object} options[optional] - takes any of child process options
-   * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
-   * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
-   */
-  gitExec(args, options, callback) {
-    return jhipsterUtils.gitExec(args, options, callback);
-  }
-
-  /**
    * @private
    * get a table name in JHipster preferred style.
    *
@@ -3095,17 +3080,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         delete this.options[optionName];
       }
-    });
-  }
-
-  /**
-   * Create a simple-git instance using current destinationPath as baseDir.
-   * @return {import('simple-git').SimpleGit}
-   */
-  createGit() {
-    return simpleGit({ baseDir: this.destinationPath() }).env({
-      ...process.env,
-      LANG: 'en',
     });
   }
 }

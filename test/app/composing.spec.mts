@@ -9,17 +9,19 @@ import { getGenerator } from '../support/index.mjs';
 
 const { createEnv } = Environment;
 
-const mockedComposedGenerators = [
+helpers.createEnv = createEnv;
+
+const allMockedComposedGenerators = [
   'jhipster:common',
   'jhipster:languages',
   'jhipster:entities',
   'jhipster:entity',
   'jhipster:database-changelog',
+  'jhipster:bootstrap',
+  'jhipster:git',
+  'jhipster:server',
+  'jhipster:client',
 ];
-
-helpers.createEnv = createEnv;
-
-const allMockedComposedGenerators = [...mockedComposedGenerators, 'jhipster:bootstrap', 'jhipster:server', 'jhipster:client'];
 
 describe('jhipster:app composing', () => {
   describe('when mocking all generators', () => {

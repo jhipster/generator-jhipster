@@ -366,87 +366,6 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * Checks if git is installed.
-   *
-   * @param {function} callback[optional] - function to be called after checking if git is installed. The callback will receive the code of the shell command executed.
-   *
-   * @return {boolean} true if installed; false otherwise.
-   */
-  isGitInstalled(callback) {
-    const gitInstalled = jhipsterUtils.isGitInstalled(callback);
-    if (!gitInstalled) {
-      this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
-    }
-    return gitInstalled;
-  }
-
-  /**
-   * @private
-   * Initialize git repository.
-   */
-  initializeGitRepository() {
-    if (this.gitInstalled || this.isGitInstalled()) {
-      const gitDir = this.gitExec('rev-parse --is-inside-work-tree', { trace: false }).stdout;
-      // gitDir has a line break to remove (at least on windows)
-      if (gitDir && gitDir.trim() === 'true') {
-        this.gitInitialized = true;
-      } else {
-        const shellStr = this.gitExec('init', { trace: false });
-        this.gitInitialized = shellStr.code === 0;
-        if (this.gitInitialized) this.log(chalk.green.bold('Git repository initialized.'));
-        else this.warning(`Failed to initialize Git repository.\n ${shellStr.stderr}`);
-      }
-    } else {
-      this.warning('Git repository could not be initialized, as Git is not installed on your system');
-    }
-  }
-
-  /**
-   * @private
-   * Commit pending files to git.
-   */
-  commitFilesToGit(commitMsg, done) {
-    if (this.gitInitialized) {
-      this.debug('Committing files to git');
-      this.gitExec('log --oneline -n 1 -- .', { trace: false }, (code, commits) => {
-        if (code !== 0 || !commits || !commits.trim()) {
-          // if no files in Git from current folder then we assume that this is initial application generation
-          this.gitExec('add .', { trace: false }, code => {
-            if (code === 0) {
-              this.gitExec(`commit --no-verify -m "${commitMsg}" -- .`, { trace: false }, code => {
-                if (code === 0) {
-                  this.log(chalk.green.bold(`Application successfully committed to Git from ${process.cwd()}.`));
-                } else {
-                  this.log(chalk.red.bold(`Application commit to Git failed from ${process.cwd()}. Try to commit manually.`));
-                }
-                done();
-              });
-            } else {
-              this.warning(`The generated application could not be committed to Git, because ${chalk.bold('git add')} command failed.`);
-              done();
-            }
-          });
-        } else {
-          // if found files in Git from current folder then we assume that this is application regeneration
-          // if there are changes in current folder then inform user about manual commit needed
-          this.gitExec('diff --name-only .', { trace: false }, (code, diffs) => {
-            if (code === 0 && diffs && diffs.trim()) {
-              this.log(
-                `Found commits in Git from ${process.cwd()}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`
-              );
-            }
-            done();
-          });
-        }
-      });
-    } else {
-      this.warning('The generated application could not be committed to Git, as a Git repository could not be initialized.');
-      done();
-    }
-  }
-
-  /**
-   * @private
    * Get Option From Array
    *
    * @param {Array} array - array
@@ -620,15 +539,6 @@ export default class PrivateBase extends Generator {
         'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
       );
     }
-  }
-
-  /**
-   * @private
-   * Check if Git is installed
-   */
-  checkGit() {
-    if (this.skipChecks || this.skipClient) return;
-    this.gitInstalled = this.isGitInstalled();
   }
 
   /**
