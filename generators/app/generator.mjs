@@ -33,6 +33,7 @@ import {
   GENERATOR_CLIENT,
   GENERATOR_PAGE,
   GENERATOR_SERVER,
+  GENERATOR_BOOTSTRAP_APPLICATION_BASE,
 } from '../generator-list.mjs';
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 
@@ -307,18 +308,15 @@ export default class JHipsterAppGenerator extends BaseGenerator {
 
     // Use jhipster defaults
     if (this.options.defaults || this.options.withEntities) {
-      if (!this.jhipsterConfig.baseName) {
-        this.jhipsterConfig.baseName = this.getDefaultAppName();
-      }
       this.setConfigDefaults(this.getDefaultConfigForApplicationType());
     }
 
-    this.existingProject = this.jhipsterConfig.baseName !== undefined && this.jhipsterConfig.applicationType !== undefined;
     // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
 
   async _postConstruct() {
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_APP);
     }
@@ -377,7 +375,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     return {
       askForInsightOptIn: prompts.askForInsightOptIn,
       askForApplicationType: prompts.askForApplicationType,
-      askForModuleName: prompts.askForModuleName,
     };
   }
 
@@ -421,7 +418,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
   }
 
   get composing() {
-    return {
+    return this.asComposingTaskGroup({
       /**
        * Composing with others generators, must be executed after `configuring` priority to let others
        * generators `configuring` priority to run.
@@ -433,7 +430,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
        * When composing in different tasks the result would be:
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
        */
-      async compose() {
+      async compose({ control }) {
         await this.composeWithJHipster(GENERATOR_COMMON);
         if (!this.jhipsterConfig.skipServer) {
           await this.composeWithJHipster(GENERATOR_SERVER);
@@ -444,7 +441,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
         if (!this.configOptions.skipI18n) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES, {
             regenerate: true,
-            skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
+            skipPrompts: this.options.withEntities || control.existingProject || this.options.defaults,
           });
         }
       },
@@ -480,7 +477,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
           })
         );
       },
-    };
+    });
   }
 
   get [BaseGenerator.COMPOSING]() {
@@ -488,15 +485,15 @@ export default class JHipsterAppGenerator extends BaseGenerator {
   }
 
   get default() {
-    return {
-      insight() {
+    return this.asDefaultTaskGroup({
+      insight({ control }) {
         const yorc = {
           ..._.omit(this.jhipsterConfig, [JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY]),
         };
         yorc.applicationType = this.jhipsterConfig.applicationType;
-        statistics.sendYoRc(yorc, this.existingProject, this.jhipsterConfig.jhipsterVersion);
+        statistics.sendYoRc(yorc, control.existingProject, this.jhipsterConfig.jhipsterVersion);
       },
-    };
+    });
   }
 
   get [BaseGenerator.DEFAULT]() {
