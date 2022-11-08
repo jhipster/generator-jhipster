@@ -68,6 +68,8 @@ import {
   parseJson,
   substituteVersionAccordingToSource,
 } from './logic/index.mjs';
+import { applyPathCustomizer, locateGenerator, parseGeneratorJson } from './logic/index.mjs';
+import { addIcon, substituteVersionAccordingToSource } from '../client/logic/index.mjs';
 import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../base-application/logic/index.mjs';
 import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
@@ -319,12 +321,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} outputPath - Path to customize.
    */
   applyOutputPathCustomizer(outputPath) {
-    const outputPathCustomizer = getOutputPathCustomizer(this.options, this.configOptions);
-    if (!outputPathCustomizer) {
-      return outputPath;
-    }
-    outputPath = normalizeOutputPath(outputPath);
-    return applyPathCustomizer(this, outputPath, outputPathCustomizer);
+    return applyPathCustomizer(this, outputPath, this.options, this.configOptions);
   }
 
   /**
@@ -334,11 +331,11 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
    */
   replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
-    const packageJsonSource = parseJson(packageJsonSourceFile);
+    const packageJsonSource = parseGeneratorJson(packageJsonSourceFile);
     const packageJsonTargetFile = this.destinationPath('package.json');
     const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
-    substituteVersionAccordingToSource('dependencies');
-    substituteVersionAccordingToSource('devDependencies');
+    substituteVersionAccordingToSource(packageJsonSource, packageJsonTarget, 'dependencies', keyToReplace);
+    substituteVersionAccordingToSource(packageJsonSource, packageJsonTarget, 'devDependencies', keyToReplace);
     this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
   }
 
@@ -350,12 +347,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} clientFramework - The name of the client framework
    */
   addIcon(iconName, clientFramework) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addIcon(iconName);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
+    addIcon(this, iconName, clientFramework);
   }
 
   /**

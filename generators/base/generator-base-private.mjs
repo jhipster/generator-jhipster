@@ -33,6 +33,7 @@ import generatorConstants from '../generator-constants.cjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
+import { destinationPath } from './logic/output/path.mjs';
 
 const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
@@ -142,9 +143,7 @@ export default class PrivateBase extends Generator {
    * Override yeoman generator's destinationPath to apply custom output dir.
    */
   destinationPath(...paths) {
-    paths = path.join(...paths);
-    paths = this.applyOutputPathCustomizer(paths);
-    return paths ? super.destinationPath(paths) : paths;
+    return destinationPath(this, paths, updatedPaths => super.destinationPath(updatedPaths), this.options, this.configOptions);
   }
 
   /**

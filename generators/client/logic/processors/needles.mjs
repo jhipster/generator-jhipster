@@ -1,5 +1,3 @@
-import fs from 'fs';
-
 /**
  * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
@@ -18,8 +16,25 @@ import fs from 'fs';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const parseJson = (filePath, defaultValue = {}) => {
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8')) || defaultValue;
+
+import { clientFrameworkTypes } from '../../../../jdl/jhipster/index.mjs';
+
+const { ANGULAR, REACT } = clientFrameworkTypes;
+
+/**
+ * @private
+ * Add a new icon to icon imports.
+ *
+ * @param {string} iconName - The name of the Font Awesome icon.
+ * @param {string} clientFramework - The name of the client framework
+ */
+const addIcon = (context, iconName, clientFramework) => {
+  if (clientFramework === ANGULAR) {
+    context.needleApi.clientAngular.addIcon(iconName);
+  } else if (clientFramework === REACT) {
+    // React
+    // TODO:
+  }
 };
 
-export default parseJson;
+export default addIcon;

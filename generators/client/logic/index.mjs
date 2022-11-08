@@ -16,6 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as locateGenerator } from './generator/locator.mjs';
-export { applyPathCustomizer, normalizeOutputPath, getOutputPathCustomizer, destinationPath } from './output/path.mjs';
-export { default as parseGeneratorJson } from './generator/parsers/json-parser.mjs';
+export { default as substituteVersionAccordingToSource } from './processors/build-tool/package-json.mjs';
+export { default as addIcon } from './processors/needles.mjs';

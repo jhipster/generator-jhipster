@@ -16,6 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+const checkPackageJsonSectionExists = (packageJson, section) => {
+  return packageJson[section] !== undefined;
+};
+
+const matchDependency = (dependencyKey, dependencyReference) => {
+  return dependencyReference.startsWith(dependencyKey);
+};
+
 /**
  * Substitutes a version in a package.json file
  * @param sourcePackageJson the source package.json file which contains the version to substitute
@@ -24,9 +33,9 @@
  * @param keyToReplace the dependency kay to replace
  */
 const substituteVersionAccordingToSource = (sourcePackageJson, targetPackageJson, section, keyToReplace) => {
-  if (targetPackageJson[section]) {
+  if (checkPackageJsonSectionExists(targetPackageJson, section)) {
     Object.entries(targetPackageJson[section]).forEach(([dependency, dependencyReference]) => {
-      if (dependencyReference.startsWith(keyToReplace)) {
+      if (matchDependency(keyToReplace, dependencyReference)) {
         const [keyToReplaceAtSource, sectionAtSource = section, dependencyAtSource = dependency] = dependencyReference.split('#');
         if (keyToReplaceAtSource !== keyToReplace) return;
         if (!sourcePackageJson[sectionAtSource] || !sourcePackageJson[sectionAtSource][dependencyAtSource]) {

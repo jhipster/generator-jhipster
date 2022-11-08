@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 /**
  * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
@@ -16,12 +18,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const getOutputPathCustomizer = (options, configOptions) => {
-  let outputPathCustomizer = options.outputPathCustomizer;
-  if (!outputPathCustomizer && configOptions) {
-    outputPathCustomizer = configOptions.outputPathCustomizer;
-  }
-  return outputPathCustomizer;
+const parseJson = (filePath, defaultValue = {}) => {
+  return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' })) || defaultValue;
 };
 
-export default getOutputPathCustomizer;
+export default parseJson;

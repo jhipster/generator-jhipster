@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import normalize from 'normalize-path';
+import path from 'path';
 
 export const normalizeOutputPath = outputPath => {
   return outputPath ? normalize(outputPath) : outputPath;
@@ -30,4 +31,27 @@ export const applyPathCustomizer = (context, outputPath, outputPathCustomizer) =
     return outputPath;
   }
   return outputPathCustomizer.call(context, outputPath);
+};
+
+export const getOutputPathCustomizer = (options, configOptions) => {
+  let outputPathCustomizer = options.outputPathCustomizer;
+  if (!outputPathCustomizer && configOptions) {
+    outputPathCustomizer = configOptions.outputPathCustomizer;
+  }
+  return outputPathCustomizer;
+};
+
+export const applyOutputPathCustomizer = (context, outputPath, options, configOptions) => {
+  const outputPathCustomizer = getOutputPathCustomizer(options, configOptions);
+  if (!outputPathCustomizer) {
+    return outputPath;
+  }
+  outputPath = normalizeOutputPath(outputPath);
+  return applyPathCustomizer(context, outputPath, outputPathCustomizer);
+};
+
+export const destinationPath = (context, paths, fallbackDestinationPathMethod, options, configOptions) => {
+  paths = path.join(...paths);
+  paths = applyOutputPathCustomizer(context, paths, options, configOptions);
+  return paths ? fallbackDestinationPathMethod(paths) : paths;
 };
