@@ -36,7 +36,6 @@ module.exports = {
   rewrite,
   rewriteFile,
   replaceContent,
-  classify,
   copyWebResource,
   renderContent,
   deepFind,
@@ -244,19 +243,6 @@ function rewrite(args) {
   lines.splice(otherwiseLineIndex, 0, args.splicable.map(line => spaceStr + line).join('\n'));
 
   return lines.join('\n');
-}
-
-/**
- * Convenient function to convert string into valid java class name
- * Note: _.classify uses _.titleize which lowercase the string,
- * so if the user chooses a proper ClassName it will not rename properly
- *
- * @param string string to 'class'-ify
- * @returns {string} 'class'-ified string
- */
-function classify(string) {
-  string = string.replace(/[\W_](\w)/g, match => ` ${match[1].toUpperCase()}`).replace(/\s/g, '');
-  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 /**

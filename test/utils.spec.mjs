@@ -38,18 +38,6 @@ describe('JHipster Utils', () => {
       });
     });
   });
-  describe('::escapeRegExp', () => {
-    describe('when the string is not a java class name', () => {
-      it('converts string into proper java class name', () => {
-        assert.textEqual(utils.classify('class name'), 'ClassName');
-      });
-    });
-    describe('when the string is already a java class name', () => {
-      it('will not convert the string', () => {
-        assert.textEqual(utils.classify('ClassName'), 'ClassName');
-      });
-    });
-  });
   describe('::copyObjectProps', () => {
     it('expects all the pairs (key, value) of the source to be in destination', () => {
       const src = { foo: 'foo', foo2: 'foo2' };
