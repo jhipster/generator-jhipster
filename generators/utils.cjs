@@ -58,8 +58,6 @@ module.exports = {
   vueAddPageServiceToMainImport,
   vueAddPageServiceToMain,
   vueAddPageProtractorConf,
-  languageSnakeCase,
-  languageToJavaLanguage,
 };
 
 const databaseTypes = require('../jdl/jhipster/database-types');
@@ -877,16 +875,4 @@ function vueAddPageProtractorConf(generator) {
     },
     generator
   );
-}
-
-function languageSnakeCase(language) {
-  // Template the message server side properties
-  return language.replace(/-/g, '_');
-}
-
-function languageToJavaLanguage(language) {
-  // Template the message server side properties
-  const langProp = languageSnakeCase(language);
-  // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-  return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
 }
