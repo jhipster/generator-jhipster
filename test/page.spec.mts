@@ -15,7 +15,6 @@ const createClientProject = options =>
   helpers
     .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
     .withOptions({
-      fromCli: true,
       skipInstall: true,
       defaults: true,
       skipServer: true, // We don't need server for this test
@@ -28,7 +27,6 @@ const createPage = (cwd, options?) =>
     .create('jhipster:page', {}, { createEnv: EnvironmentBuilder.createEnv })
     .setDir(cwd)
     .withOptions({
-      fromCli: true,
       skipInstall: true,
       ...options,
     })

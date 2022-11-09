@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   sonar:
-    image: <%= DOCKER_SONAR %>
+    image: <%- dockerContainers.sonar %>
     # Authentication is turned off for out of the box experience while trying out SonarQube
     # For real use cases delete sonar.forceAuthentication variable or set sonar.forceAuthentication=true
     environment:

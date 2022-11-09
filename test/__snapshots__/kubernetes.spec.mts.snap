@@ -191,7 +191,7 @@ spec:
     spec:
       containers:
         - name: kafka
-          image: confluentinc/cp-kafka:7.2.1
+          image: kafka-placeholder
           env:
             - name: KAFKA_ADVERTISED_LISTENERS
               value: \\"PLAINTEXT://jhipster-kafka.default.svc.cluster.local:9092\\"
@@ -239,7 +239,7 @@ spec:
     spec:
       containers:
         - name: zookeeper
-          image: confluentinc/cp-zookeeper:7.2.1
+          image: zookeeper-placeholder
           env:
             - name: ZOOKEEPER_CLIENT_PORT
               value: \\"2181\\"
@@ -406,7 +406,7 @@ spec:
             claimName: samplekafka-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -821,7 +821,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -1264,7 +1264,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -1610,7 +1610,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -1844,7 +1844,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -2166,7 +2166,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -2430,7 +2430,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -2584,7 +2584,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -3129,7 +3129,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -3453,7 +3453,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -3792,7 +3792,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -4089,7 +4089,7 @@ spec:
             claimName: msmariadb-mariadb-pvc
       containers:
         - name: mariadb
-          image: mariadb:10.8.3
+          image: mariadb-placeholder
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -4440,7 +4440,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.15
+          image: mongodb-placeholder
           command:
             - /work-dir/peer-finder
           args:
@@ -4470,7 +4470,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.15
+          image: mongodb-placeholder
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -4716,7 +4716,7 @@ spec:
             claimName: msmssqldb-mssql-pvc
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
+          image: mssql-placeholder
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
@@ -4917,7 +4917,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -5360,7 +5360,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -5821,7 +5821,7 @@ spec:
             claimName: samplemysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -8463,7 +8463,7 @@ spec:
               done
       containers:
         - name: grafana-configurer
-          image: quay.io/coreos/grafana-watcher:v0.0.8
+          image: grafana-watcher-placeholder
           args:
             - \\"--watch-dir=/var/grafana-dashboard\\"
             - \\"--grafana-url=http://jhipster-grafana:3000\\"
@@ -8523,7 +8523,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:9.1.0
+          image: grafana-placeholder
           ports:
             - containerPort: 3000
               name: http
@@ -8742,7 +8742,7 @@ spec:
         - args:
             - --kubelet-service=kube-system/kubelet
             - --config-reloader-image=quay.io/coreos/configmap-reload:v0.0.1
-          image: quay.io/coreos/prometheus-operator:v0.42.1
+          image: prometheus-operator-placeholder
           name: prometheus-operator
           ports:
             - containerPort: 8080
@@ -8891,7 +8891,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9071,7 +9071,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -9476,7 +9476,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9638,7 +9638,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -9975,7 +9975,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -10272,7 +10272,7 @@ spec:
             claimName: msmariadb-mariadb-pvc
       containers:
         - name: mariadb
-          image: mariadb:10.8.3
+          image: mariadb-placeholder
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -10623,7 +10623,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.15
+          image: mongodb-placeholder
           command:
             - /work-dir/peer-finder
           args:
@@ -10653,7 +10653,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.15
+          image: mongodb-placeholder
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -10899,7 +10899,7 @@ spec:
             claimName: msmssqldb-mssql-pvc
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
+          image: mssql-placeholder
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
@@ -11100,7 +11100,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11543,7 +11543,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -11878,7 +11878,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -12119,7 +12119,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:

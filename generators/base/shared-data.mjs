@@ -41,6 +41,9 @@ export default class SharedData {
     return this._storage.sharedSource;
   }
 
+  /**
+   * @returns {import('./types.mjs').Control}
+   */
   getData() {
     return this._storage.sharedData;
   }

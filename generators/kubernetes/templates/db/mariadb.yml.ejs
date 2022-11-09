@@ -73,7 +73,7 @@ spec:
 <%_ } _%>
       containers:
       - name: mariadb
-        image: <%= DOCKER_MARIADB %>
+        image: <%- dockerContainers.mariadb %>
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:

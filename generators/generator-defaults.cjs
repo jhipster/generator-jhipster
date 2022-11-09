@@ -109,6 +109,7 @@ const defaultConfig = {
   ...serverDefaultConfig,
   ...clientDefaultConfig,
   ...translationDefaultConfig,
+  serverPort: 8080,
 };
 
 const defaultConfigMicroservice = {
@@ -116,6 +117,8 @@ const defaultConfigMicroservice = {
   ...serverDefaultConfig,
   ...translationDefaultConfig,
   microfrontend: false,
+  gatewayServerPort: 8080,
+  serverPort: 8081,
 };
 
 const entityDefaultConfig = {

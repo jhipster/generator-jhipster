@@ -176,7 +176,7 @@ objects:
 <%_ } _%>
           containers:
           - name: ${APPLICATION_NAME}
-            image: <%= DOCKER_COUCHBASE %>
+            image: <%- dockerContainers.couchbase %>
             env:
             - name: BUCKET
               value: <%= app.baseName.toLowerCase() %>

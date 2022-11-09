@@ -63,10 +63,8 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
 
   get prompting(): PromptingTaskGroup<this> {
     return {
-      async askForCypressOptions() {
-        if (this.options.existingProject) {
-          return;
-        }
+      async askForCypressOptions({ control }) {
+        if (control.existingProject && !this.options.askAnswered) return;
         await (this.prompt as any)(
           [
             {

@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   hazelcast-management-center:
-    image: <%= DOCKER_HAZELCAST_MANAGEMENT_CENTER %>
+    image: <%- dockerContainers.hazelcast %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:

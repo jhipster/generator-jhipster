@@ -61,10 +61,6 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
 
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       async setupServerConsts() {
         const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
         this.dockerContainers = this.prepareDependencies(
@@ -74,32 +70,6 @@ export default class BaseDockerGenerator extends BlueprintBaseGenerator {
           },
           dockerPlaceholderGenerator
         );
-
-        // Make constants available in templates
-        this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-        this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-        this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-        this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
-        this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-        this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-        this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-        this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
-        this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-
-        this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
-        this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
-        this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-        this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
-        this.DOCKER_NEO4J = constants.DOCKER_NEO4J;
-        this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
-        this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
-        this.DOCKER_REDIS = constants.DOCKER_REDIS;
-        this.DOCKER_PROMETHEUS_OPERATOR = constants.DOCKER_PROMETHEUS_OPERATOR;
-        this.DOCKER_GRAFANA_WATCHER = constants.DOCKER_GRAFANA_WATCHER;
-        this.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
-
-        this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-        this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
       },
 
       checkDocker,

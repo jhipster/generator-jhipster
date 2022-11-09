@@ -56,8 +56,14 @@ export function formatDateForChangelog(now) {
 }
 
 export function parseChangelog(changelogDate) {
-  if (!changelogDate || changelogDate.length !== 14) {
-    throw new Error(`${changelogDate} is not a valid changelogDate.`);
+  if (!changelogDate) {
+    throw new Error('changelogDate is required.');
+  }
+  if (typeof changelogDate !== 'string') {
+    throw new Error(`changelogDate ${changelogDate} must be a string.`);
+  }
+  if (changelogDate.length !== 14) {
+    throw new Error(`changelogDate ${changelogDate} is not a valid changelogDate.`);
   }
   const formattedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(
     6,

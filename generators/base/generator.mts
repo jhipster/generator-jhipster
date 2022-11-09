@@ -28,7 +28,7 @@ import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
 
 import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures, EditFileCallback, CascatedEditFileCallback } from './api.mjs';
-import type { NoArgTaskGroup } from './tasks.mjs';
+import type { BaseTaskGroup } from './tasks.mjs';
 
 const { merge } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
@@ -90,7 +90,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   /**
    * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
    */
-  delegateTasksToBlueprint(tasksGetter: () => NoArgTaskGroup<this>): NoArgTaskGroup<this> {
+  delegateTasksToBlueprint(tasksGetter: () => BaseTaskGroup<this>): BaseTaskGroup<this> {
     return this.delegateToBlueprint ? {} : tasksGetter();
   }
 

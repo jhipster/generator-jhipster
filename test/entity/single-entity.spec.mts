@@ -6,7 +6,7 @@ import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '.
 import createMockedConfig from '../support/mock-config.mjs';
 import { getTemplatePath, getEntityTemplatePath, getGenerator } from '../support/index.mjs';
 
-const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };
+const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
 
 describe('jhipster:entity --single-entity', () => {
   context('when regenerating', () => {

@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   mssql:
-    image: <%= DOCKER_MSSQL %>
+    image: <%- dockerContainers.mssql %>
     # volumes are not supported on macOS
     # volumes:
     #   - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/

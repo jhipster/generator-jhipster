@@ -22,7 +22,7 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import { askForAdminUi, askForClient, askForClientTheme, askForClientThemeVariant, askForModuleName } from './prompts.mjs';
+import { askForAdminUi, askForClient, askForClientTheme, askForClientThemeVariant } from './prompts.mjs';
 import { cleanup as cleanupAngular, writeFiles as writeAngularFiles } from './files-angular.mjs';
 import { cleanup as cleanupReact, writeFiles as writeReactFiles } from './files-react.mjs';
 import { cleanup as cleanupVue, writeFiles as writeVueFiles } from './files-vue.mjs';
@@ -90,8 +90,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
-
-    this.existingProject = !!this.jhipsterConfig.clientFramework;
   }
 
   async _postConstruct() {
@@ -104,10 +102,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitialingTaskGroup({
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       setupConstants() {
         // Make constants available in templates
         this.packagejs = packagejs;
@@ -127,7 +121,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      askForModuleName,
       askForClient,
       askForAdminUi,
       askForClientTheme,
@@ -180,7 +173,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       async composeCypress() {
         const testFrameworks = this.jhipsterConfig.testFrameworks;
         if (!Array.isArray(testFrameworks) || !testFrameworks.includes(CYPRESS)) return;
-        await this.composeWithJHipster(GENERATOR_CYPRESS, { existingProject: this.existingProject });
+        await this.composeWithJHipster(GENERATOR_CYPRESS);
       },
       async composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
