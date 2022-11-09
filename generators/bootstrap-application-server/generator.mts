@@ -32,7 +32,8 @@ import type { SpringBootApplication } from '../server/types.mjs';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
-import { getDockerfileContainers, getPomVersionProperties } from '../server/index.mjs';
+import { getPomVersionProperties } from '../server/index.mjs';
+import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -73,10 +74,13 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         );
 
         const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
-        application.dockerContainers = this.prepareDependencies({
-          ...dockerContainers,
-          ...getDockerfileContainers(dockerfile),
-        });
+        application.dockerContainers = this.prepareDependencies(
+          {
+            ...dockerContainers,
+            ...getDockerfileContainers(dockerfile),
+          },
+          dockerPlaceholderGenerator
+        );
 
         // TODO v8 drop the following variables
         const applicationAsAny = application as any;

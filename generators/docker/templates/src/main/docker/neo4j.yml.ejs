@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   neo4j:
-    image: <%= DOCKER_NEO4J %>
+    image: <%- dockerContainers.neo4j %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/neo4j/:/data
     environment:

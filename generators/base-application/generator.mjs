@@ -379,7 +379,7 @@ export default class BaseApplicationGenerator extends BaseGenerator {
 
   /**
    * Shared Data
-   * @type {SharedData<ApplicationType>}
+   * @type {import('../base/shared-data.mjs').default<ApplicationType>}
    */
   get sharedData() {
     return super.sharedData;

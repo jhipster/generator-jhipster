@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-FROM <%= DOCKER_CASSANDRA %>
+FROM <%- dockerContainers.cassandra %>
 
 # script to orchestrate the automatic keyspace creation and apply all migration scripts
 ADD cassandra/scripts/autoMigrate.sh /usr/local/bin/autoMigrate

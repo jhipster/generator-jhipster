@@ -147,10 +147,6 @@ export default class EntityGenerator extends BaseGenerator {
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       isBuiltInEntity() {
         if (this.isBuiltInUser(this.context.name) || this.isBuiltInAuthority(this.context.name)) {
           throw new Error(`Is not possible to override built in ${this.context.name}`);

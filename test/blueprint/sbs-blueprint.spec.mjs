@@ -40,7 +40,6 @@ describe('JHipster client generator with sbs blueprint', () => {
     helpers
       .run(getGenerator('client'))
       .withOptions({
-        fromCli: true,
         build: MAVEN,
         auth: JWT,
         db: MYSQL,

@@ -72,10 +72,6 @@ export default class SpringControllerGenerator extends BaseGenerator {
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       initializing() {
         this.log(`The spring-controller ${this.name} is being created.`);
         const configuration = this.config;

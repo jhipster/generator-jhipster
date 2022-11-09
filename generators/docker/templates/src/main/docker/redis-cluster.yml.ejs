@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   redis:
-    image: <%= DOCKER_REDIS %>
+    image: <%- dockerContainers.redis %>
     command:
       - "redis-server"
       - "--port 6379"
@@ -31,7 +31,7 @@ services:
     ports:
       - "6379:6379"
   redis-1:
-    image: <%= DOCKER_REDIS %>
+    image: <%- dockerContainers.redis %>
     command:
       - "redis-server"
       - "--port 6379"
@@ -42,7 +42,7 @@ services:
     ports:
       - "16379:6379"
   redis-2:
-    image: <%= DOCKER_REDIS %>
+    image: <%- dockerContainers.redis %>
     command:
       - "redis-server"
       - "--port 6379"
@@ -53,7 +53,7 @@ services:
     ports:
       - "26379:6379"
   redis-3:
-    image: <%= DOCKER_REDIS %>
+    image: <%- dockerContainers.redis %>
     command:
       - "redis-server"
       - "--port 6379"
@@ -64,7 +64,7 @@ services:
     ports:
       - "36379:6379"
   redis-4:
-    image: <%= DOCKER_REDIS %>
+    image: <%- dockerContainers.redis %>
     command:
       - "redis-server"
       - "--port 6379"
@@ -75,7 +75,7 @@ services:
     ports:
       - "46379:6379"
   redis-5:
-    image: <%= DOCKER_REDIS %>
+    image: <%- dockerContainers.redis %>
     command:
       - "redis-server"
       - "--port 6379"

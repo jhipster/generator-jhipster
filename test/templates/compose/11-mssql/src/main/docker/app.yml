@@ -11,7 +11,7 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:sqlserver://msmssql-mssql:1433;database=msmssql;encrypt=false
             - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     mssql:
-        image: <%= DOCKER_MSSQL %>
+        image: <%- dockerContainers.mssql %>
         # volumes are not supported on macOS
         # volumes:
         #     - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/
@@ -25,7 +25,7 @@ services:
             - 1433:1433
         command: /bin/bash -c '/opt/mssql/bin/sqlservr & echo "wait $$MSSQL_SLEEP sec for DB to start "; sleep $$MSSQL_SLEEP; /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -d tempdb -q "EXIT(CREATE DATABASE $$MSSQL_DATABASE)"; wait;'
     jhipster-registry:
-        image: <%= DOCKER_JHIPSTER_REGISTRY %>
+        image: <%- dockerContainers.jhipsterRegistry %>
         volumes:
             - ./central-server-config:/central-config
         # By default the JHipster Registry runs with the "dev" and "native"
