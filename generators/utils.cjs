@@ -36,7 +36,6 @@ module.exports = {
   rewrite,
   rewriteFile,
   replaceContent,
-  copyWebResource,
   renderContent,
   deepFind,
   escapeRegExp,
@@ -239,49 +238,6 @@ function rewrite(args) {
   lines.splice(otherwiseLineIndex, 0, args.splicable.map(line => spaceStr + line).join('\n'));
 
   return lines.join('\n');
-}
-
-/**
- * Copy web resources
- *
- * @param {string} source source
- * @param {string} dest destination
- * @param {regex} regex regex
- * @param {string} type type of resource (html, js, etc)
- * @param {object} generator reference to the generator
- * @param {object} opt options
- * @param {any} template template
- */
-function copyWebResource(source, dest, regex, type, generator, opt = {}, template) {
-  if (generator.enableTranslation) {
-    generator.template(source, dest, generator, opt);
-  } else {
-    dest = generator.destinationPath(dest);
-    if (!dest) {
-      return;
-    }
-    renderContent(source, generator, generator, opt, body => {
-      body = body.replace(regex, '');
-      switch (type) {
-        case 'html':
-          body = replacePlaceholders(body, generator);
-          body = replaceTitleAttributes(body, generator);
-          break;
-        case 'js':
-          body = replaceTitle(body, generator);
-          if (dest.endsWith('error.route.ts')) {
-            body = replaceErrorMessage(body, generator);
-          }
-          break;
-        case 'jsx':
-          body = replaceTranslation(body, generator);
-          break;
-        default:
-          break;
-      }
-      generator.fs.write(dest, body);
-    });
-  }
 }
 
 /**
