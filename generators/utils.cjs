@@ -23,7 +23,6 @@ const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
 const fs = require('fs');
-const crypto = require('crypto');
 const os = require('os');
 
 const constants = require('./generator-constants.cjs');
@@ -43,8 +42,6 @@ module.exports = {
   buildEnumInfo,
   getEnumInfo,
   getDBTypeFromDBValue,
-  getBase64Secret,
-  getRandomHex,
   checkStringInFile,
   checkRegexInFile,
   packageNameToNamespace,
@@ -450,29 +447,6 @@ function getDBTypeFromDBValue(db) {
     return SQL;
   }
   return db;
-}
-
-/**
- * Get a random hex string
- * @param {int} len the length to use, defaults to 50
- */
-function getRandomHex(len = 50) {
-  return crypto.randomBytes(len).toString('hex');
-}
-
-/**
- * Generates a base64 secret from given string or random hex
- * @param {string} value the value used to get base64 secret
- * @param {int} len the length to use for random hex, defaults to 50
- */
-function getBase64Secret(value = '', len = 50) {
-  if (this && this.options && this.options.reproducibleTests) {
-    if (value) {
-      return `SECRET-${value}-${len}`;
-    }
-    return `SECRET--${len}`;
-  }
-  return Buffer.from(value || getRandomHex(len)).toString('base64');
 }
 
 /**

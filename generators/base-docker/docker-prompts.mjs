@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 import { loadConfigs, setClusteredApps } from './docker-base.mjs';
-import { getBase64Secret } from '../utils.cjs';
+import { createBase64Secret } from '../utils.cjs';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 
 const { MICROSERVICE, MONOLITH, GATEWAY } = applicationTypes;
@@ -314,7 +314,7 @@ async function askForAdminPassword() {
 
   const props = await this.prompt(prompts);
   this.adminPassword = props.adminPassword;
-  this.adminPasswordBase64 = getBase64Secret.call(this, this.adminPassword);
+  this.adminPasswordBase64 = createBase64Secret.call(this, this.adminPassword);
 }
 
 /**
