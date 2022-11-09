@@ -240,7 +240,7 @@ objects:
                 path: alert.rules
           containers:
           - name: ${PT_APP_NAME}
-            image: <%= DOCKER_PROMETHEUS %>
+            image: <%- dockerContainers.prometheus %>
             command:
               - '/bin/prometheus'
               - '-config.file=/etc/prometheus/prometheus.yml'
@@ -334,7 +334,7 @@ objects:
                 path: config.yml
           containers:
           - name: ${AM_APP_NAME}
-            image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
+            image: <%- dockerContainers.prometheusAlertmanager %>
             ports:
             - containerPort: 9093
               name: tcp
@@ -415,7 +415,7 @@ objects:
 <%_ } _%>
           containers:
           - name: ${GF_APP_NAME}
-            image: <%= DOCKER_GRAFANA %>
+            image: <%- dockerContainers.grafana %>
             env:
             - name: GF_SECURITY_ADMIN_PASSWORD
               value: jhipster

@@ -21,7 +21,7 @@ name: <%= baseName.toLowerCase() %>
 services:
   cassandra:
     container_name: <%= baseName.toLowerCase() %>-cassandra
-    image: <%= DOCKER_CASSANDRA %>
+    image: <%- dockerContainers.cassandra %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
     # If you want to expose these ports outside your dev PC,
@@ -33,7 +33,7 @@ services:
       - 127.0.0.1:9042:9042
       - 127.0.0.1:9160:9160
   cassandra-node:
-    image: <%= DOCKER_CASSANDRA %>
+    image: <%- dockerContainers.cassandra %>
     environment:
       - CASSANDRA_SEEDS=<%= baseName.toLowerCase() %>-cassandra
   cassandra-migration:

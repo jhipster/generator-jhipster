@@ -159,7 +159,7 @@
         <modernizer-maven-plugin.version>2.4.0</modernizer-maven-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%- javaDependencies['jib-maven-plugin'] %></jib-maven-plugin.version>
-        <jib-maven-plugin.image><%= DOCKER_JAVA_JRE %></jib-maven-plugin.image>
+        <jib-maven-plugin.image><%- dockerContainers.javaJre %></jib-maven-plugin.image>
         <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
 <%_ if (enableSwaggerCodegen) { _%>

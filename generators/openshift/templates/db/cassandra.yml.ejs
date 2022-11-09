@@ -128,7 +128,7 @@ objects:
 <%_ } _%>
           containers:
           - name: ${APPLICATION_NAME}
-            image: <%= DOCKER_CASSANDRA %>
+            image: <%- dockerContainers.cassandra %>
             env:
             - name: DATA_FILE_DIRECTORIES
               value: /data/db

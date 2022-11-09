@@ -86,7 +86,7 @@ objects:
             fsGroup: 1000
           containers:
           - name: ${APPLICATION_NAME}
-            image: <%= DOCKER_CONSUL %>
+            image: <%- dockerContainers.consul %>
             imagePullPolicy: IfNotPresent
             ports:
             - name: http
@@ -190,7 +190,7 @@ objects:
         spec:
           containers:
           - name: ${APPLICATION_NAME}-consul-config-loader
-            image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
+            image: <%- dockerContainers.consulConfigLoader %>
             imagePullPolicy: IfNotPresent
             env:
             - name: INIT_SLEEP_SECONDS

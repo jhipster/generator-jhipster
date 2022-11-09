@@ -20,20 +20,24 @@
 import _ from 'lodash';
 import chalk from 'chalk';
 
-import BaseGenerator from '../base/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import generatorDefaults from '../generator-defaults.cjs';
 import prompts from './prompts.mjs';
 import statistics from '../statistics.cjs';
 import constants from '../generator-constants.cjs';
-import { GENERATOR_CI_CD } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
 
 const { defaultConfig } = generatorDefaults;
 const { MAVEN, GRADLE } = buildToolTypes;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
-export default class CiCdGenerator extends BaseGenerator {
+/**
+ * @class
+ * @extends {BaseApplicationGenerator<import('../server/types.mjs').SpringBootApplication>}
+ */
+export default class CiCdGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -81,6 +85,7 @@ export default class CiCdGenerator extends BaseGenerator {
   }
 
   async _postConstruct() {
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CI_CD);
     }
@@ -128,14 +133,13 @@ export default class CiCdGenerator extends BaseGenerator {
       getConstants() {
         this.DOCKER_DIR = constants.DOCKER_DIR;
         this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-        this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
         this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
         this.JAVA_VERSION = constants.JAVA_VERSION;
       },
     };
   }
 
-  get [BaseGenerator.INITIALIZING]() {
+  get [BaseApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -147,7 +151,7 @@ export default class CiCdGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.PROMPTING]() {
+  get [BaseApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
@@ -175,7 +179,7 @@ export default class CiCdGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.CONFIGURING]() {
+  get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -205,18 +209,38 @@ export default class CiCdGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.LOADING]() {
+  get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   // Public API method used by the getter and also by Blueprints
   get writing() {
-    return {
-      writeFiles() {
+    return this.asWritingTaskGroup({
+      async writeFiles({ application }) {
+        Object.assign(this, application);
         if (this.pipeline === 'jenkins') {
-          this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
-          this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
-          this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
+          await this.writeFiles({
+            rootTemplatesPath: 'jenkins',
+            blocks: [
+              {
+                templates: [
+                  {
+                    sourceFile: 'Jenkinsfile',
+                    destinationFile: 'Jenkinsfile',
+                  },
+                  {
+                    sourceFile: 'jenkins.yml',
+                    destinationFile: `${application.dockerServicesDir}jenkins.yml`,
+                  },
+                  {
+                    sourceFile: 'idea.gdsl',
+                    destinationFile: `${application.srcMainResources}idea.gdsl`,
+                  },
+                ],
+              },
+            ],
+            context: this,
+          });
         }
         if (this.pipeline === 'gitlab') {
           this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
@@ -250,13 +274,13 @@ export default class CiCdGenerator extends BaseGenerator {
         }
 
         if (this.cicdIntegrations.includes('publishDocker')) {
-          this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
+          this.template('docker-registry.yml.ejs', `${application.dockerServicesDir}docker-registry.yml`);
         }
       },
-    };
+    });
   }
 
-  get [BaseGenerator.WRITING]() {
+  get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 }
