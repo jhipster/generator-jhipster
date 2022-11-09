@@ -43,7 +43,6 @@ module.exports = {
   getJavadoc,
   buildEnumInfo,
   getEnumInfo,
-  decodeBase64,
   getDBTypeFromDBValue,
   getBase64Secret,
   getRandomHex,
@@ -653,15 +652,6 @@ function getEnums(enums, customValuesState, comments) {
 
 function doesTheEnumValueHaveACustomValue(enumValue) {
   return enumValue.includes('(');
-}
-
-/**
- * Decode the given string from base64 to said encoding.
- * @param string the base64 string to decode
- * @param encoding the encoding to decode into. default to 'utf-8'
- */
-function decodeBase64(string, encoding = 'utf-8') {
-  return Buffer.from(string, 'base64').toString(encoding);
 }
 
 /**
