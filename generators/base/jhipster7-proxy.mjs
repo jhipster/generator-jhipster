@@ -17,6 +17,10 @@ const deprecatedProperties = {
     replacement: 'nodeDependencies.npm',
     get: ({ data }) => data.nodeDependencies.npm,
   },
+  DOCKER_DIR: {
+    replacement: 'dockerServicesDir',
+    get: ({ data }) => data.dockerServicesDir,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
@@ -33,6 +37,14 @@ const getProperty = (context, prop) => {
       `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(replacement)}. Value: ${value}`
     );
     return value;
+  }
+  if (prop.startsWith('DOCKER_')) {
+    console.log(
+      `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(
+        // eslint-disable-next-line no-template-curly-in-string
+        'dockerContainers.${dockerImage}'
+      )}.`
+    );
   }
   if (prop in oldConstants && !(prop in newConstants)) {
     console.log(`Template data ${chalk.yellow(String(prop))} is deprecated but a replacement is not yet added.`);
