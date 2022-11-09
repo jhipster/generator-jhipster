@@ -37,7 +37,6 @@ module.exports = {
   rewriteFile,
   replaceContent,
   classify,
-  rewriteJSONFile,
   copyWebResource,
   renderContent,
   deepFind,
@@ -258,20 +257,6 @@ function rewrite(args) {
 function classify(string) {
   string = string.replace(/[\W_](\w)/g, match => ` ${match[1].toUpperCase()}`).replace(/\s/g, '');
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-/**
- * Rewrite JSON file
- *
- * @param {string} filePath file path
- * @param {function} rewriteFile rewriteFile function
- * @param {object} generator reference to the generator
- */
-function rewriteJSONFile(filePath, rewriteFile, generator) {
-  filePath = generator.destinationPath(filePath);
-  const jsonObj = generator.fs.readJSON(filePath);
-  rewriteFile(jsonObj, generator);
-  generator.fs.writeJSON(filePath, jsonObj, null, 2);
 }
 
 /**
