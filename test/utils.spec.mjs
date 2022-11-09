@@ -38,14 +38,6 @@ describe('JHipster Utils', () => {
       });
     });
   });
-  describe('::copyObjectProps', () => {
-    it('expects all the pairs (key, value) of the source to be in destination', () => {
-      const src = { foo: 'foo', foo2: 'foo2' };
-      const dst = { foo3: 'foo3' };
-      utils.copyObjectProps(dst, src);
-      assert.objectContent(dst, src);
-    });
-  });
   describe('::getEnumInfo', () => {
     describe('when passing field data', () => {
       let enumInfo;

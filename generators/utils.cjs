@@ -43,7 +43,6 @@ module.exports = {
   getJavadoc,
   buildEnumInfo,
   getEnumInfo,
-  copyObjectProps,
   decodeBase64,
   getDBTypeFromDBValue,
   getBase64Secret,
@@ -656,15 +655,6 @@ function getEnums(enums, customValuesState, comments) {
 
 function doesTheEnumValueHaveACustomValue(enumValue) {
   return enumValue.includes('(');
-}
-/**
- * Copy object props from source to destination
- * @param {*} toObj
- * @param {*} fromObj
- */
-function copyObjectProps(toObj, fromObj) {
-  // we use Object.assign instead of spread as we want to mutilate the object.
-  Object.assign(toObj, fromObj);
 }
 
 /**
