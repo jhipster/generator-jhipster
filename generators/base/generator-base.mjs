@@ -172,26 +172,25 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
     this.parseTestOptions();
 
-    if (this.configOptions.existingProject === undefined) {
-      this.configOptions.existingProject = Boolean(this.jhipsterConfig.baseName);
-    }
-    // TODO v8 rename to existingProject.
-    this.existingModularProject = this.configOptions.existingProject;
-
     this.loadRuntimeOptions();
     this.loadStoredAppOptions();
 
     if (this.options.namespace !== 'jhipster:bootstrap') {
-      /*
-      // eslint-disable-next-line global-require
-      import boostrapGen from './bootstrap';
-      boostrapGen.namespace = 'jhipster:bootstrap';
-      const generator = this.env.instantiate(boostrapGen, { ...this.options, configOptions: this.configOptions });
-      if (this.env.queueGenerator) {
-        this.env.queueGenerator(generator, true);
-      }
-      */
-      this.composeWithJHipster(GENERATOR_BOOTSTRAP, { ...this.options, configOptions: this.configOptions });
+      this.env.runLoop.add(
+        'environment:run',
+        async (done, stop) => {
+          try {
+            await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
+            done();
+          } catch (error) {
+            stop(error);
+          }
+        },
+        {
+          once: 'queueJhipsterBootstrap',
+          run: false,
+        }
+      );
     }
   }
 
@@ -1986,36 +1985,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       default:
         return 'jhipster_family_member_0';
     }
-  }
-
-  /**
-   * @private
-   * ask a prompt for apps name.
-   *
-   * @param {object} generator - generator instance to use
-   */
-  async askModuleName(generator) {
-    const defaultAppBaseName = this.getDefaultAppName();
-    const answers = await generator.prompt({
-      type: 'input',
-      name: 'baseName',
-      validate: input => {
-        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-          return 'Your base name cannot contain special characters or a blank space';
-        }
-        if (generator.applicationType === 'microservice' && /_/.test(input)) {
-          return 'Your base name cannot contain underscores as this does not meet the URI spec';
-        }
-        if (input === 'application') {
-          return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
-        }
-        return true;
-      },
-      message: 'What is the base name of your application?',
-      default: defaultAppBaseName,
-    });
-
-    generator.baseName = generator.jhipsterConfig.baseName = answers.baseName;
   }
 
   /**

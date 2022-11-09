@@ -29,7 +29,6 @@ const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = testFrameworkTypes;
 export default {
   askForInsightOptIn,
   askForApplicationType,
-  askForModuleName,
   askForTestOpts,
   askForMoreModules,
 };
@@ -57,8 +56,8 @@ const promptValueToMicrofrontends = answer =>
         .map(baseName => ({ baseName }))
     : [];
 
-export async function askForApplicationType() {
-  if (this.existingProject && this.options.askAnswered !== true) return;
+export async function askForApplicationType({ control }) {
+  if (control.existingProject && this.options.askAnswered !== true) return;
 
   const applicationTypeChoices = [
     {
@@ -124,13 +123,8 @@ export async function askForApplicationType() {
   this.applicationType = applicationType;
 }
 
-export function askForModuleName() {
-  if (this.existingProject || this.jhipsterConfig.baseName) return undefined;
-  return this.askModuleName(this);
-}
-
-export async function askForTestOpts() {
-  if (this.existingProject) return undefined;
+export async function askForTestOpts({ control }) {
+  if (control.existingProject && this.options.askAnswered !== true) return;
 
   const choices = [];
   if (!this.skipClient) {
@@ -152,15 +146,12 @@ export async function askForTestOpts() {
 
   const answers = await this.prompt(PROMPT);
   this.testFrameworks = this.jhipsterConfig.testFrameworks = answers.testFrameworks;
-  return answers;
 }
 
-export function askForMoreModules() {
-  if (this.existingProject) {
-    return undefined;
-  }
+export async function askForMoreModules({ control }) {
+  if (control.existingProject && this.options.askAnswered !== true) return;
 
-  return this.prompt({
+  await this.prompt({
     type: 'confirm',
     name: 'installModules',
     message: 'Would you like to install other generators from the JHipster Marketplace?',

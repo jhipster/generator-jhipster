@@ -19,7 +19,6 @@ describe('jhipster:app prompts', () => {
         return helpers
           .create(getGenerator('app'))
           .withOptions({
-            fromCli: true,
             skipInstall: true,
             skipChecks: true,
           })

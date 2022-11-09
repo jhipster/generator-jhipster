@@ -48,9 +48,6 @@ export default class OpenapiClientGenerator extends BaseGenerator {
   get initializing() {
     return {
       ...super.initializing,
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
       sayHello() {
         // Have Yeoman greet the user.
         this.log(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));

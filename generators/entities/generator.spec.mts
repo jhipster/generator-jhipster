@@ -37,7 +37,7 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorPath = `${__dirname}/index.mts`;
 
-const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };
+const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {

@@ -59,7 +59,6 @@ describe(`JHipster ${generator} generator`, () => {
         return helpers
           .create(generatorFile)
           .withOptions({
-            fromCli: true,
             skipInstall: true,
             defaultLocalConfig: { ...appDefaultConfig, ...options },
           })
@@ -87,7 +86,6 @@ describe(`JHipster ${generator} generator`, () => {
         return helpers
           .create(generatorFile)
           .withOptions({
-            fromCli: true,
             skipInstall: true,
             defaultLocalConfig: { ...appDefaultConfig, ...options },
           })
@@ -115,7 +113,6 @@ describe(`JHipster ${generator} generator`, () => {
         return helpers
           .create(generatorFile)
           .withOptions({
-            fromCli: true,
             skipInstall: true,
             defaultLocalConfig: { ...appDefaultConfig, ...options },
           })
@@ -146,7 +143,6 @@ describe(`JHipster ${generator} generator`, () => {
         return helpers
           .create(generatorFile)
           .withOptions({
-            fromCli: true,
             skipInstall: true,
             defaultLocalConfig: { ...appDefaultConfig, ...options },
           })

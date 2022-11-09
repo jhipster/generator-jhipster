@@ -101,10 +101,6 @@ export default class UpgradeGenerator extends BaseGenerator {
 
   get [BaseGenerator.INITIALIZING]() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       displayLogo() {
         this.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
         this.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));

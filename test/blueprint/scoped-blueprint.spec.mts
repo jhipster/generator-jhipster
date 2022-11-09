@@ -20,7 +20,6 @@ describe('JHipster application generator with scoped blueprint', () => {
           fse.copySync(getTemplatePath('fake-blueprint'), fakeBlueprintModuleDir);
         })
         .withOptions({
-          fromCli: true,
           skipInstall: true,
           skipChecks: true,
           blueprints: '@jhipster/generator-jhipster-scoped-blueprint',

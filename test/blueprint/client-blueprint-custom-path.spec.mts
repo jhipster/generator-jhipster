@@ -94,7 +94,6 @@ describe('JHipster client generator with blueprint with path customizer', () => 
         helpers
           .run(getGenerator('client'))
           .withOptions({
-            fromCli: true,
             build: MAVEN,
             auth: JWT,
             db: MYSQL,

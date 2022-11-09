@@ -22,7 +22,7 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
-import { askForModuleName, askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
+import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 import {
   GENERATOR_COMMON,
   GENERATOR_LANGUAGES,
@@ -154,27 +154,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           this.jhipsterConfig.applicationType = defaultConfig.applicationType;
         }
       },
-
-      verifyExistingProject() {
-        const serverConfigFound =
-          this.jhipsterConfig.packageName !== undefined &&
-          this.jhipsterConfig.authenticationType !== undefined &&
-          this.jhipsterConfig.cacheProvider !== undefined &&
-          this.jhipsterConfig.websocket !== undefined &&
-          this.jhipsterConfig.databaseType !== undefined &&
-          this.jhipsterConfig.devDatabaseType !== undefined &&
-          this.jhipsterConfig.prodDatabaseType !== undefined &&
-          this.jhipsterConfig.searchEngine !== undefined &&
-          this.jhipsterConfig.buildTool !== undefined;
-
-        if (this.jhipsterConfig.baseName !== undefined && serverConfigFound) {
-          this.log(
-            chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \nto re-generate the project...\n')
-          );
-
-          this.existingProject = true;
-        }
-      },
     });
   }
 
@@ -184,7 +163,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      askForModuleName,
       askForServerSideOpts,
       askForOptionalItems,
     });

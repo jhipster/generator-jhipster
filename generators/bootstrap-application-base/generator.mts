@@ -26,7 +26,7 @@ import { stringify } from '../../utils/index.mjs';
 import { createUserEntity } from './utils.mjs';
 import { DOCKER_DIR, NODE_VERSION } from '../generator-constants.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { addFakerToEntity } from './faker.mjs';
 
 const { upperFirst } = _;
@@ -45,6 +45,7 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
   }
 
   async _postConstruct() {
+    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
   }
 

@@ -13,7 +13,7 @@ const DOCKER_DIR = constants.DOCKER_DIR;
 const FAKE_BLUEPRINT_DIR = path.join(__dirname, '../templates/fake-blueprint');
 
 const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
-const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true };
+const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
 module.exports = {

@@ -61,12 +61,18 @@ describe('base support', () => {
     describe('when not passing parameters', () => {
       it('throws', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        expect(() => parseChangelog(undefined as any)).toThrow(/^undefined is not a valid changelogDate\.$/);
+        expect(() => parseChangelog(undefined as any)).toThrow(/^changelogDate is required\.$/);
+      });
+    });
+    describe('when passing a number', () => {
+      it('throws', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        expect(() => parseChangelog(123)).toThrow(/^changelogDate 123 must be a string\.$/);
       });
     });
     describe('when passing an invalid changelogDate', () => {
       it('throws', () => {
-        expect(() => parseChangelog('1234')).toThrow(/^1234 is not a valid changelogDate\.$/);
+        expect(() => parseChangelog('1234')).toThrow(/^changelogDate 1234 is not a valid changelogDate\.$/);
       });
     });
     describe('when passing a valid changelogDate', () => {
