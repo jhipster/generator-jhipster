@@ -17,5 +17,5 @@ export type ClientApplication = Application &
   ClientFrameworkApplication & {
     withAdminUi: boolean;
     webappLoginRegExp: string;
-    clientEnumerationsDir?: string;
+    webappEnumerationsDir?: string;
   };

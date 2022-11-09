@@ -248,10 +248,10 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
           application.skipUserManagement = true;
         }
         if (application.clientFramework === ANGULAR) {
-          application.clientEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
+          application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
         }
         if (application.clientFramework === REACT) {
-          application.clientEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
+          application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
         }
       },
 

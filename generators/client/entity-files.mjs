@@ -29,13 +29,13 @@ async function addEnumerationFiles({ application, entity }) {
         ...utils.getEnumInfo(field, entity.clientRootFolder),
         frontendAppName: application.frontendAppName,
         packageName: application.packageName,
-        clientEnumerationsDir: application.clientEnumerationsDir,
+        webappEnumerationsDir: application.webappEnumerationsDir,
       };
       await this.writeFiles({
         templates: [
           {
             sourceFile: `${CLIENT_MAIN_SRC_DIR}app/entities/enumerations/enum.model.ts`,
-            destinationFile: ctx => `${application.clientEnumerationsDir}${enumFileName}.model.ts`,
+            destinationFile: ctx => `${application.webappEnumerationsDir}${enumFileName}.model.ts`,
           },
         ],
         rootTemplatesPath: [CLIENT_COMMON_TEMPLATES_DIR],
@@ -47,7 +47,7 @@ async function addEnumerationFiles({ application, entity }) {
 
 // eslint-disable-next-line import/prefer-default-export
 export async function writeEnumerationFiles({ application, entities }) {
-  if (!application.clientEnumerationsDir) return;
+  if (!application.webappEnumerationsDir) return;
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     await addEnumerationFiles.call(this, { application, entity });
   }

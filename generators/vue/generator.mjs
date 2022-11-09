@@ -50,7 +50,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application }) {
-        application.clientEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
+        application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
       },
     });
   }
