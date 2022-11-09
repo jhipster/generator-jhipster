@@ -30,6 +30,7 @@ import simpleGit from 'simple-git';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
+import jhipster7Proxy from './jhipster7-proxy.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import jhipsterUtils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
@@ -59,6 +60,7 @@ import {
 import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
+import { NODE_VERSION } from '../generator-constants.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -2175,10 +2177,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
         };
+        // TODO drop for v8 final release
+        const data = jhipster7Proxy(this, context);
         if (useAsync) {
-          await this.renderTemplateAsync(sourceFileFrom, destinationFile, context, renderOptions);
+          await this.renderTemplateAsync(sourceFileFrom, destinationFile, data, renderOptions);
         } else {
-          this.renderTemplate(sourceFileFrom, destinationFile, context, renderOptions);
+          this.renderTemplate(sourceFileFrom, destinationFile, data, renderOptions);
         }
       }
       if (!binary && transform && transform.length) {
@@ -2582,6 +2586,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
+    if (process.env.VERSION_PLACEHOLDERS === 'true') {
+      dest.nodeVersion = 'NODE_VERSION';
+    } else {
+      dest.nodeVersion = NODE_VERSION;
+    }
+
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
     dest.projectVersion = process.env.JHI_PROJECT_VERSION || '0.0.1-SNAPSHOT';

@@ -266,9 +266,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.JAVA_VERSION = constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
 
-        application.NODE_VERSION = constants.NODE_VERSION;
-        application.NPM_VERSION = constants.NPM_VERSION;
-
         application.JHIPSTER_DEPENDENCIES_VERSION = application.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         application.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
         application.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;

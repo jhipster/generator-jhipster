@@ -183,7 +183,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    */
   prepareDependencies(
     map: Record<string, string>,
-    valuePlaceholder: (value: string) => string = value => `'${_.snakeCase(value).toUpperCase()}_VERSION'`
+    valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`
   ): Record<string, string> {
     if (process.env.VERSION_PLACEHOLDERS === 'true') {
       return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
