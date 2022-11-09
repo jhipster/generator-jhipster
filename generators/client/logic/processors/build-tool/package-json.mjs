@@ -32,7 +32,7 @@ const matchDependency = (dependencyKey, dependencyReference) => {
  * @param section the section of the package.json file where the dependency is
  * @param keyToReplace the dependency kay to replace
  */
-const substituteVersionAccordingToSource = (sourcePackageJson, targetPackageJson, section, keyToReplace) => {
+const substitutePackageJsonDependencyVersionAccordingToSource = (sourcePackageJson, targetPackageJson, section, keyToReplace) => {
   if (checkPackageJsonSectionExists(targetPackageJson, section)) {
     Object.entries(targetPackageJson[section]).forEach(([dependency, dependencyReference]) => {
       if (matchDependency(keyToReplace, dependencyReference)) {
@@ -47,4 +47,4 @@ const substituteVersionAccordingToSource = (sourcePackageJson, targetPackageJson
   }
 };
 
-export default substituteVersionAccordingToSource;
+export default substitutePackageJsonDependencyVersionAccordingToSource;

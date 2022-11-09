@@ -28,7 +28,7 @@ const { ANGULAR, REACT } = clientFrameworkTypes;
  * @param {string} iconName - The name of the Font Awesome icon.
  * @param {string} clientFramework - The name of the client framework
  */
-const addIcon = (context, iconName, clientFramework) => {
+const addIconAfterNeedle = (context, iconName, clientFramework) => {
   if (clientFramework === ANGULAR) {
     context.needleApi.clientAngular.addIcon(iconName);
   } else if (clientFramework === REACT) {
@@ -37,4 +37,4 @@ const addIcon = (context, iconName, clientFramework) => {
   }
 };
 
-export default addIcon;
+export default addIconAfterNeedle;

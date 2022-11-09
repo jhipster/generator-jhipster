@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as substituteVersionAccordingToSource } from './processors/build-tool/package-json.mjs';
-export { default as addIcon } from './processors/needles.mjs';
+export { default as substitutePackageJsonDependencyVersionAccordingToSource } from './processors/build-tool/package-json.mjs';
+export { default as addIconAfterNeedle } from './processors/needles.mjs';

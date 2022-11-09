@@ -69,7 +69,7 @@ import {
   substituteVersionAccordingToSource,
 } from './logic/index.mjs';
 import { applyPathCustomizer, locateGenerator, parseGeneratorJson } from './logic/index.mjs';
-import { addIcon, substituteVersionAccordingToSource } from '../client/logic/index.mjs';
+import { addIconAfterNeedle, substitutePackageJsonDependencyVersionAccordingToSource } from '../client/logic/index.mjs';
 import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../base-application/logic/index.mjs';
 import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
@@ -334,8 +334,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const packageJsonSource = parseGeneratorJson(packageJsonSourceFile);
     const packageJsonTargetFile = this.destinationPath('package.json');
     const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
-    substituteVersionAccordingToSource(packageJsonSource, packageJsonTarget, 'dependencies', keyToReplace);
-    substituteVersionAccordingToSource(packageJsonSource, packageJsonTarget, 'devDependencies', keyToReplace);
+    substitutePackageJsonDependencyVersionAccordingToSource(packageJsonSource, packageJsonTarget, 'dependencies', keyToReplace);
+    substitutePackageJsonDependencyVersionAccordingToSource(packageJsonSource, packageJsonTarget, 'devDependencies', keyToReplace);
     this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
   }
 
@@ -347,7 +347,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} clientFramework - The name of the client framework
    */
   addIcon(iconName, clientFramework) {
-    addIcon(this, iconName, clientFramework);
+    addIconAfterNeedle(this, iconName, clientFramework);
   }
 
   /**
