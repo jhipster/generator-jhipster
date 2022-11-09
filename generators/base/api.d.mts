@@ -79,7 +79,7 @@ export type WriteFileOptions<Generator, DataType> = {
     }
   | {
       /** blocks to be written */
-      blocks: WriteFileBlock<Generator, DataType>;
+      blocks: WriteFileBlock<Generator, DataType>[];
     }
 );
 
