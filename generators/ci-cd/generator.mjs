@@ -123,7 +123,6 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
       initConstants() {
         this.NODE_VERSION = constants.NODE_VERSION;
-        this.NPM_VERSION = constants.NPM_VERSION;
       },
 
       getConstants() {

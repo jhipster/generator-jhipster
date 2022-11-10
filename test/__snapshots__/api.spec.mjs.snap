@@ -26,6 +26,7 @@ Object {
   "GENERATOR_EXPORT_JDL": "export-jdl",
   "GENERATOR_GAE": "gae",
   "GENERATOR_GENERATE_BLUEPRINT": "generate-blueprint",
+  "GENERATOR_GIT": "git",
   "GENERATOR_GRADLE": "gradle",
   "GENERATOR_HEROKU": "heroku",
   "GENERATOR_INFO": "info",

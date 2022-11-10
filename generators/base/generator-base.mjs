@@ -26,10 +26,10 @@ import semver from 'semver';
 import { exec } from 'child_process';
 import os from 'os';
 import normalize from 'normalize-path';
-import simpleGit from 'simple-git';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
+import jhipster7Proxy from './jhipster7-proxy.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import jhipsterUtils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
@@ -59,6 +59,7 @@ import {
 import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
+import { NODE_VERSION } from '../generator-constants.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -578,34 +579,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Add a new entry as a root param in "global.json" translations.
-   *
-   * @param {string} key - Key for the entry
-   * @param {string} value - Default translated value or object with multiple key and translated value
-   * @param {string} language - The language to which this translation should be added
-   */
-  addGlobalTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
-    const fullPath = `${webappSrcDir}i18n/${language}/global.json`;
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          jsonObj[key] = value;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}(key: ${key}, value:${value})${chalk.yellow(
-          ' not added to global translations.\n'
-        )}`
-      );
-      this.debug('Error:', e);
-    }
-  }
-
-  /**
-   * @private
    * Add a translation key to all installed languages
    *
    * @param {string} key - Key for the entity name
@@ -698,96 +671,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getAllSupportedLanguageOptions() {
     return constants.LANGUAGES;
-  }
-
-  /**
-   * @private
-   * Add a new dependency in the "package.json".
-   *
-   * @param {string} name - dependency name
-   * @param {string} version - dependency version
-   */
-  addNpmDependency(name, version) {
-    const fullPath = 'package.json';
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          if (jsonObj.dependencies === undefined) {
-            jsonObj.dependencies = {};
-          }
-          jsonObj.dependencies[name] = version;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${
-          chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
-        }npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
-      );
-      this.debug('Error:', e);
-    }
-  }
-
-  /**
-   * @private
-   * Add a new devDependency in the "package.json".
-   *
-   * @param {string} name - devDependency name
-   * @param {string} version - devDependency version
-   */
-  addNpmDevDependency(name, version) {
-    const fullPath = 'package.json';
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          if (jsonObj.devDependencies === undefined) {
-            jsonObj.devDependencies = {};
-          }
-          jsonObj.devDependencies[name] = version;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${
-          chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
-        }npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
-      );
-      this.debug('Error:', e);
-    }
-  }
-
-  /**
-   * @private
-   * Add a new script in the "package.json".
-   *
-   * @param {string} name - script name
-   * @param {string} data - script version
-   */
-  addNpmScript(name, data) {
-    const fullPath = 'package.json';
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          if (jsonObj.scripts === undefined) {
-            jsonObj.scripts = {};
-          }
-          jsonObj.scripts[name] = data;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${
-          chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
-        }npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`
-      );
-      this.debug('Error:', e);
-    }
   }
 
   /**
@@ -1588,20 +1471,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @deprecated
-   * executes a Git command using shellJS
-   * gitExec(args [, options] [, callback])
-   *
-   * @param {string|array} args - can be an array of arguments or a string command
-   * @param {object} options[optional] - takes any of child process options
-   * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
-   * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
-   */
-  gitExec(args, options, callback) {
-    return jhipsterUtils.gitExec(args, options, callback);
-  }
-
-  /**
    * @private
    * get a table name in JHipster preferred style.
    *
@@ -2175,10 +2044,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
         };
+        // TODO drop for v8 final release
+        const data = jhipster7Proxy(this, context);
         if (useAsync) {
-          await this.renderTemplateAsync(sourceFileFrom, destinationFile, context, renderOptions);
+          await this.renderTemplateAsync(sourceFileFrom, destinationFile, data, renderOptions);
         } else {
-          this.renderTemplate(sourceFileFrom, destinationFile, context, renderOptions);
+          this.renderTemplate(sourceFileFrom, destinationFile, data, renderOptions);
         }
       }
       if (!binary && transform && transform.length) {
@@ -2582,6 +2453,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
+    if (process.env.VERSION_PLACEHOLDERS === 'true') {
+      dest.nodeVersion = 'NODE_VERSION';
+    } else {
+      dest.nodeVersion = NODE_VERSION;
+    }
+
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
     dest.projectVersion = process.env.JHI_PROJECT_VERSION || '0.0.1-SNAPSHOT';
@@ -3085,17 +2962,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         delete this.options[optionName];
       }
-    });
-  }
-
-  /**
-   * Create a simple-git instance using current destinationPath as baseDir.
-   * @return {import('simple-git').SimpleGit}
-   */
-  createGit() {
-    return simpleGit({ baseDir: this.destinationPath() }).env({
-      ...process.env,
-      LANG: 'en',
     });
   }
 }
