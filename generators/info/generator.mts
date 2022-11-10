@@ -44,7 +44,7 @@ export default class InfoGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    return this.asInitialingTaskGroup({
+    return this.asInitializingTaskGroup({
       sayHello() {
         this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
       },

@@ -305,6 +305,18 @@ Object {
   "generators/generate-blueprint/templates/template-file-generate-blueprint.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/git/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/git/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/git/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/git/templates/template-file-git.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/gradle/generator.mjs": Object {
     "stateCleared": "modified",
   },

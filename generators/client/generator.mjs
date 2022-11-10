@@ -101,7 +101,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get initializing() {
-    return this.asInitialingTaskGroup({
+    return this.asInitializingTaskGroup({
       setupConstants() {
         // Make constants available in templates
         this.packagejs = packagejs;
@@ -116,7 +116,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitialingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
+    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get prompting() {

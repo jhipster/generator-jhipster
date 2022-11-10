@@ -183,7 +183,7 @@ export default class BaseApplicationGenerator extends BaseGenerator {
    * @param {import('./tasks.mjs').InitializingTaskGroup<this>} taskGroup
    * @returns {import('./tasks.mjs').InitializingTaskGroup<this>}
    */
-  asInitialingTaskGroup(taskGroup) {
+  asInitializingTaskGroup(taskGroup) {
     return taskGroup;
   }
 

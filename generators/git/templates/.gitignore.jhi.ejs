@@ -1,11 +1,4 @@
 ######################
-# Project Specific
-######################<% if (!skipClient) { %>
-/<%= this.CLIENT_MAIN_SRC_DIR %>content/css/main.css<% } %>
-/<%= CLIENT_DIST_DIR %>**
-/<%= TEST_DIR %>javascript/coverage/
-
-######################
 # Node
 ######################
 /node/
@@ -37,7 +30,6 @@ local.properties
 .settings/
 .loadpath
 .factorypath
-/<%= SERVER_MAIN_RES_DIR %>rebel.xml
 
 # External tool builders
 .externalToolBuilders/**
@@ -157,3 +149,5 @@ Desktop.ini
 ######################
 /coverage/
 /.nyc_output/
+
+<&- fragments.render({ join: '\n\n' }) &>
