@@ -69,7 +69,7 @@ import {
   substituteVersionAccordingToSource,
 } from './logic/index.mjs';
 import { applyPathCustomizer, locateGenerator, parseGeneratorJson } from './logic/index.mjs';
-import { addIconAfterNeedle, substitutePackageJsonDependencyVersionAccordingToSource } from '../client/logic/index.mjs';
+import { addIconInClientsImport, addMenuEntryInClients, substitutePackageJsonDependencyVersionAccordingToSource } from '../client/logic/index.mjs';
 import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../base-application/logic/index.mjs';
 import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
@@ -347,7 +347,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} clientFramework - The name of the client framework
    */
   addIcon(iconName, clientFramework) {
-    addIconAfterNeedle(this, iconName, clientFramework);
+    addIconInClientsImport(this, iconName, clientFramework);
   }
 
   /**
@@ -361,12 +361,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
   addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
+    addMenuEntryInClients(this, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
   }
 
   /**

@@ -18,6 +18,7 @@
  */
 
 import { clientFrameworkTypes } from '../../../../jdl/jhipster/index.mjs';
+import _ from 'lodash';
 
 const { ANGULAR, REACT } = clientFrameworkTypes;
 
@@ -25,10 +26,11 @@ const { ANGULAR, REACT } = clientFrameworkTypes;
  * @private
  * Add a new icon to icon imports.
  *
+ * @param context the generator context
  * @param {string} iconName - The name of the Font Awesome icon.
  * @param {string} clientFramework - The name of the client framework
  */
-const addIconAfterNeedle = (context, iconName, clientFramework) => {
+const addIconInClientsImport = (context, iconName, clientFramework) => {
   if (clientFramework === ANGULAR) {
     context.needleApi.clientAngular.addIcon(iconName);
   } else if (clientFramework === REACT) {
@@ -37,4 +39,23 @@ const addIconAfterNeedle = (context, iconName, clientFramework) => {
   }
 };
 
-export default addIconAfterNeedle;
+/**
+ * @private
+ * Add new entry to menu
+ * @param context the generator context
+ * @param routerName the client technology router name
+ * @param iconName name of the menu's icon
+ * @param enableTranslation whether translation is enabled
+ * @param clientFramework the client technology
+ * @param translationKeyMenu the translation key
+ */
+const addMenuEntry = (context, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) => {
+  if (clientFramework === ANGULAR) {
+    context.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu, context.jhiPrefix);
+  } else if (clientFramework === REACT) {
+    // React
+    // TODO:
+  }
+};
+
+export default addIconInClientsImport;
