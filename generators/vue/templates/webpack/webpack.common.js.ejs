@@ -20,7 +20,7 @@ function resolve(dir = '') {
 module.exports = async (env, options) => {
   const development = options.mode === 'development';
 <%_ if (enableTranslation) { _%>
-  const languagesHash = await hashElement(resolve('<%= MAIN_SRC_DIR %>i18n'), {
+  const languagesHash = await hashElement(resolve('<%= clientSrcDir %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
     files: { include: ['*.json'] },
@@ -37,7 +37,7 @@ module.exports = async (env, options) => {
       },
 <%_ } _%>
       entry: {
-        app: './<%= this.CLIENT_MAIN_SRC_DIR %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
+        app: './<%= clientSrcDir %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
       },
       output: {
         path: resolve('<%= DIST_DIR %>'),
@@ -46,7 +46,7 @@ module.exports = async (env, options) => {
         extensions: ['.ts', '.js', '.vue', '.json'],
         alias: {
           vue$: 'vue/dist/vue.esm.js',
-          '@': resolve('<%= this.CLIENT_MAIN_SRC_DIR %>app'),
+          '@': resolve('<%= clientSrcDir %>app'),
         },
       },
       devServer: {
@@ -143,7 +143,7 @@ module.exports = async (env, options) => {
         }),
         new HtmlWebpackPlugin({
           base: '/',
-          template: './<%= MAIN_SRC_DIR %>index.html',
+          template: './<%= clientSrcDir %>index.html',
         }),
         new VueLoaderPlugin(),
         new CopyWebpackPlugin({
@@ -159,15 +159,15 @@ module.exports = async (env, options) => {
               from: require.resolve('axios/dist/axios.min.js'),
               to: 'swagger-ui/',
             },
-            { from: './<%= this.CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
-            { from: './<%= this.CLIENT_MAIN_SRC_DIR %>content/', to: 'content/' },
-            { from: './<%= this.CLIENT_MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
+            { from: './<%= clientSrcDir %>swagger-ui/', to: 'swagger-ui/' },
+            { from: './<%= clientSrcDir %>content/', to: 'content/' },
+            { from: './<%= clientSrcDir %>favicon.ico', to: 'favicon.ico' },
             {
-              from: './<%= this.CLIENT_MAIN_SRC_DIR %>manifest.webapp',
+              from: './<%= clientSrcDir %>manifest.webapp',
               to: 'manifest.webapp',
             },
             // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-            { from: './<%= this.CLIENT_MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' },
+            { from: './<%= clientSrcDir %>robots.txt', to: 'robots.txt' },
           ],
         })<% if (enableTranslation) { %>,
         new MergeJsonWebpackPlugin({

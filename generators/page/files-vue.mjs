@@ -62,22 +62,6 @@ export const vueFiles = {
         },
       ],
     },
-    {
-      condition: generator => generator.protractorTests,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          override: generator => generator.options.recreate,
-          file: 'e2e/pages/page.page-object.ts',
-          renameTo: generator => `e2e/pages/${generator.pageFolderName}/${generator.pageFileName}.page-object.ts`,
-        },
-        {
-          override: generator => generator.options.recreate,
-          file: 'e2e/pages/page.spec.ts',
-          renameTo: generator => `e2e/pages/${generator.pageFolderName}/${generator.pageFileName}.spec.ts`,
-        },
-      ],
-    },
   ],
 };
 
@@ -88,9 +72,4 @@ export function customizeFiles() {
   // Add page services to main
   utils.vueAddPageServiceToMainImport(this, this.pageName, this.pageFileName);
   utils.vueAddPageServiceToMain(this, this.pageName, this.pageInstance);
-
-  // Add tests to protractor conf
-  if (this.protractorTests) {
-    utils.vueAddPageProtractorConf(this);
-  }
 }

@@ -45,7 +45,6 @@ module.exports = {
   vueAddPageToRouter,
   vueAddPageServiceToMainImport,
   vueAddPageServiceToMain,
-  vueAddPageProtractorConf,
 };
 
 const databaseTypes = require('../jdl/jhipster/database-types');
@@ -522,17 +521,6 @@ function vueAddPageServiceToMain(generator, pageName, pageInstance) {
           `|${pageInstance}Service: () => new ${pageName}Service(),`
         ),
       ],
-    },
-    generator
-  );
-}
-
-function vueAddPageProtractorConf(generator) {
-  rewriteFile(
-    {
-      file: `${generator.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
-      needle: 'jhipster-needle-add-protractor-tests',
-      splicable: [generator.stripMargin("'./e2e/pages/**/*.spec.ts',")],
     },
     generator
   );

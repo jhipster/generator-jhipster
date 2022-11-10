@@ -91,7 +91,7 @@ const { GRADLE, MAVEN } = buildToolTypes;
 const { SPRING_WEBSOCKET } = websocketTypes;
 const { KAFKA } = messageBrokerTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
-const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = testFrameworkTypes;
+const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
@@ -221,22 +221,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getPossibleDependencies() {
     return [];
-  }
-
-  /**
-   * @deprecated
-   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
-   */
-  get CLIENT_MAIN_SRC_DIR() {
-    return CLIENT_MAIN_SRC_DIR;
-  }
-
-  /**
-   * @deprecated
-   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
-   */
-  get CLIENT_TEST_SRC_DIR() {
-    return CLIENT_TEST_SRC_DIR;
   }
 
   /**
@@ -2449,7 +2433,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.gatlingTests = dest.testFrameworks.includes(GATLING);
     dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
-    dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
     dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
 
     dest.authenticationType = config.authenticationType;

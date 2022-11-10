@@ -37,10 +37,6 @@ export const files = {
         'webpack/logo-jhipster.png',
       ],
     },
-    {
-      condition: generator => generator.protractorTests,
-      templates: ['tsconfig.e2e.json'],
-    },
   ],
   sass: [
     {

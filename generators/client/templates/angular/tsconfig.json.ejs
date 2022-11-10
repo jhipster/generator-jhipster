@@ -18,7 +18,7 @@
 -%>
 {
   "compilerOptions": {
-    "baseUrl": "<%= this.CLIENT_MAIN_SRC_DIR %>",
+    "baseUrl": "<%= clientSrcDir %>",
     "outDir": "./<%= DIST_DIR %>",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -26,9 +26,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
-<%_ if (protractorTests) { // Prevents Jest and Mocha types conflicts. See https://github.com/jhipster/generator-jhipster/pull/13083 _%>
-    "skipLibCheck": true,
-<%_ } _%>
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,

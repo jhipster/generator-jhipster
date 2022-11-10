@@ -34,7 +34,7 @@ module.exports = {
       './tsconfig.json',
       './tsconfig.spec.json',
 <%_ if (cypressTests) { _%>
-      './<%= this.CLIENT_TEST_SRC_DIR %>cypress/tsconfig.json',
+      './<%= clientTestDir %>cypress/tsconfig.json',
 <%_ } _%>
     ]
   },

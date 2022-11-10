@@ -38,7 +38,7 @@ jobs:
       versionSpec: $(NODE_VERSION)
     displayName: 'TOOLS: install Node.js'
 <%_ } _%>
-<%_ if (cypressTests || protractorTests) {
+<%_ if (cypressTests) {
   const commented = applicationTypeGateway ? '# ' : ''; _%>
   <%= commented %>- task: Bash@3
   <%= commented %>  inputs:
@@ -110,7 +110,7 @@ jobs:
       customCommand: ' run java:jar:prod'
     displayName: 'TESTS: packaging'
 <%_ } _%>
-<%_ if (cypressTests || protractorTests) {
+<%_ if (cypressTests) {
     const commented = applicationTypeGateway ? '# ' : ''; _%>
   <%= commented %>- task: Npm@1
   <%= commented %>  inputs:

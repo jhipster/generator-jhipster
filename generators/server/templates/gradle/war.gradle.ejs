@@ -22,14 +22,14 @@ bootWar {
     mainClass = "<%= packageName %>.<%= mainClass %>"
     includes = ["WEB-INF/**", "META-INF/**"]
 <%_ if (!skipClient) { _%>
-    webXml = file("${project.rootDir}/<%= this.CLIENT_MAIN_SRC_DIR %>WEB-INF/web.xml")
+    webXml = file("${project.rootDir}/<%= clientSrcDir %>WEB-INF/web.xml")
 <%_ } _%>
 }
 
 war {
 <%_ if (!skipClient) { _%>
     webAppDirName = "<%= CLIENT_DIST_DIR %>"
-    webXml = file("${project.rootDir}/<%= this.CLIENT_MAIN_SRC_DIR %>WEB-INF/web.xml")
+    webXml = file("${project.rootDir}/<%= clientSrcDir %>WEB-INF/web.xml")
 <%_ } _%>
     enabled = true
     archiveExtension = "war.original"

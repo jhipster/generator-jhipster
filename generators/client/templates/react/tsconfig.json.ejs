@@ -35,12 +35,12 @@
     "checkJs": false,
     "baseUrl": "./",
     "paths": {
-        "app/*": ["<%= MAIN_SRC_DIR %>app/*"]
+        "app/*": ["<%= clientSrcDir %>app/*"]
     },
     "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["<%= MAIN_SRC_DIR %>app"],
+  "include": ["<%= clientSrcDir %>app"],
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"]
 }

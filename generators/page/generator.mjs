@@ -25,9 +25,6 @@ import { askForPage } from './prompts.mjs';
 import { customizeFiles as customizeVueFiles, vueFiles } from './files-vue.mjs';
 import constants from '../generator-constants.cjs';
 import { GENERATOR_PAGE } from '../generator-list.mjs';
-import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-
-const { PROTRACTOR } = testFrameworkTypes;
 
 const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
@@ -83,7 +80,6 @@ export default class PageGenerator extends BaseGenerator {
         this.skipClient = this.jhipsterConfig.skipClient;
         this.clientPackageManager = this.jhipsterConfig.clientPackageManager;
         this.enableTranslation = this.jhipsterConfig.enableTranslation;
-        this.protractorTests = this.jhipsterConfig.testFrameworks && this.jhipsterConfig.testFrameworks.includes(PROTRACTOR);
         this.clientFramework = this.jhipsterConfig.clientFramework;
       },
     };
