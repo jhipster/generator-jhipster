@@ -57,10 +57,9 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 
 import { stringify } from '../../utils/index.mjs';
-import generatorUtils from '../utils.cjs';
+import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
 
 const { isReservedTableName } = reservedKeywords;
-const { getBase64Secret, getRandomHex } = generatorUtils;
 const { defaultConfig } = generatorDefaults;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
@@ -142,7 +141,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get initializing() {
-    return this.asInitialingTaskGroup({
+    return this.asInitializingTaskGroup({
       displayLogo() {
         if (this.logo) {
           this.printJHipsterLogo();
@@ -158,7 +157,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitialingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
+    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get prompting() {
@@ -265,9 +264,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
         application.JAVA_VERSION = constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
-
-        application.NODE_VERSION = constants.NODE_VERSION;
-        application.NPM_VERSION = constants.NPM_VERSION;
 
         application.JHIPSTER_DEPENDENCIES_VERSION = application.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         application.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
@@ -707,11 +703,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
       config.jwtSecretKey === undefined
     ) {
-      config.jwtSecretKey = getBase64Secret.call(this, null, 64);
+      config.jwtSecretKey = createBase64Secret.call(this, null, 64);
     }
     // Generate remember me key if key does not already exist in config
     if (config.authenticationType === SESSION && !config.rememberMeKey) {
-      config.rememberMeKey = getRandomHex();
+      config.rememberMeKey = createSecret();
     }
 
     if (config.authenticationType === OAUTH2) {

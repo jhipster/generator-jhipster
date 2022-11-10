@@ -16,7 +16,7 @@ LABEL ALIAS=postgresql
 FROM quay.io/keycloak/keycloak:19.0.3
 LABEL ALIAS=keycloak
 
-FROM mysql:8.0.30
+FROM mysql:8.0.31
 
 FROM mariadb:10.8.3
 
@@ -49,7 +49,7 @@ LABEL ALIAS=zookeeper
 FROM sonarqube:9.6.1-community
 LABEL ALIAS=sonar
 
-FROM consul:1.13.1
+FROM consul:1.13.3
 
 FROM prom/prometheus:v2.38.0
 LABEL ALIAS=prometheus

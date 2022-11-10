@@ -20,6 +20,8 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { basename } from 'path';
 import { createHash } from 'crypto';
 import _ from 'lodash';
+import { simpleGit } from 'simple-git';
+
 import SharedData from './shared-data.mjs';
 
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
@@ -183,7 +185,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    */
   prepareDependencies(
     map: Record<string, string>,
-    valuePlaceholder: (value: string) => string = value => `'${_.snakeCase(value).toUpperCase()}_VERSION'`
+    valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`
   ): Record<string, string> {
     if (process.env.VERSION_PLACEHOLDERS === 'true') {
       return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
@@ -202,5 +204,15 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
     }
     return priorities;
+  }
+
+  /**
+   * Create a simple-git instance using current destinationPath as baseDir.
+   */
+  createGit() {
+    return simpleGit({ baseDir: this.destinationPath() }).env({
+      ...process.env,
+      LANG: 'en',
+    });
   }
 }

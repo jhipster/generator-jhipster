@@ -82,7 +82,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
    * @returns {import('./tasks.mjs').InitializingTaskGroup<this>}
    */
   get initializing() {
-    return this.asInitialingTaskGroup(this._initializing());
+    return this.asInitializingTaskGroup(this._initializing());
   }
 
   /**
@@ -99,7 +99,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
    * @param {import('./tasks.mjs').InitializingTaskGroup<this>} taskGroup
    * @returns {import('./tasks.mjs').InitializingTaskGroup<this>}
    */
-  asInitialingTaskGroup(taskGroup) {
+  asInitializingTaskGroup(taskGroup) {
     return taskGroup;
   }
 

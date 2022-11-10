@@ -42,6 +42,38 @@ const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
 const FIRST_CLI_SUPPORTED_VERSION = '4.5.1'; // The first version in which CLI support was added
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
+/**
+ * Executes a Git command using shellJS
+ * gitExec(args [, options, callback])
+ *
+ * @param {string|array} args - can be an array of arguments or a string command
+ * @param {object} options[optional] - takes any of child process options
+ * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+ * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
+ */
+function gitExec(args, options = {}, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  if (options.async === undefined) options.async = callback !== undefined;
+  if (options.silent === undefined) options.silent = true;
+  if (options.trace === undefined) options.trace = true;
+
+  if (!Array.isArray(args)) {
+    args = [args];
+  }
+  const command = `git ${args.join(' ')}`;
+  if (options.trace) {
+    console.info(command);
+  }
+  if (callback) {
+    return shelljs.exec(command, options, callback);
+  }
+  return shelljs.exec(command, options);
+}
+
 export default class UpgradeGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
@@ -218,17 +250,17 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.CONFIGURING]() {
-    return {
+    return this.asConfiguringTaskGroup({
       assertJHipsterProject() {
         if (!this.config.get('baseName')) {
           this.error('Current directory does not contain a JHipster project.');
         }
       },
 
-      assertGitPresent() {
-        if (!this.isGitInstalled()) {
+      async assertGitPresent() {
+        if (!(await this.createGit().version()).installed) {
           this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
-          this.error('Exiting the process.');
+          throw new Error('Exiting the process.');
         }
       },
 
@@ -405,7 +437,7 @@ export default class UpgradeGenerator extends BaseGenerator {
           recordCodeHasBeenGenerated();
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.DEFAULT]() {
@@ -517,5 +549,19 @@ export default class UpgradeGenerator extends BaseGenerator {
         }
       },
     };
+  }
+
+  /**
+   * @deprecated
+   * executes a Git command using shellJS
+   * gitExec(args [, options] [, callback])
+   *
+   * @param {string|array} args - can be an array of arguments or a string command
+   * @param {object} options[optional] - takes any of child process options
+   * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+   * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
+   */
+  gitExec(args, options, callback) {
+    return gitExec(args, options, callback);
   }
 }

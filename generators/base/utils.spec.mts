@@ -19,7 +19,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
-import { parseChangelog } from './utils.mjs';
+import { normalizeLineEndings, parseChangelog } from './utils.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
 import { EditFileCallback } from './api.mjs';
 
@@ -82,6 +82,14 @@ describe('base support', () => {
       it('returns the date', () => {
         expect(parseChangelog('20160208210114').toISOString()).toBe('2016-02-08T21:01:14.000Z');
       });
+    });
+  });
+  describe('::normalizeLineEndings', () => {
+    it('should convert \\r\\n to \\n', () => {
+      expect(normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\r\n')).toBe('a\r\ncrlf\r\nfile\r\nwith\r\nlf\r\nlines\r\n');
+    });
+    it('should convert \\n to \\r\\n', () => {
+      expect(normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\n')).toBe('a\ncrlf\nfile\nwith\nlf\nlines\n');
     });
   });
 });

@@ -16,14 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export function languageSnakeCase(language) {
-  // Template the message server side properties
-  return language.replace(/-/g, '_');
-}
-
-export function languageToJavaLanguage(language) {
-  // Template the message server side properties
-  const langProp = languageSnakeCase(language);
-  // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-  return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
-}
+// eslint-disable-next-line import/prefer-default-export
+export const files = {
+  git: [
+    {
+      templates: ['.gitignore.jhi', '.gitattributes.jhi'],
+    },
+  ],
+};

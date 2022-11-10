@@ -101,7 +101,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get initializing() {
-    return this.asInitialingTaskGroup({
+    return this.asInitializingTaskGroup({
       setupConstants() {
         // Make constants available in templates
         this.packagejs = packagejs;
@@ -116,7 +116,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitialingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
+    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get prompting() {
@@ -239,7 +239,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         application.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
         application.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
         application.webappLoginRegExp = constants.LOGIN_REGEX_JS;
-        application.NODE_VERSION = constants.NODE_VERSION;
 
         if (application.authenticationType === OAUTH2 || application.databaseType === NO_DATABASE) {
           application.skipUserManagement = true;
