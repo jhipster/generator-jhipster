@@ -18,7 +18,7 @@
     "zone.js": "0.11.6"
   },
   "devDependencies": {
-    "@angular/cli": "14.2.8",
+    "@angular/cli": "14.2.9",
     "@angular-builders/custom-webpack": "14.0.1",
     "@angular-builders/jest": "14.0.2",
     "@angular-eslint/eslint-plugin": "14.1.2",
