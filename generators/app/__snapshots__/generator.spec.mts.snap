@@ -3,7 +3,6 @@
 exports[`JHipster app generator with default config should match snapshot 1`] = `
 Object {
   "ANGULAR": "angular",
-  "BUILD_DIR": "target/",
   "CLIENT_WEBPACK_DIR": "webpack/",
   "DOCKER_DIR": "src/main/docker/",
   "DOCUMENTATION_ARCHIVE_PATH": "/documentation-archive/",
@@ -350,7 +349,6 @@ Object {
 exports[`JHipster app generator with gateway should match snapshot 1`] = `
 Object {
   "ANGULAR": "angular",
-  "BUILD_DIR": "target/",
   "CLIENT_WEBPACK_DIR": "webpack/",
   "DOCKER_DIR": "src/main/docker/",
   "DOCUMENTATION_ARCHIVE_PATH": "/documentation-archive/",
@@ -698,7 +696,6 @@ Object {
 exports[`JHipster app generator with microservice should match snapshot 1`] = `
 Object {
   "ANGULAR": "angular",
-  "BUILD_DIR": "target/",
   "CLIENT_WEBPACK_DIR": "webpack/",
   "DOCKER_DIR": "src/main/docker/",
   "DOCUMENTATION_ARCHIVE_PATH": "/documentation-archive/",
