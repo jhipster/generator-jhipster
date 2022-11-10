@@ -22,7 +22,7 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
-import { askForModuleName, askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
+import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 import {
   GENERATOR_COMMON,
   GENERATOR_LANGUAGES,
@@ -57,10 +57,9 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 
 import { stringify } from '../../utils/index.mjs';
-import generatorUtils from '../utils.cjs';
+import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
 
 const { isReservedTableName } = reservedKeywords;
-const { getBase64Secret, getRandomHex } = generatorUtils;
 const { defaultConfig } = generatorDefaults;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
@@ -142,7 +141,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get initializing() {
-    return this.asInitialingTaskGroup({
+    return this.asInitializingTaskGroup({
       displayLogo() {
         if (this.logo) {
           this.printJHipsterLogo();
@@ -154,37 +153,15 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           this.jhipsterConfig.applicationType = defaultConfig.applicationType;
         }
       },
-
-      verifyExistingProject() {
-        const serverConfigFound =
-          this.jhipsterConfig.packageName !== undefined &&
-          this.jhipsterConfig.authenticationType !== undefined &&
-          this.jhipsterConfig.cacheProvider !== undefined &&
-          this.jhipsterConfig.websocket !== undefined &&
-          this.jhipsterConfig.databaseType !== undefined &&
-          this.jhipsterConfig.devDatabaseType !== undefined &&
-          this.jhipsterConfig.prodDatabaseType !== undefined &&
-          this.jhipsterConfig.searchEngine !== undefined &&
-          this.jhipsterConfig.buildTool !== undefined;
-
-        if (this.jhipsterConfig.baseName !== undefined && serverConfigFound) {
-          this.log(
-            chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \nto re-generate the project...\n')
-          );
-
-          this.existingProject = true;
-        }
-      },
     });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitialingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
+    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      askForModuleName,
       askForServerSideOpts,
       askForOptionalItems,
     });
@@ -285,35 +262,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
         application.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
-        application.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-        application.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
-        application.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
-        application.DOCKER_MYSQL = constants.DOCKER_MYSQL;
-        application.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-        application.DOCKER_MONGODB = constants.DOCKER_MONGODB;
-        application.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
-        application.DOCKER_MSSQL = constants.DOCKER_MSSQL;
-        application.DOCKER_NEO4J = constants.DOCKER_NEO4J;
-        application.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
-        application.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
-        application.DOCKER_REDIS = constants.DOCKER_REDIS;
-        application.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-        application.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-        application.KAFKA_VERSION = constants.KAFKA_VERSION;
-        application.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-        application.DOCKER_SONAR = constants.DOCKER_SONAR;
-        application.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-        application.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-        application.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
-        application.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-        application.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-        application.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
-
         application.JAVA_VERSION = constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
-
-        application.NODE_VERSION = constants.NODE_VERSION;
-        application.NPM_VERSION = constants.NPM_VERSION;
 
         application.JHIPSTER_DEPENDENCIES_VERSION = application.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         application.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
@@ -753,11 +703,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
       config.jwtSecretKey === undefined
     ) {
-      config.jwtSecretKey = getBase64Secret.call(this, null, 64);
+      config.jwtSecretKey = createBase64Secret.call(this, null, 64);
     }
     // Generate remember me key if key does not already exist in config
     if (config.authenticationType === SESSION && !config.rememberMeKey) {
-      config.rememberMeKey = getRandomHex();
+      config.rememberMeKey = createSecret();
     }
 
     if (config.authenticationType === OAUTH2) {

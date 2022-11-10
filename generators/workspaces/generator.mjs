@@ -20,7 +20,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { GENERATOR_APP } from '../generator-list.mjs';
+import { GENERATOR_APP, GENERATOR_GIT } from '../generator-list.mjs';
 
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import BaseGenerator from '../base/index.mjs';
@@ -67,27 +67,6 @@ export default class WorkspacesGenerator extends BaseGenerator {
     this.loadRuntimeOptions();
   }
 
-  get initializing() {
-    return {
-      initializeGit() {
-        if (!this.options.monorepository) return;
-        this.checkGit();
-        this.initializeGitRepository();
-      },
-
-      async generateJdl() {
-        const { generateJdl } = this.options;
-        if (generateJdl) {
-          await generateJdl();
-        }
-      },
-    };
-  }
-
-  get [BaseGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
   get configuring() {
     return {
       async configure() {
@@ -99,6 +78,26 @@ export default class WorkspacesGenerator extends BaseGenerator {
   get [BaseGenerator.CONFIGURING]() {
     if (this.delegateToBlueprint) return {};
     return this.configuring;
+  }
+
+  get composing() {
+    return {
+      async composeGit() {
+        if (this.options.monorepository) {
+          await this.composeWithJHipster(GENERATOR_GIT);
+        }
+      },
+      async generateJdl() {
+        const { generateJdl } = this.options;
+        if (generateJdl) {
+          await generateJdl();
+        }
+      },
+    };
+  }
+
+  get [BaseGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get default() {

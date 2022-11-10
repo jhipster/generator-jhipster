@@ -22,13 +22,13 @@ services:
 <%_ } _%>
 <%_ if (useKafka) { _%>
   zookeeper:
-    image: <%= DOCKER_ZOOKEEPER %>
+    image: <%- dockerContainers.zookeeper %>
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_SYNC_LIMIT: 2
   kafka:
-    image: <%= DOCKER_KAFKA %>
+    image: <%- dockerContainers.kafka %>
     environment:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -39,7 +39,7 @@ services:
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka) { _%>
   jhipster-registry:
-    image: <%= DOCKER_JHIPSTER_REGISTRY %>
+    image: <%- dockerContainers.jhipsterRegistry %>
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the "dev" and "native"
@@ -82,14 +82,14 @@ services:
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
   consul:
-    image: <%= DOCKER_CONSUL %>
+    image: <%- dockerContainers.consul %>
     ports:
       - 8300:8300
       - 8500:8500
       - 8600:8600
     command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
   consul-config-loader:
-    image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
+    image: <%- dockerContainers.consulConfigLoader %>
     volumes:
       - ./central-server-config:/config
     environment:
@@ -122,7 +122,7 @@ services:
 <%_ if (monitoringPrometheus) { _%>
 
   prometheus:
-    image: <%= DOCKER_PROMETHEUS %>
+    image: <%- dockerContainers.prometheus %>
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -131,7 +131,7 @@ services:
     ports:
       - 9090:9090
   alertmanager:
-    image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
+    image: <%- dockerContainers.prometheusAlertmanager %>
     ports:
       - 9093:9093
     volumes:
@@ -141,7 +141,7 @@ services:
       - '--storage.path=/alertmanager'
 
   grafana:
-    image: <%= DOCKER_GRAFANA %>
+    image: <%- dockerContainers.grafana %>
     ports:
       - 3000:3000
     volumes:

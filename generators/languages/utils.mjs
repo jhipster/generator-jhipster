@@ -16,8 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import generatorUtils from '../utils.cjs';
+export function languageSnakeCase(language) {
+  // Template the message server side properties
+  return language.replace(/-/g, '_');
+}
 
-const { languageSnakeCase, languageToJavaLanguage } = generatorUtils;
-
-export { languageSnakeCase, languageToJavaLanguage };
+export function languageToJavaLanguage(language) {
+  // Template the message server side properties
+  const langProp = languageSnakeCase(language);
+  // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+  return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+}

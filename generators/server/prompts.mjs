@@ -56,14 +56,8 @@ const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
-export function askForModuleName() {
-  if (this.jhipsterConfig.baseName) return undefined;
-
-  return this.askModuleName(this);
-}
-
-export function askForServerSideOpts() {
-  if (this.existingProject) return undefined;
+export async function askForServerSideOpts({ control }) {
+  if (control.existingProject && !this.options.askAnswered) return;
 
   const applicationType = this.jhipsterConfig.applicationType;
   const defaultPort = applicationType === GATEWAY ? '8080' : '8081';
@@ -308,33 +302,11 @@ export function askForServerSideOpts() {
     },
   ];
 
-  return this.prompt(prompts).then(answers => {
-    this.jhipsterConfig.serviceDiscoveryType = answers.serviceDiscoveryType;
-    if (this.jhipsterConfig.applicationType === GATEWAY) {
-      this.jhipsterConfig.reactive = answers.reactive = true;
-    } else {
-      this.jhipsterConfig.reactive = answers.reactive;
-    }
-    this.jhipsterConfig.authenticationType = answers.authenticationType;
-
-    this.jhipsterConfig.packageName = answers.packageName;
-    this.jhipsterConfig.serverPort = answers.serverPort || '8080';
-    this.jhipsterConfig.cacheProvider = !answers.reactive ? answers.cacheProvider : NO_CACHE_PROVIDER;
-    this.jhipsterConfig.enableHibernateCache = !!answers.enableHibernateCache;
-
-    const { databaseType } = answers;
-    this.jhipsterConfig.databaseType = databaseType;
-    this.jhipsterConfig.devDatabaseType = answers.devDatabaseType || databaseType;
-    this.jhipsterConfig.prodDatabaseType = answers.prodDatabaseType || databaseType;
-    this.jhipsterConfig.searchEngine = answers.searchEngine;
-    this.jhipsterConfig.buildTool = answers.buildTool;
-    this.jhipsterConfig.enableGradleEnterprise = answers.enableGradleEnterprise;
-    this.jhipsterConfig.gradleEnterpriseHost = answers.gradleEnterpriseHost;
-  });
+  await this.prompt(prompts, this.config);
 }
 
-export function askForOptionalItems() {
-  if (this.existingProject) return undefined;
+export async function askForOptionalItems({ control }) {
+  if (control.existingProject && !this.options.askAnswered) return;
 
   const applicationType = this.jhipsterConfig.applicationType;
   const reactive = this.jhipsterConfig.reactive;
@@ -380,7 +352,7 @@ export function askForOptionalItems() {
   };
 
   if (choices.length > 0) {
-    return this.prompt(PROMPTS).then(answers => {
+    await this.prompt(PROMPTS).then(answers => {
       this.jhipsterConfig.serverSideOptions = answers.serverSideOptions;
       this.jhipsterConfig.websocket = this.getOptionFromArray(answers.serverSideOptions, 'websocket');
       this.jhipsterConfig.searchEngine = this.getOptionFromArray(answers.serverSideOptions, 'searchEngine');
@@ -392,5 +364,4 @@ export function askForOptionalItems() {
       }
     });
   }
-  return undefined;
 }

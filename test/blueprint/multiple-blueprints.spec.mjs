@@ -55,16 +55,7 @@ const mockClientBlueprintSubGen = class extends ClientGenerator {
   }
 
   get [ClientGenerator.WRITING]() {
-    const phaseFromJHipster = super.writing;
-    const customPhaseSteps = {
-      addDummyProperty() {
-        this.addNpmDependency('dummy-blueprint-property', '2.0');
-      },
-    };
-    return {
-      ...phaseFromJHipster,
-      ...customPhaseSteps,
-    };
+    return super.writing;
   }
 
   get [ClientGenerator.POST_WRITING]() {
@@ -163,7 +154,6 @@ describe('JHipster entity generator with multiple blueprints', () => {
         helpers
           .run(getGenerator('app'))
           .withOptions({
-            fromCli: true,
             skipInstall: true,
             skipChecks: true,
             blueprints,
@@ -197,11 +187,6 @@ describe('JHipster entity generator with multiple blueprints', () => {
         assert.file(expectedFiles.maven);
         assert.file(expectedFiles.client);
       });
-
-      it('contains the specific change added by the client blueprint', () => {
-        assert.fileContent('package.json', /dummy-blueprint-property/);
-      });
-
       it('contains the specific change added by the server blueprint', () => {
         assert.fileContent('pom.xml', /dummy-blueprint-property/);
       });

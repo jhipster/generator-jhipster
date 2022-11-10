@@ -1,7 +1,7 @@
 name: 'msmariadb'
 services:
     mariadb:
-        image: mariadb:10.8.3
+        image: <%- dockerContainers.mariadb %>
         # volumes:
         #     - ~/volumes/jhipster/msmysql/mysql/:/var/lib/mysql/
         environment:

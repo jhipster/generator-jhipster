@@ -59,13 +59,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
   }
 
   get [ClientGenerator.WRITING]() {
-    const phaseFromJHipster = super.writing;
-    const customPhaseSteps = {
-      addDummyProperty() {
-        this.addNpmDependency('dummy-blueprint-property', '2.0');
-      },
-    };
-    return { ...phaseFromJHipster, ...customPhaseSteps };
+    return super.writing;
   }
 
   get [ClientGenerator.POST_WRITING]() {
@@ -94,7 +88,6 @@ describe('JHipster client generator with blueprint with path customizer', () => 
         helpers
           .run(getGenerator('client'))
           .withOptions({
-            fromCli: true,
             build: MAVEN,
             auth: JWT,
             db: MYSQL,
@@ -134,10 +127,6 @@ describe('JHipster client generator with blueprint with path customizer', () => 
             return path;
           })
         );
-      });
-
-      it('contains the specific change added by the blueprint', () => {
-        assert.fileContent('package.json', /dummy-blueprint-property/);
       });
     });
   });

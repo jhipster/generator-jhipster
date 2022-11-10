@@ -2335,7 +2335,7 @@ spec:
                 done
       containers:
       - name: grafana-configurer
-        image: <%= DOCKER_GRAFANA_WATCHER %>
+        image: <%- dockerContainers.grafanaWatcher %>
         args:
           - '--watch-dir=/var/grafana-dashboard'
           - '--grafana-url=http://jhipster-grafana:3000'

@@ -30,9 +30,10 @@ import MultiStepTransform from './multi-step-transform/index.mjs';
 import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
 import constants from '../generator-constants.cjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
-import generatorUtils from '../utils.cjs';
 import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
 import type { PreConflictsTaskGroup } from '../base/tasks.mjs';
+import { detectCrLf } from './utils.mjs';
+import { normalizeLineEndings } from '../base/utils.mjs';
 
 const { TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const {
@@ -48,7 +49,6 @@ const { transform } = pTransform;
 const { State } = memFsEditor as any;
 const { hasState, setModifiedFileState } = State;
 const { PRETTIER_EXTENSIONS } = constants;
-const { detectCrLf, normalizeLineEndings } = generatorUtils;
 
 const TRANSFORM_PRIORITY = BaseGenerator.asPriority(TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);

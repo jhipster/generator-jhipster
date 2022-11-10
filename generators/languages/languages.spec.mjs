@@ -19,7 +19,6 @@ const createClientProject = options =>
   helpers
     .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
     .withOptions({
-      fromCli: true,
       skipInstall: true,
       defaults: true,
       ...options,

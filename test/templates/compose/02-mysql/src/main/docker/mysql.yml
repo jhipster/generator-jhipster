@@ -1,7 +1,7 @@
 name: 'msmysql'
 services:
     mysql:
-        image: mysql:8.0.30
+        image: <%- dockerContainers.mysql %>
         # volumes:
         #     - ~/volumes/jhipster/msmysql/mysql/:/var/lib/mysql/
         environment:

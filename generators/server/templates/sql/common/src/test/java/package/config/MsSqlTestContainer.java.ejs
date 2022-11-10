@@ -41,7 +41,7 @@ public class MsSqlTestContainer implements SqlTestContainer {
     @Override
     public void afterPropertiesSet() {
         if (null == mSSQLServerContainer) {
-            mSSQLServerContainer = new MSSQLServerContainer<>("<%= DOCKER_MSSQL %>")
+            mSSQLServerContainer = new MSSQLServerContainer<>("<%- dockerContainers.mssql %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))
                 .withReuse(true);

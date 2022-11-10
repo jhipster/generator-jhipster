@@ -76,13 +76,6 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
   get initializing() {
     return {
       sayHello() {
-        if (!this.options.fromCli) {
-          this.warning(
-            `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-              'jhipster <command>'
-            )} instead of ${chalk.red('yo jhipster:<command>')}`
-          );
-        }
         this.log(chalk.bold('Azure App Service configuration is starting'));
       },
       getSharedConfig() {

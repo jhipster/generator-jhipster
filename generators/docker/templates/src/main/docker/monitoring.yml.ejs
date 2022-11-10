@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   prometheus:
-    image: <%= DOCKER_PROMETHEUS %>
+    image: <%- dockerContainers.prometheus %>
     volumes:
       - ./prometheus/:/etc/prometheus/
     command:
@@ -33,7 +33,7 @@ services:
     # grafana/provisioning/datasources/datasource.yml
     network_mode: "host" # to test locally running service
   grafana:
-    image: <%= DOCKER_GRAFANA %>
+    image: <%- dockerContainers.grafana %>
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
     environment:

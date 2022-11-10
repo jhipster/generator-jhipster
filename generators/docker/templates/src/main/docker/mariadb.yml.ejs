@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   mariadb:
-    image: <%= DOCKER_MARIADB %>
+    image: <%- dockerContainers.mariadb %>
     volumes:
       - ./config/mariadb:/etc/mysql/conf.d
     # volumes:

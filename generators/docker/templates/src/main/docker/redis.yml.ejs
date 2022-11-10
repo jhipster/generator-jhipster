@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   redis:
-    image: <%= DOCKER_REDIS %>
+    image: <%- dockerContainers.redis %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:

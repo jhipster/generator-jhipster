@@ -34,6 +34,8 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mjs');
 
+const mockedGenerators = ['jhipster:git'];
+
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -48,16 +50,19 @@ describe(`JHipster ${generator} generator`, () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions({
-          defaults: true,
-          creationTimestamp: '2000-01-01',
-          applicationWithEntities: {
-            config: {
-              baseName: 'jhipster',
+        runResult = await helpers
+          .run(generatorFile)
+          .withMockedGenerators(mockedGenerators)
+          .withOptions({
+            defaults: true,
+            creationTimestamp: '2000-01-01',
+            applicationWithEntities: {
+              config: {
+                baseName: 'jhipster',
+              },
+              entities: [],
             },
-            entities: [],
-          },
-        });
+          });
       });
 
       it('should succeed', () => {
@@ -68,17 +73,20 @@ describe(`JHipster ${generator} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await basicHelpers.run(generatorFile).withOptions({
-          prettierTabWidth: 10,
-          skipInstall: true,
-          defaults: true,
-          applicationWithEntities: {
-            config: {
-              baseName: 'jhipster',
+        runResult = await basicHelpers
+          .run(generatorFile)
+          .withMockedGenerators(mockedGenerators)
+          .withOptions({
+            prettierTabWidth: 10,
+            skipInstall: true,
+            defaults: true,
+            applicationWithEntities: {
+              config: {
+                baseName: 'jhipster',
+              },
+              entities: [],
             },
-            entities: [],
-          },
-        });
+          });
       });
 
       it('writes custom .prettierrc', () => {

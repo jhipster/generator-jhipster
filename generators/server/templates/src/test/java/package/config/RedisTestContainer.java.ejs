@@ -41,7 +41,7 @@ public class RedisTestContainer implements InitializingBean, DisposableBean {
     @Override
     public void afterPropertiesSet() {
         if (null == redisContainer) {
-            redisContainer = new GenericContainer("<%= DOCKER_REDIS %>")
+            redisContainer = new GenericContainer("<%- dockerContainers.redis %>")
                 .withExposedPorts(6379)
                 .withLogConsumer(new Slf4jLogConsumer(log))
                 .withReuse(true);

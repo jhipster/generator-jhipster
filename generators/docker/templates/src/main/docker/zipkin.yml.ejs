@@ -20,6 +20,6 @@
 name: <%= baseName.toLowerCase() %>
 services:
   zipkin:
-    image: <%= DOCKER_ZIPKIN %>
+    image: <%- dockerContainers.zipkin %>
     ports:
       - 127.0.0.1:9411:9411
