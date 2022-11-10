@@ -57,10 +57,9 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 
 import { stringify } from '../../utils/index.mjs';
-import generatorUtils from '../utils.cjs';
+import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
 
 const { isReservedTableName } = reservedKeywords;
-const { getBase64Secret, getRandomHex } = generatorUtils;
 const { defaultConfig } = generatorDefaults;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
@@ -704,11 +703,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
       config.jwtSecretKey === undefined
     ) {
-      config.jwtSecretKey = getBase64Secret.call(this, null, 64);
+      config.jwtSecretKey = createBase64Secret.call(this, null, 64);
     }
     // Generate remember me key if key does not already exist in config
     if (config.authenticationType === SESSION && !config.rememberMeKey) {
-      config.rememberMeKey = getRandomHex();
+      config.rememberMeKey = createSecret();
     }
 
     if (config.authenticationType === OAUTH2) {

@@ -580,34 +580,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Add a new entry as a root param in "global.json" translations.
-   *
-   * @param {string} key - Key for the entry
-   * @param {string} value - Default translated value or object with multiple key and translated value
-   * @param {string} language - The language to which this translation should be added
-   */
-  addGlobalTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
-    const fullPath = `${webappSrcDir}i18n/${language}/global.json`;
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          jsonObj[key] = value;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}(key: ${key}, value:${value})${chalk.yellow(
-          ' not added to global translations.\n'
-        )}`
-      );
-      this.debug('Error:', e);
-    }
-  }
-
-  /**
-   * @private
    * Add a translation key to all installed languages
    *
    * @param {string} key - Key for the entity name
@@ -700,96 +672,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getAllSupportedLanguageOptions() {
     return constants.LANGUAGES;
-  }
-
-  /**
-   * @private
-   * Add a new dependency in the "package.json".
-   *
-   * @param {string} name - dependency name
-   * @param {string} version - dependency version
-   */
-  addNpmDependency(name, version) {
-    const fullPath = 'package.json';
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          if (jsonObj.dependencies === undefined) {
-            jsonObj.dependencies = {};
-          }
-          jsonObj.dependencies[name] = version;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${
-          chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
-        }npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
-      );
-      this.debug('Error:', e);
-    }
-  }
-
-  /**
-   * @private
-   * Add a new devDependency in the "package.json".
-   *
-   * @param {string} name - devDependency name
-   * @param {string} version - devDependency version
-   */
-  addNpmDevDependency(name, version) {
-    const fullPath = 'package.json';
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          if (jsonObj.devDependencies === undefined) {
-            jsonObj.devDependencies = {};
-          }
-          jsonObj.devDependencies[name] = version;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${
-          chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
-        }npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
-      );
-      this.debug('Error:', e);
-    }
-  }
-
-  /**
-   * @private
-   * Add a new script in the "package.json".
-   *
-   * @param {string} name - script name
-   * @param {string} data - script version
-   */
-  addNpmScript(name, data) {
-    const fullPath = 'package.json';
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          if (jsonObj.scripts === undefined) {
-            jsonObj.scripts = {};
-          }
-          jsonObj.scripts[name] = data;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${
-          chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
-        }npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`
-      );
-      this.debug('Error:', e);
-    }
   }
 
   /**

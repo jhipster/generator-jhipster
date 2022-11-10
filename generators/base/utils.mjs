@@ -71,3 +71,14 @@ export function parseChangelog(changelogDate) {
   )}T${changelogDate.substring(8, 10)}:${changelogDate.substring(10, 12)}:${changelogDate.substring(12, 14)}+00:00`;
   return new Date(Date.parse(formattedDate));
 }
+
+/**
+ * Replace line endings with the specified one.
+ *
+ * @param {string} str
+ * @param {string} lineEnding
+ * @returns {string} normalized line ending string
+ */
+export function normalizeLineEndings(str, lineEnding) {
+  return str.replace(/\r\n|\r|\n/g, lineEnding);
+}
