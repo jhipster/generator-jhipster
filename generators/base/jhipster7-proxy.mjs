@@ -29,6 +29,18 @@ const deprecatedProperties = {
     replacement: 'clientTestDir',
     get: ({ data }) => data.clientTestDir,
   },
+  CLIENT_DIST_DIR: {
+    replacement: 'clientDistDir',
+    get: ({ data }) => data.clientDistDir,
+  },
+  BUILD_DIR: {
+    replacement: 'temporaryDir',
+    get: ({ data }) => data.temporaryDir,
+  },
+  MAIN_SRC_DIR: {
+    replacement: 'clientSrcDir',
+    get: ({ data }) => data.clientSrcDir,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];

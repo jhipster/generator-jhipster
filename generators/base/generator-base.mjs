@@ -509,7 +509,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addElementTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addElementTranslationKey(key, value, language, webappSrcDir);
   }
 
@@ -521,7 +521,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addAdminElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addAdminElementTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language, webappSrcDir);
   }
 
@@ -533,7 +533,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addEntityTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addEntityTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
   }
 
@@ -546,7 +546,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} method - The method to be run with provided key and value from above
    * @param {string} enableTranslation - specify if i18n is enabled
    */
-  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     if (enableTranslation) {
       this.getAllInstalledLanguages().forEach(language => {
         this[method](key, value, language, webappSrcDir);
@@ -562,7 +562,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const languages = [];
     this.getAllSupportedLanguages().forEach(language => {
       try {
-        const stats = fs.lstatSync(`${this.CLIENT_MAIN_SRC_DIR}i18n/${language}`);
+        const stats = fs.lstatSync(`${this.sharedData.getApplication().clientSrcDir}i18n/${language}`);
         if (stats.isDirectory()) {
           languages.push(language);
         }

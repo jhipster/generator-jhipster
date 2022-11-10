@@ -18,11 +18,8 @@
  */
 import { preparePostEntityClientDerivedProperties } from '../../utils/entity.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import constants from '../generator-constants.cjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 import type { ClientApplication } from '../client/types.mjs';
-
-const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } = constants;
 
 /**
  * @class

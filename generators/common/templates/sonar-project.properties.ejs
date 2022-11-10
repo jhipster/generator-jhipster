@@ -36,7 +36,7 @@ sonar.javascript.lcov.reportPaths=<%_ if (buildToolMaven) { _%>target<%_ } else 
 <%_ } _%>
 
 sonar.sourceEncoding=UTF-8
-sonar.exclusions=<%= clientSrcDir %>content/**/*.*, <%= clientSrcDir %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*
+sonar.exclusions=<%= clientSrcDir %>content/**/*.*, <%= clientSrcDir %>i18n/*.js, <%= clientDistDir %>**/*.*
 
 sonar.issue.ignore.multicriteria=<%_ if (!skipServer) { _%>S3437,<% if (authenticationTypeJwt) { %>S4502,<% } %>S4684,S5145,UndocumentedApi<%_ } _%>
 

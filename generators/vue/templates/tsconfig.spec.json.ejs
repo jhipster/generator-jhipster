@@ -19,7 +19,7 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
-    "outDir": "<%= BUILD_DIR %>out-tsc/spec",
+    "outDir": "<%= temporaryDir %>out-tsc/spec",
 <%_ if (microfrontend && applicationTypeGateway) { _%>
     "paths": {
   <%_ for (const remote of microfrontends) { _%>

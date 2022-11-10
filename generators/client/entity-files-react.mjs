@@ -85,7 +85,7 @@ export function cleanupEntitiesReact({ application, entities }) {
     const { entityFolderName, entityFileName } = entity;
 
     if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
-      this.removeFile(`${this.CLIENT_TEST_SRC_DIR}spec/app/entities/${entityFolderName}/${entityFileName}-reducer.spec.ts`);
+      this.removeFile(`${application.clientTestDir}spec/app/entities/${entityFolderName}/${entityFileName}-reducer.spec.ts`);
     }
   }
 }

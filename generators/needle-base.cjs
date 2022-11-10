@@ -24,7 +24,7 @@ module.exports = class {
     this.generator = generator;
   }
 
-  get CLIENT_MAIN_SRC_DIR() {
+  get clientSrcDir() {
     return this.generator.sharedData.getApplication().clientSrcDir;
   }
 

@@ -40,7 +40,7 @@ module.exports = async (env, options) => {
         app: './<%= clientSrcDir %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
       },
       output: {
-        path: resolve('<%= DIST_DIR %>'),
+        path: resolve('<%= clientDistDir %>'),
       },
       resolve: {
         extensions: ['.ts', '.js', '.vue', '.json'],
@@ -54,7 +54,7 @@ module.exports = async (env, options) => {
         hot: config.dev.hotReload,
 <%_ } _%>
         static: {
-          directory: './<%= DIST_DIR %>',
+          directory: './<%= clientDistDir %>',
         },
         port: <%= devServerPort %>,
         proxy: [

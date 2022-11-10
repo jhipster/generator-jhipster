@@ -279,12 +279,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.jhipsterPackageJson = packagejs;
       },
 
-      setSharedConfigOptions({ application }) {
-        // Make dist dir available in templates
-        application.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool);
-        application.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool) + constants.CLIENT_DIST_DIR;
-      },
-
       prepareForTemplates({ application }) {
         // Application name modified, using each technology's conventions
         application.frontendAppName = this.getFrontendAppName(application.baseName);

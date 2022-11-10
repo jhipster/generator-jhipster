@@ -24,7 +24,7 @@ const needleClientBase = require('./needle-client.cjs');
 module.exports = class extends needleClientBase {
   addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/entities/entities-menu.vue`;
+    const filePath = `${this.clientSrcDir}/app/entities/entities-menu.vue`;
 
     const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
       filePath,
@@ -50,7 +50,7 @@ module.exports = class extends needleClientBase {
 
   addEntityToRouterImport(entityName, fileName, folderName, readOnly) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities import.\n')}`;
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`;
+    const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
 
     const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
       filePath,
@@ -88,7 +88,7 @@ module.exports = class extends needleClientBase {
 
   addEntityToRouter(entityInstance, entityName, entityFileName, readOnly) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`;
+    const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
 
     const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(filePath, `path: '${entityFileName}'`, this.generator);
     if (isSpecificEntityAlreadyGenerated) {
@@ -149,7 +149,7 @@ module.exports = class extends needleClientBase {
 
   addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow('not added to import in main.\n')}`;
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/main.ts`;
+    const filePath = `${this.clientSrcDir}/app/main.ts`;
 
     // prettier-ignore
     const entityEntry = this.generator.stripMargin(
@@ -162,7 +162,7 @@ module.exports = class extends needleClientBase {
 
   addEntityServiceToMain(entityInstance, entityName) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to service in main.\n')}`;
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/main.ts`;
+    const filePath = `${this.clientSrcDir}/app/main.ts`;
 
     // prettier-ignore
     const entityEntry = this.generator.stripMargin(
@@ -177,7 +177,7 @@ module.exports = class extends needleClientBase {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow(
       'not added to import in entities component.\n'
     )}`;
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/entities/entities.component.ts`;
+    const filePath = `${this.clientSrcDir}/app/entities/entities.component.ts`;
 
     // prettier-ignore
     const entityEntry = `import ${entityName}Service from './${entityFolderName}/${entityFileName}.service';`;
@@ -194,7 +194,7 @@ module.exports = class extends needleClientBase {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow(
       'not added to service in entities component.\n'
     )}`;
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/entities/entities.component.ts`;
+    const filePath = `${this.clientSrcDir}/app/entities/entities.component.ts`;
 
     // prettier-ignore
     const entityEntry = `@Provide('${entityInstance}Service') private ${entityInstance}Service = () => new ${entityName}Service();`;

@@ -14,9 +14,9 @@ export const testRenameTo = (data, filepath) => `${data.clientTestDir}${replaceE
 
 export const testAppRenameTo = (data, filepath) => `${data.clientTestDir}spec/app/${replaceEntityFilePath(data, filepath)}`;
 
-export const CLIENT_TEMPLATES_SRC_DIR = `${CLIENT_MAIN_SRC_DIR}`;
+export const CLIENT_TEMPLATES_SRC_DIR = CLIENT_MAIN_SRC_DIR;
 export const CLIENT_TEMPLATES_APP_DIR = `${CLIENT_MAIN_SRC_DIR}app/`;
-export const CLIENT_TEMPLATES_TEST_DIR = `${CLIENT_TEST_SRC_DIR}`;
+export const CLIENT_TEMPLATES_TEST_DIR = CLIENT_TEST_SRC_DIR;
 export const CLIENT_TEMPLATES_APP_TEST_DIR = `${CLIENT_TEMPLATES_TEST_DIR}spec/app/`;
 
 export const clientSrcBlock = {

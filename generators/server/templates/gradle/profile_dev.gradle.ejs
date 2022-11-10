@@ -149,7 +149,7 @@ task webapp(type: NpmTask) {
         .withPropertyName("postcssrc")
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ } _%>
-    outputs.dir("<%= CLIENT_DIST_DIR %>")
+    outputs.dir("<%= clientDistDir %>")
         .withPropertyName("webapp-build-dir")
 
     dependsOn npmInstall

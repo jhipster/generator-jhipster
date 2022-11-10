@@ -135,8 +135,8 @@
     "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
-    "cleanup": "rimraf <%= DIST_DIR %>",
-    "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
+    "cleanup": "rimraf <%= clientDistDir %>",
+    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= temporaryDir %>}",
 <%_ if (cypressTests) {  _%>
     "e2e": "<%= clientPackageManager %> run e2e:cypress:headed --",
     "e2e:headless": "<%= clientPackageManager %> run e2e:cypress --",

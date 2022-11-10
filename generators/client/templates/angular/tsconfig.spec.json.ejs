@@ -20,7 +20,7 @@
   "extends": "./tsconfig.json",
   "include": ["<%= clientSrcDir %>**/*.ts"],
   "compilerOptions": {
-    "outDir": "<%= BUILD_DIR %>out-tsc/spec",
+    "outDir": "<%= temporaryDir %>out-tsc/spec",
     "types": ["jest", "node"]
   }
 }

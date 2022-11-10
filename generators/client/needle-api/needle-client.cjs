@@ -43,7 +43,7 @@ module.exports = class extends needleBase {
 
   addExternalResourcesToRoot(resources, comment) {
     const errorMessage = 'Resources are not added to JHipster app.';
-    const indexFilePath = `${this.CLIENT_MAIN_SRC_DIR}index.html`;
+    const indexFilePath = `${this.clientSrcDir}index.html`;
     let resourcesBlock = '';
     if (comment) {
       resourcesBlock += `<!-- ${comment} -->\n`;

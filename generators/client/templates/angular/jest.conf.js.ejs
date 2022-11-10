@@ -30,13 +30,13 @@ module.exports = {
   roots: ['<rootDir>', `<rootDir>/${baseUrl}`],
   modulePaths: [`<rootDir>/${baseUrl}`],
   setupFiles: ['jest-date-mock'],
-  cacheDirectory: '<rootDir>/<%= BUILD_DIR %>jest-cache',
-  coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
+  cacheDirectory: '<rootDir>/<%= temporaryDir %>jest-cache',
+  coverageDirectory: '<rootDir>/<%= temporaryDir %>test-results/',
   moduleNameMapper: pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),
   reporters: [
     'default',
-    ['jest-junit', { outputDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }],
-    ['jest-sonar', { outputDirectory: './<%= BUILD_DIR %>test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
+    ['jest-junit', { outputDirectory: '<rootDir>/<%= temporaryDir %>test-results/', outputName: 'TESTS-results-jest.xml' }],
+    ['jest-sonar', { outputDirectory: './<%= temporaryDir %>test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
   ],
   testMatch: ['<rootDir>/<%= clientSrcDir %>app/**/@(*.)@(spec.ts)'],
   testEnvironmentOptions: {

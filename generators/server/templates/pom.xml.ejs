@@ -1061,7 +1061,7 @@
                         <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
                         <failOnMissingWebXml>false</failOnMissingWebXml>
 <%_ if (!skipClient) { _%>
-                        <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
+                        <warSourceDirectory><%= clientDistDir %></warSourceDirectory>
                         <webResources>
                             <resource>
                                 <directory><%= MAIN_DIR %>webapp</directory>
@@ -1975,7 +1975,7 @@
                         <configuration>
                             <filesets>
                                 <fileset>
-                                    <directory><%= CLIENT_DIST_DIR %></directory>
+                                    <directory><%= clientDistDir %></directory>
                                 </fileset>
                             </filesets>
                         </configuration>

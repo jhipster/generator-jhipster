@@ -28,7 +28,7 @@ bootWar {
 
 war {
 <%_ if (!skipClient) { _%>
-    webAppDirName = "<%= CLIENT_DIST_DIR %>"
+    webAppDirName = "<%= clientDistDir %>"
     webXml = file("${project.rootDir}/<%= clientSrcDir %>WEB-INF/web.xml")
 <%_ } _%>
     enabled = true

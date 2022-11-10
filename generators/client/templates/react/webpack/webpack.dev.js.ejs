@@ -39,7 +39,7 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
     './<%= clientSrcDir %>app/<%= microfrontend ? 'main' : 'index' %>'
   ],
   output: {
-    path: utils.root('<%= DIST_DIR %>'),
+    path: utils.root('<%= clientDistDir %>'),
     filename: '[name].[contenthash:8].js',
     chunkFilename: '[name].[chunkhash:8].chunk.js'
   },
@@ -74,7 +74,7 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
   devServer: {
     hot: <%= !microfrontend %>,
     static: {
-      directory: './<%= DIST_DIR %>',
+      directory: './<%= clientDistDir %>',
     },
     port: <%= devServerPort %>,
     proxy: [{
