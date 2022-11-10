@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 export default {
-  'skip-git': {
+  skipGit: {
     desc: 'Skip the git initialization',
     type: Boolean,
     scope: 'generator',

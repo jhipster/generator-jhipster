@@ -177,21 +177,6 @@ export default class WorkspacesGenerator extends BaseGenerator {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
-  get writing() {
-    return this.asWritingTaskGroup({
-      async writeTemplates() {
-        if (!this.generateWorkspaces) return;
-        await this.writeFiles({
-          templates: ['.gitignore'],
-        });
-      },
-    });
-  }
-
-  get [BaseGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
   get postWriting() {
     return {
       generatePackageJson() {

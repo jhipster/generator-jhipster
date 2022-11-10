@@ -32,7 +32,7 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorPath = join(__dirname, 'index.mjs');
 
-const contextBuilder = () => helpers.create(generatorPath).withOptions({ skipGit: true });
+const contextBuilder = () => helpers.create(generatorPath);
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', () => {

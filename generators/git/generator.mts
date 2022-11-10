@@ -37,10 +37,6 @@ export default class InitGenerator extends BaseGenerator {
     super(args, options, features);
 
     this.jhipsterOptions(generatorOptions);
-
-    if (this.options.skipGit) {
-      this.skipGit = this.options.skipGit;
-    }
   }
 
   async _postConstruct() {
@@ -53,15 +49,16 @@ export default class InitGenerator extends BaseGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       async checkGit() {
-        if (this.skipGit) return;
-        this.gitInstalled = (await this.createGit().version()).installed;
-        if (!this.gitInstalled) {
-          this.warning('Git repository will not be created, as Git is not installed on your system');
-          this.skipGit = true;
+        if (!this.skipGit) {
+          this.gitInstalled = (await this.createGit().version()).installed;
+          if (!this.gitInstalled) {
+            this.warning('Git repository will not be created, as Git is not installed on your system');
+            this.skipGit = true;
+          }
         }
       },
       async initializeMonorepository() {
-        if (this.options.monorepository) {
+        if (!this.skipGit && this.options.monorepository) {
           await this.initializeGitRepository();
         }
       },
