@@ -58,11 +58,6 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
         this.loadDerivedClientConfig(application);
-
-        const applicationAny = application as any;
-        // TODO remove fo v8 update client templates to use clientSrcDir and clientTestDir
-        applicationAny.customizeDestination = (ctx: any, filePath: string) =>
-          filePath.replaceAll(CLIENT_MAIN_SRC_DIR, ctx.clientSrcDir).replaceAll(CLIENT_TEST_SRC_DIR, ctx.clientTestDir);
       },
     });
   }

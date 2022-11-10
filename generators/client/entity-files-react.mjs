@@ -16,93 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
 import { replaceReactTranslations } from './transform-react.mjs';
-
-const { CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
+import { clientApplicationBlock } from './utils.mjs';
 
 export const reactFiles = {
   client: [
     {
       condition: generator => !generator.embedded,
-      path: REACT_DIR,
+      ...clientApplicationBlock,
       templates: [
-        {
-          file: 'entities/entity-detail.tsx',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.tsx`,
-        },
-        {
-          file: 'entities/entity.tsx',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`,
-        },
-        {
-          file: 'entities/entity.reducer.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`,
-        },
-        {
-          file: 'entities/index.tsx',
-          renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`,
-        },
+        'entities/_entityFolder/_entityFile-detail.tsx',
+        'entities/_entityFolder/_entityFile.tsx',
+        'entities/_entityFolder/_entityFile.reducer.ts',
+        'entities/_entityFolder/index.tsx',
       ],
     },
     {
-      path: REACT_DIR,
-      templates: [
-        {
-          file: 'entities/entity.model.ts',
-          renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`,
-        },
-      ],
+      ...clientApplicationBlock,
+      renameTo: (data, filepath) => `${data.clientSrcDir}app/shared/model/${data.entityModelFileName}.model.ts`,
+      templates: ['entities/_entityFolder/_entityModel.model.ts'],
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
-      path: REACT_DIR,
-      templates: [
-        {
-          file: 'entities/entity-delete-dialog.tsx',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.tsx`,
-        },
-        {
-          file: 'entities/entity-update.tsx',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.tsx`,
-        },
-      ],
+      ...clientApplicationBlock,
+      templates: ['entities/_entityFolder/_entityFile-delete-dialog.tsx', 'entities/_entityFolder/_entityFile-update.tsx'],
     },
   ],
   test: [
     {
       condition: generator => !generator.embedded,
-      path: REACT_DIR,
-      templates: [
-        {
-          file: 'entities/entity-reducer.spec.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-reducer.spec.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.protractorTests && !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'e2e/entities/entity-page-object.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`,
-        },
-        {
-          file: 'e2e/entities/entity.spec.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.protractorTests && !generator.readOnly && !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'e2e/entities/entity-update-page-object.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-update.page-object.ts`,
-        },
-      ],
+      ...clientApplicationBlock,
+      templates: ['entities/_entityFolder/_entityFile-reducer.spec.ts'],
     },
   ],
 };
@@ -120,11 +64,10 @@ export async function writeEntitiesReactFiles({ application, entities }) {
     if (!entity.embedded) {
       const { entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName } = entity;
 
-      const { CLIENT_MAIN_SRC_DIR } = this;
       const { applicationTypeMicroservice } = application;
       this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, {
         applicationTypeMicroservice,
-        CLIENT_MAIN_SRC_DIR,
+        CLIENT_MAIN_SRC_DIR: application.clientSrcDir,
       });
       this.needleApi.clientReact.addEntityToMenu(
         entity.entityPage,

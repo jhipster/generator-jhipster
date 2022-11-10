@@ -317,30 +317,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Apply output customizer.
-   *
-   * @param {string} outputPath - Path to customize.
-   */
-  applyOutputPathCustomizer(outputPath) {
-    let outputPathCustomizer = this.options.outputPathCustomizer;
-    if (!outputPathCustomizer && this.configOptions) {
-      outputPathCustomizer = this.configOptions.outputPathCustomizer;
-    }
-    if (!outputPathCustomizer) {
-      return outputPath;
-    }
-    outputPath = outputPath ? normalize(outputPath) : outputPath;
-    if (Array.isArray(outputPathCustomizer)) {
-      outputPathCustomizer.forEach(customizer => {
-        outputPath = customizer.call(this, outputPath);
-      });
-      return outputPath;
-    }
-    return outputPathCustomizer.call(this, outputPath);
-  }
-
-  /**
-   * @private
    * Replace placeholders with versions from packageJsonSourceFile.
    * @param {string} keyToReplace - PlaceHolder name.
    * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
@@ -1984,10 +1960,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       } else {
         destinationFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
       }
-      // TODO v8 drop
-      if (typeof context.customizeDestination === 'function') {
-        destinationFile = context.customizeDestination(context, destinationFile);
-      }
 
       let sourceFileFrom;
       if (Array.isArray(rootTemplatesAbsolutePath)) {
@@ -2187,23 +2159,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} [dest] - object to write to.
    */
   parseCommonRuntimeOptions(options = this.options, dest = this.configOptions) {
-    if (options.outputPathCustomizer) {
-      if (dest.outputPathCustomizer === undefined) {
-        dest.outputPathCustomizer = [];
-      } else if (!Array.isArray(dest.outputPathCustomizer)) {
-        dest.outputPathCustomizer = [dest.outputPathCustomizer];
-      }
-      if (Array.isArray(options.outputPathCustomizer)) {
-        options.outputPathCustomizer.forEach(customizer => {
-          if (!dest.outputPathCustomizer.includes(customizer)) {
-            dest.outputPathCustomizer.push(customizer);
-          }
-        });
-      } else if (!dest.outputPathCustomizer.includes(options.outputPathCustomizer)) {
-        dest.outputPathCustomizer.push(options.outputPathCustomizer);
-      }
-    }
-
     if (dest.jhipsterOldVersion === undefined) {
       // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
       dest.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;

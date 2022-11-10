@@ -16,146 +16,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
 import { replaceAngularTranslations } from './transform-angular.mjs';
-
-/* Constants use throughout */
-const { CLIENT_TEST_SRC_DIR, ANGULAR_DIR } = constants;
+import { clientApplicationBlock } from './utils.mjs';
 
 export const angularFiles = {
   client: [
     {
-      path: ANGULAR_DIR,
-      templates: [
-        {
-          file: 'entities/entity.model.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.model.ts`,
-        },
-        {
-          file: 'entities/entity.test-samples.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.test-samples.ts`,
-        },
-      ],
+      ...clientApplicationBlock,
+      templates: ['entities/_entityFolder/_entityFile.model.ts', 'entities/_entityFolder/_entityFile.test-samples.ts'],
     },
     {
       condition: generator => !generator.embedded,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
-        {
-          file: 'entities/list/entity-management.component.html',
-          renameTo: generator => `entities/${generator.entityFolderName}/list/${generator.entityFileName}.component.html`,
-        },
-        {
-          file: 'entities/detail/entity-management-detail.component.html',
-          renameTo: generator => `entities/${generator.entityFolderName}/detail/${generator.entityFileName}-detail.component.html`,
-        },
-        {
-          file: 'entities/entity-management.module.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.module.ts`,
-        },
-        {
-          file: 'entities/route/entity-management-routing.module.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/route/${generator.entityFileName}-routing.module.ts`,
-        },
-        {
-          file: 'entities/route/entity-management-routing-resolve.service.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/route/${generator.entityFileName}-routing-resolve.service.ts`,
-        },
-        {
-          file: 'entities/list/entity-management.component.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/list/${generator.entityFileName}.component.ts`,
-        },
-        {
-          file: 'entities/detail/entity-management-detail.component.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/detail/${generator.entityFileName}-detail.component.ts`,
-        },
-        {
-          file: 'entities/service/entity.service.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/service/${generator.entityFileName}.service.ts`,
-        },
+        'entities/_entityFolder/_entityFile.module.ts',
+        'entities/_entityFolder/detail/_entityFile-detail.component.html',
+        'entities/_entityFolder/detail/_entityFile-detail.component.ts',
+        'entities/_entityFolder/detail/_entityFile-detail.component.spec.ts',
+        'entities/_entityFolder/list/_entityFile.component.html',
+        'entities/_entityFolder/list/_entityFile.component.ts',
+        'entities/_entityFolder/list/_entityFile.component.spec.ts',
+        'entities/_entityFolder/route/_entityFile-routing.module.ts',
+        'entities/_entityFolder/route/_entityFile-routing-resolve.service.ts',
+        'entities/_entityFolder/route/_entityFile-routing-resolve.service.spec.ts',
+        'entities/_entityFolder/service/_entityFile.service.ts',
+        'entities/_entityFolder/service/_entityFile.service.spec.ts',
       ],
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
-        {
-          file: 'entities/update/entity-form.service.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/update/${generator.entityFileName}-form.service.ts`,
-        },
-        {
-          file: 'entities/update/entity-form.service.spec.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/update/${generator.entityFileName}-form.service.spec.ts`,
-        },
-        {
-          file: 'entities/update/entity-management-update.component.html',
-          renameTo: generator => `entities/${generator.entityFolderName}/update/${generator.entityFileName}-update.component.html`,
-        },
-        {
-          file: 'entities/delete/entity-management-delete-dialog.component.html',
-          renameTo: generator => `entities/${generator.entityFolderName}/delete/${generator.entityFileName}-delete-dialog.component.html`,
-        },
-        {
-          file: 'entities/update/entity-management-update.component.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/update/${generator.entityFileName}-update.component.ts`,
-        },
-        {
-          file: 'entities/delete/entity-management-delete-dialog.component.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/delete/${generator.entityFileName}-delete-dialog.component.ts`,
-        },
-      ],
-    },
-  ],
-  test: [
-    {
-      condition: generator => !generator.embedded,
-      path: ANGULAR_DIR,
-      templates: [
-        {
-          file: 'entities/detail/entity-management-detail.component.spec.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/detail/${generator.entityFileName}-detail.component.spec.ts`,
-        },
-        {
-          file: 'entities/list/entity-management.component.spec.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/list/${generator.entityFileName}.component.spec.ts`,
-        },
-        {
-          file: 'entities/route/entity-management-routing-resolve.service.spec.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/route/${generator.entityFileName}-routing-resolve.service.spec.ts`,
-        },
-        {
-          file: 'entities/service/entity.service.spec.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/service/${generator.entityFileName}.service.spec.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.readOnly && !generator.embedded,
-      path: ANGULAR_DIR,
-      templates: [
-        {
-          file: 'entities/update/entity-management-update.component.spec.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/update/${generator.entityFileName}-update.component.spec.ts`,
-        },
-        {
-          file: 'entities/delete/entity-management-delete-dialog.component.spec.ts',
-          renameTo: generator =>
-            `entities/${generator.entityFolderName}/delete/${generator.entityFileName}-delete-dialog.component.spec.ts`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.protractorTests && !generator.embedded,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'e2e/entities/entity-page-object.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`,
-        },
-        {
-          file: 'e2e/entities/entity.spec.ts',
-          renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`,
-        },
+        'entities/_entityFolder/update/_entityFile-form.service.ts',
+        'entities/_entityFolder/update/_entityFile-form.service.spec.ts',
+        'entities/_entityFolder/update/_entityFile-update.component.html',
+        'entities/_entityFolder/update/_entityFile-update.component.spec.ts',
+        'entities/_entityFolder/delete/_entityFile-delete-dialog.component.html',
+        'entities/_entityFolder/update/_entityFile-update.component.ts',
+        'entities/_entityFolder/delete/_entityFile-delete-dialog.component.ts',
+        'entities/_entityFolder/delete/_entityFile-delete-dialog.component.spec.ts',
       ],
     },
   ],
@@ -221,33 +120,33 @@ export function cleanupEntitiesAngular({ application, entities }) {
     const { entityFolderName, entityFileName } = entity;
 
     if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}.route.ts`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}.component.ts`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}.component.html`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-detail.component.ts`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-detail.component.html`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.ts`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.html`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-update.component.ts`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-update.component.html`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/${this.entityModelFileName}.model.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.route.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.component.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.component.html`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-detail.component.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-detail.component.html`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.html`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-update.component.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-update.component.html`);
+      this.removeFile(`${application.clientSrcDir}/app/shared/model/${entity.entityModelFileName}.model.ts`);
       entity.fields.forEach(field => {
         if (field.fieldIsEnum === true) {
           const { enumFileName } = field;
-          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/enumerations/${enumFileName}.model.ts`);
+          this.removeFile(`${application.clientSrcDir}/app/shared/model/enumerations/${enumFileName}.model.ts`);
         }
       });
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-routing-resolve.service.ts`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}-routing.module.ts`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}.service.ts`);
-      this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
-      this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);
-      this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.component.spec.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-routing-resolve.service.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-routing.module.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.service.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.component.spec.ts`);
       this.removeFile(
-        `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.spec.ts`
+        `${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.spec.ts`
       );
-      this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${entityFolderName}/${entityFileName}-update.component.spec.ts`);
-      this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-update.component.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
     }
   }
 }

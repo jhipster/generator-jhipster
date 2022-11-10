@@ -21,6 +21,14 @@ const deprecatedProperties = {
     replacement: 'dockerServicesDir',
     get: ({ data }) => data.dockerServicesDir,
   },
+  CLIENT_MAIN_SRC_DIR: {
+    replacement: 'clientSrcDir',
+    get: ({ data }) => data.clientSrcDir,
+  },
+  CLIENT_TEST_SRC_DIR: {
+    replacement: 'clientTestDir',
+    get: ({ data }) => data.clientTestDir,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
