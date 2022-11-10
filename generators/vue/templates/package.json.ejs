@@ -1,0 +1,175 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+  "name": "<%= dasherizedBaseName %>",
+  "version": "0.0.0",
+  "description": "<%= projectDescription %>",
+  "private": true,
+  "license": "UNLICENSED",
+  "cacheDirectories": [
+    "node_modules"
+  ],
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "<%= this.dependabotPackageJson.dependencies['@fortawesome/fontawesome-svg-core'] %>",
+    "@fortawesome/free-solid-svg-icons": "<%= this.dependabotPackageJson.dependencies['@fortawesome/free-solid-svg-icons'] %>",
+    "@fortawesome/vue-fontawesome": "<%= this.dependabotPackageJson.dependencies['@fortawesome/vue-fontawesome'] %>",
+    "axios": "<%= this.dependabotPackageJson.dependencies['axios'] %>",
+    "bootstrap": "<%= this.dependabotPackageJson.dependencies['bootstrap'] %>",
+    "bootstrap-vue": "<%= this.dependabotPackageJson.dependencies['bootstrap-vue'] %>",
+<%_ if (!clientThemeNone) { _%>
+    "bootswatch": "<%= this.dependabotPackageJson.dependencies['bootswatch'] %>",
+<%_ } _%>
+    "dayjs": "<%= this.dependabotPackageJson.dependencies['dayjs'] %>",
+<%_ if (communicationSpringWebsocket) { _%>
+    "sockjs-client": "1.5.2",
+    "@stomp/rx-stomp": "1.1.4",
+    "rxjs": "7.4.0",
+<%_ } _%>
+    "vue": "<%= this.dependabotPackageJson.dependencies['vue'] %>",
+    "vue-class-component": "<%= this.dependabotPackageJson.dependencies['vue-class-component'] %>",
+    "vue-cookie": "<%= this.dependabotPackageJson.dependencies['vue-cookie'] %>",
+    "vue-i18n": "<%= this.dependabotPackageJson.dependencies['vue-i18n'] %>",
+    "vue-infinite-loading": "<%= this.dependabotPackageJson.dependencies['vue-infinite-loading'] %>",
+    "vue-property-decorator": "<%= this.dependabotPackageJson.dependencies['vue-property-decorator'] %>",
+    "vue-router": "<%= this.dependabotPackageJson.dependencies['vue-router'] %>",
+    "vue2-filters": "<%= this.dependabotPackageJson.dependencies['vue2-filters'] %>",
+    "vuelidate": "<%= this.dependabotPackageJson.dependencies['vuelidate'] %>",
+    "vuex": "<%= this.dependabotPackageJson.dependencies['vuex'] %>"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "<%= this.dependabotPackageJson.devDependencies['@rushstack/eslint-patch'] %>",
+    "@types/jest": "<%= this.dependabotPackageJson.devDependencies['@types/jest'] %>",
+    "@types/node": "<%= this.dependabotPackageJson.devDependencies['@types/node'] %>",
+    "@types/sinon": "<%= this.dependabotPackageJson.devDependencies['@types/sinon'] %>",
+    "@types/vuelidate": "<%= this.dependabotPackageJson.devDependencies['@types/vuelidate'] %>",
+    "@vue/eslint-config-prettier": "<%= this.dependabotPackageJson.devDependencies['@vue/eslint-config-prettier'] %>",
+    "@vue/eslint-config-typescript": "<%= this.dependabotPackageJson.devDependencies['@vue/eslint-config-typescript'] %>",
+    "@vue/test-utils": "<%= this.dependabotPackageJson.devDependencies['@vue/test-utils'] %>",
+    "axios-mock-adapter": "<%= this.dependabotPackageJson.devDependencies['axios-mock-adapter'] %>",
+    "autoprefixer": "<%= this.dependabotPackageJson.devDependencies['autoprefixer'] %>",
+    "browser-sync-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['browser-sync-webpack-plugin'] %>",
+    "copy-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['copy-webpack-plugin'] %>",
+    "css-loader": "<%= this.dependabotPackageJson.devDependencies['css-loader'] %>",
+    "css-minimizer-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['css-minimizer-webpack-plugin'] %>",
+    "fork-ts-checker-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['fork-ts-checker-webpack-plugin'] %>",
+<%_ if (!skipJhipsterDependencies) { _%>
+    "generator-jhipster": "<%= jhipsterVersion %>",
+    <%_ otherModules.forEach(module => { _%>
+    "<%= module.name %>": "<%= module.version %>",
+    <%_ });
+} _%>
+    "html-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['html-webpack-plugin'] %>",
+    "jest": "<%= this.dependabotPackageJson.devDependencies['jest'] %>",
+    "jest-environment-jsdom": "<%= this.dependabotPackageJson.devDependencies['jest-environment-jsdom'] %>",
+    "jest-junit": "<%= this.dependabotPackageJson.devDependencies['jest-junit'] %>",
+    "jest-serializer-vue": "<%= this.dependabotPackageJson.devDependencies['jest-serializer-vue'] %>",
+    "jest-sonar": "<%= this.dependabotPackageJson.devDependencies['jest-sonar'] %>",
+<%_ if (enableTranslation) { _%>
+    "folder-hash": "<%= this.dependabotPackageJson.devDependencies['folder-hash'] %>",
+    "merge-jsons-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
+<%_ } _%>
+    "mini-css-extract-plugin": "<%= this.dependabotPackageJson.devDependencies['mini-css-extract-plugin'] %>",
+    "numeral": "<%= this.dependabotPackageJson.devDependencies['numeral'] %>",
+    "postcss-import": "<%= this.dependabotPackageJson.devDependencies['postcss-import'] %>",
+    "postcss-loader": "<%= this.dependabotPackageJson.devDependencies['postcss-loader'] %>",
+    "postcss-url": "<%= this.dependabotPackageJson.devDependencies['postcss-url'] %>",
+    "prettier": "<%= this.dependabotPackageJson.devDependencies['prettier'] %>",
+<%_ if (!skipServer) { _%>
+    "prettier-plugin-java": "<%= this.dependabotPackageJson.devDependencies['prettier-plugin-java'] %>",
+<%_ } _%>
+    "prettier-plugin-packagejson": "<%= this.dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>",
+<%_ if (cypressTests) { _%>
+    "cypress": "<%= this.dependabotPackageJson.devDependencies['cypress'] %>",
+<%_ } _%>
+    "rimraf": "<%= this.dependabotPackageJson.devDependencies['rimraf'] %>",
+    "sass": "<%= this.dependabotPackageJson.devDependencies['sass'] %>",
+    "sass-loader": "<%= this.dependabotPackageJson.devDependencies['sass-loader'] %>",
+    "sinon": "<%= this.dependabotPackageJson.devDependencies['sinon'] %>",
+    "swagger-ui-dist": "<%= this.dependabotPackageJson.devDependencies['swagger-ui-dist'] %>",
+    "terser-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['terser-webpack-plugin'] %>",
+    "ts-jest": "<%= this.dependabotPackageJson.devDependencies['ts-jest'] %>",
+    "ts-loader": "<%= this.dependabotPackageJson.devDependencies['ts-loader'] %>",
+    "eslint": "<%= this.dependabotPackageJson.devDependencies['eslint'] %>",
+    "eslint-plugin-prettier": "<%= this.dependabotPackageJson.devDependencies['eslint-plugin-prettier'] %>",
+    "eslint-plugin-vue": "<%= this.dependabotPackageJson.devDependencies['eslint-plugin-vue'] %>",
+    "typescript": "<%= this.dependabotPackageJson.devDependencies['typescript'] %>",
+<%_ if (microfrontend) { _%>
+    "@vue/vue2-jest": "<%= this.dependabotPackageJson.devDependencies['@vue/vue2-jest'] %>",
+<%_ } else { _%>
+    "vue-jest": "<%= this.dependabotPackageJson.devDependencies['vue-jest'] %>",
+<%_ } _%>
+    "vue-loader": "<%= this.dependabotPackageJson.devDependencies['vue-loader'] %>",
+    "vue-template-compiler": "<%= this.dependabotPackageJson.dependencies['vue'] %>",
+    "webpack": "<%= this.dependabotPackageJson.devDependencies['webpack'] %>",
+    "webpack-bundle-analyzer": "<%= this.dependabotPackageJson.devDependencies['webpack-bundle-analyzer'] %>",
+    "webpack-cli": "<%= this.dependabotPackageJson.devDependencies['webpack-cli'] %>",
+    "webpack-dev-server": "<%= this.dependabotPackageJson.devDependencies['webpack-dev-server'] %>",
+    "webpack-merge": "<%= this.dependabotPackageJson.devDependencies['webpack-merge'] %>",
+    "workbox-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['workbox-webpack-plugin'] %>"
+  },
+  "engines": {
+    "node": ">=<%= NODE_VERSION %>",
+    "npm": ">= 6.14.4"
+  },
+  "config": {
+    "default_environment": "prod"
+  },
+  "scripts": {
+    "prettier:check": "prettier --check \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
+    "lint": "eslint . --ext .ts,.vue ",
+    "lint:fix": "eslint . --ext .ts,.vue --fix",
+    "cleanup": "rimraf <%= DIST_DIR %>",
+    "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
+    "start": "<%= clientPackageManager %> run webapp:dev --",
+    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
+    "serve": "<%= clientPackageManager %> run start --",
+    "build": "<%= clientPackageManager %> run webapp:prod --",
+    "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
+<%_ if (cypressTests) {  _%>
+    "e2e": "<%= clientPackageManager %> run e2e:cypress:headed --",
+    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress --",
+<%_ } _%>
+<%_ if (cypressTests) { _%>
+    "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
+    "e2e:cypress": "cypress run --e2e --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
+    "cypress": "cypress open --e2e",
+<%_ } _%>
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config <%= this.CLIENT_TEST_SRC_DIR %>jest.conf.js",
+    "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
+    "pretest": "<%= clientPackageManager %> run lint",
+    "test": "<%= clientPackageManager %> run jest --",
+    "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update --",
+    "test:watch": "<%= clientPackageManager %> run jest -- --watch",
+    "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
+    "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev --",
+    "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --mode development --env stats=minimal",
+    "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --mode production --env stats=minimal",
+    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --mode development --env stats=normal",
+    "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod --",
+    "webapp:test": "<%= clientPackageManager %> run test --",
+    "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
+    "webpack": "webpack --config webpack/webpack.common.js"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

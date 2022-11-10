@@ -18,7 +18,6 @@
  */
 import constants from '../generator-constants.cjs';
 import { replaceReactTranslations } from './transform-react.mjs';
-import { addEnumerationFiles } from './entity-files.mjs';
 
 const { CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
 
@@ -111,8 +110,6 @@ export const reactFiles = {
 export async function writeEntitiesReactFiles({ application, entities }) {
   if (!application.clientFrameworkReact) return;
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
-    await addEnumerationFiles.call(this, { application, entity }, REACT_DIR);
-
     await this.writeFiles({
       sections: reactFiles,
       rootTemplatesPath: 'entity/react',

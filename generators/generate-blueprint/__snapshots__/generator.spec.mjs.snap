@@ -545,6 +545,18 @@ Object {
   "generators/upgrade/templates/template-file-upgrade.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/vue/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/vue/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/vue/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/vue/templates/template-file-vue.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/workspaces/generator.mjs": Object {
     "stateCleared": "modified",
   },

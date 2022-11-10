@@ -18,7 +18,6 @@
  */
 import constants from '../generator-constants.cjs';
 import { replaceAngularTranslations } from './transform-angular.mjs';
-import { addEnumerationFiles } from './entity-files.mjs';
 
 /* Constants use throughout */
 const { CLIENT_TEST_SRC_DIR, ANGULAR_DIR } = constants;
@@ -169,8 +168,6 @@ export const angularFiles = {
 export async function writeEntitiesAngularFiles({ application, entities }) {
   if (!application.clientFrameworkAngular) return;
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
-    await addEnumerationFiles.call(this, { application, entity }, ANGULAR_DIR);
-
     await this.writeFiles({
       sections: angularFiles,
       rootTemplatesPath: 'entity/angular',

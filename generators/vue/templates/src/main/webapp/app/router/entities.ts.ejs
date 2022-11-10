@@ -1,0 +1,51 @@
+import {Authority} from "@/shared/security/authority";
+/* tslint:disable */
+// prettier-ignore
+const Entities = () => import('@/entities/entities.vue');
+
+<%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
+const <%= entity.entityAngularName %> = () => import('@/entities/<%= entity.entityFolderName %>/<%= entity.entityFileName %>.vue');
+  <%_ if (!entity.readOnly) { _%>
+const <%= entity.entityAngularName %>Update = () => import('@/entities/<%= entity.entityFolderName %>/<%= entity.entityFileName %>-update.vue');
+  <%_ } _%>
+const <%= entity.entityAngularName %>Details = () => import('@/entities/<%= entity.entityFolderName %>/<%= entity.entityFileName %>-details.vue');
+
+<%_ } _%>
+// jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
+
+export default
+  {
+    path: '/<%= applicationTypeMicroservice ? baseName.toLowerCase() : '' %>',
+    component: Entities,
+    children: [
+<%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
+      {
+        path: '<%= entity.entityFileName %>',
+        name: '<%= entity.entityAngularName %>',
+        component: <%= entity.entityAngularName %>,
+        meta: { authorities: [Authority.USER] },
+      },
+  <%_ if (!entity.readOnly) { _%>
+      {
+        path: '<%= entity.entityFileName %>/new',
+        name: '<%= entity.entityAngularName %>Create',
+        component: <%= entity.entityAngularName %>Update,
+        meta: { authorities: [Authority.USER] },
+      },
+      {
+        path: '<%= entity.entityFileName %>/:<%= entity.entityInstance %>Id/edit',
+        name: '<%= entity.entityAngularName %>Edit',
+        component: <%= entity.entityAngularName %>Update,
+        meta: { authorities: [Authority.USER] },
+      },
+  <%_ } _%>
+      {
+        path: '<%= entity.entityFileName %>/:<%= entity.entityInstance %>Id/view',
+        name: '<%= entity.entityAngularName %>View',
+        component: <%= entity.entityAngularName %>Details,
+        meta: { authorities: [Authority.USER] },
+      },
+<%_ } _%>
+      // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
+    ],
+  };
