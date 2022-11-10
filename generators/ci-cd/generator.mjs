@@ -126,7 +126,6 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
       },
 
       getConstants() {
-        this.DOCKER_DIR = constants.DOCKER_DIR;
         this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
         this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
         this.JAVA_VERSION = constants.JAVA_VERSION;

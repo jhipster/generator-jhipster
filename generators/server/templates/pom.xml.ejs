@@ -67,8 +67,8 @@
         <maven.version>3.2.5</maven.version>
         <java.version><%= JAVA_VERSION %></java.version>
 <%_ if (!skipClient) { _%>
-        <node.version>v<%= NODE_VERSION %></node.version>
-        <npm.version><%= NPM_VERSION %></npm.version>
+        <node.version>v<%= nodeVersion %></node.version>
+        <npm.version><%= nodeDependencies.npm %></npm.version>
 
 <%_ } _%>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -1215,7 +1215,7 @@
                             <user>1000</user>
                         </container>
                         <extraDirectories>
-                            <paths><%= DOCKER_DIR %>jib</paths>
+                            <paths><%= dockerServicesDir %>jib</paths>
                             <permissions>
                                 <permission>
                                     <file>/entrypoint.sh</file>

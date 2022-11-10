@@ -43,7 +43,7 @@ jib {
         user = 1000
     }
     extraDirectories {
-      paths = file("<%= DOCKER_DIR %>jib")
+      paths = file("<%= dockerServicesDir %>jib")
       permissions = ["/entrypoint.sh": "755"]
     }
 }

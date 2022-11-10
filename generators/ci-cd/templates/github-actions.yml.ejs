@@ -34,7 +34,7 @@ jobs:
         timeout-minutes: 40
         env:
 <%_ if (!skipClient) { _%>
-            NODE_VERSION: <%= NODE_VERSION %>
+            NODE_VERSION: <%= nodeVersion %>
 <%_ } _%>
 <%_ if (!skipServer) { _%>
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
@@ -56,7 +56,7 @@ if (!databaseTypeNo && !skipServer ) { _%>
 <%_ if (!skipClient) { _%>
             - uses: actions/setup-node@v3
               with:
-                  node-version: <%= NODE_VERSION %>
+                  node-version: <%= nodeVersion %>
 <%_ }
 if (!skipServer) { _%>
             - uses: actions/setup-java@v3
