@@ -83,9 +83,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   get composing() {
     return {
       async composing() {
-        if (!this.options.skipGit) {
-          await this.composeWithJHipster(GENERATOR_GIT);
-        }
+        await this.composeWithJHipster(GENERATOR_GIT);
       },
     };
   }
