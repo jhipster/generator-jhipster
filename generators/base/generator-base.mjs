@@ -59,17 +59,8 @@ import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
-import { applyPathCustomizer, locateGenerator, normalizeOutputPath, getOutputPathCustomizer } from './logic/index.mjs';
-import {
-  applyPathCustomizer,
-  locateGenerator,
-  normalizeOutputPath,
-  getOutputPathCustomizer,
-  parseJson,
-  substituteVersionAccordingToSource,
-} from './logic/index.mjs';
-import { applyPathCustomizer, locateGenerator, parseGeneratorJson } from './logic/index.mjs';
-import { addIconInClientsImport, addMenuEntryInClients, substitutePackageJsonDependencyVersionAccordingToSource } from '../client/logic/index.mjs';
+import { applyPathCustomizer, locateGenerator, applyPathCustomizer, locateGenerator, parseGeneratorJson } from './logic/index.mjs';
+import { addIconInClientsImport, addMenuEntry, substitutePackageJsonDependencyVersionAccordingToSource } from '../client/logic/index.mjs';
 import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../base-application/logic/index.mjs';
 import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
@@ -361,7 +352,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
   addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    addMenuEntryInClients(this, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
+    addMenuEntry(this, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
   }
 
   /**

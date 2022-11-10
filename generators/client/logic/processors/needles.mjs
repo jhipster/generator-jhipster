@@ -58,4 +58,4 @@ const addMenuEntry = (context, routerName, iconName, enableTranslation, clientFr
   }
 };
 
-export default addIconInClientsImport;
+export { addIconInClientsImport, addMenuEntry };
