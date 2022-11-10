@@ -3,13 +3,9 @@ import { fileURLToPath } from 'url';
 import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
 import sinon from 'sinon';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { writeFileSync } from 'fs';
 
 import utils from '../generators/utils.cjs';
 import { prepareTempDir } from './utils/utils.mjs';
-
-const { detectCrLf } = utils;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -352,54 +348,6 @@ describe('JHipster Utils', () => {
           done();
         }
       );
-    });
-  });
-  describe('::detectCrLf', () => {
-    describe('passing a crlf file', () => {
-      let cleanup;
-      before(() => {
-        cleanup = prepareTempDir();
-        writeFileSync('crlf.txt', 'a\r\ncrlf file');
-      });
-      after(() => cleanup());
-
-      it('should return true', async () => {
-        expect(await detectCrLf('crlf.txt')).toBe(true);
-      });
-    });
-    describe('passing a lf file', () => {
-      let cleanup;
-      before(() => {
-        cleanup = prepareTempDir();
-        writeFileSync('lf.txt', 'a\nlf file');
-      });
-      after(() => cleanup());
-
-      it('should return false', async () => {
-        expect(await detectCrLf('lf.txt')).toBe(false);
-      });
-    });
-    describe('passing a single line file', () => {
-      let cleanup;
-      before(() => {
-        cleanup = prepareTempDir();
-        writeFileSync('lf.txt', 'a single line file');
-      });
-      after(() => cleanup());
-
-      it('should return undefined', async () => {
-        expect(await detectCrLf('lf.txt')).toBe(undefined);
-      });
-    });
-  });
-  describe('::normalizeLineEndings', () => {
-    it('should convert \\r\\n to \\n', () => {
-      expect(utils.normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\r\n')).toBe(
-        'a\r\ncrlf\r\nfile\r\nwith\r\nlf\r\nlines\r\n'
-      );
-    });
-    it('should convert \\n to \\r\\n', () => {
-      expect(utils.normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\n')).toBe('a\ncrlf\nfile\nwith\nlf\nlines\n');
     });
   });
 });

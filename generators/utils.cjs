@@ -22,16 +22,11 @@ const path = require('path');
 const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
-const fs = require('fs');
 const os = require('os');
 
 const constants = require('./generator-constants.cjs');
 
-const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
-
 module.exports = {
-  detectCrLf,
-  normalizeLineEndings,
   rewrite,
   rewriteFile,
   replaceContent,
@@ -122,44 +117,6 @@ function escapeRegExp(str) {
 function normalizeWindowsLineEndings(str) {
   const isWin32 = os.platform() === 'win32';
   return isWin32 ? str.replace(/\r\n/g, '\n') : str;
-}
-
-/**
- * Replace line endings with the specified one.
- *
- * @param {string} str
- * @param {string} lineEnding
- * @returns {string} normalized line ending string
- */
-function normalizeLineEndings(str, lineEnding) {
-  return str.replace(/\r\n|\r|\n/g, lineEnding);
-}
-
-/**
- * Detect the file first line endings
- *
- * @param {string} filePath
- * @returns {boolean|undefined} true in case of crlf, false in case of lf, undefined for a single line file
- */
-function detectCrLf(filePath) {
-  return new Promise((resolve, reject) => {
-    let isCrlf;
-    const rs = fs.createReadStream(filePath, { encoding: 'utf8' });
-    rs.on('data', function (chunk) {
-      const n = chunk.indexOf('\n');
-      const r = chunk.indexOf('\r');
-      if (n !== -1 || r !== -1) {
-        isCrlf = n === -1 || (r !== -1 && r < n);
-        rs.close();
-      }
-    })
-      .on('close', function () {
-        resolve(isCrlf);
-      })
-      .on('error', function (err) {
-        reject(err);
-      });
-  });
 }
 
 /**
