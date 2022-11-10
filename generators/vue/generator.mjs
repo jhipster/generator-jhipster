@@ -18,7 +18,7 @@
  */
 import _ from 'lodash';
 
-import BaseApplication from '../base-application/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_VUE, GENERATOR_CLIENT } from '../generator-list.mjs';
 import { writeEntityFiles, postWriteEntityFiles } from './entity-files-vue.mjs';
@@ -27,7 +27,11 @@ import { writeFiles, writeEntitiesFiles, cleanup } from './files-vue.mjs';
 const { CommonDBTypes } = fieldTypes;
 const TYPE_LONG = CommonDBTypes.LONG;
 
-export default class DatabaseChangelogLiquibase extends BaseApplication {
+/**
+ * @class
+ * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
+ */
+export default class VueGenerator extends BaseApplicationGenerator {
   async _postConstruct() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
@@ -43,7 +47,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     });
   }
 
-  get [BaseApplication.LOADING]() {
+  get [BaseApplicationGenerator.LOADING]() {
     return this.asLoadingTaskGroup(this.delegateTasksToBlueprint(() => this.loading));
   }
 
@@ -55,7 +59,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     });
   }
 
-  get [BaseApplication.PREPARING]() {
+  get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
   }
 
@@ -66,7 +70,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     };
   }
 
-  get [BaseApplication.WRITING]() {
+  get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -77,7 +81,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     };
   }
 
-  get [BaseApplication.WRITING_ENTITIES]() {
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -87,7 +91,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     };
   }
 
-  get [BaseApplication.POST_WRITING_ENTITIES]() {
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 }

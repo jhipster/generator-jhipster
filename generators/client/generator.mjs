@@ -60,7 +60,7 @@ const { clientDefaultConfig } = generatorDefaults;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-client/types.js').ClientApplication>}
+ * @extends {BaseApplicationGenerator<import('./types.mjs').ClientApplication>}
  */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {

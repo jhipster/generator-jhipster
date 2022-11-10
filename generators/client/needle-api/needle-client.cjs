@@ -19,17 +19,6 @@
 const needleBase = require('../../needle-base.cjs');
 
 module.exports = class extends needleBase {
-  constructor(generator) {
-    super(generator);
-
-    this.CLIENT_MAIN_SRC_DIR = generator.CLIENT_MAIN_SRC_DIR;
-    this.clientFramework = generator.clientFramework || generator.jhipsterConfig.clientFramework;
-
-    if (!this.CLIENT_MAIN_SRC_DIR) {
-      generator.error('Client destination folder is missing');
-    }
-  }
-
   addStyle(style, comment, filePath, needle) {
     const styleBlock = this._mergeStyleAndComment(style, comment);
     const rewriteFileModel = this.generateFileModel(filePath, needle, styleBlock);

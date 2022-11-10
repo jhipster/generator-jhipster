@@ -24,6 +24,14 @@ module.exports = class {
     this.generator = generator;
   }
 
+  get CLIENT_MAIN_SRC_DIR() {
+    return this.generator.sharedData.getApplication().clientSrcDir;
+  }
+
+  get clientFramework() {
+    return this.generator.sharedData.getApplication().clientFramework;
+  }
+
   addBlockContentToFile(rewriteFileModel, errorMessage) {
     try {
       return jhipsterUtils.rewriteFile(rewriteFileModel, this.generator);

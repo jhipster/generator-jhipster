@@ -19,22 +19,17 @@
 /* eslint-disable consistent-return */
 import chalk from 'chalk';
 
-import BaseGenerator from '../base/index.mjs';
+import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { askForPage } from './prompts.mjs';
 import { customizeFiles as customizeVueFiles, vueFiles } from './files-vue.mjs';
-import constants from '../generator-constants.cjs';
-import { GENERATOR_PAGE } from '../generator-list.mjs';
-
-const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
+import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_PAGE } from '../generator-list.mjs';
 
 /**
- * Base class for a generator that can be extended through a blueprint.
- *
  * @class
- * @extends {BaseGenerator}
+ * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
  */
-export default class PageGenerator extends BaseGenerator {
+export default class PageGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -64,29 +59,13 @@ export default class PageGenerator extends BaseGenerator {
     this.page = this.options.page || {};
 
     this.loadRuntimeOptions();
-
-    this.rootGenerator = this.env.rootGenerator() === this;
   }
 
   async _postConstruct() {
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_PAGE);
     }
-  }
-
-  get initializing() {
-    return {
-      loadConfig() {
-        this.skipClient = this.jhipsterConfig.skipClient;
-        this.clientPackageManager = this.jhipsterConfig.clientPackageManager;
-        this.enableTranslation = this.jhipsterConfig.enableTranslation;
-        this.clientFramework = this.jhipsterConfig.clientFramework;
-      },
-    };
-  }
-
-  get [BaseGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -95,7 +74,7 @@ export default class PageGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.PROMPTING]() {
+  get [BaseApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
@@ -112,79 +91,81 @@ export default class PageGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.CONFIGURING]() {
+  get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
-  }
-
-  get default() {
-    return {
-      prepareForTemplates() {
-        this.jhiPrefix = this.page.jhiPrefix || this.jhipsterConfig.jhiPrefix;
-
-        this.pageNameDashed = this._.kebabCase(this.pageName);
-        this.pageInstance = this._.lowerFirst(this.pageName);
-        this.jhiPrefixDashed = this._.kebabCase(this.jhiPrefix);
-
-        this.pageFileName = this.page.pageFileName || this.pageNameDashed;
-        this.pageFolderName = this.page.pageFileName || this.pageFileName;
-      },
-    };
-  }
-
-  get [BaseGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {
     return this.asWritingTaskGroup({
-      writeClientPageFiles() {
-        if (this.skipClient) return;
-        if (![VUE].includes(this.clientFramework)) {
-          throw new Error(`The page sub-generator is not supported for client ${this.clientFramework}`);
+      writeClientPageFiles({ application }) {
+        const jhiPrefix = this.page.jhiPrefix || this.jhipsterConfig.jhiPrefix;
+        const { pageName } = this;
+
+        const pageNameDashed = this._.kebabCase(pageName);
+        const pageInstance = this._.lowerFirst(pageName);
+        const jhiPrefixDashed = this._.kebabCase(jhiPrefix);
+
+        const pageFilename = this.page.pageFilename || pageNameDashed;
+        const pageFolderName = this.page.pageFilename || pageFilename;
+
+        const recreate = this.options.recreate;
+
+        this.data = {
+          jhiPrefix,
+          pageNameDashed,
+          pageInstance,
+          jhiPrefixDashed,
+          pageFilename,
+          pageFolderName,
+          recreate,
+          pageName,
+        };
+
+        if (!application.clientFrameworkVue) {
+          throw new Error(`The page sub-generator is not supported for client ${application.clientFramework}`);
         }
         return this.writeFiles({
           sections: vueFiles,
           rootTemplatesPath: ['vue'],
+          context: {
+            ...application,
+            ...this.data,
+          },
         });
       },
     });
   }
 
-  get [BaseGenerator.WRITING]() {
+  get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   // Public API method used by the getter and also by Blueprints
   get postWriting() {
     return {
-      customizeFiles() {
-        if (this.skipClient) return;
-        if (this.clientFramework === VUE) {
-          return customizeVueFiles.call(this);
+      customizeFiles({ application }) {
+        if (application.clientFrameworkVue) {
+          return customizeVueFiles.call(this, { ...application, ...this.data });
         }
         return undefined;
       },
     };
   }
 
-  get [BaseGenerator.POST_WRITING]() {
+  get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get end() {
     return {
-      end() {
-        if (!this.rootGenerator || this.options.skipInstall || this.skipClient) return;
-        this.rebuildClient();
-      },
       success() {
-        if (!this.rootGenerator) return;
+        if (this.env.rootGenerator() !== this) return;
         this.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
       },
     };
   }
 
-  get [BaseGenerator.END]() {
+  get [BaseApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 }
