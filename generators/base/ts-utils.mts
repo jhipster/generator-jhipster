@@ -1,9 +1,7 @@
 import { platform } from 'os';
 
-import generatorUtils from '../utils.cjs';
+import { normalizeLineEndings } from './utils.mjs';
 import type { EditFileCallback } from './api.mjs';
-
-const { normalizeLineEndings } = generatorUtils;
 
 const isWin32 = platform() === 'win32';
 

@@ -24,7 +24,7 @@ export type BaseApplication = {
 
   nodeVersion: string;
   nodePackageManager: string;
-  nodeDestinationVersion: string;
+  nodeDependencies: Record<string, string>;
 
   nativeLanguage: string;
   languages?: string[];

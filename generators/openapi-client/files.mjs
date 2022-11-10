@@ -92,7 +92,11 @@ export function customizeFiles() {
         if (this.clientsToGenerate[cliName].useServiceDiscovery) {
           openApiCmd.push('--additional-properties ribbon=true');
         }
-        this.addNpmScript(`openapi-client:${cliName}`, `${openApiCmd.join(' ')}`);
+        this.packageJson.merge({
+          scripts: {
+            [`openapi-client:${cliName}`]: openApiCmd.join(' '),
+          },
+        });
       });
     },
 
@@ -192,8 +196,12 @@ export function customizeFiles() {
       this.rewriteFile(mainClassFile, '@SpringBootApplication', componentScan);
     },
 
-    addNpmDependency() {
-      this.addNpmDependency('@openapitools/openapi-generator-cli', constants.OPENAPI_GENERATOR_CLI_VERSION);
+    customizePackageJson() {
+      this.packageJson.merge({
+        dependencies: {
+          '@openapitools/openapi-generator-cli': constants.OPENAPI_GENERATOR_CLI_VERSION,
+        },
+      });
     },
   };
 }

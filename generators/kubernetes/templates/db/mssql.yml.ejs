@@ -65,7 +65,7 @@ spec:
 <%_ } _%>
       containers:
       - name: mysql
-        image: <%= DOCKER_MSSQL %>
+        image: <%- dockerContainers.mssql %>
         env:
         - name: MSSQL_PID
           value: "Express"

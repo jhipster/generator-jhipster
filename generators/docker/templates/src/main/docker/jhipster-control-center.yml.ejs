@@ -52,7 +52,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   jhipster-control-center:
-    image: '<%= DOCKER_JHIPSTER_CONTROL_CENTER %>'
+    image: '<%- dockerContainers.jhipsterControlCenter %>'
     command:
       - /bin/sh
       - -c

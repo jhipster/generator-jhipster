@@ -31,9 +31,24 @@ const { startCase } = _;
  * @extends {BaseApplicationGenerator<import('../base-application/types.mjs').BaseApplication>}
  */
 export default class ProjectNameGenerator extends BaseApplicationGenerator {
+  constructor(args, options, features) {
+    super(args, options, features);
+
+    if (this.options.help) return;
+
+    this.sharedData.getData().existingProject =
+      this.options.defaults ||
+      this.options.withEntities ||
+      this.options.applicationWithConfig ||
+      (this.jhipsterConfig.baseName !== undefined && this.config.existed);
+  }
+
   async _postConstruct() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
+    }
+    if (this.sharedData.getData().existingProject && !this.jhipsterConfig.baseName) {
+      this.jhipsterConfig.baseName = this.getDefaultAppName();
     }
   }
 
@@ -58,22 +73,6 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
-  get configuring() {
-    return {
-      defaults() {
-        if (this.options.defaults) {
-          this.config.defaults({
-            baseName: this.getDefaultAppName(),
-          });
-        }
-      },
-    };
-  }
-
-  get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get loading() {
@@ -103,7 +102,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
           dasherizedBaseName: _.kebabCase(baseName),
           lowercaseBaseName: baseName.toLowerCase(),
           upperFirstCamelCaseBaseName: this.upperFirstCamelCase(baseName),
-          projectDescription: `${humanizedBaseName} Project`,
+          projectDescription: `Description for ${humanizedBaseName}`,
         });
       },
     });
@@ -129,7 +128,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
     if (/_/.test(input)) {
       return 'Your base name cannot contain underscores as this does not meet the URI spec';
     }
-    if (input === 'application') {
+    if (input?.toLowerCase() === 'application') {
       return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
     }
     return true;

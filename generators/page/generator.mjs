@@ -79,9 +79,6 @@ export default class PageGenerator extends BaseGenerator {
 
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
       loadConfig() {
         this.skipClient = this.jhipsterConfig.skipClient;
         this.clientPackageManager = this.jhipsterConfig.clientPackageManager;

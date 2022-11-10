@@ -83,10 +83,6 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       loadCommonConfig() {
         this.loadAppConfig();
         this.loadServerConfig();

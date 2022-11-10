@@ -20,7 +20,7 @@
 name: <%= baseName.toLowerCase() %>
 services:
   mysql:
-    image: <%= DOCKER_MYSQL %>
+    image: <%- dockerContainers.mysql %>
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/

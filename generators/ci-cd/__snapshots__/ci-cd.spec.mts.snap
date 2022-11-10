@@ -6,24 +6,25 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"gradle\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -135,24 +136,25 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"gradle\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -276,24 +278,25 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -405,24 +408,25 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -546,24 +550,25 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -735,24 +740,25 @@ jobs:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"gradle\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -838,24 +844,25 @@ jobs:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"gradle\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -930,24 +937,25 @@ jobs:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -1033,24 +1041,25 @@ jobs:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -1120,24 +1129,25 @@ jobs:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"gradle\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -1247,24 +1257,25 @@ jobs:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"gradle\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -1371,24 +1382,25 @@ jobs:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -1492,24 +1504,25 @@ jobs:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -1638,24 +1651,25 @@ jobs:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -1761,24 +1775,25 @@ gradle-package:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"gradle\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -1912,24 +1927,25 @@ deploy-to-production:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -2050,24 +2066,25 @@ maven-package:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -2191,24 +2208,25 @@ deploy-to-production:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -2339,24 +2357,25 @@ maven-package:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -2488,31 +2507,32 @@ webapp-prod:
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
+    \\"applicationType\\": \\"monolith\\",
+    \\"authenticationType\\": \\"jwt\\",
+    \\"baseName\\": \\"jhipster\\",
+    \\"blueprints\\": [],
+    \\"cacheProvider\\": \\"no\\",
+    \\"clientFramework\\": \\"angular\\",
+    \\"clientPackageManager\\": \\"npm\\",
+    \\"clientTheme\\": \\"none\\",
+    \\"clientThemeVariant\\": \\"\\",
+    \\"creationTimestamp\\": 1583434912169,
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"sql\\",
+    \\"dtoSuffix\\": \\"DTO\\",
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"entitySuffix\\": \\"\\",
+    \\"jhiPrefix\\": \\"jhi\\",
+    \\"languages\\": [\\"en\\"],
+    \\"nativeLanguage\\": \\"en\\",
+    \\"otherModules\\": [],
+    \\"prodDatabaseType\\": \\"sql\\",
     \\"promptValues\\": {
       \\"nativeLanguage\\": \\"en\\"
     },
-    \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"jhipster\\",
-    \\"clientPackageManager\\": \\"npm\\",
-    \\"clientFramework\\": \\"angular\\",
-    \\"clientTheme\\": \\"none\\",
-    \\"clientThemeVariant\\": \\"\\",
-    \\"authenticationType\\": \\"jwt\\",
-    \\"cacheProvider\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"sql\\",
-    \\"prodDatabaseType\\": \\"sql\\",
-    \\"creationTimestamp\\": 1583434912169,
-    \\"testFrameworks\\": [],
-    \\"jhiPrefix\\": \\"jhi\\",
-    \\"entitySuffix\\": \\"\\",
-    \\"dtoSuffix\\": \\"DTO\\",
-    \\"otherModules\\": [],
-    \\"enableTranslation\\": true,
-    \\"nativeLanguage\\": \\"en\\",
-    \\"languages\\": [\\"en\\"],
-    \\"blueprints\\": [],
-    \\"skipServer\\": true
+    \\"skipServer\\": true,
+    \\"testFrameworks\\": []
   }
 }
 ",
@@ -2527,24 +2547,25 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"gradle\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -2606,7 +2627,7 @@ node {
     "contents": "version: \\"2\\"
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk11
+    image: jenkins-placeholder
     ports:
       - 49001:8080
       - 50000:50000
@@ -2724,24 +2745,25 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -2898,7 +2920,7 @@ services:
     "contents": "version: \\"2\\"
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk11
+    image: jenkins-placeholder
     ports:
       - 49001:8080
       - 50000:50000
@@ -3016,24 +3038,25 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -3098,7 +3121,7 @@ node {
     "contents": "version: \\"2\\"
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk11
+    image: jenkins-placeholder
     ports:
       - 49001:8080
       - 50000:50000
@@ -3216,24 +3239,25 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -3387,7 +3411,7 @@ services:
     "contents": "version: \\"2\\"
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk11
+    image: jenkins-placeholder
     ports:
       - 49001:8080
       - 50000:50000
@@ -3560,24 +3584,25 @@ notifications:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"gradle\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -3648,24 +3673,25 @@ notifications:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",
@@ -3742,24 +3768,25 @@ notifications:
     "contents": "{
   \\"generator-jhipster\\": {
     \\"applicationType\\": \\"monolith\\",
-    \\"baseName\\": \\"sampleMysql\\",
-    \\"packageName\\": \\"com.mycompany.myapp\\",
-    \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"authenticationType\\": \\"session\\",
-    \\"cacheProvider\\": \\"ehcache\\",
-    \\"enableHibernateCache\\": true,
-    \\"websocket\\": \\"no\\",
-    \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"h2Disk\\",
-    \\"prodDatabaseType\\": \\"mysql\\",
-    \\"searchEngine\\": \\"no\\",
-    \\"enableTranslation\\": true,
-    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"baseName\\": \\"sampleMysql\\",
     \\"buildTool\\": \\"maven\\",
+    \\"cacheProvider\\": \\"ehcache\\",
     \\"clientFramework\\": \\"angular\\",
     \\"clientPackageManager\\": \\"npm\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"enableHibernateCache\\": true,
+    \\"enableTranslation\\": true,
+    \\"entities\\": [],
+    \\"languages\\": [\\"en\\"],
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"searchEngine\\": \\"no\\",
     \\"testFrameworks\\": [\\"gatling\\", \\"cypress\\"],
-    \\"languages\\": [\\"en\\"]
+    \\"websocket\\": \\"no\\"
   }
 }
 ",

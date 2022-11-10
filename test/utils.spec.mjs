@@ -3,13 +3,9 @@ import { fileURLToPath } from 'url';
 import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
 import sinon from 'sinon';
-import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { writeFileSync } from 'fs';
 
 import utils from '../generators/utils.cjs';
 import { prepareTempDir } from './utils/utils.mjs';
-
-const { detectCrLf } = utils;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,26 +32,6 @@ describe('JHipster Utils', () => {
       it('escapes the quotes', () => {
         assert.textEqual(utils.getJavadoc('Comment="KO"', 1), ' /**\n  * Comment=\\"KO\\"\n  */');
       });
-    });
-  });
-  describe('::escapeRegExp', () => {
-    describe('when the string is not a java class name', () => {
-      it('converts string into proper java class name', () => {
-        assert.textEqual(utils.classify('class name'), 'ClassName');
-      });
-    });
-    describe('when the string is already a java class name', () => {
-      it('will not convert the string', () => {
-        assert.textEqual(utils.classify('ClassName'), 'ClassName');
-      });
-    });
-  });
-  describe('::copyObjectProps', () => {
-    it('expects all the pairs (key, value) of the source to be in destination', () => {
-      const src = { foo: 'foo', foo2: 'foo2' };
-      const dst = { foo3: 'foo3' };
-      utils.copyObjectProps(dst, src);
-      assert.objectContent(dst, src);
     });
   });
   describe('::getEnumInfo', () => {
@@ -261,80 +237,6 @@ describe('JHipster Utils', () => {
       assert.equal(utils.stringHashCode('some text'), 642107175);
     });
   });
-  describe('::gitExec', () => {
-    describe('Executes command synchronously', () => {
-      it('without options', () => {
-        const result = utils.gitExec('--version');
-        assert.strictEqual(result.code, 0);
-        assert.strictEqual(result.stdout.length > 0, true);
-        assert.strictEqual(result.stdout.startsWith('git version '), true);
-        assert.strictEqual(result.stderr.length, 0);
-      });
-
-      it('with options', () => {
-        const result = utils.gitExec('--version', { trace: true });
-        assert.strictEqual(result.code, 0);
-        assert.strictEqual(result.stdout.length > 0, true);
-        assert.strictEqual(result.stdout.startsWith('git version '), true);
-        assert.strictEqual(result.stderr.length, 0);
-      });
-    });
-    describe('Executes command asynchronously', () => {
-      let cleanup;
-      let callback;
-      before(done => {
-        cleanup = prepareTempDir();
-        utils.gitExec('init');
-        callback = sinon.spy();
-        utils.gitExec('rev-parse --is-inside-work-tree', (...args) => {
-          callback(...args);
-          done();
-        });
-      });
-      after(() => cleanup());
-
-      it('without options', () => {
-        sinon.assert.calledOnce(callback);
-        assert.strictEqual(callback.getCall(0).args[0], 0);
-        assert.strictEqual(callback.getCall(0).args[1].trim(), 'true');
-        assert.strictEqual(callback.getCall(0).args[2], '');
-      });
-    });
-
-    describe('Executes command asynchronously', () => {
-      let cleanup;
-      let callback;
-      before(done => {
-        cleanup = prepareTempDir();
-        utils.gitExec('init');
-        callback = sinon.spy();
-        utils.gitExec('rev-parse --is-inside-work-tree', { trace: true }, (...args) => {
-          callback(...args);
-          done();
-        });
-      });
-      after(() => cleanup());
-
-      it('with options', () => {
-        sinon.assert.calledOnce(callback);
-        assert.strictEqual(callback.getCall(0).args[0], 0);
-        assert.strictEqual(callback.getCall(0).args[1].trim(), 'true');
-        assert.strictEqual(callback.getCall(0).args[2], '');
-      });
-    });
-  });
-  describe('::isGitInstalled', () => {
-    it('Check installed without callback', () => {
-      const isGitInstalled = utils.isGitInstalled();
-      assert.strictEqual(isGitInstalled, true);
-    });
-    it('Check installed and execute callback', () => {
-      const callback = sinon.spy();
-      const isGitInstalled = utils.isGitInstalled(callback);
-      assert.strictEqual(isGitInstalled, true);
-      sinon.assert.calledOnce(callback);
-    });
-  });
   describe('::renderContent', () => {
     const fixturesPath = path.join(__dirname, 'fixtures', 'renderContent');
     it('should render the included content', done => {
@@ -372,54 +274,6 @@ describe('JHipster Utils', () => {
           done();
         }
       );
-    });
-  });
-  describe('::detectCrLf', () => {
-    describe('passing a crlf file', () => {
-      let cleanup;
-      before(() => {
-        cleanup = prepareTempDir();
-        writeFileSync('crlf.txt', 'a\r\ncrlf file');
-      });
-      after(() => cleanup());
-
-      it('should return true', async () => {
-        expect(await detectCrLf('crlf.txt')).toBe(true);
-      });
-    });
-    describe('passing a lf file', () => {
-      let cleanup;
-      before(() => {
-        cleanup = prepareTempDir();
-        writeFileSync('lf.txt', 'a\nlf file');
-      });
-      after(() => cleanup());
-
-      it('should return false', async () => {
-        expect(await detectCrLf('lf.txt')).toBe(false);
-      });
-    });
-    describe('passing a single line file', () => {
-      let cleanup;
-      before(() => {
-        cleanup = prepareTempDir();
-        writeFileSync('lf.txt', 'a single line file');
-      });
-      after(() => cleanup());
-
-      it('should return undefined', async () => {
-        expect(await detectCrLf('lf.txt')).toBe(undefined);
-      });
-    });
-  });
-  describe('::normalizeLineEndings', () => {
-    it('should convert \\r\\n to \\n', () => {
-      expect(utils.normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\r\n')).toBe(
-        'a\r\ncrlf\r\nfile\r\nwith\r\nlf\r\nlines\r\n'
-      );
-    });
-    it('should convert \\n to \\r\\n', () => {
-      expect(utils.normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\n')).toBe('a\ncrlf\nfile\nwith\nlf\nlines\n');
     });
   });
 });

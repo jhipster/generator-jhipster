@@ -20,6 +20,8 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { basename } from 'path';
 import { createHash } from 'crypto';
 import _ from 'lodash';
+import { simpleGit } from 'simple-git';
+
 import SharedData from './shared-data.mjs';
 
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
@@ -28,7 +30,7 @@ import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
 
 import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures, EditFileCallback, CascatedEditFileCallback } from './api.mjs';
-import type { NoArgTaskGroup } from './tasks.mjs';
+import type { BaseTaskGroup } from './tasks.mjs';
 
 const { merge } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
@@ -90,7 +92,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   /**
    * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
    */
-  delegateTasksToBlueprint(tasksGetter: () => NoArgTaskGroup<this>): NoArgTaskGroup<this> {
+  delegateTasksToBlueprint(tasksGetter: () => BaseTaskGroup<this>): BaseTaskGroup<this> {
     return this.delegateToBlueprint ? {} : tasksGetter();
   }
 
@@ -183,7 +185,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    */
   prepareDependencies(
     map: Record<string, string>,
-    valuePlaceholder: (value: string) => string = value => `'${_.snakeCase(value).toUpperCase()}_VERSION'`
+    valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`
   ): Record<string, string> {
     if (process.env.VERSION_PLACEHOLDERS === 'true') {
       return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
@@ -202,5 +204,15 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       priorities = priorities.filter(priorityName => !this.options.skipPriorities.includes(priorityName));
     }
     return priorities;
+  }
+
+  /**
+   * Create a simple-git instance using current destinationPath as baseDir.
+   */
+  createGit() {
+    return simpleGit({ baseDir: this.destinationPath() }).env({
+      ...process.env,
+      LANG: 'en',
+    });
   }
 }
