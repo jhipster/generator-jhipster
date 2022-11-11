@@ -101,6 +101,12 @@ export class AlertService {
 
     (extAlerts ?? this.alerts).push(alert);
 
+    if (alert.timeout > 0) {
+      setTimeout(() => {
+        this.closeAlert(alert.id!, extAlerts ?? this.alerts);
+      }, alert.timeout);
+    }
+
     return alert;
   }
 
