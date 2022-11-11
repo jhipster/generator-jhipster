@@ -39,7 +39,6 @@ function generateProject() {
         echo "*** Empty folder, let's generate JHipster project in: $JHI_FOLDER_APP"
     fi
 
-    echo "*********************** current working dir: $mydir"
     pushd scripts/
     echo "*********************** Copying entities for $JHI_APP"
     source ./11-generate-entities.sh

@@ -268,7 +268,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.31
+              image: mysql-placeholder
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -591,7 +591,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.31
+              image: mysql-placeholder
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -806,7 +806,7 @@ objects:
           terminationGracePeriodSeconds: 10
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster/jhipster-registry:v7.4.0
+              image: jhipster-registry-placeholder
               ports:
                 - name: http
                   containerPort: 8761
@@ -1224,7 +1224,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.31
+              image: mysql-placeholder
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -1388,7 +1388,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: cassandra:3.11.13
+              image: cassandra-placeholder
               env:
                 - name: DATA_FILE_DIRECTORIES
                   value: /data/db
@@ -1823,7 +1823,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mariadb:10.8.3
+              image: mariadb-placeholder
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -2157,7 +2157,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mongo:4.4.15
+              image: mongodb-placeholder
               env:
                 - name: MONGODB_DATABASE
                   value: \${DATABASE_NAME}
@@ -2468,7 +2468,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.31
+              image: mysql-placeholder
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -2757,7 +2757,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+              image: elasticsearch-placeholder
               ports:
                 - containerPort: 9200
                   name: http
@@ -2893,7 +2893,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:15.0
+              image: postgresql-placeholder
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
@@ -3104,7 +3104,7 @@ objects:
           terminationGracePeriodSeconds: 10
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster/jhipster-registry:v7.4.0
+              image: jhipster-registry-placeholder
               ports:
                 - name: http
                   containerPort: 8761
@@ -3548,7 +3548,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+              image: elasticsearch-placeholder
               ports:
                 - containerPort: 9200
                   name: http
@@ -3687,7 +3687,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.31
+              image: mysql-placeholder
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -4034,7 +4034,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.31
+              image: mysql-placeholder
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -4247,7 +4247,7 @@ objects:
           terminationGracePeriodSeconds: 10
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster/jhipster-registry:v7.4.0
+              image: jhipster-registry-placeholder
               ports:
                 - name: http
                   containerPort: 8761
@@ -4658,7 +4658,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.31
+              image: mysql-placeholder
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -4947,7 +4947,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+              image: elasticsearch-placeholder
               ports:
                 - containerPort: 9200
                   name: http
@@ -5083,7 +5083,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:15.0
+              image: postgresql-placeholder
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
@@ -5286,7 +5286,7 @@ objects:
           terminationGracePeriodSeconds: 10
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster/jhipster-registry:v7.4.0
+              image: jhipster-registry-placeholder
               ports:
                 - name: http
                   containerPort: 8761

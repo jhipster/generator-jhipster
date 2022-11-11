@@ -243,7 +243,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -768,7 +768,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -1182,7 +1182,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -1878,7 +1878,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -2786,7 +2786,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -3494,7 +3494,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -4721,7 +4721,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -5231,7 +5231,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -8182,7 +8182,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -8832,7 +8832,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -9566,7 +9566,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.31
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9775,7 +9775,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -9849,7 +9849,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:15.0
+          image: postgresql-placeholder
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -10103,7 +10103,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -10453,7 +10453,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.31
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -10726,7 +10726,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -11078,7 +11078,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.31
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11304,7 +11304,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.31
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11550,7 +11550,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -11900,7 +11900,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.31
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -12173,7 +12173,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -12540,7 +12540,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.31
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -12781,7 +12781,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mariadb
-          image: mariadb:10.8.3
+          image: mariadb-placeholder
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -13163,7 +13163,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.15
+          image: mongodb-placeholder
           command:
             - /work-dir/peer-finder
           args:
@@ -13193,7 +13193,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.15
+          image: mongodb-placeholder
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -13453,7 +13453,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
+          image: mssql-placeholder
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
@@ -13665,7 +13665,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.31
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -13874,7 +13874,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -13948,7 +13948,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:15.0
+          image: postgresql-placeholder
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -14202,7 +14202,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -16799,7 +16799,7 @@ spec:
               done
       containers:
         - name: grafana-configurer
-          image: quay.io/coreos/grafana-watcher:v0.0.8
+          image: grafana-watcher-placeholder
           args:
             - \\"--watch-dir=/var/grafana-dashboard\\"
             - \\"--grafana-url=http://jhipster-grafana:3000\\"
@@ -16907,7 +16907,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:9.1.0
+          image: grafana-placeholder
           ports:
             - containerPort: 3000
               name: http
@@ -17128,7 +17128,7 @@ spec:
         - args:
             - --kubelet-service=kube-system/kubelet
             - --config-reloader-image=quay.io/coreos/configmap-reload:v0.0.1
-          image: quay.io/coreos/prometheus-operator:v0.42.1
+          image: prometheus-operator-placeholder
           name: prometheus-operator
           ports:
             - containerPort: 8080
@@ -17198,7 +17198,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.31
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -17472,7 +17472,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -17796,7 +17796,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.31
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -18050,7 +18050,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -18400,7 +18400,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.31
+          image: mysql-placeholder
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -18682,7 +18682,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
