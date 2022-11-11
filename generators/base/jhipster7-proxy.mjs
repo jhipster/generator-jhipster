@@ -90,8 +90,7 @@ const getProperty = (context, prop) => {
   return undefined;
 };
 
-const handler = {
-  ...Object.fromEntries(['set'].map(method => [method, (...args) => console.log(`Fixme: template data called ${method}(${args.pop()})`)])),
+const createHandler = ({ ignoreWarnings = false } = {}) => ({
   ...Object.fromEntries(
     [
       'apply',
@@ -104,7 +103,8 @@ const handler = {
       'ownKeys',
       'preventExtensions',
       'setPrototypeOf',
-    ].map(method => [method, () => console.log(`Fixme: template data called ${method}`)])
+      'set',
+    ].map(method => [method, (...args) => console.log(`Fixme: template data called ${method}(${args?.pop() ?? ''})`)])
   ),
   ownKeys: ({ data }) => {
     return Reflect.ownKeys(data);
@@ -120,7 +120,9 @@ const handler = {
       return false;
     }
     if (javascriptBuiltInProperties.includes(prop)) {
-      console.log(`${chalk.yellow(prop)} is a javascript built in symbol, its use is discouraged inside templates`);
+      if (!ignoreWarnings) {
+        console.log(`${chalk.yellow(prop)} is a javascript built in symbol, its use is discouraged inside templates`);
+      }
       return false;
     }
     const propValue = getProperty(context, prop);
@@ -130,8 +132,8 @@ const handler = {
     return propValue !== undefined;
   },
   get: getProperty,
-};
+});
 
-export default function createProxy(generator, data) {
-  return new Proxy({ generator, data }, handler);
+export default function createProxy(generator, data, options) {
+  return new Proxy({ generator, data }, createHandler(options));
 }

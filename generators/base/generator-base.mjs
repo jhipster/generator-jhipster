@@ -2001,7 +2001,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           root: rootTemplatesAbsolutePath,
         };
         // TODO drop for v8 final release
-        const data = jhipster7Proxy(this, context);
+        const data = jhipster7Proxy(this, context, { ignoreWarnings: true });
         if (useAsync) {
           await this.renderTemplateAsync(sourceFileFrom, destinationFile, data, renderOptions);
         } else {
