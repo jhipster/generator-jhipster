@@ -53,7 +53,7 @@ const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '3.0.0-RC1';
+const SPRING_BOOT_VERSION = '3.0.0-RC2';
 const HIBERNATE_VERSION = '6.1.4.Final';
 const JACOCO_VERSION = '0.8.8';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.3';
