@@ -350,9 +350,6 @@ Object {
   "src/main/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -640,9 +637,6 @@ Object {
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
@@ -653,9 +647,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
@@ -836,9 +827,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/cql/drop-keyspace.cql": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
@@ -1314,9 +1302,6 @@ Object {
   "src/main/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -1778,9 +1763,6 @@ Object {
   "src/main/resources/config/bootstrap.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -2041,9 +2023,6 @@ Object {
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
     "stateCleared": "modified",
   },
@@ -2057,9 +2036,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
@@ -2216,9 +2192,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/cql/drop-keyspace.cql": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
@@ -2671,9 +2644,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
@@ -3188,9 +3158,6 @@ Object {
   "src/main/resources/config/cql/drop-keyspace.cql": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -3646,9 +3613,6 @@ Object {
   "src/main/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -4102,9 +4066,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
@@ -4610,9 +4571,6 @@ Object {
   "src/main/resources/config/neo4j/migrations/user__user.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -5101,9 +5059,6 @@ Object {
   "src/main/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -5563,9 +5518,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
