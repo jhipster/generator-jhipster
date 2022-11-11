@@ -596,7 +596,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -1078,7 +1078,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -1355,7 +1355,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -1874,7 +1874,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -2605,7 +2605,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -3314,7 +3314,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -4364,7 +4364,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -4730,7 +4730,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+          image: elasticsearch-placeholder
           env:
             - name: discovery.type
               value: single-node
@@ -5061,7 +5061,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -7859,7 +7859,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:
@@ -8360,7 +8360,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v7.4.0
+          image: jhipster-registry-placeholder
           ports:
             - containerPort: 8761
           env:

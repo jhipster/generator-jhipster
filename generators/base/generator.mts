@@ -113,7 +113,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       if (transformCallbacks.length === 0) {
         throw new Error(`File ${filePath} doesn't exist`);
       }
-      // allow to edit inexisting files
+      // allow to edit non existing files
       content = '';
     }
 

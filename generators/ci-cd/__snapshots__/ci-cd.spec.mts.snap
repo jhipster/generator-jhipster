@@ -2627,7 +2627,7 @@ node {
     "contents": "version: \\"2\\"
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk11
+    image: jenkins-placeholder
     ports:
       - 49001:8080
       - 50000:50000
@@ -2920,7 +2920,7 @@ services:
     "contents": "version: \\"2\\"
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk11
+    image: jenkins-placeholder
     ports:
       - 49001:8080
       - 50000:50000
@@ -3121,7 +3121,7 @@ node {
     "contents": "version: \\"2\\"
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk11
+    image: jenkins-placeholder
     ports:
       - 49001:8080
       - 50000:50000
@@ -3411,7 +3411,7 @@ services:
     "contents": "version: \\"2\\"
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk11
+    image: jenkins-placeholder
     ports:
       - 49001:8080
       - 50000:50000

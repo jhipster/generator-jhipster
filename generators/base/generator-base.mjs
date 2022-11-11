@@ -25,6 +25,7 @@ import shelljs from 'shelljs';
 import semver from 'semver';
 import { exec } from 'child_process';
 import os from 'os';
+import normalize from 'normalize-path';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -59,10 +60,6 @@ import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
-import { applyOutputPathCustomizer, locateGenerator, parseJson } from './logic/index.mjs';
-import { addIconInImport, addMenuEntry, substitutePackageJsonDependencyVersionAccordingToSource } from '../client/logic/index.mjs';
-import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../base-application/logic/index.mjs';
-import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -206,7 +203,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @returns {string}
    */
   jhipsterTemplatePath(...args) {
-    this._jhipsterGenerator = locateGenerator(this._jhipsterGenerator, this.env, this.options);
+    try {
+      this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
+    } catch (error) {
+      const split = this.options.namespace.split(':', 2);
+      this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
+    }
     return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
   }
 
@@ -253,7 +255,11 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @return {boolean} true if the User is built-in.
    */
   isUsingBuiltInUser() {
-    return isBuiltInUserConfiguration(this.jhipsterConfig);
+    return (
+      !this.jhipsterConfig ||
+      (!this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.databaseType !== NO_DATABASE) ||
+      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
+    );
   }
 
   /**
@@ -263,7 +269,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @return {boolean} true if the entity is User.
    */
   isUserEntity(entityName) {
-    return entityIsUser(entityName);
+    return _.upperFirst(entityName) === 'User';
   }
 
   /**
@@ -282,7 +288,11 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @return {boolean} true if the Authority is built-in.
    */
   isUsingBuiltInAuthority() {
-    return isUsingBuiltInAuthorityConfiguration(this.jhipsterConfig);
+    return (
+      !this.jhipsterConfig ||
+      (!this.jhipsterConfig.skipUserManagement && [SQL, MONGODB, COUCHBASE, NEO4J].includes(this.jhipsterConfig.databaseType)) ||
+      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
+    );
   }
 
   /**
@@ -292,7 +302,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @return {boolean} true if the entity is Authority.
    */
   isAuthorityEntity(entityName) {
-    return entityIsAuthority(entityName);
+    return _.upperFirst(entityName) === 'Authority';
   }
 
   /**
@@ -312,7 +322,21 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} outputPath - Path to customize.
    */
   applyOutputPathCustomizer(outputPath) {
-    return applyOutputPathCustomizer(this, outputPath, this.options, this.configOptions);
+    let outputPathCustomizer = this.options.outputPathCustomizer;
+    if (!outputPathCustomizer && this.configOptions) {
+      outputPathCustomizer = this.configOptions.outputPathCustomizer;
+    }
+    if (!outputPathCustomizer) {
+      return outputPath;
+    }
+    outputPath = outputPath ? normalize(outputPath) : outputPath;
+    if (Array.isArray(outputPathCustomizer)) {
+      outputPathCustomizer.forEach(customizer => {
+        outputPath = customizer.call(this, outputPath);
+      });
+      return outputPath;
+    }
+    return outputPathCustomizer.call(this, outputPath);
   }
 
   /**
@@ -322,21 +346,25 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
    */
   replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
-    const packageJsonSource = parseJson(packageJsonSourceFile);
+    const packageJsonSource = JSON.parse(fs.readFileSync(packageJsonSourceFile, 'utf-8'));
     const packageJsonTargetFile = this.destinationPath('package.json');
-    let packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
-    packageJsonTarget = substitutePackageJsonDependencyVersionAccordingToSource(
-      packageJsonSource,
-      packageJsonTarget,
-      'dependencies',
-      keyToReplace
-    );
-    packageJsonTarget = substitutePackageJsonDependencyVersionAccordingToSource(
-      packageJsonSource,
-      packageJsonTarget,
-      'devDependencies',
-      keyToReplace
-    );
+    const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
+    const replace = section => {
+      if (packageJsonTarget[section]) {
+        Object.entries(packageJsonTarget[section]).forEach(([dependency, dependencyReference]) => {
+          if (dependencyReference.startsWith(keyToReplace)) {
+            const [keyToReplaceAtSource, sectionAtSource = section, dependencyAtSource = dependency] = dependencyReference.split('#');
+            if (keyToReplaceAtSource !== keyToReplace) return;
+            if (!packageJsonSource[sectionAtSource] || !packageJsonSource[sectionAtSource][dependencyAtSource]) {
+              throw new Error(`Error setting ${dependencyAtSource} version, not found at ${sectionAtSource}.${dependencyAtSource}`);
+            }
+            packageJsonTarget[section][dependency] = packageJsonSource[sectionAtSource][dependencyAtSource];
+          }
+        });
+      }
+    };
+    replace('dependencies');
+    replace('devDependencies');
     this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
   }
 
@@ -348,7 +376,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} clientFramework - The name of the client framework
    */
   addIcon(iconName, clientFramework) {
-    addIconInImport(this, iconName, clientFramework);
+    if (clientFramework === ANGULAR) {
+      this.needleApi.clientAngular.addIcon(iconName);
+    } else if (clientFramework === REACT) {
+      // React
+      // TODO:
+    }
   }
 
   /**
@@ -362,7 +395,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
   addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    addMenuEntry(this, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
+    if (clientFramework === ANGULAR) {
+      this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
+    } else if (clientFramework === REACT) {
+      // React
+      // TODO:
+    }
   }
 
   /**

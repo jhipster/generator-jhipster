@@ -92,7 +92,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -153,7 +153,7 @@ eureka:
       - BUCKET=mscouchbase
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -275,7 +275,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -330,7 +330,7 @@ eureka:
     volumes:
       - 05-cassandra/src/main/resources/config/cql:/cql:ro
   mscassandra-cassandra:
-    image: cassandra:3.11.13
+    image: cassandra-placeholder
     container_name: mscassandra-cassandra
     healthcheck:
       test:
@@ -341,7 +341,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -476,7 +476,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -519,7 +519,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -565,7 +565,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
-    image: postgres:15.0
+    image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -578,7 +578,7 @@ eureka:
       timeout: 5s
       retries: 10
   mspsql-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+    image: elasticsearch-placeholder
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
@@ -618,7 +618,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmongodb-mongodb:
-    image: mongo:4.4.15
+    image: mongodb-placeholder
     healthcheck:
       test:
         - CMD
@@ -658,7 +658,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmariadb-mariadb:
-    image: mariadb:10.8.3
+    image: mariadb-placeholder
     volumes:
       - ./config/mariadb:/etc/mysql/conf.d
     environment:
@@ -676,7 +676,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -824,7 +824,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -872,7 +872,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -923,7 +923,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
-    image: postgres:15.0
+    image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -936,7 +936,7 @@ eureka:
       timeout: 5s
       retries: 10
   mspsql-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+    image: elasticsearch-placeholder
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
@@ -1028,7 +1028,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmariadb-mariadb:
-    image: mariadb:10.8.3
+    image: mariadb-placeholder
     volumes:
       - ./config/mariadb:/etc/mysql/conf.d
     environment:
@@ -1046,7 +1046,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1078,7 +1078,7 @@ eureka:
       timeout: 5s
       retries: 10
   keycloak:
-    image: quay.io/keycloak/keycloak:19.0.3
+    image: keycloak-placeholder
     command: [\\"start-dev --import-realm\\"]
     volumes:
       - ./realm-config:/opt/keycloak/data/import
@@ -3680,7 +3680,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -3723,7 +3723,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -3769,7 +3769,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
-    image: postgres:15.0
+    image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -3782,7 +3782,7 @@ eureka:
       timeout: 5s
       retries: 10
   mspsql-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+    image: elasticsearch-placeholder
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
@@ -3827,15 +3827,15 @@ eureka:
       dockerfile: mongodb/MongoDB.Dockerfile
     command: mongod --shardsvr --replSet rs1
   msmongodb-mongodb-config:
-    image: mongo:4.4.15
+    image: mongodb-placeholder
     container_name: msmongodb-mongodb-config
     command: mongod --configsvr --dbpath /data/db --replSet csvr
   msmongodb-mongodb:
-    image: mongo:4.4.15
+    image: mongodb-placeholder
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -3976,7 +3976,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4019,7 +4019,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4065,7 +4065,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   mspsql-postgresql:
-    image: postgres:15.0
+    image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -4078,7 +4078,7 @@ eureka:
       timeout: 5s
       retries: 10
   mspsql-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+    image: elasticsearch-placeholder
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
@@ -4160,7 +4160,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmariadb-mariadb:
-    image: mariadb:10.8.3
+    image: mariadb-placeholder
     volumes:
       - ./config/mariadb:/etc/mysql/conf.d
     environment:
@@ -4178,7 +4178,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -4300,7 +4300,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4343,7 +4343,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4361,7 +4361,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -4483,7 +4483,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4526,7 +4526,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4544,7 +4544,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -4692,7 +4692,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4735,7 +4735,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4753,7 +4753,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -4780,7 +4780,7 @@ eureka:
       retries: 10
 
   prometheus:
-    image: prom/prometheus:v2.40.1
+    image: prometheus-placeholder
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -4789,7 +4789,7 @@ eureka:
     ports:
       - 9090:9090
   alertmanager:
-    image: prom/alertmanager:v0.24.0
+    image: prometheus-alertmanager-placeholder
     ports:
       - 9093:9093
     volumes:
@@ -4799,7 +4799,7 @@ eureka:
       - \\"--storage.path=/alertmanager\\"
 
   grafana:
-    image: grafana/grafana:9.1.0
+    image: grafana-placeholder
     ports:
       - 3000:3000
     volumes:
@@ -4965,7 +4965,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5008,7 +5008,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5026,7 +5026,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -5123,7 +5123,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       samplemysql-elasticsearch:
         condition: service_healthy
   samplemysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5140,7 +5140,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       timeout: 5s
       retries: 10
   samplemysql-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+    image: elasticsearch-placeholder
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
@@ -5247,7 +5247,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5265,7 +5265,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -5385,7 +5385,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5403,7 +5403,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -5521,7 +5521,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.31
+    image: mysql-placeholder
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5539,7 +5539,7 @@ eureka:
       retries: 10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.4.0
+    image: jhipster-registry-placeholder
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"

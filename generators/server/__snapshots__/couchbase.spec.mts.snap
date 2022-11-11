@@ -347,6 +347,9 @@ Object {
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": Object {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": Object {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -782,6 +785,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
@@ -1227,6 +1233,9 @@ Object {
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": Object {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": Object {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -1631,6 +1640,9 @@ Object {
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": Object {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": Object {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -2018,6 +2030,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
@@ -2428,6 +2443,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
@@ -2885,6 +2903,9 @@ Object {
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": Object {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": Object {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -3295,6 +3316,9 @@ Object {
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": Object {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": Object {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -3700,6 +3724,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
@@ -4140,6 +4167,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
@@ -4588,6 +4618,9 @@ Object {
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": Object {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": Object {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": Object {
     "stateCleared": "modified",
   },
@@ -4981,6 +5014,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": Object {
