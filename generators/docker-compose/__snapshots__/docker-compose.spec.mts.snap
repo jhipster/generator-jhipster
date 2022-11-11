@@ -4800,10 +4800,14 @@ eureka:
 
   grafana:
 <<<<<<< HEAD
+<<<<<<< HEAD
     image: grafana-placeholder
 =======
     image: grafana/grafana:9.2.4
 >>>>>>> 3a3388540d (extracted some more function from base-private)
+=======
+    image: grafana-placeholder
+>>>>>>> 34f562d4ce (mocha to cjs)
     ports:
       - 3000:3000
     volumes:

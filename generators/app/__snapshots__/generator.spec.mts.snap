@@ -101,6 +101,9 @@ Object {
   "devServerPort": 4200,
   "dockerContainers": Object {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 34f562d4ce (mocha to cjs)
     "cassandra": "cassandra-placeholder",
     "cassandraImage": "cassandra-image-placeholder",
     "cassandraTag": "cassandra-tag-placeholder",
@@ -219,6 +222,7 @@ Object {
     "zookeeper": "zookeeper-placeholder",
     "zookeeperImage": "zookeeper-image-placeholder",
     "zookeeperTag": "zookeeper-tag-placeholder",
+<<<<<<< HEAD
 =======
     "cassandra": "cassandra:3.11.13",
     "cassandraImage": "cassandra",
@@ -339,6 +343,8 @@ Object {
     "zookeeperImage": "confluentinc/cp-zookeeper",
     "zookeeperTag": "7.3.0",
 >>>>>>> 3a3388540d (extracted some more function from base-private)
+=======
+>>>>>>> 34f562d4ce (mocha to cjs)
   },
   "dockerServicesDir": "src/main/docker/",
   "domains": Array [
@@ -568,6 +574,9 @@ Object {
   "devServerPort": 4200,
   "dockerContainers": Object {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 34f562d4ce (mocha to cjs)
     "cassandra": "cassandra-placeholder",
     "cassandraImage": "cassandra-image-placeholder",
     "cassandraTag": "cassandra-tag-placeholder",
@@ -686,6 +695,7 @@ Object {
     "zookeeper": "zookeeper-placeholder",
     "zookeeperImage": "zookeeper-image-placeholder",
     "zookeeperTag": "zookeeper-tag-placeholder",
+<<<<<<< HEAD
 =======
     "cassandra": "cassandra:3.11.13",
     "cassandraImage": "cassandra",
@@ -806,6 +816,8 @@ Object {
     "zookeeperImage": "confluentinc/cp-zookeeper",
     "zookeeperTag": "7.3.0",
 >>>>>>> 3a3388540d (extracted some more function from base-private)
+=======
+>>>>>>> 34f562d4ce (mocha to cjs)
   },
   "dockerServicesDir": "src/main/docker/",
   "domains": Array [
@@ -1036,6 +1048,9 @@ Object {
   "devServerPort": undefined,
   "dockerContainers": Object {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 34f562d4ce (mocha to cjs)
     "cassandra": "cassandra-placeholder",
     "cassandraImage": "cassandra-image-placeholder",
     "cassandraTag": "cassandra-tag-placeholder",
@@ -1154,6 +1169,7 @@ Object {
     "zookeeper": "zookeeper-placeholder",
     "zookeeperImage": "zookeeper-image-placeholder",
     "zookeeperTag": "zookeeper-tag-placeholder",
+<<<<<<< HEAD
 =======
     "cassandra": "cassandra:3.11.13",
     "cassandraImage": "cassandra",
@@ -1274,6 +1290,8 @@ Object {
     "zookeeperImage": "confluentinc/cp-zookeeper",
     "zookeeperTag": "7.3.0",
 >>>>>>> 3a3388540d (extracted some more function from base-private)
+=======
+>>>>>>> 34f562d4ce (mocha to cjs)
   },
   "dockerServicesDir": "src/main/docker/",
   "domains": Array [
