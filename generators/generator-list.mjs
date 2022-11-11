@@ -61,4 +61,5 @@ export const GENERATOR_SERVER = 'server';
 export const GENERATOR_SPRING_CONTROLLER = 'spring-controller';
 export const GENERATOR_SPRING_SERVICE = 'spring-service';
 export const GENERATOR_UPGRADE = 'upgrade';
+export const GENERATOR_VUE = 'vue';
 export const GENERATOR_WORKSPACES = 'workspaces';

@@ -71,7 +71,7 @@ updates:
         versions: ['>=17']
 
   - package-ecosystem: 'npm'
-    directory: '/generators/client/templates/vue/'
+    directory: '/generators/vue/templates/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'

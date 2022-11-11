@@ -64,7 +64,6 @@ export default class InitGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asLoadingTaskGroup({
       async loadConfig() {
-        if (this.options.skipGit) return;
         await this.composeWithJHipster(GENERATOR_GIT);
       },
     });

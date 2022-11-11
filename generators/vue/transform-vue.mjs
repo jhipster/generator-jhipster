@@ -16,10 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default {
-  skipGit: {
-    desc: 'Skip the git initialization',
-    type: Boolean,
-    scope: 'generator',
-  },
-};
+
+const TRANSLATIONS_ATTRIBUTES = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
+  .map(s => `(?:${s}="\\$t\\(.*?\\)")`)
+  .join('|');
+
+/**
+ * Replace and cleanup vue translations.
+ *
+ * @type {import('../generator-base.js').EditFileCallback}
+ * @this {import('../generator-base.js')}
+ */
+// eslint-disable-next-line import/prefer-default-export
+export function replaceVueTranslations(body, filePath) {
+  if (/\.vue$/.test(filePath)) {
+    body = body.replace(new RegExp(`[\\s\\n]*(?:${TRANSLATIONS_ATTRIBUTES})`, 'g'), '');
+  }
+  return body;
+}

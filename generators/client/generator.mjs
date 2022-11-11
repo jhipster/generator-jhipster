@@ -25,14 +25,13 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { askForAdminUi, askForClient, askForClientTheme, askForClientThemeVariant } from './prompts.mjs';
 import { cleanup as cleanupAngular, writeFiles as writeAngularFiles } from './files-angular.mjs';
 import { cleanup as cleanupReact, writeFiles as writeReactFiles } from './files-react.mjs';
-import { cleanup as cleanupVue, writeFiles as writeVueFiles } from './files-vue.mjs';
 import { writeFiles as writeCommonFiles } from './files-common.mjs';
 import { clientI18nFiles } from '../languages/files.mjs';
 import { entityClientI18nFiles } from '../languages/entity-files.mjs';
 
 import { writeEntitiesAngularFiles, cleanupEntitiesAngular } from './entity-files-angular.mjs';
 import { writeEntitiesReactFiles, cleanupEntitiesReact } from './entity-files-react.mjs';
-import { writeEntitiesVueFiles } from './entity-files-vue.mjs';
+import { writeEnumerationFiles } from './entity-files.mjs';
 
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import constants from '../generator-constants.cjs';
@@ -44,14 +43,15 @@ import {
   GENERATOR_COMMON,
   GENERATOR_LANGUAGES,
   GENERATOR_CLIENT,
+  GENERATOR_VUE,
 } from '../generator-list.mjs';
 
-import { testFrameworkTypes, authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
+import { testFrameworkTypes, authenticationTypes, databaseTypes, fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { prepareReactEntity } from '../../utils/entity.mjs';
 
+const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 const { OAUTH2 } = authenticationTypes;
-const { ANGULAR } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 const { CommonDBTypes } = fieldTypes;
 const { NO: NO_DATABASE } = databaseTypes;
 const TYPE_STRING = CommonDBTypes.STRING;
@@ -170,16 +170,17 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       async composeCommon() {
         await this.composeWithJHipster(GENERATOR_COMMON);
       },
-      async composeCypress() {
-        const testFrameworks = this.jhipsterConfig.testFrameworks;
-        if (!Array.isArray(testFrameworks) || !testFrameworks.includes(CYPRESS)) return;
-        await this.composeWithJHipster(GENERATOR_CYPRESS);
-      },
-      async composeLanguages() {
-        // We don't expose client/server to cli, composing with languages is used for test purposes.
-        if (this.jhipsterConfig.enableTranslation === false) return;
-
-        await this.composeWithJHipster(GENERATOR_LANGUAGES);
+      async composing() {
+        const { clientFramework, testFrameworks, enableTranslation } = this.jhipsterConfigWithDefaults;
+        if (clientFramework === VUE) {
+          await this.composeWithJHipster(GENERATOR_VUE);
+        }
+        if (Array.isArray(testFrameworks) && testFrameworks.includes(CYPRESS)) {
+          await this.composeWithJHipster(GENERATOR_CYPRESS);
+        }
+        if (enableTranslation) {
+          await this.composeWithJHipster(GENERATOR_LANGUAGES);
+        }
       },
     });
   }
@@ -209,11 +210,13 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
           this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json'))
         );
         // Load client package.json into packageJson
-        const clientFramewok = application.clientFramework;
-        _.merge(
-          this.dependabotPackageJson,
-          this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', clientFramewok, 'package.json'))
-        );
+        const clientFramework = application.clientFramework;
+        if (!application.clientFrameworkVue) {
+          _.merge(
+            this.dependabotPackageJson,
+            this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', clientFramework, 'package.json'))
+          );
+        }
       },
     });
   }
@@ -242,6 +245,12 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
         if (application.authenticationType === OAUTH2 || application.databaseType === NO_DATABASE) {
           application.skipUserManagement = true;
+        }
+        if (application.clientFramework === ANGULAR) {
+          application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
+        }
+        if (application.clientFramework === REACT) {
+          application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
         }
       },
 
@@ -319,8 +328,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       writeAngularFiles,
       cleanupReact,
       writeReactFiles,
-      cleanupVue,
-      writeVueFiles,
       writeCommonFiles,
     });
   }
@@ -331,11 +338,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
+      writeEnumerationFiles,
       writeEntitiesAngularFiles,
       cleanupEntitiesAngular,
       writeEntitiesReactFiles,
       cleanupEntitiesReact,
-      writeEntitiesVueFiles,
     });
   }
 

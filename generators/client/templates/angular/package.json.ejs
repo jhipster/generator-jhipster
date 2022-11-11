@@ -110,7 +110,7 @@
     "eslint-config-prettier": "<%= this.dependabotPackageJson.devDependencies['eslint-config-prettier'] %>",
     "eslint-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['eslint-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
-    "generator-jhipster": "<%= this.packagejs.version %>",
+    "generator-jhipster": "<%= jhipsterVersion %>",
   <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
   <%_ }); _%>

@@ -16,10 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default {
-  skipGit: {
-    desc: 'Skip the git initialization',
-    type: Boolean,
-    scope: 'generator',
-  },
-};
+export { default } from './generator.mjs';

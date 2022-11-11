@@ -20,14 +20,15 @@
 'theme: angular':
   - generators/**/*-angular.*
   - generators/*client/templates/angular/**/*
+  - generators/angular/**
 
 'theme: react':
   - generators/**/*-react.*
   - generators/*client/templates/react/**/*
+  - generators/react/**
 
 'theme: vue':
-  - generators/**/*-vue.*
-  - generators/*client/templates/vue/**/*
+  - generators/vue/**
 
 'theme: jhipster-internals':
   - generators/*.*
@@ -51,15 +52,19 @@
   - Dockerfile
   - generators/docker*.js
   - generators/docker-compose/**/*
+
 'theme: maven':
   - generators/maven/**/*
 
 'theme: gradle':
   - generators/gradle/**/*
+
 'theme: aws':
   - generators/aws/**/*
+
 'theme: Heroku':
   - generators/heroku/**/*
+
 'theme: kubernetes':
   - generators/kubernetes/**/*
   - generators/kubernetes-helm/**/*
