@@ -239,7 +239,7 @@ spec:
     spec:
       containers:
         - name: zookeeper
-          image: confluentinc/cp-zookeeper:7.2.1
+          image: confluentinc/cp-zookeeper:7.3.0
           env:
             - name: ZOOKEEPER_CLIENT_PORT
               value: \\"2181\\"

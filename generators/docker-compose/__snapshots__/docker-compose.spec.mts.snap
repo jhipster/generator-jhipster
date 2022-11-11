@@ -4780,7 +4780,7 @@ eureka:
       retries: 10
 
   prometheus:
-    image: prom/prometheus:v2.38.0
+    image: prom/prometheus:v2.40.1
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
