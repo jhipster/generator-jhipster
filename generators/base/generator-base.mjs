@@ -59,6 +59,9 @@ import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
+import { locateGenerator } from './logic/index.mjs';
+import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../entities/logic/index.mjs';
+import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -201,12 +204,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @returns {string}
    */
   jhipsterTemplatePath(...args) {
-    try {
-      this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
-    } catch (error) {
-      const split = this.options.namespace.split(':', 2);
-      this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
-    }
+    this._jhipsterGenerator = locateGenerator(this._jhipsterGenerator, this.env, this.options);
     return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
   }
 
@@ -223,66 +221,50 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Replace placeholders with versions from packageJsonSourceFile.
-   * @param {string} keyToReplace - PlaceHolder name.
-   * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
+   * Verify if the entity is a built-in Entity.
+   * @param {String} entityName - Entity name to verify.
+   * @return {boolean} true if the entity is built-in.
    */
-  replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
-    const packageJsonSource = JSON.parse(fs.readFileSync(packageJsonSourceFile, 'utf-8'));
-    const packageJsonTargetFile = this.destinationPath('package.json');
-    const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
-    const replace = section => {
-      if (packageJsonTarget[section]) {
-        Object.entries(packageJsonTarget[section]).forEach(([dependency, dependencyReference]) => {
-          if (dependencyReference.startsWith(keyToReplace)) {
-            const [keyToReplaceAtSource, sectionAtSource = section, dependencyAtSource = dependency] = dependencyReference.split('#');
-            if (keyToReplaceAtSource !== keyToReplace) return;
-            if (!packageJsonSource[sectionAtSource] || !packageJsonSource[sectionAtSource][dependencyAtSource]) {
-              throw new Error(`Error setting ${dependencyAtSource} version, not found at ${sectionAtSource}.${dependencyAtSource}`);
-            }
-            packageJsonTarget[section][dependency] = packageJsonSource[sectionAtSource][dependencyAtSource];
-          }
-        });
-      }
-    };
-    replace('dependencies');
-    replace('devDependencies');
-    this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
+  isBuiltInEntity(entityName) {
+    return this.isBuiltInUser(entityName) || this.isBuiltInAuthority(entityName);
   }
 
   /**
    * @private
-   * Add a new icon to icon imports.
-   *
-   * @param {string} iconName - The name of the Font Awesome icon.
-   * @param {string} clientFramework - The name of the client framework
+   * Verify if the application is using built-in User.
+   * @return {boolean} true if the User is built-in.
    */
-  addIcon(iconName, clientFramework) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addIcon(iconName);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
+  isUsingBuiltInUser() {
+    return isBuiltInUserConfiguration(this.jhipsterConfig);
   }
 
   /**
    * @private
-   * Add a new menu element, at the root of the menu.
-   *
-   * @param {string} routerName - The name of the Angular router that is added to the menu.
-   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} translationKeyMenu - i18n key for entry in the menu
+   * Verify if the entity is a built-in User.
+   * @param {String} entityName - Entity name to verify.
+   * @return {boolean} true if the entity is User and is built-in.
    */
-  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
+  isBuiltInUser(entityName) {
+    return this.isUsingBuiltInUser() && entityIsUser(entityName);
+  }
+
+  /**
+   * @private
+   * Verify if the application is using built-in Authority.
+   * @return {boolean} true if the Authority is built-in.
+   */
+  isUsingBuiltInAuthority() {
+    return isUsingBuiltInAuthorityConfiguration(this.jhipsterConfig);
+  }
+
+  /**
+   * @private
+   * Verify if the entity is a built-in Authority.
+   * @param {String} entityName - Entity name to verify.
+   * @return {boolean} true if the entity is Authority and is built-in.
+   */
+  isBuiltInAuthority(entityName) {
+    return this.isUsingBuiltInAuthority() && entityIsAuthority(entityName);
   }
 
   /**
