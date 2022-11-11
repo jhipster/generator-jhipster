@@ -67,7 +67,7 @@ export async function writeEntitiesReactFiles({ application, entities }) {
       const { applicationTypeMicroservice } = application;
       this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, {
         applicationTypeMicroservice,
-        CLIENT_MAIN_SRC_DIR: application.clientSrcDir,
+        clientSrcDir: application.clientSrcDir,
       });
       this.needleApi.clientReact.addEntityToMenu(
         entity.entityPage,
