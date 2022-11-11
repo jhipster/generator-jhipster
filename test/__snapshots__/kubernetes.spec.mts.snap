@@ -191,7 +191,11 @@ spec:
     spec:
       containers:
         - name: kafka
+<<<<<<< HEAD
           image: kafka-placeholder
+=======
+          image: confluentinc/cp-kafka:7.3.0
+>>>>>>> 3a3388540d (extracted some more function from base-private)
           env:
             - name: KAFKA_ADVERTISED_LISTENERS
               value: \\"PLAINTEXT://jhipster-kafka.default.svc.cluster.local:9092\\"
@@ -8523,7 +8527,11 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
+<<<<<<< HEAD
           image: grafana-placeholder
+=======
+          image: grafana/grafana:9.2.4
+>>>>>>> 3a3388540d (extracted some more function from base-private)
           ports:
             - containerPort: 3000
               name: http
