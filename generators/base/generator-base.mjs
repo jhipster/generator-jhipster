@@ -59,8 +59,8 @@ import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
-import { applyPathCustomizer, locateGenerator, applyPathCustomizer, locateGenerator, parseGeneratorJson } from './logic/index.mjs';
-import { addIconInClientsImport, addMenuEntry, substitutePackageJsonDependencyVersionAccordingToSource } from '../client/logic/index.mjs';
+import { applyOutputPathCustomizer, locateGenerator, parseJson } from './logic/index.mjs';
+import { addIconInImport, addMenuEntry, substitutePackageJsonDependencyVersionAccordingToSource } from '../client/logic/index.mjs';
 import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../base-application/logic/index.mjs';
 import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
@@ -312,7 +312,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} outputPath - Path to customize.
    */
   applyOutputPathCustomizer(outputPath) {
-    return applyPathCustomizer(this, outputPath, this.options, this.configOptions);
+    return applyOutputPathCustomizer(this, outputPath, this.options, this.configOptions);
   }
 
   /**
@@ -322,11 +322,21 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
    */
   replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
-    const packageJsonSource = parseGeneratorJson(packageJsonSourceFile);
+    const packageJsonSource = parseJson(packageJsonSourceFile);
     const packageJsonTargetFile = this.destinationPath('package.json');
-    const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
-    substitutePackageJsonDependencyVersionAccordingToSource(packageJsonSource, packageJsonTarget, 'dependencies', keyToReplace);
-    substitutePackageJsonDependencyVersionAccordingToSource(packageJsonSource, packageJsonTarget, 'devDependencies', keyToReplace);
+    let packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
+    packageJsonTarget = substitutePackageJsonDependencyVersionAccordingToSource(
+      packageJsonSource,
+      packageJsonTarget,
+      'dependencies',
+      keyToReplace
+    );
+    packageJsonTarget = substitutePackageJsonDependencyVersionAccordingToSource(
+      packageJsonSource,
+      packageJsonTarget,
+      'devDependencies',
+      keyToReplace
+    );
     this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
   }
 
@@ -338,7 +348,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} clientFramework - The name of the client framework
    */
   addIcon(iconName, clientFramework) {
-    addIconInClientsImport(this, iconName, clientFramework);
+    addIconInImport(this, iconName, clientFramework);
   }
 
   /**

@@ -45,6 +45,7 @@ const substitutePackageJsonDependencyVersionAccordingToSource = (sourcePackageJs
       }
     });
   }
+  return targetPackageJson;
 };
 
 export default substitutePackageJsonDependencyVersionAccordingToSource;

@@ -406,7 +406,7 @@ spec:
             claimName: samplekafka-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -821,7 +821,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -1610,7 +1610,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -2166,7 +2166,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -2430,7 +2430,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -3129,7 +3129,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -3792,7 +3792,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -4917,7 +4917,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -5821,7 +5821,7 @@ spec:
             claimName: samplemysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -8891,7 +8891,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9476,7 +9476,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9975,7 +9975,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11100,7 +11100,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11878,7 +11878,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.30
+          image: mysql:8.0.31
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"

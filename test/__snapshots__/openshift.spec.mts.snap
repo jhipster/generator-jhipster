@@ -268,7 +268,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.30
+              image: mysql:8.0.31
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -591,7 +591,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.30
+              image: mysql:8.0.31
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -1224,7 +1224,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.30
+              image: mysql:8.0.31
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -2468,7 +2468,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.30
+              image: mysql:8.0.31
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -3687,7 +3687,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.30
+              image: mysql:8.0.31
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -4034,7 +4034,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.30
+              image: mysql:8.0.31
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -4658,7 +4658,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.30
+              image: mysql:8.0.31
               env:
                 #            - name: MYSQL_USER
                 #              value: root

@@ -17,5 +17,4 @@
  * limitations under the License.
  */
 export { default as substitutePackageJsonDependencyVersionAccordingToSource } from './processors/build-tool/package-json.mjs';
-export { addIconInClientsImport } from './processors/needles.mjs';
-export { addMenuEntry } from './processors/needles.mjs';
+export { addIconInImport, addMenuEntry } from './processors/needles.mjs';

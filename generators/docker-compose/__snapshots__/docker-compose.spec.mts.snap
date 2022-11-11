@@ -92,7 +92,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -275,7 +275,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -476,7 +476,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -519,7 +519,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -824,7 +824,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -872,7 +872,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -3680,7 +3680,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -3723,7 +3723,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -3976,7 +3976,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4019,7 +4019,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4300,7 +4300,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4343,7 +4343,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4483,7 +4483,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4526,7 +4526,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4692,7 +4692,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4735,7 +4735,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -4965,7 +4965,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5008,7 +5008,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5123,7 +5123,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       samplemysql-elasticsearch:
         condition: service_healthy
   samplemysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5247,7 +5247,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5385,7 +5385,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   jhgate-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:
@@ -5521,7 +5521,7 @@ eureka:
       jhipster-registry:
         condition: service_healthy
   msmysql-mysql:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     environment:

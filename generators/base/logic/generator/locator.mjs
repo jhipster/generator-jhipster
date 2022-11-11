@@ -21,8 +21,10 @@ const locateGenerator = (generator, env, options) => {
   try {
     existingGenerator = generator || env.requireNamespace(options.namespace).generator;
   } catch (error) {
-    const split = options.namespace.split(':', 2);
-    existingGenerator = split.length === 1 ? split[0] : split[1];
+    if (options.namespace) {
+      const split = options.namespace.split(':', 2);
+      existingGenerator = split.length === 1 ? split[0] : split[1];
+    }
   }
   return existingGenerator;
 };

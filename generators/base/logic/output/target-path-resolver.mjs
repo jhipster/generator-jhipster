@@ -19,11 +19,11 @@
 import normalize from 'normalize-path';
 import path from 'path';
 
-export const normalizeOutputPath = outputPath => {
+const normalizeOutputPath = outputPath => {
   return outputPath ? normalize(outputPath) : outputPath;
 };
 
-export const applyPathCustomizer = (context, outputPath, outputPathCustomizer) => {
+const applyPathCustomizer = (context, outputPath, outputPathCustomizer) => {
   if (Array.isArray(outputPathCustomizer)) {
     outputPathCustomizer.forEach(customizer => {
       outputPath = customizer.call(context, outputPath);
@@ -33,7 +33,7 @@ export const applyPathCustomizer = (context, outputPath, outputPathCustomizer) =
   return outputPathCustomizer.call(context, outputPath);
 };
 
-export const getOutputPathCustomizer = (options, configOptions) => {
+const getOutputPathCustomizer = (options, configOptions) => {
   let outputPathCustomizer = options.outputPathCustomizer;
   if (!outputPathCustomizer && configOptions) {
     outputPathCustomizer = configOptions.outputPathCustomizer;
@@ -50,7 +50,7 @@ export const applyOutputPathCustomizer = (context, outputPath, options, configOp
   return applyPathCustomizer(context, outputPath, outputPathCustomizer);
 };
 
-export const destinationPath = (context, paths, fallbackDestinationPathMethod, options, configOptions) => {
+export const generatedDestinationPath = (context, paths, fallbackDestinationPathMethod, options, configOptions) => {
   paths = path.join(...paths);
   paths = applyOutputPathCustomizer(context, paths, options, configOptions);
   return paths ? fallbackDestinationPathMethod(paths) : paths;
