@@ -77,14 +77,14 @@ import org.hibernate.type.SqlTypes;
 <%_ for (const relationship of relationships) { -%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipOneToMany) { -%>
-    @OneToMany(mappedBy = "<%= relationship.otherEntityRelationshipName %>")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "<%= relationship.otherEntityRelationshipName %>")
   <%_ } else if (relationship.relationshipManyToOne) { -%>
-    @ManyToOne<% if (relationship.relationshipRequired) { %>(optional = false)<% } %>
+    @ManyToOne(fetch = FetchType.LAZY<% if (relationship.relationshipRequired) { %>, optional = false<% } %>)
       <%_ if (relationship.relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
       <%_ } _%>
   <%_ } else if (relationship.relationshipManyToMany) { -%>
-    @ManyToMany<% if (!relationship.ownerSide) { %>(mappedBy = "<%= relationship.otherEntityRelationshipNamePlural %>")<% } %>
+    @ManyToMany(fetch = FetchType.LAZY<% if (!relationship.ownerSide) { %>, mappedBy = "<%= relationship.otherEntityRelationshipNamePlural %>"<% } %>)
       <%_ if (relationship.ownerSide) { _%>
         <%_ if (relationship.relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
@@ -110,7 +110,7 @@ import org.hibernate.type.SqlTypes;
     }, allowSetters = true)
       <%_ } _%>
       <%_ if (relationship.ownerSide) { -%>
-    @OneToOne<% if (relationship.relationshipRequired) { %>(optional = false)<% } %>
+    @OneToOne(fetch = FetchType.LAZY<% if (relationship.relationshipRequired) { %>, optional = false<% } %>)
         <%_ if (relationship.relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
         <%_ } _%>
@@ -121,7 +121,7 @@ import org.hibernate.type.SqlTypes;
     @JoinColumn(unique = true)
         <%_ } _%>
       <%_ } else { _%>
-    @OneToOne(mappedBy = "<%= relationship.otherEntityRelationshipName %>")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "<%= relationship.otherEntityRelationshipName %>")
       <%_ } -%>
   <%_ } -%>
 <&_ } -&>
