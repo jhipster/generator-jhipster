@@ -16907,7 +16907,11 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
+<<<<<<< HEAD
           image: grafana-placeholder
+=======
+          image: grafana/grafana:9.2.4
+>>>>>>> 3a3388540d (extracted some more function from base-private)
           ports:
             - containerPort: 3000
               name: http

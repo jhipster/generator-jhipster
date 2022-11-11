@@ -21,7 +21,6 @@ import path from 'path';
 import _ from 'lodash';
 import Generator from 'yeoman-generator';
 import chalk from 'chalk';
-import shelljs from 'shelljs';
 import semver from 'semver';
 import https from 'https';
 
@@ -33,6 +32,9 @@ import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import { databaseData } from '../sql/support/index.mjs';
 import { getDBTypeFromDBValue } from '../server/support/database.mjs';
+
+import { deleteFile, deleteFolder, generatorOrContext, logDebug, renderContent, writeContent } from './support/index.mjs';
+import { checkJavaCompliant } from '../server/support/index.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
@@ -149,11 +151,8 @@ export default class PrivateBase extends Generator {
    * @param file
    */
   removeFile(file) {
-    file = this.destinationPath(file);
-    if (file && shelljs.test('-f', file)) {
-      this.log(`Removing the file - ${file}`);
-      shelljs.rm(file);
-    }
+    // TODO Should not update variable
+    file = deleteFile(this, file);
   }
 
   /**
@@ -162,14 +161,7 @@ export default class PrivateBase extends Generator {
    * @param folder
    */
   removeFolder(folder) {
-    folder = this.destinationPath(folder);
-    try {
-      if (statSync(folder).isDirectory()) {
-        rmSync(folder, { recursive: true });
-      }
-    } catch (error) {
-      this.log(`Could not remove folder ${folder}`);
-    }
+    deleteFolder(this, folder);
   }
 
   /**
@@ -181,13 +173,10 @@ export default class PrivateBase extends Generator {
    * @returns {boolean} true if success; false otherwise
    */
   gitMove(source, dest) {
-    source = this.destinationPath(source);
-    dest = this.destinationPath(dest);
-    if (source && dest && shelljs.test('-f', source)) {
-      this.info(`Renaming the file - ${source} to ${dest}`);
-      return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
-    }
-    return true;
+    const res = moveWithGit(this, source, dest);
+    // TODO Should not update variables
+    source = res.source;
+    dest = res.dest;
   }
 
   /**
