@@ -32,7 +32,7 @@
         }
       },
       "root": "",
-      "sourceRoot": "<%= MAIN_SRC_DIR.replace(/\/$/, "") %>",
+      "sourceRoot": "<%= clientSrcDir.replace(/\/$/, "") %>",
       "prefix": "<%= jhiPrefixDashed %>",
       "architect": {
         "build": {
@@ -41,19 +41,19 @@
             "customWebpackConfig": {
               "path": "./webpack/webpack.custom.js"
             },
-            "outputPath": "<%= DIST_DIR %>",
-            "index": "<%= MAIN_SRC_DIR %>index.html",
-            "main": "<%= MAIN_SRC_DIR %>main.ts",
-            "polyfills": "<%= MAIN_SRC_DIR %>polyfills.ts",
+            "outputPath": "<%= clientDistDir %>",
+            "index": "<%= clientSrcDir %>index.html",
+            "main": "<%= clientSrcDir %>main.ts",
+            "polyfills": "<%= clientSrcDir %>polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "<%= MAIN_SRC_DIR %>content",
-              "<%= MAIN_SRC_DIR %>favicon.ico",
-              "<%= MAIN_SRC_DIR %>manifest.webapp",
-              "<%= MAIN_SRC_DIR %>robots.txt"
+              "<%= clientSrcDir %>content",
+              "<%= clientSrcDir %>favicon.ico",
+              "<%= clientSrcDir %>manifest.webapp",
+              "<%= clientSrcDir %>robots.txt"
             ],
-            "styles": ["<%= MAIN_SRC_DIR %>content/scss/vendor.scss", "<%= MAIN_SRC_DIR %>content/scss/global.scss"],
+            "styles": ["<%= clientSrcDir %>content/scss/vendor.scss", "<%= clientSrcDir %>content/scss/global.scss"],
             "scripts": []
           },
           "configurations": {
@@ -119,7 +119,7 @@
   "cli": {
     "cache": {
       "enabled": true,
-      "path": "./<%= BUILD_DIR %>angular/",
+      "path": "./<%= temporaryDir %>angular/",
       "environment": "all"
     },
     "packageManager": "<%= clientPackageManager %>"

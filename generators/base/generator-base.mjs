@@ -91,7 +91,7 @@ const { GRADLE, MAVEN } = buildToolTypes;
 const { SPRING_WEBSOCKET } = websocketTypes;
 const { KAFKA } = messageBrokerTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
-const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = testFrameworkTypes;
+const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
@@ -224,22 +224,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @deprecated
-   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
-   */
-  get CLIENT_MAIN_SRC_DIR() {
-    return CLIENT_MAIN_SRC_DIR;
-  }
-
-  /**
-   * @deprecated
-   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
-   */
-  get CLIENT_TEST_SRC_DIR() {
-    return CLIENT_TEST_SRC_DIR;
-  }
-
-  /**
    * @private
    * Verify if the entity is a built-in Entity.
    * @param {String} entityName - Entity name to verify.
@@ -313,30 +297,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   isBuiltInAuthority(entityName) {
     return this.isUsingBuiltInAuthority() && this.isAuthorityEntity(entityName);
-  }
-
-  /**
-   * @private
-   * Apply output customizer.
-   *
-   * @param {string} outputPath - Path to customize.
-   */
-  applyOutputPathCustomizer(outputPath) {
-    let outputPathCustomizer = this.options.outputPathCustomizer;
-    if (!outputPathCustomizer && this.configOptions) {
-      outputPathCustomizer = this.configOptions.outputPathCustomizer;
-    }
-    if (!outputPathCustomizer) {
-      return outputPath;
-    }
-    outputPath = outputPath ? normalize(outputPath) : outputPath;
-    if (Array.isArray(outputPathCustomizer)) {
-      outputPathCustomizer.forEach(customizer => {
-        outputPath = customizer.call(this, outputPath);
-      });
-      return outputPath;
-    }
-    return outputPathCustomizer.call(this, outputPath);
   }
 
   /**
@@ -549,7 +509,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addElementTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addElementTranslationKey(key, value, language, webappSrcDir);
   }
 
@@ -561,7 +521,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addAdminElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addAdminElementTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language, webappSrcDir);
   }
 
@@ -573,7 +533,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addEntityTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addEntityTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
   }
 
@@ -586,7 +546,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} method - The method to be run with provided key and value from above
    * @param {string} enableTranslation - specify if i18n is enabled
    */
-  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     if (enableTranslation) {
       this.getAllInstalledLanguages().forEach(language => {
         this[method](key, value, language, webappSrcDir);
@@ -602,7 +562,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const languages = [];
     this.getAllSupportedLanguages().forEach(language => {
       try {
-        const stats = fs.lstatSync(`${this.CLIENT_MAIN_SRC_DIR}i18n/${language}`);
+        const stats = fs.lstatSync(`${this.sharedData.getApplication().clientSrcDir}i18n/${language}`);
         if (stats.isDirectory()) {
           languages.push(language);
         }
@@ -1984,10 +1944,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       } else {
         destinationFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
       }
-      // TODO v8 drop
-      if (typeof context.customizeDestination === 'function') {
-        destinationFile = context.customizeDestination(context, destinationFile);
-      }
 
       let sourceFileFrom;
       if (Array.isArray(rootTemplatesAbsolutePath)) {
@@ -2045,7 +2001,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           root: rootTemplatesAbsolutePath,
         };
         // TODO drop for v8 final release
-        const data = jhipster7Proxy(this, context);
+        const data = jhipster7Proxy(this, context, { ignoreWarnings: true });
         if (useAsync) {
           await this.renderTemplateAsync(sourceFileFrom, destinationFile, data, renderOptions);
         } else {
@@ -2187,23 +2143,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} [dest] - object to write to.
    */
   parseCommonRuntimeOptions(options = this.options, dest = this.configOptions) {
-    if (options.outputPathCustomizer) {
-      if (dest.outputPathCustomizer === undefined) {
-        dest.outputPathCustomizer = [];
-      } else if (!Array.isArray(dest.outputPathCustomizer)) {
-        dest.outputPathCustomizer = [dest.outputPathCustomizer];
-      }
-      if (Array.isArray(options.outputPathCustomizer)) {
-        options.outputPathCustomizer.forEach(customizer => {
-          if (!dest.outputPathCustomizer.includes(customizer)) {
-            dest.outputPathCustomizer.push(customizer);
-          }
-        });
-      } else if (!dest.outputPathCustomizer.includes(options.outputPathCustomizer)) {
-        dest.outputPathCustomizer.push(options.outputPathCustomizer);
-      }
-    }
-
     if (dest.jhipsterOldVersion === undefined) {
       // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
       dest.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;
@@ -2494,7 +2433,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.gatlingTests = dest.testFrameworks.includes(GATLING);
     dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
-    dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
     dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
 
     dest.authenticationType = config.authenticationType;

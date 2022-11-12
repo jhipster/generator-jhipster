@@ -102,7 +102,7 @@ jobs:
                 command: './gradlew deployHeroku --no-daemon'
                 <%_ } _%>
             <%_ } _%>
-            <%_ if (cypressTests || protractorTests) {
+            <%_ if (cypressTests) {
                 const commented = '# '; _%>
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Package'

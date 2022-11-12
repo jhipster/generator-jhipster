@@ -65,32 +65,19 @@
   },
   "devDependencies": {
     "@testing-library/react": "<%= this.dependabotPackageJson.devDependencies['@testing-library/react'] %>",
-<%_ if (protractorTests) { _%>
-    "@types/chai": "4.2.11",
-<%_ } _%>
     "@types/jest": "<%= this.dependabotPackageJson.devDependencies['@types/jest'] %>",
     "@types/lodash": "<%= this.dependabotPackageJson.devDependencies['@types/lodash'] %>",
-<%_ if (protractorTests) { _%>
-    "@types/mocha": "7.0.2",
-<%_ } _%>
     "@types/node": "<%= this.dependabotPackageJson.devDependencies['@types/node'] %>",
     "@types/react": "<%= this.dependabotPackageJson.devDependencies['@types/react'] %>",
     "@types/react-dom": "<%= this.dependabotPackageJson.devDependencies['@types/react-dom'] %>",
     "@types/react-redux": "<%= this.dependabotPackageJson.devDependencies['@types/react-redux'] %>",
     "@types/redux": "<%= this.dependabotPackageJson.devDependencies['@types/redux'] %>",
-<%_ if (protractorTests) { _%>
-    "@types/selenium-webdriver": "4.0.9",
-<%_ } _%>
     "@types/webpack-env": "<%= this.dependabotPackageJson.devDependencies['@types/webpack-env'] %>",
     "@typescript-eslint/eslint-plugin": "<%= this.dependabotPackageJson.devDependencies['@typescript-eslint/eslint-plugin'] %>",
     "@typescript-eslint/parser": "<%= this.dependabotPackageJson.devDependencies['@typescript-eslint/parser'] %>",
     "autoprefixer": "<%= this.dependabotPackageJson.devDependencies['autoprefixer'] %>",
     "browser-sync": "<%= this.dependabotPackageJson.devDependencies['browser-sync'] %>",
     "browser-sync-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['browser-sync-webpack-plugin'] %>",
-<%_ if (protractorTests) { _%>
-    "chai": "4.2.0",
-    "chai-as-promised": "7.1.1",
-<%_ } _%>
     "copy-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['copy-webpack-plugin'] %>",
     "core-js": "<%= this.dependabotPackageJson.devDependencies['core-js'] %>",
     "cross-env": "<%= this.dependabotPackageJson.devDependencies['cross-env'] %>",
@@ -119,9 +106,6 @@
     "merge-jsons-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
     "mini-css-extract-plugin": "<%= this.dependabotPackageJson.devDependencies['mini-css-extract-plugin'] %>",
-<%_ if (protractorTests) { _%>
-    "mocha": "7.1.2",
-<%_ } _%>
     "postcss-loader": "<%= this.dependabotPackageJson.devDependencies['postcss-loader'] %>",
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%= this.dependabotPackageJson.devDependencies['postcss-rtlcss'] %>",
@@ -131,9 +115,6 @@
     "prettier-plugin-java": "<%= this.dependabotPackageJson.devDependencies['prettier-plugin-java'] %>",
 <%_ } _%>
     "prettier-plugin-packagejson": "<%= this.dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>",
-<%_ if (protractorTests) { _%>
-    "protractor": "7.0.0",
-<%_ } _%>
     "react-infinite-scroll-component": "<%= this.dependabotPackageJson.devDependencies['react-infinite-scroll-component'] %>",
     "redux-mock-store": "<%= this.dependabotPackageJson.devDependencies['redux-mock-store'] %>",
     "rimraf": "<%= this.dependabotPackageJson.devDependencies['rimraf'] %>",
@@ -149,16 +130,10 @@
     "thread-loader": "<%= this.dependabotPackageJson.devDependencies['thread-loader'] %>",
     "ts-jest": "<%= this.dependabotPackageJson.devDependencies['ts-jest'] %>",
     "ts-loader": "<%= this.dependabotPackageJson.devDependencies['ts-loader'] %>",
-<%_ if (protractorTests) { _%>
-    "ts-node": "8.9.1",
-<%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "<%= this.dependabotPackageJson.devDependencies['cypress'] %>",
 <%_ } _%>
     "typescript": "<%= this.dependabotPackageJson.devDependencies['typescript'] %>",
-<%_ if (protractorTests) { _%>
-    "webdriver-manager": "12.1.8",
-<%_ } _%>
     "webpack": "<%= this.dependabotPackageJson.devDependencies['webpack'] %>",
     "webpack-cli": "<%= this.dependabotPackageJson.devDependencies['webpack-cli'] %>",
     "webpack-dev-server": "<%= this.dependabotPackageJson.devDependencies['webpack-dev-server'] %>",
@@ -177,29 +152,18 @@
     "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
-    "cleanup": "rimraf <%= DIST_DIR %>",
-    "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
+    "cleanup": "rimraf <%= clientDistDir %>",
+    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= temporaryDir %>}",
     "build": "<%= clientPackageManager %> run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
-<%_ if (protractorTests && !cypressTests) { _%>
-    "e2e": "<%= clientPackageManager %> run e2e:protractor --",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless --",
-<%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
+<%_ if (cypressTests) {  _%>
     "e2e": "<%= clientPackageManager %> run e2e:cypress:headed --",
     "e2e:headless": "<%= clientPackageManager %> run e2e:cypress --",
-<%_ } _%>
-<%_ if (protractorTests) { _%>
-    "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor --",
-    "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
     "e2e:cypress": "cypress run --e2e --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
     "cypress": "cypress open --e2e",
-<%_ } _%>
-<%_ if (protractorTests) { _%>
-    "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
-    "e2e:update-webdriver": "webdriver-manager update --gecko false",
 <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",

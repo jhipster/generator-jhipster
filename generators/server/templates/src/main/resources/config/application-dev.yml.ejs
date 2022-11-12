@@ -138,7 +138,7 @@ spring:
     username: SA
     password: yourStrong(!)Password
   <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
     username: <%= baseName %>
     password:
   <%_ } _%>
@@ -203,7 +203,7 @@ spring:
   <%_ } else if (devDatabaseTypeOracle) { _%>
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
   <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>
@@ -234,7 +234,7 @@ spring:
     username: SA
     password: yourStrong(!)Password
   <%_ } else if (devDatabaseTypeH2Any) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
+    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
     username: <%= baseName %>
     password:
   <%_ } _%>

@@ -3,7 +3,7 @@
 0=JHipster H2 (Memory)|org.h2.Driver|jdbc\:h2\:mem\:<%= lowercaseBaseName %>|<%= baseName %>
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Disk) { _%>
-0=JHipster H2 (Disk)|org.h2.Driver|jdbc\:h2\:file\:./<%= BUILD_DIR %>h2db/db/<%= lowercaseBaseName %>|<%= baseName %>
+0=JHipster H2 (Disk)|org.h2.Driver|jdbc\:h2\:file\:./<%= temporaryDir %>h2db/db/<%= lowercaseBaseName %>|<%= baseName %>
 <%_ } _%>
 webAllowOthers=true
 webPort=8092

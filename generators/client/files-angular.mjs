@@ -16,15 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
 import { replaceAngularTranslations } from './transform-angular.mjs';
 
-import { authenticationTypes, applicationTypes, websocketTypes } from '../../jdl/jhipster/index.mjs';
-
-const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, ANGULAR_DIR } = constants;
-const { OAUTH2, SESSION, JWT } = authenticationTypes;
-const { GATEWAY } = applicationTypes;
-const { SPRING_WEBSOCKET } = websocketTypes;
+import { clientApplicationBlock, clientSrcBlock } from './utils.mjs';
 
 export const files = {
   common: [
@@ -49,17 +43,17 @@ export const files = {
   ],
   sass: [
     {
-      path: CLIENT_MAIN_SRC_DIR,
+      ...clientSrcBlock,
       templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
     },
   ],
   angularApp: [
     {
-      path: CLIENT_MAIN_SRC_DIR,
+      ...clientSrcBlock,
       templates: ['main.ts', 'bootstrap.ts', 'polyfills.ts', 'declarations.d.ts'],
     },
     {
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
     },
   ],
@@ -71,7 +65,7 @@ export const files = {
   ],
   angularMain: [
     {
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         // entities
         'entities/entity-navbar-items.ts',
@@ -101,17 +95,17 @@ export const files = {
     },
     {
       condition: generator => generator.enableTranslation,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: ['layouts/navbar/active-menu.directive.ts'],
     },
     {
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: ['layouts/profiles/page-ribbon.component.scss', 'layouts/navbar/navbar.component.scss', 'home/home.component.scss'],
     },
     // login
     {
-      path: ANGULAR_DIR,
-      condition: generator => generator.authenticationType !== OAUTH2,
+      ...clientApplicationBlock,
+      condition: generator => !generator.authenticationTypeOauth2,
       templates: [
         'login/login.module.ts',
         'login/login.route.ts',
@@ -121,14 +115,14 @@ export const files = {
       ],
     },
     {
-      path: ANGULAR_DIR,
-      condition: generator => generator.authenticationType === OAUTH2,
+      ...clientApplicationBlock,
+      condition: generator => generator.authenticationTypeOauth2,
       templates: ['login/logout.model.ts'],
     },
   ],
   angularAccountModule: [
     {
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       condition: generator => !generator.skipUserManagement,
       templates: [
         'account/account.route.ts',
@@ -163,8 +157,8 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === SESSION && !generator.skipUserManagement,
-      path: ANGULAR_DIR,
+      condition: generator => generator.authenticationTypeSession && !generator.skipUserManagement,
+      ...clientApplicationBlock,
       templates: [
         'account/sessions/sessions.route.ts',
         'account/sessions/session.model.ts',
@@ -177,7 +171,7 @@ export const files = {
   angularAdminModule: [
     {
       condition: generator => !generator.applicationTypeMicroservice,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         'admin/admin-routing.module.ts',
         'admin/docs/docs.route.ts',
@@ -189,7 +183,7 @@ export const files = {
     },
     {
       condition: generator => generator.withAdminUi,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         // admin modules
         'admin/configuration/configuration.route.ts',
@@ -239,8 +233,8 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.websocket === SPRING_WEBSOCKET,
-      path: ANGULAR_DIR,
+      condition: generator => generator.communicationSpringWebsocket,
+      ...clientApplicationBlock,
       templates: [
         'admin/tracker/tracker.route.ts',
         'admin/tracker/tracker.module.ts',
@@ -252,7 +246,7 @@ export const files = {
     },
     {
       condition: generator => !generator.skipUserManagement,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         'admin/user-management/user-management.route.ts',
         'admin/user-management/user-management.module.ts',
@@ -269,8 +263,8 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryAny,
-      path: ANGULAR_DIR,
+      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
+      ...clientApplicationBlock,
       templates: [
         'admin/gateway/gateway.route.ts',
         'admin/gateway/gateway.module.ts',
@@ -283,7 +277,7 @@ export const files = {
   ],
   angularCore: [
     {
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         'core/config/application-config.service.ts',
         'core/config/application-config.service.spec.ts',
@@ -318,24 +312,24 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === JWT,
-      path: ANGULAR_DIR,
+      condition: generator => generator.authenticationTypeJwt,
+      ...clientApplicationBlock,
       templates: ['core/interceptor/auth.interceptor.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
-      path: ANGULAR_DIR,
+      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
+      ...clientApplicationBlock,
       templates: ['entities/user/user.service.ts', 'entities/user/user.service.spec.ts', 'entities/user/user.model.ts'],
     },
     {
       condition: generator => generator.enableTranslation,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: ['config/language.constants.ts', 'config/translation.config.ts'],
     },
   ],
   angularShared: [
     {
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         'shared/shared.module.ts',
         'shared/shared-libs.module.ts',
@@ -361,7 +355,7 @@ export const files = {
     },
     {
       condition: generator => generator.enableTranslation,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         'shared/language/translation.module.ts',
         'shared/language/find-language-from-key.pipe.ts',
@@ -371,7 +365,7 @@ export const files = {
   ],
   angularAuthService: [
     {
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         'core/auth/state-storage.service.ts',
         'shared/auth/has-any-authority.directive.ts',
@@ -382,25 +376,25 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === JWT,
-      path: ANGULAR_DIR,
+      condition: generator => generator.authenticationTypeJwt,
+      ...clientApplicationBlock,
       templates: ['core/auth/auth-jwt.service.ts', 'core/auth/auth-jwt.service.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationType === SESSION || generator.authenticationType === OAUTH2,
-      path: ANGULAR_DIR,
+      condition: generator => generator.authenticationTypeSession || generator.authenticationTypeOauth2,
+      ...clientApplicationBlock,
       templates: ['core/auth/auth-session.service.ts'],
     },
     {
-      condition: generator => generator.authenticationType === SESSION && generator.websocket === SPRING_WEBSOCKET,
-      path: ANGULAR_DIR,
+      condition: generator => generator.authenticationTypeSession && generator.communicationSpringWebsocket,
+      ...clientApplicationBlock,
       templates: ['core/auth/csrf.service.ts'],
     },
   ],
   clientTestFw: [
     {
       condition: generator => generator.withAdminUi,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         'admin/configuration/configuration.component.spec.ts',
         'admin/configuration/configuration.service.spec.ts',
@@ -414,7 +408,7 @@ export const files = {
       ],
     },
     {
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         'shared/auth/has-any-authority.directive.spec.ts',
         'core/util/event-manager.service.spec.ts',
@@ -436,12 +430,12 @@ export const files = {
     },
     {
       condition: generator => generator.enableTranslation,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: ['shared/language/translate.directive.spec.ts'],
     },
     {
       condition: generator => !generator.skipUserManagement,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         'account/activate/activate.component.spec.ts',
         'account/activate/activate.service.spec.ts',
@@ -458,13 +452,13 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType !== OAUTH2,
-      path: ANGULAR_DIR,
+      condition: generator => !generator.authenticationTypeOauth2,
+      ...clientApplicationBlock,
       templates: ['login/login.component.spec.ts'],
     },
     {
       condition: generator => !generator.skipUserManagement,
-      path: ANGULAR_DIR,
+      ...clientApplicationBlock,
       templates: [
         'admin/user-management/list/user-management.component.spec.ts',
         'admin/user-management/detail/user-management-detail.component.spec.ts',
@@ -474,23 +468,9 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === SESSION && !generator.skipUserManagement,
-      path: ANGULAR_DIR,
+      condition: generator => generator.authenticationTypeSession && !generator.skipUserManagement,
+      ...clientApplicationBlock,
       templates: ['account/sessions/sessions.component.spec.ts'],
-    },
-    {
-      condition: generator => generator.protractorTests,
-      path: CLIENT_TEST_SRC_DIR,
-      templates: [
-        'e2e/account/account.spec.ts',
-        'e2e/admin/administration.spec.ts',
-        'e2e/page-objects/jhi-page-objects.ts',
-        'protractor.conf.js',
-      ],
-    },
-    {
-      condition: generator => generator.protractorTests,
-      templates: ['tsconfig.e2e.json'],
     },
   ],
 };
@@ -499,7 +479,7 @@ export function cleanup({ application }) {
   if (!application.clientFrameworkAngular) return;
 
   if (this.isJhipsterVersionLessThan('7.6.1')) {
-    this.removeFile(`${application.CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`);
+    this.removeFile(`${application.clientSrcDir}content/scss/rtl.scss`);
   }
 }
 

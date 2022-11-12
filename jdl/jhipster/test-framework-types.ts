@@ -18,14 +18,12 @@
  */
 
 const Types = {
-  PROTRACTOR: 'protractor',
   CYPRESS: 'cypress',
   CUCUMBER: 'cucumber',
   GATLING: 'gatling',
   NO: 'no',
 };
 
-export const PROTRACTOR = Types.PROTRACTOR;
 export const CYPRESS = Types.CYPRESS;
 export const CUCUMBER = Types.CUCUMBER;
 export const GATLING = Types.GATLING;

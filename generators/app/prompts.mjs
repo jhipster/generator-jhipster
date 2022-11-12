@@ -24,7 +24,7 @@ import { applicationTypes, testFrameworkTypes } from '../../jdl/jhipster/index.m
 
 const { appDefaultConfig, defaultConfigMicroservice } = generatorsDefaults;
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
-const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = testFrameworkTypes;
+const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 
 export default {
   askForInsightOptIn,
@@ -130,7 +130,6 @@ export async function askForTestOpts({ control }) {
   if (!this.skipClient) {
     // all client side test frameworks should be added here
     choices.push({ name: 'Cypress', value: CYPRESS });
-    choices.push({ name: '[DEPRECATED] Protractor', value: PROTRACTOR });
   }
   if (!this.skipServer) {
     // all server side test frameworks should be added here

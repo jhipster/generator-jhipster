@@ -38,10 +38,7 @@
     "project": [
       "./tsconfig.app.json",
 <%_ if (cypressTests) { _%>
-      "./<%= this.CLIENT_TEST_SRC_DIR %>cypress/tsconfig.json",
-<%_ } _%>
-<%_ if (protractorTests) { _%>
-      "./tsconfig.e2e.json",
+      "./<%= clientTestDir %>cypress/tsconfig.json",
 <%_ } _%>
       "./tsconfig.spec.json"
     ]

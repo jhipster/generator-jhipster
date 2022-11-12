@@ -41,7 +41,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheType
 
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
-const { PROTRACTOR, CYPRESS, CUCUMBER, GATLING } = testFrameworkTypes;
+const { CYPRESS, CUCUMBER, GATLING } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE, SVELTE, NO } = clientFrameworkTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
@@ -228,7 +228,6 @@ const optionValues: any = {
   [optionNames.SKIP_SERVER]: false,
   [optionNames.SKIP_USER_MANAGEMENT]: false,
   [optionNames.TEST_FRAMEWORKS]: {
-    [PROTRACTOR]: PROTRACTOR,
     [CYPRESS]: CYPRESS,
     [CUCUMBER]: CUCUMBER,
     [GATLING]: GATLING,

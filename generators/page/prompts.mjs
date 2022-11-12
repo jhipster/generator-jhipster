@@ -18,10 +18,10 @@
  */
 
 // eslint-disable-next-line import/prefer-default-export
-export function askForPage() {
-  if (this.pageName) return undefined;
+export async function askForPage() {
+  if (this.pageName) return;
 
-  return this.prompt({
+  await this.prompt({
     type: 'input',
     name: 'pageName',
     message: 'What is the name of your page?',

@@ -157,7 +157,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             ConfigurableServletWebServerFactory servletWebServer = (ConfigurableServletWebServerFactory) server;
             File root;
             String prefixPath = resolvePathPrefix();
-            root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
+            root = new File(prefixPath + "<%= clientDistDir %>");
             if (root.exists() && root.isDirectory()) {
                 servletWebServer.setDocumentRoot(root);
             }
@@ -171,7 +171,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         String fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8);
         String rootPath = Paths.get(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
-        int extractionEndIndex = extractedPath.indexOf("<%= BUILD_DIR %>");
+        int extractionEndIndex = extractedPath.indexOf("<%= temporaryDir %>");
         if (extractionEndIndex <= 0) {
             return "";
         }

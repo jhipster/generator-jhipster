@@ -386,22 +386,6 @@ export default class BaseApplicationGenerator extends BaseGenerator {
   }
 
   /**
-   * @deprecated
-   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
-   */
-  get CLIENT_MAIN_SRC_DIR() {
-    return this.sharedData.getApplication().clientSrcDir;
-  }
-
-  /**
-   * @deprecated
-   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
-   */
-  get CLIENT_TEST_SRC_DIR() {
-    return this.sharedData.getApplication().clientTestDir;
-  }
-
-  /**
    * Reset entities fake data seed.
    * @param {string} seed
    */

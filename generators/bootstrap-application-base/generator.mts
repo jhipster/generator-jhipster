@@ -100,7 +100,6 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
         const anyApplication = application as any;
 
         anyApplication.clientPackageManager = application.nodePackageManager;
-        anyApplication.protractorTests = false;
       },
     });
   }

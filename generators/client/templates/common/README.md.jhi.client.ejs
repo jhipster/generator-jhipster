@@ -94,7 +94,7 @@ The `<%= clientPackageManager %> run` command will list all of the scripts avail
 JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
   <%_ if (!clientFrameworkAngular) { _%>
-The service worker initialization code is commented out by default. To enable it, uncomment the following code in `<%= this.CLIENT_MAIN_SRC_DIR %>index.html`:
+The service worker initialization code is commented out by default. To enable it, uncomment the following code in `<%= clientSrcDir %>index.html`:
 
 ```html
 <script>
@@ -109,7 +109,7 @@ The service worker initialization code is commented out by default. To enable it
 Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
   <%_ } _%>
   <%_ if (clientFrameworkAngular) { _%>
-The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%= this.CLIENT_MAIN_SRC_DIR %>app/app.module.ts`:
+The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%= clientSrcDir %>app/app.module.ts`:
 
 ```typescript
 ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
@@ -132,13 +132,13 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
   <%_ if (clientFrameworkAngular) { _%>
-Edit [<%= this.CLIENT_MAIN_SRC_DIR %>app/app.module.ts](<%= this.CLIENT_MAIN_SRC_DIR %>app/app.module.ts) file:
+Edit [<%= clientSrcDir %>app/app.module.ts](<%= clientSrcDir %>app/app.module.ts) file:
 
 ```
 import 'leaflet/dist/leaflet.js';
 ```
 
-Edit [<%= this.CLIENT_MAIN_SRC_DIR %>content/scss/vendor.scss](<%= this.CLIENT_MAIN_SRC_DIR %>content/scss/vendor.scss) file:
+Edit [<%= clientSrcDir %>content/scss/vendor.scss](<%= clientSrcDir %>content/scss/vendor.scss) file:
 
 ```
 @import '~leaflet/dist/leaflet.css';
@@ -187,18 +187,14 @@ npm watch # alias for `npm start` and `npm run backend:start` in parallel
 <&_ if (fragment.testingSection) { -&>
 ### Client tests
 
-Unit tests are run by [Jest][]. They're located in [<%= this.CLIENT_TEST_SRC_DIR %>](<%= this.CLIENT_TEST_SRC_DIR %>) and can be run with:
+Unit tests are run by [Jest][]. They're located in [<%= clientTestDir %>](<%= clientTestDir %>) and can be run with:
 
 ```
 <%= clientPackageManager %> test
 ```
 
-  <%_ if (protractorTests) { _%>
-UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= this.CLIENT_TEST_SRC_DIR %>e2e](<%= this.CLIENT_TEST_SRC_DIR %>e2e)
-and can be run by starting Spring Boot in one terminal (`<% if (buildToolMaven) { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.
-  <%_ } _%>
   <%_ if (cypressTests) { _%>
-UI end-to-end tests are powered by [Cypress][]. They're located in [<%= this.CLIENT_TEST_SRC_DIR %>cypress](<%= this.CLIENT_TEST_SRC_DIR %>cypress)
+UI end-to-end tests are powered by [Cypress][]. They're located in [<%= clientTestDir %>cypress](<%= clientTestDir %>cypress)
 and can be run by starting Spring Boot in one terminal (`<% if (buildToolMaven) { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.
 
 #### Lighthouse audits
@@ -212,9 +208,6 @@ The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/l
 [Webpack]: https://webpack.github.io/
 [BrowserSync]: https://www.browsersync.io/
 [Jest]: https://facebook.github.io/jest/
-  <%_ if (protractorTests) { _%>
-[Protractor]: https://angular.github.io/protractor/
-  <%_ } -%>
   <%_ if (cypressTests) { _%>
 [Cypress]: https://www.cypress.io/
   <%_ } -%>
