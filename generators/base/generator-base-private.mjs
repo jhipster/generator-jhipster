@@ -454,22 +454,6 @@ export default class PrivateBase extends Generator {
   }
 
   /**
-   * @private
-   * Utility function to copy files.
-   *
-   * @param {string} source - Original file.
-   * @param {string} destination - The resulting file.
-   */
-  copy(source, destination) {
-    const customDestination = this.destinationPath(destination);
-    if (!customDestination) {
-      this.debug(`File ${destination} ignored`);
-      return;
-    }
-    this.fs.copy(this.templatePath(source), customDestination);
-  }
-
-  /**
    * Print a debug message.
    *
    * @param {string} msg - message to print

@@ -254,7 +254,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         // Make constants available in templates
         application.MAIN_DIR = constants.MAIN_DIR;
         application.TEST_DIR = constants.TEST_DIR;
-        application.DOCKER_DIR = constants.DOCKER_DIR;
         application.LOGIN_REGEX = constants.LOGIN_REGEX;
         application.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
         application.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
