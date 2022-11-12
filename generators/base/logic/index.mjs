@@ -17,6 +17,5 @@
  * limitations under the License.
  */
 export { default as locateGenerator } from './generator/locator.mjs';
-export { applyOutputPathCustomizer, generatedDestinationPath } from './output/path-resolver.mjs';
 export { default as parseJson } from './generator/parsers/json-parser.mjs';
 export { deleteFile, deleteFolder, moveWithGit } from './output/file-operations.mjs';
