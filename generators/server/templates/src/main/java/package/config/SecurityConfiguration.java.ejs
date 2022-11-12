@@ -115,7 +115,6 @@ public class SecurityConfiguration {
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
     <%_ } _%>
-    // private final SecurityProblemSupport problemSupport;
 
     public SecurityConfiguration(<% if (authenticationTypeSession && !skipUserManagement) { %>RememberMeServices rememberMeServices, <% } %><% if (!applicationTypeMicroservice) { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties) {
 <%_ if (authenticationTypeSession && !skipUserManagement) { _%>

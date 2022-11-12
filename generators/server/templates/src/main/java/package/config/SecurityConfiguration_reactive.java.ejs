@@ -142,7 +142,6 @@ import static org.springframework.security.web.server.util.matcher.ServerWebExch
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-// @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
@@ -164,7 +163,6 @@ public class SecurityConfiguration {
 
   <%_ } _%>
 <%_ } _%>
-//    private final SecurityProblemSupport problemSupport;
     private final CorsWebFilter corsWebFilter;
 
     public SecurityConfiguration(
@@ -178,7 +176,6 @@ public class SecurityConfiguration {
         this.clientRegistrationRepository = clientRegistrationRepository;
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
-//        this.problemSupport = problemSupport;
         this.corsWebFilter = corsWebFilter;
     }
 
@@ -234,9 +231,6 @@ public class SecurityConfiguration {
 <%_ if (!skipClient) { _%>
             .addFilterAfter(new SpaWebFilter(), SecurityWebFiltersOrder.HTTPS_REDIRECT)
 <%_ } _%>
-//            .exceptionHandling()
-//                .accessDeniedHandler(problemSupport)
-//                .authenticationEntryPoint(problemSupport)
 <%_ if (authenticationTypeSession) { _%>
             .formLogin()
             .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
