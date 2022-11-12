@@ -20,8 +20,10 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 <%_ if (!reactive) { _%>
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 <%_ } _%>
-<%_ if (reactive) { _%>
+<%_ if (reactive && !applicationTypeMicroservice) { _%>
 import <%= packageName %>.repository.UserRepository;
+<%_ } _%>
+<%_ if (reactive) { _%>
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 <%_ } _%>
@@ -34,22 +36,31 @@ public class JwtAuthenticationTestUtils {
     @Bean
     private HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
         return new HandlerMappingIntrospector();
-    } 
+    }
+<%_ } _%>
+<%_ if (applicationTypeMicroservice && !reactive) { _%>
+
+    @Bean
+    private TestAuthenticationResource authenticationResource() {
+        return new TestAuthenticationResource();
+    }
 <%_ } _%>
 
     @Bean
     private MeterRegistry meterRegistry() {
         return new SimpleMeterRegistry();
     }
-
 <%_ if (reactive) { _%>
+
     @MockBean
     private ReactiveUserDetailsService userDetailsService;
+<%_ } _%>
+<%_ if (reactive && !applicationTypeMicroservice) { _%>
 
     @MockBean
     private UserRepository userRepository;
-
 <%_ } _%>
+
     public static String createValidToken(String jwtKey) {
         JwtEncoder encoder = jwtEncoder(jwtKey);
 

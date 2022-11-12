@@ -186,6 +186,12 @@ const jwtFiles = {
         'security/jwt/TokenAuthenticationIT.java',
       ],
     },
+    {
+      condition: data => data.applicationTypeMicroservice,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['security/jwt/TestAuthenticationResource.java',],
+    },
   ],
   gatewayRelayFiles: [
     {
