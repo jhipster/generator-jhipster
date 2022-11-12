@@ -60,7 +60,8 @@ import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
 import { locateGenerator } from './logic/index.mjs';
-import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../base-application/logic/index.mjs';
+import { addIconInImport, addMenuEntry } from '../client/logic/index.mjs';
+import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../entities/logic/index.mjs';
 import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
