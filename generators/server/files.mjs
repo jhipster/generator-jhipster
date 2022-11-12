@@ -190,7 +190,7 @@ const jwtFiles = {
       condition: data => data.applicationTypeMicroservice,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['security/jwt/TestAuthenticationResource.java',],
+      templates: ['security/jwt/TestAuthenticationResource.java'],
     },
   ],
   gatewayRelayFiles: [
