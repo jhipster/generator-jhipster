@@ -36,7 +36,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 16.17.0
+      NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -166,7 +166,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 16.17.0
+      NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -308,7 +308,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 16.17.0
+      NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -438,7 +438,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 16.17.0
+      NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -580,7 +580,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 16.17.0
+      NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -1086,7 +1086,7 @@ jobs:
     if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
     timeout-minutes: 40
     env:
-      NODE_VERSION: 16.17.0
+      NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: DETECT
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -1095,11 +1095,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.17.0
+          node-version: NODE_VERSION
       - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
-          java-version: 17
+          java-version: 11
       - name: Install node.js packages
         run: npm install
       - name: Run backend test
@@ -1174,7 +1174,7 @@ jobs:
     if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
     timeout-minutes: 40
     env:
-      NODE_VERSION: 16.17.0
+      NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: DETECT
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -1183,11 +1183,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.17.0
+          node-version: NODE_VERSION
       - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
-          java-version: 17
+          java-version: 11
       - name: Install node.js packages
         run: npm install
       - name: Install Snyk CLI
@@ -1339,7 +1339,7 @@ jobs:
     if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
     timeout-minutes: 40
     env:
-      NODE_VERSION: 16.17.0
+      NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: DETECT
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -1348,11 +1348,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.17.0
+          node-version: NODE_VERSION
       - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
-          java-version: 17
+          java-version: 11
       - name: Install node.js packages
         run: npm install
       - name: Run backend test
@@ -1421,7 +1421,7 @@ jobs:
     if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
     timeout-minutes: 40
     env:
-      NODE_VERSION: 16.17.0
+      NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: DETECT
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -1430,11 +1430,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.17.0
+          node-version: NODE_VERSION
       - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
-          java-version: 17
+          java-version: 11
       - name: Install node.js packages
         run: npm install
       - name: Install Snyk CLI
@@ -1608,7 +1608,7 @@ jobs:
     if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
     timeout-minutes: 40
     env:
-      NODE_VERSION: 16.17.0
+      NODE_VERSION: NODE_VERSION
       SPRING_OUTPUT_ANSI_ENABLED: DETECT
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -1617,11 +1617,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.17.0
+          node-version: NODE_VERSION
       - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
-          java-version: 17
+          java-version: 11
       - name: Install node.js packages
         run: npm install
       - name: Run backend test
@@ -3532,7 +3532,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - \\"16.17.0\\"
+  - \\"NODE_VERSION\\"
 cache:
   directories:
     - node
@@ -3540,8 +3540,8 @@ cache:
     - $HOME/.gradle
 env:
   global:
-    - NODE_VERSION=16.17.0
-    - JHI_JDK=17
+    - NODE_VERSION=NODE_VERSION
+    - JHI_JDK=11
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -3549,11 +3549,21 @@ env:
     - CYPRESS_ENABLE_RECORD: false
 before_install:
   - |
-    echo '*** Using OpenJDK 17 by default'
-    sudo apt-get update -q
-    sudo apt-get install -y openjdk-17-jdk
-    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-    java -version
+    if [[ $JHI_JDK = '17' ]]; then
+      echo '*** Using OpenJDK 17'
+      sudo add-apt-repository ppa:openjdk-r/ppa -y
+      sudo apt-get update -q
+      sudo apt-get install -y openjdk-17-jdk -y
+      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+      java -version
+    else
+      echo '*** Using OpenJDK 11 by default'
+      sudo apt-get update -q
+      sudo apt-get install -y openjdk-11-jdk
+      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
+      java -version
+    fi
+  - java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - nvm install $NODE_VERSION
@@ -3620,7 +3630,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - \\"16.17.0\\"
+  - \\"NODE_VERSION\\"
 cache:
   directories:
     - node
@@ -3628,8 +3638,8 @@ cache:
     - $HOME/.m2
 env:
   global:
-    - NODE_VERSION=16.17.0
-    - JHI_JDK=17
+    - NODE_VERSION=NODE_VERSION
+    - JHI_JDK=11
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -3638,11 +3648,21 @@ env:
     - CYPRESS_ENABLE_RECORD: false
 before_install:
   - |
-    echo '*** Using OpenJDK 17 by default'
-    sudo apt-get update -q
-    sudo apt-get install -y openjdk-17-jdk
-    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-    java -version
+    if [[ $JHI_JDK = '17' ]]; then
+      echo '*** Using OpenJDK 17'
+      sudo add-apt-repository ppa:openjdk-r/ppa -y
+      sudo apt-get update -q
+      sudo apt-get install -y openjdk-17-jdk -y
+      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+      java -version
+    else
+      echo '*** Using OpenJDK 11 by default'
+      sudo apt-get update -q
+      sudo apt-get install -y openjdk-11-jdk
+      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
+      java -version
+    fi
+  - java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - nvm install $NODE_VERSION
@@ -3709,7 +3729,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - \\"16.17.0\\"
+  - \\"NODE_VERSION\\"
 cache:
   directories:
     - node
@@ -3717,8 +3737,8 @@ cache:
     - $HOME/.m2
 env:
   global:
-    - NODE_VERSION=16.17.0
-    - JHI_JDK=17
+    - NODE_VERSION=NODE_VERSION
+    - JHI_JDK=11
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -3727,11 +3747,21 @@ env:
     - CYPRESS_ENABLE_RECORD: true
 before_install:
   - |
-    echo '*** Using OpenJDK 17 by default'
-    sudo apt-get update -q
-    sudo apt-get install -y openjdk-17-jdk
-    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-    java -version
+    if [[ $JHI_JDK = '17' ]]; then
+      echo '*** Using OpenJDK 17'
+      sudo add-apt-repository ppa:openjdk-r/ppa -y
+      sudo apt-get update -q
+      sudo apt-get install -y openjdk-17-jdk -y
+      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+      java -version
+    else
+      echo '*** Using OpenJDK 11 by default'
+      sudo apt-get update -q
+      sudo apt-get install -y openjdk-11-jdk
+      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
+      java -version
+    fi
+  - java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - nvm install $NODE_VERSION

@@ -22,7 +22,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "<%= NODE_VERSION %>"
+  - "<%= nodeVersion %>"
 cache:
   directories:
     - node
@@ -34,7 +34,7 @@ cache:
 <%_ } _%>
 env:
   global:
-    - NODE_VERSION=<%= NODE_VERSION %>
+    - NODE_VERSION=<%= nodeVersion %>
     - JHI_JDK=<%= JAVA_VERSION %>
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false

@@ -566,8 +566,8 @@ task webapp_test(type: NpmTask, dependsOn: "npm_install") {
 
 if (project.hasProperty("nodeInstall")) {
     node {
-        version = "<%= NODE_VERSION %>"
-        npmVersion = "<%= NPM_VERSION %>"
+        version = "<%= nodeVersion %>"
+        npmVersion = "<%= nodeDependencies.npm %>"
         download = true
     }
 

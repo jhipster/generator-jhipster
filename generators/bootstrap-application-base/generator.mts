@@ -24,7 +24,7 @@ import { prepareFieldForTemplates } from '../../utils/field.mjs';
 import { prepareRelationshipForTemplates } from '../../utils/relationship.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { createUserEntity } from './utils.mjs';
-import { DOCKER_DIR, NODE_VERSION } from '../generator-constants.mjs';
+import { DOCKER_DIR } from '../generator-constants.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { addFakerToEntity } from './faker.mjs';
