@@ -112,6 +112,14 @@ Object {
         "security/jwt/TokenAuthenticationIT.java",
       ],
     },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/package/",
+      "renameTo": [Function],
+      "templates": Array [
+        "security/jwt/TestAuthenticationResource.java",
+      ],
+    },
   ],
   "microservice": Array [
     Object {

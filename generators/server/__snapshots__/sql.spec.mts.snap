@@ -4108,6 +4108,9 @@ Object {
   "src/test/java/tech/jhipster/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/security/jwt/TestAuthenticationResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationIT.java": Object {
     "stateCleared": "modified",
   },
@@ -4426,6 +4429,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TestAuthenticationResource.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": Object {
@@ -4802,6 +4808,9 @@ Object {
   "src/test/java/tech/jhipster/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/security/jwt/TestAuthenticationResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationIT.java": Object {
     "stateCleared": "modified",
   },
@@ -5123,6 +5132,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TestAuthenticationResource.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": Object {
@@ -5514,6 +5526,9 @@ Object {
   "src/test/java/tech/jhipster/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/security/jwt/TestAuthenticationResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationIT.java": Object {
     "stateCleared": "modified",
   },
@@ -5835,6 +5850,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TestAuthenticationResource.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": Object {
@@ -6202,6 +6220,9 @@ Object {
   "src/test/java/tech/jhipster/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/security/jwt/TestAuthenticationResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationIT.java": Object {
     "stateCleared": "modified",
   },
@@ -6517,6 +6538,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TestAuthenticationResource.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": Object {
@@ -6887,6 +6911,9 @@ Object {
   "src/test/java/tech/jhipster/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/security/jwt/TestAuthenticationResource.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationIT.java": Object {
     "stateCleared": "modified",
   },
@@ -7208,6 +7235,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TestAuthenticationResource.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": Object {
