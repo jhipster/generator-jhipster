@@ -305,11 +305,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 <%_ if (cacheProviderHazelcast) { _%>
-    implementation "com.hazelcast:hazelcast"
   <%_ if (enableHibernateCache) { _%>
-    implementation "com.hazelcast:hazelcast-hibernate53"
+    implementation "com.hazelcast:hazelcast-hibernate53:${hazelcastHibernate53Version}"
   <%_ } _%>
-    implementation "com.hazelcast:hazelcast-spring"
+    implementation "com.hazelcast:hazelcast-spring:${hazelcastSpringVersion}"
 <%_ } _%>
 <%_ if (cacheProviderInfinispan) { _%>
     implementation "org.infinispan:infinispan-hibernate-cache-v60"
