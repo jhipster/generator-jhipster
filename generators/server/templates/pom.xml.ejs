@@ -170,7 +170,12 @@
 <%_ if (searchEngineElasticsearch) { _%>
         <awaitility.version>4.2.0</awaitility.version>
 <%_ } _%>
-
+<%_ if (cacheProviderHazelcast) { _%>
+        <hazelcast-spring.version><%- javaDependencies['hazelcast-spring'] %></hazelcast-spring.version>
+  <%_ if (enableHibernateCache) { _%>
+        <hazelcast-hibernate53.version><%- javaDependencies['hazelcast-hibernate53'] %></hazelcast-hibernate53.version>
+  <%_ } _%>
+<%_ } _%>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -246,19 +251,17 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
 <%_ if (cacheProviderHazelcast) { _%>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
-        </dependency>
   <%_ if (enableHibernateCache) { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate53</artifactId>
+            <version>${hazelcast-hibernate53.version}</version>
         </dependency>
   <%_ } _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
+            <version>${hazelcast-spring.version}</version>
         </dependency>
 <%_ } _%>
 <%_ if (cacheProviderInfinispan) { _%>

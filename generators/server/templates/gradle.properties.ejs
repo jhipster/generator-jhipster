@@ -44,6 +44,12 @@ liquibaseHibernate5Version=<%- javaDependencies.liquibase %>
 <%_ if (enableLiquibase) { _%>
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
+hazelcastSpringVersion=<%- javaDependencies['hazelcast-spring'] %>
+  <%_ if (enableHibernateCache) { _%>
+hazelcastHibernate53Version=<%- javaDependencies['hazelcast-hibernate53'] %>
+  <%_ } _%>
+<%_ } _%>
 
 <%_ if (databaseTypeSql && reactive) { _%>
 commonsBeanutilsVersion=1.9.4

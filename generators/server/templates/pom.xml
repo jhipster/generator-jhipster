@@ -7,21 +7,33 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-      <liquibase.version>4.17.2</liquibase.version>
-      <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
+        <liquibase.version>4.17.2</liquibase.version>
+        <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
+        <hazelcast-spring.version>5.2.0</hazelcast-spring.version>
+        <hazelcast-hibernate53.version>2.3.0</hazelcast-hibernate53.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib-maven-plugin.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-core</artifactId>
                 <version>${liquibase.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>${jib-maven-plugin.version}</version>
+                <groupId>com.hazelcast</groupId>
+                <artifactId>hazelcast-spring</artifactId>
+                <version>${hazelcast-spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hazelcast</groupId>
+                <artifactId>hazelcast-hibernate53</artifactId>
+                <version>${hazelcast-hibernate53.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
