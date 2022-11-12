@@ -37,7 +37,7 @@ const proxyConfig = require('./proxy.conf');
 
 module.exports = async (config, options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
-  const languagesHash = await hashElement(path.resolve(__dirname, '../<%= MAIN_SRC_DIR %>i18n'), {
+  const languagesHash = await hashElement(path.resolve(__dirname, '../<%= clientSrcDir %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
     files: { include: ['*.json'] },
@@ -125,7 +125,7 @@ module.exports = async (config, options, targetOptions) => {
       from: require.resolve('axios/dist/axios.min.js'),
       to: 'swagger-ui/',
     },
-    { from: './<%= this.CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
+    { from: './<%= clientSrcDir %>swagger-ui/', to: 'swagger-ui/' },
     // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
   ];
 

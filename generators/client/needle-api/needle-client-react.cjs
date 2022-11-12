@@ -23,13 +23,13 @@ const needleClientBase = require('./needle-client.cjs');
 
 module.exports = class extends needleClientBase {
   addAppSCSSStyle(style, comment) {
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}app/app.scss`;
+    const filePath = `${this.clientSrcDir}app/app.scss`;
     this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
   }
 
   addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
-    const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`;
+    const entityMenuPath = `${this.clientSrcDir}app/entities/menu.tsx`;
     const entityEntry =
       // prettier-ignore
       this.generator.stripMargin(`|<MenuItem icon="asterisk" to="/${routerName}">
@@ -46,10 +46,10 @@ module.exports = class extends needleClientBase {
     entityName,
     entityFolderName,
     entityFileName,
-    { applicationTypeMicroservice, CLIENT_MAIN_SRC_DIR } = this
+    { applicationTypeMicroservice, clientSrcDir } = this
   ) {
-    const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/routes.tsx`;
-    const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
+    const indexModulePath = `${clientSrcDir}app/entities/routes.tsx`;
+    const indexReducerPath = `${clientSrcDir}app/entities/reducers.ts`;
 
     const errorMessage = path =>
       `${chalk.yellow('Reference to ') + entityInstance + entityClass + entityFolderName + entityFileName} ${chalk.yellow(

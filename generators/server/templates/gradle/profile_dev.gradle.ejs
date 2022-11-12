@@ -132,7 +132,7 @@ task webapp(type: NpmTask) {
         .withPropertyName("<%= CLIENT_WEBPACK_DIR %>")
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ } _%>
-    inputs.dir("<%= this.CLIENT_MAIN_SRC_DIR %>")
+    inputs.dir("<%= clientSrcDir %>")
         .withPropertyName("webapp-source-dir")
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ if (!clientFrameworkAngular) { _%>
@@ -151,7 +151,7 @@ task webapp(type: NpmTask) {
         .withPropertyName("postcssrc")
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ } _%>
-    outputs.dir("<%= CLIENT_DIST_DIR %>")
+    outputs.dir("<%= clientDistDir %>")
         .withPropertyName("webapp-build-dir")
 
     dependsOn npmInstall

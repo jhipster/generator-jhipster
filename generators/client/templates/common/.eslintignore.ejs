@@ -18,10 +18,7 @@
 -%>
 node_modules/
 src/main/docker/
-<%_ if (protractorTests) { _%>
-<%= this.CLIENT_TEST_SRC_DIR %>protractor.conf.js
-<%_ } _%>
-<%= !clientFrameworkVue ? '' : this.CLIENT_TEST_SRC_DIR %>jest.conf.js
+<%= !clientFrameworkVue ? '' : clientTestDir %>jest.conf.js
 webpack/
 target/
 build/

@@ -18,16 +18,16 @@
 -%>
 {
   "extends": "./tsconfig",
-  "include": ["<%= MAIN_SRC_DIR %>app", "<%= MAIN_SRC_DIR %>microfrontend"],
+  "include": ["<%= clientSrcDir %>app", "<%= clientSrcDir %>microfrontend"],
   "exclude": [],
   "compilerOptions": {
     "paths": {
 <%_ if (microfrontend && applicationTypeGateway) { _%>
   <%_ for (const remote of microfrontends) { _%>
-      "@<%= remote.lowercaseBaseName %>/*": ["<%= this.CLIENT_MAIN_SRC_DIR %>microfrontends/*"],
+      "@<%= remote.lowercaseBaseName %>/*": ["<%= clientSrcDir %>microfrontends/*"],
   <%_ } _%>
 <%_ } _%>
-      "app/*": ["<%= this.CLIENT_MAIN_SRC_DIR %>app/*"]
+      "app/*": ["<%= clientSrcDir %>app/*"]
    },
     "types": ["jest", "webpack-env"]
   }

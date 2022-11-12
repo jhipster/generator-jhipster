@@ -492,12 +492,12 @@ export default class JHipsterAppGenerator extends BaseGenerator {
   }
 
   get writing() {
-    return {
-      cleanup() {
-        cleanupOldFiles(this);
+    return this.asWritingTaskGroup({
+      cleanup({ application }) {
+        cleanupOldFiles(this, application);
         upgradeFiles(this);
       },
-    };
+    });
   }
 
   get [BaseGenerator.WRITING]() {

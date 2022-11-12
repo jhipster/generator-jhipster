@@ -148,7 +148,7 @@ if (cicdIntegrationsHeroku) { _%>
                   ./gradlew jib -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}" -Pprod
     <%_ } _%>
 <%_ } _%>
-<%_ if (cypressTests || protractorTests) {
+<%_ if (cypressTests) {
   const commented = applicationTypeGateway ? '# ' : ''; _%>
             <%= commented %>- name: 'E2E: Package'
             <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:package

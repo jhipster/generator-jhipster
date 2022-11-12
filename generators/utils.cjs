@@ -45,7 +45,6 @@ module.exports = {
   vueAddPageToRouter,
   vueAddPageServiceToMainImport,
   vueAddPageServiceToMain,
-  vueAddPageProtractorConf,
 };
 
 const databaseTypes = require('../jdl/jhipster/database-types');
@@ -457,10 +456,10 @@ function stringHashCode(str) {
   return hash;
 }
 
-function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
+function vueAddPageToRouterImport(generator, { clientSrcDir, pageName, pageFolderName, pageFilename = pageFolderName }) {
   rewriteFile(
     {
-      file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+      file: `${clientSrcDir}/app/router/pages.ts`,
       needle: 'jhipster-needle-add-entity-to-router-import',
       splicable: [
         generator.stripMargin(
@@ -474,10 +473,10 @@ function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilen
   );
 }
 
-function vueAddPageToRouter(generator, pageName, pageFilename) {
+function vueAddPageToRouter(generator, { clientSrcDir, pageName, pageFilename }) {
   rewriteFile(
     {
-      file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+      file: `${clientSrcDir}/app/router/pages.ts`,
       needle: 'jhipster-needle-add-entity-to-router',
       splicable: [
         generator.stripMargin(
@@ -495,10 +494,10 @@ function vueAddPageToRouter(generator, pageName, pageFilename) {
   );
 }
 
-function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
+function vueAddPageServiceToMainImport(generator, { clientSrcDir, pageName, pageFolderName, pageFilename = pageFolderName }) {
   rewriteFile(
     {
-      file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+      file: `${clientSrcDir}/app/main.ts`,
       needle: 'jhipster-needle-add-entity-service-to-main-import',
       splicable: [
         generator.stripMargin(
@@ -511,10 +510,10 @@ function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, page
   );
 }
 
-function vueAddPageServiceToMain(generator, pageName, pageInstance) {
+function vueAddPageServiceToMain(generator, { clientSrcDir, pageName, pageInstance }) {
   rewriteFile(
     {
-      file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+      file: `${clientSrcDir}/app/main.ts`,
       needle: 'jhipster-needle-add-entity-service-to-main',
       splicable: [
         generator.stripMargin(
@@ -522,17 +521,6 @@ function vueAddPageServiceToMain(generator, pageName, pageInstance) {
           `|${pageInstance}Service: () => new ${pageName}Service(),`
         ),
       ],
-    },
-    generator
-  );
-}
-
-function vueAddPageProtractorConf(generator) {
-  rewriteFile(
-    {
-      file: `${generator.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
-      needle: 'jhipster-needle-add-protractor-tests',
-      splicable: [generator.stripMargin("'./e2e/pages/**/*.spec.ts',")],
     },
     generator
   );

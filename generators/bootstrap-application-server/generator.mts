@@ -81,12 +81,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
           },
           dockerPlaceholderGenerator
         );
-
-        // TODO v8 drop the following variables
-        const applicationAsAny = application as any;
-        applicationAsAny.DIST_DIR = application.clientDistDir;
-        applicationAsAny.BUILD_DIR = application.temporaryDir;
-        applicationAsAny.MAIN_SRC_DIR = application.srcMainWebapp;
       },
     });
   }

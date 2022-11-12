@@ -60,8 +60,8 @@ describe('Enforce some developments patterns', () => {
         });
 
         [
-          ['src/main/webapp', '<%= CLIENT_MAIN_SRC_DIR %>'],
-          ['src/test/javascript', '<%= CLIENT_TEST_SRC_DIR %>'],
+          ['src/main/webapp', '<%= clientSrcDir %>'],
+          ['src/test/javascript', '<%= clientTestDir %>'],
           ['jhiTranslate', '<%= jhiPrefix %>Translate'],
           [' Java ', ' <%= backendType %> '],
         ].forEach(([notSpected, replacement]) => {

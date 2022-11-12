@@ -93,7 +93,7 @@ script:
   - ./gradlew deployHeroku
   <%_ } _%>
 <%_ } _%>
-<%_ if (cypressTests || protractorTests) {
+<%_ if (cypressTests) {
     const commented = applicationTypeGateway ? '# ' : ''; _%>
   <%= commented %>- <%= clientPackageManager %> run ci:e2e:package
   <%= commented %>- <%= clientPackageManager %> run ci:e2e:prepare

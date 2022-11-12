@@ -55,7 +55,7 @@ const getTsLoaderRule = env => {
 module.exports = async options => {
   const development = options.env === 'development';
 <%_ if (enableTranslation) { _%>
-  const languagesHash = await hashElement(path.resolve(__dirname, '../<%= MAIN_SRC_DIR %>i18n'), {
+  const languagesHash = await hashElement(path.resolve(__dirname, '../<%= clientSrcDir %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
     files: { include: ['*.json'] },
@@ -95,7 +95,7 @@ return merge(
       {
         test: /\.tsx?$/,
         use: getTsLoaderRule(options.env),
-        include: [utils.root('./<%= this.CLIENT_MAIN_SRC_DIR %>app')],
+        include: [utils.root('./<%= clientSrcDir %>app')],
         exclude: [utils.root('node_modules')]
       }
       /*
@@ -148,17 +148,17 @@ return merge(
           from: require.resolve('axios/dist/axios.min.js'),
           to: 'swagger-ui/',
         },
-        { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
+        { from: './<%= clientSrcDir %>swagger-ui/', to: 'swagger-ui/' },
 <%_ } _%>
-        { from: './<%= MAIN_SRC_DIR %>content/', to: 'content/' },
-        { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
-        { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
+        { from: './<%= clientSrcDir %>content/', to: 'content/' },
+        { from: './<%= clientSrcDir %>favicon.ico', to: 'favicon.ico' },
+        { from: './<%= clientSrcDir %>manifest.webapp', to: 'manifest.webapp' },
         // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-        { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
+        { from: './<%= clientSrcDir %>robots.txt', to: 'robots.txt' }
       ],
     }),
     new HtmlWebpackPlugin({
-      template: './<%= this.CLIENT_MAIN_SRC_DIR %>index.html',
+      template: './<%= clientSrcDir %>index.html',
       chunksSortMode: 'auto',
       inject: 'body',
       base: '/',

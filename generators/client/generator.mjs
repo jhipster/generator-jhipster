@@ -60,7 +60,7 @@ const { clientDefaultConfig } = generatorDefaults;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-client/types.js').ClientApplication>}
+ * @extends {BaseApplicationGenerator<import('./types.mjs').ClientApplication>}
  */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
@@ -192,9 +192,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       configureGlobal({ application }) {
-        // Make constants available in templates
-        application.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
-        application.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
         this.packagejs = packagejs;
       },
 
@@ -235,12 +232,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       prepareForTemplates({ application }) {
-        // Make dist dir available in templates
-        application.BUILD_DIR = this.getBuildDirectoryForBuildTool(application.buildTool);
-
-        application.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(application.buildTool) + constants.CLIENT_DIST_DIR;
-        application.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
-        application.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
         application.webappLoginRegExp = constants.LOGIN_REGEX_JS;
 
         if (application.authenticationType === OAUTH2 || application.databaseType === NO_DATABASE) {

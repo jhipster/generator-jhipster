@@ -66,19 +66,6 @@
     "zone.js": "<%= this.dependabotPackageJson.dependencies['zone.js'] %>"
   },
   "devDependencies": {
-<%_ if (protractorTests) { _%>
-    "@types/chai": "4.2.14",
-    "@types/chai-string": "1.4.2",
-    "@types/mocha": "8.2.0",
-    "@types/selenium-webdriver": "4.0.11",
-    "chai": "4.2.0",
-    "chai-as-promised": "7.1.1",
-    "chai-string": "1.5.0",
-    "mocha": "8.2.1",
-    "protractor": "7.0.0",
-    "ts-node": "9.1.1",
-    "webdriver-manager": "12.1.8",
-<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
     "@types/sockjs-client": "1.5.0",
 <%_ } _%>
@@ -148,27 +135,16 @@
     "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
-    "cleanup": "rimraf <%= DIST_DIR %>",
-    "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
-<%_ if (protractorTests && !cypressTests) { _%>
-    "e2e": "<%= clientPackageManager %> run e2e:protractor --",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless --",
-<%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
+    "cleanup": "rimraf <%= clientDistDir %>",
+    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= temporaryDir %>}",
+<%_ if (cypressTests) {  _%>
     "e2e": "<%= clientPackageManager %> run e2e:cypress:headed --",
     "e2e:headless": "<%= clientPackageManager %> run e2e:cypress --",
-<%_ } _%>
-<%_ if (protractorTests) { _%>
-    "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor --",
-    "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
     "e2e:cypress": "cypress run --e2e --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
     "cypress": "cypress open --e2e",
-<%_ } _%>
-<%_ if (protractorTests) { _%>
-    "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
-    "e2e:update-webdriver": "webdriver-manager update --gecko false",
 <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",

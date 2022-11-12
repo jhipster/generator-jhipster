@@ -122,11 +122,6 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return {
-      prepareForTemplates({ application }) {
-        application.BUILD_DIR = this.getBuildDirectoryForBuildTool(application.buildTool);
-        application.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(application.buildTool) + constants.CLIENT_DIST_DIR;
-      },
-
       setupConstants({ application }) {
         // Make constants available in templates
         application.MAIN_DIR = constants.MAIN_DIR;

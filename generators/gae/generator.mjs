@@ -118,7 +118,6 @@ export default class GaeGenerator extends BaseGenerator {
         this.gaeMaxInstances = configuration.get('gaeMaxInstances');
         this.gaeMinInstances = configuration.get('gaeMinInstances');
         this.gaeCloudSQLInstanceNeeded = configuration.get('gaeCloudSQLInstanceNeeded');
-        this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.config.buildTool) + constants.CLIENT_DIST_DIR;
         this.dasherizedBaseName = _.kebabCase(this.baseName);
       },
     };

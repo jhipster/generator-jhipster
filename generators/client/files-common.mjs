@@ -16,40 +16,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
-
-const { CLIENT_MAIN_SRC_DIR } = constants;
+import { clientSrcBlock } from './utils.mjs';
 
 export const files = {
   common: [
     {
-      templates: ['.eslintignore', 'README.md.jhi.client', `${CLIENT_MAIN_SRC_DIR}manifest.webapp`],
+      templates: ['.eslintignore', 'README.md.jhi.client'],
     },
     {
-      path: CLIENT_MAIN_SRC_DIR,
+      condition: generator => generator.microfrontend && (generator.clientFrameworkVue || generator.clientFrameworkReact),
+      templates: ['webpack/webpack.microfrontend.js.jhi'],
+    },
+    {
+      ...clientSrcBlock,
       templates: [
-        { file: 'content/images/jhipster_family_member_0.svg' },
-        { file: 'content/images/jhipster_family_member_0_head-192.png' },
-        { file: 'content/images/jhipster_family_member_0_head-256.png' },
-        { file: 'content/images/jhipster_family_member_0_head-384.png' },
-        { file: 'content/images/jhipster_family_member_0_head-512.png' },
-        { file: 'content/images/jhipster_family_member_1.svg' },
-        { file: 'content/images/jhipster_family_member_1_head-192.png' },
-        { file: 'content/images/jhipster_family_member_1_head-256.png' },
-        { file: 'content/images/jhipster_family_member_1_head-384.png' },
-        { file: 'content/images/jhipster_family_member_1_head-512.png' },
-        { file: 'content/images/jhipster_family_member_2.svg' },
-        { file: 'content/images/jhipster_family_member_2_head-192.png' },
-        { file: 'content/images/jhipster_family_member_2_head-256.png' },
-        { file: 'content/images/jhipster_family_member_2_head-384.png' },
-        { file: 'content/images/jhipster_family_member_2_head-512.png' },
-        { file: 'content/images/jhipster_family_member_3.svg' },
-        { file: 'content/images/jhipster_family_member_3_head-192.png' },
-        { file: 'content/images/jhipster_family_member_3_head-256.png' },
-        { file: 'content/images/jhipster_family_member_3_head-384.png' },
-        { file: 'content/images/jhipster_family_member_3_head-512.png' },
-        { file: 'content/images/logo-jhipster.png' },
-        { file: 'favicon.ico', noEjs: true },
+        'manifest.webapp',
+        'content/images/jhipster_family_member_0.svg',
+        'content/images/jhipster_family_member_0_head-192.png',
+        'content/images/jhipster_family_member_0_head-256.png',
+        'content/images/jhipster_family_member_0_head-384.png',
+        'content/images/jhipster_family_member_0_head-512.png',
+        'content/images/jhipster_family_member_1.svg',
+        'content/images/jhipster_family_member_1_head-192.png',
+        'content/images/jhipster_family_member_1_head-256.png',
+        'content/images/jhipster_family_member_1_head-384.png',
+        'content/images/jhipster_family_member_1_head-512.png',
+        'content/images/jhipster_family_member_2.svg',
+        'content/images/jhipster_family_member_2_head-192.png',
+        'content/images/jhipster_family_member_2_head-256.png',
+        'content/images/jhipster_family_member_2_head-384.png',
+        'content/images/jhipster_family_member_2_head-512.png',
+        'content/images/jhipster_family_member_3.svg',
+        'content/images/jhipster_family_member_3_head-192.png',
+        'content/images/jhipster_family_member_3_head-256.png',
+        'content/images/jhipster_family_member_3_head-384.png',
+        'content/images/jhipster_family_member_3_head-512.png',
+        'content/images/logo-jhipster.png',
+        'favicon.ico',
         'content/css/loading.css',
         'WEB-INF/web.xml',
         'robots.txt',
@@ -59,18 +62,14 @@ export const files = {
     },
     {
       condition: generator => generator.enableI18nRTL && !generator.clientFrameworkReact && !generator.clientFrameworkAngular,
-      path: CLIENT_MAIN_SRC_DIR,
+      ...clientSrcBlock,
       templates: ['content/scss/rtl.scss'],
-    },
-    {
-      condition: generator => generator.microfrontend && (generator.clientFrameworkVue || generator.clientFrameworkReact),
-      templates: ['webpack/webpack.microfrontend.js.jhi'],
     },
   ],
   swagger: [
     {
-      path: CLIENT_MAIN_SRC_DIR,
-      templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif' }],
+      ...clientSrcBlock,
+      templates: ['swagger-ui/index.html', 'swagger-ui/dist/images/throbber.gif'],
     },
   ],
 };

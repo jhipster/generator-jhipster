@@ -31,16 +31,16 @@ FROM cassandra:3.11.13
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:4.4.9
+FROM neo4j:5.1.0
 
-FROM hazelcast/management-center:5.1.4
+FROM hazelcast/management-center:5.2.0
 LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.16-alpine
 
-FROM redis:6.2.7
+FROM redis:7.0.5
 
-FROM confluentinc/cp-kafka:7.2.1
+FROM confluentinc/cp-kafka:7.3.0
 LABEL ALIAS=kafka
 
 FROM confluentinc/cp-zookeeper:7.3.0
@@ -51,7 +51,7 @@ LABEL ALIAS=sonar
 
 FROM consul:1.13.3
 
-FROM prom/prometheus:v2.38.0
+FROM prom/prometheus:v2.40.1
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.24.0
@@ -60,7 +60,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:9.1.0
+FROM grafana/grafana:9.2.4
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8

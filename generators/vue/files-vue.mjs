@@ -17,14 +17,8 @@
  * limitations under the License.
  */
 import { replaceVueTranslations } from './transform-vue.mjs';
-import constants from '../generator-constants.cjs';
 
-import { authenticationTypes, applicationTypes, websocketTypes } from '../../jdl/jhipster/index.mjs';
-
-const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, VUE_DIR } = constants;
-const { OAUTH2, SESSION } = authenticationTypes;
-const { GATEWAY } = applicationTypes;
-const { SPRING_WEBSOCKET } = websocketTypes;
+import { clientApplicationBlock, clientTestBlock, clientSrcBlock } from '../client/utils.mjs';
 
 export const vueFiles = {
   common: [
@@ -50,12 +44,12 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.microfrontend,
-      path: VUE_DIR,
+      ...clientApplicationBlock,
       templates: ['index.ts'],
     },
     {
       condition: generator => generator.microfrontend,
-      path: CLIENT_TEST_SRC_DIR,
+      ...clientTestBlock,
       templates: [
         'spec/app/microfrontends/entities-menu.component.ts',
         'spec/app/microfrontends/entities-menu.vue',
@@ -64,19 +58,19 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.applicationTypeMicroservice,
-      path: CLIENT_TEST_SRC_DIR,
+      ...clientTestBlock,
       templates: ['spec/app/entities/entities-menu.spec.ts'],
     },
   ],
   sass: [
     {
-      path: CLIENT_MAIN_SRC_DIR,
+      ...clientSrcBlock,
       templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
     },
   ],
   vueApp: [
     {
-      path: VUE_DIR,
+      ...clientApplicationBlock,
       templates: [
         'app.vue',
         'app.component.ts',
@@ -100,13 +94,13 @@ export const vueFiles = {
   i18n: [
     {
       condition: generator => generator.enableTranslation,
-      path: VUE_DIR,
+      ...clientApplicationBlock,
       templates: ['locale/translation.service.ts', 'shared/config/formatter.ts', 'shared/config/store/translation-store.ts'],
     },
   ],
   sharedVueApp: [
     {
-      path: VUE_DIR,
+      ...clientApplicationBlock,
       templates: [
         'core/home/home.vue',
         'core/home/home.component.ts',
@@ -131,12 +125,12 @@ export const vueFiles = {
   ],
   accountModule: [
     {
-      path: VUE_DIR,
+      ...clientApplicationBlock,
       templates: ['account/account.service.ts'],
     },
     {
-      condition: generator => generator.authenticationType !== OAUTH2,
-      path: VUE_DIR,
+      condition: generator => !generator.authenticationTypeOauth2,
+      ...clientApplicationBlock,
       templates: [
         'account/login-form/login-form.vue',
         'account/login-form/login-form.component.ts',
@@ -146,7 +140,7 @@ export const vueFiles = {
     },
     {
       condition: generator => !generator.skipUserManagement,
-      path: VUE_DIR,
+      ...clientApplicationBlock,
       templates: [
         'account/change-password/change-password.vue',
         'account/change-password/change-password.component.ts',
@@ -165,23 +159,23 @@ export const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === SESSION && !generator.skipUserManagement,
-      path: VUE_DIR,
+      condition: generator => generator.authenticationTypeSession && !generator.skipUserManagement,
+      ...clientApplicationBlock,
       templates: ['account/sessions/sessions.vue', 'account/sessions/sessions.component.ts'],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2,
-      path: VUE_DIR,
+      condition: generator => generator.authenticationTypeOauth2,
+      ...clientApplicationBlock,
       templates: ['account/login.service.ts'],
     },
   ],
   adminModule: [
     {
-      path: VUE_DIR,
+      ...clientApplicationBlock,
       templates: ['admin/docs/docs.vue', 'admin/docs/docs.component.ts'],
     },
     {
-      path: VUE_DIR,
+      ...clientApplicationBlock,
       condition: generator => generator.withAdminUi,
       templates: [
         'admin/configuration/configuration.vue',
@@ -203,13 +197,13 @@ export const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.websocket === SPRING_WEBSOCKET,
-      path: VUE_DIR,
+      condition: generator => generator.communicationSpringWebsocket,
+      ...clientApplicationBlock,
       templates: ['admin/tracker/tracker.vue', 'admin/tracker/tracker.component.ts', 'admin/tracker/tracker.service.ts'],
     },
     {
       condition: generator => !generator.skipUserManagement,
-      path: VUE_DIR,
+      ...clientApplicationBlock,
       templates: [
         'admin/user-management/user-management.vue',
         'admin/user-management/user-management.component.ts',
@@ -221,25 +215,19 @@ export const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryAny,
-      path: VUE_DIR,
+      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
+      ...clientApplicationBlock,
       templates: ['admin/gateway/gateway.vue', 'admin/gateway/gateway.component.ts', 'admin/gateway/gateway.service.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
-      path: VUE_DIR,
+      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
+      ...clientApplicationBlock,
       templates: ['entities/user/user.service.ts'],
-    },
-  ],
-  clientTestConfig: [
-    {
-      path: CLIENT_TEST_SRC_DIR,
-      templates: ['jest.conf.js'],
     },
   ],
   clientTestFw: [
     {
-      path: CLIENT_TEST_SRC_DIR,
+      ...clientTestBlock,
       templates: [
         'jest.conf.js',
         'spec/app/account/account.service.spec.ts',
@@ -254,7 +242,7 @@ export const vueFiles = {
       ],
     },
     {
-      path: CLIENT_TEST_SRC_DIR,
+      ...clientTestBlock,
       condition: generator => generator.withAdminUi,
       templates: [
         'spec/app/admin/configuration/configuration.component.spec.ts',
@@ -268,27 +256,27 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.enableTranslation,
-      path: CLIENT_TEST_SRC_DIR,
+      ...clientTestBlock,
       templates: ['spec/app/shared/config/formatter.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2,
-      path: CLIENT_TEST_SRC_DIR,
+      condition: generator => generator.authenticationTypeOauth2,
+      ...clientTestBlock,
       templates: ['spec/app/account/login.service.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationType !== OAUTH2,
-      path: CLIENT_TEST_SRC_DIR,
+      condition: generator => !generator.authenticationTypeOauth2,
+      ...clientTestBlock,
       templates: ['spec/app/account/login-form/login-form.component.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationType === SESSION && !generator.skipUserManagement,
-      path: CLIENT_TEST_SRC_DIR,
+      condition: generator => generator.authenticationTypeSession && !generator.skipUserManagement,
+      ...clientTestBlock,
       templates: ['spec/app/account/sessions/sessions.component.spec.ts', 'spec/app/account/login.service.spec.ts'],
     },
     {
       condition: generator => !generator.skipUserManagement,
-      path: CLIENT_TEST_SRC_DIR,
+      ...clientTestBlock,
       templates: [
         'spec/app/account/change-password/change-password.component.spec.ts',
         'spec/app/account/register/register.component.spec.ts',
@@ -299,13 +287,13 @@ export const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.websocket === SPRING_WEBSOCKET,
-      path: CLIENT_TEST_SRC_DIR,
+      condition: generator => generator.communicationSpringWebsocket,
+      ...clientTestBlock,
       templates: ['spec/app/admin/tracker/tracker.component.spec.ts', 'spec/app/admin/tracker/tracker.service.spec.ts'],
     },
     {
       condition: generator => !generator.skipUserManagement,
-      path: CLIENT_TEST_SRC_DIR,
+      ...clientTestBlock,
       templates: [
         'spec/app/admin/user-management/user-management.component.spec.ts',
         'spec/app/admin/user-management/user-management-view.component.spec.ts',
@@ -313,8 +301,8 @@ export const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryAny,
-      path: CLIENT_TEST_SRC_DIR,
+      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
+      ...clientTestBlock,
       templates: ['spec/app/admin/gateway/gateway.component.spec.ts'],
     },
   ],
@@ -323,7 +311,7 @@ export const vueFiles = {
 export const entitiesFiles = {
   entities: [
     {
-      path: VUE_DIR,
+      ...clientApplicationBlock,
       templates: [
         'entities/entities.component.ts',
         'entities/entities.vue',
@@ -345,7 +333,7 @@ export function cleanup({ application }) {
   }
 
   if (this.isJhipsterVersionLessThan('7.4.2')) {
-    this.removeFile(`${VUE_DIR}entities/user/user.oauth2.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/entities/user/user.oauth2.service.ts`);
   }
 }
 

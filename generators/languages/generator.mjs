@@ -197,9 +197,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         } else {
           this.languagesToApply = [...new Set(this.languagesToApply || [])];
         }
-
-        // Make dist dir available in templates
-        application.BUILD_DIR = this.getBuildDirectoryForBuildTool(application.buildTool);
       },
     };
   }

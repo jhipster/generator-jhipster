@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "baseUrl": "<%= this.CLIENT_MAIN_SRC_DIR %>app",
-        "outDir": "<%= BUILD_DIR %>out-tsc/dist",
+        "baseUrl": "<%= clientSrcDir %>app",
+        "outDir": "<%= temporaryDir %>out-tsc/dist",
         "target": "es5",
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
@@ -19,7 +19,7 @@
         "allowJs": true
     },
     "include": [
-        "<%= this.CLIENT_MAIN_SRC_DIR %>app"
+        "<%= clientSrcDir %>app"
     ],
     "exclude": ["node_modules"]
 }

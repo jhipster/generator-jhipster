@@ -138,16 +138,6 @@ export default class PrivateBase extends Generator {
   }
 
   /**
-   * TODO v8 drop customizer
-   * Override yeoman generator's destinationPath to apply custom output dir.
-   */
-  destinationPath(...paths) {
-    paths = path.join(...paths);
-    paths = this.applyOutputPathCustomizer(paths);
-    return paths ? super.destinationPath(paths) : paths;
-  }
-
-  /**
    * Remove File
    *
    * @param file

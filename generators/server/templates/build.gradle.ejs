@@ -575,13 +575,13 @@ if (project.hasProperty("nodeInstall")) {
     // Copy local node and npm to a fixed location for npmw
     def fixedNode = tasks.register("fixedNode", Copy) {
         from nodeSetup
-        into '<%= BUILD_DIR %>node'
+        into '<%= temporaryDir %>node'
     }
     tasks.named("nodeSetup").configure { finalizedBy fixedNode }
 
     def fixedNpm = tasks.register("fixedNpm", Copy) {
         from npmSetup
-        into '<%= BUILD_DIR %>node'
+        into '<%= temporaryDir %>node'
     }
     tasks.named("npmSetup").configure { finalizedBy fixedNpm }
 }
