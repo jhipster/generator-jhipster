@@ -234,9 +234,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       prepareForTemplates({ application }) {
         application.webappLoginRegExp = constants.LOGIN_REGEX_JS;
 
-        if (application.authenticationType === OAUTH2 || application.databaseType === NO_DATABASE) {
-          application.skipUserManagement = true;
-        }
         if (application.clientFramework === ANGULAR) {
           application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
         }

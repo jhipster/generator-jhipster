@@ -580,9 +580,6 @@ Object {
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
@@ -593,9 +590,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
@@ -1726,9 +1720,6 @@ Object {
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
@@ -1739,9 +1730,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
@@ -2133,9 +2121,6 @@ Object {
   "src/main/java/com/package/domain/AnotherSimple.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Authority.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/domain/Simple.java": Object {
     "stateCleared": "modified",
   },
@@ -2146,9 +2131,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/SimpleRepository.java": Object {
@@ -3366,9 +3348,6 @@ Object {
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
@@ -3379,9 +3358,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
@@ -3797,9 +3773,6 @@ Object {
   "src/main/java/com/package/domain/AnotherSimple.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Authority.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/domain/Simple.java": Object {
     "stateCleared": "modified",
   },
@@ -3810,9 +3783,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/AnotherSimpleRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/repository/SimpleRepository.java": Object {

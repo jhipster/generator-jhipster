@@ -640,9 +640,6 @@ Object {
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": Object {
     "stateCleared": "modified",
   },
@@ -653,9 +650,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/SimpleRepository.java": Object {
@@ -1951,9 +1945,6 @@ Object {
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Authority.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": Object {
     "stateCleared": "modified",
   },
@@ -1967,9 +1958,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": Object {
