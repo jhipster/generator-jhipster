@@ -22,7 +22,7 @@ import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_T
 export const sqlFiles = {
   reactiveJavaUserManagement: [
     {
-      condition: generator => generator.reactive && (!generator.skipUserManagement || generator.authenticationTypeOauth2),
+      condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -32,7 +32,7 @@ export const sqlFiles = {
       ],
     },
     {
-      condition: generator => generator.reactive && (!generator.skipUserManagement || generator.authenticationTypeOauth2),
+      condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {

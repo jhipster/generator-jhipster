@@ -101,6 +101,9 @@ export type CommonClientServerApplication = BaseApplication &
 
     dockerServicesDir?: string;
     prettierExtensions?: string;
+
+    generateBuiltInUserEntity?: boolean;
+    userManagement?: boolean;
   };
 
 type ServiceDiscoveryType = 'no' | 'eureka' | 'consul';

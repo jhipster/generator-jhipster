@@ -126,7 +126,7 @@ export const files = {
   ],
   accountModule: [
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: [
         'modules/account/index.tsx',
@@ -144,7 +144,7 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeSession && !generator.skipUserManagement,
+      condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: ['modules/account/sessions/sessions.tsx', 'modules/account/sessions/sessions.reducer.ts'],
     },
@@ -176,7 +176,7 @@ export const files = {
       templates: ['modules/administration/tracker/tracker.tsx'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: [
         'modules/administration/user-management/index.tsx',
@@ -280,7 +280,7 @@ export const files = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: [
         // 'spec/app/modules/account/register/register.spec.tsx',
@@ -291,7 +291,7 @@ export const files = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: ['modules/administration/user-management/user-management.reducer.spec.ts'],
     },
@@ -301,7 +301,7 @@ export const files = {
       templates: ['shared/reducers/locale.spec.ts'],
     },
     {
-      condition: generator => generator.skipUserManagement && generator.authenticationTypeOauth2,
+      condition: generator => generator.authenticationTypeOauth2,
       ...clientApplicationBlock,
       templates: ['shared/reducers/user-management.spec.ts'],
     },

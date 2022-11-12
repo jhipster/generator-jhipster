@@ -19,7 +19,7 @@
 package <%= packageName %>.web.rest;
 
 import <%= packageName %>.IntegrationTest;
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
   <%_ } _%>
@@ -35,7 +35,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } _%>
 import org.springframework.http.MediaType;
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -73,7 +73,7 @@ import static org.hamcrest.Matchers.not;
 @IntegrationTest
 class UserJWTControllerIT {
 
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
     @Autowired
     private UserRepository userRepository;
 
@@ -89,7 +89,7 @@ class UserJWTControllerIT {
 <%_ } _%>
 
     @Test
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
@@ -138,7 +138,7 @@ class UserJWTControllerIT {
     }
 
     @Test
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>

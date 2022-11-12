@@ -100,9 +100,10 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
       getSharedConfig() {
         this.loadAppConfig();
-        this.loadClientConfig();
         this.loadServerConfig();
-        this.loadPlatformConfig();
+
+        this.loadDerivedAppConfig();
+        this.loadDerivedServerConfig();
       },
 
       getConfig() {
@@ -191,14 +192,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
   get loading() {
     return {
       loadSharedConfig() {
-        this.loadAppConfig();
-        this.loadDerivedAppConfig();
-        this.loadClientConfig();
-        this.loadDerivedClientConfig();
-        this.loadServerConfig();
-        this.loadTranslationConfig();
         this._loadCiCdConfig();
-        this.loadPlatformConfig();
       },
     };
   }

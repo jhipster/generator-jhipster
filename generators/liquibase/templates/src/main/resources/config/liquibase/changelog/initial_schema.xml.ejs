@@ -36,7 +36,7 @@
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000001" author="jhipster">
-<%_ if (!skipUserManagement || authenticationTypeOauth2) {
+<%_ if (generateBuiltInUserEntity) {
         const idField = user.primaryKey.fields[0];
 _%>
         <createTable tableName="<%= user.entityTableName %>">

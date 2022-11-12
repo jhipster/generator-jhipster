@@ -869,10 +869,6 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/repository/UserRepository.java",
-          "renameTo": [Function],
-        },
-        Object {
           "file": "package/service/UserService.java",
           "renameTo": [Function],
         },
@@ -897,10 +893,6 @@ Object {
           "renameTo": [Function],
         },
         Object {
-          "file": "package/web/rest/vm/ManagedUserVM.java",
-          "renameTo": [Function],
-        },
-        Object {
           "file": "package/web/rest/AccountResource.java",
           "renameTo": [Function],
         },
@@ -909,19 +901,11 @@ Object {
           "renameTo": [Function],
         },
         Object {
-          "file": "package/web/rest/PublicUserResource.java",
-          "renameTo": [Function],
-        },
-        Object {
           "file": "package/web/rest/vm/KeyAndPasswordVM.java",
           "renameTo": [Function],
         },
         Object {
           "file": "package/service/mapper/package-info.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/service/mapper/UserMapper.java",
           "renameTo": [Function],
         },
       ],

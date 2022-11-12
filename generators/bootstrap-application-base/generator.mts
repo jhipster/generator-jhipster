@@ -127,16 +127,15 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
   get loadingEntities() {
     return this.asLoadingEntitiesTaskGroup({
       loadUser({ application }) {
-        if (application.skipUserManagement && !application.authenticationTypeOauth2) {
-          return;
-        }
-        if (this.sharedData.hasEntity('User')) {
-          throw new Error("Fail to bootstrap 'User', already exists.");
-        }
+        if (application.generateBuiltInUserEntity) {
+          if (this.sharedData.hasEntity('User')) {
+            throw new Error("Fail to bootstrap 'User', already exists.");
+          }
 
-        const user = createUserEntity.call(this, {}, application);
-        this.sharedData.setEntity('User', user);
-        application.user = user;
+          const user = createUserEntity.call(this, {}, application);
+          this.sharedData.setEntity('User', user);
+          application.user = user;
+        }
       },
       loadingEntities({ entitiesToLoad }) {
         for (const { entityName, entityStorage } of entitiesToLoad) {

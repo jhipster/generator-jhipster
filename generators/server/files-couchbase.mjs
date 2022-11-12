@@ -65,12 +65,12 @@ export const couchbaseFiles = {
   ],
   serverResource: [
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/couchmove/changelog/V0__create_collections.n1ql', 'config/couchmove/changelog/V0.2__create_indexes.n1ql'],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
+      condition: generator => generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         'config/couchmove/changelog/V0.1__initial_setup/authority/ROLE_ADMIN.json',

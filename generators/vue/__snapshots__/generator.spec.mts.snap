@@ -999,21 +999,6 @@ Object {
   "src/app/account/account.service.ts": Object {
     "stateCleared": "modified",
   },
-  "src/app/account/activate/activate.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/activate/activate.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/activate/activate.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/change-password/change-password.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/change-password/change-password.vue": Object {
-    "stateCleared": "modified",
-  },
   "src/app/account/login-form/login-form.component.ts": Object {
     "stateCleared": "modified",
   },
@@ -1023,58 +1008,10 @@ Object {
   "src/app/account/login.service.ts": Object {
     "stateCleared": "modified",
   },
-  "src/app/account/register/register.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/register/register.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/register/register.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/reset-password/finish/reset-password-finish.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/reset-password/finish/reset-password-finish.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/reset-password/init/reset-password-init.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/reset-password/init/reset-password-init.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/settings/settings.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/account/settings/settings.vue": Object {
-    "stateCleared": "modified",
-  },
   "src/app/admin/docs/docs.component.ts": Object {
     "stateCleared": "modified",
   },
   "src/app/admin/docs/docs.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/admin/user-management/user-management-edit.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/admin/user-management/user-management-edit.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/admin/user-management/user-management-view.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/admin/user-management/user-management-view.vue": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/admin/user-management/user-management.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/admin/user-management/user-management.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/admin/user-management/user-management.vue": Object {
     "stateCleared": "modified",
   },
   "src/app/app.component.ts": Object {
@@ -1371,34 +1308,7 @@ Object {
   "test/spec/app/account/account.service.spec.ts": Object {
     "stateCleared": "modified",
   },
-  "test/spec/app/account/activate/activate.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/account/change-password/change-password.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
   "test/spec/app/account/login-form/login-form.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/account/register/register.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/account/reset-password/finish/reset-password-finish.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/account/reset-password/init/reset-password-init.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/account/settings/settings.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/admin/user-management/user-management-edit.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/admin/user-management/user-management-view.component.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "test/spec/app/admin/user-management/user-management.component.spec.ts": Object {
     "stateCleared": "modified",
   },
   "test/spec/app/core/error/error.component.spec.ts": Object {
