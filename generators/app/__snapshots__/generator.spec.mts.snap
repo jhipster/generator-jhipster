@@ -245,6 +245,8 @@ Object {
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
+    "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
+    "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",
     "jib-maven-plugin": "'JIB-MAVEN-PLUGIN-VERSION'",
     "liquibase": "'LIQUIBASE-VERSION'",
   },
@@ -590,6 +592,8 @@ Object {
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
+    "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
+    "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",
     "jib-maven-plugin": "'JIB-MAVEN-PLUGIN-VERSION'",
     "liquibase": "'LIQUIBASE-VERSION'",
   },
@@ -936,6 +940,8 @@ Object {
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
+    "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
+    "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",
     "jib-maven-plugin": "'JIB-MAVEN-PLUGIN-VERSION'",
     "liquibase": "'LIQUIBASE-VERSION'",
   },
