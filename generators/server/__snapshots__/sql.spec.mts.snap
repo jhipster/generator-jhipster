@@ -4066,18 +4066,6 @@ Object {
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/MailServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
     "stateCleared": "modified",
   },
@@ -4692,18 +4680,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/MailServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
@@ -5337,18 +5313,6 @@ Object {
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/MailServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
     "stateCleared": "modified",
   },
@@ -5959,18 +5923,6 @@ Object {
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/MailServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
     "stateCleared": "modified",
   },
@@ -6579,18 +6531,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/MailServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {

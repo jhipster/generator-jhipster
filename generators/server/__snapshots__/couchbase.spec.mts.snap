@@ -1263,9 +1263,6 @@ Object {
   "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },

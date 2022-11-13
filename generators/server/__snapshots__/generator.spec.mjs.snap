@@ -933,7 +933,7 @@ Object {
           "renameTo": [Function],
         },
         Object {
-          "file": "package/web/rest/vm/ManagedUserVM.java",
+          "file": "package/web/rest/AccountResource.java",
           "renameTo": [Function],
         },
         Object {
