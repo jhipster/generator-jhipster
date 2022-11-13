@@ -457,4 +457,24 @@ export default class EntityGenerator extends BaseGenerator {
   isUserEntity(entityName) {
     return _.upperFirst(entityName) === 'User';
   }
+
+  /**
+   * @private
+   * Verify if the entity is a Authority entity.
+   * @param {String} entityName - Entity name to verify.
+   * @return {boolean} true if the entity is Authority.
+   */
+  isAuthorityEntity(entityName) {
+    return _.upperFirst(entityName) === 'Authority';
+  }
+
+  /**
+   * @private
+   * Verify if the entity is a built-in Authority.
+   * @param {String} entityName - Entity name to verify.
+   * @return {boolean} true if the entity is Authority and is built-in.
+   */
+  isBuiltInAuthority(entityName) {
+    return this.generateBuiltInAuthorityEntity && this.isAuthorityEntity(entityName);
+  }
 }
