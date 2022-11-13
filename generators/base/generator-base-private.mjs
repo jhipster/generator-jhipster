@@ -165,21 +165,6 @@ export default class PrivateBase extends Generator {
   }
 
   /**
-   * @private
-   * Execute a git mv.
-   *
-   * @param {string} source
-   * @param {string} dest
-   * @returns {boolean} true if success; false otherwise
-   */
-  gitMove(source, dest) {
-    const res = moveWithGit(this, source, dest);
-    // TODO Should not update variables
-    source = res.source;
-    dest = res.dest;
-  }
-
-  /**
    * @returns default app name
    */
   getDefaultAppName() {

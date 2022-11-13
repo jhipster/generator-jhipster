@@ -19,6 +19,7 @@
 
 import constants from './generator-constants.cjs';
 import { languageSnakeCase, languageToJavaLanguage } from './languages/utils.mjs';
+import { moveWithGit } from './base/logic/index.mjs';
 
 export { cleanupOldServerFiles } from './server/cleanup.mjs';
 
@@ -359,7 +360,8 @@ export function upgradeFiles(generator) {
         .map(langNameDiffer)
         .filter(props => props)
         .forEach(props => {
-          const code = generator.gitMove(
+          const code = moveWithGit(
+            generator,
             `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
             `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
           );
