@@ -45,7 +45,7 @@ export const mongoDbFiles = {
       ],
     },
     {
-      condition: generator => generator.generateUserManagement,
+      condition: generator => generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
