@@ -164,6 +164,12 @@ export default class EntityGenerator extends BaseGenerator {
         this.loadDerivedPlatformConfig(this.application);
       },
 
+      isBuiltInEntity() {
+        if (this.isBuiltInUser(this.context.name) || this.isBuiltInAuthority(this.context.name)) {
+          throw new Error(`Is not possible to override built in ${this.context.name}`);
+        }
+      },
+
       setupMicroServiceEntity() {
         const context = this.context;
 
