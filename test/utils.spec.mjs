@@ -2,32 +2,34 @@ import { fileURLToPath } from 'url';
 import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
 
-import { getEnumInfo, getJavadoc, deepFind, stringHashCode } from '../generators/utils.mjs';
+import { deepFind, stringHashCode, renderContent } from '../generators/utils.mjs';
+import { getEnumInfo } from '../generators/entity/logic/index.mjs';
+import { javadoc } from '../generators/server/logic/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 describe('utils - generator', () => {
-  describe('::getJavadoc', () => {
+  describe('::javadoc', () => {
     describe('when passing a negative or nil increment', () => {
       it('returns the comment with no increment', () => {
-        assert.textEqual(getJavadoc('whatever', -42), '/**\n * whatever\n */');
-        assert.textEqual(getJavadoc('whatever', 0), '/**\n * whatever\n */');
+        assert.textEqual(javadoc('whatever', -42), '/**\n * whatever\n */');
+        assert.textEqual(javadoc('whatever', 0), '/**\n * whatever\n */');
       });
     });
     describe('when passing a positive increment', () => {
       it('returns the comment with the increment', () => {
-        assert.textEqual(getJavadoc('whatever', 1), ' /**\n  * whatever\n  */');
+        assert.textEqual(javadoc('whatever', 1), ' /**\n  * whatever\n  */');
       });
     });
     describe('when passing a nil comment', () => {
       it('inserts an empty comment instead of failing', () => {
-        assert.textEqual(getJavadoc(null, 1), ' /**\n  * \n  */');
+        assert.textEqual(javadoc(null, 1), ' /**\n  * \n  */');
       });
     });
     describe('when passing a comment containing double quotes', () => {
       it('escapes the quotes', () => {
-        assert.textEqual(getJavadoc('Comment="KO"', 1), ' /**\n  * Comment=\\"KO\\"\n  */');
+        assert.textEqual(javadoc('Comment="KO"', 1), ' /**\n  * Comment=\\"KO\\"\n  */');
       });
     });
   });

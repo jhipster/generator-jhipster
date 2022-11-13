@@ -23,6 +23,7 @@ import ejs from 'ejs';
 import _ from 'lodash';
 import os from 'os';
 
+
 /**
  * Rewrite file with passed arguments
  * @param {object} args argument object (containing path, file, haystack, etc properties)
@@ -187,29 +188,6 @@ export function deepFind(obj, path, placeholder) {
 }
 
 /**
- * Convert passed block of string to javadoc formatted string.
- *
- * @param {string} text text to convert to javadoc format
- * @param {number} indentSize indent size (default 0)
- * @returns javadoc formatted string
- */
-export function getJavadoc(text, indentSize = 0) {
-  if (!text) {
-    text = '';
-  }
-  if (text.includes('"')) {
-    text = text.replace(/"/g, '\\"');
-  }
-  let javadoc = `${_.repeat(' ', indentSize)}/**`;
-  const rows = text.split('\n');
-  for (let i = 0; i < rows.length; i++) {
-    javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} * ${rows[i]}`;
-  }
-  javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} */`;
-  return javadoc;
-}
-
-/**
  * Build an enum object
  * @param {Object} field - entity field
  * @param {String} clientRootFolder - the client's root folder
@@ -324,6 +302,16 @@ export function getEnums(enums, customValuesState, comments) {
 
 export function doesTheEnumValueHaveACustomValue(enumValue) {
   return enumValue.includes('(');
+=======
+ * Get DB type from DB value
+ * @param {string} db - db
+ */
+function getDBTypeFromDBValue(db) {
+  if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
+    return SQL;
+  }
+  return db;
+>>>>>>> 3da36b5af1 (move some methods from utils to logic folder)
 }
 
 /**

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { getEnumInfo } from '../utils.mjs';
+import { getEnumInfo } from '../entity/logic/index.mjs';
 
 const { startCase } = _;
 

@@ -18,6 +18,7 @@
  */
 import { getEnumInfo } from '../utils.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
+import { getEnumInfo } from '../entity/logic/index.mjs';
 
 const CLIENT_COMMON_TEMPLATES_DIR = 'entity/common';
 

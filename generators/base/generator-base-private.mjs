@@ -27,14 +27,14 @@ import https from 'https';
 import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 import { packageJson } from '../../lib/index.mjs';
-import { getJavadoc } from '../utils.mjs';
+import { databaseData } from '../sql/support/index.mjs';
+import { javadoc } from './logic/index.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
-import { databaseData } from '../sql/support/index.mjs';
+import { deleteFile, deleteFolder } from './support/index.mjs';
 import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
-import { deleteFile, deleteFolder, generatorOrContext, logDebug, renderContent, writeContent } from './support/index.mjs';
-import { checkJavaCompliant } from '../server/support/index.mjs';
+import { deleteFile, deleteFolder } from './support/index.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
@@ -199,7 +199,7 @@ export default class PrivateBase extends Generator {
    * @returns class javadoc
    */
   formatAsClassJavadoc(text) {
-    return getJavadoc(text, 0);
+    return javadoc(text, 0);
   }
 
   /**
@@ -210,7 +210,7 @@ export default class PrivateBase extends Generator {
    * @returns field javadoc
    */
   formatAsFieldJavadoc(text) {
-    return getJavadoc(text, 4);
+    return javadoc(text, 4);
   }
 
   /**
