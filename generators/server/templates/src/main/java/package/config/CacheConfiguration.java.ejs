@@ -218,7 +218,7 @@ public class CacheConfiguration {
   <%_ if (authenticationTypeOauth2 && applicationTypeMicroservice) { _%>
             createCache(cm, "oAuth2Authentication");
   <%_ } _%>
-  <%_ if (generateUserManagement) { _%>
+  <%_ if (generateBuiltInUserEntity) { _%>
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
     <%_ if (enableHibernateCache) { _%>
