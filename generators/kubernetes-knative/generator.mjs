@@ -147,8 +147,11 @@ export default class KubernetesKnativeGenerator extends BaseDockerGenerator {
     return {
       loadSharedConfig() {
         this.appConfigs.forEach(element => {
+          this.loadAppConfig(element, element);
           this.loadServerConfig(element, element);
+
           this.loadDerivedAppConfig(element);
+          this.loadDerivedServerConfig(element);
         });
         this.loadDeploymentConfig(this);
         derivedKubernetesPlatformProperties(this);

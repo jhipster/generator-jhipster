@@ -225,82 +225,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Verify if the entity is a built-in Entity.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is built-in.
-   */
-  isBuiltInEntity(entityName) {
-    return this.isBuiltInUser(entityName) || this.isBuiltInAuthority(entityName);
-  }
-
-  /**
-   * @private
-   * Verify if the application is using built-in User.
-   * @return {boolean} true if the User is built-in.
-   */
-  isUsingBuiltInUser() {
-    return (
-      !this.jhipsterConfig ||
-      (!this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.databaseType !== NO_DATABASE) ||
-      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
-    );
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a User entity.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is User.
-   */
-  isUserEntity(entityName) {
-    return _.upperFirst(entityName) === 'User';
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a built-in User.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is User and is built-in.
-   */
-  isBuiltInUser(entityName) {
-    return this.isUsingBuiltInUser() && this.isUserEntity(entityName);
-  }
-
-  /**
-   * @private
-   * Verify if the application is using built-in Authority.
-   * @return {boolean} true if the Authority is built-in.
-   */
-  isUsingBuiltInAuthority() {
-    return (
-      !this.jhipsterConfig ||
-      (!this.jhipsterConfig.skipUserManagement && [SQL, MONGODB, COUCHBASE, NEO4J].includes(this.jhipsterConfig.databaseType)) ||
-      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
-    );
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a Authority entity.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is Authority.
-   */
-  isAuthorityEntity(entityName) {
-    return _.upperFirst(entityName) === 'Authority';
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a built-in Authority.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is Authority and is built-in.
-   */
-  isBuiltInAuthority(entityName) {
-    return this.isUsingBuiltInAuthority() && this.isAuthorityEntity(entityName);
-  }
-
-  /**
-   * @private
    * Replace placeholders with versions from packageJsonSourceFile.
    * @param {string} keyToReplace - PlaceHolder name.
    * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
@@ -1410,7 +1334,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
     const entities = [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
       .map(entityName => ({ name: entityName, definition: this.readEntityJson(entityName) }))
-      .filter(entity => entity && !this.isBuiltInUser(entity.name) && !this.isBuiltInAuthority(entity.name) && entity.definition)
+      .filter(entity => entity && !entity.builtInUser && entity.definition)
       .sort(isBefore);
     this.jhipsterConfig.entities = entities.map(({ name }) => name);
     return entities;
@@ -2407,7 +2331,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.skipFakeData = config.skipFakeData;
     dest.entitySuffix = config.entitySuffix;
     dest.dtoSuffix = config.dtoSuffix;
-    dest.skipUserManagement = config.skipUserManagement;
     dest.skipCheckLengthOfIdentifier = config.skipCheckLengthOfIdentifier;
     dest.microfrontend = config.microfrontend;
     dest.microfrontends = config.microfrontends;
@@ -2439,6 +2362,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.rememberMeKey = config.rememberMeKey;
     dest.jwtSecretKey = config.jwtSecretKey;
     dest.fakerSeed = config.fakerSeed;
+    dest.skipUserManagement = config.skipUserManagement;
   }
 
   /**
@@ -2495,6 +2419,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.authenticationTypeSession = dest.authenticationType === SESSION;
     dest.authenticationTypeJwt = dest.authenticationType === JWT;
     dest.authenticationTypeOauth2 = dest.authenticationType === OAUTH2;
+
+    dest.generateUserManagement = !dest.skipUserManagement && dest.authenticationType !== OAUTH2 && dest.applicationType !== MICROSERVICE;
+    dest.generateBuiltInUserEntity = dest.generateUserManagement;
   }
 
   /**
@@ -2598,8 +2525,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     } else {
       dest.gradleEnterpriseHost = config.gradleEnterpriseHost;
     }
-
-    this.loadDerivedServerConfig(dest);
   }
 
   /**
@@ -2684,6 +2609,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
     dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
     dest.serviceDiscoveryAny = ![undefined, false, 'no'].includes(dest.serviceDiscoveryType);
+
+    if (dest.databaseType === NO_DATABASE) {
+      // User management requires a database.
+      dest.generateUserManagement = false;
+    }
+    // TODO make UserEntity optional on relationships for microservices and oauth2
+    // Used for relationships and syncWithIdp
+    dest.generateBuiltInUserEntity =
+      dest.generateUserManagement ||
+      dest.authenticationType === OAUTH2 ||
+      (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
   }
 
   /**

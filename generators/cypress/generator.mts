@@ -132,7 +132,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
 
   get writing(): WritingTaskGroup<this, CypressApplication> {
     return {
-      cleanup({ application: { authenticationTypeOauth2, skipUserManagement, cypressDir } }) {
+      cleanup({ application: { authenticationTypeOauth2, generateUserManagement, cypressDir } }) {
         if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
           this.removeFile(`${cypressDir}support/keycloak-oauth2.ts`);
           this.removeFile(`${cypressDir}fixtures/users/user.json`);
@@ -146,7 +146,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
           if (!authenticationTypeOauth2) {
             this.removeFile(`${cypressDir}integration/account/login-page.spec.ts`);
           }
-          if (!skipUserManagement) {
+          if (generateUserManagement) {
             this.removeFile(`${cypressDir}integration/account/register-page.spec.ts`);
             this.removeFile(`${cypressDir}integration/account/settings-page.spec.ts`);
             this.removeFile(`${cypressDir}integration/account/password-page.spec.ts`);

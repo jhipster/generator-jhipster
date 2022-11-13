@@ -93,7 +93,7 @@ import org.springframework.security.core.userdetails.MapReactiveUserDetailsServi
 import org.springframework.security.core.userdetails.UserDetails;
   <%_ } _%>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
@@ -263,7 +263,7 @@ public class SecurityConfiguration {
             .pathMatchers("/*.*").permitAll()
 <%_ } _%>
             .pathMatchers("/api/authenticate").permitAll()
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
             .pathMatchers("/api/register").permitAll()
             .pathMatchers("/api/activate").permitAll()
             .pathMatchers("/api/account/reset-password/init").permitAll()

@@ -1,6 +1,6 @@
 CREATE COLLECTION `${bucket}`.`${scope}`.`user`;
 
-<%_ if (builtInAuthority) { _%>
+<%_ if (generateBuiltInAuthorityEntity) { _%>
 CREATE COLLECTION `${bucket}`.`${scope}`.`authority`;
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>

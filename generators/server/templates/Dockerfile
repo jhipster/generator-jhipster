@@ -18,12 +18,12 @@ LABEL ALIAS=keycloak
 
 FROM mysql:8.0.31
 
-FROM mariadb:10.8.3
+FROM mariadb:10.9.4
 
 FROM mongo:6.0.2
 LABEL ALIAS=mongodb
 
-FROM couchbase/server:7.0.3
+FROM couchbase/server:7.1.2
 LABEL ALIAS=couchbase
 
 FROM cassandra:3.11.13
@@ -36,7 +36,7 @@ FROM neo4j:5.1.0
 FROM hazelcast/management-center:5.2.0
 LABEL ALIAS=hazelcast
 
-FROM memcached:1.6.16-alpine
+FROM memcached:1.6.17-alpine
 
 FROM redis:7.0.5
 

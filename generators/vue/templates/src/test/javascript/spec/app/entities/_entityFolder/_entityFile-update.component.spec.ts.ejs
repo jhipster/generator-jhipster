@@ -45,7 +45,7 @@ import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/
     const otherEntityFolderName = relationship.otherEntityFileName;
     const otherEntityClientRootFolder = relationship.otherEntityClientRootFolder; _%>
     <%_ if (!importEntitiesSeen.includes(otherEntityAngularName)) { _%>
-      <% if (relationship.otherEntityUser && (!skipUserManagement || authenticationTypeOauth2)) { %>
+      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
 import UserService from '@/entities/user/user.service';
       <% } else if (!relationship.otherEntityUser) { %>
 import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
@@ -99,7 +99,7 @@ describe('Component Tests', () => {
       const otherEntityName = relationship.otherEntityName;
       const otherEntityAngularName = relationship.otherEntityAngularName; _%>
     <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
-      <% if (relationship.otherEntityUser && (!skipUserManagement || authenticationTypeOauth2)) { %>
+      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
           userService: () => new UserService(),
       <%_ } else { _%>
           <%= otherEntityName %>Service: () =>

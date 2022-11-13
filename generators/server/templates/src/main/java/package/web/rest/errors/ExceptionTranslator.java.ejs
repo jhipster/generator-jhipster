@@ -119,7 +119,7 @@ _%>
     public ExceptionTranslator(Environment env) {
         this.env = env;
     }
-    
+
     @ExceptionHandler
     <%_ if (reactive) { _%>@Override<%_ } _%>
     public <%- returnType %> handleAnyException(Throwable ex, <%= requestClass %> request
@@ -163,33 +163,33 @@ _%>
 
     protected ProblemDetailWithCause custemizeProblem(ProblemDetailWithCause problem, Throwable err, <%= requestClass %> request) {
         if (problem.getStatus() <= 0) problem.setStatus(toStatus(err));
-        
+
         if (problem.getType() == null || problem.getType().equals(URI.create("about:blank"))) problem.setType(getMappedType(err));
-        
+
         // higher precedence to Custom/ResponseStatus types
         String title = extractTitle(err, problem.getStatus());
         if (problem.getTitle() == null || !problem.getTitle().equals(title)) {
         	problem.setTitle(title);
         }
-        
+
         if (problem.getDetail() == null) {
             // higher precedence to cause
         	problem.setDetail(getCustemizedErrorDetails(err));
         }
-        
-        if (problem.getProperties() == null || !problem.getProperties().containsKey(MESSAGE_KEY)) 
+
+        if (problem.getProperties() == null || !problem.getProperties().containsKey(MESSAGE_KEY))
         	problem.setProperty(MESSAGE_KEY,
                 getMappedMessageKey((Throwable) err) != null
                     ? getMappedMessageKey(err)
                     : "error.http." + problem.getStatus());
-        
-        if (problem.getProperties() == null || !problem.getProperties().containsKey(PATH_KEY)) 
+
+        if (problem.getProperties() == null || !problem.getProperties().containsKey(PATH_KEY))
             problem.setProperty(PATH_KEY, getPathValue(request));
-        
-        if((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %>) && 
+
+        if((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %>) &&
                 (problem.getProperties() == null || !problem.getProperties().containsKey(FIELD_ERRORS_KEY)))
             problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors((<% if (reactive) { %>WebExchangeBindException<% } else { %>MethodArgumentNotValidException<% } %>) err));
-    
+
         problem.setCause(buildCause(err.getCause(), request).orElse(null));
 
         return problem;
@@ -253,12 +253,12 @@ _%>
             return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
         return ErrorConstants.DEFAULT_TYPE;
     }
-    
+
     private String getMappedMessageKey(Throwable err) {
         if(err instanceof MethodArgumentNotValidException)
             return ErrorConstants.ERR_VALIDATION;
     <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
-        else if(err instanceof ConcurrencyFailureException 
+        else if(err instanceof ConcurrencyFailureException
                 || err.getCause() != null && err.getCause() instanceof ConcurrencyFailureException)
             return ErrorConstants.ERR_CONCURRENCY_FAILURE;
     <%_ } _%>
@@ -267,7 +267,7 @@ _%>
     <%_ } _%>
         return null;
     }
-    
+
     private String getCustemizedTitle(Throwable err) {
         if(err instanceof MethodArgumentNotValidException exp)
             return "Method argument not valid";
@@ -285,27 +285,27 @@ _%>
         }
     	return err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
     }
-    
+
     private HttpStatus getMappedStatus(Throwable err) {
         // Where we disagree with Spring defaults
         if (err instanceof AccessDeniedException accDenied) return HttpStatus.FORBIDDEN;
     <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         if(err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
-    <%_ } _%>    
+    <%_ } _%>
         if(err instanceof BadCredentialsException) return HttpStatus.UNAUTHORIZED;
     <%_ if (reactive) { _%>
         if (err instanceof UsernameNotFoundException) return HttpStatus.UNAUTHORIZED;
     <%_ } _%>
         return null;
     }
-    
+
     private URI getPathValue(<%= requestClass %> request) {
         if(request == null) return URI.create("about:blank");
         return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI((NativeWebRequest) request))<% } %>;
     }
 
     private HttpHeaders buildHeaders(Throwable err, <%= requestClass %> request) {
-        return err instanceof BadRequestAlertException ? 
+        return err instanceof BadRequestAlertException ?
                 HeaderUtil.createFailureAlert(applicationName, true, ((BadRequestAlertException) err).getEntityName(),
                         ((BadRequestAlertException) err).getErrorKey(), ((BadRequestAlertException) err).getMessage()) : null;
     }

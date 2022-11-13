@@ -1017,54 +1017,6 @@ Object {
   "src/app/index.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/app/modules/account/activate/activate.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/activate/activate.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/activate/activate.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/password-reset/finish/password-reset-finish.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/password-reset/init/password-reset-init.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/password-reset/password-reset.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/password/password.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/password/password.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/password/password.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/register/register.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/register/register.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/register/register.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/settings/settings.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/settings/settings.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/account/settings/settings.tsx": Object {
-    "stateCleared": "modified",
-  },
   "src/app/modules/administration/administration.reducer.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -1078,27 +1030,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/modules/administration/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/administration/user-management/index.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/administration/user-management/user-management-delete-dialog.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/administration/user-management/user-management-detail.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/administration/user-management/user-management-update.tsx": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/administration/user-management/user-management.reducer.spec.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/administration/user-management/user-management.reducer.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/app/modules/administration/user-management/user-management.tsx": Object {
     "stateCleared": "modified",
   },
   "src/app/modules/home/home.scss": Object {

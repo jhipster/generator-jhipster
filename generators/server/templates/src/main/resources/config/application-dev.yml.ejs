@@ -216,7 +216,7 @@ spring:
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
   <%_ } _%>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   mail:
     host: localhost
     port: 25
@@ -379,7 +379,7 @@ jhipster:
       # security key (this key should be unique for your application, and kept secret)
       key: <%= rememberMeKey %>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://127.0.0.1:<%= serverPort %>
 <%_ } _%>

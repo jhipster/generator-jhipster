@@ -53,7 +53,7 @@ export class AccountService {
     private applicationConfigService: ApplicationConfigService
   ) {}
 
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   save(account: Account): Observable<{}> {
     return this.http.post(this.applicationConfigService.getEndpointFor('api/account'), account);
   }

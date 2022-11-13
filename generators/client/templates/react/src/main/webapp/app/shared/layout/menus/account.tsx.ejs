@@ -31,7 +31,7 @@ import { NavDropdown } from './menu-components';
 
 const accountMenuItemsAuthenticated = () => (
   <>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
     <MenuItem icon="wrench" to="/account/settings" data-cy="settings"><Translate contentKey="global.menu.account.settings">Settings</Translate></MenuItem>
     <MenuItem icon="lock" to="/account/password" data-cy="passwordItem"><Translate contentKey="global.menu.account.password">Password</Translate></MenuItem>
   <%_ if (authenticationTypeSession) { _%>
@@ -49,7 +49,7 @@ const accountMenuItems = () => (
 <%_ } else { _%>
     <DropdownItem id="login-item" tag="a" href={getLoginUrl()} data-cy="login"><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
     <MenuItem icon="user-plus" to="/account/register" data-cy="register"><Translate contentKey="global.menu.account.register">Register</Translate></MenuItem>
 <%_ } _%>
   </>

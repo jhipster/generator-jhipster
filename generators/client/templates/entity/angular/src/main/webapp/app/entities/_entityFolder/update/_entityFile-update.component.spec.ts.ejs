@@ -38,7 +38,7 @@ import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions.filter(relationships => relationships[0].otherEntity.entityAngularName !== entityAngularName)) { _%>
   <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity; _%>
-  <%_ if (this.isBuiltInUser(otherEntity.entityAngularName)) { _%>
+  <%_ if (otherEntity.builtInUser) { _%>
 
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';

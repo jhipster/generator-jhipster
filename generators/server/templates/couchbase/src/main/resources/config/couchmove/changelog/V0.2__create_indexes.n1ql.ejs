@@ -21,7 +21,7 @@ CREATE INDEX user_non_activated ON `${bucket}`.`${scope}`.`user`(createdDate)
       AND activationKey IS NOT NULL
     WITH { "defer_build" : true };
 
-<%_ if (builtInAuthority) { _%>
+<%_ if (generateBuiltInAuthorityEntity) { _%>
 CREATE INDEX authority_type ON `${bucket}`.`${scope}`.`authority`(type)
     WHERE `type` = "authority"
     WITH { "defer_build" : true };

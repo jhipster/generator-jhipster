@@ -54,9 +54,11 @@ export default class CloudfoundryGenerator extends BaseGenerator {
 
       getSharedConfig() {
         this.loadAppConfig();
-        this.loadClientConfig();
         this.loadServerConfig();
         this.loadPlatformConfig();
+
+        this.loadDerivedAppConfig();
+        this.loadDerivedServerConfig();
       },
       getConfig() {
         const configuration = this.config;

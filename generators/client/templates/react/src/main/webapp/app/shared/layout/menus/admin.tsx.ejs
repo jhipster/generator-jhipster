@@ -30,7 +30,7 @@ const adminMenuItems = () => (
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
     <MenuItem icon="road" to="/admin/gateway"><Translate contentKey="global.menu.admin.gateway">Gateway</Translate></MenuItem>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
     <MenuItem icon="users" to="/admin/user-management"><Translate contentKey="global.menu.admin.userManagement">User management</Translate></MenuItem>
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
