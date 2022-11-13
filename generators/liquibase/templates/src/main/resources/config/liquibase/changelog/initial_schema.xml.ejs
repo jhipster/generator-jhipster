@@ -46,7 +46,7 @@ _%>
             <column name="login" type="varchar(50)">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
             </column>
-  <%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (generateUserManagement) { _%>
             <column name="password_hash" type="varchar(60)"/>
   <%_ } _%>
             <column name="first_name" type="varchar(50)"/>
@@ -59,7 +59,7 @@ _%>
                 <constraints nullable="false" />
             </column>
             <column name="lang_key" type="varchar(10)"/>
-  <%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (generateUserManagement) { _%>
             <column name="activation_key" type="varchar(20)"/>
             <column name="reset_key" type="varchar(20)"/>
   <%_ } _%>
@@ -67,7 +67,7 @@ _%>
                 <constraints nullable="false"/>
             </column>
             <column name="created_date" type="timestamp"/>
-  <%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (generateUserManagement) { _%>
             <column name="reset_date" type="timestamp">
                 <constraints nullable="true"/>
             </column>
@@ -120,7 +120,7 @@ _%>
                                  referencedColumnNames="id"
                                  referencedTableName="<%= user.entityTableName %>"/>
 
-  <%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (generateUserManagement) { _%>
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
                                 tableName="<%= user.entityTableName %>"/>
@@ -133,25 +133,25 @@ _%>
                                  referencedColumnNames="id"
                                  referencedTableName="<%= user.entityTableName %>"/>
   <%_ } _%>
-  <%_ if (!authenticationTypeOauth2 || (authenticationTypeOauth2 && !applicationTypeMicroservice)) { _%>
-        <loadData
-                  file="config/liquibase/data/user.csv"
-                  separator=";"
-                  tableName="<%= user.entityTableName %>"
-                  usePreparedStatements="true">
-    <%_ if (prodDatabaseTypePostgres) { _%>
-            <column name="id" type="<%= idField.loadColumnType %>"/>
-    <%_ } _%>
-            <column name="activated" type="boolean"/>
-            <column name="created_date" type="timestamp"/>
-        </loadData>
-        <dropDefaultValue tableName="<%= user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
+  <%_ if (generateUserManagement) { _%>
         <loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
                   tableName="<%= jhiTablePrefix %>_authority"
                   usePreparedStatements="true">
             <column name="name" type="string"/>
+        </loadData>
+    <%_ if (!authenticationTypeOauth2) { _%>
+        <loadData
+                  file="config/liquibase/data/user.csv"
+                  separator=";"
+                  tableName="<%= user.entityTableName %>"
+                  usePreparedStatements="true">
+      <%_ if (prodDatabaseTypePostgres) { _%>
+            <column name="id" type="<%= idField.loadColumnType %>"/>
+      <%_ } _%>
+            <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
         </loadData>
         <loadData
                   file="config/liquibase/data/user_authority.csv"
@@ -160,6 +160,8 @@ _%>
                   usePreparedStatements="true">
             <column name="user_id" type="<%= idField.loadColumnType %>"/>
         </loadData>
+    <%_ } _%>
+        <dropDefaultValue tableName="<%= user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
   <%_ } _%>
 <%_ } _%>
     </changeSet>
