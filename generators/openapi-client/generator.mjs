@@ -56,6 +56,11 @@ export default class OpenapiClientGenerator extends BaseGenerator {
         this.openApiClients = this.config.get('openApiClients') || {};
         this.loadAppConfig();
         this.loadServerConfig();
+        this.loadTranslationConfig();
+        this.loadPlatformConfig();
+
+        this.loadDerivedAppConfig();
+        this.loadDerivedServerConfig();
       },
     };
   }

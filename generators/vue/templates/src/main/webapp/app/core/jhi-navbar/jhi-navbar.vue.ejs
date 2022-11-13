@@ -59,7 +59,7 @@
             <span v-text="$t('global.menu.admin.gateway')">Gateway</span>
           </b-dropdown-item>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
           <b-dropdown-item to="/admin/user-management" active-class="active">
             <font-awesome-icon icon="users" />
             <span v-text="$t('global.menu.admin.userManagement')">User management</span>
@@ -126,7 +126,7 @@
               Account
             </span>
           </span>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
           <b-dropdown-item data-cy="settings" to="/account/settings" tag="b-dropdown-item" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="wrench" />
             <span v-text="$t('global.menu.account.settings')">Settings</span>
@@ -136,7 +136,7 @@
             <span v-text="$t('global.menu.account.password')">Password</span>
           </b-dropdown-item>
 <%_ } _%>
-<%_ if (authenticationTypeSession && !skipUserManagement) { _%>
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
           <b-dropdown-item to="/account/sessions" tag="b-dropdown-item" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="cloud" />
             <span v-text="$t('global.menu.account.sessions')">Sessions</span>
@@ -150,7 +150,7 @@
             <font-awesome-icon icon="sign-in-alt" />
             <span v-text="$t('global.menu.account.login')">Sign in</span>
           </b-dropdown-item>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
           <b-dropdown-item data-cy="register" to="/register" tag="b-dropdown-item" id="register" v-if="!authenticated" active-class="active">
             <font-awesome-icon icon="user-plus" />
             <span v-text="$t('global.menu.account.register')">Register</span>

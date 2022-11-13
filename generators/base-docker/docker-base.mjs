@@ -116,8 +116,10 @@ export function loadConfigs() {
       _.defaults(config, this.getDefaultConfigForApplicationType(config.applicationType));
       this.loadAppConfig(config, config);
       this.loadServerConfig(config, config);
-      this.loadDerivedPlatformConfig(config);
+      this.loadPlatformConfig(config, config);
+
       this.loadDerivedAppConfig(config);
+      this.loadDerivedPlatformConfig(config);
       this.loadDerivedServerConfig(config);
 
       if (config.applicationType === MONOLITH) {

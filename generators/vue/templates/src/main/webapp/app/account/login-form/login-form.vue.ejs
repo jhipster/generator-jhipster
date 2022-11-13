@@ -42,7 +42,7 @@
           </div>
         </b-form>
         <p></p>
-        <%_ if (!skipUserManagement) { _%>
+        <%_ if (generateUserManagement) { _%>
         <div>
           <b-alert show variant="warning">
             <b-link :to="'/account/reset/request'" class="alert-link" v-text="$t('login.password.forgot')"

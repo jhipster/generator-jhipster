@@ -47,10 +47,14 @@ export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, SpringBootAppl
       ],
     },
     {
-      condition: generator =>
-        (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice) || !generator.skipUserManagement,
+      condition: generator => Boolean(generator.generateUserManagement),
       path: SERVER_MAIN_RES_DIR,
-      templates: ['config/liquibase/data/user.csv', 'config/liquibase/data/authority.csv', 'config/liquibase/data/user_authority.csv'],
+      templates: ['config/liquibase/data/user.csv', 'config/liquibase/data/user_authority.csv'],
+    },
+    {
+      condition: generator => Boolean(generator.generateBuiltInAuthorityEntity),
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['config/liquibase/data/authority.csv'],
     },
   ],
 };

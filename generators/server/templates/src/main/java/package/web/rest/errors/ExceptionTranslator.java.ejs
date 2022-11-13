@@ -175,7 +175,7 @@ _%>
             .build();
         return create(ex, problem, request);
     }
-    <%_ if (!skipUserManagement) { _%>
+    <%_ if (generateUserManagement) { _%>
 
     @ExceptionHandler
     public <%- returnType %> handleEmailAlreadyUsedException(<%= packageName %>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {

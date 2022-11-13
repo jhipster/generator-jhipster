@@ -37,7 +37,7 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 <%_ if (communicationSpringWebsocket) { _%>
 import { TrackerService } from 'app/core/tracker/tracker.service';
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 <%_ } _%>
 
@@ -58,7 +58,7 @@ function accountWithAuthorities(authorities: string[]): Account {
 
 describe('Account Service', () => {
   let service: AccountService;
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   let applicationConfigService: ApplicationConfigService;
 <%_ } _%>
   let httpMock: HttpTestingController;
@@ -91,7 +91,7 @@ describe('Account Service', () => {
     });
 
     service = TestBed.inject(AccountService);
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
     applicationConfigService = TestBed.inject(ApplicationConfigService);
 <%_ } _%>
     httpMock = TestBed.inject(HttpTestingController);
@@ -114,7 +114,7 @@ describe('Account Service', () => {
     httpMock.verify();
   });
 
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 describe('save', () => {
   it('should call account saving endpoint with correct values', () => {
     // GIVEN

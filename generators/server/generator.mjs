@@ -297,9 +297,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.testResourceDir = SERVER_TEST_RES_DIR;
         application.srcMainDir = MAIN_DIR;
         application.srcTestDir = TEST_DIR;
-
-        application.builtInUser = this.isUsingBuiltInUser();
-        application.builtInAuthority = this.isUsingBuiltInAuthority();
+        application.generateBuiltInAuthorityEntity = application.generateBuiltInUserEntity && !application.databaseTypeCassandra;
       },
     });
   }

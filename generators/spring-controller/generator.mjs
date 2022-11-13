@@ -113,7 +113,12 @@ export default class SpringControllerGenerator extends BaseGenerator {
   get loading() {
     return {
       loadSharedConfig() {
+        this.loadAppConfig();
         this.loadServerConfig();
+        this.loadTranslationConfig();
+        this.loadPlatformConfig();
+
+        this.loadDerivedAppConfig();
         this.loadDerivedServerConfig();
       },
     };

@@ -659,7 +659,7 @@ export default class PrivateBase extends Generator {
       const otherEntityAngularName = relationship.otherEntityAngularName;
       const importType = `I${otherEntityAngularName}`;
       let importPath;
-      if (this.isBuiltInUser(otherEntityAngularName)) {
+      if (relationship.otherEntity?.builtInUser) {
         importPath = clientFramework === ANGULAR ? 'app/entities/user/user.model' : 'app/shared/model/user.model';
       } else {
         importPath =

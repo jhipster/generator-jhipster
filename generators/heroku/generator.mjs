@@ -86,7 +86,11 @@ export default class HerokuGenerator extends BaseGenerator {
       loadCommonConfig() {
         this.loadAppConfig();
         this.loadServerConfig();
+        this.loadTranslationConfig();
         this.loadPlatformConfig();
+
+        this.loadDerivedAppConfig();
+        this.loadDerivedServerConfig();
       },
 
       initializing() {
@@ -288,25 +292,6 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get [BaseGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get loading() {
-    return {
-      loadSharedConfig() {
-        this.loadAppConfig();
-        this.loadDerivedAppConfig();
-        this.loadClientConfig();
-        this.loadDerivedClientConfig();
-        this.loadServerConfig();
-        this.loadTranslationConfig();
-        this.loadPlatformConfig();
-      },
-    };
-  }
-
-  get [BaseGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get default() {
@@ -585,14 +570,14 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
       copyHerokuFiles() {
         if (this.abort) return;
 
         this.log(chalk.bold('\nCreating Heroku deployment files'));
 
         this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
-        this.template('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
+        this.renderTemplate('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, this);
         this.template('Procfile.ejs', 'Procfile');
         this.template('system.properties.ejs', 'system.properties');
         if (this.buildTool === GRADLE) {
@@ -623,7 +608,7 @@ export default class HerokuGenerator extends BaseGenerator {
           });
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.WRITING]() {

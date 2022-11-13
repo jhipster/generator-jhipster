@@ -123,7 +123,7 @@ export const files = {
   angularAccountModule: [
     {
       ...clientApplicationBlock,
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       templates: [
         'account/account.route.ts',
         'account/account.module.ts',
@@ -157,7 +157,7 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeSession && !generator.skipUserManagement,
+      condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: [
         'account/sessions/sessions.route.ts',
@@ -245,7 +245,7 @@ export const files = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: [
         'admin/user-management/user-management.route.ts',
@@ -317,7 +317,7 @@ export const files = {
       templates: ['core/interceptor/auth.interceptor.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
+      condition: generator => generator.generateBuiltInUserEntity,
       ...clientApplicationBlock,
       templates: ['entities/user/user.service.ts', 'entities/user/user.service.spec.ts', 'entities/user/user.model.ts'],
     },
@@ -434,7 +434,7 @@ export const files = {
       templates: ['shared/language/translate.directive.spec.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: [
         'account/activate/activate.component.spec.ts',
@@ -457,7 +457,7 @@ export const files = {
       templates: ['login/login.component.spec.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: [
         'admin/user-management/list/user-management.component.spec.ts',
@@ -468,7 +468,7 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeSession && !generator.skipUserManagement,
+      condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: ['account/sessions/sessions.component.spec.ts'],
     },

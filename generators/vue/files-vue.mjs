@@ -139,7 +139,7 @@ export const vueFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: [
         'account/change-password/change-password.vue',
@@ -159,7 +159,7 @@ export const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeSession && !generator.skipUserManagement,
+      condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: ['account/sessions/sessions.vue', 'account/sessions/sessions.component.ts'],
     },
@@ -202,7 +202,7 @@ export const vueFiles = {
       templates: ['admin/tracker/tracker.vue', 'admin/tracker/tracker.component.ts', 'admin/tracker/tracker.service.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientApplicationBlock,
       templates: [
         'admin/user-management/user-management.vue',
@@ -220,7 +220,7 @@ export const vueFiles = {
       templates: ['admin/gateway/gateway.vue', 'admin/gateway/gateway.component.ts', 'admin/gateway/gateway.service.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
+      condition: generator => generator.generateBuiltInUserEntity,
       ...clientApplicationBlock,
       templates: ['entities/user/user.service.ts'],
     },
@@ -270,12 +270,12 @@ export const vueFiles = {
       templates: ['spec/app/account/login-form/login-form.component.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationTypeSession && !generator.skipUserManagement,
+      condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
       ...clientTestBlock,
       templates: ['spec/app/account/sessions/sessions.component.spec.ts', 'spec/app/account/login.service.spec.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientTestBlock,
       templates: [
         'spec/app/account/change-password/change-password.component.spec.ts',
@@ -292,7 +292,7 @@ export const vueFiles = {
       templates: ['spec/app/admin/tracker/tracker.component.spec.ts', 'spec/app/admin/tracker/tracker.service.spec.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       ...clientTestBlock,
       templates: [
         'spec/app/admin/user-management/user-management.component.spec.ts',

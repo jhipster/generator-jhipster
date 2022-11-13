@@ -95,8 +95,9 @@ export default class GaeGenerator extends BaseGenerator {
       loadCommonConfig() {
         this.loadAppConfig();
         this.loadServerConfig();
-        this.loadPlatformConfig();
-        this.loadClientConfig();
+
+        this.loadDerivedAppConfig();
+        this.loadDerivedServerConfig();
       },
 
       loadConfig() {

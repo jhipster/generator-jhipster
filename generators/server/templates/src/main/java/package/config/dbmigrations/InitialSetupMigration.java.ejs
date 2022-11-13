@@ -48,7 +48,7 @@ public class InitialSetupMigration {
         userAuthority = template.save(userAuthority);
         Authority adminAuthority = createAdminAuthority();
         adminAuthority = template.save(adminAuthority);
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (generateUserManagement) { _%>
         addUsers(userAuthority, adminAuthority);
 <%_ } _%>
     }
@@ -72,7 +72,7 @@ public class InitialSetupMigration {
         Authority userAuthority = createAuthority(AuthoritiesConstants.USER);
         return userAuthority;
     }
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (generateUserManagement) { _%>
 
     private void addUsers(Authority userAuthority, Authority adminAuthority) {
         <%= user.persistClass %> user = createUser(userAuthority);
@@ -80,7 +80,6 @@ public class InitialSetupMigration {
         <%= user.persistClass %> admin = createAdmin(adminAuthority, userAuthority);
         template.save(admin);
     }
-
 
     private <%= user.persistClass %> createUser(Authority userAuthority) {
         <%= user.persistClass %> userUser = new <%= user.persistClass %>();
@@ -115,5 +114,4 @@ public class InitialSetupMigration {
         return adminUser;
     }
 <%_ } _%>
-
 }

@@ -1,6 +1,6 @@
 import {Authority} from "@/shared/security/authority";
 
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('@/admin/user-management/user-management.vue');
   const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('@/admin/user-management/user-management-view.vue');
   const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('@/admin/user-management/user-management-edit.vue');
@@ -20,7 +20,7 @@ import {Authority} from "@/shared/security/authority";
 <%_ } _%>
 
 export default [
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
     {
       path: '/admin/user-management',
       name: '<%= jhiPrefixCapitalized %>User',

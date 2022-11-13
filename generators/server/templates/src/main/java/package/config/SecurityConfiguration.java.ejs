@@ -63,7 +63,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import java.util.*;
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
-  <%_ if (!skipUserManagement) { _%>
+  <%_ if (generateUserManagement) { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -98,7 +98,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
-<%_ if (authenticationTypeSession && !skipUserManagement) { _%>
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
 
     private final RememberMeServices rememberMeServices;
 <%_ } _%>
@@ -117,8 +117,8 @@ public class SecurityConfiguration {
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (authenticationTypeSession && !skipUserManagement) { %>RememberMeServices rememberMeServices, <% } if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (!applicationTypeMicroservice) { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
-<%_ if (authenticationTypeSession && !skipUserManagement) { _%>
+    public SecurityConfiguration(<% if (authenticationTypeSession && generateUserManagement) { %>RememberMeServices rememberMeServices, <% } if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (!applicationTypeMicroservice) { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
         this.rememberMeServices = rememberMeServices;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
@@ -180,7 +180,7 @@ public class SecurityConfiguration {
                 .authenticationEntryPoint(problemSupport)
                 .accessDeniedHandler(problemSupport)
 <%_ if (authenticationTypeSession) { _%>
-  <%_ if (!skipUserManagement) { _%>
+  <%_ if (generateUserManagement) { _%>
         .and()
             .rememberMe()
             .rememberMeServices(rememberMeServices)

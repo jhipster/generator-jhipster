@@ -26,7 +26,7 @@ import Login from 'app/modules/login/login';
 <%_ if (authenticationTypeOauth2) { _%>
 import LoginRedirect from 'app/modules/login/login-redirect';
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import Register from 'app/modules/account/register/register';
 import Activate from 'app/modules/account/activate/activate';
 import PasswordResetInit from 'app/modules/account/password-reset/init/password-reset-init';
@@ -44,7 +44,7 @@ import { sendActivity } from 'app/config/websocket-middleware';
 <%_ } _%>
 
 const loading = <div>loading ...</div>;
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 
   const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
@@ -78,7 +78,7 @@ const AppRoutes = () => {
         <Route path="login" element={<Login />} />
 <%_ } _%>
         <Route path="logout" element={<Logout />} />
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
         <Route path="account">
           <Route
             path="*"

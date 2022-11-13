@@ -23,15 +23,15 @@ package <%= packageName %>.config;
  */
 public final class Constants {
 
-<%_ if (!skipUserManagement || authenticationTypeOauth2) { _%>
+<%_ if (generateBuiltInUserEntity) { _%>
     // Regex for acceptable logins
     public static final String LOGIN_REGEX = "<%- LOGIN_REGEX %>";
 
 <%_ } _%>
-<%_ if (!skipUserManagement || authenticationTypeOauth2 || databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (generateBuiltInUserEntity || databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
     public static final String SYSTEM = "system";
 <%_ } _%>
-<%_ if (!skipUserManagement || authenticationTypeOauth2) { _%>
+<%_ if (generateBuiltInUserEntity) { _%>
     public static final String DEFAULT_LANGUAGE = "<%= nativeLanguage %>";
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>

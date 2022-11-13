@@ -41,7 +41,7 @@ Object.keys(differentRelationships).forEach(key => {
   if (differentRelationships[key].some(rel => rel.reference.owned)) {
     const uniqueRel = differentRelationships[key][0];
     if (uniqueRel.otherEntityAngularName !== entityAngularName) {
-      if (this.isBuiltInUser(uniqueRel.otherEntityAngularName)) {
+      if (uniqueRel.otherEntity.builtInUser) {
 _%>
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';

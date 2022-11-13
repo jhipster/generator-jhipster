@@ -20,7 +20,7 @@ import React from 'react';
 
 import { Route } from 'react-router-dom';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import UserManagement from './user-management';
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
@@ -40,7 +40,7 @@ import Tracker from './tracker/tracker';
 const AdministrationRoutes = () => (
   <div>
     <ErrorBoundaryRoutes>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
       <Route path="user-management/*" element={<UserManagement />} />
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>

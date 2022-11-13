@@ -162,8 +162,6 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
     entityWithConfig.skipServer = true;
   }
 
-  entityWithConfig.builtInUser = generator.isBuiltInUser(entityName);
-
   _.defaults(entityWithConfig, {
     entityNameCapitalized: entityName,
     entityClass: _.upperFirst(entityName),
@@ -244,7 +242,7 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
       ? `${microserviceName.toLowerCase()}/${entityFileName}`
       : `${entityFileName}`;
 
-  const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
+  const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => relationship.otherEntity.builtInUser);
   entityWithConfig.saveUserSnapshot =
     entityWithConfig.applicationType === MICROSERVICE &&
     entityWithConfig.authenticationType === OAUTH2 &&

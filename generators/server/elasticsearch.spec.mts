@@ -6,7 +6,7 @@ import { buildServerMatrix, extendMatrix, entitiesServerSamples as entities } fr
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.mjs';
 
-import { databaseTypes, searchEngineTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';
+import { databaseTypes, searchEngineTypes, authenticationTypes, applicationTypes } from '../../jdl/jhipster/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,6 +17,7 @@ const { SQL, CASSANDRA, MONGODB, NEO4J } = databaseTypes;
 const commonConfig = { baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 const { ELASTICSEARCH } = searchEngineTypes;
 const { OAUTH2 } = authenticationTypes;
+const { MICROSERVICE } = applicationTypes;
 
 let samples = buildServerMatrix();
 
