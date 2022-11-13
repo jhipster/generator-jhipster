@@ -23,24 +23,11 @@ const doesTheEnumValueHaveACustomValue = enumValue => {
   return enumValue.includes('(');
 };
 
-/**
- * @deprecated
- * private function to remove for jhipster v7
- * @param enums
- * @return {*}
- */
-const getEnumsWithCustomValue = enums => {
-  return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
-    if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
-      const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
-      const enumValueName = matches[1];
-      const enumValueCustomValue = matches[3];
-      enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
-    } else {
-      enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
-    }
-    return enumsWithCustomValueArray;
-  }, []);
+const parseEnumValue = enumValueLine => {
+  const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(enumValueLine);
+  const enumValueName = matches[1];
+  const enumValueCustomValue = matches[3];
+  return { name: enumValueName, value: enumValueCustomValue };
 };
 
 const getCustomValuesState = enumValues => {
@@ -88,6 +75,15 @@ const getEnums = (enums, customValuesState, comments) => {
   });
 };
 
+const extractEnumInstance = field => {
+  const fieldType = field.fieldType;
+  return _.lowerFirst(fieldType);
+};
+
+const extractEnumEntries = field => {
+  return field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+};
+
 /**
  * Build an enum object
  * @param {Object} field - entity field
@@ -95,43 +91,16 @@ const getEnums = (enums, customValuesState, comments) => {
  * @return {Object} the enum info.
  */
 const enumInfo = (field, clientRootFolder) => {
-  const fieldType = field.fieldType;
-  // Todo: check if the next line does a side-effect and refactor it.
-  field.enumInstance = _.lowerFirst(fieldType);
-  const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+  field.enumInstance = extractEnumInstance(field); // TODO remove side effect
+  const enums = extractEnumEntries(field);
   const customValuesState = getCustomValuesState(enums);
   return {
-    enumName: fieldType,
+    enumName: field.fieldType,
     javadoc: field.fieldTypeJavadoc && javadoc(field.fieldTypeJavadoc),
     enumInstance: field.enumInstance,
     enums,
     ...customValuesState,
     enumValues: getEnums(enums, customValuesState, field.fieldValuesJavadocs),
-    clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
-  };
-};
-
-/**
- * @Deprecated
- * Build an enum object, deprecated use getEnumInfoInstead
- * @param {any} field : entity field
- * @param {string} frontendAppName
- * @param {string} packageName
- * @param {string} clientRootFolder
- */
-const buildEnumInfo = (field, frontendAppName, packageName, clientRootFolder) => {
-  const fieldType = field.fieldType;
-  field.enumInstance = _.lowerFirst(fieldType);
-  const enums = field.fieldValues.replace(/\s/g, '').split(',');
-  const enumsWithCustomValue = getEnumsWithCustomValue(enums);
-  return {
-    enumName: fieldType,
-    enumValues: field.fieldValues.split(',').join(', '),
-    enumInstance: field.enumInstance,
-    enums,
-    enumsWithCustomValue,
-    frontendAppName,
-    packageName,
     clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
   };
 };
