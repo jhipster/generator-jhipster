@@ -47,7 +47,7 @@ export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, SpringBootAppl
       ],
     },
     {
-      condition: generator => generator.generateUserManagement,
+      condition: generator => Boolean(generator.generateUserManagement),
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/data/user.csv', 'config/liquibase/data/authority.csv', 'config/liquibase/data/user_authority.csv'],
     },

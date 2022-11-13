@@ -103,7 +103,7 @@ export type CommonClientServerApplication = BaseApplication &
     prettierExtensions?: string;
 
     generateBuiltInUserEntity?: boolean;
-    userManagement?: boolean;
+    generateUserManagement?: boolean;
   };
 
 type ServiceDiscoveryType = 'no' | 'eureka' | 'consul';
