@@ -42,9 +42,6 @@ const moveToJavaPackageSrcDir = (data, filePath) => `${data.javaPackageSrcDir}${
  */
 const moveToJavaPackageTestDir = (data, filePath) => `${data.javaPackageTestDir}${filePath.replace(/_\w*/, '')}`;
 
-const shouldSkipUserManagement = generator =>
-  !generator.generateUserManagement && (!generator.applicationTypeMonolith || !generator.authenticationTypeOauth2);
-
 export const mongoDbFiles = {
   serverResource: [
     {
@@ -395,7 +392,7 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationTypeSession && !generator.reactive,
+      condition: generator => generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -410,10 +407,7 @@ export const baseServerFiles = {
     },
     {
       condition: generator =>
-        !shouldSkipUserManagement(generator) &&
-        generator.authenticationTypeSession &&
-        !generator.reactive &&
-        !generator.databaseTypeCouchbase,
+        generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive && !generator.databaseTypeCouchbase,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -468,7 +462,7 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && !generator.authenticationTypeOauth2,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1210,7 +1204,7 @@ export const baseServerFiles = {
       templates: [{ file: 'package/features/gitkeep', renameTo: generator => `${generator.testDir}cucumber/gitkeep`, noEjs: true }],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && !generator.authenticationTypeOauth2,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         // Create auth config test files

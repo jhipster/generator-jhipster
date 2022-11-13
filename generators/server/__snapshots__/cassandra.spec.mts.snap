@@ -1026,13 +1026,7 @@ Object {
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/security/DomainUserDetailsService.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/SecurityUtils.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/UserNotActivatedException.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/package-info.java": Object {
@@ -1189,9 +1183,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
