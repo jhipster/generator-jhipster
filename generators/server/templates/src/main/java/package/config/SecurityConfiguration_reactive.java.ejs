@@ -241,6 +241,7 @@ public class SecurityConfiguration {
             .logout()
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(new HttpStatusReturningServerLogoutSuccessHandler())
+        .and()
 <%_ } _%>
             .headers()
                 .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
