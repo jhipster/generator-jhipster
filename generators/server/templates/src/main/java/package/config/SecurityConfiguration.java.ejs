@@ -60,7 +60,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import java.util.*;
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
-  <%_ if (!skipUserManagement) { _%>
+  <%_ if (generateUserManagement) { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -102,7 +102,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
-<%_ if (authenticationTypeSession && !skipUserManagement) { _%>
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
 
     private final RememberMeServices rememberMeServices;
 <%_ } _%>
@@ -116,8 +116,8 @@ public class SecurityConfiguration {
     private String issuerUri;
     <%_ } _%>
 
-    public SecurityConfiguration(<% if (authenticationTypeSession && !skipUserManagement) { %>RememberMeServices rememberMeServices, <% } %><% if (!applicationTypeMicroservice) { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties) {
-<%_ if (authenticationTypeSession && !skipUserManagement) { _%>
+    public SecurityConfiguration(<% if (authenticationTypeSession && generateUserManagement) { %>RememberMeServices rememberMeServices, <% } %><% if (!applicationTypeMicroservice) { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties) {
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
         this.rememberMeServices = rememberMeServices;
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>

@@ -3922,33 +3922,6 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/MailService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UserService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/AdminUserRest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/UserRest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
     "stateCleared": "modified",
   },
@@ -3961,13 +3934,7 @@ Object {
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
@@ -3979,19 +3946,10 @@ Object {
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
@@ -4037,15 +3995,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/templates/error.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/passwordResetEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/gatling/conf/gatling.conf": Object {
@@ -4132,9 +4081,6 @@ Object {
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
     "stateCleared": "modified",
   },
@@ -4159,25 +4105,10 @@ Object {
   "src/test/resources/config/bootstrap.yml": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/i18n/messages_en.properties": Object {
-    "stateCleared": "modified",
-  },
   "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/testEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
@@ -4622,33 +4553,6 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/MailService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UserService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/AdminUserRest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/UserRest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
     "stateCleared": "modified",
   },
@@ -4661,13 +4565,7 @@ Object {
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
@@ -4679,19 +4577,10 @@ Object {
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
@@ -4731,15 +4620,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/templates/error.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/passwordResetEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/IntegrationTest.java": Object {
@@ -4782,9 +4662,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/cucumber/stepdefs/UserStepDefs.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": Object {
@@ -4832,9 +4709,6 @@ Object {
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
     "stateCleared": "modified",
   },
@@ -4856,9 +4730,6 @@ Object {
   "src/test/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/i18n/messages_en.properties": Object {
-    "stateCleared": "modified",
-  },
   "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
@@ -4866,21 +4737,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/tech/jhipster/cucumber/gitkeep": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/tech/jhipster/cucumber/user.feature": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/testEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
@@ -5328,33 +5184,6 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/MailService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UserService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/AdminUserRest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/UserRest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
     "stateCleared": "modified",
   },
@@ -5367,13 +5196,7 @@ Object {
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
@@ -5385,19 +5208,10 @@ Object {
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
@@ -5443,15 +5257,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/templates/error.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/passwordResetEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/IntegrationTest.java": Object {
@@ -5502,9 +5307,6 @@ Object {
   "src/test/java/tech/jhipster/cucumber/stepdefs/StepDefs.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/cucumber/stepdefs/UserStepDefs.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": Object {
     "stateCleared": "modified",
   },
@@ -5550,9 +5352,6 @@ Object {
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
     "stateCleared": "modified",
   },
@@ -5577,9 +5376,6 @@ Object {
   "src/test/resources/config/bootstrap.yml": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/i18n/messages_en.properties": Object {
-    "stateCleared": "modified",
-  },
   "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
@@ -5587,21 +5383,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/tech/jhipster/cucumber/gitkeep": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/tech/jhipster/cucumber/user.feature": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/testEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
@@ -6043,33 +5824,6 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/MailService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UserService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
     "stateCleared": "modified",
   },
@@ -6082,13 +5836,7 @@ Object {
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
@@ -6100,19 +5848,10 @@ Object {
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
@@ -6158,15 +5897,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/templates/error.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/passwordResetEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/IntegrationTest.java": Object {
@@ -6244,9 +5974,6 @@ Object {
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
     "stateCleared": "modified",
   },
@@ -6271,25 +5998,10 @@ Object {
   "src/test/resources/config/bootstrap.yml": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/i18n/messages_en.properties": Object {
-    "stateCleared": "modified",
-  },
   "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/testEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
@@ -6731,33 +6443,6 @@ Object {
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/MailService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UserService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/AdminUserRest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/UserRest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": Object {
     "stateCleared": "modified",
   },
@@ -6770,13 +6455,7 @@ Object {
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
@@ -6788,19 +6467,10 @@ Object {
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
@@ -6840,15 +6510,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/templates/error.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/passwordResetEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/gatling/conf/gatling.conf": Object {
@@ -6935,9 +6596,6 @@ Object {
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
     "stateCleared": "modified",
   },
@@ -6959,25 +6617,10 @@ Object {
   "src/test/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/i18n/messages_en.properties": Object {
-    "stateCleared": "modified",
-  },
   "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/testEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {

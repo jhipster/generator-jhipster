@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import {
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   userManagementPageHeadingSelector,
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
@@ -39,7 +39,7 @@ describe('/admin', () => {
     cy.visit('');
   });
 
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   describe('/user-management', () => {
     it('should load the page', () => {
       cy.clickOnAdminMenuItem('user-management');

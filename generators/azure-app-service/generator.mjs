@@ -488,7 +488,9 @@ which is free for the first 30 days`);
   _computeDerivedConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     this.loadAppConfig(config, dest);
     this.loadServerConfig(config, dest);
-    super.loadDerivedAppConfig(dest);
+
+    this.loadDerivedAppConfig(dest);
+    this.loadDerivedServerConfig(dest, dest);
     dest.azureAppInsightsInstrumentationKeyEmpty = config.azureAppInsightsInstrumentationKey === '';
   }
 

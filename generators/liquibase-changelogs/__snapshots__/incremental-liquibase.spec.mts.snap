@@ -84,6 +84,13 @@ Object {
                                 columnDataType=\\"varchar(60)\\"
                                 tableName=\\"jhi_user\\"/>
         <loadData
+                  file=\\"config/liquibase/data/authority.csv\\"
+                  separator=\\";\\"
+                  tableName=\\"jhi_authority\\"
+                  usePreparedStatements=\\"true\\">
+            <column name=\\"name\\" type=\\"string\\"/>
+        </loadData>
+        <loadData
                   file=\\"config/liquibase/data/user.csv\\"
                   separator=\\";\\"
                   tableName=\\"jhi_user\\"
@@ -92,14 +99,6 @@ Object {
             <column name=\\"activated\\" type=\\"boolean\\"/>
             <column name=\\"created_date\\" type=\\"timestamp\\"/>
         </loadData>
-        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
-        <loadData
-                  file=\\"config/liquibase/data/authority.csv\\"
-                  separator=\\";\\"
-                  tableName=\\"jhi_authority\\"
-                  usePreparedStatements=\\"true\\">
-            <column name=\\"name\\" type=\\"string\\"/>
-        </loadData>
         <loadData
                   file=\\"config/liquibase/data/user_authority.csv\\"
                   separator=\\";\\"
@@ -107,6 +106,7 @@ Object {
                   usePreparedStatements=\\"true\\">
             <column name=\\"user_id\\" type=\\"numeric\\"/>
         </loadData>
+        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
     </changeSet>
 
     <changeSet author=\\"jhipster\\" id=\\"00000000000002\\" context=\\"test\\">
@@ -403,6 +403,13 @@ Object {
                                 columnDataType=\\"varchar(60)\\"
                                 tableName=\\"jhi_user\\"/>
         <loadData
+                  file=\\"config/liquibase/data/authority.csv\\"
+                  separator=\\";\\"
+                  tableName=\\"jhi_authority\\"
+                  usePreparedStatements=\\"true\\">
+            <column name=\\"name\\" type=\\"string\\"/>
+        </loadData>
+        <loadData
                   file=\\"config/liquibase/data/user.csv\\"
                   separator=\\";\\"
                   tableName=\\"jhi_user\\"
@@ -411,14 +418,6 @@ Object {
             <column name=\\"activated\\" type=\\"boolean\\"/>
             <column name=\\"created_date\\" type=\\"timestamp\\"/>
         </loadData>
-        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
-        <loadData
-                  file=\\"config/liquibase/data/authority.csv\\"
-                  separator=\\";\\"
-                  tableName=\\"jhi_authority\\"
-                  usePreparedStatements=\\"true\\">
-            <column name=\\"name\\" type=\\"string\\"/>
-        </loadData>
         <loadData
                   file=\\"config/liquibase/data/user_authority.csv\\"
                   separator=\\";\\"
@@ -426,6 +425,7 @@ Object {
                   usePreparedStatements=\\"true\\">
             <column name=\\"user_id\\" type=\\"numeric\\"/>
         </loadData>
+        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
     </changeSet>
 
     <changeSet author=\\"jhipster\\" id=\\"00000000000002\\" context=\\"test\\">
@@ -740,6 +740,13 @@ Object {
                                 columnDataType=\\"varchar(60)\\"
                                 tableName=\\"jhi_user\\"/>
         <loadData
+                  file=\\"config/liquibase/data/authority.csv\\"
+                  separator=\\";\\"
+                  tableName=\\"jhi_authority\\"
+                  usePreparedStatements=\\"true\\">
+            <column name=\\"name\\" type=\\"string\\"/>
+        </loadData>
+        <loadData
                   file=\\"config/liquibase/data/user.csv\\"
                   separator=\\";\\"
                   tableName=\\"jhi_user\\"
@@ -748,14 +755,6 @@ Object {
             <column name=\\"activated\\" type=\\"boolean\\"/>
             <column name=\\"created_date\\" type=\\"timestamp\\"/>
         </loadData>
-        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
-        <loadData
-                  file=\\"config/liquibase/data/authority.csv\\"
-                  separator=\\";\\"
-                  tableName=\\"jhi_authority\\"
-                  usePreparedStatements=\\"true\\">
-            <column name=\\"name\\" type=\\"string\\"/>
-        </loadData>
         <loadData
                   file=\\"config/liquibase/data/user_authority.csv\\"
                   separator=\\";\\"
@@ -763,6 +762,7 @@ Object {
                   usePreparedStatements=\\"true\\">
             <column name=\\"user_id\\" type=\\"numeric\\"/>
         </loadData>
+        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
     </changeSet>
 
     <changeSet author=\\"jhipster\\" id=\\"00000000000002\\" context=\\"test\\">
@@ -1060,6 +1060,13 @@ Object {
                                 columnDataType=\\"varchar(60)\\"
                                 tableName=\\"jhi_user\\"/>
         <loadData
+                  file=\\"config/liquibase/data/authority.csv\\"
+                  separator=\\";\\"
+                  tableName=\\"jhi_authority\\"
+                  usePreparedStatements=\\"true\\">
+            <column name=\\"name\\" type=\\"string\\"/>
+        </loadData>
+        <loadData
                   file=\\"config/liquibase/data/user.csv\\"
                   separator=\\";\\"
                   tableName=\\"jhi_user\\"
@@ -1068,14 +1075,6 @@ Object {
             <column name=\\"activated\\" type=\\"boolean\\"/>
             <column name=\\"created_date\\" type=\\"timestamp\\"/>
         </loadData>
-        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
-        <loadData
-                  file=\\"config/liquibase/data/authority.csv\\"
-                  separator=\\";\\"
-                  tableName=\\"jhi_authority\\"
-                  usePreparedStatements=\\"true\\">
-            <column name=\\"name\\" type=\\"string\\"/>
-        </loadData>
         <loadData
                   file=\\"config/liquibase/data/user_authority.csv\\"
                   separator=\\";\\"
@@ -1083,6 +1082,7 @@ Object {
                   usePreparedStatements=\\"true\\">
             <column name=\\"user_id\\" type=\\"numeric\\"/>
         </loadData>
+        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
     </changeSet>
 
     <changeSet author=\\"jhipster\\" id=\\"00000000000002\\" context=\\"test\\">
@@ -1459,6 +1459,13 @@ Object {
                                 columnDataType=\\"varchar(60)\\"
                                 tableName=\\"jhi_user\\"/>
         <loadData
+                  file=\\"config/liquibase/data/authority.csv\\"
+                  separator=\\";\\"
+                  tableName=\\"jhi_authority\\"
+                  usePreparedStatements=\\"true\\">
+            <column name=\\"name\\" type=\\"string\\"/>
+        </loadData>
+        <loadData
                   file=\\"config/liquibase/data/user.csv\\"
                   separator=\\";\\"
                   tableName=\\"jhi_user\\"
@@ -1467,14 +1474,6 @@ Object {
             <column name=\\"activated\\" type=\\"boolean\\"/>
             <column name=\\"created_date\\" type=\\"timestamp\\"/>
         </loadData>
-        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
-        <loadData
-                  file=\\"config/liquibase/data/authority.csv\\"
-                  separator=\\";\\"
-                  tableName=\\"jhi_authority\\"
-                  usePreparedStatements=\\"true\\">
-            <column name=\\"name\\" type=\\"string\\"/>
-        </loadData>
         <loadData
                   file=\\"config/liquibase/data/user_authority.csv\\"
                   separator=\\";\\"
@@ -1482,6 +1481,7 @@ Object {
                   usePreparedStatements=\\"true\\">
             <column name=\\"user_id\\" type=\\"numeric\\"/>
         </loadData>
+        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
     </changeSet>
 
     <changeSet author=\\"jhipster\\" id=\\"00000000000002\\" context=\\"test\\">
@@ -1638,6 +1638,13 @@ Object {
                                 columnDataType=\\"varchar(60)\\"
                                 tableName=\\"jhi_user\\"/>
         <loadData
+                  file=\\"config/liquibase/data/authority.csv\\"
+                  separator=\\";\\"
+                  tableName=\\"jhi_authority\\"
+                  usePreparedStatements=\\"true\\">
+            <column name=\\"name\\" type=\\"string\\"/>
+        </loadData>
+        <loadData
                   file=\\"config/liquibase/data/user.csv\\"
                   separator=\\";\\"
                   tableName=\\"jhi_user\\"
@@ -1646,14 +1653,6 @@ Object {
             <column name=\\"activated\\" type=\\"boolean\\"/>
             <column name=\\"created_date\\" type=\\"timestamp\\"/>
         </loadData>
-        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
-        <loadData
-                  file=\\"config/liquibase/data/authority.csv\\"
-                  separator=\\";\\"
-                  tableName=\\"jhi_authority\\"
-                  usePreparedStatements=\\"true\\">
-            <column name=\\"name\\" type=\\"string\\"/>
-        </loadData>
         <loadData
                   file=\\"config/liquibase/data/user_authority.csv\\"
                   separator=\\";\\"
@@ -1661,6 +1660,7 @@ Object {
                   usePreparedStatements=\\"true\\">
             <column name=\\"user_id\\" type=\\"numeric\\"/>
         </loadData>
+        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
     </changeSet>
 
     <changeSet author=\\"jhipster\\" id=\\"00000000000002\\" context=\\"test\\">
@@ -1850,6 +1850,13 @@ Object {
                                 columnDataType=\\"varchar(60)\\"
                                 tableName=\\"jhi_user\\"/>
         <loadData
+                  file=\\"config/liquibase/data/authority.csv\\"
+                  separator=\\";\\"
+                  tableName=\\"jhi_authority\\"
+                  usePreparedStatements=\\"true\\">
+            <column name=\\"name\\" type=\\"string\\"/>
+        </loadData>
+        <loadData
                   file=\\"config/liquibase/data/user.csv\\"
                   separator=\\";\\"
                   tableName=\\"jhi_user\\"
@@ -1858,14 +1865,6 @@ Object {
             <column name=\\"activated\\" type=\\"boolean\\"/>
             <column name=\\"created_date\\" type=\\"timestamp\\"/>
         </loadData>
-        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
-        <loadData
-                  file=\\"config/liquibase/data/authority.csv\\"
-                  separator=\\";\\"
-                  tableName=\\"jhi_authority\\"
-                  usePreparedStatements=\\"true\\">
-            <column name=\\"name\\" type=\\"string\\"/>
-        </loadData>
         <loadData
                   file=\\"config/liquibase/data/user_authority.csv\\"
                   separator=\\";\\"
@@ -1873,6 +1872,7 @@ Object {
                   usePreparedStatements=\\"true\\">
             <column name=\\"user_id\\" type=\\"numeric\\"/>
         </loadData>
+        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
     </changeSet>
 
     <changeSet author=\\"jhipster\\" id=\\"00000000000002\\" context=\\"test\\">
@@ -2123,6 +2123,13 @@ Object {
                                 columnDataType=\\"varchar(60)\\"
                                 tableName=\\"jhi_user\\"/>
         <loadData
+                  file=\\"config/liquibase/data/authority.csv\\"
+                  separator=\\";\\"
+                  tableName=\\"jhi_authority\\"
+                  usePreparedStatements=\\"true\\">
+            <column name=\\"name\\" type=\\"string\\"/>
+        </loadData>
+        <loadData
                   file=\\"config/liquibase/data/user.csv\\"
                   separator=\\";\\"
                   tableName=\\"jhi_user\\"
@@ -2131,14 +2138,6 @@ Object {
             <column name=\\"activated\\" type=\\"boolean\\"/>
             <column name=\\"created_date\\" type=\\"timestamp\\"/>
         </loadData>
-        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
-        <loadData
-                  file=\\"config/liquibase/data/authority.csv\\"
-                  separator=\\";\\"
-                  tableName=\\"jhi_authority\\"
-                  usePreparedStatements=\\"true\\">
-            <column name=\\"name\\" type=\\"string\\"/>
-        </loadData>
         <loadData
                   file=\\"config/liquibase/data/user_authority.csv\\"
                   separator=\\";\\"
@@ -2146,6 +2145,7 @@ Object {
                   usePreparedStatements=\\"true\\">
             <column name=\\"user_id\\" type=\\"numeric\\"/>
         </loadData>
+        <dropDefaultValue tableName=\\"jhi_user\\" columnName=\\"created_date\\" columnDataType=\\"\${datetimeType}\\"/>
     </changeSet>
 
     <changeSet author=\\"jhipster\\" id=\\"00000000000002\\" context=\\"test\\">

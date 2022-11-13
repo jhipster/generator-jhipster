@@ -26,12 +26,12 @@ import authentication from './authentication';
 import applicationProfile from './application-profile';
 
 import administration from 'app/modules/administration/administration.reducer';
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import userManagement from 'app/modules/administration/user-management/user-management.reducer';
 <%_ } else if (authenticationTypeOauth2) { _%>
 import userManagement from './user-management';
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import register from 'app/modules/account/register/register.reducer';
 import activate from 'app/modules/account/activate/activate.reducer';
 import password from 'app/modules/account/password/password.reducer';
@@ -53,10 +53,10 @@ const rootReducer: ReducersMapObject = {
 <%_ } _%>
   applicationProfile,
   administration,
-<%_ if (!skipUserManagement || authenticationTypeOauth2) { _%>
+<%_ if (generateBuiltInUserEntity) { _%>
   userManagement,
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   register,
   activate,
   passwordReset,

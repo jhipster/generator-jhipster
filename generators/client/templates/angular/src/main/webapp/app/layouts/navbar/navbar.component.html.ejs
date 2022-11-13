@@ -107,7 +107,7 @@
             </a>
           </li>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
           <li>
             <a class="dropdown-item" routerLink="admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="users" [fixedWidth]="true"></fa-icon>
@@ -194,7 +194,7 @@
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
           <li *ngSwitchCase="true">
             <a class="dropdown-item" routerLink="account/settings" routerLinkActive="active" (click)="collapseNavbar()" data-cy="settings">
               <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon>
@@ -208,7 +208,7 @@
             </a>
           </li>
 <%_ } _%>
-<%_ if (authenticationTypeSession && !skipUserManagement) { _%>
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
           <li *ngSwitchCase="true">
             <a class="dropdown-item" routerLink="account/sessions" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="cloud" [fixedWidth]="true"></fa-icon>
@@ -228,7 +228,7 @@
               <span <%= jhiPrefix %>Translate="global.menu.account.login"><%- this._getClientTranslation('global.menu.account.login') %></span>
             </a>
           </li>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
           <li *ngSwitchCase="false">
             <a class="dropdown-item" routerLink="account/register" routerLinkActive="active" (click)="collapseNavbar()" data-cy="register">
               <fa-icon icon="user-plus" [fixedWidth]="true"></fa-icon>

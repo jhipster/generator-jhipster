@@ -186,7 +186,7 @@ spring:
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   mail:
     host: localhost
     port: 25
@@ -343,7 +343,7 @@ jhipster:
       # security key (this key should be unique for your application, and kept secret)
       key: <%= rememberMeKey %>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://my-server-url-to-change # Modify according to your server's URL
 <%_ } _%>

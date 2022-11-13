@@ -19,7 +19,7 @@ import MetricsService from './admin/metrics/metrics.service';
 import LogsService from './admin/logs/logs.service';
 import ConfigurationService from '@/admin/configuration/configuration.service';
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import ActivateService from './account/activate/activate.service';
 import RegisterService from './account/register/register.service';
 import UserManagementService from './admin/user-management/user-management.service';
@@ -102,7 +102,7 @@ router.beforeEach(async (to, from, next) => {
   router,
   provide: {
     loginService: () => loginService,
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
     activateService: () => new ActivateService(),
     registerService: () => new RegisterService(),
     userManagementService: () => new UserManagementService(),

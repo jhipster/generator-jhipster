@@ -172,7 +172,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
     otherEntityNameCapitalized: _.upperFirst(otherEntityName),
     otherEntityTableName:
       otherEntityData.entityTableName ||
-      generator.getTableName(generator.isBuiltInUser(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
+      generator.getTableName(otherEntityData.builtInUser ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
   });
 
   _.defaults(relationship, {
@@ -189,7 +189,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
   });
 
   if (entityWithConfig.dto === MAPSTRUCT) {
-    if (otherEntityData.dto !== MAPSTRUCT && !generator.isBuiltInUser(otherEntityName)) {
+    if (otherEntityData.dto !== MAPSTRUCT && !otherEntityData.builtInUser) {
       generator.warning(
         `Entity ${entityName}: this entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
       );
@@ -204,7 +204,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
   }
 
   if (relationship.otherEntityAngularName === undefined) {
-    if (generator.isBuiltInUser(otherEntityName)) {
+    if (otherEntityData.builtInUser) {
       relationship.otherEntityAngularName = 'User';
     } else {
       const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
@@ -219,7 +219,7 @@ export function prepareRelationshipForTemplates(entityWithConfig, relationship, 
     unique: relationship.id || (relationship.ownerSide && relationship.relationshipType === 'one-to-one'),
   });
 
-  if (!generator.isBuiltInUser(otherEntityName)) {
+  if (!otherEntityData.builtInUser) {
     _.defaults(relationship, {
       otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
       otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),

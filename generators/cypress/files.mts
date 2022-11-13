@@ -55,7 +55,7 @@ export const cypressFiles: WriteFileSection<CypressGenerator, CypressApplication
       templates: ['e2e/account/login-page.cy.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => Boolean(generator.generateUserManagement),
       path: CYPRESS_TEMPLATE_SOURCE_DIR,
       renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: [

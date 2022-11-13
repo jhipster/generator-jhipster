@@ -66,7 +66,7 @@ import AlertService from '@/shared/alert/alert.service';
       hasManyToMany = true;
     } _%>
     <%_ if (!importEntitiesSeen.includes(otherEntityAngularName)) { _%>
-      <% if (relationship.otherEntityUser && (!skipUserManagement || authenticationTypeOauth2)) { %>
+      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
 import UserService from '@/entities/user/user.service';
       <% } else { %>
 import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
@@ -142,7 +142,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         const otherEntityAngularName = relationship.otherEntityAngularName;
   _%>
   <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
-      <% if (relationship.otherEntityUser && (!skipUserManagement || authenticationTypeOauth2)) { %>
+      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
   @Inject('userService') private userService: () => UserService;
       <% } else { %>
   @Inject('<%= otherEntityName %>Service') private <%= otherEntityName %>Service: () => <%= otherEntityAngularName %>Service;
@@ -319,7 +319,7 @@ _%>
           if (!entitiesSet.has(otherEntityName)) {
             entitiesSet.add(otherEntityName);
     _%>
-      <% if (relationship.otherEntityUser && (!skipUserManagement || authenticationTypeOauth2)) { %>
+      <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
     this.userService().retrieve().then((res) => {
       <%_ } else { _%>
     this.<%= otherEntityName %>Service().retrieve().then((res) => {

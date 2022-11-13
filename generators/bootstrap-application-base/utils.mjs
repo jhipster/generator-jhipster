@@ -48,6 +48,7 @@ export function createUserEntity(customUserData = {}, application) {
     fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
     dto: true,
     adminUserDto: `AdminUser${application.dtoSuffix ?? ''}`,
+    builtInUser: true,
     ...customUserData,
   };
 

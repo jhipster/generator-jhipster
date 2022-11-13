@@ -69,6 +69,10 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
         this.loadAppConfig();
         this.loadServerConfig();
         this.loadPlatformConfig();
+
+        this.loadDerivedAppConfig();
+        this.loadDerivedServerConfig();
+        this.loadDerivedPlatformConfig();
       },
       getConfig() {
         this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
