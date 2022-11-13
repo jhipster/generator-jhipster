@@ -20,6 +20,7 @@
 import { SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR, DOCKER_DIR } from './generator-constants.mjs';
 import { languageSnakeCase, languageToJavaLanguage } from './languages/utils.mjs';
 import { clientFrameworkTypes } from '../jdl/jhipster/index.mjs';
+import { moveWithGit } from './base/logic/index.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 
@@ -356,7 +357,8 @@ export function upgradeFiles(generator) {
         .map(langNameDiffer)
         .filter(props => props)
         .forEach(props => {
-          const code = generator.gitMove(
+          const code = moveWithGit(
+            generator,
             `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
             `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
           );
