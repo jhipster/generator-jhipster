@@ -33,6 +33,7 @@ import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
 import { deleteFile, deleteFolder, moveWithGit } from './logic/index.mjs';
+import { javadoc } from '../server/logic/index.mjs';
 
 const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
@@ -198,7 +199,7 @@ export default class PrivateBase extends Generator {
    * @returns class javadoc
    */
   formatAsClassJavadoc(text) {
-    return jhipsterUtils.getJavadoc(text, 0);
+    return javadoc(text, 0);
   }
 
   /**
@@ -209,7 +210,7 @@ export default class PrivateBase extends Generator {
    * @returns field javadoc
    */
   formatAsFieldJavadoc(text) {
-    return jhipsterUtils.getJavadoc(text, 4);
+    return javadoc(text, 4);
   }
 
   /**

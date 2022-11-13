@@ -2,35 +2,35 @@ import { fileURLToPath } from 'url';
 
 import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
-import sinon from 'sinon';
 
 import utils from '../generators/utils.cjs';
-import { prepareTempDir } from './utils/utils.mjs';
+import { getEnumInfo } from '../generators/entity/logic/index.mjs';
+import { javadoc } from '../generators/server/logic/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 describe('JHipster Utils', () => {
-  describe('::getJavadoc', () => {
+  describe('::javadoc', () => {
     describe('when passing a negative or nil increment', () => {
       it('returns the comment with no increment', () => {
-        assert.textEqual(utils.getJavadoc('whatever', -42), '/**\n * whatever\n */');
-        assert.textEqual(utils.getJavadoc('whatever', 0), '/**\n * whatever\n */');
+        assert.textEqual(javadoc('whatever', -42), '/**\n * whatever\n */');
+        assert.textEqual(javadoc('whatever', 0), '/**\n * whatever\n */');
       });
     });
     describe('when passing a positive increment', () => {
       it('returns the comment with the increment', () => {
-        assert.textEqual(utils.getJavadoc('whatever', 1), ' /**\n  * whatever\n  */');
+        assert.textEqual(javadoc('whatever', 1), ' /**\n  * whatever\n  */');
       });
     });
     describe('when passing a nil comment', () => {
       it('inserts an empty comment instead of failing', () => {
-        assert.textEqual(utils.getJavadoc(null, 1), ' /**\n  * \n  */');
+        assert.textEqual(javadoc(null, 1), ' /**\n  * \n  */');
       });
     });
     describe('when passing a comment containing double quotes', () => {
       it('escapes the quotes', () => {
-        assert.textEqual(utils.getJavadoc('Comment="KO"', 1), ' /**\n  * Comment=\\"KO\\"\n  */');
+        assert.textEqual(javadoc('Comment="KO"', 1), ' /**\n  * Comment=\\"KO\\"\n  */');
       });
     });
   });
@@ -41,7 +41,7 @@ describe('JHipster Utils', () => {
       before(() => {
         const clientRootFolder = 'root';
         const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB', fieldTypeJavadoc: 'enum comment' };
-        enumInfo = utils.getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it("returns the enum's name", () => {
@@ -63,7 +63,7 @@ describe('JHipster Utils', () => {
       before(() => {
         const clientRootFolder = 'root';
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-        enumInfo = utils.getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it('returns whether there are custom enums', () => {
@@ -84,7 +84,7 @@ describe('JHipster Utils', () => {
       before(() => {
         const clientRootFolder = 'root';
         const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB' };
-        enumInfo = utils.getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it('returns whether there are custom enums', () => {
@@ -110,7 +110,7 @@ describe('JHipster Utils', () => {
         before(() => {
           const clientRootFolder = 'root';
           const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb)' };
-          enumInfo = utils.getEnumInfo(field, clientRootFolder);
+          enumInfo = getEnumInfo(field, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -135,7 +135,7 @@ describe('JHipster Utils', () => {
         before(() => {
           const clientRootFolder = 'root';
           const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb and b)' };
-          enumInfo = utils.getEnumInfo(field, clientRootFolder);
+          enumInfo = getEnumInfo(field, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -167,7 +167,7 @@ describe('JHipster Utils', () => {
               BBB: 'second comment',
             },
           };
-          enumInfo = utils.getEnumInfo(field, clientRootFolder);
+          enumInfo = getEnumInfo(field, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -192,7 +192,7 @@ describe('JHipster Utils', () => {
 
       before(() => {
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-        enumInfo = utils.getEnumInfo(field);
+        enumInfo = getEnumInfo(field);
       });
 
       it('returns an empty string for the clientRootFolder property', () => {
@@ -205,7 +205,7 @@ describe('JHipster Utils', () => {
       before(() => {
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
         const clientRootFolder = 'root';
-        enumInfo = utils.getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it('returns the clientRootFolder property suffixed by a dash', () => {

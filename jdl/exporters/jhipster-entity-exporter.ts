@@ -21,7 +21,7 @@ import fs from 'fs';
 import path from 'path';
 import ApplicationTypes from '../jhipster/application-types';
 import { toFilePath, readJSONFile } from '../readers/json-file-reader';
-import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils';
+import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils';
 
 import { areEntitiesEqual as areJHipsterEntitiesEqual } from '../utils/object-utils';
 

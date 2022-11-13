@@ -60,7 +60,6 @@ import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
 import { locateGenerator } from './logic/index.mjs';
-import { addIconInImport, addMenuEntry } from '../client/logic/index.mjs';
 import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../entities/logic/index.mjs';
 import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
@@ -1582,15 +1581,15 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       shelljs.exec(
         // prettier-ignore
         `"${keytoolPath}keytool" -genkey -noprompt `
-                + '-storetype PKCS12 '
-                + '-keyalg RSA '
-                + '-alias selfsigned '
-                + `-keystore "${keyStoreFile}" `
-                + '-storepass password '
-                + '-keypass password '
-                + '-keysize 2048 '
-                + '-validity 99999 '
-                + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
+        + '-storetype PKCS12 '
+        + '-keyalg RSA '
+        + '-alias selfsigned '
+        + `-keystore "${keyStoreFile}" `
+        + '-storepass password '
+        + '-keypass password '
+        + '-keysize 2048 '
+        + '-validity 99999 '
+        + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
         code => {
           if (code !== 0) {
             this.warning("\nFailed to create a KeyStore with 'keytool'", code);

@@ -18,6 +18,7 @@
  */
 import utils from '../utils.cjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
+import { getEnumInfo } from '../entity/logic/index.mjs';
 
 const CLIENT_COMMON_TEMPLATES_DIR = 'entity/common';
 
@@ -26,7 +27,7 @@ async function addEnumerationFiles({ application, entity }) {
     if (field.fieldIsEnum === true) {
       const { enumFileName } = field;
       const enumInfo = {
-        ...utils.getEnumInfo(field, entity.clientRootFolder),
+        ...getEnumInfo(field, entity.clientRootFolder),
         frontendAppName: application.frontendAppName,
         packageName: application.packageName,
         webappEnumerationsDir: application.webappEnumerationsDir,

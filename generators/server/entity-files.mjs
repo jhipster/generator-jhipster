@@ -24,6 +24,7 @@ import utils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
 import { databaseTypes, searchEngineTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
 import { writeEntityCouchbaseFiles } from './entity-files-couchbase.mjs';
+import { getEnumInfo } from '../entity/logic/index.mjs';
 
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
@@ -466,7 +467,7 @@ export function writeFiles() {
         for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
           const fieldType = field.fieldType;
           const enumInfo = {
-            ...utils.getEnumInfo(field, entity.clientRootFolder),
+            ...getEnumInfo(field, entity.clientRootFolder),
             frontendAppName: application.frontendAppName,
             packageName: application.packageName,
             entityAbsolutePackage: entity.entityAbsolutePackage || application.packageName,

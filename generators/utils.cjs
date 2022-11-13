@@ -19,7 +19,6 @@
 /* eslint-disable no-console */
 
 const path = require('path');
-const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
 const os = require('os');
@@ -33,9 +32,6 @@ module.exports = {
   renderContent,
   deepFind,
   escapeRegExp,
-  getJavadoc,
-  buildEnumInfo,
-  getEnumInfo,
   getDBTypeFromDBValue,
   checkStringInFile,
   checkRegexInFile,
@@ -250,146 +246,6 @@ function deepFind(obj, path, placeholder) {
     current = current[paths[i]];
   }
   return current;
-}
-
-/**
- * Convert passed block of string to javadoc formatted string.
- *
- * @param {string} text text to convert to javadoc format
- * @param {number} indentSize indent size (default 0)
- * @returns javadoc formatted string
- */
-function getJavadoc(text, indentSize = 0) {
-  if (!text) {
-    text = '';
-  }
-  if (text.includes('"')) {
-    text = text.replace(/"/g, '\\"');
-  }
-  let javadoc = `${_.repeat(' ', indentSize)}/**`;
-  const rows = text.split('\n');
-  for (let i = 0; i < rows.length; i++) {
-    javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} * ${rows[i]}`;
-  }
-  javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} */`;
-  return javadoc;
-}
-
-/**
- * Build an enum object
- * @param {Object} field - entity field
- * @param {String} clientRootFolder - the client's root folder
- * @return {Object} the enum info.
- */
-function getEnumInfo(field, clientRootFolder) {
-  const fieldType = field.fieldType;
-  // Todo: check if the next line does a side-effect and refactor it.
-  field.enumInstance = _.lowerFirst(fieldType);
-  const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
-  const customValuesState = getCustomValuesState(enums);
-  return {
-    enumName: fieldType,
-    javadoc: field.fieldTypeJavadoc && getJavadoc(field.fieldTypeJavadoc),
-    enumInstance: field.enumInstance,
-    enums,
-    ...customValuesState,
-    enumValues: getEnums(enums, customValuesState, field.fieldValuesJavadocs),
-    clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
-  };
-}
-
-/**
- * @Deprecated
- * Build an enum object, deprecated use getEnumInfoInstead
- * @param {any} field : entity field
- * @param {string} frontendAppName
- * @param {string} packageName
- * @param {string} clientRootFolder
- */
-function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
-  const fieldType = field.fieldType;
-  field.enumInstance = _.lowerFirst(fieldType);
-  const enums = field.fieldValues.replace(/\s/g, '').split(',');
-  const enumsWithCustomValue = getEnumsWithCustomValue(enums);
-  return {
-    enumName: fieldType,
-    enumValues: field.fieldValues.split(',').join(', '),
-    enumInstance: field.enumInstance,
-    enums,
-    enumsWithCustomValue,
-    frontendAppName,
-    packageName,
-    clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
-  };
-}
-
-/**
- * @deprecated
- * private function to remove for jhipster v7
- * @param enums
- * @return {*}
- */
-function getEnumsWithCustomValue(enums) {
-  return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
-    if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
-      const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
-      const enumValueName = matches[1];
-      const enumValueCustomValue = matches[3];
-      enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
-    } else {
-      enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
-    }
-    return enumsWithCustomValueArray;
-  }, []);
-}
-
-function getCustomValuesState(enumValues) {
-  const state = {
-    withoutCustomValue: 0,
-    withCustomValue: 0,
-  };
-  enumValues.forEach(enumValue => {
-    if (doesTheEnumValueHaveACustomValue(enumValue)) {
-      state.withCustomValue++;
-    } else {
-      state.withoutCustomValue++;
-    }
-  });
-  return {
-    withoutCustomValues: state.withCustomValue === 0,
-    withSomeCustomValues: state.withCustomValue !== 0 && state.withoutCustomValue !== 0,
-    withCustomValues: state.withoutCustomValue === 0,
-  };
-}
-
-function getEnums(enums, customValuesState, comments) {
-  if (customValuesState.withoutCustomValues) {
-    return enums.map(enumValue => ({
-      name: enumValue,
-      value: enumValue,
-      comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 4),
-    }));
-  }
-  return enums.map(enumValue => {
-    if (!doesTheEnumValueHaveACustomValue(enumValue)) {
-      return {
-        name: enumValue.trim(),
-        value: enumValue.trim(),
-        comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 4),
-      };
-    }
-    // eslint-disable-next-line no-unused-vars
-    const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
-    return {
-      name: matched[1],
-      value: matched[2],
-      comment: comments && comments[matched[1]] && getJavadoc(comments[matched[1]], 4),
-    };
-  });
-}
-
-function doesTheEnumValueHaveACustomValue(enumValue) {
-  return enumValue.includes('(');
 }
 
 /**
