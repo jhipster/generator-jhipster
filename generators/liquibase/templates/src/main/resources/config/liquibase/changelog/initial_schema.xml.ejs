@@ -133,7 +133,7 @@ _%>
                                  referencedColumnNames="id"
                                  referencedTableName="<%= user.entityTableName %>"/>
   <%_ } _%>
-  <%_ if (generateUserManagement) { _%>
+  <%_ if (generateBuiltInAuthorityEntity) { _%>
         <loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
@@ -141,15 +141,16 @@ _%>
                   usePreparedStatements="true">
             <column name="name" type="string"/>
         </loadData>
-    <%_ if (!authenticationTypeOauth2) { _%>
+  <%_ } _%>
+  <%_ if (generateUserManagement) { _%>
         <loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
                   tableName="<%= user.entityTableName %>"
                   usePreparedStatements="true">
-      <%_ if (prodDatabaseTypePostgres) { _%>
+    <%_ if (prodDatabaseTypePostgres) { _%>
             <column name="id" type="<%= idField.loadColumnType %>"/>
-      <%_ } _%>
+    <%_ } _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
@@ -160,9 +161,8 @@ _%>
                   usePreparedStatements="true">
             <column name="user_id" type="<%= idField.loadColumnType %>"/>
         </loadData>
-    <%_ } _%>
-        <dropDefaultValue tableName="<%= user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
   <%_ } _%>
+        <dropDefaultValue tableName="<%= user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
 <%_ } _%>
     </changeSet>
 

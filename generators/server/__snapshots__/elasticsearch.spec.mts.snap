@@ -2397,6 +2397,9 @@ Object {
   "src/main/java/com/package/config/WebConfigurer.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/config/dbmigrations/InitialSetupMigration.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/config/dbmigrations/package-info.java": Object {
     "stateCleared": "modified",
   },

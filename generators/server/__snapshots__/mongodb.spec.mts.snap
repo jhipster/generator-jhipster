@@ -565,6 +565,9 @@ Object {
   "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/dbmigrations/InitialSetupMigration.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/dbmigrations/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -970,6 +973,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/dbmigrations/InitialSetupMigration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/dbmigrations/package-info.java": Object {
@@ -1684,6 +1690,9 @@ Object {
   "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/dbmigrations/InitialSetupMigration.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/dbmigrations/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -2080,6 +2089,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/dbmigrations/InitialSetupMigration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/dbmigrations/package-info.java": Object {
@@ -3288,6 +3300,9 @@ Object {
   "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/dbmigrations/InitialSetupMigration.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/dbmigrations/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -3702,6 +3717,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/WebConfigurer.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/dbmigrations/InitialSetupMigration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/dbmigrations/package-info.java": Object {
