@@ -43,7 +43,7 @@ const moveToJavaPackageSrcDir = (data, filePath) => `${data.javaPackageSrcDir}${
 const moveToJavaPackageTestDir = (data, filePath) => `${data.javaPackageTestDir}${filePath.replace(/_\w*/, '')}`;
 
 const shouldSkipUserManagement = generator =>
-  generator.skipUserManagement && (!generator.applicationTypeMonolith || !generator.authenticationTypeOauth2);
+  !generator.generateUserManagement && (!generator.applicationTypeMonolith || !generator.authenticationTypeOauth2);
 
 export const mongoDbFiles = {
   serverResource: [
@@ -1257,13 +1257,13 @@ export const baseServerFiles = {
   ],
   accountResource: [
     {
-      condition: data => data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      condition: data => !data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['web/rest/AccountResource_skipUserManagement.java'],
     },
     {
-      condition: data => data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      condition: data => !data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/rest/AccountResourceIT_skipUserManagement.java'],
@@ -1281,13 +1281,13 @@ export const baseServerFiles = {
       templates: ['web/rest/AccountResourceIT_oauth2.java'],
     },
     {
-      condition: data => !data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      condition: data => data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['web/rest/AccountResource.java'],
     },
     {
-      condition: data => !data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      condition: data => data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/rest/AccountResourceIT.java'],
