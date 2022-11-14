@@ -920,4 +920,37 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
     return entityTableName;
   }
+
+  /**
+   * @private
+   * Format As Field Javadoc
+   *
+   * @param {string} text - text to format
+   * @returns field javadoc
+   */
+  formatAsFieldJavadoc(text) {
+    return javadoc(text, 4);
+  }
+
+  /**
+   * @private
+   * Format As Api Description
+   *
+   * @param {string} text - text to format
+   * @returns formatted api description
+   */
+  formatAsApiDescription(text) {
+    return getApiDescription(text);
+  }
+
+  /**
+   * @private
+   * Format As Class Javadoc
+   *
+   * @param {string} text - text to format
+   * @returns class javadoc
+   */
+  formatAsClassJavadoc(text) {
+    return javadoc(text, 0);
+  }
 }
