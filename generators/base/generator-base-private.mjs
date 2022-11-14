@@ -32,8 +32,7 @@ import generatorConstants from '../generator-constants.cjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
-import { deleteFile, deleteFolder } from './logic/index.mjs';
-import { getApiDescription, javadoc } from '../server/logic/index.mjs';
+import { deleteFile, deleteFolder, parseCreationTimestamp } from './logic/index.mjs';
 
 const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
@@ -178,58 +177,12 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * Format As Liquibase Remarks
-   *
-   * @param {string} text - text to format
-   * @param {boolean} addRemarksTag - add remarks tag
-   * @returns formatted liquibase remarks
-   */
-  formatAsLiquibaseRemarks(text, addRemarksTag = false) {
-    if (!text) {
-      return addRemarksTag ? '' : text;
-    }
-    const rows = text.split('\n');
-    let description = rows[0];
-    for (let i = 1; i < rows.length; i++) {
-      // discard empty rows
-      if (rows[i].trim() !== '') {
-        // if simple text then put space between row strings
-        if (!description.endsWith('>') && !rows[i].startsWith('<')) {
-          description += ' ';
-        }
-        description += rows[i];
-      }
-    }
-    // escape & to &amp;
-    description = description.replace(/&/g, '&amp;');
-    // escape " to &quot;
-    description = description.replace(/"/g, '&quot;');
-    // escape ' to &apos;
-    description = description.replace(/'/g, '&apos;');
-    // escape < to &lt;
-    description = description.replace(/</g, '&lt;');
-    // escape > to &gt;
-    description = description.replace(/>/g, '&gt;');
-    return addRemarksTag ? ` remarks="${description}"` : description;
-  }
-
-  /**
-   * @private
    * Parse creationTimestamp option
    * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
    *                   obtained by parsing the given string representation of the creationTimestamp.
    */
   parseCreationTimestamp(creationTimestampOption = this.options.creationTimestamp) {
-    let creationTimestamp;
-    if (creationTimestampOption) {
-      creationTimestamp = Date.parse(creationTimestampOption);
-      if (!creationTimestamp) {
-        this.warning(`Error parsing creationTimestamp ${creationTimestampOption}.`);
-      } else if (creationTimestamp > new Date().getTime()) {
-        throw new Error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
-      }
-    }
-    return creationTimestamp;
+    return parseCreationTimestamp(this, creationTimestampOption);
   }
 
   /**

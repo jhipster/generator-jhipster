@@ -8,12 +8,16 @@ import fieldTypes from '../jdl/jhipster/field-types';
 
 // eslint-disable-next-line import/no-named-default
 import { default as JHipsterServerGeneratorClass } from '../generators/server/generator.mjs';
+// eslint-disable-next-line import/no-named-default
+import { default as DatabaseChangelogLiquibaseClass } from '../generators/liquibase-changelogs/index.mjs';
 
 const { CASSANDRA, MONGODB, MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
 const { CommonDBTypes } = fieldTypes;
 const BaseGenerator = BaseGeneratorClass.prototype;
 const JHipsterServerGenerator = JHipsterServerGeneratorClass.prototype;
+const JHipsterDatabaseChangelogLiquibase = DatabaseChangelogLiquibaseClass.prototype;
+
 const NO_DTO = MapperTypes.NO;
 
 BaseGenerator.log = msg => {
@@ -197,47 +201,55 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('formatAsLiquibaseRemarks', () => {
     describe('when formatting a nil text', () => {
       it('returns it', () => {
-        expect(BaseGenerator.formatAsLiquibaseRemarks()).to.equal(undefined);
+        expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks()).to.equal(undefined);
       });
     });
     describe('when formatting an empty text', () => {
       it('returns it', () => {
-        expect(BaseGenerator.formatAsLiquibaseRemarks('')).to.equal('');
+        expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('')).to.equal('');
       });
     });
     describe('when formatting normal texts', () => {
       describe('when having empty lines', () => {
         it('discards them', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks('First line\n \nSecond line\n\nThird line')).to.equal(
+          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('First line\n \nSecond line\n\nThird line')).to.equal(
             'First line Second line Third line'
           );
         });
       });
       describe('when having a plain text', () => {
         it('puts a space before each line', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is\na great generator')).to.equal('JHipster is a great generator');
+          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('JHipster is\na great generator')).to.equal(
+            'JHipster is a great generator'
+          );
         });
       });
       describe('when having ampersand', () => {
         it('formats the text to escape it', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster uses Spring & Hibernate')).to.equal(
+          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('JHipster uses Spring & Hibernate')).to.equal(
             'JHipster uses Spring &amp; Hibernate'
           );
         });
       });
       describe('when having quotes', () => {
         it('formats the text to escape it', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is "the" best')).to.equal('JHipster is &quot;the&quot; best');
+          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('JHipster is "the" best')).to.equal(
+            'JHipster is &quot;the&quot; best'
+          );
         });
       });
       describe('when having apostrophe', () => {
         it('formats the text to escape it', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal('JHipster is &apos;the&apos; best');
+          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal(
+            'JHipster is &apos;the&apos; best'
+          );
         });
       });
       describe('when having HTML tags < and >', () => {
         it('formats the text to escape it', () => {
-          expect(BaseGenerator.formatAsLiquibaseRemarks('Not boldy\n<b>boldy</b>')).to.equal('Not boldy&lt;b&gt;boldy&lt;/b&gt;');
+          expect(JHipsterDatabaseChangelogLiquibase.formatAsLiquibaseRemarks('Not boldy\n<b>boldy</b>')).to.equal(
+            'Not boldy&lt;b&gt;boldy&lt;/b&gt;'
+          );
         });
       });
     });

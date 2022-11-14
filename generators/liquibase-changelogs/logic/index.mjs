@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 // eslint-disable-next-line import/prefer-default-export
-export { getJavadoc as javadoc, getApiDescription } from './formatting.mjs';
+export { default as liquibaseComment } from './formatting.mjs';

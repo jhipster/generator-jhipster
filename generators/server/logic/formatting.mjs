@@ -1,4 +1,23 @@
+/**
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import _ from 'lodash';
+import { stringNullOrEmpty, textToArray, isSimpleText } from '../../base/logic/index.mjs';
 
 const indent = (indentSize = 0) => {
   return _.repeat(' ', indentSize);
@@ -9,18 +28,6 @@ const removeDoubleQuotes = text => {
     return text.replace(/"/g, '\\"');
   }
   return text;
-};
-
-const stringNullOrEmpty = str => {
-  return str === null || str === undefined || str.trim() === '';
-};
-
-const isSimpleText = text => {
-  return !text.startsWith('<') && !text.endsWith('>');
-};
-
-const textToArray = text => {
-  return text.split('\n');
 };
 
 /**
@@ -54,7 +61,7 @@ const getApiDescription = text => {
     // discard empty rows
     if (!stringNullOrEmpty(rows[i])) {
       // if simple text then put space between row strings
-      if (isSimpleText(rows[i])) {
+      if (isSimpleText(description, rows[i])) {
         description += ' ';
       }
       description += removeDoubleQuotes(rows[i]);

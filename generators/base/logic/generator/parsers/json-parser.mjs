@@ -1,5 +1,3 @@
-import fs from 'fs';
-
 /**
  * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
@@ -18,6 +16,8 @@ import fs from 'fs';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import fs from 'fs';
+
 const parseJson = (filePath, defaultValue = {}) => {
   return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' })) || defaultValue;
 };
