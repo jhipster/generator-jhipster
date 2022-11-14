@@ -332,35 +332,6 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
-  get install() {
-    return {
-      afterRunHook() {
-        try {
-          const modules = this.getModuleHooks();
-          if (modules.length > 0) {
-            this.log(`\n${chalk.bold.green('Running post run module hooks\n')}`);
-            // form the data to be passed to modules
-            const context = this.context;
-
-            // run through all post entity creation module hooks
-            this.callHooks(GENERATOR_ENTITY, 'post', {
-              entityConfig: context,
-              force: this.options.force,
-            });
-          }
-        } catch (err) {
-          this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.')}`);
-          this.debug('Error:', err);
-        }
-      },
-    };
-  }
-
-  get [BaseGenerator.INSTALL]() {
-    return this.delegateTasksToBlueprint(() => this.install);
-  }
-
-  // Public API method used by the getter and also by Blueprints
   get end() {
     return {
       end() {
