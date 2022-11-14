@@ -206,32 +206,7 @@ export default class PrivateBase extends Generator {
    * @returns formatted api description
    */
   formatAsApiDescription(text) {
-    if (!text) {
-      return text;
-    }
-    const rows = text.split('\n');
-    let description = this.formatLineForJavaStringUse(rows[0]);
-    for (let i = 1; i < rows.length; i++) {
-      // discard empty rows
-      if (rows[i].trim() !== '') {
-        // if simple text then put space between row strings
-        if (!description.endsWith('>') && !rows[i].startsWith('<')) {
-          description += ' ';
-        }
-        description += this.formatLineForJavaStringUse(rows[i]);
-      }
-    }
-    return description;
-  }
-
-  /**
-   * @private
-   */
-  formatLineForJavaStringUse(text) {
-    if (!text) {
-      return text;
-    }
-    return text.replace(/"/g, '\\"');
+    return getApiDescription(text);
   }
 
   /**

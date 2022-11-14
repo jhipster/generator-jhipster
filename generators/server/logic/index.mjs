@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 // eslint-disable-next-line import/prefer-default-export
-export { default as javadoc } from './text-formatting.mjs';
+export { getJavadoc as javadoc, getApiDescription } from './text-formatting.mjs';

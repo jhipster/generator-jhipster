@@ -11,6 +11,14 @@ const removeDoubleQuotes = text => {
   return text;
 };
 
+const stringNullOrEmpty = str => {
+  return str === null || str === undefined || str.trim() === '';
+};
+
+const isSimpleText = text => {
+  return !text.startsWith('<') && !text.endsWith('>');
+};
+
 const textToArray = text => {
   return text.split('\n');
 };
@@ -36,4 +44,23 @@ const getJavadoc = (text, indentSize = 0) => {
   return javadoc;
 };
 
-export default getJavadoc;
+const getApiDescription = text => {
+  if (!text) {
+    return text;
+  }
+  const rows = textToArray(text);
+  let description = removeDoubleQuotes(rows[0]);
+  for (let i = 1; i < rows.length; i++) {
+    // discard empty rows
+    if (!stringNullOrEmpty(rows[i])) {
+      // if simple text then put space between row strings
+      if (isSimpleText(rows[i])) {
+        description += ' ';
+      }
+      description += removeDoubleQuotes(rows[i]);
+    }
+  }
+  return description;
+};
+
+export { getJavadoc, getApiDescription };
