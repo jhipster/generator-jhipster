@@ -59,6 +59,7 @@ import {
 
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
+import { getApiDescription, javadoc } from './logic/index.mjs';
 
 const { isReservedTableName } = reservedKeywords;
 const { defaultConfig } = generatorDefaults;
@@ -855,5 +856,38 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       entityTableName = `${jhiTablePrefix}_${entityTableName}`;
     }
     return entityTableName;
+  }
+
+  /**
+   * @private
+   * Format As Field Javadoc
+   *
+   * @param {string} text - text to format
+   * @returns field javadoc
+   */
+  formatAsFieldJavadoc(text) {
+    return javadoc(text, 4);
+  }
+
+  /**
+   * @private
+   * Format As Api Description
+   *
+   * @param {string} text - text to format
+   * @returns formatted api description
+   */
+  formatAsApiDescription(text) {
+    return getApiDescription(text);
+  }
+
+  /**
+   * @private
+   * Format As Class Javadoc
+   *
+   * @param {string} text - text to format
+   * @returns class javadoc
+   */
+  formatAsClassJavadoc(text) {
+    return javadoc(text, 0);
   }
 }

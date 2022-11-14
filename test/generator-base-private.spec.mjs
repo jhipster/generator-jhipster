@@ -6,11 +6,14 @@ import databaseTypes from '../jdl/jhipster/database-types';
 import entityOptions from '../jdl/jhipster/entity-options';
 import fieldTypes from '../jdl/jhipster/field-types';
 
+// eslint-disable-next-line import/no-named-default
+import { default as JHipsterServerGeneratorClass } from '../generators/server/generator.mjs';
+
 const { CASSANDRA, MONGODB, MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
 const { CommonDBTypes } = fieldTypes;
 const BaseGenerator = BaseGeneratorClass.prototype;
-
+const JHipsterServerGenerator = JHipsterServerGeneratorClass.prototype;
 const NO_DTO = MapperTypes.NO;
 
 BaseGenerator.log = msg => {
@@ -155,35 +158,37 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('formatAsApiDescription', () => {
     describe('when formatting a nil text', () => {
       it('returns it', () => {
-        expect(BaseGenerator.formatAsApiDescription()).to.equal(undefined);
+        expect(JHipsterServerGenerator.formatAsApiDescription()).to.equal(undefined);
       });
     });
     describe('when formatting an empty text', () => {
       it('returns it', () => {
-        expect(BaseGenerator.formatAsApiDescription('')).to.equal('');
+        expect(JHipsterServerGenerator.formatAsApiDescription('')).to.equal('');
       });
     });
     describe('when formatting normal texts', () => {
       describe('when having empty lines', () => {
         it('discards them', () => {
-          expect(BaseGenerator.formatAsApiDescription('First line\n \nSecond line\n\nThird line')).to.equal(
+          expect(JHipsterServerGenerator.formatAsApiDescription('First line\n \nSecond line\n\nThird line')).to.equal(
             'First line Second line Third line'
           );
         });
       });
       describe('when having HTML tags', () => {
         it('keeps them', () => {
-          expect(BaseGenerator.formatAsApiDescription('Not boldy\n<b>boldy</b>')).to.equal('Not boldy<b>boldy</b>');
+          expect(JHipsterServerGenerator.formatAsApiDescription('Not boldy\n<b>boldy</b>')).to.equal('Not boldy<b>boldy</b>');
         });
       });
       describe('when having a plain text', () => {
         it('puts a space before each line', () => {
-          expect(BaseGenerator.formatAsApiDescription('JHipster is\na great generator')).to.equal('JHipster is a great generator');
+          expect(JHipsterServerGenerator.formatAsApiDescription('JHipster is\na great generator')).to.equal(
+            'JHipster is a great generator'
+          );
         });
       });
       describe('when having quotes', () => {
         it('formats the text to make the string valid', () => {
-          expect(BaseGenerator.formatAsApiDescription('JHipster is "the" best')).to.equal('JHipster is \\"the\\" best');
+          expect(JHipsterServerGenerator.formatAsApiDescription('JHipster is "the" best')).to.equal('JHipster is \\"the\\" best');
         });
       });
     });
