@@ -32,8 +32,8 @@ import generatorConstants from '../generator-constants.cjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
-import { deleteFile, deleteFolder, moveWithGit } from './logic/index.mjs';
-import { javadoc } from '../server/logic/index.mjs';
+import { deleteFile, deleteFolder } from './logic/index.mjs';
+import { getApiDescription, javadoc } from '../server/logic/index.mjs';
 
 const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
@@ -206,32 +206,7 @@ export default class PrivateBase extends Generator {
    * @returns formatted api description
    */
   formatAsApiDescription(text) {
-    if (!text) {
-      return text;
-    }
-    const rows = text.split('\n');
-    let description = this.formatLineForJavaStringUse(rows[0]);
-    for (let i = 1; i < rows.length; i++) {
-      // discard empty rows
-      if (rows[i].trim() !== '') {
-        // if simple text then put space between row strings
-        if (!description.endsWith('>') && !rows[i].startsWith('<')) {
-          description += ' ';
-        }
-        description += this.formatLineForJavaStringUse(rows[i]);
-      }
-    }
-    return description;
-  }
-
-  /**
-   * @private
-   */
-  formatLineForJavaStringUse(text) {
-    if (!text) {
-      return text;
-    }
-    return text.replace(/"/g, '\\"');
+    return getApiDescription(text);
   }
 
   /**

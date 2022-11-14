@@ -240,31 +240,11 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Verify if the entity is a built-in User.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is User and is built-in.
-   */
-  isBuiltInUser(entityName) {
-    return this.isUsingBuiltInUser() && entityIsUser(entityName);
-  }
-
-  /**
-   * @private
    * Verify if the application is using built-in Authority.
    * @return {boolean} true if the Authority is built-in.
    */
   isUsingBuiltInAuthority() {
     return isUsingBuiltInAuthorityConfiguration(this.jhipsterConfig);
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a built-in Authority.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is Authority and is built-in.
-   */
-  isBuiltInAuthority(entityName) {
-    return this.isUsingBuiltInAuthority() && entityIsAuthority(entityName);
   }
 
   /**
