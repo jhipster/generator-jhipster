@@ -175,20 +175,18 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   <%_ } _%>
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCassandra || (searchEngineElasticsearch && reactive)) { _%>
+<%_ if (databaseTypeMongodb)) { _%>
   data:
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
     mongodb:
       uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
       database: <%= baseName %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-    cassandra:
-      contact-points: localhost
-      compression: LZ4
-      keyspace-name: <%= baseName %>
-      local-datacenter: datacenter1
+  cassandra:
+    contact-points: localhost
+    compression: LZ4
+    keyspace-name: <%= baseName %>
+    local-datacenter: datacenter1
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
   elasticsearch:
