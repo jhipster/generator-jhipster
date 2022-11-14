@@ -44,7 +44,7 @@
     "copy-webpack-plugin": "11.0.0",
     "core-js": "3.26.1",
     "cross-env": "7.0.3",
-    "css-loader": "6.7.1",
+    "css-loader": "6.7.2",
     "css-minimizer-webpack-plugin": "4.2.2",
     "eslint": "8.27.0",
     "eslint-config-prettier": "8.5.0",
