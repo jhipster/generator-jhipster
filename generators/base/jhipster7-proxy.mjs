@@ -45,6 +45,14 @@ const deprecatedProperties = {
     replacement: 'clientDistDir',
     get: ({ data }) => data.clientDistDir,
   },
+  userPrimaryKeyTypeString: {
+    replacement: 'user.primaryKey.typeString',
+    get: ({ data }) => data.user.primaryKey.typeString,
+  },
+  userPrimaryKeyTypeUUID: {
+    replacement: 'user.primaryKey.typeUUID',
+    get: ({ data }) => data.user.primaryKey.typeUUID,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
