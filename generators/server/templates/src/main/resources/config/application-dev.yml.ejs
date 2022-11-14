@@ -175,7 +175,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   <%_ } _%>
 <%_ } _%>
-<%_ if (databaseTypeMongodb)) { _%>
+<%_ if (databaseTypeMongodb) { _%>
   data:
     mongodb:
       uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
