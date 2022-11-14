@@ -17,23 +17,23 @@
  limitations under the License.
 -%>
 <div>
-  <h2 id="session-page-heading" <%= jhiPrefix %>Translate="sessions.title" [translateValues]="{ username: account.login }" *ngIf="account"><%- this._getClientTranslation('sessions.title', { username: '{{ account.login }}' }) %></h2>
+  <h2 id="session-page-heading" <%= jhiPrefix %>Translate="sessions.title" [translateValues]="{ username: account.login }" *ngIf="account"><%- getWebappTranslation('sessions.title', { username: '{{ account.login }}' }) %></h2>
 
   <div class="alert alert-success" *ngIf="success" <%= jhiPrefix %>Translate="sessions.messages.success">
-    <%- this._getClientTranslation('sessions.messages.success') %>
+    <%- getWebappTranslation('sessions.messages.success') %>
   </div>
 
   <div class="alert alert-danger" *ngIf="error" <%= jhiPrefix %>Translate="sessions.messages.error">
-     <%- this._getClientTranslation('sessions.messages.error') %>
+     <%- getWebappTranslation('sessions.messages.error') %>
   </div>
 
   <div class="table-responsive">
     <table class="table table-striped" aria-describedby="session-page-heading">
       <thead>
         <tr>
-          <th scope="col" <%= jhiPrefix %>Translate="sessions.table.ipaddress"><%- this._getClientTranslation('sessions.table.ipaddress') %></th>
-          <th scope="col" <%= jhiPrefix %>Translate="sessions.table.useragent"><%- this._getClientTranslation('sessions.table.useragent') %></th>
-          <th scope="col" <%= jhiPrefix %>Translate="sessions.table.date"><%- this._getClientTranslation('sessions.table.date') %></th>
+          <th scope="col" <%= jhiPrefix %>Translate="sessions.table.ipaddress"><%- getWebappTranslation('sessions.table.ipaddress') %></th>
+          <th scope="col" <%= jhiPrefix %>Translate="sessions.table.useragent"><%- getWebappTranslation('sessions.table.useragent') %></th>
+          <th scope="col" <%= jhiPrefix %>Translate="sessions.table.date"><%- getWebappTranslation('sessions.table.date') %></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -49,7 +49,7 @@
               (click)="invalidate(session.series)"
               <%= jhiPrefix %>Translate="sessions.table.button"
             >
-              <%- this._getClientTranslation('sessions.table.button') %>
+              <%- getWebappTranslation('sessions.table.button') %>
             </button>
           </td>
         </tr>

@@ -20,44 +20,44 @@
   <div class="col-8">
     <div *ngIf="user">
       <h2>
-        <span <%= jhiPrefix %>Translate="userManagement.detail.title"><%- this._getClientTranslation('userManagement.detail.title') %></span> [<strong>{{ user.login }}</strong>]
+        <span <%= jhiPrefix %>Translate="userManagement.detail.title"><%- getWebappTranslation('userManagement.detail.title') %></span> [<strong>{{ user.login }}</strong>]
       </h2>
 
       <dl class="row-md jh-entity-details">
-        <dt><span <%= jhiPrefix %>Translate="userManagement.login"><%- this._getClientTranslation('userManagement.login') %></span></dt>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.login"><%- getWebappTranslation('userManagement.login') %></span></dt>
         <dd>
           <span>{{ user.login }}</span>
-          <span *ngIf="user.activated" class="badge bg-success" <%= jhiPrefix %>Translate="userManagement.activated"><%- this._getClientTranslation('userManagement.activated') %></span>
-          <span *ngIf="!user.activated" class="badge bg-danger" <%= jhiPrefix %>Translate="userManagement.deactivated"><%- this._getClientTranslation('userManagement.deactivated') %></span>
+          <span *ngIf="user.activated" class="badge bg-success" <%= jhiPrefix %>Translate="userManagement.activated"><%- getWebappTranslation('userManagement.activated') %></span>
+          <span *ngIf="!user.activated" class="badge bg-danger" <%= jhiPrefix %>Translate="userManagement.deactivated"><%- getWebappTranslation('userManagement.deactivated') %></span>
         </dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.firstName"><%- this._getClientTranslation('userManagement.firstName') %></span></dt>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.firstName"><%- getWebappTranslation('userManagement.firstName') %></span></dt>
         <dd>{{ user.firstName }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.lastName"><%- this._getClientTranslation('userManagement.lastName') %></span></dt>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.lastName"><%- getWebappTranslation('userManagement.lastName') %></span></dt>
         <dd>{{ user.lastName }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.email"><%- this._getClientTranslation('userManagement.email') %></span></dt>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.email"><%- getWebappTranslation('userManagement.email') %></span></dt>
         <dd>{{ user.email }}</dd>
 <%_ if (enableTranslation) { _%>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.langKey"><%- this._getClientTranslation('userManagement.langKey') %></span></dt>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.langKey"><%- getWebappTranslation('userManagement.langKey') %></span></dt>
         <dd>{{ user.langKey }}</dd>
 <%_ } _%>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.createdBy"><%- this._getClientTranslation('userManagement.createdBy') %></span></dt>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.createdBy"><%- getWebappTranslation('userManagement.createdBy') %></span></dt>
         <dd>{{ user.createdBy }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.createdDate"><%- this._getClientTranslation('userManagement.createdDate') %></span></dt>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.createdDate"><%- getWebappTranslation('userManagement.createdDate') %></span></dt>
         <dd>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy"><%- this._getClientTranslation('userManagement.lastModifiedBy') %></span></dt>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy"><%- getWebappTranslation('userManagement.lastModifiedBy') %></span></dt>
         <dd>{{ user.lastModifiedBy }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate"><%- this._getClientTranslation('userManagement.lastModifiedDate') %></span></dt>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate"><%- getWebappTranslation('userManagement.lastModifiedDate') %></span></dt>
         <dd>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.profiles"><%- this._getClientTranslation('userManagement.profiles') %></span></dt>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.profiles"><%- getWebappTranslation('userManagement.profiles') %></span></dt>
         <dd>
           <ul class="list-unstyled">
             <li *ngFor="let authority of user.authorities">
@@ -68,7 +68,7 @@
       </dl>
 
       <button type="submit" routerLink="../../" class="btn btn-info">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back"><%- this._getClientTranslation('entity.action.back') %></span>
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back"><%- getWebappTranslation('entity.action.back') %></span>
       </button>
     </div>
   </div>

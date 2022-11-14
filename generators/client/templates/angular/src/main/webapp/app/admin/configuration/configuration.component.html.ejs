@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 <div *ngIf="allBeans">
-  <h2 id="configuration-page-heading" <%= jhiPrefix %>Translate="configuration.title" data-cy="configurationPageHeading"><%- this._getClientTranslation('configuration.title') %></h2>
+  <h2 id="configuration-page-heading" <%= jhiPrefix %>Translate="configuration.title" data-cy="configurationPageHeading"><%- getWebappTranslation('configuration.title') %></h2>
 
-  <span <%= jhiPrefix %>Translate="configuration.filter"><%- this._getClientTranslation('configuration.filter') %></span>
+  <span <%= jhiPrefix %>Translate="configuration.filter"><%- getWebappTranslation('configuration.filter') %></span>
   <input type="text" [(ngModel)]="beansFilter" (ngModelChange)="filterAndSortBeans()" class="form-control" />
 
   <h3 id="spring-configuration">Spring configuration</h3>
@@ -28,9 +28,9 @@
     <thead>
       <tr <%= jhiPrefix %>Sort predicate="prefix" [(ascending)]="beansAscending" (sortChange)="filterAndSortBeans()">
         <th <%= jhiPrefix %>SortBy="prefix" scope="col" class="w-40">
-          <span <%= jhiPrefix %>Translate="configuration.table.prefix"><%- this._getClientTranslation('configuration.table.prefix') %></span> <fa-icon icon="sort"></fa-icon>
+          <span <%= jhiPrefix %>Translate="configuration.table.prefix"><%- getWebappTranslation('configuration.table.prefix') %></span> <fa-icon icon="sort"></fa-icon>
         </th>
-        <th scope="col" class="w-60"><span <%= jhiPrefix %>Translate="configuration.table.properties"><%- this._getClientTranslation('configuration.table.properties') %></span></th>
+        <th scope="col" class="w-60"><span <%= jhiPrefix %>Translate="configuration.table.properties"><%- getWebappTranslation('configuration.table.properties') %></span></th>
       </tr>
     </thead>
     <tbody>

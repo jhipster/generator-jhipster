@@ -23,7 +23,7 @@
     </div>
 
     <div class="col-md-8">
-      <h1 <%= jhiPrefix %>Translate="error.title"><%- this._getClientTranslation('error.title') %></h1>
+      <h1 <%= jhiPrefix %>Translate="error.title"><%- getWebappTranslation('error.title') %></h1>
 
       <div *ngIf="errorMessage">
         <div class="alert alert-danger">{{ errorMessage }}</div>

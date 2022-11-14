@@ -18,22 +18,22 @@
 -%>
 <div>
   <h2>
-    <span id="gateway-page-heading" <%= jhiPrefix %>Translate="gateway.title"><%- this._getClientTranslation('gateway.title') %></span>
+    <span id="gateway-page-heading" <%= jhiPrefix %>Translate="gateway.title"><%- getWebappTranslation('gateway.title') %></span>
 
     <button class="btn btn-primary float-end" (click)="refresh()" (disabled)="updatingRoutes">
-      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="gateway.refresh.button"><%- this._getClientTranslation('gateway.refresh.button') %></span>
+      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="gateway.refresh.button"><%- getWebappTranslation('gateway.refresh.button') %></span>
     </button>
   </h2>
 
-  <h3 <%= jhiPrefix %>Translate="gateway.routes.title"><%- this._getClientTranslation('gateway.routes.title') %></h3>
+  <h3 <%= jhiPrefix %>Translate="gateway.routes.title"><%- getWebappTranslation('gateway.routes.title') %></h3>
 
   <div class="table-responsive">
     <table class="table table-striped" aria-describedby="gateway-page-heading">
       <thead>
         <tr>
-          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.url"><%- this._getClientTranslation('gateway.routes.url') %></th>
-          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.service"><%- this._getClientTranslation('gateway.routes.service') %></th>
-          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.servers"><%- this._getClientTranslation('gateway.routes.servers') %></th>
+          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.url"><%- getWebappTranslation('gateway.routes.url') %></th>
+          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.service"><%- getWebappTranslation('gateway.routes.service') %></th>
+          <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.servers"><%- getWebappTranslation('gateway.routes.servers') %></th>
         </tr>
       </thead>
       <tbody>
@@ -42,7 +42,7 @@
           <td>{{ route.serviceId }}</td>
           <td>
             <div *ngIf="route.serviceInstances.length === 0" class="label label-danger" <%= jhiPrefix %>Translate="gateway.routes.error">
-              <%- this._getClientTranslation('gateway.routes.error') %>
+              <%- getWebappTranslation('gateway.routes.error') %>
             </div>
 
             <div class="table-responsive">
