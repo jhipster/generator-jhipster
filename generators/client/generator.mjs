@@ -272,12 +272,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get default() {
     return this.asDefaultTaskGroup({
-      loadUserManagementEntities({ application }) {
-        if (application.user) {
-          application.userPrimaryKeyTypeString = application.user.primaryKey.type === TYPE_STRING;
-          application.userPrimaryKeyTypeUUID = application.user.primaryKey.type === TYPE_UUID;
-        }
-      },
       async loadNativeLanguage({ application, entities }) {
         for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
           await this._loadEntityClientTranslations(entity, application);
