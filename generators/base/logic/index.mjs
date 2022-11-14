@@ -18,3 +18,5 @@
  */
 export { default as locateGenerator } from './generator/locator.mjs';
 export { deleteFile, deleteFolder, moveWithGit } from './output/file-operations.mjs';
+export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode } from './output/formatter.mjs';
+export { default as parseCreationTimestamp } from './sequences.mjs';
