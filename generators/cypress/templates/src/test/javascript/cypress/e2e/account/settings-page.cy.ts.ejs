@@ -88,5 +88,19 @@ describe('/account/settings', () => {
       cy.get(submitSettingsSelector).click();
       cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(400));
     });
+
+    after(() => {
+      cy.login(adminUsername, adminPassword);
+      cy.visit('/account/settings');
+      cy.get(emailSettingsSelector).should('have.value', 'admin@localhost.fr');
+      cy.get(emailSettingsSelector).clear().type('admin@localhost');
+      cy.intercept({
+        method: 'POST',
+        url: '/api/account',
+        times: 1,
+      }).as('settingsSave');
+      cy.get(submitSettingsSelector).click();
+      cy.wait('@settingsSave');
+    });
   });
 });
