@@ -21,7 +21,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vu
   public reverse = false;
   public totalItems = 0;
   public isLoading = false;
-  public removeId: <% if (userPrimaryKeyTypeString || userPrimaryKeyTypeUUID) { %>string<% } else { %>number<% } %> = null;
+  public removeId: <% if (user.primaryKey.typeString || user.primaryKey.typeUUID) { %>string<% } else { %>number<% } %> = null;
 
   public mounted(): void {
     this.loadAll();

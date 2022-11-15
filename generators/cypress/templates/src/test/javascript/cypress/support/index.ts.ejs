@@ -34,6 +34,9 @@
 import '@cypress/code-coverage/support';
 <%_ } _%>
 
+<%_ if (generateUserManagement) { _%>
+import './account';
+<%_ } _%>
 import './commands';
 import './navbar';
 import './entity';
