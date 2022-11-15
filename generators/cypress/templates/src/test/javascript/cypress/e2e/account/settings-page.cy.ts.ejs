@@ -29,13 +29,35 @@ describe('/account/settings', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
 
-  beforeEach(() => {
+  let account: { email: string };
+
+  before(() => {
     cy.login(username, password);
-    cy.visit('/account/settings');
+    cy.authenticatedRequest({
+      method: 'GET',
+      url: '/api/account',
+    }).then(({ body }) => {
+      account = body;
+    });
   });
 
   beforeEach(() => {
+    cy.login(username, password);
+    cy.visit('/account/settings');
+    cy.get(emailSettingsSelector).should('have.value', account.email);
+
     cy.intercept('POST', '/api/account').as('settingsSave');
+  });
+
+  afterEach(() => {
+    cy.login(username, password);
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/account',
+      body: account,
+    })
+      .its('status')
+      .should('eq', 200);
   });
 
   it('should be accessible through menu', () => {
@@ -49,7 +71,7 @@ describe('/account/settings', () => {
     // need to modify email because default email does not match regex in vue
     cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
     cy.get(submitSettingsSelector).click();
-    cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(200));
+    cy.wait('@settingsSave').then(({ response }) => expect(response?.statusCode).to.equal(200));
   });
 
   it("should be able to change 'user' lastname settings", () => {
@@ -57,36 +79,32 @@ describe('/account/settings', () => {
     // need to modify email because default email does not match regex in vue
     cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
     cy.get(submitSettingsSelector).click();
-    cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(200));
+    cy.wait('@settingsSave').then(({ response }) => expect(response?.statusCode).to.equal(200));
   });
 
   it("should be able to change 'user' email settings", () => {
-    cy.get(emailSettingsSelector).should('have.value', 'user@localhost.fr');
     cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
     cy.get(submitSettingsSelector).click();
-    cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(200));
+    cy.wait('@settingsSave').then(({ response }) => expect(response?.statusCode).to.equal(200));
   });
 
   describe('if there is another user with an email', () => {
+    let adminEmail: string;
+
     before(() => {
       cy.login(adminUsername, adminPassword);
-      cy.visit('/account/settings');
-      cy.get(emailSettingsSelector).should('have.value', 'admin@localhost');
-      cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
-      cy.intercept({
-        method: 'POST',
+      cy.authenticatedRequest({
+        method: 'GET',
         url: '/api/account',
-        times: 1,
-      }).as('settingsSave');
-      cy.get(submitSettingsSelector).click();
-      cy.wait('@settingsSave');
+      }).then(({ body }) => {
+        adminEmail = body.email;
+      });
     });
 
     it("should not be able to change 'user' email to same value", () => {
-      cy.get(emailSettingsSelector).should('have.value', 'user@localhost.fr');
-      cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
+      cy.get(emailSettingsSelector).clear().type(adminEmail);
       cy.get(submitSettingsSelector).click();
-      cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(400));
+      cy.wait('@settingsSave').then(({ response }) => expect(response?.statusCode).to.equal(400));
     });
   });
 });
