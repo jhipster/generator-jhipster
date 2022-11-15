@@ -32,7 +32,7 @@
     "@types/lodash": "4.14.188",
     "@types/node": "16.18.3",
     "@types/react": "18.0.25",
-    "@types/react-dom": "18.0.8",
+    "@types/react-dom": "18.0.9",
     "@types/react-redux": "7.1.24",
     "@types/redux": "3.6.31",
     "@types/webpack-env": "1.18.0",
