@@ -63,6 +63,7 @@ export const cypressFiles: WriteFileSection<CypressGenerator, CypressApplication
         'e2e/account/settings-page.cy.ts',
         'e2e/account/password-page.cy.ts',
         'e2e/account/reset-password-page.cy.ts',
+        'support/account.ts',
       ],
     },
     {
