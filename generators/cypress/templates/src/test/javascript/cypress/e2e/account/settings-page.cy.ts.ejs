@@ -68,7 +68,10 @@ describe('/account/settings', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/account',
-      body: originalUserAccount,
+      body: {
+        ...originalUserAccount,
+        email: testUserEmail,
+      },
     })
       .its('status')
       .should('eq', 200);
