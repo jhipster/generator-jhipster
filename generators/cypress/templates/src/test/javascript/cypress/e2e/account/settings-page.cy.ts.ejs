@@ -29,22 +29,36 @@ describe('/account/settings', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
 
-  let account: { email: string };
+  let originalUserAccount: Record<string, string | number>;
+  const testUserEmail = 'user@localhost.fr';
 
   before(() => {
     cy.login(username, password);
+
     cy.authenticatedRequest({
       method: 'GET',
       url: '/api/account',
     }).then(({ body }) => {
-      account = body;
+      originalUserAccount = body;
+
+      // need to modify email because default email does not match regex in some frameworks
+      cy.authenticatedRequest({
+        method: 'POST',
+        url: '/api/account',
+        body: {
+          ...originalUserAccount,
+          email: testUserEmail,
+        },
+      })
+        .its('status')
+        .should('eq', 200);
     });
   });
 
   beforeEach(() => {
     cy.login(username, password);
     cy.visit('/account/settings');
-    cy.get(emailSettingsSelector).should('have.value', account.email);
+    cy.get(emailSettingsSelector).should('have.value', testUserEmail);
 
     cy.intercept('POST', '/api/account').as('settingsSave');
   });
@@ -54,7 +68,7 @@ describe('/account/settings', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/account',
-      body: account,
+      body: originalUserAccount,
     })
       .its('status')
       .should('eq', 200);
@@ -68,16 +82,12 @@ describe('/account/settings', () => {
 
   it("should be able to change 'user' firstname settings", () => {
     cy.get(firstNameSettingsSelector).clear().type('jhipster');
-    // need to modify email because default email does not match regex in vue
-    cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
     cy.get(submitSettingsSelector).click();
     cy.wait('@settingsSave').then(({ response }) => expect(response?.statusCode).to.equal(200));
   });
 
   it("should be able to change 'user' lastname settings", () => {
     cy.get(lastNameSettingsSelector).clear().type('retspihj');
-    // need to modify email because default email does not match regex in vue
-    cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
     cy.get(submitSettingsSelector).click();
     cy.wait('@settingsSave').then(({ response }) => expect(response?.statusCode).to.equal(200));
   });
@@ -89,7 +99,8 @@ describe('/account/settings', () => {
   });
 
   describe('if there is another user with an email', () => {
-    let adminEmail: string;
+    let originalAdminAccount: Record<string, string | number>;
+    const testAdminEmail = 'admin@localhost.fr';
 
     before(() => {
       cy.login(adminUsername, adminPassword);
@@ -97,12 +108,35 @@ describe('/account/settings', () => {
         method: 'GET',
         url: '/api/account',
       }).then(({ body }) => {
-        adminEmail = body.email;
+        originalAdminAccount = body;
+
+        // need to modify email because default email does not match regex in some frameworks
+        cy.authenticatedRequest({
+          method: 'POST',
+          url: '/api/account',
+          body: {
+            ...originalAdminAccount,
+            email: testAdminEmail,
+          },
+        })
+          .its('status')
+          .should('eq', 200);
       });
     });
 
+    after(() => {
+      cy.login(adminUsername, adminPassword);
+      cy.authenticatedRequest({
+        method: 'POST',
+        url: '/api/account',
+        body: originalAdminAccount,
+      })
+        .its('status')
+        .should('eq', 200);
+    });
+
     it("should not be able to change 'user' email to same value", () => {
-      cy.get(emailSettingsSelector).clear().type(adminEmail);
+      cy.get(emailSettingsSelector).clear().type(testAdminEmail);
       cy.get(submitSettingsSelector).click();
       cy.wait('@settingsSave').then(({ response }) => expect(response?.statusCode).to.equal(400));
     });
