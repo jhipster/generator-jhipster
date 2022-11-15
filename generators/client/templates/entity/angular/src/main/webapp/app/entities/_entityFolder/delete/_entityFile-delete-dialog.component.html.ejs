@@ -18,7 +18,7 @@
 -%>
 <form *ngIf="<%= entityInstance %>" name="deleteForm" (ngSubmit)="confirmDelete(<%= entityInstance %>.<%= primaryKey.name %>!)">
     <div class="modal-header">
-        <h4 class="modal-title" data-cy="<%= entityInstance %>DeleteDialogHeading" <%= jhiPrefix %>Translate="entity.delete.title"><%- this._getClientTranslation('entity.delete.title') %></h4>
+        <h4 class="modal-title" data-cy="<%= entityInstance %>DeleteDialogHeading" <%= jhiPrefix %>Translate="entity.delete.title"><%- getWebappTranslation('entity.delete.title') %></h4>
 
         <button type="button" class="btn-close" data-dismiss="modal" aria-hidden="true"
                 (click)="cancel()">&times;</button>
@@ -26,16 +26,16 @@
 
     <div class="modal-body">
         <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
-        <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.delete.question" [translateValues]="{ id: <%= entityInstance %>.<%= primaryKey.name %> }"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.delete.question', { id: '{{ ' + entityInstance + '.' + primaryKey.name + ' }}' }) %></p>
+        <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.delete.question" [translateValues]="{ id: <%= entityInstance %>.<%= primaryKey.name %> }"><%- getWebappTranslation(i18nKeyPrefix + '.delete.question', { id: '{{ ' + entityInstance + '.' + primaryKey.name + ' }}' }) %></p>
     </div>
 
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
-            <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel"><%- this._getClientTranslation('entity.action.cancel') %></span>
+            <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel"><%- getWebappTranslation('entity.action.cancel') %></span>
         </button>
 
         <button id="<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
-            <fa-icon icon="times"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.delete"><%- this._getClientTranslation('entity.action.delete') %></span>
+            <fa-icon icon="times"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.delete"><%- getWebappTranslation('entity.action.delete') %></span>
         </button>
     </div>
 </form>

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<h4 <%= jhiPrefix %>Translate="metrics.jvm.memory.title"><%- this._getClientTranslation('metrics.jvm.memory.title') %></h4>
+<h4 <%= jhiPrefix %>Translate="metrics.jvm.memory.title"><%- getWebappTranslation('metrics.jvm.memory.title') %></h4>
 
 <div *ngIf="!updating && jvmMemoryMetrics">
   <div *ngFor="let entry of jvmMemoryMetrics | keyvalue">

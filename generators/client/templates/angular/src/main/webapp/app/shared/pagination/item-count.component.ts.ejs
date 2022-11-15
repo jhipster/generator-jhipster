@@ -27,7 +27,7 @@ import { Component, Input } from '@angular/core';
 <%_ if (enableTranslation) { _%>
     <div <%= jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first, second: second, total: total }"></div>
 <%_ } else { _%>
-    <div><%- this._getClientTranslation('global.item-count') %></div>
+    <div><%- getWebappTranslation('global.item-count') %></div>
 <%_ } _%>
   `
 })

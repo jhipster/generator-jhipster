@@ -27,14 +27,16 @@ const INTERPOLATE_ATTRIBUTE = 'interpolate=\\{(?<interpolate>\\{[^\\}]+\\})\\}\\
 const COMPONENT_ATTRIBUTE = 'component="(?<component>[^"]+)"\\s*';
 const TRANSLATE_TAG = `<Translate\\s*(?:(?:${COMPONENT_ATTRIBUTE}|${INTERPOLATE_ATTRIBUTE}|${CONTENT_TYPE_ATTRIBUTE})+)>(?<translation>[\\s\\S]*?)<\\/Translate>`;
 
-function getTranslationValue(generator, key, data) {
-  if (generator._getEntityClientTranslation) {
-    return generator._getEntityClientTranslation(key, data);
-  }
-  return (generator._getClientTranslation && generator._getClientTranslation(key, data)) || undefined;
+function getTranslationValue(getWebappTranslation, key, data) {
+  return getWebappTranslation(key, data) || undefined;
 }
 
-const replaceTranslationKeysWithText = (generator, body, regexp, { keyPattern, interpolatePattern, wrapTranslation, escapeHtml } = {}) => {
+const replaceTranslationKeysWithText = (
+  getWebappTranslation,
+  body,
+  regexp,
+  { keyPattern, interpolatePattern, wrapTranslation, escapeHtml } = {}
+) => {
   const matches = body.matchAll(new RegExp(regexp, 'g'));
   if (typeof wrapTranslation === 'string') {
     wrapTranslation = [wrapTranslation, wrapTranslation];
@@ -82,7 +84,7 @@ const replaceTranslationKeysWithText = (generator, body, regexp, { keyPattern, i
       }
     }
 
-    const translation = getTranslationValue(generator, key, data);
+    const translation = getTranslationValue(getWebappTranslation, key, data);
 
     let replacement = translation;
     if (!replacement) {
@@ -101,23 +103,20 @@ const replaceTranslationKeysWithText = (generator, body, regexp, { keyPattern, i
 /**
  * Replace and cleanup translations.
  *
- * @type {import('../generator-base.js').EditFileCallback}
- * @this {import('../generator-base.js')}
+ * @return {import('../base/api.mjs').EditFileCallback}
  */
 // eslint-disable-next-line import/prefer-default-export
-export function replaceReactTranslations(body, filePath) {
-  if (!this._getClientTranslation) {
+export const createTranslationReplacer = getWebappTranslation =>
+  function replaceReactTranslations(body, filePath) {
+    if (/\.tsx$/.test(filePath)) {
+      body = body.replace(new RegExp(TRANSLATE_IMPORT, 'g'), '');
+      body = replaceTranslationKeysWithText(getWebappTranslation, body, `\\{\\s*${TRANSLATE_FUNCTION}\\s*\\}`, { wrapTranslation: '"' });
+      body = replaceTranslationKeysWithText(getWebappTranslation, body, TRANSLATE_FUNCTION, { wrapTranslation: '"' });
+      body = replaceTranslationKeysWithText(getWebappTranslation, body, TRANSLATE_TAG, {
+        keyPattern: CONTENT_TYPE_ATTRIBUTE,
+        interpolatePattern: INTERPOLATE_ATTRIBUTE,
+        escapeHtml: true,
+      });
+    }
     return body;
-  }
-  if (/\.tsx$/.test(filePath)) {
-    body = body.replace(new RegExp(TRANSLATE_IMPORT, 'g'), '');
-    body = replaceTranslationKeysWithText(this, body, `\\{\\s*${TRANSLATE_FUNCTION}\\s*\\}`, { wrapTranslation: '"' });
-    body = replaceTranslationKeysWithText(this, body, TRANSLATE_FUNCTION, { wrapTranslation: '"' });
-    body = replaceTranslationKeysWithText(this, body, TRANSLATE_TAG, {
-      keyPattern: CONTENT_TYPE_ATTRIBUTE,
-      interpolatePattern: INTERPOLATE_ATTRIBUTE,
-      escapeHtml: true,
-    });
-  }
-  return body;
-}
+  };

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { replaceAngularTranslations } from './transform-angular.mjs';
+import { createTranslationReplacer } from './transform-angular.mjs';
 
 import { clientApplicationBlock, clientSrcBlock } from './utils.mjs';
 
@@ -483,13 +483,18 @@ export function cleanup({ application }) {
   }
 }
 
-export async function writeFiles({ application }) {
+export async function writeFiles({ application, control }) {
   if (!application.clientFrameworkAngular) return;
+
+  await control.loadClientTranslations?.();
 
   await this.writeFiles({
     sections: files,
     rootTemplatesPath: 'angular',
-    transform: !application.enableTranslation ? [replaceAngularTranslations] : undefined,
-    context: application,
+    transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
+    context: {
+      ...application,
+      getWebappTranslation: control.getWebappTranslation,
+    },
   });
 }

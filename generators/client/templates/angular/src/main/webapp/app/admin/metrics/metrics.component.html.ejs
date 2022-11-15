@@ -18,14 +18,14 @@
 -%>
 <div>
   <h2>
-    <span id="metrics-page-heading" <%= jhiPrefix %>Translate="metrics.title" data-cy="metricsPageHeading"><%- this._getClientTranslation('metrics.title') %></span>
+    <span id="metrics-page-heading" <%= jhiPrefix %>Translate="metrics.title" data-cy="metricsPageHeading"><%- getWebappTranslation('metrics.title') %></span>
 
     <button class="btn btn-primary float-end" (click)="refresh()">
-      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="metrics.refresh.button"><%- this._getClientTranslation('metrics["refresh.button"]') %></span>
+      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="metrics.refresh.button"><%- getWebappTranslation('metrics["refresh.button"]') %></span>
     </button>
   </h2>
 
-  <h3 <%= jhiPrefix %>Translate="metrics.jvm.title"><%- this._getClientTranslation('metrics.jvm.title') %></h3>
+  <h3 <%= jhiPrefix %>Translate="metrics.jvm.title"><%- getWebappTranslation('metrics.jvm.title') %></h3>
 
   <div class="row" *ngIf="metrics && !updatingMetrics">
     <<%= jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics" [jvmMemoryMetrics]="metrics.jvm"></<%= jhiPrefixDashed %>-jvm-memory>
@@ -41,7 +41,7 @@
     [garbageCollectorMetrics]="metrics.garbageCollector"
   ></<%= jhiPrefixDashed %>-metrics-garbagecollector>
 
-  <div class="well well-lg" *ngIf="updatingMetrics" <%= jhiPrefix %>Translate="metrics.updating"><%- this._getClientTranslation('metrics.updating') %></div>
+  <div class="well well-lg" *ngIf="updatingMetrics" <%= jhiPrefix %>Translate="metrics.updating"><%- getWebappTranslation('metrics.updating') %></div>
 
   <<%= jhiPrefixDashed %>-metrics-request
     *ngIf="metrics && metricsKeyExists('http.server.requests')"

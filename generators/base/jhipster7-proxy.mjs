@@ -53,6 +53,14 @@ const deprecatedProperties = {
     replacement: 'user.primaryKey.typeUUID',
     get: ({ data }) => data.user.primaryKey.typeUUID,
   },
+  _getClientTranslation: {
+    replacement: 'getWebappTranslation',
+    get: ({ data }) => data.getWebappTranslation,
+  },
+  _getEntityClientTranslation: {
+    replacement: 'getWebappTranslation',
+    get: ({ data }) => data.getWebappTranslation,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];

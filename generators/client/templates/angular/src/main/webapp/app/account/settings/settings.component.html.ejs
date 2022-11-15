@@ -20,18 +20,18 @@
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
       <h2 <%= jhiPrefix %>Translate="settings.title" [translateValues]="{ username: settingsForm.value.login }" *ngIf="settingsForm.value.login">
-        <%- this._getClientTranslation('settings.title', { username: '{{ settingsForm.value.login }}' }) %>
+        <%- getWebappTranslation('settings.title', { username: '{{ settingsForm.value.login }}' }) %>
       </h2>
 
       <div class="alert alert-success" *ngIf="success" <%= jhiPrefix %>Translate="settings.messages.success">
-          <%- this._getClientTranslation('settings.messages.success') %>
+          <%- getWebappTranslation('settings.messages.success') %>
       </div>
 
       <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
       <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.value.login" novalidate>
         <div class="mb-3">
-          <label class="form-label" for="firstName" <%= jhiPrefix %>Translate="settings.form.firstname"><%- this._getClientTranslation('settings.form.firstname') %></label>
+          <label class="form-label" for="firstName" <%= jhiPrefix %>Translate="settings.form.firstname"><%- getWebappTranslation('settings.form.firstname') %></label>
           <input
             type="text"
             class="form-control"
@@ -53,7 +53,7 @@
               *ngIf="settingsForm.get('firstName')?.errors?.required"
               <%= jhiPrefix %>Translate="settings.messages.validate.firstname.required"
             >
-              <%- this._getClientTranslation('settings.messages.validate.firstname.required') %>
+              <%- getWebappTranslation('settings.messages.validate.firstname.required') %>
             </small>
 
             <small
@@ -61,7 +61,7 @@
               *ngIf="settingsForm.get('firstName')?.errors?.minlength"
               <%= jhiPrefix %>Translate="settings.messages.validate.firstname.minlength"
             >
-              <%- this._getClientTranslation('settings.messages.validate.firstname.minlength') %>
+              <%- getWebappTranslation('settings.messages.validate.firstname.minlength') %>
             </small>
 
             <small
@@ -69,13 +69,13 @@
               *ngIf="settingsForm.get('firstName')?.errors?.maxlength"
               <%= jhiPrefix %>Translate="settings.messages.validate.firstname.maxlength"
             >
-              <%- this._getClientTranslation('settings.messages.validate.firstname.maxlength') %>
+              <%- getWebappTranslation('settings.messages.validate.firstname.maxlength') %>
             </small>
           </div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="lastName" <%= jhiPrefix %>Translate="settings.form.lastname"><%- this._getClientTranslation('settings.form.lastname') %></label>
+          <label class="form-label" for="lastName" <%= jhiPrefix %>Translate="settings.form.lastname"><%- getWebappTranslation('settings.form.lastname') %></label>
           <input
             type="text"
             class="form-control"
@@ -97,7 +97,7 @@
               *ngIf="settingsForm.get('lastName')?.errors?.required"
               <%= jhiPrefix %>Translate="settings.messages.validate.lastname.required"
             >
-              <%- this._getClientTranslation('settings.messages.validate.lastname.required') %>
+              <%- getWebappTranslation('settings.messages.validate.lastname.required') %>
             </small>
 
             <small
@@ -105,7 +105,7 @@
               *ngIf="settingsForm.get('lastName')?.errors?.minlength"
               <%= jhiPrefix %>Translate="settings.messages.validate.lastname.minlength"
             >
-              <%- this._getClientTranslation('settings.messages.validate.lastname.minlength') %>
+              <%- getWebappTranslation('settings.messages.validate.lastname.minlength') %>
             </small>
 
             <small
@@ -113,13 +113,13 @@
               *ngIf="settingsForm.get('lastName')?.errors?.maxlength"
               <%= jhiPrefix %>Translate="settings.messages.validate.lastname.maxlength"
             >
-               <%- this._getClientTranslation('settings.messages.validate.lastname.maxlength') %>
+               <%- getWebappTranslation('settings.messages.validate.lastname.maxlength') %>
             </small>
           </div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label"><%- this._getClientTranslation('global.form["email.label"]') %></label>
+          <label class="form-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label"><%- getWebappTranslation('global.form["email.label"]') %></label>
           <input
             type="email"
             class="form-control"
@@ -136,7 +136,7 @@
               *ngIf="settingsForm.get('email')?.errors?.required"
               <%= jhiPrefix %>Translate="global.messages.validate.email.required"
             >
-              <%- this._getClientTranslation('global.messages.validate.email.required') %>
+              <%- getWebappTranslation('global.messages.validate.email.required') %>
             </small>
 
             <small
@@ -144,7 +144,7 @@
               *ngIf="settingsForm.get('email')?.errors?.email"
               <%= jhiPrefix %>Translate="global.messages.validate.email.invalid"
             >
-              <%- this._getClientTranslation('global.messages.validate.email.invalid') %>
+              <%- getWebappTranslation('global.messages.validate.email.invalid') %>
             </small>
 
             <small
@@ -152,7 +152,7 @@
               *ngIf="settingsForm.get('email')?.errors?.minlength"
               <%= jhiPrefix %>Translate="global.messages.validate.email.minlength"
             >
-              <%- this._getClientTranslation('global.messages.validate.email.minlength') %>
+              <%- getWebappTranslation('global.messages.validate.email.minlength') %>
             </small>
 
             <small
@@ -160,14 +160,14 @@
               *ngIf="settingsForm.get('email')?.errors?.maxlength"
               <%= jhiPrefix %>Translate="global.messages.validate.email.maxlength"
             >
-              <%- this._getClientTranslation('global.messages.validate.email.maxlength') %>
+              <%- getWebappTranslation('global.messages.validate.email.maxlength') %>
             </small>
           </div>
         </div>
         <%_ if (enableTranslation) { _%>
 
         <div class="mb-3" *ngIf="languages && languages.length > 0">
-          <label for="langKey" <%= jhiPrefix %>Translate="settings.form.language"><%- this._getClientTranslation('settings.form.language') %></label>
+          <label for="langKey" <%= jhiPrefix %>Translate="settings.form.language"><%- getWebappTranslation('settings.form.language') %></label>
           <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
             <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
           </select>
@@ -181,7 +181,7 @@
           <%= jhiPrefix %>Translate="settings.form.button"
           data-cy="submit"
         >
-          <%- this._getClientTranslation('settings.form.button') %>
+          <%- getWebappTranslation('settings.form.button') %>
         </button>
       </form>
     </div>

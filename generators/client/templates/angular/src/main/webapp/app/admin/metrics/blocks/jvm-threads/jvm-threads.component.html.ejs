@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<h4 <%= jhiPrefix %>Translate="metrics.jvm.threads.title"><%- this._getClientTranslation('metrics.jvm.threads.title') %></h4>
+<h4 <%= jhiPrefix %>Translate="metrics.jvm.threads.title"><%- getWebappTranslation('metrics.jvm.threads.title') %></h4>
 
-<span><span <%= jhiPrefix %>Translate="metrics.jvm.threads.runnable"><%- this._getClientTranslation('metrics.jvm.threads.runnable') %></span> {{ threadStats.threadDumpRunnable }}</span>
+<span><span <%= jhiPrefix %>Translate="metrics.jvm.threads.runnable"><%- getWebappTranslation('metrics.jvm.threads.runnable') %></span> {{ threadStats.threadDumpRunnable }}</span>
 
 <ngb-progressbar
   [value]="threadStats.threadDumpRunnable"
@@ -30,7 +30,7 @@
   <span>{{ (threadStats.threadDumpRunnable * 100) / threadStats.threadDumpAll | number: '1.0-0' }}%</span>
 </ngb-progressbar>
 
-<span><span <%= jhiPrefix %>Translate="metrics.jvm.threads.timedwaiting"><%- this._getClientTranslation('metrics.jvm.threads.timedwaiting') %></span> ({{ threadStats.threadDumpTimedWaiting }})</span>
+<span><span <%= jhiPrefix %>Translate="metrics.jvm.threads.timedwaiting"><%- getWebappTranslation('metrics.jvm.threads.timedwaiting') %></span> ({{ threadStats.threadDumpTimedWaiting }})</span>
 
 <ngb-progressbar
   [value]="threadStats.threadDumpTimedWaiting"
@@ -42,7 +42,7 @@
   <span>{{ (threadStats.threadDumpTimedWaiting * 100) / threadStats.threadDumpAll | number: '1.0-0' }}%</span>
 </ngb-progressbar>
 
-<span><span <%= jhiPrefix %>Translate="metrics.jvm.threads.waiting"><%- this._getClientTranslation('metrics.jvm.threads.waiting') %></span> ({{ threadStats.threadDumpWaiting }})</span>
+<span><span <%= jhiPrefix %>Translate="metrics.jvm.threads.waiting"><%- getWebappTranslation('metrics.jvm.threads.waiting') %></span> ({{ threadStats.threadDumpWaiting }})</span>
 
 <ngb-progressbar
   [value]="threadStats.threadDumpWaiting"
@@ -54,7 +54,7 @@
   <span>{{ (threadStats.threadDumpWaiting * 100) / threadStats.threadDumpAll | number: '1.0-0' }}%</span>
 </ngb-progressbar>
 
-<span><span <%= jhiPrefix %>Translate="metrics.jvm.threads.blocked"><%- this._getClientTranslation('metrics.jvm.threads.blocked') %></span> ({{ threadStats.threadDumpBlocked }})</span>
+<span><span <%= jhiPrefix %>Translate="metrics.jvm.threads.blocked"><%- getWebappTranslation('metrics.jvm.threads.blocked') %></span> ({{ threadStats.threadDumpBlocked }})</span>
 
 <ngb-progressbar
   [value]="threadStats.threadDumpBlocked"

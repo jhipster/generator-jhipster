@@ -17,18 +17,18 @@
  limitations under the License.
 -%>
 <div class="table-responsive" *ngIf="loggers">
-  <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading"><%- this._getClientTranslation('logs.title') %></h2>
+  <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading"><%- getWebappTranslation('logs.title') %></h2>
 
-  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers.length }"><%- this._getClientTranslation('logs.nbloggers', { total: '{{ loggers.length }}' }) %></p>
+  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers.length }"><%- getWebappTranslation('logs.nbloggers', { total: '{{ loggers.length }}' }) %></p>
 
-  <span <%= jhiPrefix %>Translate="logs.filter"><%- this._getClientTranslation('logs.filter') %></span>
+  <span <%= jhiPrefix %>Translate="logs.filter"><%- getWebappTranslation('logs.filter') %></span>
   <input type="text" [(ngModel)]="filter" (ngModelChange)="filterAndSort()" class="form-control" />
 
   <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
     <thead>
       <tr <%= jhiPrefix %>Sort [(predicate)]="orderProp" [(ascending)]="ascending" (sortChange)="filterAndSort()">
-        <th <%= jhiPrefix %>SortBy="name" scope="col"><span <%= jhiPrefix %>Translate="logs.table.name"><%- this._getClientTranslation('logs.table.name') %></span> <fa-icon icon="sort"></fa-icon></th>
-        <th <%= jhiPrefix %>SortBy="level" scope="col"><span <%= jhiPrefix %>Translate="logs.table.level"><%- this._getClientTranslation('logs.table.level') %></span> <fa-icon icon="sort"></fa-icon></th>
+        <th <%= jhiPrefix %>SortBy="name" scope="col"><span <%= jhiPrefix %>Translate="logs.table.name"><%- getWebappTranslation('logs.table.name') %></span> <fa-icon icon="sort"></fa-icon></th>
+        <th <%= jhiPrefix %>SortBy="level" scope="col"><span <%= jhiPrefix %>Translate="logs.table.level"><%- getWebappTranslation('logs.table.level') %></span> <fa-icon icon="sort"></fa-icon></th>
       </tr>
     </thead>
 

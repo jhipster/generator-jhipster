@@ -16,24 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<h3 id="datasourceMetrics" <%= jhiPrefix %>Translate="metrics.datasource.title"><%- this._getClientTranslation('metrics.datasource.title') %></h3>
+<h3 id="datasourceMetrics" <%= jhiPrefix %>Translate="metrics.datasource.title"><%- getWebappTranslation('metrics.datasource.title') %></h3>
 
 <div class="table-responsive" *ngIf="!updating && datasourceMetrics">
   <table class="table table-striped" aria-describedby="datasourceMetrics">
     <thead>
       <tr>
         <th scope="col">
-          <span <%= jhiPrefix %>Translate="metrics.datasource.usage"><%- this._getClientTranslation('metrics.datasource.usage') %></span> (active: {{ datasourceMetrics.active.value }},
+          <span <%= jhiPrefix %>Translate="metrics.datasource.usage"><%- getWebappTranslation('metrics.datasource.usage') %></span> (active: {{ datasourceMetrics.active.value }},
           min: {{ datasourceMetrics.min.value }}, max: {{ datasourceMetrics.max.value }}, idle: {{ datasourceMetrics.idle.value }})
         </th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.datasource.count"><%- this._getClientTranslation('metrics.datasource.count') %></th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.datasource.mean"><%- this._getClientTranslation('metrics.datasource.mean') %></th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.min"><%- this._getClientTranslation('metrics.servicesstats.table.min') %></th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p50"><%- this._getClientTranslation('metrics.servicesstats.table.p50') %></th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p75"><%- this._getClientTranslation('metrics.servicesstats.table.p75') %></th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p95"><%- this._getClientTranslation('metrics.servicesstats.table.p95') %></th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p99"><%- this._getClientTranslation('metrics.servicesstats.table.p99') %></th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.datasource.max"><%- this._getClientTranslation('metrics.datasource.max') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.datasource.count"><%- getWebappTranslation('metrics.datasource.count') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.datasource.mean"><%- getWebappTranslation('metrics.datasource.mean') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.min"><%- getWebappTranslation('metrics.servicesstats.table.min') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p50"><%- getWebappTranslation('metrics.servicesstats.table.p50') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p75"><%- getWebappTranslation('metrics.servicesstats.table.p75') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p95"><%- getWebappTranslation('metrics.servicesstats.table.p95') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p99"><%- getWebappTranslation('metrics.servicesstats.table.p99') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.datasource.max"><%- getWebappTranslation('metrics.datasource.max') %></th>
       </tr>
     </thead>
     <tbody>

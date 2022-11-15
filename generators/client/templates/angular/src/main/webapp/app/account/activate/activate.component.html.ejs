@@ -19,15 +19,15 @@
 <div>
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
-      <h1 <%= jhiPrefix %>Translate="activate.title"><%- this._getClientTranslation('activate.title') %></h1>
+      <h1 <%= jhiPrefix %>Translate="activate.title"><%- getWebappTranslation('activate.title') %></h1>
 
       <div class="alert alert-success" *ngIf="success">
-        <span <%= jhiPrefix %>Translate="activate.messages.success"><%- this._getClientTranslation('activate.messages.success') %></span>
-        <a class="alert-link" routerLink="/login" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link"><%- this._getClientTranslation('global.messages.info.authenticated.link') %></a>.
+        <span <%= jhiPrefix %>Translate="activate.messages.success"><%- getWebappTranslation('activate.messages.success') %></span>
+        <a class="alert-link" routerLink="/login" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link"><%- getWebappTranslation('global.messages.info.authenticated.link') %></a>.
       </div>
 
       <div class="alert alert-danger" *ngIf="error" <%= jhiPrefix %>Translate="activate.messages.error">
-        <%- this._getClientTranslation('activate.messages.error') %>
+        <%- getWebappTranslation('activate.messages.error') %>
       </div>
     </div>
   </div>

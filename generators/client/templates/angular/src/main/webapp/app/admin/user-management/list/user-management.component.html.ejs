@@ -18,15 +18,15 @@
 -%>
 <div>
   <h2>
-    <span id="user-management-page-heading" <%= jhiPrefix %>Translate="userManagement.home.title" data-cy="userManagementPageHeading"><%- this._getClientTranslation('userManagement.home.title') %></span>
+    <span id="user-management-page-heading" <%= jhiPrefix %>Translate="userManagement.home.title" data-cy="userManagementPageHeading"><%- getWebappTranslation('userManagement.home.title') %></span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span <%= jhiPrefix %>Translate="userManagement.home.refreshListLabel"><%- this._getClientTranslation('userManagement.home.refreshListLabel') %></span>
+        <span <%= jhiPrefix %>Translate="userManagement.home.refreshListLabel"><%- getWebappTranslation('userManagement.home.refreshListLabel') %></span>
       </button>
       <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
-        <fa-icon icon="plus"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.createLabel"><%- this._getClientTranslation('userManagement.home.createLabel') %></span>
+        <fa-icon icon="plus"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.createLabel"><%- getWebappTranslation('userManagement.home.createLabel') %></span>
       </button>
     </div>
   </h2>
@@ -40,30 +40,30 @@
       <thead>
         <tr<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()"<% } %>>
           <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="id"<% } %>>
-            <span <%= jhiPrefix %>Translate="global.field.id"><%- this._getClientTranslation('global.field.id') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+            <span <%= jhiPrefix %>Translate="global.field.id"><%- getWebappTranslation('global.field.id') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
           </th>
           <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="login"<% } %>>
-            <span <%= jhiPrefix %>Translate="userManagement.login"><%- this._getClientTranslation('userManagement.login') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+            <span <%= jhiPrefix %>Translate="userManagement.login"><%- getWebappTranslation('userManagement.login') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
           </th>
           <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="email"<% } %>>
-            <span <%= jhiPrefix %>Translate="userManagement.email"><%- this._getClientTranslation('userManagement.email') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+            <span <%= jhiPrefix %>Translate="userManagement.email"><%- getWebappTranslation('userManagement.email') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
           </th>
           <th scope="col"></th>
 <%_ if (enableTranslation) { _%>
           <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="langKey"<% } %>>
-            <span <%= jhiPrefix %>Translate="userManagement.langKey"><%- this._getClientTranslation('userManagement.langKey') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+            <span <%= jhiPrefix %>Translate="userManagement.langKey"><%- getWebappTranslation('userManagement.langKey') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
           </th>
 <%_ } _%>
-          <th scope="col"><span <%= jhiPrefix %>Translate="userManagement.profiles"><%- this._getClientTranslation('userManagement.profiles') %></span></th>
+          <th scope="col"><span <%= jhiPrefix %>Translate="userManagement.profiles"><%- getWebappTranslation('userManagement.profiles') %></span></th>
 <%_ if (!databaseTypeCassandra) { _%>
           <th scope="col" <%= jhiPrefix %>SortBy="createdDate">
-            <span <%= jhiPrefix %>Translate="userManagement.createdDate"><%- this._getClientTranslation('userManagement.createdDate') %></span> <fa-icon icon="sort"></fa-icon>
+            <span <%= jhiPrefix %>Translate="userManagement.createdDate"><%- getWebappTranslation('userManagement.createdDate') %></span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedBy">
-            <span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy"><%- this._getClientTranslation('userManagement.lastModifiedBy') %></span> <fa-icon icon="sort"></fa-icon>
+            <span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy"><%- getWebappTranslation('userManagement.lastModifiedBy') %></span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedDate">
-            <span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate"><%- this._getClientTranslation('userManagement.lastModifiedDate') %></span> <fa-icon icon="sort"></fa-icon>
+            <span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate"><%- getWebappTranslation('userManagement.lastModifiedDate') %></span> <fa-icon icon="sort"></fa-icon>
           </th>
 <%_ } _%>
           <th scope="col"></th>
@@ -83,7 +83,7 @@
               *ngIf="!user.activated"
               <%= jhiPrefix %>Translate="userManagement.deactivated"
             >
-              <%- this._getClientTranslation('userManagement.deactivated') %>
+              <%- getWebappTranslation('userManagement.deactivated') %>
             </button>
             <button
               class="btn btn-success btn-sm"
@@ -92,7 +92,7 @@
               [disabled]="!currentAccount || currentAccount.login === user.login"
               <%= jhiPrefix %>Translate="userManagement.activated"
             >
-              <%- this._getClientTranslation('userManagement.activated') %>
+              <%- getWebappTranslation('userManagement.activated') %>
             </button>
           </td>
 <%_ if (enableTranslation) { _%>
@@ -112,12 +112,12 @@
             <div class="btn-group">
               <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view"><%- this._getClientTranslation('entity.action.view') %></span>
+                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view"><%- getWebappTranslation('entity.action.view') %></span>
               </button>
 
               <button type="submit" [routerLink]="['./', user.login, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm">
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit"><%- this._getClientTranslation('entity.action.edit') %></span>
+                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit"><%- getWebappTranslation('entity.action.edit') %></span>
               </button>
 
               <button
@@ -127,7 +127,7 @@
                 [disabled]="!currentAccount || currentAccount.login === user.login"
               >
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete"><%- this._getClientTranslation('entity.action.delete') %></span>
+                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete"><%- getWebappTranslation('entity.action.delete') %></span>
               </button>
             </div>
           </td>

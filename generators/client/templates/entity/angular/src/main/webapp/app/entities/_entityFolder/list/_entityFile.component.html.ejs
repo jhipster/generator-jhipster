@@ -18,19 +18,19 @@
 -%>
 <div>
     <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
-        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.title') %></span>
+        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%- getWebappTranslation(i18nKeyPrefix + '.home.title') %></span>
 
         <div class="d-flex justify-content-end">
             <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-                <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.refreshListLabel') %></span>
+                <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel"><%- getWebappTranslation(i18nKeyPrefix + '.home.refreshListLabel') %></span>
             </button>
             <%_ if (!readOnly) { _%>
 
             <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityPage %>/new']">
                 <fa-icon icon="plus"></fa-icon>
                 <span <% if (searchEngine) { %>class="hidden-sm-down" <% } %> <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createLabel">
-                <%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.createLabel') %>
+                <%- getWebappTranslation(i18nKeyPrefix + '.home.createLabel') %>
                 </span>
             </button>
             <%_ } _%>
@@ -45,7 +45,7 @@
     <form name="searchForm" class="row row-cols-sm-auto align-items-center">
         <div class="col-sm-12">
             <div class="input-group w-100 mt-3">
-                <label class="visually-hidden" for="currentSearch" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.search"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.search') %></label>
+                <label class="visually-hidden" for="currentSearch" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.search"><%- getWebappTranslation(i18nKeyPrefix + '.home.search') %></label>
                 <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= i18nKeyPrefix %>.home.search' | translate }}<% } else { %>Query<% } %>">
 
                 <button class="btn btn-info" (click)="search(currentSearch)">
@@ -65,7 +65,7 @@
 <%_ } _%>
 
     <div class="alert alert-warning" id="no-result" *ngIf="<%= entityInstancePlural %>?.length === 0">
-        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.notFound') %></span>
+        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound"><%- getWebappTranslation(i18nKeyPrefix + '.home.notFound') %></span>
     </div>
 
     <div class="table-responsive table-entities" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
@@ -75,7 +75,7 @@
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
                     <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>">
                         <div class="d-flex">
-                            <span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%- this._getEntityClientTranslation(field.fieldTranslationKey) %></span>
+                            <span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%- getWebappTranslation(field.fieldTranslationKey) %></span>
   <%_ if (!field.transient) { _%>
                             <fa-icon class="p-1" <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon>
   <%_ } _%>
@@ -90,7 +90,7 @@
   _%>
                     <th scope="col" <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>">
                         <div class="d-flex">
-                            <span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.' + relationship.relationshipName) %></span>
+                            <span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- getWebappTranslation(i18nKeyPrefix + '.' + relationship.relationshipName) %></span>
                             <fa-icon class="p-1" icon="sort"></fa-icon>
                         </div>
                     </th>
@@ -116,7 +116,7 @@ _%>
                     </td>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                     <td>
-                        <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open"><%- this._getClientTranslation('entity.action.open') %></a>
+                        <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open"><%- getWebappTranslation('entity.action.open') %></a>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
     <%_ } else if (field.fieldIsEnum) { _%>
@@ -177,7 +177,7 @@ _%>
                                     class="btn btn-info btn-sm"
                                     data-cy="filterOtherEntityButton">
                                 <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.show"  [translateValues]="{ otherEntity: ('<%= otherEntityTranslationKey %>' | translate) }"><%- this._getClientTranslation('entity.action.show', {'otherEntity' : relationship.otherEntity.entityClassHumanized }) %></span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.show"  [translateValues]="{ otherEntity: ('<%= otherEntityTranslationKey %>' | translate) }"><%- getWebappTranslation('entity.action.show', {'otherEntity' : relationship.otherEntity.entityClassHumanized }) %></span>
                             </button>
     <%_ } _%>
 <%_ } _%>
@@ -186,7 +186,7 @@ _%>
                                     class="btn btn-info btn-sm"
                                     data-cy="entityDetailsButton">
                                 <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view"><%- this._getClientTranslation('entity.action.view') %></span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view"><%- getWebappTranslation('entity.action.view') %></span>
                             </button>
 <%_ if (!readOnly) { _%>
 
@@ -195,14 +195,14 @@ _%>
                                     class="btn btn-primary btn-sm"
                                     data-cy="entityEditButton">
                                 <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit"><%- this._getClientTranslation('entity.action.edit') %></span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit"><%- getWebappTranslation('entity.action.edit') %></span>
                             </button>
 
                             <button type="submit" (click)="delete(<%= entityInstance %>)"
                                     class="btn btn-danger btn-sm"
                                     data-cy="entityDeleteButton">
                                 <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete"><%- this._getClientTranslation('entity.action.delete') %></span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete"><%- getWebappTranslation('entity.action.delete') %></span>
                             </button>
 <%_ } _%>
                         </div>
