@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "6.2.1",
-    "@fortawesome/free-solid-svg-icons": "6.2.0",
+    "@fortawesome/free-solid-svg-icons": "6.2.1",
     "@fortawesome/vue-fontawesome": "2.0.9",
     "axios": "0.27.2",
     "bootstrap": "4.6.2",
