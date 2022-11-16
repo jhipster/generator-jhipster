@@ -22,6 +22,8 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
+
+import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 import {
   GENERATOR_COMMON,
@@ -99,6 +101,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
       type: Boolean,
     });
+    this.jhipsterOptions(serverOptions);
 
     if (this.options.help) {
       return;
@@ -262,13 +265,18 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.JAVA_VERSION = control.useVersionPlaceholders ? 'JAVA_VERSION' : constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
 
-        application.projectVersion = this.projectVersion || '0.0.1-SNAPSHOT';
+        if (this.projectVersion) {
+          this.info(`Using projectVersion: ${application.jhipsterDependenciesVersion}`);
+          application.projectVersion = this.projectVersion;
+        } else {
+          application.projectVersion = '0.0.1-SNAPSHOT';
+        }
 
         if (control.useVersionPlaceholders) {
           application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
         } else if (this.jhipsterDependenciesVersion) {
           application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
-          this.info(`Using JHipster dependencies version ${application.jhipsterDependenciesVersion}`);
+          this.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
         } else {
           application.jhipsterDependenciesVersion = constants.JHIPSTER_DEPENDENCIES_VERSION;
         }
