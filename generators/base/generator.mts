@@ -30,7 +30,13 @@ import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
 import baseOptions from './options.mjs';
 
-import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures, EditFileCallback, CascatedEditFileCallback } from './api.mjs';
+import type {
+  JHipsterGeneratorOptions,
+  JHipsterGeneratorFeatures,
+  EditFileCallback,
+  CascatedEditFileCallback,
+  JHipsterOptions,
+} from './api.mjs';
 import type { BaseTaskGroup } from './tasks.mjs';
 
 const { merge } = _;
@@ -79,7 +85,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
     this.sharedData = this.createSharedData();
 
-    this.jhipsterOptions(baseOptions);
+    this.jhipsterOptions(baseOptions as JHipsterOptions);
   }
 
   /**

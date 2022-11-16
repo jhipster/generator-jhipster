@@ -47,7 +47,6 @@ import {
   buildToolTypes,
   databaseTypes,
   cacheTypes,
-  searchEngineTypes,
   serviceDiscoveryTypes,
   websocketTypes,
   fieldTypes,
@@ -63,11 +62,10 @@ const { isReservedTableName } = reservedKeywords;
 const { defaultConfig } = generatorDefaults;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
-const { ELASTICSEARCH } = searchEngineTypes;
 const { EUREKA } = serviceDiscoveryTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
 const { FALSE: NO_WEBSOCKET } = websocketTypes;
-const { CASSANDRA, COUCHBASE, ORACLE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
+const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
 
 const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, MAIN_DIR, TEST_DIR } = constants;
@@ -88,6 +86,11 @@ const { SUPPORTED_VALIDATION_RULES } = constants;
  * @extends {BaseApplicationGenerator<import('./types.mjs').SpringBootApplication>}
  */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
+  /** @type {string} */
+  jhipsterDependenciesVersion;
+  /** @type {string} */
+  projectVersion;
+
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -259,11 +262,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.JAVA_VERSION = control.useVersionPlaceholders ? 'JAVA_VERSION' : constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
 
+        application.projectVersion = this.projectVersion || '0.0.1-SNAPSHOT';
+
         if (control.useVersionPlaceholders) {
           application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
-        } else if (control.jhipsterDependenciesVersion) {
-          application.jhipsterDependenciesVersion = control.jhipsterDependenciesVersion;
-          this.info(`Using JHipster BOM version ${process.env.JHI_BOM_VERSION}`);
+        } else if (this.jhipsterDependenciesVersion) {
+          application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
+          this.info(`Using JHipster BOM version ${application.jhipsterDependenciesVersion}`);
         } else {
           application.jhipsterDependenciesVersion = constants.JHIPSTER_DEPENDENCIES_VERSION;
         }

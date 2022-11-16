@@ -2324,7 +2324,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
-    dest.projectVersion = this.sharedData.getControl().projectVersion || '0.0.1-SNAPSHOT';
     dest.applicationType = config.applicationType;
     dest.reactive = config.reactive;
     dest.jhiPrefix = config.jhiPrefix;
