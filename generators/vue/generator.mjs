@@ -32,7 +32,7 @@ const TYPE_LONG = CommonDBTypes.LONG;
  * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
  */
 export default class VueGenerator extends BaseApplicationGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_VUE);

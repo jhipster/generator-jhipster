@@ -314,7 +314,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_APP);

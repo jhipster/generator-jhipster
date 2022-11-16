@@ -59,7 +59,7 @@ export default class WorkspacesGenerator extends BaseGenerator {
     this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints('workspaces');
     }

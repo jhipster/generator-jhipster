@@ -75,7 +75,7 @@ export default class HerokuGenerator extends BaseGenerator {
     this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_HEROKU);
     }

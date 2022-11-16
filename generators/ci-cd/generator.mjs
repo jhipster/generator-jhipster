@@ -84,7 +84,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
     });
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CI_CD);

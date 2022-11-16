@@ -32,7 +32,7 @@ const { MYSQL, POSTGRESQL, MARIADB } = databaseTypes;
 
 /* eslint-disable consistent-return */
 export default class AwsGenerator extends BaseGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_AWS);
     }

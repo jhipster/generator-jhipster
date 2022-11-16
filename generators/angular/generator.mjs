@@ -28,7 +28,7 @@ import { writeFiles, cleanup } from './files-angular.mjs';
  * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
  */
 export default class AngularGenerator extends BaseApplicationGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ANGULAR);

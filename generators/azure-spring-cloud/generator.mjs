@@ -54,7 +54,7 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
     this.azureSpringCloudSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_AZURE_SPRING_CLOUD);
     }

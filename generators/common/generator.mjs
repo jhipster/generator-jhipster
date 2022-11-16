@@ -50,7 +50,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     this.loadRuntimeOptions();
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_COMMON);
