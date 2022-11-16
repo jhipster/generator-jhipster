@@ -36,7 +36,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
 
     if (this.options.help) return;
 
-    this.sharedData.getData().existingProject =
+    this.sharedData.getControl().existingProject =
       this.options.defaults ||
       this.options.withEntities ||
       this.options.applicationWithConfig ||
@@ -47,7 +47,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
     }
-    if (this.sharedData.getData().existingProject && !this.jhipsterConfig.baseName) {
+    if (this.sharedData.getControl().existingProject && !this.jhipsterConfig.baseName) {
       this.jhipsterConfig.baseName = this.getDefaultAppName();
     }
   }

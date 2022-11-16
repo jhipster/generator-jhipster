@@ -233,11 +233,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       loadEnvironmentVariables({ application }) {
-        if (process.env.JHI_BOM_VERSION) {
-          application.jhiBomVersion = process.env.JHI_BOM_VERSION;
-          this.info(`Using JHipster BOM version ${process.env.JHI_BOM_VERSION}`);
-        }
-
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
           this.info(`Using ${application.defaultPackaging} as default packaging`);
@@ -250,7 +245,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
 
-      setupServerconsts({ application }) {
+      setupServerconsts({ control, application }) {
         // Make constants available in templates
         application.MAIN_DIR = constants.MAIN_DIR;
         application.TEST_DIR = constants.TEST_DIR;
@@ -264,7 +259,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.JAVA_VERSION = constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
 
-        application.JHIPSTER_DEPENDENCIES_VERSION = application.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
+        if (control.useVersionPlaceholders) {
+          application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
+        } else if (control.jhipsterDependenciesVersion) {
+          application.jhipsterDependenciesVersion = control.jhipsterDependenciesVersion;
+          this.info(`Using JHipster BOM version ${process.env.JHI_BOM_VERSION}`);
+        } else {
+          application.jhipsterDependenciesVersion = constants.JHIPSTER_DEPENDENCIES_VERSION;
+        }
         application.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
         application.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
         application.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;

@@ -75,13 +75,17 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
+
+    if (this.options.help) return;
+
+    this.loadSharedData();
   }
 
   /**
    * Get arguments for the priority
    */
   getArgsForPriority(priorityName: string) {
-    const control = this.sharedData.getData();
+    const control = this.sharedData.getControl();
     if (priorityName === POST_WRITING || priorityName === PREPARING) {
       const source = this.sharedData.getSource();
       return [{ control, source }];
@@ -163,20 +167,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    * Shared Data
    */
   get sharedData() {
-    if (!this.#sharedData) {
-      const destinationPath = this.destinationPath();
-      const dirname = basename(destinationPath);
-      const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
-      const applicationId = `${prefix}-${dirname}`;
-      if (this.options.sharedData.applications === undefined) {
-        this.options.sharedData.applications = {};
-      }
-      const sharedApplications = this.options.sharedData.applications;
-      if (!sharedApplications[applicationId]) {
-        sharedApplications[applicationId] = {};
-      }
-      this.#sharedData = new SharedData(sharedApplications[applicationId]);
-    }
     return this.#sharedData;
   }
 
@@ -214,5 +204,25 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       ...process.env,
       LANG: 'en',
     });
+  }
+
+  /**
+   * @private
+   */
+  loadSharedData() {
+    const destinationPath = this.destinationPath();
+    const dirname = basename(destinationPath);
+    const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
+    const applicationId = `${prefix}-${dirname}`;
+    if (this.options.sharedData.applications === undefined) {
+      this.options.sharedData.applications = {};
+    }
+    const sharedApplications = this.options.sharedData.applications;
+    if (!sharedApplications[applicationId]) {
+      sharedApplications[applicationId] = {};
+    }
+    this.#sharedData = new SharedData(sharedApplications[applicationId]);
+
+    this.#sharedData.getControl().useVersionPlaceholders = process.env.VERSION_PLACEHOLDERS === 'true';
   }
 }

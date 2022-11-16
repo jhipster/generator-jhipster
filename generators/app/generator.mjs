@@ -21,6 +21,7 @@ import chalk from 'chalk';
 import _ from 'lodash';
 import BaseGenerator from '../base-application/index.mjs';
 
+import serverOptions from '../server/options.mjs';
 import { cleanupOldFiles, upgradeFiles } from '../cleanup.mjs';
 import prompts from './prompts.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
@@ -296,6 +297,8 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       desc: 'Detect line endings',
       type: Boolean,
     });
+
+    this.jhipsterOptions(serverOptions);
 
     // Just constructing help, stop here
     if (this.options.help) {

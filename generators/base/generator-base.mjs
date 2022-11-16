@@ -2316,7 +2316,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    if (process.env.VERSION_PLACEHOLDERS === 'true') {
+    if (this.sharedData.getControl().useVersionPlaceholders) {
       dest.nodeVersion = 'NODE_VERSION';
     } else {
       dest.nodeVersion = NODE_VERSION;
@@ -2324,7 +2324,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
-    dest.projectVersion = process.env.JHI_PROJECT_VERSION || '0.0.1-SNAPSHOT';
+    dest.projectVersion = this.sharedData.getControl().projectVersion || '0.0.1-SNAPSHOT';
     dest.applicationType = config.applicationType;
     dest.reactive = config.reactive;
     dest.jhiPrefix = config.jhiPrefix;
@@ -2827,8 +2827,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           this.config.set(optionName, optionValue);
         } else if (optionDesc.scope === 'blueprint') {
           this.blueprintStorage.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'runtime') {
-          this.configOptions[optionName] = optionValue;
+        } else if (optionDesc.scope === 'control') {
+          this.sharedData.sharedData.getControl()[optionName] = optionValue;
         } else if (optionDesc.scope === 'generator') {
           this[optionName] = optionValue;
         } else {
