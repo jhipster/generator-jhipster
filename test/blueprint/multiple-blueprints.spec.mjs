@@ -142,43 +142,27 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
   }
 };
 
-describe('JHipster entity generator with multiple blueprints', () => {
+describe('JHipster generator with multiple blueprints', () => {
   const blueprintNames = [
     'generator-jhipster-my-client-blueprint,generator-jhipster-my-server-blueprint',
     'my-client-blueprint,my-server-blueprint',
   ];
 
   blueprintNames.forEach(blueprints => {
-    describe(`generate entity with multiple blueprints option '${blueprints}'`, () => {
-      before(done => {
-        helpers
+    describe(`generate with multiple blueprints option '${blueprints}'`, () => {
+      before(async () => {
+        await helpers
           .run(getGenerator('app'))
           .withOptions({
             skipInstall: true,
             skipChecks: true,
+            baseName: 'jhipster',
             blueprints,
           })
           .withGenerators([
             [mockClientBlueprintSubGen, 'jhipster-my-client-blueprint:client'],
             [mockServerBlueprintSubGen, 'jhipster-my-server-blueprint:server'],
-          ])
-          .withPrompts({
-            baseName: 'jhipster',
-            clientFramework: ANGULAR,
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            serviceDiscoveryType: false,
-            authenticationType: JWT,
-            cacheProvider: EHCACHE,
-            enableHibernateCache: true,
-            databaseType: SQL,
-            devDatabaseType: H2_MEMORY,
-            prodDatabaseType: MYSQL,
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-          })
-          .on('end', done);
+          ]);
       });
 
       it('creates expected files from jhipster app generator', () => {
