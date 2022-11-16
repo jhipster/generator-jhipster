@@ -2811,16 +2811,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./base/api.mjs').JHipsterOptions} [options] - Object containing options.
+   * @param {import('./api.mjs').JHipsterOptions} options - Object containing options.
+   * @param {boolean} [common=false] - skip generator scoped options.
    */
-  jhipsterOptions(options = {}) {
+  jhipsterOptions(options, common = false) {
     options = _.cloneDeep(options);
     Object.entries(options).forEach(([optionName, optionDesc]) => {
       this.option(kebabCase(optionName), optionDesc);
-      if (!optionDesc.scope) return;
+      if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
       let optionValue;
       // Hidden options are test options, which doesn't rely on commoander for options parsing.
       // We must parse environment variables manually
