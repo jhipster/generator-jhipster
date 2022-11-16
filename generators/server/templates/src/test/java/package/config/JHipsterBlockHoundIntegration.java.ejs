@@ -24,9 +24,6 @@ import reactor.blockhound.integration.BlockHoundIntegration;
 public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
     @Override
     public void applyTo(BlockHound.Builder builder) {
-        // Workaround until https://github.com/reactor/reactor-core/issues/2137 is fixed
-        builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler$BoundedState", "dispose");
-        builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler", "schedule");
         builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
         builder.allowBlockingCallsInside("<%= packageName %>.service.MailService", "sendEmailFromTemplate");
         builder.allowBlockingCallsInside("<%= packageName %>.security.DomainUserDetailsService", "createSpringSecurityUser");
@@ -47,6 +44,9 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
 <%_} _%>
 <%_ if (databaseTypeCassandra) { _%>
         builder.allowBlockingCallsInside("io.netty.util.NetUtil", "<clinit>");
+<%_} _%>
+<%_ if (databaseTypeNeo4j) { _%>
+        builder.allowBlockingCallsInside("org.springframework.data.neo4j.core.PropertyFilterSupport", "getInputProperties");
 <%_} _%>
     }
 
