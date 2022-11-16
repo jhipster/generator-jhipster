@@ -268,7 +268,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
         } else if (this.jhipsterDependenciesVersion) {
           application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
-          this.info(`Using JHipster BOM version ${application.jhipsterDependenciesVersion}`);
+          this.info(`Using JHipster dependencies version ${application.jhipsterDependenciesVersion}`);
         } else {
           application.jhipsterDependenciesVersion = constants.JHIPSTER_DEPENDENCIES_VERSION;
         }
