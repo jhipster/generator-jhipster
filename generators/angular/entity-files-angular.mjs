@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { createTranslationReplacer } from './transform-angular.mjs';
-import { clientApplicationBlock } from './utils.mjs';
+import { clientApplicationBlock } from '../client/utils.mjs';
 
 export const angularFiles = {
   client: [
@@ -61,22 +61,27 @@ export const angularFiles = {
 };
 
 /**
- * @this {import('./client/index.mjs')}
+ * @this {import('./index.mjs')}
  * @returns
  */
-export async function writeEntitiesAngularFiles({ application, entities, control }) {
-  if (!application.clientFrameworkAngular) return;
-
+export async function writeEntitiesFiles({ application, entities, control }) {
   await control.loadClientTranslations?.();
 
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     await this.writeFiles({
       sections: angularFiles,
-      rootTemplatesPath: 'entity/angular',
       transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
       context: { ...application, ...entity, getWebappTranslation: control.getWebappTranslation },
     });
+  }
+}
 
+/**
+ * @this {import('./index.mjs')}
+ * @returns
+ */
+export async function postWriteEntitiesFiles({ application, entities, control }) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     if (!entity.embedded) {
       const { clientFramework, enableTranslation } = application;
       const {
@@ -117,8 +122,7 @@ export async function writeEntitiesAngularFiles({ application, entities, control
   }
 }
 
-export function cleanupEntitiesAngular({ application, entities }) {
-  if (!application.clientFrameworkAngular) return;
+export function cleanupEntitiesFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     const { entityFolderName, entityFileName } = entity;
 
