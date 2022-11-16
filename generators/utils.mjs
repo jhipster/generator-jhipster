@@ -24,6 +24,11 @@ import _ from 'lodash';
 import os from 'os';
 
 
+const databaseTypes = require('../jdl/jhipster/database-types');
+const { stripMargin } = require('./base/logic/index.mjs');
+
+const SQL = databaseTypes.SQL;
+
 /**
  * Rewrite file with passed arguments
  * @param {object} args argument object (containing path, file, haystack, etc properties)
@@ -373,7 +378,7 @@ export function vueAddPageToRouterImport(generator, { clientSrcDir, pageName, pa
       file: `${clientSrcDir}/app/router/pages.ts`,
       needle: 'jhipster-needle-add-entity-to-router-import',
       splicable: [
-        generator.stripMargin(
+        stripMargin(
           // prettier-ignore
           `|// prettier-ignore
                 |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFilename}.vue');`
@@ -390,7 +395,7 @@ export function vueAddPageToRouter(generator, { clientSrcDir, pageName, pageFile
       file: `${clientSrcDir}/app/router/pages.ts`,
       needle: 'jhipster-needle-add-entity-to-router',
       splicable: [
-        generator.stripMargin(
+        stripMargin(
           // prettier-ignore
           `|{
                     |    path: '/pages/${pageFilename}',
@@ -411,7 +416,7 @@ export function vueAddPageServiceToMainImport(generator, { clientSrcDir, pageNam
       file: `${clientSrcDir}/app/main.ts`,
       needle: 'jhipster-needle-add-entity-service-to-main-import',
       splicable: [
-        generator.stripMargin(
+        stripMargin(
           // prettier-ignore
           `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFilename}.service';`
         ),
@@ -427,7 +432,7 @@ export function vueAddPageServiceToMain(generator, { clientSrcDir, pageName, pag
       file: `${clientSrcDir}/app/main.ts`,
       needle: 'jhipster-needle-add-entity-service-to-main',
       splicable: [
-        generator.stripMargin(
+        stripMargin(
           // prettier-ignore
           `|${pageInstance}Service: () => new ${pageName}Service(),`
         ),

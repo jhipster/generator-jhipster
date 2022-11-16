@@ -44,4 +44,14 @@ const htmlEncode = text => {
   return htmLifiedText;
 };
 
-export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode };
+/**
+ * @private
+ * Strip margin indicated by pipe `|` from a string literal
+ *
+ *  @param {string} content - the string to process
+ */
+const stripMargin = content => {
+  return content.replace(/^[ ]*\|/gm, '');
+};
+
+export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin };

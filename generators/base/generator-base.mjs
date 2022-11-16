@@ -70,7 +70,7 @@ import {
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
 import { removeFieldsWithUnsetValues } from './support/index.mjs';
-import { locateGenerator } from './logic/index.mjs';
+import { locateGenerator, parseCreationTimestamp } from './logic/index.mjs';
 import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../entities/logic/index.mjs';
 import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
@@ -1871,7 +1871,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.skipClient = options.skipClient;
     }
     if (dest.creationTimestamp === undefined && options.creationTimestamp) {
-      const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(this, options.creationTimestamp);
       if (creationTimestamp) {
         dest.creationTimestamp = creationTimestamp;
       }
@@ -2006,7 +2006,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     if (options.creationTimestamp) {
-      const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+      const creationTimestamp = parseCreationTimestamp(this, options.creationTimestamp);
       if (creationTimestamp) {
         this.configOptions.creationTimestamp = creationTimestamp;
         if (this.jhipsterConfig.creationTimestamp === undefined) {

@@ -178,109 +178,49 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * Parse creationTimestamp option
-   * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
-   *                   obtained by parsing the given string representation of the creationTimestamp.
-   */
-  parseCreationTimestamp(creationTimestampOption = this.options.creationTimestamp) {
-    return parseCreationTimestamp(this, creationTimestampOption);
-  }
-
-  /**
-   * @private
-   * @param {any} input input
-   * @returns {boolean} true if input is number; false otherwise
-   */
-  isNumber(input) {
-    return !isNaN(this.filterNumber(input));
-  }
-
-  /**
-   * @private
-   * @param {any} input input
-   * @returns {boolean} true if input is a signed number; false otherwise
-   */
-  isSignedNumber(input) {
-    return !isNaN(this.filterNumber(input, true));
-  }
-
-  /**
-   * @private
-   * @param {any} input input
-   * @returns {boolean} true if input is a signed decimal number; false otherwise
-   */
-  isSignedDecimalNumber(input) {
-    return !isNaN(this.filterNumber(input, true, true));
-  }
-
-  /**
-   * @private
-   * Filter Number
+   * Utility function to copy and process templates.
    *
-   * @param {string} input - input to filter
-   * @param isSigned - flag indicating whether to check for signed number or not
-   * @param isDecimal - flag indicating whether to check for decimal number or not
-   * @returns {number} parsed number if valid input; <code>NaN</code> otherwise
+   * @param {string} source - source
+   * @param {string} destination - destination
+   * @param {*} generator - reference to the generator
+   * @param {*} options - options object
+   * @param {*} context - context
    */
-  filterNumber(input, isSigned, isDecimal) {
-    const signed = isSigned ? '(\\-|\\+)?' : '';
-    const decimal = isDecimal ? '(\\.[0-9]+)?' : '';
-    const regex = new RegExp(`^${signed}([0-9]+${decimal})$`);
-
-    if (regex.test(input)) return Number(input);
-
-    return NaN;
-  }
-
-  /**
-   * @private
-   * Get Option From Array
-   *
-   * @param {Array} array - array
-   * @param {any} option - options
-   * @returns {boolean} true if option is in array and is set to 'true'
-   */
-  getOptionFromArray(array, option) {
-    let optionValue = false;
-    array.forEach(value => {
-      if (_.includes(value, option)) {
-        optionValue = value.split(':')[1];
-      }
-    });
-    optionValue = optionValue === 'true' ? true : optionValue;
-    return optionValue;
-  }
-
-  /**
-   * @private
-   * Function to issue a https get request, and process the result
-   *
-   *  @param {string} url - the url to fetch
-   *  @param {function} onSuccess - function, which gets called when the request succeeds, with the body of the response
-   *  @param {function} onFail - callback when the get failed.
-   */
-  httpsGet(url, onSuccess, onFail) {
-    https
-      .get(url, res => {
-        let body = '';
-        res.on('data', chunk => {
-          body += chunk;
-        });
-        res.on('end', () => {
-          onSuccess(body);
-        });
+  template(source, destination, generator, options = {}, context) {
+    const _this = generator || this;
+    const _context = context || _this;
+    const customDestination = _this.destinationPath(destination);
+    if (!customDestination) {
+      this.debug(`File ${destination} ignored`);
+      return Promise.resolved();
+    }
+    return renderContent(source, _this, _context, options)
+      .then(res => {
+        _this.fs.write(customDestination, res);
+        return customDestination;
       })
-      .on('error', onFail);
+      .catch(error => {
+        this.warning(source);
+        throw error;
+      });
   }
 
   /**
    * @private
-   * Strip margin indicated by pipe `|` from a string literal
+   * Utility function to render a template into a string
    *
-   *  @param {string} content - the string to process
+   * @param {string} source - source
+   * @param {function} callback - callback to take the rendered template as a string
+   * @param {*} generator - reference to the generator
+   * @param {*} options - options object
+   * @param {*} context - context
    */
-  stripMargin(content) {
-    return content.replace(/^[ ]*\|/gm, '');
+  render(source, callback, generator, options = {}, context) {
+    const _this = generator || this;
+    const _context = context || _this;
+    renderContent(source, _this, _context, options, res => {
+      callback(res);
+    });
   }
 
   /**

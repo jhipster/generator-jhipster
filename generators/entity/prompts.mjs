@@ -28,6 +28,8 @@ import {
   validations,
   clientFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
+import { reservedKeywords, databaseTypes, applicationTypes, entityOptions, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
+import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from '../base/logic/index.mjs';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
 const { CASSANDRA, SQL } = databaseTypes;
@@ -770,7 +772,7 @@ function askForField() {
       when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('minlength'),
       type: 'input',
       name: 'fieldValidateRulesMinlength',
-      validate: input => (this.isNumber(input) ? true : 'Minimum length must be a positive number'),
+      validate: input => (inputIsNumber(input) ? true : 'Minimum length must be a positive number'),
       message: 'What is the minimum length of your field?',
       default: 0,
     },
@@ -778,7 +780,7 @@ function askForField() {
       when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('maxlength'),
       type: 'input',
       name: 'fieldValidateRulesMaxlength',
-      validate: input => (this.isNumber(input) ? true : 'Maximum length must be a positive number'),
+      validate: input => (inputIsNumber(input) ? true : 'Maximum length must be a positive number'),
       message: 'What is the maximum length of your field?',
       default: 20,
     },
@@ -789,9 +791,9 @@ function askForField() {
       message: 'What is the minimum of your field?',
       validate: (input, response) => {
         if ([FLOAT, DOUBLE, BIG_DECIMAL].includes(response.fieldType)) {
-          return this.isSignedDecimalNumber(input) ? true : 'Minimum must be a decimal number';
+          return inputIsSignedDecimalNumber(input) ? true : 'Minimum must be a decimal number';
         }
-        return this.isSignedNumber(input) ? true : 'Minimum must be a number';
+        return inputIsSignedNumber(input) ? true : 'Minimum must be a number';
       },
       default: 0,
     },
@@ -802,9 +804,9 @@ function askForField() {
       message: 'What is the maximum of your field?',
       validate: (input, response) => {
         if ([FLOAT, DOUBLE, BIG_DECIMAL].includes(response.fieldType)) {
-          return this.isSignedDecimalNumber(input) ? true : 'Maximum must be a decimal number';
+          return inputIsSignedDecimalNumber(input) ? true : 'Maximum must be a decimal number';
         }
-        return this.isSignedNumber(input) ? true : 'Maximum must be a number';
+        return inputIsSignedNumber(input) ? true : 'Maximum must be a number';
       },
       default: 100,
     },
@@ -818,7 +820,7 @@ function askForField() {
       type: 'input',
       name: 'fieldValidateRulesMinbytes',
       message: 'What is the minimum byte size of your field?',
-      validate: input => (this.isNumber(input) ? true : 'Minimum byte size must be a positive number'),
+      validate: input => (inputIsNumber(input) ? true : 'Minimum byte size must be a positive number'),
       default: 0,
     },
     {
@@ -831,7 +833,7 @@ function askForField() {
       type: 'input',
       name: 'fieldValidateRulesMaxbytes',
       message: 'What is the maximum byte size of your field?',
-      validate: input => (this.isNumber(input) ? true : 'Maximum byte size must be a positive number'),
+      validate: input => (inputIsNumber(input) ? true : 'Maximum byte size must be a positive number'),
       default: 5000000,
     },
     {

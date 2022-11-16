@@ -29,6 +29,7 @@ import {
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
+import { getOptionFromArray } from '../base/logic/index.mjs';
 
 const { OptionNames } = applicationOptions;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
@@ -348,13 +349,13 @@ export async function askForOptionalItems({ control }) {
   if (choices.length > 0) {
     await this.prompt(PROMPTS).then(answers => {
       this.jhipsterConfig.serverSideOptions = answers.serverSideOptions;
-      this.jhipsterConfig.websocket = this.getOptionFromArray(answers.serverSideOptions, 'websocket');
-      this.jhipsterConfig.searchEngine = this.getOptionFromArray(answers.serverSideOptions, 'searchEngine');
-      this.jhipsterConfig.messageBroker = this.getOptionFromArray(answers.serverSideOptions, 'messageBroker');
-      this.jhipsterConfig.enableSwaggerCodegen = this.getOptionFromArray(answers.serverSideOptions, 'enableSwaggerCodegen');
+      this.jhipsterConfig.websocket = getOptionFromArray(answers.serverSideOptions, 'websocket');
+      this.jhipsterConfig.searchEngine = getOptionFromArray(answers.serverSideOptions, 'searchEngine');
+      this.jhipsterConfig.messageBroker = getOptionFromArray(answers.serverSideOptions, 'messageBroker');
+      this.jhipsterConfig.enableSwaggerCodegen = getOptionFromArray(answers.serverSideOptions, 'enableSwaggerCodegen');
       // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
       if (!this.jhipsterConfig.serviceDiscoveryType) {
-        this.jhipsterConfig.serviceDiscoveryType = this.getOptionFromArray(answers.serverSideOptions, 'serviceDiscoveryType');
+        this.jhipsterConfig.serviceDiscoveryType = getOptionFromArray(answers.serverSideOptions, 'serviceDiscoveryType');
       }
     });
   }

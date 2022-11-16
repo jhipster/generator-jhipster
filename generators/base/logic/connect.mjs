@@ -16,14 +16,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as locateGenerator } from './generator/locator.mjs';
-export { deleteFile, deleteFolder, moveWithGit } from './output/file-operations.mjs';
-export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin } from './formatter.mjs';
-export { default as parseCreationTimestamp } from './sequences.mjs';
-export {
-  isNumber as inputIsNumber,
-  isSignedNumber as inputIsSignedNumber,
-  isSignedDecimalNumber as inputIsSignedDecimalNumber,
-} from './asserts.mjs';
-export { default as getOptionFromArray } from './converter.mjs';
-export { default as httpsGet } from './connect.mjs';
+import https from 'https';
+
+/**
+ * @private
+ * Function to issue a https get request, and process the result
+ *
+ *  @param {string} url - the url to fetch
+ *  @param {function} onSuccess - function, which gets called when the request succeeds, with the body of the response
+ *  @param {function} onFail - callback when the get failed.
+ */
+const httpsGet = (url, onSuccess, onFail) => {
+  https
+    .get(url, res => {
+      let body = '';
+      res.on('data', chunk => {
+        body += chunk;
+      });
+      res.on('end', () => {
+        onSuccess(body);
+      });
+    })
+    .on('error', onFail);
+};
+
+export default httpsGet;

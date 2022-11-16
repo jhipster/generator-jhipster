@@ -18,6 +18,7 @@
  */
 import chalk from 'chalk';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { httpsGet } from '../base/logic/index.mjs';
 
 const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -173,7 +174,7 @@ async function _retrieveBootswatchThemes(generator, useApi) {
   }
 
   return new Promise((resolve, reject) => {
-    generator.httpsGet(
+    httpsGet(
       'https://bootswatch.com/api/5.json',
 
       body => {
