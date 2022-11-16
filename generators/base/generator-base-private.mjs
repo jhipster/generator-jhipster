@@ -22,19 +22,15 @@ import _ from 'lodash';
 import Generator from 'yeoman-generator';
 import chalk from 'chalk';
 import semver from 'semver';
-import https from 'https';
 
 import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 import { packageJson } from '../../lib/index.mjs';
 import { databaseData } from '../sql/support/index.mjs';
-import { javadoc } from './logic/index.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
-import { deleteFile, deleteFolder } from './support/index.mjs';
 import { getDBTypeFromDBValue } from '../server/support/database.mjs';
-
-import { deleteFile, deleteFolder } from './support/index.mjs';
+import { deleteFile, deleteFolder, generatorOrContext, renderContent } from './logic/index.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
@@ -187,8 +183,7 @@ export default class PrivateBase extends Generator {
    * @param {*} context - context
    */
   template(source, destination, generator, options = {}, context) {
-    const _this = generator || this;
-    const _context = context || _this;
+    const _this = generatorOrContext(generator, this);
     const customDestination = _this.destinationPath(destination);
     if (!customDestination) {
       this.debug(`File ${destination} ignored`);

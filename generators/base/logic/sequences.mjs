@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import path from 'path';
+
 /**
  * @private
  * Parse creationTimestamp option
@@ -36,4 +38,22 @@ const parseCreationTimestamp = (context, creationTimestampOption) => {
   return creationTimestamp;
 };
 
-export default parseCreationTimestamp;
+/**
+ *
+ * @param context the context to reset faker seed for
+ * @param basename name of the file
+ */
+const resetFakerSeed = (context, basename) => {
+  if (context.entityClass) {
+    if (context.configOptions && context.configOptions.sharedEntities) {
+      // TODO looks executed for each entity class, should be executed only once
+      Object.values(context.configOptions.sharedEntities).forEach(entity => {
+        entity.resetFakerSeed(`${context.entityClass}-${basename}`);
+      });
+    } else if (context.resetFakerSeed) {
+      context.resetFakerSeed(basename);
+    }
+  }
+};
+
+export { parseCreationTimestamp, resetFakerSeed };
