@@ -43,6 +43,7 @@ Object {
   "GENERATOR_OPENSHIFT": "openshift",
   "GENERATOR_PAGE": "page",
   "GENERATOR_PROJECT_NAME": "project-name",
+  "GENERATOR_REACT": "react",
   "GENERATOR_SERVER": "server",
   "GENERATOR_SPRING_CONTROLLER": "spring-controller",
   "GENERATOR_SPRING_SERVICE": "spring-service",
