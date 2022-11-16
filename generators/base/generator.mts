@@ -138,7 +138,10 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
         } else {
           throw new Error(`Scope ${optionDesc.scope} not supported`);
         }
-        delete this.options[optionName];
+        if (optionDesc.scope !== 'generator') {
+          // generator scoped options may be duplicated
+          delete this.options[optionName];
+        }
       }
     });
   }
