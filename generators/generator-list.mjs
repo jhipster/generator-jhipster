@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+export const GENERATOR_ANGULAR = 'angular';
 export const GENERATOR_APP = 'app';
 export const GENERATOR_AWS = 'aws';
 export const GENERATOR_AZURE_APP_SERVICE = 'azure-app-service';

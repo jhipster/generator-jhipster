@@ -40,7 +40,7 @@ const { MAVEN, GRADLE } = buildToolTypes;
 const NO_CACHE_PROVIDER = cacheProviders.NO;
 
 export default class GaeGenerator extends BaseGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_GAE);
     }

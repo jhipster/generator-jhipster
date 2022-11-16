@@ -48,7 +48,7 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
     this.entityChanges = {};
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     // TODO V8 switch to GENERATOR_BOOTSTRAP_APPLICATION_SERVER
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {

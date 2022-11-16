@@ -23,11 +23,9 @@ import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { askForAdminUi, askForClient, askForClientTheme, askForClientThemeVariant } from './prompts.mjs';
-import { cleanup as cleanupAngular, writeFiles as writeAngularFiles } from './files-angular.mjs';
 import { cleanup as cleanupReact, writeFiles as writeReactFiles } from './files-react.mjs';
 import { writeFiles as writeCommonFiles } from './files-common.mjs';
 
-import { writeEntitiesAngularFiles, cleanupEntitiesAngular } from './entity-files-angular.mjs';
 import { writeEntitiesReactFiles, cleanupEntitiesReact } from './entity-files-react.mjs';
 import { writeEnumerationFiles } from './entity-files.mjs';
 
@@ -84,7 +82,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     this.loadRuntimeOptions();
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
@@ -159,10 +157,10 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
       async composing() {
         const { clientFramework, testFrameworks, enableTranslation } = this.jhipsterConfigWithDefaults;
-        if (clientFramework === VUE) {
-          await this.composeWithJHipster(GENERATOR_VUE);
-        } else if (!enableTranslation || clientFramework === ANGULAR) {
-          // TODO move to angular/react generators
+        if ([ANGULAR, VUE].includes(clientFramework)) {
+          await this.composeWithJHipster(clientFramework);
+        } else if (!enableTranslation) {
+          // TODO move to react generators
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
         }
         if (Array.isArray(testFrameworks) && testFrameworks.includes(CYPRESS)) {
@@ -217,9 +215,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       prepareForTemplates({ application }) {
         application.webappLoginRegExp = constants.LOGIN_REGEX_JS;
 
-        if (application.clientFramework === ANGULAR) {
-          application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
-        }
         if (application.clientFramework === REACT) {
           application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
         }
@@ -277,8 +272,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       webappFakeDataSeed({ application: { clientFramework } }) {
         this.resetEntitiesFakeData(clientFramework);
       },
-      cleanupAngular,
-      writeAngularFiles,
       cleanupReact,
       writeReactFiles,
       writeCommonFiles,
@@ -292,8 +285,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
       writeEnumerationFiles,
-      writeEntitiesAngularFiles,
-      cleanupEntitiesAngular,
       writeEntitiesReactFiles,
       cleanupEntitiesReact,
     });

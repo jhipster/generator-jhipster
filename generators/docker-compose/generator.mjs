@@ -50,7 +50,7 @@ const { MEMCACHED, REDIS } = cacheTypes;
  * @extends {import('../base/index.mjs')}
  */
 export default class DockerComposeGenerator extends BaseDockerGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DOCKER_COMPOSE);
     }

@@ -39,7 +39,7 @@ export default class OpenapiClientGenerator extends BaseGenerator {
     });
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_OPENAPI_CLIENT);
     }

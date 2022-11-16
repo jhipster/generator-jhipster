@@ -19,33 +19,26 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { fieldTypes } from '../../jdl/jhipster/index.mjs';
-import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
-import { writeEntityFiles, postWriteEntityFiles } from './entity-files-vue.mjs';
-import { writeFiles, writeEntitiesFiles, cleanup } from './files-vue.mjs';
-
-const { CommonDBTypes } = fieldTypes;
-const TYPE_LONG = CommonDBTypes.LONG;
+import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
+import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.mjs';
+import { writeFiles, cleanup } from './files-angular.mjs';
 
 /**
  * @class
  * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
  */
-export default class VueGenerator extends BaseApplicationGenerator {
+export default class AngularGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_VUE);
+      await this.composeWithBlueprints(GENERATOR_ANGULAR);
     }
   }
 
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { enableTranslation } = this.jhipsterConfigWithDefaults;
-        if (enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
-        }
+        await this.composeWithJHipster(GENERATOR_LANGUAGES);
       },
     });
   }
@@ -57,7 +50,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       loadPackageJson() {
-        _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('vue', 'templates', 'package.json')));
+        _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('angular', 'templates', 'package.json')));
       },
     });
   }
@@ -69,13 +62,26 @@ export default class VueGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application }) {
-        application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
+        application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
       },
     });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      loadEntities() {
+        const entities = this.sharedData.getEntities().map(({ entity }) => entity);
+        this.localEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
   }
 
   get writing() {
@@ -91,8 +97,8 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get writingEntities() {
     return {
+      cleanupEntitiesFiles,
       writeEntitiesFiles,
-      writeEntityFiles,
     };
   }
 
@@ -102,7 +108,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get postWritingEntities() {
     return {
-      postWriteEntityFiles,
+      postWriteEntitiesFiles,
     };
   }
 

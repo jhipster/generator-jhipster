@@ -81,7 +81,7 @@ describe(`JHipster ${generator} generator`, () => {
     const postWritingEntities = jestMock.fn();
 
     class CustomGenerator extends Generator<BaseApplication> {
-      async _postConstruct() {
+      async beforeQueue() {
         await this.dependsOnJHipster('bootstrap-application');
       }
 
@@ -312,7 +312,7 @@ describe(`JHipster ${generator} generator`, () => {
     const postWritingEntities = jestMock.fn();
 
     class CustomGenerator extends Generator<BaseApplication> {
-      async _postConstruct() {
+      async beforeQueue() {
         await this.dependsOnJHipster('bootstrap-application');
       }
 

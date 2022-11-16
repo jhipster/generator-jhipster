@@ -244,7 +244,7 @@ const testBlueprintSupport = (generatorName, options = {}) => {
           spy = addSpies(generator);
         });
     });
-    it('should compose with blueprints', () => {
+    it(`should compose with jhipster-foo:${generatorName} blueprint once`, () => {
       expect(result.mockedGenerators[`jhipster-foo:${generatorName}`].callCount).toBe(1);
     });
     it('should not call any priority', () => {
@@ -306,7 +306,7 @@ const testBlueprintSupport = (generatorName, options = {}) => {
 
       result = await context;
     });
-    it('should compose with blueprints', () => {
+    it(`should compose with jhipster-foo:${generatorName} blueprint once`, () => {
       expect(result.mockedGenerators[`jhipster-foo-sbs:${generatorName}`].callCount).toBe(1);
     });
     it('should call every priority', () => {

@@ -7,7 +7,7 @@ import { testBlueprintSupport, buildClientSamples, entitiesClientSamples as enti
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
-import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
+import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import constants from '../generator-constants.cjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
@@ -17,9 +17,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.mjs');
+const generatorFile = join(__dirname, 'index.mts');
 
-const { ANGULAR: clientFramework } = ClientFrameworkTypes;
+const { ANGULAR: clientFramework } = clientFrameworkTypes;
 const { CLIENT_MAIN_SRC_DIR } = constants;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
 
