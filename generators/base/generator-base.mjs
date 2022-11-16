@@ -25,7 +25,6 @@ import shelljs from 'shelljs';
 import semver from 'semver';
 import { exec } from 'child_process';
 import os from 'os';
-import normalize from 'normalize-path';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -80,7 +79,6 @@ const {
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
-const { kebabCase } = _;
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
@@ -2807,41 +2805,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.config.set(this.options.localConfig);
       delete this.options.localConfig;
     }
-  }
-
-  /**
-   * Load options from an object.
-   * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./api.mjs').JHipsterOptions} options - Object containing options.
-   * @param {boolean} [common=false] - skip generator scoped options.
-   */
-  jhipsterOptions(options, common = false) {
-    options = _.cloneDeep(options);
-    Object.entries(options).forEach(([optionName, optionDesc]) => {
-      this.option(kebabCase(optionName), optionDesc);
-      if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
-      let optionValue;
-      // Hidden options are test options, which doesn't rely on commoander for options parsing.
-      // We must parse environment variables manually
-      if (optionDesc.hide && optionDesc.env && process.env[optionDesc.env]) {
-        optionValue = process.env[optionDesc.env];
-      } else {
-        optionValue = this.options[optionName];
-      }
-      if (optionValue !== undefined) {
-        if (optionDesc.scope === 'storage') {
-          this.config.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'blueprint') {
-          this.blueprintStorage.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'control') {
-          this.sharedData.getControl()[optionName] = optionValue;
-        } else if (optionDesc.scope === 'generator') {
-          this[optionName] = optionValue;
-        } else {
-          throw new Error(`Scope ${optionDesc.scope} not supported`);
-        }
-        delete this.options[optionName];
-      }
-    });
   }
 }

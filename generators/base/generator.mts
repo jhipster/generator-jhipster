@@ -39,7 +39,7 @@ import type {
 } from './api.mjs';
 import type { BaseTaskGroup } from './tasks.mjs';
 
-const { merge } = _;
+const { merge, kebabCase } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
   PRIORITY_NAMES;
 
@@ -105,6 +105,42 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    */
   delegateTasksToBlueprint(tasksGetter: () => BaseTaskGroup<this>): BaseTaskGroup<this> {
     return this.delegateToBlueprint ? {} : tasksGetter();
+  }
+
+  /**
+   * Load options from an object.
+   * When composing, we need to load options from others generators, externalising options allow to easily load them.
+   * @param {import('./api.mjs').JHipsterOptions} options - Object containing options.
+   * @param {boolean} [common=false] - skip generator scoped options.
+   */
+  jhipsterOptions(options: JHipsterOptions, common = false) {
+    options = _.cloneDeep(options);
+    Object.entries(options).forEach(([optionName, optionDesc]) => {
+      this.option(kebabCase(optionName), optionDesc);
+      if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
+      let optionValue;
+      // Hidden options are test options, which doesn't rely on commoander for options parsing.
+      // We must parse environment variables manually
+      if (optionDesc.hide && optionDesc.env && process.env[optionDesc.env]) {
+        optionValue = process.env[optionDesc.env];
+      } else {
+        optionValue = this.options[optionName];
+      }
+      if (optionValue !== undefined) {
+        if (optionDesc.scope === 'storage') {
+          this.config.set(optionName, optionValue);
+        } else if (optionDesc.scope === 'blueprint') {
+          this.blueprintStorage.set(optionName, optionValue);
+        } else if (optionDesc.scope === 'control') {
+          this.sharedData.getControl()[optionName] = optionValue;
+        } else if (optionDesc.scope === 'generator') {
+          this[optionName] = optionValue;
+        } else {
+          throw new Error(`Scope ${optionDesc.scope} not supported`);
+        }
+        delete this.options[optionName];
+      }
+    });
   }
 
   /**
