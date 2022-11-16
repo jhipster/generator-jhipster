@@ -292,8 +292,13 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       type: Boolean,
     });
 
-    this.jhipsterOptions(gitOptions, true);
-    this.jhipsterOptions(serverOptions, true);
+    this.jhipsterOptions(
+      {
+        ...gitOptions,
+        ...serverOptions,
+      },
+      true
+    );
 
     // Just constructing help, stop here
     if (this.options.help) {
