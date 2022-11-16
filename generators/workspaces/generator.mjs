@@ -20,7 +20,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { GENERATOR_APP, GENERATOR_GIT } from '../generator-list.mjs';
+import { GENERATOR_ANGULAR, GENERATOR_APP, GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.mjs';
 
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import BaseGenerator from '../base/index.mjs';
@@ -165,11 +165,6 @@ export default class WorkspacesGenerator extends BaseGenerator {
         this.packages = this.workspacesConfig.packages;
         this.env.options.nodePackageManager = this.workspacesConfig.clientPackageManager;
       },
-      loadDependabotPackageJson() {
-        if (!this.generateWorkspaces) return;
-
-        this._.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
-      },
     };
   }
 
@@ -184,7 +179,11 @@ export default class WorkspacesGenerator extends BaseGenerator {
 
         const {
           dependencies: { rxjs },
-        } = this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'angular', 'package.json'));
+        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'templates', 'package.json'));
+
+        const {
+          devDependencies: { concurrently },
+        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json'));
 
         this.packageJson.merge({
           workspaces: {
@@ -192,7 +191,7 @@ export default class WorkspacesGenerator extends BaseGenerator {
           },
           devDependencies: {
             rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
-            concurrently: this.dependabotPackageJson.devDependencies.concurrently,
+            concurrently,
           },
           scripts: {
             'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
