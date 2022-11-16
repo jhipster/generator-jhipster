@@ -18,7 +18,7 @@
  */
 export default {
   skipGit: {
-    desc: 'Skip the git initialization',
+    desc: 'Skip git repository initialization',
     type: Boolean,
     scope: 'generator',
   },
