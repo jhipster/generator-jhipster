@@ -28,6 +28,7 @@ import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
 
 import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
+import baseOptions from './options.mjs';
 
 import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures, EditFileCallback, CascatedEditFileCallback } from './api.mjs';
 import type { BaseTaskGroup } from './tasks.mjs';
@@ -71,14 +72,14 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   static END = asPriority(END);
 
-  #sharedData;
+  readonly sharedData!: SharedData<any>;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
 
-    if (this.options.help) return;
+    this.sharedData = this.createSharedData();
 
-    this.loadSharedData();
+    this.jhipsterOptions(baseOptions);
   }
 
   /**
@@ -164,20 +165,13 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
-   * Shared Data
-   */
-  get sharedData() {
-    return this.#sharedData;
-  }
-
-  /**
    * Shallow clone or convert dependencies to placeholder if needed.
    */
   prepareDependencies(
     map: Record<string, string>,
     valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`
   ): Record<string, string> {
-    if (process.env.VERSION_PLACEHOLDERS === 'true') {
+    if (this.sharedData.getControl().useVersionPlaceholders) {
       return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
     }
     return {
@@ -209,7 +203,7 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   /**
    * @private
    */
-  loadSharedData() {
+  createSharedData() {
     const destinationPath = this.destinationPath();
     const dirname = basename(destinationPath);
     const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
@@ -221,8 +215,6 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     if (!sharedApplications[applicationId]) {
       sharedApplications[applicationId] = {};
     }
-    this.#sharedData = new SharedData(sharedApplications[applicationId]);
-
-    this.#sharedData.getControl().useVersionPlaceholders = process.env.VERSION_PLACEHOLDERS === 'true';
+    return new SharedData(sharedApplications[applicationId]);
   }
 }

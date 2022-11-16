@@ -256,7 +256,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
         application.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
-        application.JAVA_VERSION = constants.JAVA_VERSION;
+        application.JAVA_VERSION = control.useVersionPlaceholders ? 'JAVA_VERSION' : constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
 
         if (control.useVersionPlaceholders) {
@@ -267,10 +267,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         } else {
           application.jhipsterDependenciesVersion = constants.JHIPSTER_DEPENDENCIES_VERSION;
         }
-        application.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
-        application.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
-        application.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
-        application.JACOCO_VERSION = constants.JACOCO_VERSION;
+        application.SPRING_BOOT_VERSION = control.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : constants.SPRING_BOOT_VERSION;
+        application.HIBERNATE_VERSION = control.useVersionPlaceholders ? 'HIBERNATE_VERSION' : constants.HIBERNATE_VERSION;
+        application.JACKSON_DATABIND_NULLABLE_VERSION = control.useVersionPlaceholders
+          ? 'JACKSON_DATABIND_NULLABLE_VERSION'
+          : constants.JACKSON_DATABIND_NULLABLE_VERSION;
+        application.JACOCO_VERSION = control.useVersionPlaceholders ? 'JACOCO_VERSION' : constants.JACOCO_VERSION;
 
         application.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
         application.VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;

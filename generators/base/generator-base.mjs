@@ -36,7 +36,7 @@ import constants from '../generator-constants.cjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.cjs';
 import generatorDefaults from '../generator-defaults.cjs';
-import commonOptions from '../options.mjs';
+import commonOptions from './options.mjs';
 import detectLanguage from '../languages/detect-language.mjs';
 import { formatDateForChangelog } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
@@ -2821,14 +2821,21 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     Object.entries(options).forEach(([optionName, optionDesc]) => {
       this.option(kebabCase(optionName), optionDesc);
       if (!optionDesc.scope) return;
-      const optionValue = this.options[optionName];
+      let optionValue;
+      // Hidden options are test options, which doesn't rely on commoander for options parsing.
+      // We must parse environment variables manually
+      if (optionDesc.hide && optionDesc.env && process.env[optionDesc.env]) {
+        optionValue = process.env[optionDesc.env];
+      } else {
+        optionValue = this.options[optionName];
+      }
       if (optionValue !== undefined) {
         if (optionDesc.scope === 'storage') {
           this.config.set(optionName, optionValue);
         } else if (optionDesc.scope === 'blueprint') {
           this.blueprintStorage.set(optionName, optionValue);
         } else if (optionDesc.scope === 'control') {
-          this.sharedData.sharedData.getControl()[optionName] = optionValue;
+          this.sharedData.getControl()[optionName] = optionValue;
         } else if (optionDesc.scope === 'generator') {
           this[optionName] = optionValue;
         } else {
