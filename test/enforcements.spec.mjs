@@ -21,7 +21,14 @@ import fs, { readFileSync } from 'fs';
 import fse from 'fs-extra';
 import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS, GENERATOR_VUE } from '../generators/generator-list.mjs';
+import {
+  GENERATOR_ANGULAR,
+  GENERATOR_CLIENT,
+  GENERATOR_COMMON,
+  GENERATOR_CYPRESS,
+  GENERATOR_REACT,
+  GENERATOR_VUE,
+} from '../generators/generator-list.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -50,6 +57,7 @@ describe('Enforce some developments patterns', () => {
     const filesToTest = [
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_CLIENT)),
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_ANGULAR)),
+      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_REACT)),
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_VUE)),
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_COMMON)),
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_CYPRESS)),

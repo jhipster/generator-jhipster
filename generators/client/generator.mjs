@@ -23,26 +23,16 @@ import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { askForAdminUi, askForClient, askForClientTheme, askForClientThemeVariant } from './prompts.mjs';
-import { cleanup as cleanupReact, writeFiles as writeReactFiles } from './files-react.mjs';
 import { writeFiles as writeCommonFiles } from './files-common.mjs';
 
-import { writeEntitiesReactFiles, cleanupEntitiesReact } from './entity-files-react.mjs';
 import { writeEnumerationFiles } from './entity-files.mjs';
 
 import constants from '../generator-constants.cjs';
 import statistics from '../statistics.cjs';
 import generatorDefaults from '../generator-defaults.cjs';
-import {
-  GENERATOR_BOOTSTRAP_APPLICATION,
-  GENERATOR_CYPRESS,
-  GENERATOR_COMMON,
-  GENERATOR_LANGUAGES,
-  GENERATOR_CLIENT,
-  GENERATOR_VUE,
-} from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { prepareReactEntity } from '../../utils/entity.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
@@ -157,11 +147,8 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
       async composing() {
         const { clientFramework, testFrameworks, enableTranslation } = this.jhipsterConfigWithDefaults;
-        if ([ANGULAR, VUE].includes(clientFramework)) {
+        if ([ANGULAR, VUE, REACT].includes(clientFramework)) {
           await this.composeWithJHipster(clientFramework);
-        } else if (!enableTranslation) {
-          // TODO move to react generators
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
         }
         if (Array.isArray(testFrameworks) && testFrameworks.includes(CYPRESS)) {
           await this.composeWithJHipster(GENERATOR_CYPRESS);
@@ -214,10 +201,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
       prepareForTemplates({ application }) {
         application.webappLoginRegExp = constants.LOGIN_REGEX_JS;
-
-        if (application.clientFramework === REACT) {
-          application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
-        }
       },
     });
   }
@@ -226,29 +209,8 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
   }
 
-  // Public API method used by the getter and also by Blueprints
-  get preparingEachEntity() {
-    return this.asPreparingEachEntityTaskGroup({
-      react({ application, entity }) {
-        if (application.clientFrameworkReact) {
-          prepareReactEntity({ entity, application });
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.asPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.preparingEachEntity));
-  }
-
-  // Public API method used by the getter and also by Blueprints
   get default() {
     return this.asDefaultTaskGroup({
-      loadEntities() {
-        const entities = this.sharedData.getEntities().map(({ entity }) => entity);
-        this.localEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
-      },
-
       insight({ application }) {
         statistics.sendSubGenEvent('generator', GENERATOR_CLIENT, {
           app: {
@@ -272,8 +234,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       webappFakeDataSeed({ application: { clientFramework } }) {
         this.resetEntitiesFakeData(clientFramework);
       },
-      cleanupReact,
-      writeReactFiles,
       writeCommonFiles,
     });
   }
@@ -285,8 +245,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
       writeEnumerationFiles,
-      writeEntitiesReactFiles,
-      cleanupEntitiesReact,
     });
   }
 
