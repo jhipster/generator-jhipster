@@ -132,7 +132,7 @@ _%>
     @Override
     protected <%- returnType %> handleExceptionInternal(
             Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, <%= requestEntityRequestClass %> request) {
-        body = body == null ? wrapAndCustomizeProblem(ex, request) : body;
+        body = body == null ? wrapAndCustomizeProblem((Throwable) ex, (<%= requestClass %>) request) : body;
     <%_ if (reactive) { _%>
         if (request.getResponse().isCommitted()) {
             return Mono.error(ex);
