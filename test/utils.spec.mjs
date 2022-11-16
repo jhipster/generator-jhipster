@@ -4,6 +4,7 @@ import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
 
 import utils from '../generators/utils.cjs';
+import { renderContent } from '../generators/base/logic/index.mjs';
 import { getEnumInfo } from '../generators/entity/logic/index.mjs';
 import { javadoc } from '../generators/server/logic/index.mjs';
 
@@ -240,7 +241,7 @@ describe('JHipster Utils', () => {
   describe('::renderContent', () => {
     const fixturesPath = path.join(__dirname, 'fixtures', 'renderContent');
     it('should render the included content', done => {
-      utils.renderContent(
+      renderContent(
         path.join(fixturesPath, 'include.ejs'),
         { templatePath: tmpl => tmpl },
         {},
@@ -252,7 +253,7 @@ describe('JHipster Utils', () => {
       );
     });
     it('when 2 roots are provided, first should have precedence', done => {
-      utils.renderContent(
+      renderContent(
         path.join(fixturesPath, 'include.ejs'),
         { templatePath: tmpl => tmpl },
         {},
@@ -264,7 +265,7 @@ describe('JHipster Utils', () => {
       );
     });
     it('when 2 roots are provided, should find the template in the second folder if does not exists in the first', done => {
-      utils.renderContent(
+      renderContent(
         path.join(fixturesPath, 'include_common.ejs'),
         { templatePath: tmpl => tmpl },
         {},

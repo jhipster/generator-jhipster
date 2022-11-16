@@ -61,7 +61,6 @@ import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
 import { locateGenerator, parseCreationTimestamp } from './logic/index.mjs';
 import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../entities/logic/index.mjs';
-import { entityIsAuthority, entityIsUser } from '../entity/logic/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

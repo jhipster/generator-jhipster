@@ -16,16 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as locateGenerator } from './generator/locator.mjs';
-export { deleteFile, deleteFolder, moveWithGit } from './output/file-operations.mjs';
-export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin } from './formatter.mjs';
-export { parseCreationTimestamp, resetFakerSeed } from './sequences.mjs';
-export {
-  isNumber as inputIsNumber,
-  isSignedNumber as inputIsSignedNumber,
-  isSignedDecimalNumber as inputIsSignedDecimalNumber,
-} from './asserts.mjs';
-export { default as getOptionFromArray } from './converter.mjs';
-export { default as httpsGet } from './connect.mjs';
-export { renderContent, writeContent } from './output/renderer.mjs';
-export { generatorOrContext, firstOrSecond } from './context.mjs';
+
+/**
+ * Render content
+ *
+ * @param {object} generator reference to the generator
+ * @param {object} options options
+ */
+const appendYeomanOptionsFromGeneratorOptions = (generator, options) => {
+  return {
+    root: options.root || generator.jhipsterTemplatesFolders || generator.templatePath(),
+    context: generator,
+    ...options,
+  };
+};
+
+export default appendYeomanOptionsFromGeneratorOptions;
