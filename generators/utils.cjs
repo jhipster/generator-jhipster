@@ -19,13 +19,13 @@
 /* eslint-disable no-console */
 
 const path = require('path');
-const ejs = require('ejs');
 const _ = require('lodash');
 const os = require('os');
 
 const constants = require('./generator-constants.cjs');
 
 module.exports = {
+  stripMargin, // remove this one once everything is converted to mjs
   rewrite,
   rewriteFile,
   replaceContent,
@@ -43,9 +43,18 @@ module.exports = {
 };
 
 const databaseTypes = require('../jdl/jhipster/database-types');
-const { stripMargin } = require('./base/logic/index.mjs');
 
 const SQL = databaseTypes.SQL;
+
+/**
+ * @private
+ * Strip margin indicated by pipe `|` from a string literal
+ *
+ *  @param {string} content - the string to process
+ */
+function stripMargin(content) {
+  return content.replace(/^[ ]*\|/gm, '');
+}
 
 /**
  * Rewrite file with passed arguments

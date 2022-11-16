@@ -21,7 +21,7 @@ const _ = require('lodash');
 const needleClientBase = require('./needle-client.cjs');
 const constants = require('../../generator-constants.cjs');
 const jhipsterUtils = require('../../utils.cjs');
-const { stripMargin } = require('../../base/logic/index.mjs');
+const { stripMargin } = require('../../utils.cjs');
 
 module.exports = class extends needleClientBase {
   addGlobalSCSSStyle(style, comment) {

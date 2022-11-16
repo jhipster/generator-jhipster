@@ -20,7 +20,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 
 const needleClientBase = require('./needle-client.cjs');
-const { stripMargin } = require('../../base/logic/index.mjs');
+const { stripMargin } = require('../../utils.cjs');
 
 module.exports = class extends needleClientBase {
   addAppSCSSStyle(style, comment) {
