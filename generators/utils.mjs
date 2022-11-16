@@ -23,10 +23,18 @@ import ejs from 'ejs';
 import _ from 'lodash';
 import os from 'os';
 
-const databaseTypes = require('../jdl/jhipster/database-types');
-const { stripMargin } = require('./base/logic/index.mjs');
-
+import { databaseTypes } from '../jdl/jhipster/index.mjs;
 const SQL = databaseTypes.SQL;
+
+/**
+ * @private
+ * Strip margin indicated by pipe `|` from a string literal
+ *
+ *  @param {string} content - the string to process
+ */
+function stripMargin(content) {
+  return content.replace(/^[ ]*\|/gm, '');
+}
 
 /**
  * Rewrite file with passed arguments
