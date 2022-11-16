@@ -21,6 +21,7 @@ const _ = require('lodash');
 const needleClientBase = require('./needle-client.cjs');
 const constants = require('../../generator-constants.cjs');
 const jhipsterUtils = require('../../utils.cjs');
+const { stripMargin } = require('../../base/logic/index.mjs');
 
 module.exports = class extends needleClientBase {
   addGlobalSCSSStyle(style, comment) {
@@ -102,7 +103,7 @@ module.exports = class extends needleClientBase {
   _generateRewriteFileModelWithImportStatement(appName, angularName, folderName, fileName, modulePath, needle) {
     const importStatement = this._generateImportStatement(appName, angularName, folderName, fileName);
 
-    return this.generateFileModel(modulePath, needle, this.generator.stripMargin(importStatement));
+    return this.generateFileModel(modulePath, needle, stripMargin(importStatement));
   }
 
   _generateImportStatement(appName, angularName, folderName, fileName) {
@@ -118,7 +119,7 @@ module.exports = class extends needleClientBase {
   }
 
   _generateRewriteFileModelAddModule(appName, angularName, modulePath, needle) {
-    return this.generateFileModel(modulePath, needle, this.generator.stripMargin(`|${appName}${angularName}Module,`));
+    return this.generateFileModel(modulePath, needle, stripMargin(`|${appName}${angularName}Module,`));
   }
 
   addIcon(iconName) {
@@ -159,7 +160,7 @@ module.exports = class extends needleClientBase {
     const routerLink = `routerLink="${routerName}"`;
     const entityEntry =
       // prettier-ignore
-      this.generator.stripMargin(`|<li>
+      stripMargin(`|<li>
                              |                        <a class="dropdown-item" ${routerLink} routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                              |                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
                              |                            <span${enableTranslation ? ` ${jhiPrefix}Translate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${entityTranslationValue}</span>
@@ -218,7 +219,7 @@ module.exports = class extends needleClientBase {
       pageTitleTemplate = `
             |        data: { pageTitle: '${pageTitle}' },`;
     }
-    const routingEntry = this.generator.stripMargin(
+    const routingEntry = stripMargin(
       `{
             |        path: '${route}',${pageTitleTemplate}
             |        loadChildren: () => import('${modulePath}').then(m => m.${moduleName}),

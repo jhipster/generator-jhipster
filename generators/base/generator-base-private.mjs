@@ -32,7 +32,7 @@ import generatorConstants from '../generator-constants.cjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
-import { deleteFile, deleteFolder, parseCreationTimestamp } from './logic/index.mjs';
+import { deleteFile, deleteFolder, inputIsNumber, parseCreationTimestamp } from './logic/index.mjs';
 
 const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
@@ -173,113 +173,6 @@ export default class PrivateBase extends Generator {
     return /^[a-zA-Z0-9_-]+$/.test(path.basename(process.cwd()))
       ? path.basename(process.cwd()).replace('generator-jhipster-', '')
       : 'jhipster';
-  }
-
-  /**
-   * @private
-   * Parse creationTimestamp option
-   * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
-   *                   obtained by parsing the given string representation of the creationTimestamp.
-   */
-  parseCreationTimestamp(creationTimestampOption = this.options.creationTimestamp) {
-    return parseCreationTimestamp(this, creationTimestampOption);
-  }
-
-  /**
-   * @private
-   * @param {any} input input
-   * @returns {boolean} true if input is number; false otherwise
-   */
-  isNumber(input) {
-    return !isNaN(this.filterNumber(input));
-  }
-
-  /**
-   * @private
-   * @param {any} input input
-   * @returns {boolean} true if input is a signed number; false otherwise
-   */
-  isSignedNumber(input) {
-    return !isNaN(this.filterNumber(input, true));
-  }
-
-  /**
-   * @private
-   * @param {any} input input
-   * @returns {boolean} true if input is a signed decimal number; false otherwise
-   */
-  isSignedDecimalNumber(input) {
-    return !isNaN(this.filterNumber(input, true, true));
-  }
-
-  /**
-   * @private
-   * Filter Number
-   *
-   * @param {string} input - input to filter
-   * @param isSigned - flag indicating whether to check for signed number or not
-   * @param isDecimal - flag indicating whether to check for decimal number or not
-   * @returns {number} parsed number if valid input; <code>NaN</code> otherwise
-   */
-  filterNumber(input, isSigned, isDecimal) {
-    const signed = isSigned ? '(\\-|\\+)?' : '';
-    const decimal = isDecimal ? '(\\.[0-9]+)?' : '';
-    const regex = new RegExp(`^${signed}([0-9]+${decimal})$`);
-
-    if (regex.test(input)) return Number(input);
-
-    return NaN;
-  }
-
-  /**
-   * @private
-   * Get Option From Array
-   *
-   * @param {Array} array - array
-   * @param {any} option - options
-   * @returns {boolean} true if option is in array and is set to 'true'
-   */
-  getOptionFromArray(array, option) {
-    let optionValue = false;
-    array.forEach(value => {
-      if (_.includes(value, option)) {
-        optionValue = value.split(':')[1];
-      }
-    });
-    optionValue = optionValue === 'true' ? true : optionValue;
-    return optionValue;
-  }
-
-  /**
-   * @private
-   * Function to issue a https get request, and process the result
-   *
-   *  @param {string} url - the url to fetch
-   *  @param {function} onSuccess - function, which gets called when the request succeeds, with the body of the response
-   *  @param {function} onFail - callback when the get failed.
-   */
-  httpsGet(url, onSuccess, onFail) {
-    https
-      .get(url, res => {
-        let body = '';
-        res.on('data', chunk => {
-          body += chunk;
-        });
-        res.on('end', () => {
-          onSuccess(body);
-        });
-      })
-      .on('error', onFail);
-  }
-
-  /**
-   * @private
-   * Strip margin indicated by pipe `|` from a string literal
-   *
-   *  @param {string} content - the string to process
-   */
-  stripMargin(content) {
-    return content.replace(/^[ ]*\|/gm, '');
   }
 
   /**

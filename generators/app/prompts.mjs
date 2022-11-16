@@ -21,6 +21,7 @@ import statistics from '../statistics.cjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import generatorsDefaults from '../generator-defaults.cjs';
 import { applicationTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { httpsGet } from '../base/logic/index.mjs';
 
 const { appDefaultConfig, defaultConfigMicroservice } = generatorsDefaults;
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
@@ -166,7 +167,7 @@ export async function askForMoreModules({ control }) {
 export function askModulesToBeInstalled(done, generator) {
   const jHipsterMajorVersion = packagejs.version.match(/^(\d+)/g);
 
-  generator.httpsGet(
+  httpsGet(
     `https://api.npms.io/v2/search?q=keywords:jhipster-module+jhipster-${jHipsterMajorVersion}&from=0&size=50`,
     body => {
       try {

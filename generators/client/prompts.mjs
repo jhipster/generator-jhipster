@@ -20,6 +20,7 @@ import chalk from 'chalk';
 import constants from '../generator-constants.cjs';
 import generatorDefaults from '../generator-defaults.cjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { httpsGet } from '../base/logic/index.mjs';
 
 const { clientDefaultConfig } = generatorDefaults;
 const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
@@ -173,7 +174,7 @@ async function _retrieveBootswatchThemes(generator, useApi) {
   }
 
   return new Promise((resolve, reject) => {
-    generator.httpsGet(
+    httpsGet(
       'https://bootswatch.com/api/5.json',
 
       body => {

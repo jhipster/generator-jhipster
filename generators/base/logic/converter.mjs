@@ -16,14 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as locateGenerator } from './generator/locator.mjs';
-export { deleteFile, deleteFolder, moveWithGit } from './output/file-operations.mjs';
-export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin } from './formatter.mjs';
-export { default as parseCreationTimestamp } from './sequences.mjs';
-export {
-  isNumber as inputIsNumber,
-  isSignedNumber as inputIsSignedNumber,
-  isSignedDecimalNumber as inputIsSignedDecimalNumber,
-} from './asserts.mjs';
-export { default as getOptionFromArray } from './converter.mjs';
-export { default as httpsGet } from './connect.mjs';
+
+import _ from 'lodash';
+
+/**
+ * @private
+ * Get Option From Array
+ *
+ * @param {Array} array - array
+ * @param {any} option - options
+ * @returns {boolean} true if option is in array and is set to 'true'
+ */
+const optionFromArray = (array, option) => {
+  let optionValue = false;
+  array.forEach(value => {
+    if (_.includes(value, option)) {
+      optionValue = value.split(':')[1];
+    }
+  });
+  optionValue = optionValue === 'true' ? true : optionValue;
+  return optionValue;
+};
+
+export default optionFromArray;
