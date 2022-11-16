@@ -79,7 +79,7 @@ import org.hibernate.type.SqlTypes;
   <%_ if (relationship.relationshipOneToMany) { -%>
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "<%= relationship.otherEntityRelationshipName %>")
   <%_ } else if (relationship.relationshipManyToOne) { -%>
-    @ManyToOne(fetch = FetchType.LAZY<% if (relationship.relationshipRequired) { %>, optional = false<% } %>)
+    @ManyToOne(<% if (relationship.relationshipRequired) { %>optional = false<% } else { %>fetch = FetchType.LAZY<% } %>)
       <%_ if (relationship.relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
       <%_ } _%>
