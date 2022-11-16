@@ -37,7 +37,7 @@ describe(`JHipster ${generator} generator`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
   describe.skip('blueprint support', () => testBlueprintSupport(generator));
