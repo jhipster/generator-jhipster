@@ -148,7 +148,7 @@ runs:
         echo "JHI_PROJECT_VERSION=$JHI_PROJECT_VERSION" >> $GITHUB_ENV
 
         if [[ "${{inputs.jhipster-bom-branch}}" != "release" && "${{inputs.jhipster-bom-branch}}" != "ignore" ]]; then
-          echo "JHI_BOM_VERSION=0.0.0-CICD" >> $GITHUB_ENV
+          echo "JHIPSTER_DEPENDENCIES_VERSION=0.0.0-CICD" >> $GITHUB_ENV
         fi
 
         # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080

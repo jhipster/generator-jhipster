@@ -17,43 +17,16 @@
  * limitations under the License.
  */
 export default {
-  'from-cli': {
-    desc: 'Indicates the command is run from JHipster CLI',
-    type: Boolean,
-    hide: true,
-  },
-  'skip-prettier': {
+  skipPrettier: {
     desc: 'Skip prettier',
     type: Boolean,
     hide: true,
   },
-  'skip-prompts': {
-    desc: 'Skip prompts',
+  useVersionPlaceholders: {
+    desc: 'replace mutable versions with placeholders',
     type: Boolean,
-  },
-  defaults: {
-    desc: 'Use default config',
-    type: Boolean,
-  },
-  reproducible: {
-    desc: 'Force a reproducible project for testing',
-    type: Boolean,
+    env: 'VERSION_PLACEHOLDERS',
+    scope: 'control',
     hide: true,
-  },
-  add: {
-    desc: 'Compose with a generator at current project',
-    type: Boolean,
-  },
-  regenerate: {
-    desc: 'Regenerate a generator at current project',
-    type: Boolean,
-  },
-  configure: {
-    desc: 'Configure the generator',
-    type: Boolean,
-  },
-  'skip-jhipster-dependencies': {
-    desc: "Don't add generator-jhipster and blueprints to package.json.",
-    type: Boolean,
   },
 };

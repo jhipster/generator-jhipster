@@ -71,7 +71,7 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
   });
 
   it('Assert gradle.properties has not snake case properties', () => {
-    assert.noFileContent('gradle.properties', /^(?!.*#).*_.*$/m); // Not comment and contains underscore
+    assert.noFileContent('gradle.properties', /^(?!.*#).*_.*[$|=]/m); // Not comment and contains underscore
   });
 
   it('Assert gradle.properties has the plugin added', () => {

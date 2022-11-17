@@ -21,6 +21,8 @@ import chalk from 'chalk';
 import _ from 'lodash';
 import BaseGenerator from '../base-application/index.mjs';
 
+import gitOptions from '../git/options.mjs';
+import serverOptions from '../server/options.mjs';
 import { cleanupOldFiles, upgradeFiles } from '../cleanup.mjs';
 import prompts from './prompts.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
@@ -76,13 +78,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     this.option('skip-server', {
       desc: 'Skip the server-side application generation',
       type: Boolean,
-    });
-
-    // This adds support for a `--skip-git` flag
-    this.option('skip-git', {
-      desc: 'Skip the git initialization',
-      type: Boolean,
-      defaults: false,
     });
 
     // This adds support for a `--skip-commit-hook` flag
@@ -296,6 +291,14 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       desc: 'Detect line endings',
       type: Boolean,
     });
+
+    this.jhipsterOptions(
+      {
+        ...gitOptions,
+        ...serverOptions,
+      },
+      true
+    );
 
     // Just constructing help, stop here
     if (this.options.help) {
