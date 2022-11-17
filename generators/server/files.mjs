@@ -773,8 +773,7 @@ export const baseServerFiles = {
         generator.cacheProviderHazelcast ||
         generator.cacheProviderInfinispan ||
         generator.cacheProviderMemcached ||
-        generator.cacheProviderRedis ||
-        generator.applicationTypeGateway,
+        generator.cacheProviderRedis,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
