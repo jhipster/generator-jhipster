@@ -10,7 +10,7 @@
     "@popperjs/core": "2.11.6",
     "bootstrap": "5.2.2",
     "bootswatch": "5.2.2",
-    "ngx-cookie-service": "14.0.1",
+    "ngx-cookie-service": "15.0.0",
     "ngx-infinite-scroll": "14.0.1",
     "ngx-webstorage": "10.0.1",
     "rxjs": "7.5.7",
