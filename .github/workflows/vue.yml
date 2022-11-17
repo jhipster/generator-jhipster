@@ -29,8 +29,8 @@ on:
       - 'skip_ci*'
     paths-ignore:
       - 'package*.json'
-      - 'generators/*client/templates/angular/**'
-      - 'generators/*client/templates/react/**'
+      - 'generators/angular/**'
+      - 'generators/react/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:

@@ -29,8 +29,8 @@ on:
       - 'skip_ci*'
     paths-ignore:
       - 'package*.json'
-      - 'generators/*client/templates/react/**'
-      - 'generators/*client/templates/vue/**'
+      - 'generators/*/react/**'
+      - 'generators/*/vue/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:
