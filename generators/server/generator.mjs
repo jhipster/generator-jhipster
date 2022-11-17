@@ -22,6 +22,7 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
+import { exec } from 'child_process';
 
 import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
@@ -59,6 +60,7 @@ import {
   HIBERNATE_VERSION,
   JACKSON_DATABIND_NULLABLE_VERSION,
   JACOCO_VERSION,
+  JAVA_COMPATIBLE_VERSIONS,
 } from '../generator-constants.mjs';
 import statistics from '../statistics.cjs';
 import generatorDefaults from '../generator-defaults.mjs';
@@ -180,10 +182,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
 
-      setupRequiredConfig() {
-        if (!this.jhipsterConfig.applicationType) {
-          this.jhipsterConfig.applicationType = defaultConfig.applicationType;
-        }
+      validateJava() {
+        this.checkJava();
       },
     });
   }
@@ -780,6 +780,30 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       config.prodDatabaseType = databaseType;
       config.enableHibernateCache = false;
     }
+  }
+
+  /**
+   * Check if a supported Java is installed
+   */
+  checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS) {
+    if (this.skipChecks || this.skipServer) return;
+    const done = this.async();
+    exec('java -version', (err, stdout, stderr) => {
+      if (err) {
+        this.warning('Java is not found on your computer.');
+      } else {
+        const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
+        if (!javaVersion.match(new RegExp(`(${javaCompatibleVersions.map(ver => `^${ver}`).join('|')})`))) {
+          const [latest, ...others] = javaCompatibleVersions.concat().reverse();
+          this.warning(
+            `Java ${others.reverse().join(', ')} or ${latest} are not found on your computer. Your Java version is: ${chalk.yellow(
+              javaVersion
+            )}`
+          );
+        }
+      }
+      done();
+    });
   }
 
   _generateSqlSafeName(name) {
