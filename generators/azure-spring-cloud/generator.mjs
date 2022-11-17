@@ -27,6 +27,7 @@ import { JAVA_VERSION, CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../gener
 
 import { cacheTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_AZURE_SPRING_CLOUD } from '../generator-list.mjs';
+import { mavenProfile } from './templates.mjs';
 
 const { MEMCACHED } = cacheTypes;
 
@@ -347,35 +348,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
       addAzureSpringCloudMavenProfile() {
         if (this.abort) return;
         if (this.buildTool === MAVEN) {
-          this.addMavenProfile(
-            'azure',
-            `            <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-undertow</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>spring-cloud-starter-azure-spring-cloud-client</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-config</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-zipkin</artifactId>
-            </dependency>
-        </dependencies>
-        <properties>
-            <!-- default Spring profiles -->
-            <spring.profiles.active>prod,azure\${profile.api-docs}</spring.profiles.active>
-        </properties>`
-          );
+          this.addMavenProfile('azure', mavenProfile());
         }
       },
     };
