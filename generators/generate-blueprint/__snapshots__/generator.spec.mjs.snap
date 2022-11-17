@@ -20,6 +20,18 @@ Object {
   "cli/cli.mjs": Object {
     "stateCleared": "modified",
   },
+  "generators/angular/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/angular/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/angular/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/angular/templates/template-file-angular.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/app/generator.mjs": Object {
     "stateCleared": "modified",
   },

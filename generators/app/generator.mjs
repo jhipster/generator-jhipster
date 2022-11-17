@@ -314,7 +314,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_APP);
@@ -421,19 +421,19 @@ export default class JHipsterAppGenerator extends BaseGenerator {
        * When composing in different tasks the result would be:
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
        */
-      async compose({ control }) {
+      async compose() {
+        const { enableTranslation, skipServer, clientFramework } = this.jhipsterConfigWithDefaults;
         await this.composeWithJHipster(GENERATOR_COMMON);
-        if (!this.jhipsterConfig.skipServer) {
-          await this.composeWithJHipster(GENERATOR_SERVER);
-        }
-        if (this.jhipsterConfig.clientFramework !== CLIENT_FRAMEWORK_NO) {
-          await this.composeWithJHipster(GENERATOR_CLIENT);
-        }
-        if (!this.configOptions.skipI18n) {
+        if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES, {
             regenerate: true,
-            skipPrompts: this.options.withEntities || control.existingProject || this.options.defaults,
           });
+        }
+        if (!skipServer) {
+          await this.composeWithJHipster(GENERATOR_SERVER);
+        }
+        if (clientFramework !== CLIENT_FRAMEWORK_NO) {
+          await this.composeWithJHipster(GENERATOR_CLIENT);
         }
       },
       askForTestOpts: prompts.askForTestOpts,

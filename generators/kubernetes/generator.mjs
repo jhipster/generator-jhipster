@@ -45,7 +45,7 @@ const { MAVEN } = buildToolTypes;
  * @extends {BaseDockerGenerator}
  */
 export default class KubernetesGenerator extends BaseDockerGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_KUBERNETES);
     }

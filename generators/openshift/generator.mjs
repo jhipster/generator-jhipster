@@ -56,7 +56,7 @@ const { EPHEMERAL, PERSISTENT } = StorageTypes;
  * @extends {BaseDockerGenerator}
  */
 export default class OpenshiftGenerator extends BaseDockerGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_OPENSHIFT);
     }

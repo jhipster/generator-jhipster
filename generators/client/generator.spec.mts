@@ -39,6 +39,8 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mjs');
 
+const skipPriorities = ['prompting', 'writing', 'postWriting', 'writingEntities', 'postWritingEntities'];
+
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -50,23 +52,20 @@ describe(`JHipster ${generator} generator`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   describe('composing', () => {
-    const mockedComposedGenerators = ['jhipster:common', 'jhipster:client', 'jhipster:languages', 'jhipster:cypress'];
+    const mockedComposedGenerators = ['jhipster:common', 'jhipster:languages', 'jhipster:cypress'];
 
     describe('with translation disabled', () => {
       let runResult;
       const options = { enableTranslation: false };
-      before(() => {
-        return helpers
-          .create(generatorFile)
+      before(async () => {
+        runResult = await helpers
+          .run(generatorFile)
           .withOptions({
             skipInstall: true,
+            skipPriorities,
             defaultLocalConfig: { ...appDefaultConfig, ...options },
           })
-          .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .withMockedGenerators(mockedComposedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -74,26 +73,23 @@ describe(`JHipster ${generator} generator`, () => {
       it('should compose with jhipster:common', () => {
         assert(runResult.mockedGenerators['jhipster:common'].calledOnce);
       });
-      it('should not compose with jhipster:languages', () => {
-        assert.equal(runResult.mockedGenerators['jhipster:languages'].callCount, 0);
+      it('should compose with jhipster:languages', () => {
+        assert.equal(runResult.mockedGenerators['jhipster:languages'].callCount, 1);
       });
     });
 
     describe('with translation enabled', () => {
       let runResult;
       const options = { enableTranslation: true };
-      before(() => {
-        return helpers
-          .create(generatorFile)
+      before(async () => {
+        runResult = await helpers
+          .run(generatorFile)
           .withOptions({
             skipInstall: true,
+            skipPriorities,
             defaultLocalConfig: { ...appDefaultConfig, ...options },
           })
-          .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .withMockedGenerators(mockedComposedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -109,18 +105,15 @@ describe(`JHipster ${generator} generator`, () => {
     describe('without cypress', () => {
       let runResult;
       const options = { testFrameworks: [] };
-      before(() => {
-        return helpers
-          .create(generatorFile)
+      before(async () => {
+        runResult = await helpers
+          .run(generatorFile)
           .withOptions({
             skipInstall: true,
+            skipPriorities,
             defaultLocalConfig: { ...appDefaultConfig, ...options },
           })
-          .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .withMockedGenerators(mockedComposedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -139,18 +132,15 @@ describe(`JHipster ${generator} generator`, () => {
     describe('with cypress', () => {
       let runResult;
       const options = { testFrameworks: [CYPRESS] };
-      before(() => {
-        return helpers
-          .create(generatorFile)
+      before(async () => {
+        runResult = await helpers
+          .run(generatorFile)
           .withOptions({
             skipInstall: true,
+            skipPriorities,
             defaultLocalConfig: { ...appDefaultConfig, ...options },
           })
-          .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .withMockedGenerators(mockedComposedGenerators);
       });
 
       after(() => runResult.cleanup());

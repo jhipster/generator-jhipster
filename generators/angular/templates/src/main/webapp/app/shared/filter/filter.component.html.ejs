@@ -1,0 +1,12 @@
+<div class="filter-display" *ngIf="filters.hasAnyFilterSet()">
+  <span <%= jhiPrefix %>Translate="entity.filters.set"><%- getWebappTranslation('entity.filters.set') %></span>
+  <fa-icon icon="times" (click)="clearAllFilters()" title="<% if (enableTranslation) { %>{{ 'entity.filters.clearAll' | translate }}<% } else { %><%- getWebappTranslation('entity.filters.clearAll') %><% } %>"></fa-icon>
+  <ul>
+    <ng-container *ngFor="let filterOption of filters.filterOptions">
+      <li *ngFor="let value of filterOption.values">
+        <span>{{ filterOption.name }}:</span> {{ value }}
+        <fa-icon icon="times" (click)="clearFilter(filterOption.name, value)" title="<% if (enableTranslation) { %>{{ 'entity.filters.clear' | translate }}<% } else { %><%- getWebappTranslation('entity.filters.clear') %><% } %>"></fa-icon>
+      </li>
+    </ng-container>
+  </ul>
+</div>

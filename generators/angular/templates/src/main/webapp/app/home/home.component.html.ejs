@@ -1,0 +1,64 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<div class="row">
+  <div class="col-md-3">
+    <span class="hipster img-fluid rounded"></span>
+  </div>
+
+  <div class="col-md-9">
+    <h1 class="display-4"><span <%= jhiPrefix %>Translate="home.title"><%- getWebappTranslation('home.title') %></span> (<%= humanizedBaseName %>)</h1>
+
+    <p class="lead" <%= jhiPrefix %>Translate="home.subtitle"><%- getWebappTranslation('home.subtitle') %></p>
+
+    <div [ngSwitch]="account !== null">
+      <div class="alert alert-success" *ngSwitchCase="true">
+        <span id="home-logged-message" *ngIf="account" <%= jhiPrefix %>Translate="home.logged.message"
+          [translateValues]="{ username: account.login }"><%- getWebappTranslation('home.logged.message', { username: '{{ account.login }}' }) %></span>
+      </div>
+
+      <div class="alert alert-warning" *ngSwitchCase="false">
+        <span <%= jhiPrefix %>Translate="global.messages.info.authenticated.prefix"><%- getWebappTranslation('global.messages.info.authenticated.prefix') %></span>
+        <a class="alert-link" (click)="login()" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link"><%- getWebappTranslation('global.messages.info.authenticated.link') %></a><span <%= jhiPrefix %>Translate="global.messages.info.authenticated.suffix"><%- getWebappTranslation('global.messages.info.authenticated.suffix') %></span>
+      </div>
+      <%_ if (generateUserManagement) { _%>
+
+      <div class="alert alert-warning" *ngSwitchCase="false">
+        <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount"><%- getWebappTranslation('global.messages.info.register.noaccount') %></span>&nbsp;
+        <a class="alert-link" routerLink="account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link"><%- getWebappTranslation('global.messages.info.register.link') %></a>
+      </div>
+      <%_ } _%>
+    </div>
+
+    <p <%= jhiPrefix %>Translate="home.question">
+      <%- getWebappTranslation('home.question') %>
+    </p>
+
+    <ul>
+      <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.homepage"><%- getWebappTranslation('home.link.homepage') %></a></li>
+      <li><a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.stackoverflow"><%- getWebappTranslation('home.link.stackoverflow') %></a></li>
+      <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.bugtracker"><%- getWebappTranslation('home.link.bugtracker') %></a></li>
+      <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.chat"><%- getWebappTranslation('home.link.chat') %></a></li>
+      <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.follow"><%- getWebappTranslation('home.link.follow') %></a></li>
+    </ul>
+
+    <p>
+      <span <%= jhiPrefix %>Translate="home.like"><%- getWebappTranslation('home.like') %></span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.github"><%- getWebappTranslation('home.github') %></a>!
+    </p>
+  </div>
+</div>

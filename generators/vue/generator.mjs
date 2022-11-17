@@ -20,7 +20,7 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
-import { GENERATOR_VUE, GENERATOR_CLIENT } from '../generator-list.mjs';
+import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
 import { writeEntityFiles, postWriteEntityFiles } from './entity-files-vue.mjs';
 import { writeFiles, writeEntitiesFiles, cleanup } from './files-vue.mjs';
 
@@ -32,11 +32,26 @@ const TYPE_LONG = CommonDBTypes.LONG;
  * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
  */
 export default class VueGenerator extends BaseApplicationGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_VUE);
     }
+  }
+
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composing() {
+        const { enableTranslation } = this.jhipsterConfigWithDefaults;
+        if (enableTranslation) {
+          await this.composeWithJHipster(GENERATOR_LANGUAGES);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
   }
 
   get loading() {

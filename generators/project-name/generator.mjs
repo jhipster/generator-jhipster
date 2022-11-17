@@ -43,7 +43,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
       (this.jhipsterConfig.baseName !== undefined && this.config.existed);
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
     }

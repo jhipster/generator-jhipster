@@ -53,7 +53,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
     this.loadRuntimeOptions();
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {

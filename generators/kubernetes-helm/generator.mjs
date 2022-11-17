@@ -45,7 +45,7 @@ const { KAFKA } = messageBrokerTypes;
  * @extends {BaseDockerGenerator}
  */
 export default class KubernetesHelmGenerator extends BaseDockerGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_KUBERNETES_HELM);
     }

@@ -19,22 +19,21 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import jest from 'jest-mock';
 
-import { replaceReactTranslations } from './transform-react.mjs';
+import { createTranslationReplacer } from './transform-react.mjs';
 
 describe('React transform', () => {
   describe('replaceReactTranslations', () => {
-    let generator;
-
+    let replaceReactTranslations;
     beforeEach(() => {
       let value = 0;
-      generator = {
-        _getClientTranslation: jest.fn().mockImplementation((key, interpolation = '') => {
+      replaceReactTranslations = createTranslationReplacer(
+        jest.fn().mockImplementation((key, interpolation = '') => {
           if (interpolation) {
             interpolation = `-${JSON.stringify(interpolation)}`;
           }
           return `${key}${interpolation}-translated-value-${value++}`;
-        }),
-      };
+        })
+      );
     });
 
     describe('with translation disabled', () => {
@@ -45,7 +44,7 @@ describe('React transform', () => {
           const body = `
 <Translate contentKey="home.subtitle">This is your homepage</Translate>
 `;
-          expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 home.subtitle-translated-value-0
 "
@@ -58,7 +57,7 @@ home.subtitle-translated-value-0
 Active sessions for [<strong>{account.login}</strong>]
 </Translate>
 `;
-          expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-value-0
 "
@@ -71,7 +70,7 @@ sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-val
 Active sessions for [<strong>{account.login}</strong>]
 </Translate>
 `;
-          expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-value-0
 "
@@ -82,7 +81,7 @@ sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-val
           const body = `
 translate('global')
 `;
-          expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 \\"global-translated-value-0\\"
 "
@@ -96,7 +95,7 @@ translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
   dynamic: exec(),
 })
 `;
-          expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 \\"global-{\\"min\\":20,\\"max\\":50,\\"pattern\\":\\"^[a-zA-Z0-9]*\\",\\"anotherPattern\\":\\"^[a-zA-Z0-9]*\\",\\"dynamic\\":\\"{exec()}\\"}-translated-value-0\\"
 "
@@ -110,7 +109,7 @@ translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
   dynamic: exec(),
 })}
 `;
-          expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 \\"global-{\\"min\\":20,\\"max\\":50,\\"pattern\\":\\"^[a-zA-Z0-9]*\\",\\"anotherPattern\\":\\"^[a-zA-Z0-9]*\\",\\"dynamic\\":\\"{exec()}\\"}-translated-value-0\\"
 "
@@ -209,7 +208,7 @@ export const Home = () => {
 
 export default Home;
 `;
-          expect(replaceReactTranslations.call(generator, body, extension)).toMatchInlineSnapshot(`
+          expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 import React from 'react';
 import { Link } from 'react-router-dom';
