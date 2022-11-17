@@ -30,6 +30,7 @@ import statistics from '../statistics.cjs';
 import dockerPrompts from '../base-docker/docker-prompts.mjs';
 import { CLIENT_MAIN_SRC_DIR, MAIN_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { applicationTypes, buildToolTypes, cacheTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
+import { mavenProdProfileContent, mavenPluginConfiguration, mavenProfileContent } from './templates.mjs';
 
 const cacheProviders = cacheTypes;
 const { MEMCACHED } = cacheTypes;
@@ -816,15 +817,9 @@ export default class GaeGenerator extends BaseGenerator {
       addMavenPlugin() {
         if (this.abort) return;
         if (this.buildTool === MAVEN) {
-          this.render('pom-plugin.xml.ejs', rendered => {
-            this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.2.0', rendered.trim());
-          });
-          this.render('pom-profile.xml.ejs', rendered => {
-            this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
-          });
-          this.render('pom-gae-build-profile.xml.ejs', rendered => {
-            this.addMavenProfile('gae', `            ${rendered.trim()}`);
-          });
+          this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.2.0', mavenPluginConfiguration(this));
+          this.addMavenProfile('prod-gae', mavenProdProfileContent(this));
+          this.addMavenProfile('gae', mavenProfileContent(this));
         }
       },
     };

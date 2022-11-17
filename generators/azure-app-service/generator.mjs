@@ -31,6 +31,7 @@ import { JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 
 import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
+import { mavenPluginConfiguration } from './templates.mjs';
 
 const { defaultConfig } = generatorDefaults;
 const { MAVEN } = buildToolTypes;
@@ -398,14 +399,15 @@ which is free for the first 30 days`);
 
       addAzureAppServiceMavenPlugin() {
         if (this.abort) return;
-        const done = this.async();
         this.log(chalk.bold('\nAdding Azure Web App Maven plugin'));
         if (this.buildTool === MAVEN) {
-          this.render('pom-plugin.xml.ejs', rendered => {
-            this.addMavenPlugin('com.microsoft.azure', 'azure-webapp-maven-plugin', AZURE_WEBAPP_MAVEN_PLUGIN_VERSION, rendered);
-          });
+          this.addMavenPlugin(
+            'com.microsoft.azure',
+            'azure-webapp-maven-plugin',
+            AZURE_WEBAPP_MAVEN_PLUGIN_VERSION,
+            mavenPluginConfiguration(this)
+          );
         }
-        done();
       },
 
       checkAzureApplicationInsightsExtension() {

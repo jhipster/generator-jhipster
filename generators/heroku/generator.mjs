@@ -38,6 +38,7 @@ import {
   searchEngineTypes,
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
+import { mavenProfileContent } from './templates.mjs';
 
 const cacheProviderOptions = cacheTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
@@ -603,9 +604,7 @@ export default class HerokuGenerator extends BaseGenerator {
       addHerokuMavenProfile() {
         if (this.abort) return;
         if (this.buildTool === MAVEN) {
-          this.render('pom-profile.xml.ejs', profile => {
-            this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
-          });
+          this.addMavenProfile('heroku', mavenProfileContent(this));
         }
       },
     });
