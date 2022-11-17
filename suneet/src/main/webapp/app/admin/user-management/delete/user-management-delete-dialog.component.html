@@ -1,0 +1,25 @@
+<form *ngIf="user" name="deleteForm" (ngSubmit)="confirmDelete(user.login!)">
+  <div class="modal-header">
+    <h4 class="modal-title" myPrefixTranslate="entity.delete.title">Confirm delete operation</h4>
+
+    <button type="button" class="btn-close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <my-prefix-alert-error></my-prefix-alert-error>
+
+    <p myPrefixTranslate="userManagement.delete.question" [translateValues]="{ login: user.login }">
+      Are you sure you want to delete user {{ user.login }}?
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="ban"></fa-icon>&nbsp;<span myPrefixTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button type="submit" class="btn btn-danger">
+      <fa-icon icon="times"></fa-icon>&nbsp;<span myPrefixTranslate="entity.action.delete">Delete</span>
+    </button>
+  </div>
+</form>

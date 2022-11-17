@@ -1,0 +1,15 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: samplemongokafka
+services:
+  mongodb:
+    extends:
+      file: ./mongodb.yml
+      service: mongodb
+  kafka:
+    extends:
+      file: ./kafka.yml
+      service: kafka
+  zookeeper:
+    extends:
+      file: ./kafka.yml
+      service: zookeeper

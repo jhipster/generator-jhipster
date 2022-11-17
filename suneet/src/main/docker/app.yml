@@ -1,0 +1,38 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: samplemongokafka
+services:
+  app:
+    image: samplemongokafka
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - SPRING_DATA_MONGODB_URI=mongodb://samplemongokafka-mongodb:27017
+      - SPRING_DATA_MONGODB_DATABASE=sampleMongoKafka
+      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+    ports:
+      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      mongodb:
+        condition: service_healthy
+  mongodb:
+    extends:
+      file: ./mongodb.yml
+      service: mongodb
+  kafka:
+    extends:
+      file: ./kafka.yml
+      service: kafka
+  zookeeper:
+    extends:
+      file: ./kafka.yml
+      service: zookeeper

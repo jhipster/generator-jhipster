@@ -1,0 +1,12 @@
+<div class="filter-display" *ngIf="filters.hasAnyFilterSet()">
+  <span myPrefixTranslate="entity.filters.set">Following filters are set</span>
+  <fa-icon icon="times" (click)="clearAllFilters()" title="{{ 'entity.filters.clearAll' | translate }}"></fa-icon>
+  <ul>
+    <ng-container *ngFor="let filterOption of filters.filterOptions">
+      <li *ngFor="let value of filterOption.values">
+        <span>{{ filterOption.name }}:</span> {{ value }}
+        <fa-icon icon="times" (click)="clearFilter(filterOption.name, value)" title="{{ 'entity.filters.clear' | translate }}"></fa-icon>
+      </li>
+    </ng-container>
+  </ul>
+</div>

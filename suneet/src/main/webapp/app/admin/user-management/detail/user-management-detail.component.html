@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="user">
+      <h2>
+        <span myPrefixTranslate="userManagement.detail.title">User</span> [<strong>{{ user.login }}</strong
+        >]
+      </h2>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span myPrefixTranslate="userManagement.login">Login</span></dt>
+        <dd>
+          <span>{{ user.login }}</span>
+          <span *ngIf="user.activated" class="badge bg-success" myPrefixTranslate="userManagement.activated">Activated</span>
+          <span *ngIf="!user.activated" class="badge bg-danger" myPrefixTranslate="userManagement.deactivated">Deactivated</span>
+        </dd>
+
+        <dt><span myPrefixTranslate="userManagement.firstName">First name</span></dt>
+        <dd>{{ user.firstName }}</dd>
+
+        <dt><span myPrefixTranslate="userManagement.lastName">Last name</span></dt>
+        <dd>{{ user.lastName }}</dd>
+
+        <dt><span myPrefixTranslate="userManagement.email">Email</span></dt>
+        <dd>{{ user.email }}</dd>
+
+        <dt><span myPrefixTranslate="userManagement.langKey">Language</span></dt>
+        <dd>{{ user.langKey }}</dd>
+
+        <dt><span myPrefixTranslate="userManagement.createdBy">Created by</span></dt>
+        <dd>{{ user.createdBy }}</dd>
+
+        <dt><span myPrefixTranslate="userManagement.createdDate">Created date</span></dt>
+        <dd>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
+
+        <dt><span myPrefixTranslate="userManagement.lastModifiedBy">Modified by</span></dt>
+        <dd>{{ user.lastModifiedBy }}</dd>
+
+        <dt><span myPrefixTranslate="userManagement.lastModifiedDate">Modified date</span></dt>
+        <dd>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
+
+        <dt><span myPrefixTranslate="userManagement.profiles">Profiles</span></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <li *ngFor="let authority of user.authorities">
+              <span class="badge bg-info">{{ authority }}</span>
+            </li>
+          </ul>
+        </dd>
+      </dl>
+
+      <button type="submit" routerLink="../../" class="btn btn-info">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span myPrefixTranslate="entity.action.back">Back</span>
+      </button>
+    </div>
+  </div>
+</div>

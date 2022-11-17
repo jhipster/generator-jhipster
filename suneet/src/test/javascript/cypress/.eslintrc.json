@@ -1,0 +1,12 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["cypress", "@typescript-eslint"],
+  "env": {
+    "cypress/globals": true
+  },
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:cypress/recommended"],
+  "rules": {
+    "@typescript-eslint/no-namespace": ["error", { "allowDeclarations": true }]
+  }
+}
