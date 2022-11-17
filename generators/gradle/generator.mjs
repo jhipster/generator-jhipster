@@ -41,7 +41,7 @@ export default class GradleGenerator extends BaseApplicationGenerator {
     });
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
       await this.composeWithBlueprints(GENERATOR_GRADLE);

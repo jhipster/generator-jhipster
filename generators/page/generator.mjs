@@ -61,7 +61,7 @@ export default class PageGenerator extends BaseApplicationGenerator {
     this.loadRuntimeOptions();
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_PAGE);

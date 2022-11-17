@@ -51,7 +51,7 @@ export default class DatabaseChangelogGenerator extends BaseApplication<SpringBo
     this.configOptions.oldSharedEntities = this.configOptions.oldSharedEntities || [];
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_LIQUIBASE);

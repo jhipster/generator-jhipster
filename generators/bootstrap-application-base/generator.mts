@@ -45,7 +45,7 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
     this.loadStoredAppOptions();
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
   }

@@ -40,7 +40,7 @@ const exec = childProcess.exec;
 
 /* eslint-disable consistent-return */
 export default class CloudfoundryGenerator extends BaseGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLOUDFOUNDRY);
     }

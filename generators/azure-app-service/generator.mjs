@@ -67,7 +67,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
     this.azureSpringCloudSkipInsights = this.options.skipInsights;
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_AZURE_APP_SERVICE);
     }
