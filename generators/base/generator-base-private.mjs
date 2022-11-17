@@ -28,7 +28,7 @@ import https from 'https';
 import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 import { packageJson } from '../../lib/index.mjs';
-import { getJavadoc, renderContent } from '../utils.mjs';
+import { getJavadoc } from '../utils.mjs';
 import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
@@ -410,24 +410,6 @@ export default class PrivateBase extends Generator {
    */
   stripMargin(content) {
     return content.replace(/^[ ]*\|/gm, '');
-  }
-
-  /**
-   * @private
-   * Utility function to render a template into a string
-   *
-   * @param {string} source - source
-   * @param {function} callback - callback to take the rendered template as a string
-   * @param {*} generator - reference to the generator
-   * @param {*} options - options object
-   * @param {*} context - context
-   */
-  render(source, callback, generator, options = {}, context) {
-    const _this = generator || this;
-    const _context = context || _this;
-    renderContent(source, _this, _context, options, res => {
-      callback(res);
-    });
   }
 
   /**
