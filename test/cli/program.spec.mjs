@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-expressions, no-console */
 
-const expect = require('chai').expect;
+import { expect } from 'chai';
 
-const { createProgram } = require('../../cli/program.cjs');
-const { prepareTempDir } = require('../utils/utils.cjs');
+import { createProgram } from '../../cli/program.mjs';
+import { prepareTempDir } from '../utils/utils.mjs';
 
 describe('jhipster program', () => {
   let cleanup;

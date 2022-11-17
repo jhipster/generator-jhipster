@@ -1,10 +1,14 @@
 /* eslint-disable no-unused-expressions, no-console */
 
-const path = require('path');
-const sinon = require('sinon');
+import path from 'path';
+import sinon from 'sinon';
+import { fileURLToPath } from 'url';
 
-const { prepareTempDir } = require('../utils/utils.cjs');
-const { runJHipster } = require('../../cli/program.cjs');
+import { prepareTempDir } from '../utils/utils.mjs';
+import { runJHipster } from '../../cli/program.mjs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe('jhipster cli with jdl fork', () => {
   let cleanup;
@@ -34,9 +38,7 @@ describe('jhipster cli with jdl fork', () => {
       sandbox.restore();
     });
 
-    it('should succeed', () => {
-      return runJHipster();
-    });
+    it('should succeed', async () => runJHipster());
   });
 
   describe('generates entities', () => {
@@ -65,9 +67,7 @@ describe('jhipster cli with jdl fork', () => {
       sandbox.restore();
     });
 
-    it('should succeed', async () => {
-      return runJHipster();
-    });
+    it('should succeed', async () => runJHipster());
   });
 
   describe('generates an application with deployments', () => {
@@ -90,9 +90,6 @@ describe('jhipster cli with jdl fork', () => {
       sandbox.restore();
     });
 
-    it('should succeed', function () {
-      this.timeout(60000);
-      return runJHipster();
-    });
+    it('should succeed', async () => runJHipster());
   });
 });

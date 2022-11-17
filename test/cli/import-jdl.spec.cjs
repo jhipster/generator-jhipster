@@ -77,7 +77,7 @@ const loadImportJdl = options => {
     },
     ...options,
   };
-  return proxyquire('../../cli/import-jdl.cjs', options);
+  return proxyquire('../../dist/cli/import-jdl.cjs', options);
 };
 
 const defaultAddedOptions = {};

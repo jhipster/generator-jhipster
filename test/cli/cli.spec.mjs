@@ -1,19 +1,24 @@
 /* eslint-disable no-unused-expressions, no-console */
 
-const assert = require('assert');
-const expect = require('chai').expect;
-const { exec, fork } = require('child_process');
-const path = require('path');
-const sinon = require('sinon');
-const Environment = require('yeoman-environment');
-const helpers = require('yeoman-test');
+import assert from 'assert';
+import { expect } from 'chai';
+import { exec, fork } from 'child_process';
+import path from 'path';
+import sinon from 'sinon';
+import Environment from 'yeoman-environment';
+import helpers from 'yeoman-test';
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
 
-const { createProgram, buildJHipster } = require('../../cli/program.cjs');
-const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils.cjs');
-const { logger } = require('../../cli/utils.cjs');
-const { getTemplatePath } = require('../support/index.cjs');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
+import { createProgram, buildJHipster } from '../../cli/program.mjs';
+import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from '../utils/utils.mjs';
+import { logger } from '../../cli/utils.mjs';
+import { getTemplatePath } from '../support/index.cjs';
 
-const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.cjs'));
+const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'dist', 'cli', 'cli.cjs'));
 
 const mockCli = (opts = {}) => {
   const program = buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
