@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.mjs');
+const generatorFile = join(__dirname, 'index.mts');
 
 const { REACT: clientFramework } = clientFrameworkTypes;
 const { CLIENT_MAIN_SRC_DIR } = constants;
@@ -63,7 +63,7 @@ describe(`JHipster ${clientFramework} generator`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
   describe('blueprint support', () => testBlueprintSupport(generator));

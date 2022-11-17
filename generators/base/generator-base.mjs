@@ -25,7 +25,6 @@ import shelljs from 'shelljs';
 import semver from 'semver';
 import { exec } from 'child_process';
 import os from 'os';
-import normalize from 'normalize-path';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -36,7 +35,7 @@ import constants from '../generator-constants.cjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.cjs';
 import generatorDefaults from '../generator-defaults.cjs';
-import commonOptions from '../options.mjs';
+import commonOptions from './options.mjs';
 import detectLanguage from '../languages/detect-language.mjs';
 import { formatDateForChangelog } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
@@ -80,7 +79,6 @@ const {
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
-const { kebabCase } = _;
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
@@ -2316,7 +2314,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    if (process.env.VERSION_PLACEHOLDERS === 'true') {
+    if (this.sharedData.getControl().useVersionPlaceholders) {
       dest.nodeVersion = 'NODE_VERSION';
     } else {
       dest.nodeVersion = NODE_VERSION;
@@ -2324,7 +2322,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
-    dest.projectVersion = process.env.JHI_PROJECT_VERSION || '0.0.1-SNAPSHOT';
     dest.applicationType = config.applicationType;
     dest.reactive = config.reactive;
     dest.jhiPrefix = config.jhiPrefix;
@@ -2808,34 +2805,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.config.set(this.options.localConfig);
       delete this.options.localConfig;
     }
-  }
-
-  /**
-   * @experimental
-   * Load options from an object.
-   * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./base/api.mjs').JHipsterOptions} [options] - Object containing options.
-   */
-  jhipsterOptions(options = {}) {
-    options = _.cloneDeep(options);
-    Object.entries(options).forEach(([optionName, optionDesc]) => {
-      this.option(kebabCase(optionName), optionDesc);
-      if (!optionDesc.scope) return;
-      const optionValue = this.options[optionName];
-      if (optionValue !== undefined) {
-        if (optionDesc.scope === 'storage') {
-          this.config.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'blueprint') {
-          this.blueprintStorage.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'runtime') {
-          this.configOptions[optionName] = optionValue;
-        } else if (optionDesc.scope === 'generator') {
-          this[optionName] = optionValue;
-        } else {
-          throw new Error(`Scope ${optionDesc.scope} not supported`);
-        }
-        delete this.options[optionName];
-      }
-    });
   }
 }

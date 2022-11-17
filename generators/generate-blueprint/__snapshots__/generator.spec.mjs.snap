@@ -509,6 +509,18 @@ Object {
   "generators/project-name/templates/template-file-project-name.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/react/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/react/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/react/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/react/templates/template-file-react.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/server/generator.mjs": Object {
     "stateCleared": "modified",
   },

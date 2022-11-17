@@ -54,16 +54,12 @@ fi
 
 echo "::group::Check Angular"
 git -c color.ui=always diff --exit-code @~1 -- \
-  'generators/client/**/angular/**' \
-  'generators/client/**/*-angular*' \
   'generators/angular' \
   || ANGULAR=true WORKFLOW_ANGULAR=true
 echo "::endgroup::"
 
 echo "::group::Check React"
 git -c color.ui=always diff --exit-code @~1 -- \
-  'generators/client/**/react/**' \
-  'generators/client/**/*-react*' \
   'generators/react' \
   || REACT=true WORKFLOW_REACT=true
 echo "::endgroup::"
@@ -76,11 +72,8 @@ echo "::endgroup::"
 
 echo "::group::Check Client Common"
 git -c color.ui=always diff --exit-code @~1 -- \
+  'generators/bootstrap-application-client' \
   'generators/client/**' \
-  ':^*-angular*' \
-  ':^**/angular/**' \
-  ':^*-react*' \
-  ':^**/react/**' \
   || CLIENT_COMMON=true
 echo "::endgroup::"
 
@@ -97,7 +90,6 @@ echo "::endgroup::"
 echo "::group::Check Server"
 git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap-application-server' \
-  'generators/docker' \
   'generators/gradle' \
   'generators/maven' \
   'generators/server' \
@@ -142,6 +134,7 @@ echo "::endgroup::"
 echo "::group::Check Workspaces"
 git -c color.ui=always diff --exit-code @~1 -- \
   'generators/workspaces' \
+  'generators/docker' \
   'generators/docker-compose' \
   || WORKSPACES=true ANY=true
 echo "::endgroup::"

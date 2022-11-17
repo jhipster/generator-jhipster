@@ -18,6 +18,7 @@
  */
 /* eslint-disable consistent-return */
 import chalk from 'chalk';
+import { JHipsterOptions } from '../base/api.mjs';
 
 import BaseGenerator from '../base/index.mjs';
 import { GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
@@ -36,7 +37,7 @@ export default class InitGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
-    this.jhipsterOptions(generatorOptions);
+    this.jhipsterOptions(generatorOptions as JHipsterOptions);
   }
 
   async beforeQueue() {

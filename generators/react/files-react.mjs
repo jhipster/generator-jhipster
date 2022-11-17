@@ -18,7 +18,7 @@
  */
 import { createTranslationReplacer } from './transform-react.mjs';
 
-import { clientApplicationBlock, clientSrcBlock } from './utils.mjs';
+import { clientApplicationBlock, clientSrcBlock } from '../client/utils.mjs';
 
 export const files = {
   common: [
@@ -308,7 +308,7 @@ export const files = {
   ],
 };
 
-export function cleanup({ application }) {
+export function cleanupFiles({ application }) {
   if (!application.clientFrameworkReact) return;
 
   if (this.isJhipsterVersionLessThan('7.4.0') && application.enableI18nRTL) {
@@ -338,7 +338,6 @@ export async function writeFiles({ application, control }) {
 
   await this.writeFiles({
     sections: files,
-    rootTemplatesPath: 'react',
     transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
     context: application,
   });

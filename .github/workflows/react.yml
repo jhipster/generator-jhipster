@@ -30,8 +30,8 @@ on:
       - 'spring-boot-3.0-m4'
     paths-ignore:
       - 'package*.json'
-      - 'generators/*client/templates/angular/**'
-      - 'generators/*client/templates/vue/**'
+      - 'generators/angular/**'
+      - 'generators/vue/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:

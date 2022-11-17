@@ -37,7 +37,7 @@
             <url>https://repo.spring.io/milestone</url>
         </repository>
 <%_ } _%>
-<%_ if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
+<%_ if (jhipsterDependenciesVersion.endsWith('-SNAPSHOT')) { _%>
         <repository>
             <id>ossrh-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
@@ -99,7 +99,7 @@
         <profile.e2e />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version><%= JHIPSTER_DEPENDENCIES_VERSION %></jhipster-dependencies.version>
+        <jhipster-dependencies.version><%= jhipsterDependenciesVersion %></jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version><%= SPRING_BOOT_VERSION %></spring-boot.version>
