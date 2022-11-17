@@ -23,7 +23,7 @@ import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../gener
 
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-react.mjs';
 import { writeFiles, cleanupFiles } from './files-react.mjs';
-import { prepareReactEntity } from '../../utils/entity.mjs';
+import { prepareEntity } from './application/entities/index.mjs';
 
 /**
  * @class
@@ -82,7 +82,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       react({ application, entity }) {
-        prepareReactEntity({ entity, application });
+        prepareEntity({ entity, application });
       },
     });
   }
