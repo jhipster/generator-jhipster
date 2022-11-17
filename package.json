@@ -79,7 +79,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "7.6.0",
-    "@types/lodash": "4.14.188",
+    "@types/lodash": "4.14.189",
     "@types/yeoman-generator": "5.2.11",
     "@types/yeoman-test": "4.0.3",
     "aws-sdk": "2.1253.0",
