@@ -124,7 +124,7 @@ _%>
     <%_ if (reactive) { _%>@Override<%_ } _%>
     public <%- returnType %> handleAnyException(Throwable ex, <%= requestClass %> request
     ) {
-        ProblemDetailWithCause pdCause = wrapAndCustemizeProblem(ex, request);
+        ProblemDetailWithCause pdCause = wrapAndCustomizeProblem(ex, request);
         return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex, request), HttpStatusCode.valueOf(pdCause.getStatus()), request);
     }
 
@@ -132,7 +132,7 @@ _%>
     @Override
     protected <%- returnType %> handleExceptionInternal(
             Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, <%= requestEntityRequestClass %> request) {
-        body = body == null ? wrapAndCustemizeProblem((Throwable) ex, (<%= requestClass %>) request) : body;
+        body = body == null ? wrapAndCustomizeProblem((Throwable) ex, (<%= requestClass %>) request) : body;
     <%_ if (reactive) { _%>
         if (request.getResponse().isCommitted()) {
             return Mono.error(ex);
@@ -143,8 +143,8 @@ _%>
     <%_ } _%>
     }
 
-    protected ProblemDetailWithCause wrapAndCustemizeProblem(Throwable ex, <%= requestClass %> request) {
-        return custemizeProblem(getProblemDetailWithCause(ex), ex, request);
+    protected ProblemDetailWithCause wrapAndCustomizeProblem(Throwable ex, <%= requestClass %> request) {
+        return customizeProblem(getProblemDetailWithCause(ex), ex, request);
     }
 
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
@@ -161,7 +161,7 @@ _%>
         return ProblemDetailWithCauseBuilder.instance().withStatus(toStatus(ex).value()).build();
     }
 
-    protected ProblemDetailWithCause custemizeProblem(ProblemDetailWithCause problem, Throwable err, <%= requestClass %> request) {
+    protected ProblemDetailWithCause customizeProblem(ProblemDetailWithCause problem, Throwable err, <%= requestClass %> request) {
         if (problem.getStatus() <= 0) problem.setStatus(toStatus(err));
 
         if (problem.getType() == null || problem.getType().equals(URI.create("about:blank"))) problem.setType(getMappedType(err));
@@ -174,7 +174,7 @@ _%>
 
         if (problem.getDetail() == null) {
             // higher precedence to cause
-        	problem.setDetail(getCustemizedErrorDetails(err));
+        	problem.setDetail(getCustomizedErrorDetails(err));
         }
 
         if (problem.getProperties() == null || !problem.getProperties().containsKey(MESSAGE_KEY))
@@ -196,7 +196,7 @@ _%>
     }
 
     private String extractTitle(Throwable err, int statusCode) {
-        return getCustemizedTitle(err) != null ? getCustemizedTitle(err) : extractTitleForResponseStatus(err, statusCode);
+        return getCustomizedTitle(err) != null ? getCustomizedTitle(err) : extractTitleForResponseStatus(err, statusCode);
     }
 
     private List<FieldErrorVM> getFieldErrors(<% if (reactive) { %>WebExchangeBindException<% } else { %>MethodArgumentNotValidException<% } %> ex) {
@@ -215,8 +215,7 @@ _%>
 
     private String extractTitleForResponseStatus(Throwable err, int statusCode) {
         ResponseStatus specialStatus = extractResponseStatus(err);
-        String title = specialStatus == null ? HttpStatus.valueOf(statusCode).getReasonPhrase() : specialStatus.reason();
-        return title;
+        return specialStatus == null ? HttpStatus.valueOf(statusCode).getReasonPhrase() : specialStatus.reason();
     }
 
 <%_ if (!reactive) { _%>
@@ -234,7 +233,7 @@ _%>
                 .ofNullable(getMappedStatus(throwable))
                 .orElse(Optional
                         .ofNullable(resolveResponseStatus(throwable))
-                        .map(response -> response.value())
+                        .map(ResponseStatus::value)
                         .orElse(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
@@ -268,13 +267,13 @@ _%>
         return null;
     }
 
-    private String getCustemizedTitle(Throwable err) {
+    private String getCustomizedTitle(Throwable err) {
         if(err instanceof MethodArgumentNotValidException exp)
             return "Method argument not valid";
         return null;
     }
 
-    private String getCustemizedErrorDetails(Throwable err) {
+    private String getCustomizedErrorDetails(Throwable err) {
     	Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
     	if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
 	        if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
@@ -321,7 +320,7 @@ _%>
 
     public Optional<ProblemDetailWithCause> buildCause(final Throwable throwable, <%= requestClass %> request) {
         if(throwable != null && isCasualChainEnabled()) {
-            return Optional.of(custemizeProblem(getProblemDetailWithCause(throwable), throwable, request));
+            return Optional.of(customizeProblem(getProblemDetailWithCause(throwable), throwable, request));
         }
         return Optional.ofNullable(null);
     }
