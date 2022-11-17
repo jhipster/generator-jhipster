@@ -17,9 +17,16 @@
  * limitations under the License.
  */
 export default {
-  skipGit: {
-    desc: 'Skip git repository initialization',
-    type: Boolean,
+  jhipsterDependenciesVersion: {
+    desc: 'jhipster-dependencies version to use, this option is not persisted',
+    type: String,
+    env: 'JHIPSTER_DEPENDENCIES_VERSION',
+    scope: 'generator',
+  },
+  projectVersion: {
+    desc: 'project version to use, this option is not persisted',
+    type: String,
+    env: 'JHI_PROJECT_VERSION',
     scope: 'generator',
   },
 };

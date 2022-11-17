@@ -87,6 +87,11 @@ export default class PrivateBase extends Generator {
    */
   constructor(args, options, features) {
     super(args, options, features);
+    if (!this.options.sharedData) {
+      // Make sure sharedData is loaded.
+      // Tests that instantiates the Generator direcly 'options.sharedData' may be missing.
+      this.options.sharedData = this.env.sharedOptions.sharedData;
+    }
     // expose lodash to templates
     this._ = _;
   }

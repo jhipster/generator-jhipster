@@ -28,11 +28,18 @@ import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
 
 import { PRIORITY_NAMES, PRIORITY_PREFIX } from './priorities.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
+import baseOptions from './options.mjs';
 
-import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures, EditFileCallback, CascatedEditFileCallback } from './api.mjs';
+import type {
+  JHipsterGeneratorOptions,
+  JHipsterGeneratorFeatures,
+  EditFileCallback,
+  CascatedEditFileCallback,
+  JHipsterOptions,
+} from './api.mjs';
 import type { BaseTaskGroup } from './tasks.mjs';
 
-const { merge } = _;
+const { merge, kebabCase } = _;
 const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
   PRIORITY_NAMES;
 
@@ -71,17 +78,21 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
 
   static END = asPriority(END);
 
-  #sharedData;
+  readonly sharedData!: SharedData<any>;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, { tasksMatchingPriority: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
+
+    this.sharedData = this.createSharedData();
+
+    this.jhipsterOptions(baseOptions as JHipsterOptions);
   }
 
   /**
    * Get arguments for the priority
    */
   getArgsForPriority(priorityName: string) {
-    const control = this.sharedData.getData();
+    const control = this.sharedData.getControl();
     if (priorityName === POST_WRITING || priorityName === PREPARING) {
       const source = this.sharedData.getSource();
       return [{ control, source }];
@@ -94,6 +105,45 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    */
   delegateTasksToBlueprint(tasksGetter: () => BaseTaskGroup<this>): BaseTaskGroup<this> {
     return this.delegateToBlueprint ? {} : tasksGetter();
+  }
+
+  /**
+   * Load options from an object.
+   * When composing, we need to load options from others generators, externalising options allow to easily load them.
+   * @param {import('./api.mjs').JHipsterOptions} options - Object containing options.
+   * @param {boolean} [common=false] - skip generator scoped options.
+   */
+  jhipsterOptions(options: JHipsterOptions, common = false) {
+    options = _.cloneDeep(options);
+    Object.entries(options).forEach(([optionName, optionDesc]) => {
+      this.option(kebabCase(optionName), optionDesc);
+      if (!optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
+      let optionValue;
+      // Hidden options are test options, which doesn't rely on commoander for options parsing.
+      // We must parse environment variables manually
+      if (optionDesc.hide && optionDesc.env && process.env[optionDesc.env]) {
+        optionValue = process.env[optionDesc.env];
+      } else {
+        optionValue = this.options[optionName];
+      }
+      if (optionValue !== undefined) {
+        if (optionDesc.scope === 'storage') {
+          this.config.set(optionName, optionValue);
+        } else if (optionDesc.scope === 'blueprint') {
+          this.blueprintStorage.set(optionName, optionValue);
+        } else if (optionDesc.scope === 'control') {
+          this.sharedData.getControl()[optionName] = optionValue;
+        } else if (optionDesc.scope === 'generator') {
+          this[optionName] = optionValue;
+        } else {
+          throw new Error(`Scope ${optionDesc.scope} not supported`);
+        }
+        if (optionDesc.scope !== 'generator') {
+          // generator scoped options may be duplicated
+          delete this.options[optionName];
+        }
+      }
+    });
   }
 
   /**
@@ -160,34 +210,13 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   }
 
   /**
-   * Shared Data
-   */
-  get sharedData() {
-    if (!this.#sharedData) {
-      const destinationPath = this.destinationPath();
-      const dirname = basename(destinationPath);
-      const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
-      const applicationId = `${prefix}-${dirname}`;
-      if (this.options.sharedData.applications === undefined) {
-        this.options.sharedData.applications = {};
-      }
-      const sharedApplications = this.options.sharedData.applications;
-      if (!sharedApplications[applicationId]) {
-        sharedApplications[applicationId] = {};
-      }
-      this.#sharedData = new SharedData(sharedApplications[applicationId]);
-    }
-    return this.#sharedData;
-  }
-
-  /**
    * Shallow clone or convert dependencies to placeholder if needed.
    */
   prepareDependencies(
     map: Record<string, string>,
     valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`
   ): Record<string, string> {
-    if (process.env.VERSION_PLACEHOLDERS === 'true') {
+    if (this.sharedData.getControl().useVersionPlaceholders) {
       return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
     }
     return {
@@ -214,5 +243,23 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
       ...process.env,
       LANG: 'en',
     });
+  }
+
+  /**
+   * @private
+   */
+  createSharedData() {
+    const destinationPath = this.destinationPath();
+    const dirname = basename(destinationPath);
+    const prefix = createHash('shake256', { outputLength: 1 }).update(destinationPath, 'utf8').digest('hex');
+    const applicationId = `${prefix}-${dirname}`;
+    if (this.options.sharedData.applications === undefined) {
+      this.options.sharedData.applications = {};
+    }
+    const sharedApplications = this.options.sharedData.applications;
+    if (!sharedApplications[applicationId]) {
+      sharedApplications[applicationId] = {};
+    }
+    return new SharedData(sharedApplications[applicationId]);
   }
 }

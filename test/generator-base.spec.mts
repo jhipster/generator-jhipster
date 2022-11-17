@@ -264,7 +264,7 @@ describe('Generator Base', () => {
     beforeEach(() => {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       oldCwd = testInTempDir(() => {});
-      base = new Base({ ...options, env: Environment.createEnv() });
+      base = new Base({ ...options, sharedData: {}, env: Environment.createEnv() });
     });
     afterEach(() => {
       revertTempDir(oldCwd);
