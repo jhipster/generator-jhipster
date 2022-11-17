@@ -60,7 +60,6 @@ import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
 import { locateGenerator, parseCreationTimestamp } from './logic/index.mjs';
-import { isBuiltInUserConfiguration, isUsingBuiltInAuthorityConfiguration } from '../entities/logic/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -216,34 +215,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getPossibleDependencies() {
     return [];
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a built-in Entity.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is built-in.
-   */
-  isBuiltInEntity(entityName) {
-    return this.isBuiltInUser(entityName) || this.isBuiltInAuthority(entityName);
-  }
-
-  /**
-   * @private
-   * Verify if the application is using built-in User.
-   * @return {boolean} true if the User is built-in.
-   */
-  isUsingBuiltInUser() {
-    return isBuiltInUserConfiguration(this.jhipsterConfig);
-  }
-
-  /**
-   * @private
-   * Verify if the application is using built-in Authority.
-   * @return {boolean} true if the Authority is built-in.
-   */
-  isUsingBuiltInAuthority() {
-    return isUsingBuiltInAuthorityConfiguration(this.jhipsterConfig);
   }
 
   /**

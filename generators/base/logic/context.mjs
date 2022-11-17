@@ -24,4 +24,4 @@ const generatorOrContext = (generator, context) => {
   return firstOrSecond(generator || context);
 };
 
-export { generatorOrContext, firstOrSecond };
+export default generatorOrContext;

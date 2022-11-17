@@ -20,12 +20,7 @@ export { default as locateGenerator } from './generator/locator.mjs';
 export { deleteFile, deleteFolder, moveWithGit } from './output/file-operations.mjs';
 export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin } from './formatter.mjs';
 export { parseCreationTimestamp, resetFakerSeed } from './sequences.mjs';
-export {
-  isNumber as inputIsNumber,
-  isSignedNumber as inputIsSignedNumber,
-  isSignedDecimalNumber as inputIsSignedDecimalNumber,
-} from './asserts.mjs';
 export { default as getOptionFromArray } from './converter.mjs';
 export { default as httpsGet } from './connect.mjs';
 export { renderContent, writeContent } from './output/renderer.mjs';
-export { generatorOrContext, firstOrSecond } from './context.mjs';
+export { default as generatorOrContext } from './context.mjs';

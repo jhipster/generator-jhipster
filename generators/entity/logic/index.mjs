@@ -17,6 +17,9 @@
  * limitations under the License.
  */
 // eslint-disable-next-line import/prefer-default-export
-export { default as entityIsAuthority } from './entity/authority-checker.mjs';
-export { default as entityIsUser } from './entity/user-checker.mjs';
+export {
+  isNumber as inputIsNumber,
+  isSignedNumber as inputIsSignedNumber,
+  isSignedDecimalNumber as inputIsSignedDecimalNumber,
+} from './asserts.mjs';
 export { default as getEnumInfo } from './enum.mjs';

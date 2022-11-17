@@ -31,7 +31,7 @@ import generatorConstants from '../generator-constants.cjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
-import { deleteFile, deleteFolder, firstOrSecond, generatorOrContext, renderContent, writeContent } from './logic/index.mjs';
+import { deleteFile, deleteFolder, generatorOrContext, renderContent, writeContent } from './logic/index.mjs';
 
 const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
@@ -191,7 +191,7 @@ export default class PrivateBase extends Generator {
       this.debug(`File ${destination} ignored`);
       return Promise.resolved();
     }
-    const _context = firstOrSecond(context, _this);
+    const _context = context || _this;
     return writeContent(_this, _context, customDestination, options, source);
   }
 
