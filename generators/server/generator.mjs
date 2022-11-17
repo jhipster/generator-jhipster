@@ -22,7 +22,6 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
-import { exec } from 'child_process';
 
 import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
@@ -182,8 +181,10 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
 
-      validateJava() {
-        this.checkJava();
+      async validateJava() {
+        if (!this.options.skipChecks) {
+          await this.checkJava();
+        }
       },
     });
   }
@@ -785,13 +786,10 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /**
    * Check if a supported Java is installed
    */
-  checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS) {
-    if (this.skipChecks || this.skipServer) return;
-    const done = this.async();
-    exec('java -version', (err, stdout, stderr) => {
-      if (err) {
-        this.warning('Java is not found on your computer.');
-      } else {
+  async checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS) {
+    try {
+      const { exitCode, stderr } = await this.spawnCommand('java', ['-version'], { stdio: 'pipe' });
+      if (exitCode === 0 && stderr) {
         const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
         if (!javaVersion.match(new RegExp(`(${javaCompatibleVersions.map(ver => `^${ver}`).join('|')})`))) {
           const [latest, ...others] = javaCompatibleVersions.concat().reverse();
@@ -801,9 +799,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             )}`
           );
         }
+      } else {
+        this.warning('Error parsing Java version.');
       }
-      done();
-    });
+    } catch (error) {
+      this.warning('Java is not found on your computer.');
+    }
   }
 
   _generateSqlSafeName(name) {
