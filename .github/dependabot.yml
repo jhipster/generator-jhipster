@@ -16,7 +16,7 @@ updates:
         versions: ['>=6']
 
   - package-ecosystem: 'npm'
-    directory: '/generators/client/templates/angular/'
+    directory: '/generators/angular/templates/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
@@ -55,7 +55,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'npm'
-    directory: '/generators/client/templates/react/'
+    directory: '/generators/react/templates/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'

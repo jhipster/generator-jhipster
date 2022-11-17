@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { createTranslationReplacer } from './transform-react.mjs';
-import { clientApplicationBlock } from './utils.mjs';
+import { clientApplicationBlock } from '../client/utils.mjs';
 
 export const reactFiles = {
   client: [
@@ -51,9 +51,7 @@ export const reactFiles = {
   ],
 };
 
-export async function writeEntitiesReactFiles({ application, entities, control }) {
-  if (!application.clientFrameworkReact) return;
-
+export async function writeEntitiesFiles({ application, entities, control }) {
   if (!application.enableTranslation) {
     await control.loadClientTranslations?.();
   }
@@ -61,11 +59,14 @@ export async function writeEntitiesReactFiles({ application, entities, control }
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     await this.writeFiles({
       sections: reactFiles,
-      rootTemplatesPath: 'entity/react',
       transform: !application.enableTranslation ? [createTranslationReplacer(control.getWebappTranslation)] : undefined,
       context: { ...application, ...entity },
     });
+  }
+}
 
+export async function postWriteEntitiesFiles({ application, entities }) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     if (!entity.embedded) {
       const { entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName } = entity;
 
@@ -84,8 +85,7 @@ export async function writeEntitiesReactFiles({ application, entities, control }
   }
 }
 
-export function cleanupEntitiesReact({ application, entities }) {
-  if (!application.clientFrameworkReact) return;
+export function cleanupEntitiesFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     const { entityFolderName, entityFileName } = entity;
 

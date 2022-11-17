@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.mjs');
+const generatorFile = join(__dirname, 'index.mts');
 
 const { REACT: clientFramework } = clientFrameworkTypes;
 const { CLIENT_MAIN_SRC_DIR } = constants;

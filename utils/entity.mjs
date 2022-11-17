@@ -790,9 +790,3 @@ export function preparePostEntityClientDerivedProperties(entity) {
     entity.tsKeyType = getTypescriptKeyType(entity.primaryKey.type);
   }
 }
-
-export function prepareReactEntity({ entity, application }) {
-  entity.entityReactState = application.applicationTypeMonolith
-    ? entity.entityInstance
-    : `${application.lowercaseBaseName}.${entity.entityInstance}`;
-}
