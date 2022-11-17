@@ -772,13 +772,13 @@ export default class GaeGenerator extends BaseGenerator {
 
         this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
-        this.template('app.yaml.ejs', `${MAIN_DIR}/appengine/app.yaml`);
+        this.writeFile('app.yaml.ejs', `${MAIN_DIR}/appengine/app.yaml`);
         if (this.applicationType === GATEWAY) {
-          this.template('dispatch.yaml.ejs', `${MAIN_DIR}/appengine/dispatch.yaml`);
+          this.writeFile('dispatch.yaml.ejs', `${MAIN_DIR}/appengine/dispatch.yaml`);
         }
-        this.template('application-prod-gae.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
+        this.writeFile('application-prod-gae.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
         if (this.buildTool === 'gradle') {
-          this.template('gae.gradle.ejs', 'gradle/gae.gradle');
+          this.writeFile('gae.gradle.ejs', 'gradle/gae.gradle');
         }
       },
 

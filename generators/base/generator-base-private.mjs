@@ -414,35 +414,6 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * Utility function to copy and process templates.
-   *
-   * @param {string} source - source
-   * @param {string} destination - destination
-   * @param {*} generator - reference to the generator
-   * @param {*} options - options object
-   * @param {*} context - context
-   */
-  template(source, destination, generator, options = {}, context) {
-    const _this = generator || this;
-    const _context = context || _this;
-    const customDestination = _this.destinationPath(destination);
-    if (!customDestination) {
-      this.debug(`File ${destination} ignored`);
-      return Promise.resolved();
-    }
-    return renderContent(source, _this, _context, options)
-      .then(res => {
-        _this.fs.write(customDestination, res);
-        return customDestination;
-      })
-      .catch(error => {
-        this.warning(source);
-        throw error;
-      });
-  }
-
-  /**
-   * @private
    * Utility function to render a template into a string
    *
    * @param {string} source - source

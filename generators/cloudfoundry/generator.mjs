@@ -95,8 +95,8 @@ export default class CloudfoundryGenerator extends BaseGenerator {
       copyCloudFoundryFiles() {
         if (this.abort) return;
         this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
-        this.template('manifest.yml.ejs', 'deploy/cloudfoundry/manifest.yml');
-        this.template('application-cloudfoundry.yml.ejs', `${SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
+        this.writeFile('manifest.yml.ejs', 'deploy/cloudfoundry/manifest.yml');
+        this.writeFile('application-cloudfoundry.yml.ejs', `${SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
       },
 
       checkInstallation() {

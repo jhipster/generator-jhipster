@@ -512,9 +512,9 @@ which is free for the first 30 days`);
       writeFiles() {
         if (this.abort) return;
         this.log(chalk.bold('\nCreating Azure App Service deployment files'));
-        this.template('application-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
+        this.writeFile('application-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
         if (this.azureAppServiceDeploymentType === 'github-action') {
-          this.template('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
+          this.writeFile('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
         }
       },
     };

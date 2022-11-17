@@ -22,6 +22,9 @@ import { createHash } from 'crypto';
 import _ from 'lodash';
 import { simpleGit } from 'simple-git';
 
+import type { CopyOptions } from 'mem-fs-editor';
+import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
+
 import SharedData from './shared-data.mjs';
 
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
@@ -110,8 +113,8 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   /**
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./api.mjs').JHipsterOptions} options - Object containing options.
-   * @param {boolean} [common=false] - skip generator scoped options.
+   * @param options - Object containing options.
+   * @param common - skip generator scoped options.
    */
   jhipsterOptions(options: JHipsterOptions, common = false) {
     options = _.cloneDeep(options);
@@ -144,6 +147,25 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
         }
       }
     });
+  }
+
+  /**
+   * Utility function to write file.
+   *
+   * @param source
+   * @param destination - destination
+   * @param data - template data
+   * @param options - options passed to ejs render
+   * @param copyOptions
+   */
+  writeFile(source: string, destination: string, data: TemplateData = this, options: TemplateOptions, copyOptions: CopyOptions) {
+    options = {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      root: (options?.root ?? this.jhipsterTemplatesFolders ?? this.templatePath()) as any,
+      context: this,
+      ...options,
+    };
+    return this.renderTemplate(source, destination, data, options, copyOptions);
   }
 
   /**
