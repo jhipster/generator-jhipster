@@ -226,6 +226,14 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
+   * Check if Java is installed
+   */
+  checkJava() {
+    checkJavaCompliant(this);
+  }
+
+  /**
+   * @private
    * Check if Node is installed
    */
   checkNode() {

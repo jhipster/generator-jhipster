@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-import path from 'path';
-
 /**
  * @private
  * Parse creationTimestamp option

@@ -24,5 +24,5 @@ export { default as getOptionFromArray } from './converter.mjs';
 export { default as httpsGet } from './connect.mjs';
 export { renderContent, writeContent } from './output/renderer.mjs';
 export { default as generatorOrContext } from './context.mjs';
-export { default as logDebug } from './debug.mjs';
+export { default as logDebug } from './logging.mjs';
 export { appendYeomanOptionsFromGeneratorOptions, generatorSkipChecks } from './options.mjs';

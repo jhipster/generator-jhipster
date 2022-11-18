@@ -18,3 +18,4 @@
  */
 // eslint-disable-next-line import/prefer-default-export
 export { getJavadoc as javadoc, getApiDescription } from './formatting.mjs';
+export { default as checkJavaCompliant } from './asserts.mjs';

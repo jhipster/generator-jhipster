@@ -2433,7 +2433,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {...string} subpath : the path to fetch from
    */
   fetchFromInstalledJHipster(...subpath) {
-    return path.join(__dirname, '..', ...subpath);
+    if (subpath) {
+      return path.join(__dirname, '..', ...subpath);
+    }
+    return subpath;
   }
 
   /**
