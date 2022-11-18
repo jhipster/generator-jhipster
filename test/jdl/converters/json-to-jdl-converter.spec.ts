@@ -68,7 +68,6 @@ describe('JSONToJDLConverter', () => {
     languages []
     messageBroker false
     nativeLanguage en
-    otherModules [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
     packageName com.mycompany.myapp
     prodDatabaseType mysql
     reactive false
@@ -122,7 +121,6 @@ describe('JSONToJDLConverter', () => {
     languages []
     messageBroker false
     nativeLanguage en
-    otherModules []
     packageName com.mycompany.myapp
     prodDatabaseType mysql
     reactive false
@@ -257,7 +255,6 @@ paginate Country with pager
     languages []
     messageBroker false
     nativeLanguage en
-    otherModules []
     packageName com.mycompany.app1
     prodDatabaseType mysql
     reactive false
@@ -295,7 +292,6 @@ application {
     languages []
     messageBroker false
     nativeLanguage en
-    otherModules []
     packageName com.mycompany.app2
     prodDatabaseType mysql
     reactive false
@@ -333,7 +329,6 @@ application {
     languages []
     messageBroker false
     nativeLanguage en
-    otherModules []
     packageName com.mycompany.app3
     prodDatabaseType mysql
     reactive false

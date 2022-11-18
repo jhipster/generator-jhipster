@@ -494,23 +494,11 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
       this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints });
     }
 
-    // OtherModules is used to create package.json dependencies.
-    let otherModules = this.jhipsterConfig.otherModules || [];
     if (blueprints && blueprints.length > 0) {
       blueprints.forEach(blueprint => {
         blueprint.version = this._findBlueprintVersion(blueprint.name) || blueprint.version;
       });
-
-      // Remove potential previous value to avoid duplicates
-      otherModules = otherModules.filter(module => blueprints.findIndex(blueprint => blueprint.name === module.name) === -1);
-      otherModules.push(...blueprints);
-    }
-
-    if (blueprints.length > 0) {
       this.jhipsterConfig.blueprints = blueprints;
-    }
-    if (otherModules.length > 0) {
-      this.jhipsterConfig.otherModules = otherModules;
     }
 
     if (!this.options.skipChecks) {

@@ -206,7 +206,6 @@ export default class extends BaseGenerator {
   get writing() {
     return {
       async writing() {
-        if (this.shouldSkipFiles()) return;
         await this.writeFiles({
           sections: files,
           context: this.application,
@@ -251,7 +250,7 @@ export default class extends BaseGenerator {
   get postWriting() {
     return {
       packageJson() {
-        if (this.shouldSkipFiles() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
         this.packageJson.merge({
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
@@ -293,7 +292,7 @@ export default class extends BaseGenerator {
         });
       },
       addCliToPackageJson() {
-        if (this.shouldSkipFiles() || !this.jhipsterConfig.cli || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        if (!this.jhipsterConfig.cli || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { baseName, cliName = `jhipster-${baseName}` } = this.application;
         this.packageJson.merge({
           bin: {
@@ -303,7 +302,7 @@ export default class extends BaseGenerator {
         });
       },
       addGeneratorJHipsterDependency() {
-        if (this.shouldSkipFiles() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
         if (this.jhipsterConfig.dynamic) {
           this.packageJson.merge({
