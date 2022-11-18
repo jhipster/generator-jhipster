@@ -222,7 +222,7 @@ public class SecurityConfiguration {
             // See https://github.com/spring-projects/spring-security/issues/5766
             .addFilterAt(new CookieCsrfFilter(), SecurityWebFiltersOrder.REACTOR_CONTEXT)
 <%_ } else { _%>
-                .disable()
+                .disable())
 <%_ } _%>
 <%_ if (!skipClient) { _%>
             .addFilterAfter(new SpaWebFilter(), SecurityWebFiltersOrder.HTTPS_REDIRECT)
