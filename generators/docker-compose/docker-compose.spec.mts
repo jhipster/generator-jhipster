@@ -533,7 +533,12 @@ describe('JHipster Docker Compose Sub Generator', () => {
         .run();
     });
     it('should match files snapshot', function () {
-      expect(runResult.getSnapshot()).toMatchSnapshot();
+      expect(runResult.getSnapshot()).toMatchSnapshot({
+        'realm-config/jhipster-realm.json': {
+          contents: expect.any(String),
+          stateCleared: 'modified',
+        },
+      });
     });
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);
