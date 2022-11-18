@@ -70,10 +70,10 @@
     "fork-ts-checker-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['fork-ts-checker-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= jhipsterVersion %>",
-    <%_ otherModules.forEach(module => { _%>
-    "<%= module.name %>": "<%= module.version %>",
-    <%_ });
-} _%>
+  <%_ blueprints.forEach(blueprint => { _%>
+    "<%= blueprint.name %>": "<%= blueprint.version %>",
+  <%_ }); _%>
+<%_ } _%>
     "html-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['html-webpack-plugin'] %>",
     "jest": "<%= this.dependabotPackageJson.devDependencies['jest'] %>",
     "jest-environment-jsdom": "<%= this.dependabotPackageJson.devDependencies['jest-environment-jsdom'] %>",

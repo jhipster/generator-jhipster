@@ -27,7 +27,6 @@
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
-    "otherModules": [{ "name": "generator-jhipster-vuejs" }, { "name": "generator-jhipster-dotnetcore" }],
     "enableTranslation": false,
     "clientPackageManager": "npm",
     "skipClient": true,
