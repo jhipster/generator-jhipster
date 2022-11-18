@@ -31,4 +31,8 @@ const appendYeomanOptionsFromGeneratorOptions = (generator, options) => {
   };
 };
 
-export default appendYeomanOptionsFromGeneratorOptions;
+const generatorSkipChecks = generator => {
+  return generator.skipChecks;
+};
+
+export { generatorSkipChecks, appendYeomanOptionsFromGeneratorOptions };

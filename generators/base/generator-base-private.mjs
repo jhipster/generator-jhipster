@@ -31,7 +31,8 @@ import generatorConstants from '../generator-constants.cjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
-import { deleteFile, deleteFolder, generatorOrContext, renderContent, writeContent } from './logic/index.mjs';
+import { deleteFile, deleteFolder, generatorOrContext, logDebug, renderContent, writeContent } from './logic/index.mjs';
+import { generatorSkipChecks } from './logic/options.mjs';
 
 const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
@@ -220,15 +221,7 @@ export default class PrivateBase extends Generator {
    * @param {string[]} args - arguments to print
    */
   debug(msg, ...args) {
-    const formattedMsg = `${chalk.yellow.bold('DEBUG!')} ${msg}`;
-    if ((this.configOptions && this.configOptions.isDebugEnabled) || (this.options && this.options.debug)) {
-      this.log(formattedMsg);
-      args.forEach(arg => this.log(arg));
-    }
-    if (this._debug && this._debug.enabled) {
-      this._debug(formattedMsg);
-      args.forEach(arg => this._debug(arg));
-    }
+    logDebug(this, msg, ...args);
   }
 
   /**
@@ -236,7 +229,7 @@ export default class PrivateBase extends Generator {
    * Check if Java is installed
    */
   checkJava() {
-    if (this.skipChecks || this.skipServer) return;
+    if (generatorSkipChecks(this) || this.skipServer) return;
     const done = this.async();
     exec('java -version', (err, stdout, stderr) => {
       if (err) {
