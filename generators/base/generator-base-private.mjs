@@ -61,10 +61,6 @@ const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL } = databaseTypes;
 const { MAVEN } = buildToolTypes;
 
 /**
- * @typedef {import('./api.mjs').JHipsterGeneratorOptions} JHipsterGeneratorOptions
- */
-
-/**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
  */
 
@@ -225,15 +221,7 @@ export default class PrivateBase extends Generator {
    * @param {string[]} args - arguments to print
    */
   debug(msg, ...args) {
-    const formattedMsg = `${chalk.yellow.bold('DEBUG!')} ${msg}`;
-    if ((this.configOptions && this.configOptions.isDebugEnabled) || (this.options && this.options.debug)) {
-      this.log(formattedMsg);
-      args.forEach(arg => this.log(arg));
-    }
-    if (this._debug && this._debug.enabled) {
-      this._debug(formattedMsg);
-      args.forEach(arg => this._debug(arg));
-    }
+    logDebug(this, msg, ...args);
   }
 
   /**

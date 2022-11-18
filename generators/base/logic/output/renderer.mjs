@@ -19,7 +19,7 @@
 import path from 'path';
 import ejs from 'ejs';
 // eslint-disable-next-line  import/no-named-default
-import { default as appendYeomanOptionsFromGeneratorOptions } from '../options.mjs';
+import { appendYeomanOptionsFromGeneratorOptions } from '../options.mjs';
 import { resetFakerSeed } from '../sequences.mjs';
 
 const appendCallBackToTemplate = (generator, cb, promise, source) => {
