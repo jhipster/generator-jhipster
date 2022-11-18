@@ -21,7 +21,6 @@ import _ from 'lodash';
 import Generator from 'yeoman-generator';
 import chalk from 'chalk';
 import semver from 'semver';
-import { exec } from 'child_process';
 
 import { databaseTypes, buildToolTypes, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
 
@@ -32,9 +31,9 @@ import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
 import { deleteFile, deleteFolder, generatorOrContext, logDebug, renderContent, writeContent } from './logic/index.mjs';
-import { generatorSkipChecks } from './logic/options.mjs';
+import { checkJavaCompliant } from '../server/logic/index.mjs';
 
-const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
+const { SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
 const dbTypes = fieldTypes;
 const { REQUIRED } = validations;
@@ -229,24 +228,7 @@ export default class PrivateBase extends Generator {
    * Check if Java is installed
    */
   checkJava() {
-    if (generatorSkipChecks(this) || this.skipServer) return;
-    const done = this.async();
-    exec('java -version', (err, stdout, stderr) => {
-      if (err) {
-        this.warning('Java is not found on your computer.');
-      } else {
-        const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-        if (!javaVersion.match(new RegExp(`(${JAVA_COMPATIBLE_VERSIONS.map(ver => `^${ver}`).join('|')})`))) {
-          const [latest, ...others] = JAVA_COMPATIBLE_VERSIONS.concat().reverse();
-          this.warning(
-            `Java ${others.reverse().join(', ')} or ${latest} are not found on your computer. Your Java version is: ${chalk.yellow(
-              javaVersion
-            )}`
-          );
-        }
-      }
-      done();
-    });
+    checkJavaCompliant(this);
   }
 
   /**

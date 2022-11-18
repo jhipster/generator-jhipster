@@ -19,6 +19,8 @@
 import constants from './generator-constants.cjs';
 
 export const {
+  JAVA_COMPATIBLE_VERSIONS,
+
   GENERATOR_JHIPSTER,
   JHIPSTER_CONFIG_DIR,
   NODE_VERSION,

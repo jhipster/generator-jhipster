@@ -63,7 +63,7 @@ const printUsingInternalDebugger = (context, message, ...args) => {
   args.forEach(arg => context._debug(arg));
 };
 
-const debug = (context, message, ...args) => {
+const logging = (context, message, ...args) => {
   const formattedMsg = formatDebugMessageHeader(message);
   if (jhipsterDebugOptionsChecker(context)) {
     printMessageUsingGeneratorLogger(context, formattedMsg, ...args);
@@ -73,4 +73,4 @@ const debug = (context, message, ...args) => {
   }
 };
 
-export default debug;
+export default logging;
