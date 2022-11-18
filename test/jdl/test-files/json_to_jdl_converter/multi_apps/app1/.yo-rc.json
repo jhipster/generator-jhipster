@@ -26,7 +26,6 @@
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
-    "otherModules": [],
     "enableTranslation": false,
     "clientPackageManager": "npm",
     "skipClient": true,

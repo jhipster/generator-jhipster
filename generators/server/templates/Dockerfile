@@ -18,12 +18,12 @@ LABEL ALIAS=keycloak
 
 FROM mysql:8.0.31
 
-FROM mariadb:10.9.4
+FROM mariadb:10.10.2
 
 FROM mongo:6.0.3
 LABEL ALIAS=mongodb
 
-FROM couchbase/server:7.1.2
+FROM couchbase/server:7.1.3
 LABEL ALIAS=couchbase
 
 FROM cassandra:3.11.13
@@ -51,7 +51,7 @@ LABEL ALIAS=sonar
 
 FROM consul:1.14.0
 
-FROM prom/prometheus:v2.40.1
+FROM prom/prometheus:v2.40.2
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.24.0

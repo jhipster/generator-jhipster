@@ -2526,7 +2526,6 @@ webapp-prod:
     \\"jhiPrefix\\": \\"jhi\\",
     \\"languages\\": [\\"en\\"],
     \\"nativeLanguage\\": \\"en\\",
-    \\"otherModules\\": [],
     \\"prodDatabaseType\\": \\"sql\\",
     \\"promptValues\\": {
       \\"nativeLanguage\\": \\"en\\"

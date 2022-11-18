@@ -98,8 +98,8 @@
     "eslint-webpack-plugin": "<%= this.dependabotPackageJson.devDependencies['eslint-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ otherModules.forEach(module => { _%>
-    "<%= module.name %>": "<%= module.version %>",
+  <%_ blueprints.forEach(blueprint => { _%>
+    "<%= blueprint.name %>": "<%= blueprint.version %>",
   <%_ }); _%>
 <%_ } _%>
     "jest": "<%= this.dependabotPackageJson.devDependencies['jest'] %>",

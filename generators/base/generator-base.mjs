@@ -1035,102 +1035,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @private
-   * Register a module configuration to .jhipster/modules/jhi-hooks.json
-   *
-   * @param {string} npmPackageName - npm package name of the generator
-   * @param {string} hookFor - from which JHipster generator this should be hooked ( 'entity' or 'app')
-   * @param {string} hookType - where to hook this at the generator stage ( 'pre' or 'post')
-   * @param {string} callbackSubGenerator[optional] - sub generator to invoke, if this is not given the module's main generator will be called, i.e app
-   * @param {string} description[optional] - description of the generator
-   */
-  registerModule(npmPackageName, hookFor, hookType, callbackSubGenerator, description) {
-    try {
-      let modules;
-      let error;
-      let duplicate;
-      const moduleName = _.startCase(npmPackageName.replace(`${GENERATOR_JHIPSTER}-`, ''));
-      const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
-      const generatorCallback = `${generatorName}:${callbackSubGenerator || 'app'}`;
-      const moduleConfig = {
-        name: `${moduleName} generator`,
-        npmPackageName,
-        description: description || `A JHipster module to generate ${moduleName}`,
-        hookFor,
-        hookType,
-        generatorCallback,
-      };
-      try {
-        // if file is not present, we got an empty list, no exception
-        // TODO 7.0 this.destinationPath(MODULES_HOOK_FILE);
-        modules = this.fs.readJSON(MODULES_HOOK_FILE, []);
-        duplicate = _.findIndex(modules, moduleConfig) !== -1;
-      } catch (err) {
-        error = true;
-        this.log(chalk.red('The JHipster module configuration file could not be read!'));
-        this.debug('Error:', err);
-      }
-      if (!error && !duplicate) {
-        modules.push(moduleConfig);
-        this.fs.writeJSON(MODULES_HOOK_FILE, modules, null, 4);
-      }
-    } catch (err) {
-      this.log(`\n${chalk.bold.red('Could not add jhipster module configuration')}`);
-      this.debug('Error:', err);
-    }
-  }
-
-  /**
-   * @private
-   * get the module hooks config json
-   */
-  getModuleHooks() {
-    let modulesConfig = [];
-    try {
-      if (shelljs.test('-f', MODULES_HOOK_FILE)) {
-        modulesConfig = this.fs.readJSON(MODULES_HOOK_FILE);
-      }
-    } catch (err) {
-      this.log(chalk.red('The module configuration file could not be read!'));
-    }
-
-    return modulesConfig;
-  }
-
-  /**
-   * @private
-   * Call all the module hooks with the given options.
-   * @param {string} hookFor - "app" or "entity"
-   * @param {string} hookType - "pre" or "post"
-   * @param {any} options - the options to pass to the hooks
-   * @param {function} cb - callback to trigger at the end
-   */
-  callHooks(hookFor, hookType, options, cb) {
-    const modules = this.getModuleHooks();
-    // run through all module hooks, which matches the hookFor and hookType
-    modules.forEach(module => {
-      this.debug('Composing module with config:', module);
-      if (module.hookFor === hookFor && module.hookType === hookType) {
-        // compose with the modules callback generator
-        const hook = module.generatorCallback.split(':')[1];
-        try {
-          this.composeExternalModule(module.npmPackageName, hook || 'app', options);
-        } catch (e) {
-          this.log(
-            chalk.red('Could not compose module ') +
-              chalk.bold.yellow(module.npmPackageName) +
-              chalk.red('. \nMake sure you have installed the module with ') +
-              chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`)
-          );
-          this.debug('ERROR:', e);
-        }
-      }
-    });
-    this.debug('calling callback');
-    cb && cb();
-  }
-
-  /**
    * Compose with a jhipster generator using default jhipster config.
    * @param {string} generator - jhipster generator.
    * @param {object} [args] - args to pass
@@ -1182,27 +1086,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   dependsOnJHipster(generator, args, options) {
     return this.composeWithJHipster(generator, args, options, { immediately: true });
-  }
-
-  /**
-   * @private
-   * Compose an external generator with Yeoman.
-   * @param {string} npmPackageName - package name
-   * @param {string} subGen - sub generator name
-   * @param {any} options - options to pass
-   * @return {object} the composed generator
-   */
-  composeExternalModule(npmPackageName, subGen, options = {}) {
-    const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
-    const generatorCallback = `${generatorName}:${subGen}`;
-    if (!this.env.isPackageRegistered(generatorName)) {
-      this.env.lookup({ filterPaths: true, packagePatterns: npmPackageName });
-    }
-    if (!this.env.get(generatorCallback)) {
-      throw new Error(`Generator ${generatorCallback} isn't registered.`);
-    }
-    options.configOptions = options.configOptions || this.configOptions;
-    return this.composeWith(generatorCallback, options, true);
   }
 
   /**
@@ -2266,7 +2149,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.skipServer = config.skipServer;
     dest.skipCommitHook = config.skipCommitHook;
-    dest.otherModules = config.otherModules || [];
+    dest.blueprints = config.blueprints || [];
     dest.skipClient = config.skipClient;
     dest.prettierJava = config.prettierJava;
     dest.pages = config.pages;
@@ -2692,24 +2575,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadDependabotDependencies(packageJson) {
     const { dependencies, devDependencies } = this.fs.readJSON(packageJson);
     _.merge(this.configOptions.nodeDependencies, dependencies, devDependencies);
-  }
-
-  /**
-   * @experimental
-   * Check if modular generators should be composed.
-   * @return {Boolean}
-   */
-  shouldComposeModular() {
-    return !this.options.add && !this.options.regenerate;
-  }
-
-  /**
-   * @experimental
-   * Check if modular generators should skip write files.
-   * @return {Boolean}
-   */
-  shouldSkipFiles() {
-    return this.options.configure;
   }
 
   /**
