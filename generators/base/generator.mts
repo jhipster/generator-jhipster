@@ -158,14 +158,10 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
    * @param options - options passed to ejs render
    * @param copyOptions
    */
-  writeFile(source: string, destination: string, data: TemplateData = this, options: TemplateOptions, copyOptions: CopyOptions) {
-    options = {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      root: (options?.root ?? this.jhipsterTemplatesFolders ?? this.templatePath()) as any,
-      context: this,
-      ...options,
-    };
-    return this.renderTemplate(source, destination, data, options, copyOptions);
+  writeFile(source: string, destination: string, data: TemplateData = this, options?: TemplateOptions, copyOptions?: CopyOptions) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
+    return this.renderTemplate(source, destination, data, { root, ...options }, copyOptions);
   }
 
   /**
