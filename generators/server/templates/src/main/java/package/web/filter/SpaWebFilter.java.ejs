@@ -31,7 +31,7 @@ public class SpaWebFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-        if (!path.startsWith("/api") && !path.startsWith("/management")<% if (authenticationTypeOauth2) { %> && !path.startsWith("/login") !path.startsWith("/oauth2")<% } %>
+        if (!path.startsWith("/api") && !path.startsWith("/management")<% if (authenticationTypeOauth2) { %> && !path.startsWith("/login") && !path.startsWith("/oauth2")<% } %>
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
             && !path.startsWith("/services") && !path.startsWith("/v3/api-docs")
 <%_ } _%>
