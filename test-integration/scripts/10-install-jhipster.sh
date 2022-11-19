@@ -53,7 +53,7 @@ if [[ "$JHI_REPO" == *"/generator-jhipster" || "$JHI_GEN_BRANCH" == "local" ]]; 
 
     cd "$JHI_CLI_PACKAGE_PATH"
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    npm ci --prod
+    npm ci
     npm install -g "$JHI_CLI_PACKAGE_PATH"
 
 elif [[ "$JHI_GEN_BRANCH" == "release" ]]; then
@@ -69,6 +69,6 @@ else
     cd generator-jhipster
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
-    npm ci --prod
+    npm ci
     npm install -g .
 fi
