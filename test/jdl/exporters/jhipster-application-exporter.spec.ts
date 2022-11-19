@@ -285,9 +285,9 @@ Object {
       });
       after(() => {
         fs.unlinkSync(path.join('toto', '.yo-rc.json'));
-        fs.rmdirSync('toto');
+        fs.rmSync('toto');
         fs.unlinkSync(path.join('titi', '.yo-rc.json'));
-        fs.rmdirSync('titi');
+        fs.rmSync('titi');
       });
 
       it('should export the first application', () => {

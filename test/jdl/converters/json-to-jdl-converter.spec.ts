@@ -208,7 +208,7 @@ paginate Country with pager
           fs.mkdirSync(dir);
         });
         after(() => {
-          fs.rmdirSync(dir);
+          fs.rmSync(dir);
         });
 
         it('does not fail', () => {

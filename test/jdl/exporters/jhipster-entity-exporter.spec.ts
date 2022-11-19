@@ -86,7 +86,7 @@ describe('JHipsterEntityExporter', () => {
 
         after(() => {
           fs.unlinkSync('.jhipster/A.json');
-          fs.rmdirSync('.jhipster');
+          fs.rmSync('.jhipster');
         });
 
         it('should return the exported entities', () => {
@@ -197,7 +197,7 @@ Array [
 
         after(() => {
           fs.unlinkSync('.jhipster/A.json');
-          fs.rmdirSync('.jhipster');
+          fs.rmSync('.jhipster');
         });
       });
       context('when passing an application name and application type', () => {
@@ -409,7 +409,7 @@ Array [
             fs.unlinkSync('.jhipster/Location.json');
             fs.unlinkSync('.jhipster/LocalStore.json');
             fs.unlinkSync('.jhipster/Product.json');
-            fs.rmdirSync('.jhipster');
+            fs.rmSync('.jhipster');
           });
         });
         context('inside a microservice', () => {
@@ -537,7 +537,7 @@ Array [
               ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
                 fs.unlinkSync(`.jhipster/${entityName}.json`);
               });
-              fs.rmdirSync('.jhipster');
+              fs.rmSync('.jhipster');
             });
           });
           context('and when microservice entities are passed', () => {
@@ -624,7 +624,7 @@ Array [
             after(() => {
               fs.unlinkSync('.jhipster/Client.json');
               fs.unlinkSync('.jhipster/Location.json');
-              fs.rmdirSync('.jhipster');
+              fs.rmSync('.jhipster');
             });
           });
         });
@@ -674,7 +674,7 @@ Array [
 
         after(() => {
           fs.unlinkSync('.jhipster/A.json');
-          fs.rmdirSync('.jhipster');
+          fs.rmSync('.jhipster');
         });
 
         it('should merge the existing content with the new one', () => {

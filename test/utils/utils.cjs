@@ -81,7 +81,7 @@ function _prepareTempEnv() {
   const tempDir = path.join(os.tmpdir(), crypto.randomBytes(20).toString('hex'));
   process.chdir(os.tmpdir());
   if (fs.existsSync(tempDir)) {
-    fs.rmdirSync(tempDir, { recursive: true });
+    fs.rmSync(tempDir, { recursive: true });
   }
   fs.mkdirSync(tempDir, { recursive: true });
   process.chdir(tempDir);
@@ -119,7 +119,7 @@ function revertTempDir(dest = path.join(__dirname, '..', '..'), tempDir) {
     }
   }
   if (tempDir && dest !== tempDir) {
-    fs.rmdirSync(tempDir, { recursive: true });
+    fs.rmSync(tempDir, { recursive: true });
   }
   process.chdir(dest);
 }
