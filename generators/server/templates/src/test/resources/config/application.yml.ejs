@@ -51,7 +51,7 @@ eureka:
 
 <%_ if (databaseTypeMongodb) { _%>
 mongock:
-  migration-scan-package:
+  change-logs-scan-package:
     - <%= packageName %>.config.dbmigrations
   mongo-db:
     read-concern: local
