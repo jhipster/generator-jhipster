@@ -23,8 +23,6 @@ import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../gen
 import { dockerFiles } from './files.mjs';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.mjs';
 
-const WAIT_TIMEOUT = 3 * 60000;
-
 /**
  * @class
  * @extends {BaseApplicationGenerator<import('../server/types.mjs').SpringBootApplication>}
