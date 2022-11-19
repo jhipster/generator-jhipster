@@ -102,6 +102,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
+<%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 <%_ } _%>
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode;
