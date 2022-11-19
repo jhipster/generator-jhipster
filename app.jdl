@@ -1,6 +1,0 @@
-application {
-  config {
-    clientFramework no
-  }
-}
-

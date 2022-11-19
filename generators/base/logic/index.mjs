@@ -26,3 +26,4 @@ export { renderContent, writeContent } from './output/renderer.mjs';
 export { default as generatorOrContext } from './context.mjs';
 export { default as logDebug } from './logging.mjs';
 export { appendYeomanOptionsFromGeneratorOptions, generatorSkipChecks } from './options.mjs';
+export { default as getEnumInfo } from './generator/enum.mjs';

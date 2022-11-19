@@ -22,4 +22,3 @@ export {
   isSignedNumber as inputIsSignedNumber,
   isSignedDecimalNumber as inputIsSignedDecimalNumber,
 } from './asserts.mjs';
-export { default as getEnumInfo } from './enum.mjs';

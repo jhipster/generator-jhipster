@@ -23,7 +23,7 @@ import { cleanupOldFiles } from './entity-cleanup.mjs';
 import constants from '../generator-constants.cjs';
 import { databaseTypes, searchEngineTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
 import { writeEntityCouchbaseFiles } from './entity-files-couchbase.mjs';
-import { getEnumInfo } from '../entity/logic/index.mjs';
+import { getEnumInfo } from '../base/logic/index.mjs';
 
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
