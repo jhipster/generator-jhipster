@@ -70,12 +70,10 @@ import {
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
 import { removeFieldsWithUnsetValues } from './support/index.mjs';
-import { locateGenerator, parseCreationTimestamp } from './logic/index.mjs';
+import { locateGenerator, parseCreationTimestamp } from './support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-const { defaultConfig, defaultConfigMicroservice } = generatorDefaults;
 
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 

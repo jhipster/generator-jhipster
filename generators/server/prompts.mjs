@@ -29,7 +29,7 @@ import {
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
-import { getOptionFromArray } from '../base/logic/index.mjs';
+import { getOptionFromArray } from '../base/support/index.mjs';
 
 const { OptionNames } = applicationOptions;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;

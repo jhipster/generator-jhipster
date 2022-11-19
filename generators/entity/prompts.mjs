@@ -29,7 +29,7 @@ import {
   clientFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { reservedKeywords, databaseTypes, applicationTypes, entityOptions, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
-import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './logic/index.mjs';
+import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.mjs';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
 const { CASSANDRA, SQL } = databaseTypes;

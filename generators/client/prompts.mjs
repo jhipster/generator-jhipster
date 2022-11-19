@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { httpsGet } from '../base/logic/index.mjs';
+import { httpsGet } from '../base/support/index.mjs';
 
 const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;

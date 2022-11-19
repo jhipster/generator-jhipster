@@ -86,6 +86,7 @@ import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
 import checkJava from './support/checks/check-java.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
+import { getApiDescription, javadoc } from './support/index.mjs';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;

@@ -27,7 +27,7 @@ import { GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION } from 
 import { prepareFieldForTemplates } from '../../utils/field.mjs';
 import { prepareRelationshipForTemplates } from '../../utils/relationship.mjs';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
-import { liquibaseComment } from './logic/index.mjs';
+import { liquibaseComment } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_LONG = CommonDBTypes.LONG;
