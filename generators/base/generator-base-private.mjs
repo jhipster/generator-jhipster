@@ -30,8 +30,8 @@ import generatorConstants from '../generator-constants.cjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
-import { deleteFile, deleteFolder, generatorOrContext, logDebug, renderContent, writeContent } from './logic/index.mjs';
-import { checkJavaCompliant } from '../server/logic/index.mjs';
+import { deleteFile, deleteFolder, generatorOrContext, logDebug, renderContent, writeContent } from './support/index.mjs';
+import { checkJavaCompliant } from '../server/support/index.mjs';
 
 const { SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;

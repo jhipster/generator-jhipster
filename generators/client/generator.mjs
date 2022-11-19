@@ -33,7 +33,7 @@ import generatorDefaults from '../generator-defaults.cjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { addIconInImport, addMenuEntry } from './logic/index.mjs';
+import { addIconInImport, addMenuEntry } from './support/index.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;

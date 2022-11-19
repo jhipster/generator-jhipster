@@ -19,7 +19,7 @@
 
 import constants from './generator-constants.cjs';
 import { languageSnakeCase, languageToJavaLanguage } from './languages/utils.mjs';
-import { moveWithGit } from './base/logic/index.mjs';
+import { moveWithGit } from './base/support/index.mjs';
 
 export { cleanupOldServerFiles } from './server/cleanup.mjs';
 

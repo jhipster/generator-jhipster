@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { javadoc } from '../../../server/logic/index.mjs';
+import { javadoc } from '../../../server/support/index.mjs';
 
 const doesTheEnumValueHaveACustomValue = enumValue => {
   return enumValue.includes('(');

@@ -59,7 +59,7 @@ import {
 
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
-import { getApiDescription, javadoc } from './logic/index.mjs';
+import { getApiDescription, javadoc } from './support/index.mjs';
 
 const { isReservedTableName } = reservedKeywords;
 const { defaultConfig } = generatorDefaults;

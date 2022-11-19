@@ -59,7 +59,7 @@ import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import { NODE_VERSION } from '../generator-constants.mjs';
-import { locateGenerator, parseCreationTimestamp } from './logic/index.mjs';
+import { locateGenerator, parseCreationTimestamp } from './support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

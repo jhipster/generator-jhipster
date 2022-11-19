@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { stringNullOrEmpty, textToArray, isSimpleText } from '../../base/logic/index.mjs';
+import { stringNullOrEmpty, textToArray, isSimpleText } from '../../base/support/index.mjs';
 
 const indent = (indentSize = 0) => {
   return _.repeat(' ', indentSize);

@@ -4,8 +4,8 @@ import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
 
 import utils from '../generators/utils.cjs';
-import { renderContent, getEnumInfo } from '../generators/base/logic/index.mjs';
-import { javadoc } from '../generators/server/logic/index.mjs';
+import { renderContent, getEnumInfo } from '../generators/base/support/index.mjs';
+import { javadoc } from '../generators/server/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -10,7 +10,7 @@ import fieldTypes from '../jdl/jhipster/field-types';
 import { default as JHipsterServerGeneratorClass } from '../generators/server/generator.mjs';
 // eslint-disable-next-line import/no-named-default
 import { default as DatabaseChangelogLiquibaseClass } from '../generators/liquibase-changelogs/index.mjs';
-import { stripMargin } from '../generators/base/logic/index.mjs';
+import { stripMargin } from '../generators/base/support/index.mjs';
 
 const { CASSANDRA, MONGODB, MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;

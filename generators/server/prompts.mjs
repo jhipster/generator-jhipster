@@ -31,7 +31,7 @@ import {
   cacheTypes,
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
-import { getOptionFromArray } from '../base/logic/index.mjs';
+import { getOptionFromArray } from '../base/support/index.mjs';
 
 const { OptionNames } = applicationOptions;
 const { serverDefaultConfig } = generatorDefaults;

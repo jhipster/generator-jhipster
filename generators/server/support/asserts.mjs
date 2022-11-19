@@ -19,7 +19,7 @@
 
 import { exec } from 'child_process';
 import chalk from 'chalk';
-import { generatorSkipChecks } from '../../base/logic/index.mjs';
+import { generatorSkipChecks } from '../../base/support/index.mjs';
 import { JAVA_COMPATIBLE_VERSIONS } from '../../generator-constants.mjs';
 
 const checkJavaVersionCompatible = javaVersionReturnString => {

@@ -21,7 +21,7 @@ import statistics from '../statistics.cjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import generatorsDefaults from '../generator-defaults.cjs';
 import { applicationTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { httpsGet } from '../base/logic/index.mjs';
+import { httpsGet } from '../base/support/index.mjs';
 
 const { appDefaultConfig, defaultConfigMicroservice } = generatorsDefaults;
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
