@@ -144,7 +144,7 @@ management:
 
 <%_ if (databaseTypeMongodb) { _%>
 mongock:
-  change-logs-scan-package:
+  migration-scan-package:
     - <%= packageName %>.config.dbmigrations
 
 <%_ } _%>
