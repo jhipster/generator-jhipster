@@ -338,6 +338,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.infinispan:infinispan-spring-boot-starter-embedded"
     implementation "org.infinispan:infinispan-core-jakarta"
     implementation "org.infinispan:infinispan-jcache"
+    compileOnly "org.infinispan:infinispan-component-annotations"
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
     implementation "com.google.code.simple-spring-memcached:spring-cache"
