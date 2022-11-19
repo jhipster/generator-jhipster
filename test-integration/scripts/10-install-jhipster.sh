@@ -69,6 +69,6 @@ else
     cd generator-jhipster
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
-    npm ci --prod
+    npm ci
     npm install -g .
 fi
