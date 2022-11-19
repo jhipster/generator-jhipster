@@ -78,8 +78,6 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
-import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
-import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestAttributeHandler;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -105,6 +103,7 @@ import org.springframework.security.web.server.authentication.logout.HttpStatusR
 <%_ } _%>
 <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestAttributeHandler;
 <%_ } _%>
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode;
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
