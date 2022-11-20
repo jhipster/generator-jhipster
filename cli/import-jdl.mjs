@@ -16,23 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const fs = require('fs');
-const _ = require('lodash');
-const path = require('path');
-const pluralize = require('pluralize');
-const { fork: forkProcess } = require('child_process');
+import chalk from 'chalk';
+import fs from 'fs';
+import _ from 'lodash';
+import path from 'path';
+import pluralize from 'pluralize';
+import { fork as forkProcess } from 'child_process';
+import { createRequire } from 'module';
 
-const EnvironmentBuilder = require('./environment-builder.cjs');
-const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArgs } = require('./utils.cjs');
+import EnvironmentBuilder from './environment-builder.mjs';
+import { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArgs } from './utils.mjs';
 
-const { packageJson: packagejs } = require('../lib/index.cjs');
-const statistics = require('../generators/statistics.cjs');
-const { JHIPSTER_CONFIG_DIR } = require('../generators/generator-constants.cjs');
+import { packageJson as packagejs } from '../lib/index.mjs';
+import statistics from '../generators/statistics.mjs';
+import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
 
-const jhipsterCli = require.resolve('./cli.cjs');
-const { writeConfigFile } = require('./export-utils.cjs');
+import { writeConfigFile } from './export-utils.mjs';
 
+const require = createRequire(import.meta.url);
+const jhipsterCli = require.resolve('./cli.mjs');
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 
 /**
@@ -212,7 +214,7 @@ function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOp
  * Imports the Applications and Entities defined in JDL
  * The app .yo-rc.json files and entity json files are written to disk
  */
-function importJDL(jdlImporter) {
+function importJdl(jdlImporter) {
   logger.info('The JDL is being parsed.');
 
   try {
@@ -380,7 +382,7 @@ class JDLProcessor {
     } else {
       importer = createImporterFromFiles(this.jdlFiles, configuration);
     }
-    this.importState = importJDL.call(this, importer);
+    this.importState = importJdl.call(this, importer);
   }
 
   config() {
@@ -525,7 +527,7 @@ class JDLProcessor {
  * @param {any} [options] options passed from CLI
  * @param {any} [env] the yeoman environment
  */
-module.exports = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
+export default async (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
   logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
   logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
   try {

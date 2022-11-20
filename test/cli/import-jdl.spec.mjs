@@ -1,12 +1,22 @@
-const path = require('path');
-const proxyquire = require('proxyquire');
-const fse = require('fs-extra');
-const assert = require('yeoman-assert');
-const expect = require('chai').expect;
-const utils = require('../../cli/utils.cjs');
+import path from 'path';
+import fse from 'fs-extra';
+import assert from 'yeoman-assert';
+import { expect } from 'chai';
 
-const { testInTempDir, revertTempDir } = require('../utils/utils.cjs');
-const { getTemplatePath } = require('../support/index.cjs');
+import {
+  CLI_NAME,
+  GENERATOR_NAME,
+  toString,
+  logger,
+  getCommand,
+  doneFactory,
+  done,
+  printSuccess,
+  getOptionAsArgs,
+} from '../../cli/utils.mjs';
+import { testInTempDir, revertTempDir } from '../utils/utils.mjs';
+import { getTemplatePath } from '../support/index.mjs';
+import rewiremock from './rewiremock-entrypoint.mjs';
 
 let subGenCallParams = {
   count: 0,
@@ -40,10 +50,20 @@ const env = {
 
 const loadImportJdl = options => {
   options = {
-    './utils.cjs': {
-      ...utils,
+    './utils.mjs': {
+      ...{
+        CLI_NAME,
+        GENERATOR_NAME,
+        toString,
+        logger,
+        getCommand,
+        doneFactory,
+        done,
+        printSuccess,
+        getOptionAsArgs,
+      },
       logger: {
-        ...utils.logger,
+        ...logger,
         info: () => {},
       },
       printSuccess: () => {},
@@ -60,7 +80,7 @@ const loadImportJdl = options => {
         };
       },
     },
-    './environment-builder.cjs': {
+    './environment-builder.mjs': {
       createDefaultBuilder: () => {
         return {
           getEnvironment: () => {
@@ -77,7 +97,7 @@ const loadImportJdl = options => {
     },
     ...options,
   };
-  return proxyquire('../../dist/cli/import-jdl.cjs', options);
+  return rewiremock.proxy('../../dist/cli/import-jdl.mjs', options);
 };
 
 const defaultAddedOptions = {};
