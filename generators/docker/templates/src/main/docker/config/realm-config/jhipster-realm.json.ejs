@@ -105,7 +105,9 @@
       }
     ],
     "client": {
+<%_ if (applicationTypeGateway) { _%>
       "internal": [],
+<%_ } _%>
       "realm-management": [
         {
           "id": "a6249a12-d76c-4514-b137-e3018b243e25",
@@ -543,7 +545,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= faker.datatype.uuid() %>",
       "redirectUris": [
         "/realms/jhipster/account/*"
       ],
@@ -587,7 +589,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= faker.datatype.uuid() %>",
       "redirectUris": [
         "/realms/jhipster/account/*"
       ],
@@ -640,7 +642,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= faker.datatype.uuid() %>",
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -680,7 +682,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= faker.datatype.uuid() %>",
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -711,7 +713,7 @@
         "offline_access",
         "microprofile-jwt"
       ]
-    },
+    },<% if (applicationTypeGateway) { %>
     {
       "id": "10e6ea34-9f1e-49ef-8e28-7eb851459694",
       "clientId": "internal",
@@ -810,7 +812,7 @@
         "offline_access",
         "microprofile-jwt"
       ]
-    },
+    },<% } %>
     {
       "id": "1acf7ad0-68cb-46a6-a3e4-8b2f2abecb85",
       "clientId": "jhipster-control-center",
@@ -943,7 +945,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= faker.datatype.uuid() %>",
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -985,7 +987,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= faker.datatype.uuid() %>",
       "redirectUris": [
         "/admin/jhipster/console/*"
       ],

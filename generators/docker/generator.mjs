@@ -22,6 +22,8 @@ import { createDockerComposeFile, createDockerExtendedServices } from '../base-d
 import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../generator-list.mjs';
 import { dockerFiles } from './files.mjs';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.mjs';
+import {faker} from '@faker-js/faker/locale/en';
+import { stringHashCode } from '../utils.cjs';
 
 const WAIT_TIMEOUT = 3 * 60000;
 
@@ -83,9 +85,10 @@ export default class DockerGenerator extends BaseApplicationGenerator {
   get writing() {
     return this.asWritingTaskGroup({
       async writeDockerFiles({ application }) {
+        faker.seed(stringHashCode(application.baseName));
         await this.writeFiles({
           sections: dockerFiles,
-          context: application,
+          context: {...application, faker},
         });
       },
     });

@@ -35,6 +35,8 @@ import {
   searchEngineTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
+import {faker} from '@faker-js/faker/locale/en';
+import { stringHashCode } from '../utils.cjs';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -143,6 +145,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
       setAppsYaml() {
         this.appsYaml = [];
         this.keycloakRedirectUris = '';
+        this.applicationTypeGateway = false;
+        this.faker = faker;
         this.appConfigs.forEach(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           const parentConfiguration = {};
@@ -160,7 +164,11 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
               })
             );
           }
+          if (appConfig.applicationType === GATEWAY) {
+            this.applicationTypeGateway = true;
+          }
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
+            this.faker.seed(stringHashCode(appConfig.baseName))
             this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {
               this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
