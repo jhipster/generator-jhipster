@@ -17,7 +17,7 @@ import org.springframework.boot.ansi.AnsiStyle;
 public class CRLFLogConverter extends CompositeConverter<ILoggingEvent> {
     public static final Marker CRLF_SAFE_MARKER = MarkerFactory.getMarker("CRLF_SAFE");
 
-    private static final String[] SAFE_LOGGERS = { "org.hibernate" };
+    private static final String[] SAFE_LOGGERS = { "org.hibernate", "org.springframework.autoconfigure" };
     private static final Map<String, AnsiElement> ELEMENTS;
 
 	static {
