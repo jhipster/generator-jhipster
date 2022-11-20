@@ -5,7 +5,7 @@
     "baseName": "sampleGradleOauth2Infinispan",
     "blueprints": [],
     "buildTool": "gradle",
-    "cacheProvider": "infinispan",
+    "cacheProvider": "no",
     "clientFramework": "angular",
     "clientPackageManager": "npm",
     "clientTheme": "none",
