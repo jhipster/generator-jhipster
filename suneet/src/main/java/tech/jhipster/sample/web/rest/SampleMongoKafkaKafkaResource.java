@@ -7,10 +7,14 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.annotation.Bean;
+// import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -28,13 +32,14 @@ import tech.jhipster.sample.config.KafkaSseProducer;
 public class SampleMongoKafkaKafkaResource {
 
     private final Logger log = LoggerFactory.getLogger(SampleMongoKafkaKafkaResource.class);
-    private final MessageChannel output;
+    private static final String PRODUCER_BINDING_NAME = "codedsun-out-0";
+    private final StreamBridge streamBridge;
 
     // TODO implement state of the art emitter repository to become 12 factor
     private Map<String, SseEmitter> emitters = new HashMap<>();
 
-    public SampleMongoKafkaKafkaResource(@Qualifier(KafkaSseProducer.CHANNELNAME) MessageChannel output) {
-        this.output = output;
+    public SampleMongoKafkaKafkaResource(StreamBridge streamBridge) {
+        this.streamBridge = streamBridge;
     }
 
     @PostMapping("/publish")
@@ -43,7 +48,7 @@ public class SampleMongoKafkaKafkaResource {
         Map<String, Object> map = new HashMap<>();
         map.put(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.TEXT_PLAIN_VALUE);
         MessageHeaders headers = new MessageHeaders(map);
-        output.send(new GenericMessage<>(message, headers));
+        streamBridge.send(PRODUCER_BINDING_NAME, new GenericMessage<>(message, headers));
     }
 
     @GetMapping("/register")
@@ -62,19 +67,22 @@ public class SampleMongoKafkaKafkaResource {
         Optional.ofNullable(emitters.get(user)).ifPresent(ResponseBodyEmitter::complete);
     }
 
-    @StreamListener(value = KafkaSseConsumer.CHANNELNAME, copyHeaders = "false")
-    public void consume(Message<String> message) {
-        log.debug("Got message from kafka stream: {}", message.getPayload());
-        emitters
-            .entrySet()
-            .stream()
-            .map(Map.Entry::getValue)
-            .forEach((SseEmitter emitter) -> {
-                try {
-                    emitter.send(event().data(message.getPayload(), MediaType.TEXT_PLAIN));
-                } catch (IOException e) {
-                    log.debug("error sending sse message, {}", message.getPayload());
-                }
-            });
+    @Bean
+    public Consumer<Message<String>> consume() {
+        return message -> {
+            log.debug("Got message from kafka stream: {}", message.getPayload());
+            emitters
+                .entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .forEach((SseEmitter emitter) -> {
+                    try {
+                        emitter.send(event().data(message.getPayload(), MediaType.TEXT_PLAIN));
+                    } catch (IOException e) {
+                        log.debug("error sending sse message, {}", message.getPayload());
+                    }
+                });
+        };
     }
+
 }

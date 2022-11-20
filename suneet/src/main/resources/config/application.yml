@@ -103,11 +103,11 @@ spring:
           auto-create-topics: true
           brokers: localhost:9092
       bindings:
-        binding-in-sse:
+        codedsun-in-0:
           destination: sse-topic
           content-type: text/plain
           group: sample-mongo-kafka
-        binding-out-sse:
+        codedsun-out-0:
           destination: sse-topic
           content-type: text/plain
           group: sample-mongo-kafka

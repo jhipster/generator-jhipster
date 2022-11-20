@@ -255,6 +255,9 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream</artifactId>
+            <scope>test</scope>
+			<type>test-jar</type>
+			<classifier>test-binder</classifier>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

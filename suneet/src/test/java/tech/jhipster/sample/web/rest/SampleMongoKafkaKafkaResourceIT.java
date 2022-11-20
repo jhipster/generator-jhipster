@@ -13,7 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.cloud.stream.test.binder.MessageCollector;
+import org.springframework.cloud.stream.binder.test.InputDestination;
+import org.springframework.cloud.stream.binder.test.OutputDestination;
+// import org.springframework.cloud.stream.test.binder.MessageCollector;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
@@ -33,26 +35,32 @@ import tech.jhipster.sample.config.KafkaSseProducer;
 @EmbeddedKafka
 class SampleMongoKafkaKafkaResourceIT {
 
-    @Autowired
-    private MessageCollector collector;
+    // @Autowired
+    // private MessageCollector collector;
 
     @Autowired
     private MockMvc restMockMvc;
 
-    @Autowired
-    @Qualifier(KafkaSseProducer.CHANNELNAME)
-    private MessageChannel output;
+    // @Autowired
+    // @Qualifier(KafkaSseProducer.CHANNELNAME)
+    // private MessageChannel output;
+
+    // @Autowired
+    // @Qualifier(KafkaSseConsumer.CHANNELNAME)
+    // private MessageChannel input;
 
     @Autowired
-    @Qualifier(KafkaSseConsumer.CHANNELNAME)
-    private MessageChannel input;
+    private InputDestination input;
+
+    @Autowired
+    private OutputDestination output;
 
     @Test
     void producesMessages() throws Exception {
         restMockMvc.perform(post("/api/sample-mongo-kafka-kafka/publish?message=value-produce")).andExpect(status().isOk());
-        BlockingQueue<Message<?>> messages = collector.forChannel(output);
-        GenericMessage<String> payload = (GenericMessage<String>) messages.take();
-        assertThat(payload.getPayload()).isEqualTo("value-produce");
+        // BlockingQueue<Message<?>> messages = collector.forChannel(output);
+        // GenericMessage<String> payload = (GenericMessage<String>) messages.take();
+        assertThat(output.receive().getPayload()).isEqualTo("value-produce");
     }
 
     @Test
