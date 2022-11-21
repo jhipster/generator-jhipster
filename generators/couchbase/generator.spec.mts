@@ -1,14 +1,36 @@
+/**
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport, buildServerMatrix, extendMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
-import Generator from './index.mjs';
+import Generator from './generator.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
-import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from './__test-support/index.mjs';
+import {
+  mockedGenerators as serverGenerators,
+  shouldComposeWithKafka,
+  shouldComposeWithLiquibase,
+} from '../server/__test-support/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -16,7 +38,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.mjs');
+// compose with server generator, many conditionals at server generator
+const generatorFile = join(__dirname, '../server/index.mjs');
 
 const { COUCHBASE: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
@@ -25,7 +48,9 @@ const couchbaseSamples = extendMatrix(buildServerMatrix(), {
   searchEngine: ['no', 'couchbase'],
 });
 
-const samplesBuilder = (): [string, any][] =>
+const mockedGenerators = serverGenerators.filter(generator => generator !== 'jhipster:couchbase');
+
+const samplesBuilder = () =>
   Object.entries(couchbaseSamples).map(([name, sample]) => [
     name,
     {

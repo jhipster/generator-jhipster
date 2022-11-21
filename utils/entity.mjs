@@ -21,7 +21,7 @@ import pluralize from 'pluralize';
 import path from 'path';
 
 import { hibernateSnakeCase } from './db.mjs';
-import { parseChangelog } from '../generators/base/utils.mjs';
+import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
 import generatorDefaults from '../generators/generator-defaults.cjs';
 import { fieldToReference } from './field.mjs';
 import constants from '../generators/generator-constants.cjs';
@@ -271,11 +271,14 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
 
 export function prepareEntityServerForTemplates(entity) {
   const { entityPackage, packageName, packageFolder, persistClass } = entity;
-  let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder } = entity;
+  let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder, entityJavaPackageFolder = packageFolder } = entity;
   if (entityPackage) {
+    entityJavaPackageFolder = `${entityPackage.replace(/\./g, '/')}/`;
     entityAbsolutePackage = [packageName, entityPackage].join('.');
-    entityAbsoluteFolder = path.join(packageFolder, entityPackage.replace(/\./g, '/'));
+    entityAbsoluteFolder = path.join(packageFolder, entityJavaPackageFolder);
   }
+  entityAbsoluteFolder = normalizePathEnd(entityAbsoluteFolder);
+  entity.entityJavaPackageFolder = entityJavaPackageFolder;
   entity.entityAbsolutePackage = entityAbsolutePackage;
   entity.entityAbsoluteFolder = entityAbsoluteFolder;
   entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;

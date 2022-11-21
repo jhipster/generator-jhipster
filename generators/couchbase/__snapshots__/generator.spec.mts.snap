@@ -781,6 +781,12 @@ Object {
   "src/main/resources/config/couchmove/changelog/V0.1__initial_setup/user/user.json": Object {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/couchmove/changelog/V0.2__create_indexes.n1ql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/couchmove/changelog/V0__create_collections.n1ql": Object {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/couchmove/changelog/V20220129000100__simple.n1ql": Object {
     "stateCleared": "modified",
   },
@@ -1174,6 +1180,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V0.1__initial_setup/user/user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/couchmove/changelog/V0.2__create_indexes.n1ql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/couchmove/changelog/V0__create_collections.n1ql": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000100__simple.n1ql": Object {
@@ -1930,6 +1942,12 @@ Object {
   "src/main/resources/config/couchmove/changelog/V0.1__initial_setup/user/user.json": Object {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/couchmove/changelog/V0.2__create_indexes.n1ql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/couchmove/changelog/V0__create_collections.n1ql": Object {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/couchmove/changelog/V20220129000100__simple.n1ql": Object {
     "stateCleared": "modified",
   },
@@ -2341,6 +2359,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V0.1__initial_setup/user/user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/couchmove/changelog/V0.2__create_indexes.n1ql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/couchmove/changelog/V0__create_collections.n1ql": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000100__simple.n1ql": Object {
@@ -3624,6 +3648,12 @@ Object {
   "src/main/resources/config/couchmove/changelog/V0.1__initial_setup/user/user.json": Object {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/couchmove/changelog/V0.2__create_indexes.n1ql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/couchmove/changelog/V0__create_collections.n1ql": Object {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/couchmove/changelog/V20220129000100__simple.n1ql": Object {
     "stateCleared": "modified",
   },
@@ -4059,6 +4089,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V0.1__initial_setup/user/user.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/couchmove/changelog/V0.2__create_indexes.n1ql": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/couchmove/changelog/V0__create_collections.n1ql": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000100__simple.n1ql": Object {

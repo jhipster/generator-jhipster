@@ -28,6 +28,7 @@ import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_COMMON,
+  GENERATOR_COUCHBASE,
   GENERATOR_DOCKER,
   GENERATOR_GRADLE,
   GENERATOR_KAFKA,
@@ -61,6 +62,7 @@ import {
 
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
+import { normalizePathEnd } from '../base/utils.mjs';
 
 const { isReservedTableName } = reservedKeywords;
 const { defaultConfig } = generatorDefaults;
@@ -230,6 +232,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if (databaseType === SQL) {
           await this.composeWithJHipster(GENERATOR_LIQUIBASE);
+        } else if (databaseType === COUCHBASE) {
+          await this.composeWithJHipster(GENERATOR_COUCHBASE);
         }
         if (messageBroker === KAFKA) {
           await this.composeWithJHipster(GENERATOR_KAFKA);
@@ -313,14 +317,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.jhiTablePrefix = this.getTableName(application.jhiPrefix);
 
         application.mainJavaDir = SERVER_MAIN_SRC_DIR;
-        application.mainJavaPackageDir = `${SERVER_MAIN_SRC_DIR}${application.packageFolder}/`;
+        application.mainJavaPackageDir = normalizePathEnd(`${SERVER_MAIN_SRC_DIR}${application.packageFolder}`);
         application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
         application.testJavaDir = SERVER_TEST_SRC_DIR;
-        application.testJavaPackageDir = `${SERVER_TEST_SRC_DIR}${application.packageFolder}/`;
+        application.testJavaPackageDir = normalizePathEnd(`${SERVER_TEST_SRC_DIR}${application.packageFolder}`);
         application.testResourceDir = SERVER_TEST_RES_DIR;
         application.srcMainDir = MAIN_DIR;
         application.srcTestDir = TEST_DIR;
-        application.generateBuiltInAuthorityEntity = application.generateBuiltInUserEntity && !application.databaseTypeCassandra;
       },
     });
   }
