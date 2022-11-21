@@ -71,7 +71,13 @@ import {
 } from '../generator-constants.mjs';
 import { removeFieldsWithUnsetValues } from './support/index.mjs';
 import { locateGenerator, parseCreationTimestamp } from './support/index.mjs';
-import { addExternalResourcesToIndexHtml } from '../client/support/index.mjs';
+import {
+  addAdminMenuEntry,
+  addEntityMenuEntry,
+  addExternalResourcesToIndexHtml,
+  addIconInImport,
+  addMenuEntry,
+} from '../client/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -218,6 +224,42 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @private
+   * Add a new icon to icon imports.
+   *
+   * @param {string} iconName - The name of the Font Awesome icon.
+   * @param {string} clientFramework - The name of the client framework
+   */
+  addIcon(iconName, clientFramework) {
+    addIconInImport(this, iconName, clientFramework);
+  }
+
+  /**
+   * @private
+   * Add a new menu element, at the root of the menu.
+   *
+   * @param {string} routerName - The name of the router that is added to the menu.
+   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
+   * @param {boolean} enableTranslation - If translations are enabled or not
+   * @param {string} clientFramework - The name of the client framework
+   * @param {string} translationKeyMenu - i18n key for entry in the menu
+   */
+  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
+    addMenuEntry(this, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
+  }
+
+  /**
+   * @private
+   * Add external resources to root file(index.html).
+   *
+   * @param {string} resources - Resources added to root file.
+   * @param {string} comment - comment to add before resources content.
+   */
+  addExternalResourcesToRoot(resources, comment) {
+    addExternalResourcesToIndexHtml(this, resources, comment);
+  }
+
+  /**
    * Add a new menu element to the admin menu.
    *
    * @param {string} routerName - The name of the Angular router that is added to the admin menu.
@@ -227,12 +269,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} translationKeyMenu - i18n key for entry in the admin menu
    */
   addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
-    } else if (clientFramework === REACT) {
-      // React
-      // TODO:
-    }
+    addAdminMenuEntry(this, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
   }
 
   /**
@@ -253,19 +290,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     entityTranslationValue = _.startCase(routerName),
     jhiPrefix = this.jhiPrefix
   ) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addEntityToMenu(
-        routerName,
-        enableTranslation,
-        entityTranslationKeyMenu,
-        entityTranslationValue,
-        jhiPrefix
-      );
-    } else if (clientFramework === REACT) {
-      this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-    } else if (clientFramework === VUE) {
-      this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-    }
+    addEntityMenuEntry(this, routerName, enableTranslation, clientFramework, entityTranslationKeyMenu, entityTranslationValue, jhiPrefix);
   }
 
   /**

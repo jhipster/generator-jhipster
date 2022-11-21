@@ -16,4 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { addMenuEntry, addIconInImport, addAdminMenuEntry, addEntityMenuEntry } from './needles.mjs';
+
+/**
+ * @private
+ * Add a new entity in the "entities" menu.
+ *
+ * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
+ * @param {boolean} enableTranslation - If translations are enabled or not
+ * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
+ * @param {string} entityTranslationValue - i18n value for entity entry in menu
+ */
+const addEntityMenuEntry = (context, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue) => {
+  context.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
+};
+
+export default addEntityMenuEntry;

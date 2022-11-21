@@ -32,7 +32,6 @@ import statistics from '../statistics.cjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { addExternalResourcesToIndexHtml, addIconInImport, addMenuEntry } from './support/index.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
@@ -299,41 +298,5 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.END]() {
     return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
-  }
-
-  /**
-   * @private
-   * Add a new icon to icon imports.
-   *
-   * @param {string} iconName - The name of the Font Awesome icon.
-   * @param {string} clientFramework - The name of the client framework
-   */
-  addIcon(iconName, clientFramework) {
-    addIconInImport(this, iconName, clientFramework);
-  }
-
-  /**
-   * @private
-   * Add a new menu element, at the root of the menu.
-   *
-   * @param {string} routerName - The name of the router that is added to the menu.
-   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} translationKeyMenu - i18n key for entry in the menu
-   */
-  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    addMenuEntry(this, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
-  }
-
-  /**
-   * @private
-   * Add external resources to root file(index.html).
-   *
-   * @param {string} resources - Resources added to root file.
-   * @param {string} comment - comment to add before resources content.
-   */
-  addExternalResourcesToRoot(resources, comment) {
-    addExternalResourcesToIndexHtml(this, resources, comment);
   }
 }

@@ -42,3 +42,34 @@ export const addMenuEntry = (context, routerName, iconName, enableTranslation, t
 export const addIconInImport = (context, iconName) => {
   context.needleApi.clientAngular.addIcon(iconName);
 };
+
+/**
+ * Add a new menu element to the admin menu.
+ * @param context the generator context
+ * @param {string} routerName - The name of the Angular router that is added to the admin menu.
+ * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
+ * @param {boolean} enableTranslation - If translations are enabled or not
+ * @param {string} translationKeyMenu - i18n key for entry in the admin menu
+ */
+export const addAdminMenuEntry = (context, routerName, iconName, enableTranslation, translationKeyMenu) => {
+  context.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, context.jhiPrefix);
+};
+
+/**
+ * @private
+ * Add a new entity in the "entities" menu.
+ *
+ * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
+ * @param {boolean} enableTranslation - If translations are enabled or not
+ * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
+ * @param {string} entityTranslationValue - i18n value for entity entry in menu
+ */
+export const addEntityMenuEntry = (context, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue, jhiPrefix) => {
+  context.needleApi.clientAngular.addEntityToMenu(
+    routerName,
+    enableTranslation,
+    entityTranslationKeyMenu,
+    entityTranslationValue,
+    jhiPrefix
+  );
+};
