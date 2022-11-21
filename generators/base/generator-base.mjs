@@ -71,6 +71,7 @@ import {
 } from '../generator-constants.mjs';
 import { removeFieldsWithUnsetValues } from './support/index.mjs';
 import { locateGenerator, parseCreationTimestamp } from './support/index.mjs';
+import { addExternalResourcesToIndexHtml } from '../client/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -214,17 +215,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getPossibleDependencies() {
     return [];
-  }
-
-  /**
-   * @private
-   * Add external resources to root file(index.html).
-   *
-   * @param {string} resources - Resources added to root file.
-   * @param {string} comment - comment to add before resources content.
-   */
-  addExternalResourcesToRoot(resources, comment) {
-    this.needleApi.client.addExternalResourcesToRoot(resources, comment);
   }
 
   /**

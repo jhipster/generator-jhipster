@@ -18,7 +18,8 @@
  */
 
 import _ from 'lodash';
-import { clientFrameworkTypes } from '../../../../jdl/jhipster/index.mjs';
+import { clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
+import { addMenuEntry as addAngularMenuEntry, addIconInImport as addAngularIconInImport } from '../../angular/support/index.mjs';
 
 const { ANGULAR, REACT } = clientFrameworkTypes;
 
@@ -32,7 +33,7 @@ const { ANGULAR, REACT } = clientFrameworkTypes;
  */
 export const addIconInImport = (context, iconName, clientFramework) => {
   if (clientFramework === ANGULAR) {
-    context.needleApi.clientAngular.addIcon(iconName);
+    addAngularIconInImport(context, iconName);
   } else if (clientFramework === REACT) {
     // React
     // TODO:
@@ -58,9 +59,20 @@ export const addMenuEntry = (
   translationKeyMenu = _.camelCase(routerName)
 ) => {
   if (clientFramework === ANGULAR) {
-    context.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu, context.jhiPrefix);
+    addAngularMenuEntry(context, routerName, iconName, enableTranslation, translationKeyMenu);
   } else if (clientFramework === REACT) {
     // React
     // TODO:
   }
+};
+
+/**
+ * @private
+ * Add external resources to root file(index.html).
+ *
+ * @param {string} resources - Resources added to root file.
+ * @param {string} comment - comment to add before resources content.
+ */
+export const addExternalResourcesToIndexHtml = (context, resources, comment) => {
+  context.needleApi.client.addExternalResourcesToRoot(resources, comment);
 };
