@@ -33,7 +33,6 @@ const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 
 /* Constants use throughout */
-const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
@@ -421,7 +420,6 @@ export const gatlingFiles = {
       templates: [
         {
           file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
-          options: { interpolate: INTERPOLATE_REGEX },
           renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
         },
       ],
