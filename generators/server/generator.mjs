@@ -308,7 +308,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.cacheManagerIsAvailable = [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(
           application.cacheProvider
         );
-        application.testsNeedCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
+        application.authenticationUsesCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
 
         application.jhiTablePrefix = this.getTableName(application.jhiPrefix);
 

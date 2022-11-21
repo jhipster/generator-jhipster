@@ -39,7 +39,7 @@ const { entityDefaultConfig } = generatorDefaults;
 const { ELASTICSEARCH } = searchEngineTypes;
 const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
-const { OAUTH2, SESSION } = authenticationTypes;
+const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 const { isReservedTableName } = reservedKeywords;
 
@@ -244,8 +244,8 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
 
   const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => relationship.otherEntity.builtInUser);
   entityWithConfig.saveUserSnapshot =
-    entityWithConfig.applicationType === MICROSERVICE &&
-    entityWithConfig.authenticationType === OAUTH2 &&
+    application.applicationType === MICROSERVICE &&
+    application.authenticationType === OAUTH2 &&
     hasBuiltInUserField &&
     entityWithConfig.dto === NO_MAPPER;
 
@@ -703,8 +703,7 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
 }
 
 export function preparePostEntityServerDerivedProperties(entity) {
-  const { databaseType, authenticationType, reactive } = entity;
-  entity.testsNeedCsrf = [OAUTH2, SESSION].includes(authenticationType);
+  const { databaseType, reactive } = entity;
   entity.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[databaseType];
   let springDataDatabase;
   if (entity.databaseType !== SQL) {
@@ -749,11 +748,9 @@ export function preparePostEntityServerDerivedProperties(entity) {
   if (entity.primaryKey && entity.primaryKey.derived) {
     entity.isUsingMapsId = true;
     entity.mapsIdAssoc = entity.relationships.find(rel => rel.id);
-    entity.hasOauthUser = entity.mapsIdAssoc.otherEntityName === 'user' && entity.authenticationType === OAUTH2;
   } else {
     entity.isUsingMapsId = false;
     entity.mapsIdAssoc = null;
-    entity.hasOauthUser = false;
   }
   entity.reactiveOtherEntities = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity));
   entity.reactiveUniqueEntityTypes = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntityNameCapitalized));
