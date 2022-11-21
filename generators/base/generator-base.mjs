@@ -1733,7 +1733,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         return val;
       }
       if (typeof val === 'function') {
-        return val.call(this, context, this) || false;
+        return val.call(this, context) || false;
       }
       throw new Error(`Type not supported ${val}`);
     };

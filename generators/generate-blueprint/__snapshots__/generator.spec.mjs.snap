@@ -377,6 +377,18 @@ Object {
   "generators/init/templates/template-file-init.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/kafka/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kafka/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kafka/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kafka/templates/template-file-kafka.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/kubernetes-helm/generator.mjs": Object {
     "stateCleared": "modified",
   },

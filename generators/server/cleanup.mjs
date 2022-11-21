@@ -24,7 +24,6 @@ import cleanupCacheProvider from './cleanup-cache-provider.mjs';
 import cleanupAngular from './cleanup-angular.mjs';
 import cleanupGradle from './cleanup-gradle.mjs';
 import cleanupOauth2 from './cleanup-oauth2.mjs';
-import cleanupKafka from './cleanup-kafka.mjs';
 import cleanupReactive from './cleanup-reactive.mjs';
 import cleanupCucumber from './cleanup-cucumber.mjs';
 import cleanupMaven from './cleanup-maven.mjs';
@@ -67,9 +66,6 @@ export function cleanupOldServerFiles(generator, application, javaDir, testDir, 
   }
   if (application.authenticationTypeOauth2) {
     cleanupOauth2(generator, javaDir, testDir, mainResourceDir, testResourceDir);
-  }
-  if (application.messageBrokerKafka) {
-    cleanupKafka(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
   if (application.reactive) {
     cleanupReactive(generator, javaDir, testDir, mainResourceDir, testResourceDir);

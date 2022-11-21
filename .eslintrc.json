@@ -20,7 +20,7 @@
       }
     },
     {
-      "files": ["**/*.spec.{c,m,}{js,ts}", "test/**/*.{c,m,}{js,ts}"],
+      "files": ["**/*.spec.{c,m,}{js,ts}", "**/__test-support/*.{c,m,}{js,ts}", "test/**/*.{c,m,}{js,ts}"],
       "env": {
         "mocha": true
       },

@@ -32,6 +32,7 @@ Object {
   "GENERATOR_HEROKU": "heroku",
   "GENERATOR_INFO": "info",
   "GENERATOR_INIT": "init",
+  "GENERATOR_KAFKA": "kafka",
   "GENERATOR_KUBERNETES": "kubernetes",
   "GENERATOR_KUBERNETES_HELM": "kubernetes-helm",
   "GENERATOR_KUBERNETES_KNATIVE": "kubernetes-knative",
