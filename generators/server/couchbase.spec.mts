@@ -8,6 +8,7 @@ import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
+import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from './__test-support/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -23,8 +24,6 @@ const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en',
 const couchbaseSamples = extendMatrix(buildServerMatrix(), {
   searchEngine: ['no', 'couchbase'],
 });
-
-const mockedGenerators = ['jhipster:languages', 'jhipster:common', 'jhipster:docker'];
 
 const samplesBuilder = (): [string, any][] =>
   Object.entries(couchbaseSamples).map(([name, sample]) => [
@@ -79,6 +78,8 @@ describe(`JHipster ${databaseType} generator`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
+      shouldComposeWithKafka(sample, () => runResult);
+      shouldComposeWithLiquibase(false, () => runResult);
     });
   });
 });

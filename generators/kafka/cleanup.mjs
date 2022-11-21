@@ -17,21 +17,27 @@
  * limitations under the License.
  */
 /**
+ * @typedef {import('../server/types.mjs').SpringBootApplication} SpringBootApplication
+ */
+/**
+ * @typedef {import('./generator.mjs')} KafkaGenerator
+ */
+/**
+ * @typedef {import('../base-application/tasks.mjs').ApplicationTaskParam<SpringBootApplication>} CleanupTaskParam
+ */
+/**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  *
- * @param {any} generator - reference to generator
- * @param {string} javaDir - Java directory
- * @param {string} testDir - Java tests directory
- * @param {string} mainResourceDir - Main resources directory
- * @param {string} testResourceDir - Test resources directory
+ * @this {this} - KafkaGenerator
+ * @param {CleanupTaskParam} - args
  */
-export default function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
-  if (generator.isJhipsterVersionLessThan('6.5.2')) {
-    generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaConsumer.java`);
-    generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`);
+export default function cleanupKafkaFilesTask({ application }) {
+  if (this.isJhipsterVersionLessThan('6.5.2')) {
+    this.removeFile(`${application.javaPackageSrcDir}service/${application.upperFirstCamelCaseBaseName}KafkaConsumer.java`);
+    this.removeFile(`${application.javaPackageSrcDir}service/${application.upperFirstCamelCaseBaseName}KafkaProducer.java`);
   }
-  if (generator.isJhipsterVersionLessThan('7.7.1')) {
-    generator.removeFile(`${javaDir}config/KafkaProperties.java`);
+  if (this.isJhipsterVersionLessThan('7.7.1')) {
+    this.removeFile(`${application.javaPackageSrcDir}config/KafkaProperties.java`);
   }
 }

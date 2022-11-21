@@ -8,6 +8,7 @@ import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
+import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from './__test-support/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -52,8 +53,6 @@ sqlSamples = extendFilteredMatrix(sqlSamples, ({ prodDatabaseType }) => prodData
 sqlSamples = extendFilteredMatrix(sqlSamples, ({ reactive }) => !reactive, {
   cacheProvider: [NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS],
 });
-
-const mockedGenerators = ['jhipster:languages', 'jhipster:common', 'jhipster:liquibase', 'jhipster:docker'];
 
 const samplesBuilder = (): [string, any][] =>
   Object.entries(sqlSamples).map(([name, sample]) => [
@@ -117,6 +116,8 @@ describe(`JHipster ${databaseType} generator`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
+      shouldComposeWithKafka(sample, () => runResult);
+      shouldComposeWithLiquibase(sample, () => runResult);
     });
   });
 });
