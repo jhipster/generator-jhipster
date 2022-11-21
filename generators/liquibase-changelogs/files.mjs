@@ -18,9 +18,6 @@
  */
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 
-/* Constants use throughout */
-const INTERPOLATE_REGEX = /<%:([\s\S]+?)%>/g;
-
 export const addEntityFiles = {
   dbChangelog: [
     {
@@ -28,7 +25,6 @@ export const addEntityFiles = {
       templates: [
         {
           file: 'config/liquibase/changelog/added_entity.xml',
-          options: { interpolate: INTERPOLATE_REGEX },
           renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_${generator.entity.entityClass}.xml`,
         },
       ],
@@ -42,7 +38,6 @@ export const addEntityFiles = {
       templates: [
         {
           file: 'config/liquibase/changelog/added_entity_constraints.xml',
-          options: { interpolate: INTERPOLATE_REGEX },
           renameTo: generator =>
             `config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entity.entityClass}.xml`,
         },
@@ -58,7 +53,6 @@ export const updateEntityFiles = {
       templates: [
         {
           file: 'config/liquibase/changelog/updated_entity.xml',
-          options: { interpolate: INTERPOLATE_REGEX },
           renameTo: generator =>
             `config/liquibase/changelog/${generator.databaseChangelog.changelogDate}_updated_entity_${generator.entity.entityClass}.xml`,
         },
@@ -74,7 +68,6 @@ export const updateConstraintsFiles = {
       templates: [
         {
           file: 'config/liquibase/changelog/updated_entity_constraints.xml',
-          options: { interpolate: INTERPOLATE_REGEX },
           renameTo: generator =>
             `config/liquibase/changelog/${generator.databaseChangelog.changelogDate}_updated_entity_constraints_${generator.entity.entityClass}.xml`,
         },
@@ -90,7 +83,6 @@ export const updateMigrateFiles = {
       templates: [
         {
           file: 'config/liquibase/changelog/updated_entity_migrate.xml',
-          options: { interpolate: INTERPOLATE_REGEX },
           renameTo: generator =>
             `config/liquibase/changelog/${generator.databaseChangelog.changelogDate}_updated_entity_migrate_${generator.entity.entityClass}.xml`,
         },
@@ -106,9 +98,6 @@ export const fakeFiles = {
       templates: [
         {
           file: 'config/liquibase/fake-data/table_entity.csv',
-          options: {
-            interpolate: INTERPOLATE_REGEX,
-          },
           renameTo: generator => {
             if (!generator.incrementalChangelog || generator.recreateInitialChangelog) {
               return `config/liquibase/fake-data/${generator.entity.entityTableName}.csv`;
