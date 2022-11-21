@@ -393,13 +393,13 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     // Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6
-    implementation "io.mongock:mongock-springboot-v3" {
+    implementation "io.mongock:mongock-springboot-v3", {
         exclude group: "org.reflections", module: "reflections"
     }
-    implementation "io.mongock:mongodb-springdata-v4-driver" {
+    implementation "io.mongock:mongodb-springdata-v4-driver", {
         exclude group: "org.reflections", module: "reflections"
     }
-    implementation "org.reflections:reflections:0.10.1" {
+    implementation "org.reflections:reflections:0.10.1", {
         exclude group: "org.javassist", module: "javassist"
     }
     testImplementation "org.testcontainers:mongodb"
