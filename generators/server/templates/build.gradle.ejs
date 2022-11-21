@@ -392,8 +392,16 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     liquibaseRuntime "org.liquibase:liquibase-core"
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-    implementation "io.mongock:mongock-springboot-v3"
-    implementation "io.mongock:mongodb-springdata-v4-driver"
+    // Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6
+    implementation "io.mongock:mongock-springboot-v3" {
+        exclude group: "org.reflections", module: "reflections"
+    }
+    implementation "io.mongock:mongodb-springdata-v4-driver" {
+        exclude group: "org.reflections", module: "reflections"
+    }
+    implementation "org.reflections:reflections:0.9.11" {
+        exclude group: "org.javassist", module: "javassist"
+    }
     testImplementation "org.testcontainers:mongodb"
   <%_ if (reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
