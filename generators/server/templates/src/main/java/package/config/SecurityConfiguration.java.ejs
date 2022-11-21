@@ -36,6 +36,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+<%_ if (!reactive) { _%>
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+<%_ } _%>
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
 import org.springframework.security.config.http.SessionCreationPolicy;
 <%_ } _%>
@@ -168,6 +171,7 @@ public class SecurityConfiguration {
   <%_ if (authenticationTypeJwt) { _%>
             .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
   <%_ } else if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+            .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
             .addFilterBefore(corsFilter, CsrfFilter.class)
   <%_ } _%>
 <%_ } _%>
@@ -199,12 +203,12 @@ public class SecurityConfiguration {
 <%_ if (devDatabaseTypeH2Any) { _%>
             .requestMatchers("/h2-console/**").permitAll()
 <%_ } _%>
-<% if (authenticationTypeJwt) { %>
+<%_ if (authenticationTypeJwt) { _%>
             .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
-<% } else { %>
+<%_ } else { _%>
             .requestMatchers("/api/authenticate").permitAll()
-<% } %>
+<%_ } _%>
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
             .requestMatchers("/api/register").permitAll()
             .requestMatchers("/api/activate").permitAll()
@@ -317,6 +321,21 @@ public class SecurityConfiguration {
   <%_ } _%>
 
         return jwtDecoder;
+    }
+<%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+
+    // Spring Security 6 doesn't set CSRF token by default.
+    // See https://github.com/spring-projects/spring-security/issues/12141#issuecomment-1321345077
+    private static final class CsrfCookieFilter extends OncePerRequestFilter {
+
+        @Override
+        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
+            filterChain.doFilter(request, response);
+        }
     }
 <%_ } _%>
 }
