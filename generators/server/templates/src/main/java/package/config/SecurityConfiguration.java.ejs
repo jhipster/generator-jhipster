@@ -69,7 +69,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
+<%_ if ((authenticationTypeOauth2 || authenticationTypeSession) && !applicationTypeMicroservice) { _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 <%_ } _%>
