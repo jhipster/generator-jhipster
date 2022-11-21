@@ -25,6 +25,7 @@ import { fileURLToPath } from 'url';
 import testSupport from '../../test/support/index.cjs';
 import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
 import Generator from './index.mjs';
+import { shouldComposeWithKafka } from './__test-support/index.mjs';
 
 const { snakeCase } = lodash;
 const { testBlueprintSupport } = testSupport;
@@ -35,7 +36,7 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorPath = join(__dirname, 'index.mjs');
 
-const serverGenerators = ['jhipster:common', 'jhipster:maven', 'jhipster:gradle'];
+const serverGenerators = ['jhipster:common', 'jhipster:maven', 'jhipster:gradle', 'jhipster:kafka'];
 const skipPriorities = ['prompting', 'writing', 'postWriting', 'writingEntities', 'postWritingEntities'];
 
 describe(`JHipster ${generator} generator`, () => {
@@ -98,6 +99,42 @@ describe(`JHipster ${generator} generator`, () => {
         it('should not compose with others buildTool generators', () => {
           assert(runResult.mockedGenerators['jhipster:maven'].notCalled);
         });
+      });
+    });
+
+    describe('messageBroker option', () => {
+      describe('no', () => {
+        let runResult;
+        before(async () => {
+          runResult = await helpers
+            .run(generatorPath)
+            .withOptions({
+              localConfig: {
+                baseName: 'jhipster',
+                messageBroker: 'no',
+              },
+              skipPriorities,
+            })
+            .withMockedGenerators(serverGenerators);
+        });
+
+        shouldComposeWithKafka(false, () => runResult);
+      });
+      describe('kafka', () => {
+        let runResult;
+        before(async () => {
+          runResult = await helpers
+            .run(generatorPath)
+            .withOptions({
+              localConfig: {
+                baseName: 'jhipster',
+                messageBroker: 'kafka',
+              },
+              skipPriorities,
+            })
+            .withMockedGenerators(serverGenerators);
+        });
+        shouldComposeWithKafka(true, () => runResult);
       });
     });
   });

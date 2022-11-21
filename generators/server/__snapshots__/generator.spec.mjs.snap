@@ -736,20 +736,6 @@ Object {
         },
       ],
     },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/KafkaSseConsumer.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/KafkaSseProducer.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
   ],
   "serverJavaServiceError": Array [
     Object {
@@ -1102,26 +1088,6 @@ Object {
       "templates": Array [
         Object {
           "file": "package/web/filter/SpaWebFilter.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/KafkaResource_reactive.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/KafkaResource.java",
           "renameTo": [Function],
         },
       ],
@@ -1523,40 +1489,6 @@ Object {
       "templates": Array [
         Object {
           "file": "package/security/DomainUserDetailsServiceIT.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/KafkaTestContainer.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/EmbeddedKafka.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/KafkaResourceIT.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/web/rest/KafkaResourceIT_reactive.java",
           "renameTo": [Function],
         },
       ],

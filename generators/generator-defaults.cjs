@@ -46,9 +46,6 @@ const appDefaultConfig = {
   get blueprints() {
     return [];
   },
-  get otherModules() {
-    return [];
-  },
   get pages() {
     return [];
   },

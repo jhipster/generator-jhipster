@@ -441,8 +441,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       },
       askForTestOpts: prompts.askForTestOpts,
 
-      askForMoreModules: prompts.askForMoreModules,
-
       /**
        * At this point every other generator should already be configured, so, enforce defaults fallback.
        */
@@ -510,20 +508,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
   get end() {
     return {
       afterRunHook() {
-        try {
-          const modules = this.getModuleHooks();
-          if (modules.length > 0) {
-            this.log(`\n${chalk.bold.green('Running post run module hooks\n')}`);
-            // run through all post app creation module hooks
-            this.callHooks('app', 'post', {
-              appConfig: this.configOptions,
-              force: this.options.force,
-            });
-          }
-        } catch (err) {
-          this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated app.')}`);
-          this.debug('Error:', err);
-        }
         this.log(
           chalk.green(
             `\nIf you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`
