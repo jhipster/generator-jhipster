@@ -29,15 +29,16 @@ import org.springframework.context.annotation.Configuration;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
-<%_ if (!applicationTypeMicroservice || !authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeJwt) { _%>
 import org.springframework.http.HttpMethod;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-<%_ if (!reactive && (authenticationTypeSession || authenticationTypeOauth2)) { _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import tech.jhipster.web.filter.CookieCsrfFilter;
 <%_ } _%>
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -60,13 +61,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
   <%_ } _%>
-  <%_ if (!reactive && (authenticationTypeSession || authenticationTypeOauth2)) { _%>
-import java.io.IOException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-  <%_ } _%>
 import java.util.*;
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
@@ -74,21 +68,15 @@ import java.util.*;
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.CsrfToken;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-  <%_ if (!applicationTypeMicroservice) { _%>
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-  <%_ } _%>
   <%_ if (applicationTypeMonolith) { _%>
 import org.springframework.security.config.Customizer;
   <%_ } _%>
@@ -104,12 +92,6 @@ import <%= packageName %>.security.oauth2.CustomClaimConverter;
 <%_ if(!skipClient) { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 <%_ } _%>
-<%_ if (!applicationTypeMicroservice) { _%>
-import org.springframework.web.filter.CorsFilter;
-    <%_ if (!reactive && (authenticationTypeSession || authenticationTypeOauth2)) { _%>
-import org.springframework.web.filter.OncePerRequestFilter;
-    <%_ } _%>
-<%_ } _%>
 
 @Configuration
 @EnableWebSecurity
@@ -121,22 +103,15 @@ public class SecurityConfiguration {
 
     private final RememberMeServices rememberMeServices;
 <%_ } _%>
-<%_ if (!applicationTypeMicroservice) { _%>
-
-    private final CorsFilter corsFilter;
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
     <%_ } _%>
 
-    public SecurityConfiguration(<% if (authenticationTypeSession && generateUserManagement) { %>RememberMeServices rememberMeServices, <% } %><% if (!applicationTypeMicroservice) { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties) {
+    public SecurityConfiguration(<% if (authenticationTypeSession && generateUserManagement) { %>RememberMeServices rememberMeServices, <% } %> JHipsterProperties jHipsterProperties) {
 <%_ if (authenticationTypeSession && generateUserManagement) { _%>
         this.rememberMeServices = rememberMeServices;
-<%_ } _%>
-<%_ if (!applicationTypeMicroservice) { _%>
-        this.corsFilter = corsFilter;
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
     }
@@ -169,22 +144,20 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
         http
-            .csrf()
+            .csrf(csrf -> csrf
 <%_ if (devDatabaseTypeH2Any) { _%>
                 .ignoringRequestMatchers("/h2-console/**")
 <%_ } _%>
 <%_ if ((authenticationTypeOauth2 || authenticationTypeSession) && !applicationTypeMicroservice) { _%>
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .and()
+                // See https://stackoverflow.com/q/74447118/65681
+                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
 <%_ } else { _%>
-                .disable()
+                .disable())
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
-  <%_ if (authenticationTypeJwt) { _%>
-            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-  <%_ } else if (authenticationTypeSession || authenticationTypeOauth2) { _%>
-            .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-            .addFilterBefore(corsFilter, CsrfFilter.class)
+  <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+            .addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class)
   <%_ } _%>
 <%_ } _%>
 <%_ if (!skipClient) { _%>
@@ -200,7 +173,6 @@ public class SecurityConfiguration {
 <%_ } _%>
             .authorizeRequests()
 <%_ if (!applicationTypeMicroservice) { _%>
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
   <%_ if (!skipClient) { _%>
             .requestMatchers("/app/*.html").permitAll()
             .requestMatchers("/app/*/*.html").permitAll()
@@ -333,20 +305,6 @@ public class SecurityConfiguration {
   <%_ } _%>
 
         return jwtDecoder;
-    }
-<%_ } _%>
-<%_ if (!reactive && (authenticationTypeSession || authenticationTypeOauth2)) { _%>
-
-    // Spring Security 6 doesn't set XSRF-TOKEN cookie by default.
-    // See https://github.com/spring-projects/spring-security/issues/12141#issuecomment-1321345077
-    private static final class CsrfCookieFilter extends OncePerRequestFilter {
-        @Override
-        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-            response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
-            filterChain.doFilter(request, response);
-        }
     }
 <%_ } _%>
 }

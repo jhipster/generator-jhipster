@@ -115,7 +115,6 @@ import org.springframework.security.web.server.util.matcher.OrServerWebExchangeM
 <%_ if (skipUserManagement && !authenticationTypeOauth2) { _%>
 import org.springframework.util.StringUtils;
 <%_ } _%>
-import org.springframework.web.cors.reactive.CorsWebFilter;
 <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
