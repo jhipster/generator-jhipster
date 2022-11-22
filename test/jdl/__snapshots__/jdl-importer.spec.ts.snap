@@ -3,7 +3,6 @@
 exports[`JDLImporter import when not parsing applications should export entity Country 1`] = `
 Object {
   "applications": "*",
-  "changelogDate": "20160926101210",
   "dto": "no",
   "embedded": false,
   "entityTableName": "country",
@@ -42,7 +41,6 @@ Object {
 exports[`JDLImporter import when not parsing applications should export entity Department 1`] = `
 Object {
   "applications": "*",
-  "changelogDate": "20160926092246",
   "dto": "no",
   "embedded": true,
   "entityTableName": "department",
@@ -107,9 +105,7 @@ Object {
 
 exports[`JDLImporter import when not parsing applications should export entity Employee 1`] = `
 Object {
-  "angularJSSuffix": "myentities",
   "applications": "*",
-  "changelogDate": "20160926083805",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "employee",
@@ -193,7 +189,6 @@ Object {
 exports[`JDLImporter import when not parsing applications should export entity Job 1`] = `
 Object {
   "applications": "*",
-  "changelogDate": "20160924093047",
   "dto": "no",
   "embedded": false,
   "entityTableName": "job",
@@ -259,7 +254,6 @@ Object {
 exports[`JDLImporter import when not parsing applications should export entity JobHistory 1`] = `
 Object {
   "applications": "*",
-  "changelogDate": "20160924092444",
   "dto": "no",
   "embedded": false,
   "entityTableName": "job_history",
@@ -320,7 +314,6 @@ Object {
 exports[`JDLImporter import when not parsing applications should export entity Location 1`] = `
 Object {
   "applications": "*",
-  "changelogDate": "20160924092439",
   "dto": "no",
   "embedded": false,
   "entityTableName": "location",
@@ -373,7 +366,6 @@ Object {
 exports[`JDLImporter import when not parsing applications should export entity Region 1`] = `
 Object {
   "applications": "*",
-  "changelogDate": "20160926083800",
   "dto": "no",
   "embedded": false,
   "entityTableName": "region",
@@ -404,7 +396,6 @@ Object {
 exports[`JDLImporter import when not parsing applications should export entity Task 1`] = `
 Object {
   "applications": "*",
-  "changelogDate": "20160926100704",
   "dto": "no",
   "embedded": false,
   "entityTableName": "task",
@@ -444,9 +435,8 @@ Object {
   "exportedApplicationsWithEntities": Object {},
   "exportedDeployments": Array [],
   "exportedEntities": Array [
-    Object {
+    JSONEntity {
       "applications": "*",
-      "changelogDate": "20160926101210",
       "dto": "no",
       "embedded": false,
       "entityTableName": "country",
@@ -481,9 +471,8 @@ Object {
       "service": "no",
       "skipServer": true,
     },
-    Object {
+    JSONEntity {
       "applications": "*",
-      "changelogDate": "20160926092246",
       "dto": "no",
       "embedded": true,
       "entityTableName": "department",
@@ -545,10 +534,8 @@ Object {
       ],
       "service": "no",
     },
-    Object {
-      "angularJSSuffix": "myentities",
+    JSONEntity {
       "applications": "*",
-      "changelogDate": "20160926083805",
       "dto": "mapstruct",
       "embedded": false,
       "entityTableName": "employee",
@@ -627,9 +614,8 @@ Object {
       "searchEngine": "elasticsearch",
       "service": "serviceClass",
     },
-    Object {
+    JSONEntity {
       "applications": "*",
-      "changelogDate": "20160924093047",
       "dto": "no",
       "embedded": false,
       "entityTableName": "job",
@@ -691,9 +677,8 @@ Object {
       ],
       "service": "no",
     },
-    Object {
+    JSONEntity {
       "applications": "*",
-      "changelogDate": "20160924092444",
       "dto": "no",
       "embedded": false,
       "entityTableName": "job_history",
@@ -749,9 +734,8 @@ Object {
       ],
       "service": "no",
     },
-    Object {
+    JSONEntity {
       "applications": "*",
-      "changelogDate": "20160924092439",
       "dto": "no",
       "embedded": false,
       "entityTableName": "location",
@@ -800,9 +784,8 @@ Object {
       ],
       "service": "no",
     },
-    Object {
+    JSONEntity {
       "applications": "*",
-      "changelogDate": "20160926083800",
       "dto": "no",
       "embedded": false,
       "entityTableName": "region",
@@ -829,9 +812,8 @@ Object {
       ],
       "service": "no",
     },
-    Object {
+    JSONEntity {
       "applications": "*",
-      "changelogDate": "20160926100704",
       "dto": "no",
       "embedded": false,
       "entityTableName": "task",
