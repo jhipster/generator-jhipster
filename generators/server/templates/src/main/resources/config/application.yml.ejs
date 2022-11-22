@@ -196,11 +196,11 @@ spring:
           auto-create-topics: true
           brokers: localhost:9092
       bindings:
-        binding-in-sse:
+        binding-in-0:
           destination: sse-topic
           content-type: text/plain
           group: <%= dasherizedBaseName %>
-        binding-out-sse:
+        binding-out-0:
           destination: sse-topic
           content-type: text/plain
           group: <%= dasherizedBaseName %>

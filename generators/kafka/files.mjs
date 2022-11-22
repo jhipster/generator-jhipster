@@ -29,7 +29,7 @@ export const kafkaFiles = {
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/KafkaSseConsumer.java', 'config/KafkaSseProducer.java'],
+      templates: ['config/KafkaConfiguration.java'],
     },
   ],
   resources: [

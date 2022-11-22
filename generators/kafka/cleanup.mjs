@@ -40,4 +40,8 @@ export default function cleanupKafkaFilesTask({ application }) {
   if (this.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.javaPackageSrcDir}config/KafkaProperties.java`);
   }
+  if (this.isJhipsterVersionLessThan('7.9.3')) {
+    this.removeFile(`${application.javaPackageSrcDir}config/KafkaSseConsumer.java`);
+    this.removeFile(`${application.javaPackageSrcDir}config/KafkaSseProducer.java`);
+  }
 }
