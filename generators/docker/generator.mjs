@@ -85,10 +85,13 @@ export default class DockerGenerator extends BaseApplicationGenerator {
   get writing() {
     return this.asWritingTaskGroup({
       async writeDockerFiles({ application }) {
-        faker.seed(stringHashCode(application.baseName));
+        if (application.authenticationTypeOauth2) {
+          faker.seed(stringHashCode(application.baseName));
+          application.keycloakSecrets = Array(6).forEach(() => faker.datatype.uuid());
+        }
         await this.writeFiles({
           sections: dockerFiles,
-          context: { ...application, faker },
+          context: application,
         });
       },
     });

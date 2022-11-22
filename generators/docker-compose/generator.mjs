@@ -145,8 +145,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
       setAppsYaml() {
         this.appsYaml = [];
         this.keycloakRedirectUris = '';
-        this.applicationTypeGateway = false;
-        this.faker = faker;
+        this.includesApplicationTypeGateway = false;
         this.appConfigs.forEach(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           const parentConfiguration = {};
@@ -165,10 +164,13 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             );
           }
           if (appConfig.applicationType === GATEWAY) {
-            this.applicationTypeGateway = true;
+            this.includesApplicationTypeGateway = true;
           }
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-            this.faker.seed(stringHashCode(appConfig.baseName));
+            if (this.keycloakSecrets === undefined && appConfig.authenticationType === 'oauth2') {
+              faker.seed(stringHashCode(appConfig.baseName));
+              this.keycloakSecrets = Array(6).forEach(() => faker.datatype.uuid());
+            }
             this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {
               this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;

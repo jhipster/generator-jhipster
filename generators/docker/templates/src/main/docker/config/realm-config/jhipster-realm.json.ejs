@@ -545,7 +545,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "<%= faker.datatype.uuid() %>",
+      "secret": "<%= keycloakSecrets[0] %>",
       "redirectUris": [
         "/realms/jhipster/account/*"
       ],
@@ -589,7 +589,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "<%= faker.datatype.uuid() %>",
+      "secret": "<%= keycloakSecrets[1] %>",
       "redirectUris": [
         "/realms/jhipster/account/*"
       ],
@@ -642,7 +642,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "<%= faker.datatype.uuid() %>",
+      "secret": "<%= keycloakSecrets[2] %>",
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -682,7 +682,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "<%= faker.datatype.uuid() %>",
+      "secret": "<%= keycloakSecrets[3] %>",
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -713,7 +713,8 @@
         "offline_access",
         "microprofile-jwt"
       ]
-    },<% if (applicationTypeGateway) { %>
+    },
+<%_ if (applicationTypeGateway) { _%>
     {
       "id": "10e6ea34-9f1e-49ef-8e28-7eb851459694",
       "clientId": "internal",
@@ -812,7 +813,8 @@
         "offline_access",
         "microprofile-jwt"
       ]
-    },<% } %>
+    },
+<%_ } _%>
     {
       "id": "1acf7ad0-68cb-46a6-a3e4-8b2f2abecb85",
       "clientId": "jhipster-control-center",
@@ -945,7 +947,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "<%= faker.datatype.uuid() %>",
+      "secret": "<%= keycloakSecrets[4] %>",
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -987,7 +989,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "<%= faker.datatype.uuid() %>",
+      "secret": "<%= keycloakSecrets[5] %>",
       "redirectUris": [
         "/admin/jhipster/console/*"
       ],
