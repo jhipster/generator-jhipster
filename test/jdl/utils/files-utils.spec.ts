@@ -80,7 +80,7 @@ describe('FileUtils', () => {
       });
 
       after(() => {
-        fs.rmdirSync('./here');
+        fs.rmSync('./here', { recursive: true });
       });
 
       it('should create it', () => {
@@ -109,9 +109,9 @@ describe('FileUtils', () => {
       });
 
       after(() => {
-        fs.rmdirSync(path.join('toto', 'titi', 'tutu'));
-        fs.rmdirSync(path.join('toto', 'titi'));
-        fs.rmdirSync('toto');
+        fs.rmSync(path.join('toto', 'titi', 'tutu'), { recursive: true });
+        fs.rmSync(path.join('toto', 'titi'), { recursive: true });
+        fs.rmSync('toto', { recursive: true });
       });
 
       it('should create the folder structure recursively', () => {
