@@ -87,7 +87,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
       async writeDockerFiles({ application }) {
         if (application.authenticationTypeOauth2) {
           faker.seed(stringHashCode(application.baseName));
-          application.keycloakSecrets = Array(6).forEach(() => faker.datatype.uuid());
+          application.keycloakSecrets = new Array(6).forEach(() => faker.datatype.uuid());
         }
         await this.writeFiles({
           sections: dockerFiles,
