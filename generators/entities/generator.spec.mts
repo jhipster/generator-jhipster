@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 import constants from '../generator-constants.cjs';
 import testSupport from '../../test/support/index.cjs';
 import Generator from './generator.mjs';
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 
 const { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
 

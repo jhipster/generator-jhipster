@@ -24,13 +24,12 @@ import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
 import TestFrameworkTypes from '../../jdl/jhipster/test-framework-types.js';
 
 import { testBlueprintSupport, fromMatrix, extendMatrix, AuthenticationTypeMatrix } from '../../test/support/index.mjs';
-import testUtils from '../../test/utils/utils.cjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './generator.mjs';
 import constants from '../generator-constants.cjs';
 
 const { CYPRESS } = TestFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
-const { defaultHelpers: helpers } = testUtils;
 const { CLIENT_TEST_SRC_DIR } = constants;
 
 const { snakeCase } = lodash;

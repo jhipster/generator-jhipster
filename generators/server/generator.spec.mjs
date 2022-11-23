@@ -23,7 +23,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import testSupport from '../../test/support/index.cjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './index.mjs';
 import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka } from './__test-support/index.mjs';
 

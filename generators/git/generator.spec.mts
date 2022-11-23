@@ -22,7 +22,7 @@ import { fileURLToPath } from 'url';
 import { access } from 'fs/promises';
 
 import { testBlueprintSupport } from '../../test/support/index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { GENERATOR_GIT } from '../generator-list.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

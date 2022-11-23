@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport, buildClientSamples, entitiesClientSamples as entities } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import constants from '../generator-constants.cjs';

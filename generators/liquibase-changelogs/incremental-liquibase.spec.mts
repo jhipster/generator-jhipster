@@ -3,7 +3,7 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 import constants from '../generator-constants.cjs';
 import { jdlImporter } from '../../jdl/index.mjs';
 import expectedFiles from '../../test/utils/expected-files.cjs';

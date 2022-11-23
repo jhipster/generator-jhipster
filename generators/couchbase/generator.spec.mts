@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport, buildServerMatrix, extendMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
 import Generator from './generator.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import {

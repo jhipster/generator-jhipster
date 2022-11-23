@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import { existsSync } from 'fs';
 
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.cjs';
-import { skipPrettierHelpers as helpers } from '../utils/utils.cjs';
+import { skipPrettierHelpers as helpers } from './helpers.mjs';
 import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.cjs';
 
 const {

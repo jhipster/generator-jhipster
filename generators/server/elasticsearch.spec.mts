@@ -3,7 +3,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { buildServerMatrix, extendMatrix, entitiesServerSamples as entities } from '../../test/support/index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.mjs';
 
 import { databaseTypes, searchEngineTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';

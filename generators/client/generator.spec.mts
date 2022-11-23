@@ -24,7 +24,7 @@ import assert from 'assert';
 
 import testSupport from '../../test/support/index.cjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import defaults from '../generator-defaults.cjs';
 import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 

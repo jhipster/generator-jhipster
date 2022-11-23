@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport, buildServerMatrix, extendMatrix, extendFilteredMatrix } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
 import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from './__test-support/index.mjs';
