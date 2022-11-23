@@ -1349,9 +1349,6 @@ exports[`generator - app - with blueprint generate application with a peer versi
   "src/test/resources/templates/mail/testEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/resources/testcontainers.properties": {
-    "stateCleared": "modified",
-  },
   "tsconfig.app.json": {
     "stateCleared": "modified",
   },
@@ -2723,9 +2720,6 @@ exports[`generator - app - with blueprint generate application with a version-co
     "stateCleared": "modified",
   },
   "src/test/resources/templates/mail/testEmail.html": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/testcontainers.properties": {
     "stateCleared": "modified",
   },
   "tsconfig.app.json": {
