@@ -23,7 +23,8 @@ import { fileURLToPath } from 'url';
 import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
 import TestFrameworkTypes from '../../jdl/jhipster/test-framework-types.js';
 
-import { testBlueprintSupport, fromMatrix, extendMatrix, AuthenticationTypeMatrix } from '../../test/support/index.mjs';
+import { fromMatrix, extendMatrix, AuthenticationTypeMatrix } from '../../test/support/index.mjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './generator.mjs';
 import constants from '../generator-constants.cjs';

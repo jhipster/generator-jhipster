@@ -21,7 +21,7 @@ import { basename, dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { access } from 'fs/promises';
 
-import { testBlueprintSupport } from '../../test/support/index.mjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { GENERATOR_GIT } from '../generator-list.mjs';
 

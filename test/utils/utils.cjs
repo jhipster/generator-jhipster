@@ -1,7 +1,6 @@
 const crypto = require('crypto');
 const path = require('path');
 const os = require('os');
-const assert = require('yeoman-assert');
 const fse = require('fs-extra');
 const fs = require('fs');
 

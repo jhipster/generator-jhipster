@@ -1,11 +1,14 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import path from 'path';
+import path, { dirname } from 'path';
 import sinon from 'sinon';
 import { existsSync } from 'fs';
+import { fileURLToPath } from 'url';
 
-import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.cjs';
+import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
 import { skipPrettierHelpers as helpers } from './helpers.mjs';
-import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.cjs';
+import priorities from '../../generators/base-application/priorities.cjs';
+
+const { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } = priorities;
 
 const {
   CONFIGURING_EACH_ENTITY,
@@ -17,6 +20,9 @@ const {
   WRITING_ENTITIES,
   POST_WRITING_ENTITIES,
 } = PRIORITY_NAMES;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export const testOptions = data => {
   const { generatorPath, customOptions, contextBuilder = () => helpers.create(generatorPath) } = data;
