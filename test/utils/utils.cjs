@@ -4,32 +4,13 @@ const os = require('os');
 const assert = require('yeoman-assert');
 const fse = require('fs-extra');
 const fs = require('fs');
-const { createHelpers } = require('yeoman-test');
 
-const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
 const constants = require('../../generators/generator-constants.cjs');
 
 const DOCKER_DIR = constants.DOCKER_DIR;
 const FAKE_BLUEPRINT_DIR = path.join(__dirname, '../templates/fake-blueprint');
 
-const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
-const DEFAULT_TEST_OPTIONS = { skipInstall: true };
-const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
-
 module.exports = {
-  DEFAULT_TEST_OPTIONS,
-  basicHelpers: createTestHelpers({ generatorOptions: { reproducible: true, skipChecks: true } }),
-  defaultHelpers: createTestHelpers({
-    generatorOptions: { skipPrettier: true, reproducible: true, skipChecks: true },
-    environmentOptions: { dryRun: true },
-  }),
-  skipPrettierHelpers: createTestHelpers({ generatorOptions: { skipPrettier: true, reproducible: true, skipChecks: true } }),
-  dryRunHelpers: createTestHelpers({
-    generatorOptions: { skipPrettier: true, reproducible: true, skipChecks: true },
-    environmentOptions: { dryRun: true },
-  }),
-  createTestHelpers,
-  shouldBeV3DockerfileCompatible,
   getJHipsterCli,
   prepareTempDir,
   testInTempDir,
@@ -39,32 +20,6 @@ module.exports = {
   copyFakeBlueprint,
   lnYeoman,
 };
-
-function createTestHelpers(options = {}) {
-  const { environmentOptions = {} } = options;
-  const sharedOptions = {
-    ...DEFAULT_TEST_OPTIONS,
-    ...environmentOptions.sharedOptions,
-  };
-  const newOptions = {
-    settings: { ...DEFAULT_TEST_SETTINGS, ...options.settings },
-    environmentOptions: { ...DEFAULT_TEST_ENV_OPTIONS, ...environmentOptions, sharedOptions },
-    generatorOptions: { ...DEFAULT_TEST_OPTIONS, ...options.generatorOptions },
-    createEnv: (...args) => EnvironmentBuilder.createEnv(...args),
-  };
-  return createHelpers(newOptions);
-}
-
-function shouldBeV3DockerfileCompatible(databaseType) {
-  it('creates compose file without container_name, external_links, links', () => {
-    assert.noFileContent(`${DOCKER_DIR}app.yml`, /container_name:/);
-    assert.noFileContent(`${DOCKER_DIR}app.yml`, /external_links:/);
-    assert.noFileContent(`${DOCKER_DIR}app.yml`, /links:/);
-    assert.noFileContent(`${DOCKER_DIR + databaseType}.yml`, /container_name:/);
-    assert.noFileContent(`${DOCKER_DIR + databaseType}.yml`, /external_links:/);
-    assert.noFileContent(`${DOCKER_DIR + databaseType}.yml`, /links:/);
-  });
-}
 
 function getJHipsterCli() {
   const cmdPath = path.join(__dirname, '../../dist/cli/jhipster.mjs');

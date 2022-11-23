@@ -19,13 +19,6 @@
 import utils from './utils.cjs';
 
 export const {
-  DEFAULT_TEST_OPTIONS,
-  basicHelpers,
-  defaultHelpers,
-  skipPrettierHelpers,
-  dryRunHelpers,
-  createTestHelpers,
-  shouldBeV3DockerfileCompatible,
   getJHipsterCli,
   prepareTempDir,
   testInTempDir,
