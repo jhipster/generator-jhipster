@@ -93,7 +93,7 @@ function copyBlueprint(sourceDir, destDir, ...blueprintNames) {
 }
 
 function copyFakeBlueprint(destDir, ...blueprintName) {
-  copyBlueprint(getTemplatePath('fake-blueprint'), destDir, ...blueprintName);
+  copyBlueprint(getTemplatePath('blueprints/fake-blueprint'), destDir, ...blueprintName);
 }
 
 function lnYeoman(packagePath) {

@@ -3,7 +3,7 @@
 const path = require('path');
 const sinon = require('sinon');
 
-const { prepareTempDir } = require('./utils/utils.cjs');
+const { prepareTempDir, getTemplatePath } = require('./utils/utils.cjs');
 const { runJHipster } = require('../../cli/program.cjs');
 
 describe('jhipster cli with jdl fork', () => {
@@ -22,7 +22,7 @@ describe('jhipster cli with jdl fork', () => {
           'jhipster',
           'jhipster',
           'jdl',
-          path.join(__dirname, '..', 'templates', 'import-jdl', 'single-app-only.jdl'),
+          getTemplatePath('import-jdl/common/single-app-only.jdl'),
           '--skip-install',
           '--fork',
           '--skip-sample-repository',
@@ -48,7 +48,7 @@ describe('jhipster cli with jdl fork', () => {
           'jhipster',
           'jhipster',
           'jdl',
-          path.join(__dirname, '..', 'templates', 'import-jdl', 'jdl.jdl'),
+          getTemplatePath('import-jdl/common/jdl.jdl'),
           '--base-name',
           'jhipsterApp',
           '--db',
@@ -79,7 +79,7 @@ describe('jhipster cli with jdl fork', () => {
           'jhipster',
           'jhipster',
           'jdl',
-          path.join(__dirname, '..', 'templates', 'import-jdl', 'apps-and-entities-and-deployments.jdl'),
+          getTemplatePath('import-jdl/common/apps-and-entities-and-deployments.jdl'),
           '--skip-install',
           '--fork',
           '--skip-prettier',
