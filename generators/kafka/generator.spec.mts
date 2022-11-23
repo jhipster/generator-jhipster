@@ -21,7 +21,8 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport, buildServerMatrix } from '../../test/support/index.mjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
+import { buildServerMatrix } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 

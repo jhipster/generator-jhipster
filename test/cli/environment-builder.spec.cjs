@@ -25,7 +25,7 @@ const helpers = require('yeoman-test');
 
 const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
 
-const { getTemplatePath, prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } = require('../utils/utils.cjs');
+const { getTemplatePath, prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } = require('./utils/utils.cjs');
 
 describe('Environment builder', () => {
   let cleanup;

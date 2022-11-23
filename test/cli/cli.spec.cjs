@@ -9,7 +9,7 @@ const Environment = require('yeoman-environment');
 const helpers = require('yeoman-test');
 
 const { createProgram, buildJHipster } = require('../../cli/program.cjs');
-const { getTemplatePath, getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils.cjs');
+const { getTemplatePath, getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('./utils/utils.cjs');
 const { logger } = require('../../cli/utils.cjs');
 
 const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.cjs'));

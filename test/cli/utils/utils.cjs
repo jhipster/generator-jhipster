@@ -4,9 +4,9 @@ const os = require('os');
 const fse = require('fs-extra');
 const fs = require('fs');
 
-const FAKE_BLUEPRINT_DIR = path.join(__dirname, '../templates/fake-blueprint');
+const getPackageFilePath = (...filePath) => path.resolve(__dirname, '../../..', ...filePath);
 
-const getTemplatePath = (...templatePath) => path.resolve(__dirname, '../templates', ...templatePath);
+const getTemplatePath = (...templatePath) => getPackageFilePath('test/templates', ...templatePath);
 
 module.exports = {
   getJHipsterCli,
@@ -21,7 +21,7 @@ module.exports = {
 };
 
 function getJHipsterCli() {
-  const cmdPath = path.join(__dirname, '../../dist/cli/jhipster.mjs');
+  const cmdPath = getPackageFilePath('dist/cli/jhipster.mjs');
   let cmd = `node ${cmdPath} `;
   if (os.platform() === 'win32') {
     // corrected test for windows user
@@ -65,7 +65,7 @@ function testInTempDir(cb) {
   return cwd;
 }
 
-function revertTempDir(dest = path.join(__dirname, '..', '..'), tempDir) {
+function revertTempDir(dest = getPackageFilePath(), tempDir) {
   if (tempDir === undefined) {
     const cwd = process.cwd();
     if (cwd.includes(os.tmpdir())) {
@@ -80,7 +80,7 @@ function revertTempDir(dest = path.join(__dirname, '..', '..'), tempDir) {
 
 function copyTemplateBlueprints(destDir, ...blueprintNames) {
   blueprintNames.forEach(blueprintName =>
-    copyBlueprint(path.join(__dirname, `../templates/blueprints/generator-jhipster-${blueprintName}`), destDir, blueprintName)
+    copyBlueprint(getTemplatePath(`blueprints/generator-jhipster-${blueprintName}`), destDir, blueprintName)
   );
 }
 
@@ -93,12 +93,12 @@ function copyBlueprint(sourceDir, destDir, ...blueprintNames) {
 }
 
 function copyFakeBlueprint(destDir, ...blueprintName) {
-  copyBlueprint(FAKE_BLUEPRINT_DIR, destDir, ...blueprintName);
+  copyBlueprint(getTemplatePath('fake-blueprint'), destDir, ...blueprintName);
 }
 
 function lnYeoman(packagePath) {
   const nodeModulesPath = `${packagePath}/node_modules`;
   fse.ensureDirSync(nodeModulesPath);
-  fs.symlinkSync(path.join(__dirname, '../../node_modules/yeoman-generator/'), `${nodeModulesPath}/yeoman-generator`);
-  fs.symlinkSync(path.join(__dirname, '../../node_modules/yeoman-environment/'), `${nodeModulesPath}/yeoman-environment`);
+  fs.symlinkSync(getPackageFilePath('node_modules/yeoman-generator/'), `${nodeModulesPath}/yeoman-generator`);
+  fs.symlinkSync(getPackageFilePath('node_modules/yeoman-environment/'), `${nodeModulesPath}/yeoman-environment`);
 }
