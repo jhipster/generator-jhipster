@@ -48,18 +48,6 @@ export default class GradleGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      async load({ application }) {
-        application.gradleVersion = GRADLE_VERSION;
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
   get preparing() {
     return this.asPreparingTaskGroup({
       async verify({ application }) {

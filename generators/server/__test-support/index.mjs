@@ -10,9 +10,11 @@ export const mockedGenerators = [
   'jhipster:common',
   'jhipster:couchbase',
   'jhipster:docker',
+  'jhipster:gradle',
   'jhipster:kafka',
   'jhipster:languages',
   'jhipster:liquibase',
+  'jhipster:maven',
 ];
 
 export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
