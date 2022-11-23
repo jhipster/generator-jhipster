@@ -357,9 +357,3 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
     }
   });
 };
-
-export const getTemplatePath = (...templatePath) => path.resolve(__dirname, '../templates', ...templatePath);
-
-export const getEntityTemplatePath = entityName => getTemplatePath(`.jhipster/${entityName}.json`);
-
-export const getGenerator = generatorName => path.resolve(__dirname, '../../generators', generatorName, 'index.mjs');

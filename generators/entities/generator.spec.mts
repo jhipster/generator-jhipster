@@ -22,14 +22,13 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import constants from '../generator-constants.cjs';
-import testSupport from '../../test/support/index.cjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './generator.mjs';
 import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 
 const { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
 
 const { snakeCase } = lodash;
-const { testBlueprintSupport } = testSupport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

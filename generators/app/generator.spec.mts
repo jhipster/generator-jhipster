@@ -21,12 +21,11 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import testSupport from '../../test/support/index.cjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
-const { testBlueprintSupport } = testSupport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

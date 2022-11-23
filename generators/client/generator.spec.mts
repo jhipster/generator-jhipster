@@ -22,14 +22,13 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import assert from 'assert';
 
-import testSupport from '../../test/support/index.cjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import defaults from '../generator-defaults.cjs';
 import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { snakeCase } = lodash;
-const { testBlueprintSupport } = testSupport;
 const { appDefaultConfig } = defaults;
 const { CYPRESS } = testFrameworkTypes;
 

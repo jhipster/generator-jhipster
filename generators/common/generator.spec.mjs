@@ -22,11 +22,10 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { defaultHelpers as helpers, basicHelpers } from '../../test/support/helpers.mjs';
-import testSupport from '../../test/support/index.cjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
-const { testBlueprintSupport } = testSupport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

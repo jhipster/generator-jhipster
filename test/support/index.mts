@@ -1,9 +1,3 @@
-import testSupport from './index.cjs';
-
-const { basicTests, testBlueprintSupport, testOptions } = testSupport;
-
-export { basicTests, testBlueprintSupport, testOptions };
-
 export * from './get-generator.mjs';
 export * from './get-template-path.mjs';
 export * from './application-samples.mjs';

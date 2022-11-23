@@ -20,7 +20,7 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { basicTests, testBlueprintSupport } from '../../test/support/index.mjs';
+import { basicTests, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { defaultConfig, requiredConfig } from './config.mjs';
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
