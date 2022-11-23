@@ -4,10 +4,9 @@ const os = require('os');
 const fse = require('fs-extra');
 const fs = require('fs');
 
-const constants = require('../../generators/generator-constants.cjs');
-
-const DOCKER_DIR = constants.DOCKER_DIR;
 const FAKE_BLUEPRINT_DIR = path.join(__dirname, '../templates/fake-blueprint');
+
+const getTemplatePath = (...templatePath) => path.resolve(__dirname, '../templates', ...templatePath);
 
 module.exports = {
   getJHipsterCli,
@@ -18,6 +17,7 @@ module.exports = {
   copyBlueprint,
   copyFakeBlueprint,
   lnYeoman,
+  getTemplatePath,
 };
 
 function getJHipsterCli() {

@@ -11,9 +11,7 @@ import databaseTypes from '../../jdl/jhipster/database-types';
 import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
 import authenticationTypes from '../../jdl/jhipster/authentication-types';
 import cacheTypes from '../../jdl/jhipster/cache-types';
-import testSupport from '../support/index.cjs';
-
-const { getGenerator } = testSupport;
+import { getGenerator } from '../support/index.mjs';
 
 const { MYSQL, SQL, H2_MEMORY } = databaseTypes;
 const { ANGULAR } = clientFrameworkTypes;

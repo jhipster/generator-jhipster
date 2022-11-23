@@ -4,18 +4,7 @@ import helpers from 'yeoman-test';
 import expectedFiles from '../utils/expected-files.cjs';
 import ClientGenerator from '../../generators/client/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
-import databaseTypes from '../../jdl/jhipster/database-types';
-import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
-import authenticationTypes from '../../jdl/jhipster/authentication-types';
-import cacheProviderTypes from '../../jdl/jhipster/cache-types';
-import testSupport from '../support/index.cjs';
-
-const { getGenerator } = testSupport;
-
-const { MYSQL, SQL, H2_MEMORY } = databaseTypes;
-const { ANGULAR } = clientFrameworkTypes;
-const { JWT } = authenticationTypes;
-const { EHCACHE } = cacheProviderTypes;
+import { getGenerator } from '../support/index.mjs';
 
 const mockClientBlueprintSubGen = class extends ClientGenerator {
   constructor(args, opts, features) {
