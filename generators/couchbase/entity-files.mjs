@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
+import { moveToJavaEntityPackageSrcDir } from '../server/utils.mjs';
 
-export const entityCouchbaseFiles = {
+export const entityFiles = {
   dbChangelog: [
     {
       condition: generator => !generator.skipDbChangelog && !generator.embedded,
@@ -44,50 +45,34 @@ export const entityCouchbaseFiles = {
   ],
   server: [
     {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/domain/Entity.java.jhi.spring_data_couchbase',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.spring_data_couchbase`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaEntityPackageSrcDir,
+      templates: ['domain/_PersistClass_.java.jhi.spring_data_couchbase'],
     },
     {
       condition: generator => !generator.embedded,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/EntityRepository.java',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/${generator.entityClass}Repository.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaEntityPackageSrcDir,
+      templates: ['repository/_EntityClass_Repository.java'],
     },
   ],
 };
 
-export function writeEntityCouchbaseFiles() {
-  return {
-    cleanupCouchbaseEntityFiles({ application, entities }) {
-      if (!application.databaseTypeCouchbase) return;
-      for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
-        if (this.isJhipsterVersionLessThan('7.6.1')) {
-          this.removeFile(
-            `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V${entity.changelogDate}__${entity.entityInstance.toLowerCase()}.fts`
-          );
-        }
-      }
-    },
+export function cleanupCouchbaseEntityFilesTask({ application, entities }) {
+  for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
+    if (this.isJhipsterVersionLessThan('7.6.1')) {
+      this.removeFile(
+        `${application.srcMainResources}config/couchmove/changelog/V${entity.changelogDate}__${entity.entityInstance.toLowerCase()}.fts`
+      );
+    }
+  }
+}
 
-    async writeEntityCouchbaseFiles({ application, entities }) {
-      if (!application.databaseTypeCouchbase) return;
-
-      for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
-        await this.writeFiles({
-          sections: entityCouchbaseFiles,
-          rootTemplatesPath: 'entity/couchbase',
-          context: { ...application, ...entity },
-        });
-      }
-    },
-  };
+export default async function writeEntityCouchbaseFiles({ application, entities }) {
+  for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
+    await this.writeFiles({
+      sections: entityFiles,
+      context: { ...application, ...entity },
+    });
+  }
 }
