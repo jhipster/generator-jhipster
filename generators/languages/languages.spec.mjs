@@ -253,9 +253,8 @@ describe('JHipster generator languages', () => {
         createClientProject({
           localConfig: { clientFramework: 'vue', enableTranslation: true, nativeLanguage: 'en' },
         }).then(result =>
-          helpers
+          result
             .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
-            .setDir(result.cwd)
             .withOptions({ skipInstall: true, baseName: 'jhipster' })
             .withPrompts({
               languages: ['fr', 'de'],
@@ -280,9 +279,8 @@ describe('JHipster generator languages', () => {
         createClientProject({
           localConfig: { clientFramework: 'vue', enableTranslation: true, nativeLanguage: 'en' },
         }).then(result =>
-          helpers
+          result
             .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
-            .setDir(result.cwd)
             .withOptions({ skipInstall: true, languages: ['fr', 'de'], baseName: 'jhipster' })
             .run()
         )
