@@ -2,7 +2,11 @@
 
 import { expect } from 'chai';
 
+<<<<<<< HEAD
 import { createProgram } from '../../cli/program.mjs';
+=======
+import { createProgram } from '../../cli/program.cjs';
+>>>>>>> 453074da9c (rebased from main)
 import { prepareTempDir } from './utils/utils.cjs';
 
 describe('jhipster program', () => {

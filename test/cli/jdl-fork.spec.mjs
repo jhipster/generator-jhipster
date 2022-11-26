@@ -2,6 +2,7 @@
 
 import sinon from 'sinon';
 
+<<<<<<< HEAD
 <<<<<<<< HEAD:test/cli/jdl-fork.spec.mts
 import { prepareTempDir } from './utils/utils.cjs';
 import { runJHipster } from '../../cli/program.mjs';
@@ -11,6 +12,11 @@ const { getTemplatePath } = require('./utils/utils.cjs');
 import { prepareTempDir } from '../utils/utils.mjs';
 import { runJHipster } from '../../cli/program.mjs';
 >>>>>>>> e4f168bcb9 (convert some tests to mjs):test/cli/jdl-fork.spec.mjs
+=======
+import { prepareTempDir } from './utils/utils.cjs';
+import { runJHipster } from '../../cli/program.mjs';
+import { getTemplatePath } from '../support/index.mts';
+>>>>>>> 453074da9c (rebased from main)
 
 describe('jhipster cli with jdl fork', () => {
   let cleanup;

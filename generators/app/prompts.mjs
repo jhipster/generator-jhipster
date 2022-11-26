@@ -20,7 +20,6 @@ import chalk from 'chalk';
 import statistics from '../statistics.cjs';
 
 import { applicationTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { httpsGet } from '../base/support/index.mjs';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;

@@ -34,9 +34,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
 import { createProgram, buildJHipster } from '../../cli/program.mjs';
-import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from '../utils/utils.mjs';
+import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from './utils/utils.cjs';
 import { logger } from '../../cli/utils.mjs';
-import { getTemplatePath } from '../support/index.cjs';
+import { getTemplatePath } from '../support/index.mts';
 
 const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'dist', 'cli', 'cli.cjs'));
 
