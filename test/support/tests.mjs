@@ -1,11 +1,14 @@
-const { jestExpect: expect } = require('mocha-expect-snapshot');
-const path = require('path');
-const sinon = require('sinon');
-const { existsSync } = require('fs');
+import { jestExpect as expect } from 'mocha-expect-snapshot';
+import path, { dirname } from 'path';
+import sinon from 'sinon';
+import { existsSync } from 'fs';
+import { fileURLToPath } from 'url';
 
-const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants.cjs');
-const { skipPrettierHelpers: helpers } = require('../utils/utils.cjs');
-const { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } = require('../../generators/base-application/priorities.cjs');
+import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
+import { skipPrettierHelpers as helpers } from './helpers.mjs';
+import priorities from '../../generators/base-application/priorities.cjs';
+
+const { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } = priorities;
 
 const {
   CONFIGURING_EACH_ENTITY,
@@ -18,7 +21,10 @@ const {
   POST_WRITING_ENTITIES,
 } = PRIORITY_NAMES;
 
-const testOptions = data => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export const testOptions = data => {
   const { generatorPath, customOptions, contextBuilder = () => helpers.create(generatorPath) } = data;
   let runResult;
   before(async () => {
@@ -33,7 +39,7 @@ const testOptions = data => {
 
 const skipWritingPriorities = ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'];
 
-const basicTests = data => {
+export const basicTests = data => {
   const {
     generatorPath,
     customPrompts,
@@ -177,7 +183,7 @@ const basicTests = data => {
   });
 };
 
-const testBlueprintSupport = (generatorName, options = {}) => {
+export const testBlueprintSupport = (generatorName, options = {}) => {
   if (typeof options === 'boolean') {
     options = { skipSbsBlueprint: options };
   }
@@ -356,19 +362,4 @@ const testBlueprintSupport = (generatorName, options = {}) => {
       });
     }
   });
-};
-
-const getTemplatePath = (...templatePath) => path.resolve(__dirname, '../templates', ...templatePath);
-
-const getEntityTemplatePath = entityName => getTemplatePath(`.jhipster/${entityName}.json`);
-
-const getGenerator = generatorName => path.resolve(__dirname, '../../generators', generatorName, 'index.mjs');
-
-module.exports = {
-  basicTests,
-  testBlueprintSupport,
-  testOptions,
-  getTemplatePath,
-  getEntityTemplatePath,
-  getGenerator,
 };

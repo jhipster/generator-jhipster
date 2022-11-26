@@ -1,21 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
-import expectedFiles from '../utils/expected-files.cjs';
 import ClientGenerator from '../../generators/client/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
-import databaseTypes from '../../jdl/jhipster/database-types';
-import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
-import authenticationTypes from '../../jdl/jhipster/authentication-types';
-import cacheProviderTypes from '../../jdl/jhipster/cache-types';
-import testSupport from '../support/index.cjs';
-
-const { getGenerator } = testSupport;
-
-const { MYSQL, SQL, H2_MEMORY } = databaseTypes;
-const { ANGULAR } = clientFrameworkTypes;
-const { JWT } = authenticationTypes;
-const { EHCACHE } = cacheProviderTypes;
+import { getGenerator } from '../support/index.mjs';
 
 const mockClientBlueprintSubGen = class extends ClientGenerator {
   constructor(args, opts, features) {
@@ -150,8 +138,10 @@ describe('JHipster generator with multiple blueprints', () => {
 
   blueprintNames.forEach(blueprints => {
     describe(`generate with multiple blueprints option '${blueprints}'`, () => {
+      let runResult;
+
       before(async () => {
-        await helpers
+        runResult = await helpers
           .run(getGenerator('app'))
           .withOptions({
             skipInstall: true,
@@ -165,12 +155,6 @@ describe('JHipster generator with multiple blueprints', () => {
           ]);
       });
 
-      it('creates expected files from jhipster app generator', () => {
-        assert.file(expectedFiles.common);
-        assert.file(expectedFiles.server);
-        assert.file(expectedFiles.maven);
-        assert.file(expectedFiles.client);
-      });
       it('contains the specific change added by the server blueprint', () => {
         assert.fileContent('pom.xml', /dummy-blueprint-property/);
       });

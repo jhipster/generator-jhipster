@@ -2,10 +2,8 @@ import { fileURLToPath } from 'url';
 
 import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
-import sinon from 'sinon';
 
 import utils from '../generators/utils.cjs';
-import { prepareTempDir } from './utils/utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

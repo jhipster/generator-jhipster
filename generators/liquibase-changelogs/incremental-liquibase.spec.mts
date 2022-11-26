@@ -3,10 +3,9 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 import constants from '../generator-constants.cjs';
 import { jdlImporter } from '../../jdl/index.mjs';
-import expectedFiles from '../../test/utils/expected-files.cjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -107,10 +106,6 @@ describe('jhipster:app --incremental-changelog', function () {
       runResult.assertFile(['.yo-rc.json']);
     });
 
-    it('creates expected liquibase files', () => {
-      runResult.assertFile(expectedFiles.liquibase);
-    });
-
     it('should match snapshot', () => {
       expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
     });
@@ -140,10 +135,6 @@ describe('jhipster:app --incremental-changelog', function () {
 
       it('should create application', () => {
         runResult.assertFile(['.yo-rc.json']);
-      });
-
-      it('creates expected liquibase files', () => {
-        runResult.assertFile(expectedFiles.liquibase);
       });
 
       it('should not override existing incremental files', () => {
@@ -180,10 +171,6 @@ describe('jhipster:app --incremental-changelog', function () {
 
       it('should create application', () => {
         runResult.assertFile(['.yo-rc.json']);
-      });
-
-      it('creates expected liquibase files', () => {
-        runResult.assertFile(expectedFiles.liquibase);
       });
 
       it('should override existing incremental files', () => {

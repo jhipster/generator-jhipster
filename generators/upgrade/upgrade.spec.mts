@@ -1,5 +1,4 @@
 import path, { dirname } from 'path';
-import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import shelljs from 'shelljs';
 import fse from 'fs-extra';
@@ -7,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { packageJson } from '../../lib/index.mjs';
-import { prepareTempDir } from '../../test/utils/utils.mjs';
+import { prepareTempDir } from '../../test/support/temp-dir.mjs';
 import generatorUtils from '../utils.cjs';
 
 const { escapeRegExp } = generatorUtils;
@@ -19,35 +18,28 @@ describe('JHipster upgrade generator', function () {
   this.timeout(400000);
 
   describe('default application', () => {
-    let cleanup;
-    before(async () => {
-      cleanup = prepareTempDir();
-      await helpers
-        .create(path.join(__dirname, '../app/index.mjs'), { tmpdir: false })
-        .withOptions({
-          baseName: 'upgradeTest',
-          skipInstall: true,
-          skipChecks: true,
-          defaults: true,
-          localConfig: {
-            skipClient: true,
-            skipServer: true,
-          },
-        })
-        .run()
-        .then(() => {
-          return helpers
-            .create(path.join(__dirname, './index.mjs'), { tmpdir: false })
-            .withOptions({
-              force: true,
-              silent: false,
-              targetVersion: packageJson.version,
-            })
-            .run();
-        });
-    });
+    let runResult;
 
-    after(() => cleanup());
+    before(async () => {
+      runResult = await helpers.run(path.join(__dirname, '../app/index.mjs')).withOptions({
+        baseName: 'upgradeTest',
+        skipInstall: true,
+        skipChecks: true,
+        defaults: true,
+        localConfig: {
+          skipClient: true,
+          skipServer: true,
+        },
+      });
+      runResult = await runResult
+        .create(path.join(__dirname, './index.mjs'))
+        .withOptions({
+          force: true,
+          silent: false,
+          targetVersion: packageJson.version,
+        })
+        .run();
+    });
 
     it('generated git commits to match snapshot', () => {
       const commits = shelljs.exec('git log --pretty=format:%s', { silent: false }).stdout;

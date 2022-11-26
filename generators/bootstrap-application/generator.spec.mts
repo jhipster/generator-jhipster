@@ -22,7 +22,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import Generator from './index.mjs';
-import { dryRunHelpers as helpers } from '../../test/utils/utils.mjs';
+import { dryRunHelpers as helpers } from '../../test/support/helpers.mjs';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 
 const {
