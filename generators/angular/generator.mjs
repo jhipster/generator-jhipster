@@ -138,4 +138,33 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   ) {
     addAngularEntityMenuEntry(this, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue, jhiPrefix);
   }
+
+  /**
+   * @private
+   * Add a new entity in the TS modules file.
+   *
+   * @param {string} entityInstance - Entity Instance
+   * @param {string} entityClass - Entity Class
+   * @param {string} entityName - Entity Name
+   * @param {string} entityFolderName - Entity Folder Name
+   * @param {string} entityFileName - Entity File Name
+   * @param {string} entityUrl - Entity router URL
+   * @param {string} clientFramework - The name of the client framework
+   * @param {string} microserviceName - Microservice Name
+   * @param {boolean} readOnly - If the entity is read-only or not
+   * @param {string} pageTitle - The translation key or the text for the page title in the browser
+   */
+  addEntityToModule(
+    entityInstance = this.entityInstance,
+    entityClass = this.entityClass,
+    entityName = this.entityAngularName,
+    entityFolderName = this.entityFolderName,
+    entityFileName = this.entityFileName,
+    entityUrl = this.entityUrl,
+    microserviceName = this.microserviceName,
+    readOnly = this.readOnly,
+    pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
+  ) {
+    this.needleApi.clientAngular.addEntityToModule(entityName, entityFolderName, entityFileName, entityUrl, microserviceName, pageTitle);
+  }
 }

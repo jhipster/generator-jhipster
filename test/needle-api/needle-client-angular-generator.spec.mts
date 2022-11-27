@@ -18,6 +18,19 @@ const mockAngularBlueprintSubGen = class extends AngularGenerator {
       addToMenuStep() {
         this.addEntityToMenu('routerName3', true, 'routerName3');
       },
+      addToModuleStep() {
+        this.addEntityToModule(
+          'entityInstance',
+          'entityClass',
+          'entityName',
+          'entityFolderName',
+          'entityFileName',
+          'entityUrl',
+          'microserviceName',
+          false,
+          'entity.home.title'
+        );
+      },
     };
   }
 };
@@ -66,5 +79,15 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
       .withOptions({ force: false, skipChecks: true, skipInstall: true })
       // .withOptions({ force: false, bail: true, skipChecks: true, skipInstall: true })
       .run();
+  });
+  it('entity module contains the microservice object added by needle api', () => {
+    assert.fileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`,
+      '      {\n' +
+        "        path: 'entityUrl',\n" +
+        "        data: { pageTitle: 'entity.home.title' },\n" +
+        "        loadChildren: () => import('./entityFolderName/entityFileName.module').then(m => m.MicroserviceNameentityNameModule),\n" +
+        '      }'
+    );
   });
 });

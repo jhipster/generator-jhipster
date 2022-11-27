@@ -29,18 +29,6 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
         this.addAppSCSSStyle('@import without-comment');
         this.addAppSCSSStyle('@import with-comment', 'my comment');
       },
-      addEntityToModuleStep() {
-        this.addEntityToModule(
-          'entityInstance',
-          'entityClass',
-          'entityName',
-          'entityFolderName',
-          'entityFileName',
-          'entityUrl',
-          REACT,
-          'microServiceNam'
-        );
-      },
     };
     return { ...customPhaseSteps };
   }
@@ -68,17 +56,6 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       });
-  });
-
-  it('Assert entity is added to module', () => {
-    const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/routes.tsx`;
-    const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
-
-    assert.fileContent(indexModulePath, "import entityName from './entityFolderName';");
-    assert.fileContent(indexModulePath, '<Route path="entityFileName/*" element={<entityName />} />');
-
-    assert.fileContent(indexReducerPath, "import entityInstance from 'app/entities/entityFolderName/entityFileName.reducer';");
-    assert.fileContent(indexReducerPath, 'entityInstance,');
   });
 
   it('Assert app.scss is updated', () => {

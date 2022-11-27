@@ -28,18 +28,6 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         this.addElementToAdminMenu('routerName2', 'iconName2', true, ANGULAR);
       },
       addToModuleStep() {
-        this.addEntityToModule(
-          'entityInstance',
-          'entityClass',
-          'entityName',
-          'entityFolderName',
-          'entityFileName',
-          'entityUrl',
-          ANGULAR,
-          'microserviceName',
-          false,
-          'entity.home.title'
-        );
         this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, ANGULAR);
         this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, ANGULAR);
         this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule', 'entityAudit.home.title');
@@ -127,17 +115,6 @@ describe('needle API Client for Angular: JHipster client generator with blueprin
 
   it('icon imports contains a new icon added by a new admin menu method of needle api ', () => {
     assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, '  faIconName2');
-  });
-
-  it('entity module contains the microservice object added by needle api', () => {
-    assert.fileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`,
-      '      {\n' +
-        "        path: 'entityUrl',\n" +
-        "        data: { pageTitle: 'entity.home.title' },\n" +
-        "        loadChildren: () => import('./entityFolderName/entityFileName.routes'),\n" +
-        '      }'
-    );
   });
 
   it('admin module contains the import and the module added by needle api', () => {

@@ -268,45 +268,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Add a new entity in the TS modules file.
-   *
-   * @param {string} entityInstance - Entity Instance
-   * @param {string} entityClass - Entity Class
-   * @param {string} entityName - Entity Name
-   * @param {string} entityFolderName - Entity Folder Name
-   * @param {string} entityFileName - Entity File Name
-   * @param {string} entityUrl - Entity router URL
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} microserviceName - Microservice Name
-   * @param {boolean} readOnly - If the entity is read-only or not
-   * @param {string} pageTitle - The translation key or the text for the page title in the browser
-   */
-  addEntityToModule(
-    entityInstance = this.entityInstance,
-    entityClass = this.entityClass,
-    entityName = this.entityAngularName,
-    entityFolderName = this.entityFolderName,
-    entityFileName = this.entityFileName,
-    entityUrl = this.entityUrl,
-    clientFramework = this.clientFramework,
-    microserviceName = this.microserviceName,
-    readOnly = this.readOnly,
-    pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
-  ) {
-    if (clientFramework === ANGULAR) {
-      this.needleApi.clientAngular.addEntityToModule(entityName, entityFolderName, entityFileName, entityUrl, microserviceName, pageTitle);
-    } else if (clientFramework === REACT) {
-      this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
-    } else if (clientFramework === VUE) {
-      this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
-      this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
-      this.needleApi.clientVue.addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName);
-      this.needleApi.clientVue.addEntityServiceToEntitiesComponent(entityInstance, entityName);
-    }
-  }
-
-  /**
-   * @private
    * Add a new admin in the TS modules file.
    *
    * @param {string} appName - Angular2 application name.

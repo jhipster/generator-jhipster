@@ -96,7 +96,6 @@ export async function postWriteEntityFiles({ application, entities }) {
         entityFolderName,
         entityFileName,
         entityUrl,
-        clientFramework,
         microserviceName,
         readOnly,
         pageTitle
