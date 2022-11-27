@@ -480,8 +480,8 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-gateway"
-    implementation "com.github.vladimir-bukhtoyarov:bucket4j-core"
-    implementation "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
+    implementation "com.bucket4j:bucket4j-core"
+    implementation "com.bucket4j:bucket4j-jcache"
 <%_ } _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
