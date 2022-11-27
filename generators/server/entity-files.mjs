@@ -23,7 +23,6 @@ import { cleanupOldFiles } from './entity-cleanup.mjs';
 import utils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
 import { databaseTypes, searchEngineTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
-import { writeEntityCouchbaseFiles } from './entity-files-couchbase.mjs';
 
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
@@ -482,7 +481,6 @@ export function writeFiles() {
         }
       }
     },
-    ...writeEntityCouchbaseFiles(),
   };
 }
 

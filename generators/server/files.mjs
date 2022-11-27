@@ -19,7 +19,6 @@
 import { cleanupOldServerFiles } from './cleanup.mjs';
 import constants from '../generator-constants.cjs';
 import { addSectionsCondition, mergeSections } from './utils.mjs';
-import { writeCouchbaseFiles } from './files-couchbase.mjs';
 import { writeSqlFiles } from './files-sql.mjs';
 
 /* Constants use throughout */
@@ -1554,7 +1553,6 @@ export function writeFiles() {
         },
       });
     },
-    ...writeCouchbaseFiles.call(this),
     ...writeSqlFiles.call(this),
   });
 }

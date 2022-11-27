@@ -135,7 +135,7 @@ export const dockerFiles = {
       templates: ['swagger-editor.yml'],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
+      condition: generator => generator.authenticationTypeOauth2,
       path: DOCKER_DIR,
       templates: ['keycloak.yml', { file: 'config/realm-config/jhipster-realm.json', renameTo: () => 'realm-config/jhipster-realm.json' }],
     },

@@ -21,6 +21,7 @@ import shelljs from 'shelljs';
 import jsyaml from 'js-yaml';
 import pathjs from 'path';
 import normalize from 'normalize-path';
+import { faker } from '@faker-js/faker/locale/en';
 
 import BaseDockerGenerator from '../base-docker/index.mjs';
 
@@ -35,6 +36,7 @@ import {
   searchEngineTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
+import { stringHashCode } from '../utils.cjs';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -143,6 +145,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
       setAppsYaml() {
         this.appsYaml = [];
         this.keycloakRedirectUris = '';
+        this.includesApplicationTypeGateway = false;
         this.appConfigs.forEach(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           const parentConfiguration = {};
@@ -160,7 +163,14 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
               })
             );
           }
+          if (appConfig.applicationType === GATEWAY) {
+            this.includesApplicationTypeGateway = true;
+          }
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
+            if (this.keycloakSecrets === undefined && appConfig.authenticationType === 'oauth2') {
+              faker.seed(stringHashCode(appConfig.baseName));
+              this.keycloakSecrets = Array.from(Array(6), () => faker.datatype.uuid());
+            }
             this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {
               this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;

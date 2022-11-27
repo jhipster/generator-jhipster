@@ -574,6 +574,9 @@ Object {
   "src/main/docker/kafka.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/keycloak.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/memcached.yml": Object {
     "stateCleared": "modified",
   },
@@ -584,6 +587,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/services.yml": Object {
@@ -728,10 +734,16 @@ Object {
   "src/main/docker/jhipster-control-center.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/keycloak.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/monitoring.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/services.yml": Object {

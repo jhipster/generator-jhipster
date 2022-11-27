@@ -47,19 +47,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -529,25 +517,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -996,25 +969,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
@@ -1454,19 +1412,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
@@ -1816,25 +1762,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
@@ -2304,19 +2235,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
@@ -2729,25 +2648,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -3295,19 +3199,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -3687,25 +3579,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -4196,19 +4073,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -4663,25 +4528,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -5226,19 +5076,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {

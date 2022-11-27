@@ -6,7 +6,7 @@ import helpers from 'yeoman-test';
 import Environment from 'yeoman-environment';
 
 import Base from '../generators/base/index.mjs';
-import { testInTempDir, revertTempDir } from './utils/utils.mjs';
+import { testInTempDir, revertTempDir } from './support/temp-dir.mjs';
 import { parseChangelog } from '../generators/base/utils.mjs';
 import { databaseTypes } from '../jdl/jhipster/index.mjs';
 

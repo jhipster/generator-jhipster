@@ -22,13 +22,12 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import testSupport from '../../test/support/index.cjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './index.mjs';
-import { shouldComposeWithKafka } from './__test-support/index.mjs';
+import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka } from './__test-support/index.mjs';
 
 const { snakeCase } = lodash;
-const { testBlueprintSupport } = testSupport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,7 +35,6 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorPath = join(__dirname, 'index.mjs');
 
-const serverGenerators = ['jhipster:common', 'jhipster:maven', 'jhipster:gradle', 'jhipster:kafka'];
 const skipPriorities = ['prompting', 'writing', 'postWriting', 'writingEntities', 'postWritingEntities'];
 
 describe(`JHipster ${generator} generator`, () => {
@@ -63,7 +61,7 @@ describe(`JHipster ${generator} generator`, () => {
               },
               skipPriorities,
             })
-            .withMockedGenerators(serverGenerators);
+            .withMockedGenerators(mockedGenerators);
         });
 
         it('should compose with maven generator', () => {
@@ -85,7 +83,7 @@ describe(`JHipster ${generator} generator`, () => {
               },
               skipPriorities,
             })
-            .withMockedGenerators(serverGenerators);
+            .withMockedGenerators(mockedGenerators);
         });
 
         it('should compose with gradle generator', () => {
@@ -110,7 +108,7 @@ describe(`JHipster ${generator} generator`, () => {
               },
               skipPriorities,
             })
-            .withMockedGenerators(serverGenerators);
+            .withMockedGenerators(mockedGenerators);
         });
 
         shouldComposeWithKafka(false, () => runResult);
@@ -127,9 +125,45 @@ describe(`JHipster ${generator} generator`, () => {
               },
               skipPriorities,
             })
-            .withMockedGenerators(serverGenerators);
+            .withMockedGenerators(mockedGenerators);
         });
         shouldComposeWithKafka(true, () => runResult);
+      });
+    });
+
+    describe('databaseType option', () => {
+      describe('no', () => {
+        let runResult;
+        before(async () => {
+          runResult = await helpers
+            .run(generatorPath)
+            .withOptions({
+              localConfig: {
+                baseName: 'jhipster',
+                databaseType: 'no',
+              },
+              skipPriorities,
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+
+        shouldComposeWithCouchbase(false, () => runResult);
+      });
+      describe('couchbase', () => {
+        let runResult;
+        before(async () => {
+          runResult = await helpers
+            .run(generatorPath)
+            .withOptions({
+              localConfig: {
+                baseName: 'jhipster',
+                databaseType: 'couchbase',
+              },
+              skipPriorities,
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+        shouldComposeWithCouchbase(true, () => runResult);
       });
     });
   });

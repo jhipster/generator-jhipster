@@ -31,7 +31,7 @@ FROM cassandra:3.11.13
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.1.0
+FROM neo4j:5.2.0
 
 FROM hazelcast/management-center:5.2.0
 LABEL ALIAS=hazelcast
@@ -49,9 +49,9 @@ LABEL ALIAS=zookeeper
 FROM sonarqube:9.7.1-community
 LABEL ALIAS=sonar
 
-FROM consul:1.14.0
+FROM consul:1.14.1
 
-FROM prom/prometheus:v2.40.2
+FROM prom/prometheus:v2.40.3
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.24.0
@@ -60,7 +60,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:9.2.5
+FROM grafana/grafana:9.2.6
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8
