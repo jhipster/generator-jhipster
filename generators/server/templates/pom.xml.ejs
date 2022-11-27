@@ -31,7 +31,7 @@
     <description><%= projectDescription %></description>
 
     <repositories>
-<%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
+<%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1 || SPRING_CLOUD_VERSION.indexOf('RC') > -1) { _%>
         <repository>
             <id>spring-milestone</id>
             <url>https://repo.spring.io/milestone</url>
@@ -60,7 +60,7 @@
     </repositories>
 
     <pluginRepositories>
-<%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
+<%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1 || SPRING_CLOUD_VERSION.indexOf('RC') > -1) { _%>
         <pluginRepository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>

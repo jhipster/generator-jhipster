@@ -291,6 +291,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           application.jhipsterDependenciesVersion = constants.JHIPSTER_DEPENDENCIES_VERSION;
         }
         application.SPRING_BOOT_VERSION = control.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : constants.SPRING_BOOT_VERSION;
+        application.SPRING_CLOUD_VERSION = control.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : constants.SPRING_CLOUD_VERSION;
         application.HIBERNATE_VERSION = control.useVersionPlaceholders ? 'HIBERNATE_VERSION' : constants.HIBERNATE_VERSION;
         application.JACKSON_DATABIND_NULLABLE_VERSION = control.useVersionPlaceholders
           ? 'JACKSON_DATABIND_NULLABLE_VERSION'
