@@ -4,6 +4,7 @@ import ClientGenerator from '../../generators/client/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { getGenerator } from '../support/index.mjs';
+import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
 
 const { REACT } = clientFrameworkTypes;
 
@@ -21,15 +22,12 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
     this.sbsBlueprint = true;
   }
 
-  get [ClientGenerator.POST_WRITING]() {
+  get [BaseApplicationGenerator.POST_WRITING]() {
     const customPhaseSteps = {
       addAppCssStep() {
         // please change this to public API when it will be available see https://github.com/jhipster/generator-jhipster/issues/9234
         this.addAppSCSSStyle('@import without-comment');
         this.addAppSCSSStyle('@import with-comment', 'my comment');
-      },
-      addEntityToMenuStep() {
-        this.addEntityToMenu('routerName', false, REACT, false);
       },
       addEntityToModuleStep() {
         this.addEntityToModule(
@@ -70,13 +68,6 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       });
-  });
-
-  it('Assert entity is added to menu', () => {
-    result.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`,
-      '<MenuItem icon="asterisk" to="/routerName">\n        Router Name\n      </MenuItem>'
-    );
   });
 
   it('Assert entity is added to module', () => {

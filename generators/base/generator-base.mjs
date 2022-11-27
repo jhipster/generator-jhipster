@@ -71,13 +71,7 @@ import {
 } from '../generator-constants.mjs';
 import { removeFieldsWithUnsetValues } from './support/index.mjs';
 import { locateGenerator, parseCreationTimestamp } from './support/index.mjs';
-import {
-  addAdminMenuEntry,
-  addEntityMenuEntry,
-  addExternalResourcesToIndexHtml,
-  addIconInImport,
-  addMenuEntry,
-} from '../client/support/index.mjs';
+import { addAdminMenuEntry, addExternalResourcesToIndexHtml, addIconInImport, addMenuEntry } from '../client/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -270,27 +264,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
     addAdminMenuEntry(this, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
-  }
-
-  /**
-   * @private
-   * Add a new entity in the "entities" menu.
-   *
-   * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
-   * @param {string} entityTranslationValue - i18n value for entity entry in menu
-   */
-  addEntityToMenu(
-    routerName,
-    enableTranslation,
-    clientFramework = this.clientFramework,
-    entityTranslationKeyMenu = _.camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName),
-    jhiPrefix = this.jhiPrefix
-  ) {
-    addEntityMenuEntry(this, routerName, enableTranslation, clientFramework, entityTranslationKeyMenu, entityTranslationValue, jhiPrefix);
   }
 
   /**

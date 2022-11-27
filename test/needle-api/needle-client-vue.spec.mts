@@ -6,6 +6,7 @@ import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 import { getGenerator } from '../support/index.mjs';
+import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
 
 const { VUE } = clientFrameworkTypes;
 
@@ -20,11 +21,8 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
     this.sbsBlueprint = true;
   }
 
-  get [ClientGenerator.POST_WRITING]() {
+  get [BaseApplicationGenerator.POST_WRITING]() {
     const customPhaseSteps = {
-      addCustomMethods() {
-        this.addEntityToMenu('routerName', false, VUE);
-      },
       addToModuleStep() {
         this.addEntityToModule(
           'entityInstance',
@@ -63,18 +61,6 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         languages: ['fr'],
       })
   );
-
-  it('menu contains the item and the root', () => {
-    assert.fileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/entities/entities-menu.vue`,
-      `
-    <b-dropdown-item to="/routerName">
-      <font-awesome-icon icon="asterisk" />
-      <span>Router Name</span>
-    </b-dropdown-item>
-`
-    );
-  });
 
   it('menu contains the item in router import', () => {
     assert.fileContent(

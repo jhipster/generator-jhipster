@@ -23,13 +23,9 @@ import {
   addMenuEntry as addAngularMenuEntry,
   addIconInImport as addAngularIconInImport,
   addAdminMenuEntry as addAngularAdminMenuEntry,
-  addEntityMenuEntry as addAngularEntityMenuEntry,
 } from '../../angular/support/index.mjs';
 
-import { addEntityMenuEntry as addReactEntityMenuEntry } from '../../react/support/index.mjs';
-import { addEntityMenuEntry as addVueEntityMenuEntry } from '../../vue/support/index.mjs';
-
-const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
+const { ANGULAR, REACT } = clientFrameworkTypes;
 
 /**
  * @private
@@ -96,32 +92,4 @@ export const addExternalResourcesToIndexHtml = (context, resources, comment) => 
  */
 export const addAdminMenuEntry = (context, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu) => {
   addAngularAdminMenuEntry(context, routerName, iconName, enableTranslation, translationKeyMenu);
-};
-
-/**
- * @private
- * Add a new entity in the "entities" menu.
- *
- * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
- * @param {boolean} enableTranslation - If translations are enabled or not
- * @param {string} clientFramework - The name of the client framework
- * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
- * @param {string} entityTranslationValue - i18n value for entity entry in menu
- */
-export const addEntityMenuEntry = (
-  context,
-  routerName,
-  enableTranslation,
-  clientFramework,
-  entityTranslationKeyMenu,
-  entityTranslationValue,
-  jhiPrefix
-) => {
-  if (clientFramework === ANGULAR) {
-    addAngularEntityMenuEntry(context, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue, jhiPrefix);
-  } else if (clientFramework === REACT) {
-    addReactEntityMenuEntry(context, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-  } else if (clientFramework === VUE) {
-    addVueEntityMenuEntry(context, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-  }
 };

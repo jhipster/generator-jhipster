@@ -101,13 +101,7 @@ export async function postWriteEntityFiles({ application, entities }) {
         readOnly,
         pageTitle
       );
-      this.addEntityToMenu(
-        entity.entityPage,
-        application.enableTranslation,
-        application.clientFramework,
-        entity.entityTranslationKeyMenu,
-        entity.entityClassHumanized
-      );
+      this.addEntityToMenu(entity.entityPage, application.enableTranslation, entity.entityTranslationKeyMenu, entity.entityClassHumanized);
     }
   }
 }

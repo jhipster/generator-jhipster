@@ -112,7 +112,6 @@ export async function postWriteEntitiesFiles({ application, entities, control })
       this.addEntityToMenu(
         entity.entityPage,
         application.enableTranslation,
-        application.clientFramework,
         entity.entityTranslationKeyMenu,
         entity.entityClassHumanized,
         application.jhiPrefix

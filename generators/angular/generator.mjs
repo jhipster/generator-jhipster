@@ -22,6 +22,7 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.mjs';
 import { writeFiles, cleanup } from './files-angular.mjs';
+import { addEntityMenuEntry as addAngularEntityMenuEntry } from './support/index.mjs';
 
 /**
  * @class
@@ -117,5 +118,24 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+  }
+
+  /**
+   * @private
+   * Add a new entity in the "entities" menu.
+   *
+   * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
+   * @param {boolean} enableTranslation - If translations are enabled or not
+   * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
+   * @param {string} entityTranslationValue - i18n value for entity entry in menu
+   */
+  addEntityToMenu(
+    routerName,
+    enableTranslation,
+    entityTranslationKeyMenu = _.camelCase(routerName),
+    entityTranslationValue = _.startCase(routerName),
+    jhiPrefix = this.jhiPrefix
+  ) {
+    addAngularEntityMenuEntry(this, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue, jhiPrefix);
   }
 }

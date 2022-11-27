@@ -24,12 +24,13 @@ import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../gener
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-react.mjs';
 import { writeFiles, cleanupFiles } from './files-react.mjs';
 import { prepareEntity } from './application/entities/index.mjs';
+import { addEntityMenuEntry as addReactEntityMenuEntry } from './support/index.mjs';
 
 /**
  * @class
  * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
  */
-export default class AngularGenerator extends BaseApplicationGenerator {
+export default class ReactGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
@@ -121,5 +122,23 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+  }
+
+  /**
+   * @private
+   * Add a new entity in the "entities" menu.
+   *
+   * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
+   * @param {boolean} enableTranslation - If translations are enabled or not
+   * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
+   * @param {string} entityTranslationValue - i18n value for entity entry in menu
+   */
+  addEntityToMenu(
+    routerName,
+    enableTranslation,
+    entityTranslationKeyMenu = _.camelCase(routerName),
+    entityTranslationValue = _.startCase(routerName)
+  ) {
+    addReactEntityMenuEntry(this, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
   }
 }

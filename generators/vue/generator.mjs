@@ -23,6 +23,7 @@ import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
 import { writeEntityFiles, postWriteEntityFiles } from './entity-files-vue.mjs';
 import { writeFiles, writeEntitiesFiles, cleanup } from './files-vue.mjs';
+import { addEntityMenuEntry as addVueEntityMenuEntry } from './support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_LONG = CommonDBTypes.LONG;
@@ -108,5 +109,24 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+  }
+
+  /**
+   * @private
+   * Add a new entity in the "entities" menu.
+   *
+   * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
+   * @param {boolean} enableTranslation - If translations are enabled or not
+   * @param {string} clientFramework - The name of the client framework
+   * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
+   * @param {string} entityTranslationValue - i18n value for entity entry in menu
+   */
+  addEntityToMenu(
+    routerName,
+    enableTranslation,
+    entityTranslationKeyMenu = _.camelCase(routerName),
+    entityTranslationValue = _.startCase(routerName)
+  ) {
+    addVueEntityMenuEntry(this, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
   }
 }
