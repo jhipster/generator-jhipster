@@ -31,25 +31,25 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         builder.allowBlockingCallsInside("org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter", "read");
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$query$2");
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$importFtsIndex$1");
-<%_} _%>
+<%_ } _%>
 <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
         builder.allowBlockingCallsInside("org.mariadb.r2dbc.message.client.HandshakeResponse", "writeConnectAttributes");
         builder.allowBlockingCallsInside("org.mariadb.r2dbc.client.MariadbPacketDecoder", "decode");
-<%_} _%>
+<%_ } _%>
 <%_ if (devDatabaseTypeMssql || prodDatabaseTypeMssql) { _%>
         builder.allowBlockingCallsInside("io.r2dbc.mssql.client.ssl.TdsSslHandler", "createSslHandler");
-<%_} _%>
+<%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
         builder.allowBlockingCallsInside("org.elasticsearch.client.indices.CreateIndexRequest", "settings");
-<%_} _%>
+<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
         builder.allowBlockingCallsInside("io.netty.util.NetUtil", "<clinit>");
-<%_} _%>
+<%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
         builder.allowBlockingCallsInside("org.springframework.data.neo4j.core.PropertyFilterSupport", "getInputProperties");
-<%_} _%>
-    }
+<%_ } _%>
 <%_ if (reactive) { _%>
         builder.allowBlockingCallsInside("org.springframework.web.reactive.result.method.InvocableHandlerMethod", "invoke");
-<%_} _%>
+<%_ } _%>
+    }
 }
