@@ -33,7 +33,7 @@ const javaDependencies = {};
 Object.freeze(javaDependencies);
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-const ELATICSEARCH_TAG = '8.5.0';
+const ELATICSEARCH_TAG = '7.17.4';
 const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
