@@ -19,11 +19,9 @@
 import { cleanupOldServerFiles } from './cleanup.mjs';
 import constants from '../generator-constants.cjs';
 import { addSectionsCondition, mergeSections } from './utils.mjs';
-import { writeCouchbaseFiles } from './files-couchbase.mjs';
 import { writeSqlFiles } from './files-sql.mjs';
 
 /* Constants use throughout */
-const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -173,7 +171,7 @@ export const baseServerFiles = {
   serverBuild: [
     {
       templates: [
-        { file: 'checkstyle.xml', options: { interpolate: INTERPOLATE_REGEX } },
+        'checkstyle.xml',
         { file: 'devcontainer/devcontainer.json', renameTo: () => '.devcontainer/devcontainer.json' },
         { file: 'devcontainer/Dockerfile', renameTo: () => '.devcontainer/Dockerfile' },
       ],
@@ -186,8 +184,8 @@ export const baseServerFiles = {
         'gradle.properties',
         'gradle/sonar.gradle',
         'gradle/docker.gradle',
-        { file: 'gradle/profile_dev.gradle', options: { interpolate: INTERPOLATE_REGEX } },
-        { file: 'gradle/profile_prod.gradle', options: { interpolate: INTERPOLATE_REGEX } },
+        'gradle/profile_dev.gradle',
+        'gradle/profile_prod.gradle',
         'gradle/war.gradle',
         'gradle/zipkin.gradle',
       ],
@@ -198,7 +196,7 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.buildToolMaven,
-      templates: [{ file: 'pom.xml', options: { interpolate: INTERPOLATE_REGEX } }],
+      templates: ['pom.xml'],
     },
     {
       condition: generator => !generator.skipClient,
@@ -907,20 +905,6 @@ export const baseServerFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [{ file: 'package/service/package-info.java', renameTo: generator => `${generator.javaDir}service/package-info.java` }],
     },
-    {
-      condition: generator => generator.messageBrokerKafka,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/KafkaSseConsumer.java',
-          renameTo: generator => `${generator.javaDir}config/KafkaSseConsumer.java`,
-        },
-        {
-          file: 'package/config/KafkaSseProducer.java',
-          renameTo: generator => `${generator.javaDir}config/KafkaSseProducer.java`,
-        },
-      ],
-    },
   ],
   serverJavaWebError: [
     {
@@ -998,26 +982,6 @@ export const baseServerFiles = {
         {
           file: 'package/web/filter/SpaWebFilter.java',
           renameTo: generator => `${generator.javaDir}web/filter/SpaWebFilter.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka && generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/KafkaResource_reactive.java',
-          renameTo: generator => `${generator.javaDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResource.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka && !generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/KafkaResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResource.java`,
         },
       ],
     },
@@ -1216,40 +1180,6 @@ export const baseServerFiles = {
         {
           file: 'package/security/DomainUserDetailsServiceIT.java',
           renameTo: generator => `${generator.testDir}security/DomainUserDetailsServiceIT.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/KafkaTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/KafkaTestContainer.java`,
-        },
-        {
-          file: 'package/config/EmbeddedKafka.java',
-          renameTo: generator => `${generator.testDir}config/EmbeddedKafka.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka && !generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/KafkaResourceIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResourceIT.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka && generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/KafkaResourceIT_reactive.java',
-          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResourceIT.java`,
         },
       ],
     },
@@ -1668,7 +1598,6 @@ export function writeFiles() {
         },
       });
     },
-    ...writeCouchbaseFiles.call(this),
     ...writeSqlFiles.call(this),
   });
 }

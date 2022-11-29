@@ -61,6 +61,10 @@ const deprecatedProperties = {
     replacement: 'getWebappTranslation',
     get: ({ data }) => data.getWebappTranslation,
   },
+  testsNeedCsrf: {
+    replacement: 'authenticationUsesCsrf',
+    get: ({ data }) => data.authenticationUsesCsrf,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];

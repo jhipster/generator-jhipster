@@ -80,7 +80,7 @@ describe('JHipsterDeploymentExporter', () => {
 
           after('cleanup for the fist deployment', () => {
             fs.unlinkSync(path.join('docker-compose', '.yo-rc.json'));
-            fs.rmdirSync('docker-compose');
+            fs.rmSync('docker-compose', { recursive: true });
           });
 
           it('should exports it', done => {
@@ -122,7 +122,7 @@ Object {
 
           after('cleanup for the fist deployment', () => {
             fs.unlinkSync(path.join('kubernetes', '.yo-rc.json'));
-            fs.rmdirSync('kubernetes');
+            fs.rmSync('kubernetes', { recursive: true });
           });
 
           it('should exports it', done => {

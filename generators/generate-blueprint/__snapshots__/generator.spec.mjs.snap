@@ -224,6 +224,18 @@ Object {
   "generators/common/templates/template-file-common.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/couchbase/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/couchbase/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/couchbase/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/couchbase/templates/template-file-couchbase.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/cypress/generator.mjs": Object {
     "stateCleared": "modified",
   },
@@ -375,6 +387,18 @@ Object {
     "stateCleared": "modified",
   },
   "generators/init/templates/template-file-init.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kafka/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kafka/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kafka/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kafka/templates/template-file-kafka.ejs": Object {
     "stateCleared": "modified",
   },
   "generators/kubernetes-helm/generator.mjs": Object {

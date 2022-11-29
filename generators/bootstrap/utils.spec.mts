@@ -1,6 +1,6 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { writeFileSync } from 'fs';
-import { prepareTempDir } from '../../test/utils/utils.mjs';
+import { prepareTempDir } from '../../test/support/temp-dir.mjs';
 
 import { detectCrLf } from './utils.mjs';
 

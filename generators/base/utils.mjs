@@ -82,3 +82,5 @@ export function parseChangelog(changelogDate) {
 export function normalizeLineEndings(str, lineEnding) {
   return str.replace(/\r\n|\r|\n/g, lineEnding);
 }
+
+export const normalizePathEnd = directory => (directory.endsWith('/') ? directory : `${directory}/`);

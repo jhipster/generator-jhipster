@@ -37,7 +37,7 @@ import NeedleApi from '../needle-api.cjs';
 import generatorDefaults from '../generator-defaults.cjs';
 import commonOptions from './options.mjs';
 import detectLanguage from '../languages/detect-language.mjs';
-import { formatDateForChangelog } from './utils.mjs';
+import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
 import {
   defaultApplicationOptions,
@@ -1733,7 +1733,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         return val;
       }
       if (typeof val === 'function') {
-        return val.call(this, context, this) || false;
+        return val.call(this, context) || false;
       }
       throw new Error(`Type not supported ${val}`);
     };
@@ -2371,7 +2371,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   loadServerConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.packageName = config.packageName;
-    dest.packageFolder = config.packageFolder;
+    dest.packageFolder = config.packageFolder && normalizePathEnd(config.packageFolder);
     dest.serverPort = config.serverPort;
 
     dest.srcMainJava = SERVER_MAIN_SRC_DIR;
@@ -2412,11 +2412,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   loadDerivedServerConfig(dest = this) {
     if (!dest.packageFolder) {
-      dest.packageFolder = dest.packageName.replace(/\./g, '/');
+      dest.packageFolder = `${dest.packageName.replace(/\./g, '/')}/`;
     }
 
-    dest.javaPackageSrcDir = `${dest.srcMainJava}${dest.packageFolder}/`;
-    dest.javaPackageTestDir = `${dest.srcTestJava}${dest.packageFolder}/`;
+    dest.javaPackageSrcDir = normalizePathEnd(`${dest.srcMainJava}${dest.packageFolder}`);
+    dest.javaPackageTestDir = normalizePathEnd(`${dest.srcTestJava}${dest.packageFolder}`);
 
     dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     // Convert to false for templates.
@@ -2500,6 +2500,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.generateUserManagement ||
       dest.authenticationType === OAUTH2 ||
       (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
+
+    dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
   }
 
   /**

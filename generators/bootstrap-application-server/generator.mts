@@ -34,6 +34,7 @@ import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
 import { getPomVersionProperties } from '../server/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
+import { GRADLE_VERSION } from '../gradle/constants.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -55,9 +56,10 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
 
   get loading() {
     return this.asLoadingTaskGroup({
-      async loadApplication({ application }) {
+      async loadApplication({ application, control }) {
         this.loadServerConfig(undefined, application);
 
+        application.gradleVersion = control.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
         application.temporaryDir = application.buildTool === 'gradle' ? 'build/' : 'target/';
         application.buildDir = `${application.temporaryDir}${application.buildTool === 'gradle' ? 'resources/main/' : 'classes/'}`;

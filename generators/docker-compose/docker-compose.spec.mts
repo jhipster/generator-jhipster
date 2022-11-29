@@ -4,7 +4,7 @@ import monitoringTypes from '../../jdl/jhipster/monitoring-types';
 import applicationTypes from '../../jdl/jhipster/application-types';
 import { deploymentTestSamples } from '../../test/support/mock-config.mjs';
 import { getGenerator } from '../../test/support/index.mjs';
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE, MONOLITH } = applicationTypes;
@@ -533,7 +533,12 @@ describe('JHipster Docker Compose Sub Generator', () => {
         .run();
     });
     it('should match files snapshot', function () {
-      expect(runResult.getSnapshot()).toMatchSnapshot();
+      expect(runResult.getSnapshot()).toMatchSnapshot({
+        'realm-config/jhipster-realm.json': {
+          contents: expect.any(String),
+          stateCleared: 'modified',
+        },
+      });
     });
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.dockercompose);

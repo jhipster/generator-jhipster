@@ -22,12 +22,12 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import testSupport from '../../test/support/index.cjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './index.mjs';
+import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithKafka } from './__test-support/index.mjs';
 
 const { snakeCase } = lodash;
-const { testBlueprintSupport } = testSupport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,7 +35,6 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorPath = join(__dirname, 'index.mjs');
 
-const serverGenerators = ['jhipster:common', 'jhipster:maven', 'jhipster:gradle'];
 const skipPriorities = ['prompting', 'writing', 'postWriting', 'writingEntities', 'postWritingEntities'];
 
 describe(`JHipster ${generator} generator`, () => {
@@ -47,11 +46,6 @@ describe(`JHipster ${generator} generator`, () => {
     expect(instance.features.bar).toBe(true);
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
-  describe('exported files', () => {
-    it('should match snapshot', async () => {
-      expect((await import('./files.mjs')).serverFiles).toMatchSnapshot();
-    });
-  });
 
   describe('composing', () => {
     describe('buildTool option', () => {
@@ -67,7 +61,7 @@ describe(`JHipster ${generator} generator`, () => {
               },
               skipPriorities,
             })
-            .withMockedGenerators(serverGenerators);
+            .withMockedGenerators(mockedGenerators);
         });
 
         it('should compose with maven generator', () => {
@@ -89,7 +83,7 @@ describe(`JHipster ${generator} generator`, () => {
               },
               skipPriorities,
             })
-            .withMockedGenerators(serverGenerators);
+            .withMockedGenerators(mockedGenerators);
         });
 
         it('should compose with gradle generator', () => {
@@ -98,6 +92,78 @@ describe(`JHipster ${generator} generator`, () => {
         it('should not compose with others buildTool generators', () => {
           assert(runResult.mockedGenerators['jhipster:maven'].notCalled);
         });
+      });
+    });
+
+    describe('messageBroker option', () => {
+      describe('no', () => {
+        let runResult;
+        before(async () => {
+          runResult = await helpers
+            .run(generatorPath)
+            .withOptions({
+              localConfig: {
+                baseName: 'jhipster',
+                messageBroker: 'no',
+              },
+              skipPriorities,
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+
+        shouldComposeWithKafka(false, () => runResult);
+      });
+      describe('kafka', () => {
+        let runResult;
+        before(async () => {
+          runResult = await helpers
+            .run(generatorPath)
+            .withOptions({
+              localConfig: {
+                baseName: 'jhipster',
+                messageBroker: 'kafka',
+              },
+              skipPriorities,
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+        shouldComposeWithKafka(true, () => runResult);
+      });
+    });
+
+    describe('databaseType option', () => {
+      describe('no', () => {
+        let runResult;
+        before(async () => {
+          runResult = await helpers
+            .run(generatorPath)
+            .withOptions({
+              localConfig: {
+                baseName: 'jhipster',
+                databaseType: 'no',
+              },
+              skipPriorities,
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+
+        shouldComposeWithCouchbase(false, () => runResult);
+      });
+      describe('couchbase', () => {
+        let runResult;
+        before(async () => {
+          runResult = await helpers
+            .run(generatorPath)
+            .withOptions({
+              localConfig: {
+                baseName: 'jhipster',
+                databaseType: 'couchbase',
+              },
+              skipPriorities,
+            })
+            .withMockedGenerators(mockedGenerators);
+        });
+        shouldComposeWithCouchbase(true, () => runResult);
       });
     });
   });

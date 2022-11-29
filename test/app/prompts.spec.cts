@@ -7,7 +7,7 @@ import { JWT } from '../../jdl/jhipster/authentication-types';
 import { CYPRESS } from '../../jdl/jhipster/test-framework-types';
 import { ANGULAR } from '../../jdl/jhipster/client-framework-types';
 import { MAVEN } from '../../jdl/jhipster/build-tool-types';
-import { getGenerator } from '../support/index.cjs';
+import { getGenerator } from '../support/index.mjs';
 
 const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:client', 'jhipster:languages', 'jhipster:entity'];
 

@@ -26,14 +26,16 @@ import os from 'os';
 import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 import {
-  GENERATOR_COMMON,
-  GENERATOR_LANGUAGES,
-  GENERATOR_SERVER,
   GENERATOR_BOOTSTRAP_APPLICATION,
-  GENERATOR_LIQUIBASE,
-  GENERATOR_GRADLE,
-  GENERATOR_MAVEN,
+  GENERATOR_COMMON,
+  GENERATOR_COUCHBASE,
   GENERATOR_DOCKER,
+  GENERATOR_GRADLE,
+  GENERATOR_KAFKA,
+  GENERATOR_LANGUAGES,
+  GENERATOR_LIQUIBASE,
+  GENERATOR_MAVEN,
+  GENERATOR_SERVER,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
@@ -55,10 +57,12 @@ import {
   entityOptions,
   validations,
   reservedKeywords,
+  messageBrokerTypes,
 } from '../../jdl/jhipster/index.mjs';
 
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
+import { normalizePathEnd } from '../base/utils.mjs';
 
 const { isReservedTableName } = reservedKeywords;
 const { defaultConfig } = generatorDefaults;
@@ -69,6 +73,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE
 const { FALSE: NO_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
+const { KAFKA } = messageBrokerTypes;
 
 const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, MAIN_DIR, TEST_DIR } = constants;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -210,7 +215,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
 
       async composing() {
-        const { buildTool, enableTranslation, databaseType } = this.jhipsterConfigWithDefaults;
+        const { buildTool, enableTranslation, databaseType, messageBroker } = this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
           await this.composeWithJHipster(GENERATOR_GRADLE);
         } else if (buildTool === MAVEN) {
@@ -227,6 +232,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if (databaseType === SQL) {
           await this.composeWithJHipster(GENERATOR_LIQUIBASE);
+        } else if (databaseType === COUCHBASE) {
+          await this.composeWithJHipster(GENERATOR_COUCHBASE);
+        }
+        if (messageBroker === KAFKA) {
+          await this.composeWithJHipster(GENERATOR_KAFKA);
         }
       },
     });
@@ -302,19 +312,18 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.cacheManagerIsAvailable = [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(
           application.cacheProvider
         );
-        application.testsNeedCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
+        application.authenticationUsesCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
 
         application.jhiTablePrefix = this.getTableName(application.jhiPrefix);
 
         application.mainJavaDir = SERVER_MAIN_SRC_DIR;
-        application.mainJavaPackageDir = `${SERVER_MAIN_SRC_DIR}${application.packageFolder}/`;
+        application.mainJavaPackageDir = normalizePathEnd(`${SERVER_MAIN_SRC_DIR}${application.packageFolder}`);
         application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
         application.testJavaDir = SERVER_TEST_SRC_DIR;
-        application.testJavaPackageDir = `${SERVER_TEST_SRC_DIR}${application.packageFolder}/`;
+        application.testJavaPackageDir = normalizePathEnd(`${SERVER_TEST_SRC_DIR}${application.packageFolder}`);
         application.testResourceDir = SERVER_TEST_RES_DIR;
         application.srcMainDir = MAIN_DIR;
         application.srcTestDir = TEST_DIR;
-        application.generateBuiltInAuthorityEntity = application.generateBuiltInUserEntity && !application.databaseTypeCassandra;
       },
     });
   }

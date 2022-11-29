@@ -3,11 +3,13 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
+import { buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
+import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from './__test-support/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -36,8 +38,6 @@ const samplesBuilder = (): [string, any][] =>
   ]);
 
 const testSamples = samplesBuilder();
-
-const mockedGenerators = ['jhipster:languages', 'jhipster:common', 'jhipster:docker'];
 
 describe(`JHipster ${databaseType} generator`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -75,6 +75,8 @@ describe(`JHipster ${databaseType} generator`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
+      shouldComposeWithKafka(sample, () => runResult);
+      shouldComposeWithLiquibase(false, () => runResult);
     });
   });
 });

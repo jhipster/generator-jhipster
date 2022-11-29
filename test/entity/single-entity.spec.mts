@@ -1,7 +1,7 @@
 import path from 'path';
 import fse from 'fs-extra';
 
-import { skipPrettierHelpers as helpers } from '../utils/utils.mjs';
+import { skipPrettierHelpers as helpers } from '../support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import createMockedConfig from '../support/mock-config.mjs';
 import { getTemplatePath, getEntityTemplatePath, getGenerator } from '../support/index.mjs';

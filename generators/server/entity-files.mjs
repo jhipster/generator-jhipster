@@ -23,7 +23,6 @@ import { cleanupOldFiles } from './entity-cleanup.mjs';
 import utils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
 import { databaseTypes, searchEngineTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
-import { writeEntityCouchbaseFiles } from './entity-files-couchbase.mjs';
 
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
@@ -33,7 +32,6 @@ const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 
 /* Constants use throughout */
-const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
@@ -421,7 +419,6 @@ export const gatlingFiles = {
       templates: [
         {
           file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
-          options: { interpolate: INTERPOLATE_REGEX },
           renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
         },
       ],
@@ -484,7 +481,6 @@ export function writeFiles() {
         }
       }
     },
-    ...writeEntityCouchbaseFiles(),
   };
 }
 
