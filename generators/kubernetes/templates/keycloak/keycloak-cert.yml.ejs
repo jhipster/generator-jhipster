@@ -1,0 +1,45 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: jks-password-secret
+  namespace: rey
+data:
+  password-key: MTIzNDU2
+type: Opaque
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: pkcs12-password-secret
+  namespace: rey
+data:
+  password-key: MTIzNDU2
+type: Opaque
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: keycloak-cert
+  namespace: rey
+spec:
+  secretName: keycloak-tls-secret
+  issuerRef:
+    name: clusterissuer
+    kind: ClusterIssuer
+  dnsNames:
+    <%_ if (ingressDomain) { _%>
+      - keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+    <%_ } else { _%>
+      - keycloak      
+    <%_ } _%>
+  keystores:
+    jks:
+      create: true
+      passwordSecretRef: # Password used to encrypt the keystore
+        key: password-key
+        name: pkcs12-password-secret
+    pkcs12:
+      create: true
+      passwordSecretRef: # Password used to encrypt the keystore
+        key: password-key
+        name: jks-password-secret

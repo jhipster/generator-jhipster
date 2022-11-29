@@ -108,11 +108,14 @@ export function loadConfigs() {
 
   // Loading configs
   this.debug(`Apps folders: ${this.appsFolders}`);
-  this.appsFolders.forEach((appFolder, index) => {
+  this.appsFolders.forEach((appFolder) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
+    this.debug(chalk.red.bold(`App folder ${path}`));
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
       const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
-      config.composePort = serverPort + index;
+      config.composePort = serverPort + config.applicationIndex;
+      const index = config.applicationIndex;
+      this.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and index ${index}`));
       _.defaults(config, this.getDefaultConfigForApplicationType(config.applicationType));
       this.loadAppConfig(config, config);
       this.loadServerConfig(config, config);

@@ -1,0 +1,103 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: keycloak
+spec:
+  ports:
+  - name: http
+    port: 9080
+    targetPort: 8080
+  - name: https
+    port: 9443
+    targetPort: 8443
+  selector:
+    app: keycloak
+  <%_ if (!kubernetesServiceTypeIngress) { _%>
+  type: <%= kubernetesServiceType %>
+  <%_ } else { _%>
+  type: <%= ingressTypeGke ? 'NodePort' : 'ClusterIP' %>
+  <%_ } _%>    
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: <%= DOCKER_KEYCLOAK %>
+        args: ["start --import-realm"]
+        env:
+        - name: KEYCLOAK_ADMIN
+          value: "admin"
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          value: "admin"
+        - name: KC_DB
+          value: dev-file
+        - name: KC_FEATURES
+          value: scripts
+        <%_ if (ingressDomain) { _%>
+        - name: KC_PROXY
+          value: "edge"
+        - name: KC_HOSTNAME_URL
+          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+        - name: KC_HOSTNAME_ADMIN_URL
+          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+        <%_ } else { _%>
+        - name: KC_HOSTNAME_URL
+          value: https://keycloak:9443
+        - name: KC_HOSTNAME_ADMIN_URL
+          value: https://keycloak:9443
+        - name: KC_HTTPS_CERTIFICATE_FILE
+          value: "/etc/x509/https/tls.crt"
+        - name: KC_HTTPS_CERTIFICATE_KEY_FILE
+          value: "/etc/x509/https/tls.key"
+        <%_ } _%>
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 8443
+        readinessProbe:
+        <%_ if (ingressDomain) { _%>
+          httpGet:
+            path: /realms/master
+            port: 8080
+        <%_ } else { _%>
+          httpGet:
+            path: /realms/master
+            port: 8443
+            scheme: HTTPS
+        <%_ } _%>
+        volumeMounts:
+        - name: keycloak-volume
+          mountPath: /opt/keycloak/data/import
+        <%_ if (!ingressDomain) { _%>
+        - name: keycloak-cert
+          mountPath: /etc/x509/https
+          readOnly: true
+        <%_ } _%>
+      volumes:
+      - name: keycloak-volume
+        configMap:
+          name: keycloak-config
+      <%_ if (!ingressDomain) { _%>
+      - name: keycloak-cert
+        secret:
+          secretName: keycloak-tls-secret
+      <%_ } _%>

@@ -92,6 +92,45 @@ export function writeFiles() {
       this.template('messagebroker/kafka.yml.ejs', `messagebroker-${suffix}/kafka.yml`);
     },
 
+    writeKeycloak() {
+      const keycloakOut = 'keycloak'.concat('-', suffix);
+      this.entryPort ="8080";
+      this.keycloakRedirectUris = '';
+      this.appConfigs.forEach(appConfig => {
+        // Add application configuration
+        if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
+          this.entryPort = appConfig.composePort;
+          if (this.ingressDomain) {
+            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", "https://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", `;
+          } else {
+            this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", "https://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", `;
+          }
+
+          this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
+
+          if (appConfig.devServerPort !== undefined) {
+            this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
+          }
+
+          this.debug(chalk.red.bold(`${appConfig.baseName} has redirect URIs ${this.keycloakRedirectUris}`));
+          this.debug(chalk.red.bold(`AppConfig is ${JSON.stringify(appConfig)}`));
+        }
+      })
+      this.template('keycloak/keycloak-configmap.yml.ejs', `${keycloakOut}/keycloak-configmap.yml`);
+      this.template('keycloak/keycloak.yml.ejs', `${keycloakOut}/keycloak.yml`);
+
+      if (this.kubernetesServiceType === 'Ingress') {
+        this.template('keycloak/keycloak-ingress.yml.ejs', `${keycloakOut}/keycloak-ingress.yml`);
+      }      
+      if (this.istio) {
+        this.template('istio/gateway/keycloak-gateway.yml.ejs', `${keycloakOut}/keycloak-gateway.yml`);
+      }
+
+      this.template('cert-manager/cluster-issuer.yml.ejs', 'cert-manager/cluster-issuer.yml');
+      this.template('cert-manager/ca-secret.yml.ejs', 'cert-manager/ca-secret.yml');
+      this.template('keycloak/keycloak-cert.yml.ejs', `${keycloakOut}/keycloak-cert.yml`);
+    },
+
     writePrometheusGrafanaFiles() {
       const monitOut = 'monitoring'.concat('-', suffix);
       if (this.monitoring === PROMETHEUS) {
@@ -126,7 +165,7 @@ export function writeFiles() {
       const istioOut = 'istio'.concat('-', suffix);
       this.template('istio/gateway/grafana-gateway.yml.ejs', `${istioOut}/grafana-gateway.yml`);
       this.template('istio/gateway/zipkin-gateway.yml.ejs', `${istioOut}/zipkin-gateway.yml`);
-      this.template('istio/gateway/kiali-gateway.yml.ejs', `${istioOut}/kiali-gateway.yml`);
+      this.template('istio/gateway/kiali-gateway.yml.ejs', `${istioOut}/kiali-gateway.yml`);      
     },
 
     writeKustomize() {

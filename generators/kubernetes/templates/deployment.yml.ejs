@@ -216,10 +216,41 @@ spec:
         - name: SPRING_SLEUTH_PROPAGATION_KEYS
           value: "x-request-id,x-ot-span-context"
 <%_ } _%>
+<%_ if (useKeycloak && app.authenticationTypeOauth2) { _%>  
+        - name: JAVA_OPTS
+          value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Xmx256m -Xms256m"
+      <%_ if (ingressDomain) { _%>
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI        
+          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+      <%_ } else { _%>
+        # For Keycloak to work without an ingressDomain or hosted DNS, add keycloak service IP to your hosts file
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI        
+          value: https://keycloak:9443/realms/jhipster
+      <%_ } _%>
+      <%_ if (app.applicationTypeGateway || app.applicationTypeMonolith) { _%>
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
+          value: web_app
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
+          value: web_app
+      <%_ } _%>
+      <%_ if (app.applicationTypeMicroservice) { _%>
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
+          value: internal
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
+          value: internal
+      <%_ } _%>
+<%_ } else { _%>
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
+<%_ } _%>
         - name: SERVER_SHUTDOWN
           value: graceful
+    <%_ if (useKeycloak && app.authenticationTypeOauth2) { _%>
+        # if using self-signed certificates, for a successful start, add keycloak certificate to java truststore 
+        volumeMounts:
+          - name: java-truststore
+            mountPath: /etc/pki/java
+    <%_ } _%>
         resources:
           requests:
             memory: "512Mi"
@@ -242,3 +273,13 @@ spec:
             path: /management/health/liveness
             port: http
           initialDelaySeconds: 120
+  <%_ if (useKeycloak && app.authenticationTypeOauth2) { _%>
+      volumes:
+      - name: java-truststore
+        secret:
+          secretName: keycloak-tls-secret
+          items:
+          - key: truststore.jks
+            path: cacerts
+  <%_ } _%>
+          

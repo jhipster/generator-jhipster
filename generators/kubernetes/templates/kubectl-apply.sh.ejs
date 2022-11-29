@@ -65,13 +65,16 @@ logSummary() {
 
 default() {
     suffix=k8s
+    kubectl apply -f cert-manager/
 <%_ if (!kubernetesNamespaceDefault) { _%>
     kubectl apply -f namespace.yml
-<%_ } _%> <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
-    kubectl apply -f registry-${suffix}/
 <%_ } _%> <%_ if (istio) { _%>
     kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
-<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+<%_ } _%> 
+    kubectl apply -f keycloak-${suffix}/
+<%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
+    kubectl apply -f registry-${suffix}/
+    <%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
     kubectl apply -f <%- appConfig.baseName.toLowerCase() %>-${suffix}/
 <%_ }) _%>
 <%_ if (useKafka) { _%>

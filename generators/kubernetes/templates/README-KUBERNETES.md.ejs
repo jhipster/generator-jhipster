@@ -115,6 +115,52 @@ $ kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespac
 ```
 <%_ } _%>
 
+<%_ if (useKeycloak && usesOauth2) { _%>
+## Keycloak
+
+Keycloak deployment requires the installation of [cert-manager](https://cert-manager.io/docs/installation/).
+
+```
+$ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.1/cert-manager.yaml
+```
+
+  <%_ if (!ingressDomain) { _%>
+In production mode, for Keycloak to accept requests, the requested host must match the host variable in Keycloak configuration. Add keycloak service IP to your hosts file.
+  <%_ } _%>
+
+  <%_ if (kubernetesServiceType === 'NodePort') { _%>        
+If you don't want to expose Keycloak service, add '127.0.0.1 keycloak' to your hosts file, and start port-forwarding for the keycloak service:
+
+```
+$ kubectl port-forward svc/keycloak -n <%= kubernetesNamespace %> 9443
+```
+  <%_ } _%>
+
+  <%_ if (kubernetesServiceType === 'LoadBalancer') { _%>
+If using Minikube, run:
+```
+$ minikube tunnel
+```
+Then find the service external IP with the following command:
+```
+$ kubectl get svc keycloak -n <%= kubernetesNamespace %>
+```
+Add a line for keycloak external IP to your hosts file, for example:
+```
+10.104.134.176 keycloak
+```
+
+  <%_ } _%>
+
+  <%_ if (istio) { _%>
+
+For istio-ingressgateway to be able to find Keycloak certificate for TLS, the certificate must be created in the same namespace. You can install Istio in a custom namespace with [Istioctl](https://istio.io/latest/docs/setup/install/istioctl/) and the following options:
+```
+$ ./istioctl install --set namespace=<%= kubernetesNamespace %> --set values.global.istioNamespace=<%= kubernetesNamespace %>
+```
+  <%_ } _%>    
+
+<%_ } _%>
 
 ## Troubleshooting
 

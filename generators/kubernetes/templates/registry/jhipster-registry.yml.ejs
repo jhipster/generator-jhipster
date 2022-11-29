@@ -74,10 +74,10 @@ spec:
       labels:
         app: jhipster-registry
         version: "1.0"
-<%_ if (istio) { _%>
+      <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-<%_ } _%>
+      <%_ } _%>
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -89,16 +89,16 @@ spec:
         # StatefulSet specific configuration
         # Registry configuration
         - name: SPRING_PROFILES_ACTIVE
-          value: prod,k8s
+          value: prod,k8s<%_ if (useKeycloak && usesOauth2) { _%>,oauth2<% } %>
         - name: SPRING_SECURITY_USER_PASSWORD
           valueFrom:
             secretKeyRef:
               name: registry-secret
               key: registry-admin-password
-<%_ if (istio) { _%>
+    <%_ if (istio) { _%>
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "false"
-<%_ } _%>
+    <%_ } _%>
         - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
           value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
         - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
@@ -125,10 +125,39 @@ spec:
           value: 'true'
         - name: K8S_CONFIG_PATH
           value: '/central-config/'
+  <%_ if (useKeycloak && usesOauth2) { _%>
+    <%_ if (ingressDomain) { _%>        
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
+          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+    <%_ } else { _%>
+        # For Keycloak to work without an ingressDomain or hosted DNS, add keycloak service IP to your hosts file
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
+          value: https://keycloak:9443/realms/jhipster
+    <%_ } _%>
+        - name: JAVA_OPTS
+          value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts"
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
+          value: jhipster-registry
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
+          value: jhipster-registry
+  <%_ } _%>
         volumeMounts:
         - name: config-volume
           mountPath: /central-config
+    <%_ if (useKeycloak && usesOauth2) { _%>
+        # if using self-signed certificates, for a successful start, add keycloak certificate to java truststore 
+        - name: java-truststore
+          mountPath: /etc/pki/java
+    <%_ } _%>
       volumes:
       - name: config-volume
         configMap:
           name: application-config
+  <%_ if (useKeycloak && usesOauth2) { _%>
+      - name: java-truststore
+        secret:
+          secretName: keycloak-tls-secret
+          items:
+          - key: truststore.jks
+            path: cacerts
+  <%_ } _%>

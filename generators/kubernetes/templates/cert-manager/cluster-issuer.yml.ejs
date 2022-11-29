@@ -1,0 +1,10 @@
+# Default configuration is a ClusterIssuer self-signed CA
+# For external issuers refer to https://cert-manager.io/docs/configuration/external/
+# For ACME issuer refer to https://cert-manager.io/docs/configuration/acme/
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+    name: clusterissuer
+spec:
+  ca:
+    secretName: ca-secret

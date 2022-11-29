@@ -42,6 +42,9 @@ const appOut = appName.concat('-', suffix); _%>
 - <%= appOut %>/<%= appName %>-virtual-service.yml
   <%_  } _%>
 <%_ }) _%>
+# keycloak
+- keycloak-<%= suffix %>/keycloak-configmap.yml
+- keycloak-<%= suffix %>/keycloak.yml
 <%_ if (useKafka) { _%>
 # messagebroker
 - messagebroker-<%= suffix %>/kafka.yml
