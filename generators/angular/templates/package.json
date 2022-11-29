@@ -12,7 +12,7 @@
     "bootswatch": "5.2.2",
     "ngx-cookie-service": "14.0.1",
     "ngx-infinite-scroll": "14.0.1",
-    "ngx-webstorage": "10.0.1",
+    "ngx-webstorage": "11.1.1",
     "rxjs": "7.5.7",
     "tslib": "2.4.1",
     "zone.js": "0.12.0"
