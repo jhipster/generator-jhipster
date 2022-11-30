@@ -2,7 +2,11 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  <%_ if (istio) { _%>
+  namespace: istio-system
+  <%_ } else { _%>
+  namespace: <%= kubernetesNamespace %>
+  <%_ } _%>
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -11,7 +15,11 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  <%_ if (istio) { _%>
+  namespace: istio-system
+  <%_ } else { _%>
+  namespace: <%= kubernetesNamespace %>
+  <%_ } _%>
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -20,7 +28,11 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  <%_ if (istio) { _%>
+  namespace: istio-system
+  <%_ } else { _%>
+  namespace: <%= kubernetesNamespace %>
+  <%_ } _%>
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -43,3 +55,12 @@ spec:
       passwordSecretRef: # Password used to encrypt the keystore
         key: password-key
         name: jks-password-secret
+  <%_ if (istio) { _%>
+  # istio requires secret replication with reflector
+  # $ kubectl -n kube-system apply -f https://github.com/emberstack/kubernetes-reflector/releases/latest/download/reflector.yaml
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "<%= kubernetesNamespace %>"
+  <%_ } _%>

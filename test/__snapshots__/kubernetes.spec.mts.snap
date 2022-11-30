@@ -138,7 +138,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -147,7 +147,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -156,7 +156,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: default
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -3348,7 +3348,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -3357,7 +3357,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -3366,7 +3366,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: default
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -7158,7 +7158,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -7167,7 +7167,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -7176,7 +7176,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: default
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -10491,7 +10491,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -10500,7 +10500,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -10509,7 +10509,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: default
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -14235,7 +14235,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: istio-system
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -14244,7 +14244,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: istio-system
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -14253,7 +14253,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: istio-system
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -14272,6 +14272,13 @@ spec:
       passwordSecretRef: # Password used to encrypt the keystore
         key: password-key
         name: jks-password-secret
+  # istio requires secret replication with reflector
+  # $ kubectl -n kube-system apply -f https://github.com/emberstack/kubernetes-reflector/releases/latest/download/reflector.yaml
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: \\"true\\"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: \\"true\\"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: \\"default\\"
 ",
     "stateCleared": "modified",
   },
@@ -17675,7 +17682,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -17684,7 +17691,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -17693,7 +17700,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: default
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -22130,7 +22137,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -22139,7 +22146,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -22148,7 +22155,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: default
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -25337,7 +25344,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: mynamespace
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -25346,7 +25353,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: mynamespace
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -25355,7 +25362,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: mynamespace
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -31309,7 +31316,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: mynamespace
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -31318,7 +31325,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: mynamespace
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -31327,7 +31334,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: mynamespace
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -34828,7 +34835,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -34837,7 +34844,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: default
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -34846,7 +34853,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: default
 spec:
   secretName: keycloak-tls-secret
   issuerRef:
@@ -39491,7 +39498,7 @@ spec:
 apiVersion: v1
 metadata:
   name: jks-password-secret
-  namespace: rey
+  namespace: jhipsternamespace
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -39500,7 +39507,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: pkcs12-password-secret
-  namespace: rey
+  namespace: jhipsternamespace
 data:
   password-key: MTIzNDU2
 type: Opaque
@@ -39509,7 +39516,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: keycloak-cert
-  namespace: rey
+  namespace: jhipsternamespace
 spec:
   secretName: keycloak-tls-secret
   issuerRef:

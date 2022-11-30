@@ -151,15 +151,14 @@ Add a line for keycloak external IP to your hosts file, for example:
 ```
 
   <%_ } _%>
-
+  
   <%_ if (istio) { _%>
-
-For istio-ingressgateway to be able to find Keycloak certificate for TLS, the certificate must be created in the same namespace. You can install Istio in a custom namespace with [Istioctl](https://istio.io/latest/docs/setup/install/istioctl/) and the following options:
+Istio requires secret replication from istio-system to <%= kubernetesNamespace %> with reflector:
 ```
-$ ./istioctl install --set namespace=<%= kubernetesNamespace %> --set values.global.istioNamespace=<%= kubernetesNamespace %>
+$ kubectl -n kube-system apply -f https://github.com/emberstack/kubernetes-reflector/releases/latest/download/reflector.yaml
 ```
-  <%_ } _%>    
-
+  
+  <%_ } _%>
 <%_ } _%>
 
 ## Troubleshooting
