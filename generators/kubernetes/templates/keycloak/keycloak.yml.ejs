@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
       - name: keycloak
-        image: <%= DOCKER_KEYCLOAK %>
+        image: <%- dockerContainers.keycloak %>
         args: ["start --import-realm"]
         env:
         - name: KEYCLOAK_ADMIN
