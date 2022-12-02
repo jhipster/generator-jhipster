@@ -5,10 +5,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/KafkaSseProducer.java": Object {
+  "src/main/java/com/package/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/JhipsterKafkaResource.java": Object {
@@ -31,10 +28,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/KafkaSseProducer.java": Object {
+  "src/main/java/tech/jhipster/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": Object {
@@ -57,10 +51,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/KafkaSseProducer.java": Object {
+  "src/main/java/tech/jhipster/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": Object {
@@ -83,10 +74,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/KafkaSseProducer.java": Object {
+  "src/main/java/com/package/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/JhipsterKafkaResource.java": Object {
@@ -109,10 +97,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/KafkaSseProducer.java": Object {
+  "src/main/java/tech/jhipster/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": Object {
@@ -135,10 +120,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/KafkaSseProducer.java": Object {
+  "src/main/java/com/package/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/JhipsterKafkaResource.java": Object {
@@ -161,10 +143,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/KafkaSseProducer.java": Object {
+  "src/main/java/tech/jhipster/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": Object {
@@ -187,10 +166,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/KafkaSseProducer.java": Object {
+  "src/main/java/com/package/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/JhipsterKafkaResource.java": Object {
@@ -213,10 +189,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/KafkaSseProducer.java": Object {
+  "src/main/java/tech/jhipster/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": Object {
@@ -239,10 +212,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/KafkaSseProducer.java": Object {
+  "src/main/java/com/package/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/JhipsterKafkaResource.java": Object {
@@ -265,10 +235,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/KafkaSseProducer.java": Object {
+  "src/main/java/tech/jhipster/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": Object {
@@ -291,10 +258,7 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/KafkaSseConsumer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/KafkaSseProducer.java": Object {
+  "src/main/java/com/package/config/KafkaConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/JhipsterKafkaResource.java": Object {
