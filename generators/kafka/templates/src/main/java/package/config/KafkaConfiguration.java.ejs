@@ -21,6 +21,7 @@ package <%= packageName %>.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
@@ -41,7 +42,7 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public Consumer<Message<String>> consume() {
+    public Consumer<GenericMessage<String>> consume() {
         return message -> {
             log.debug("Got message from kafka stream: {}", message.getPayload());
             emitters
