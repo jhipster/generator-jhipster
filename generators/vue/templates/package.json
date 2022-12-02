@@ -46,7 +46,7 @@
     "merge-jsons-webpack-plugin": "2.0.1",
     "mini-css-extract-plugin": "2.7.1",
     "numeral": "2.0.6",
-    "postcss-import": "15.0.0",
+    "postcss-import": "15.0.1",
     "postcss-loader": "7.0.2",
     "postcss-url": "10.1.3",
     "rimraf": "3.0.2",
