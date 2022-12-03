@@ -19,19 +19,19 @@
  * limitations under the License.
  */
 
-const chalk = require('chalk');
-const { Option } = require('commander');
-const didYouMean = require('didyoumean');
-const fs = require('fs');
-const path = require('path');
+import chalk from 'chalk';
+import { Option } from 'commander';
+import didYouMean from 'didyoumean';
+import fs from 'fs';
+import path from 'path';
 
-const EnvironmentBuilder = require('./environment-builder.cjs');
-const SUB_GENERATORS = require('./commands.cjs');
-const JHipsterCommand = require('./jhipster-command.cjs');
-const { CLI_NAME, logger, getCommand, done } = require('./utils.cjs');
-const { packageJson } = require('../lib/index.cjs');
-const { packageNameToNamespace } = require('../generators/utils.cjs');
-const { logo } = require('./logo.cjs');
+import EnvironmentBuilder from './environment-builder.cjs';
+import SUB_GENERATORS from './commands.cjs';
+import JHipsterCommand from './jhipster-command.cjs';
+import { CLI_NAME, logger, getCommand, done } from './utils.cjs';
+import { packageJson } from '../lib/index.cjs';
+import { packageNameToNamespace } from '../generators/utils.cjs';
+import { logo } from './logo.cjs';
 
 const { version: JHIPSTER_VERSION } = packageJson;
 const JHIPSTER_NS = CLI_NAME;
@@ -259,7 +259,7 @@ const buildJHipster = ({
   env = envBuilder.getEnvironment(),
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
   loadCommand = key => {
-    return require(`./${key}.cjs`);
+    return import(`./${key}.mjs`);
   },
   defaultCommand,
 } = {}) => {
@@ -276,12 +276,4 @@ const runJHipster = (args = {}) => {
   return buildJHipster(args).parseAsync(argv);
 };
 
-module.exports = {
-  createProgram,
-  buildCommands,
-  buildJHipster,
-  runJHipster,
-  printJHipsterLogo,
-  done,
-  logger,
-};
+export { createProgram, buildCommands, buildJHipster, runJHipster, printJHipsterLogo, done, logger };

@@ -124,9 +124,8 @@
     "yeoman-generator": "5.7.0"
   },
   "devDependencies": {
-    "@node-loaders/auto": "0.6.0",
-    "@node-loaders/esbuild": "0.6.0",
-    "@node-loaders/mock": "0.7.0",
+    "@esbuild-kit/cjs-loader": "2.4.1",
+    "@esbuild-kit/esm-loader": "2.5.4",
     "@types/chai": "4.3.4",
     "@types/mocha": "10.0.1",
     "@types/sinon-chai": "3.2.9",

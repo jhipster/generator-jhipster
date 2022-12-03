@@ -1,18 +1,24 @@
 /* eslint-disable no-unused-expressions, no-console */
 
-const assert = require('assert');
-const expect = require('chai').expect;
-const { exec, fork } = require('child_process');
-const path = require('path');
-const sinon = require('sinon');
-const Environment = require('yeoman-environment');
-const helpers = require('yeoman-test');
+import { createRequire } from 'module';
+import assert from 'assert';
+import { expect } from 'chai';
+import { exec, fork } from 'child_process';
+import sinon from 'sinon';
+import Environment from 'yeoman-environment';
+import helpers from 'yeoman-test';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const { createProgram, buildJHipster } = require('../../cli/program.cjs');
-const { getTemplatePath, getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('./utils/utils.cjs');
-const { logger } = require('../../cli/utils.cjs');
+import { createProgram, buildJHipster } from '../../cli/program.mjs';
+import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from './utils/utils.cjs';
+import { logger } from '../../cli/utils.cjs';
+import { getTemplatePath } from '../support/index.mjs';
 
-const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.cjs'));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
+const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'dist', 'cli', 'cli.mjs'));
 
 const mockCli = (opts = {}) => {
   const program = buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
@@ -55,8 +61,6 @@ describe('jhipster cli', () => {
   });
 
   it('should return error on unknown command', function (done) {
-    this.timeout(10000);
-
     exec(`${cmd} junkcmd`, (error, stdout, stderr) => {
       expect(error).to.not.be.null;
       expect(error.code).to.equal(1);
@@ -377,7 +381,7 @@ describe('jhipster cli', () => {
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
-            stdout = forked.stdout.read().toString();
+            stdout = forked.stdout?.read().toString();
             done();
           });
         });
@@ -399,7 +403,7 @@ describe('jhipster cli', () => {
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
-            stdout = forked.stdout.read().toString();
+            stdout = forked.stdout?.read().toString();
             done();
           });
         });
@@ -421,7 +425,7 @@ describe('jhipster cli', () => {
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
-            stdout = forked.stdout.read().toString();
+            stdout = forked.stdout?.read().toString();
             done();
           });
         });
@@ -443,7 +447,7 @@ describe('jhipster cli', () => {
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['bar', '--blueprints', 'cli-shared', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
-            stdout = forked.stdout.read().toString();
+            stdout = forked.stdout?.read().toString();
             done();
           });
         });
@@ -465,7 +469,7 @@ describe('jhipster cli', () => {
           lnYeoman(tmpdir);
           const forked = fork(jhipsterCli, ['app', '--blueprints', 'bar', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', () => {
-            stdout = forked.stdout.read().toString();
+            stdout = forked.stdout?.read().toString();
             done();
           });
         });
@@ -487,7 +491,7 @@ describe('jhipster cli', () => {
           const forked = fork(jhipsterCli, ['run', 'jhipster:app', '--help'], { stdio: 'pipe' });
           forked.on('exit', code => {
             exitCode = code;
-            stdout = forked.stdout.read().toString();
+            stdout = forked.stdout?.read().toString();
             done();
           });
         });
@@ -514,7 +518,7 @@ describe('jhipster cli', () => {
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {
             exitCode = code;
-            stdout = forked.stdout.read().toString();
+            stdout = forked.stdout?.read().toString();
             done();
           });
         });
@@ -540,7 +544,7 @@ describe('jhipster cli', () => {
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--foo-bar'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {
             exitCode = code;
-            stdout = forked.stdout.read().toString();
+            stdout = forked.stdout?.read().toString();
             done();
           });
         });
@@ -563,7 +567,7 @@ describe('jhipster cli', () => {
           const forked = fork(jhipsterCli, ['run', 'non-existing', '--help'], { stdio: 'pipe', cwd: tmpdir });
           forked.on('exit', code => {
             exitCode = code;
-            stderr = forked.stderr.read().toString();
+            stderr = forked.stderr?.read().toString();
             done();
           });
         });

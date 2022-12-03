@@ -17,15 +17,16 @@
  * limitations under the License.
  */
 /* eslint-disable no-unused-expressions */
-const assert = require('assert');
-const expect = require('chai').expect;
-const fs = require('fs');
-const sinon = require('sinon');
-const helpers = require('yeoman-test');
+import assert from 'assert';
+import { expect } from 'chai';
+import fs from 'fs';
+import sinon from 'sinon';
+import helpers from 'yeoman-test';
 
-const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
+import EnvironmentBuilder from '../../cli/environment-builder.cjs';
+import { getTemplatePath } from '../support/index.mjs';
 
-const { getTemplatePath, prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } = require('./utils/utils.cjs');
+import { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } from './utils/utils.cjs';
 
 describe('Environment builder', () => {
   let cleanup;

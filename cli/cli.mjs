@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-const { runJHipster } = require('./program.cjs');
-const { done, logger } = require('./utils.cjs');
+import { runJHipster } from './program.mjs';
+import { done, logger } from './utils.cjs';
 
-module.exports = runJHipster().catch(done);
+export default runJHipster().catch(done);
 
 process.on('unhandledRejection', up => {
   logger.error('Unhandled promise rejection at:');

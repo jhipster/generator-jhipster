@@ -1,11 +1,18 @@
-const { mockRequire } = require('@node-loaders/mock/require');
-const path = require('path');
-const fse = require('fs-extra');
-const assert = require('yeoman-assert');
-const expect = require('chai').expect;
-const utils = require('../../cli/utils.cjs');
+import path from 'path';
+import fse from 'fs-extra';
+import chai, { expect } from 'chai';
+import tdChai from 'testdouble-chai';
+import assert from 'yeoman-assert';
+import * as td from 'testdouble';
+import Environment from 'yeoman-environment';
 
-const { getTemplatePath, testInTempDir, revertTempDir } = require('./utils/utils.cjs');
+import * as utils from '../../cli/utils.mjs';
+import { testInTempDir, revertTempDir } from './utils/utils.cjs';
+import { getTemplatePath } from '../support/index.mjs';
+import { logger } from '../../cli/utils.mjs';
+import { EnvironmentBuilder } from '../../cli/index.mjs';
+
+chai.use(tdChai(td));
 
 let subGenCallParams = {
   count: 0,
@@ -39,7 +46,7 @@ const env = {
 
 const loadImportJdl = options => {
   options = {
-    './utils.cjs': {
+    './utils.mjs': {
       ...utils,
       logger: {
         ...utils.logger,
@@ -76,7 +83,7 @@ const loadImportJdl = options => {
     },
     ...options,
   };
-  return mockRequire('../../cli/import-jdl.cjs', options);
+  return rewiremock.proxy('../../dist/cli/import-jdl.mjs', options);
 };
 
 const defaultAddedOptions = {};
@@ -111,33 +118,79 @@ describe('JHipster generator import jdl', () => {
   // this test for some reason works only when put at the beginning.
   describe('runs in series with --interactive flag', () => {
     const options = { skipInstall: true, noInsight: true, interactive: true };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        fse.removeSync(`${dir}/.yo-rc.json`);
-        return loadImportJdl()(['apps-and-entities-and-deployments.jdl'], options, env);
+    let moduleToTest;
+    beforeEach(async () => {
+      logger.info('boom');
+      const utilsToMock = await td.replaceEsm('../../cli/utils.mjs');
+      td.when(utilsToMock.logger.info(td.matchers.anything())).thenDo(() => {});
+      td.when(utilsToMock.printSuccess(td.matchers.anything())).thenDo(() => {});
+      logger.info('boom');
+      const childProcessForkToMock = (await td.replaceEsm('child_process')).fork;
+      const forkArgvCaptor = td.matchers.captor();
+      td.when(childProcessForkToMock(td.matchers.anything(), forkArgvCaptor.capture(), td.matchers.anything())).thenReturn(() => {
+        const command = forkArgvCaptor.value[0];
+        const options = forkArgvCaptor.value.slice(1);
+        pushCall(command, options);
+        return {
+          on(code, cb) {
+            cb(0);
+          },
+        };
       });
+      logger.info('boom');
+      const envMock = td.imitate(Environment.createEnv());
+      const generatorArgsCaptor = td.matchers.captor();
+      const generatorOptionsCaptor = td.matchers.captor();
+      td.when(envMock.run(generatorArgsCaptor.capture(), generatorOptionsCaptor.capture())).thenReturn(() => {
+        pushCall(generatorArgsCaptor.value, generatorOptionsCaptor.value);
+        return Promise.resolve();
+      });
+      td.when(envMock.composeWith(td.matchers.anything(), td.matchers.anything(), td.matchers.anything())).thenReturn(() => {});
+      logger.info('boom4');
+      const envBuilderMock = new EnvironmentBuilder(envMock);
+      logger.info('boom4');
+      logger.info(JSON.stringify(envBuilderMock));
+      td.when(envBuilderMock.getEnvironment()).thenReturn(envMock);
+      logger.info('boom4');
+
+      const environmentMockESM = (await td.replaceEsm('../../cli/environment-builder.mjs')).default;
+      logger.info('boom5');
+      logger.info(JSON.stringify(environmentMockESM));
+      td.when(environmentMockESM).thenReturn(envMock);
+      // generator, args, options, schedule = true
+      moduleToTest = (await import('../../cli/import-jdl.mjs')).default;
+      logger.info('boom6');
     });
 
-    afterEach(() => revertTempDir(originalCwd));
+    afterEach(() => {
+      revertTempDir(originalCwd);
+      td.reset();
+    });
 
-    it('calls generator in order', () => {
-      expect(subGenCallParams.count).to.equal(5);
-      expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'jhipster:docker-compose', 'jhipster:kubernetes']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--from-jdl',
-      ]);
-      expect(subGenCallParams.options[3]).to.eql({
-        force: true,
-        skipInstall: true,
-        fromJdl: true,
-        noInsight: true,
-        skipPrompts: true,
+    it('calls generator in order', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['apps-and-entities-and-deployments.jdl'], options, env).then(() => {
+          expect(subGenCallParams.count).to.equal(5);
+          expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'jhipster:docker-compose', 'jhipster:kubernetes']);
+          expect(subGenCallParams.options[0]).to.eql([
+            '--reproducible',
+            '--force',
+            '--with-entities',
+            '--skip-install',
+            '--no-insight',
+            '--from-jdl',
+          ]);
+          expect(subGenCallParams.options[3]).to.eql({
+            force: true,
+            skipInstall: true,
+            fromJdl: true,
+            noInsight: true,
+            skipPrompts: true,
+          });
+          done();
+        });
       });
     });
   });
@@ -742,8 +795,8 @@ describe('JHipster generator import jdl', () => {
   describe('imports a JDL entity model with relations for mongodb', () => {
     beforeEach(() => {
       return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/documents-with-relations'), dir);
-        fse.copySync(getTemplatePath('import-jdl/mongodb-with-relations'), dir);
+        fse.copySync(getTemplatePath('documents-with-relations'), dir);
+        fse.copySync(getTemplatePath('mongodb-with-relations'), dir);
         return loadImportJdl()(['orders-model.jdl'], {}, env);
       });
     });
@@ -756,8 +809,8 @@ describe('JHipster generator import jdl', () => {
   describe('imports a JDL entity model with relations for couchbase', () => {
     beforeEach(() => {
       return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/documents-with-relations'), dir);
-        fse.copySync(getTemplatePath('import-jdl/couchbase-with-relations'), dir);
+        fse.copySync(getTemplatePath('documents-with-relations'), dir);
+        fse.copySync(getTemplatePath('couchbase-with-relations'), dir);
         return loadImportJdl()(['orders-model.jdl'], {}, env);
       });
     });
