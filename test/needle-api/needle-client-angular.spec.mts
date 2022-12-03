@@ -25,7 +25,6 @@ const mockBlueprintSubGen = class extends ClientGenerator {
       },
       addToMenuStep() {
         this.addElementToMenu('routerName1', 'iconName1', true, ANGULAR);
-        this.addElementToAdminMenu('routerName2', 'iconName2', true, ANGULAR);
       },
       addToModuleStep() {
         this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, ANGULAR);
@@ -97,24 +96,6 @@ describe('needle API Client for Angular: JHipster client generator with blueprin
 
   it('icon imports contains a new icon added by a new menu method of needle api ', () => {
     assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, '  faIconName1');
-  });
-
-  it('admin menu contains the admin element added by needle api', () => {
-    assert.fileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
-      `
-            <li>
-              <a class="dropdown-item" routerLink="routerName2" routerLinkActive="active" (click)="collapseNavbar()">
-                <fa-icon icon="iconName2" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>
-              </a>
-            </li>
-`
-    );
-  });
-
-  it('icon imports contains a new icon added by a new admin menu method of needle api ', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, '  faIconName2');
   });
 
   it('admin module contains the import and the module added by needle api', () => {

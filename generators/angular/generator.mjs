@@ -22,7 +22,8 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.mjs';
 import { writeFiles, cleanup } from './files-angular.mjs';
-import { addEntityMenuEntry as addAngularEntityMenuEntry } from './support/index.mjs';
+import { addAdminMenuEntry, addEntityMenuEntry as addAngularEntityMenuEntry } from './support/index.mjs';
+import { addIconInImport } from './support/index.mjs';
 
 /**
  * @class
@@ -166,5 +167,27 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
   ) {
     this.needleApi.clientAngular.addEntityToModule(entityName, entityFolderName, entityFileName, entityUrl, microserviceName, pageTitle);
+  }
+
+  /**
+   * @private
+   * Add a new icon to icon imports.
+   *
+   * @param {string} iconName - The name of the Font Awesome icon.
+   */
+  addIcon(iconName) {
+    addIconInImport(this, iconName);
+  }
+
+  /**
+   * Add a new menu element to the admin menu.
+   *
+   * @param {string} routerName - The name of the Angular router that is added to the admin menu.
+   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
+   * @param {boolean} enableTranslation - If translations are enabled or not
+   * @param {string} translationKeyMenu - i18n key for entry in the admin menu
+   */
+  addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = _.camelCase(routerName)) {
+    addAdminMenuEntry(this, routerName, iconName, enableTranslation, translationKeyMenu);
   }
 }

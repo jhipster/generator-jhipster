@@ -17,6 +17,7 @@ const mockAngularBlueprintSubGen = class extends AngularGenerator {
     return {
       addToMenuStep() {
         this.addEntityToMenu('routerName3', true, 'routerName3');
+        this.addElementToAdminMenu('routerName2', 'iconName2', true);
       },
       addToModuleStep() {
         this.addEntityToModule(
@@ -80,6 +81,24 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
       // .withOptions({ force: false, bail: true, skipChecks: true, skipInstall: true })
       .run();
   });
+  it('admin menu contains the admin element added by needle api', () => {
+    assert.fileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
+      `
+            <li>
+              <a class="dropdown-item" routerLink="routerName2" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="iconName2" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>
+              </a>
+            </li>
+`
+    );
+  });
+
+  it('icon imports contains a new icon added by a new admin menu method of needle api ', () => {
+    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, '  faIconName2');
+  });
+
   it('entity module contains the microservice object added by needle api', () => {
     assert.fileContent(
       `${CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`,

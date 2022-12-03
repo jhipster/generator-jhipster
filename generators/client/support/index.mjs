@@ -16,4 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { addIconInImport, addMenuEntry, addExternalResourcesToIndexHtml, addAdminMenuEntry } from './needles.mjs';
+export { addMenuEntry, addExternalResourcesToIndexHtml } from './needles.mjs';

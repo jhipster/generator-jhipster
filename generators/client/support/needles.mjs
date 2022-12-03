@@ -19,30 +19,9 @@
 
 import _ from 'lodash';
 import { clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
-import {
-  addMenuEntry as addAngularMenuEntry,
-  addIconInImport as addAngularIconInImport,
-  addAdminMenuEntry as addAngularAdminMenuEntry,
-} from '../../angular/support/index.mjs';
+import { addMenuEntry as addAngularMenuEntry } from '../../angular/support/index.mjs';
 
 const { ANGULAR, REACT } = clientFrameworkTypes;
-
-/**
- * @private
- * Add a new icon to icon imports.
- *
- * @param context the generator context
- * @param {string} iconName - The name of the Font Awesome icon.
- * @param {string} clientFramework - The name of the client framework
- */
-export const addIconInImport = (context, iconName, clientFramework) => {
-  if (clientFramework === ANGULAR) {
-    addAngularIconInImport(context, iconName);
-  } else if (clientFramework === REACT) {
-    // React
-    // TODO:
-  }
-};
 
 /**
  * @private
@@ -79,17 +58,4 @@ export const addMenuEntry = (
  */
 export const addExternalResourcesToIndexHtml = (context, resources, comment) => {
   context.needleApi.client.addExternalResourcesToRoot(resources, comment);
-};
-
-/**
- * Add a new menu element to the admin menu.
- * @param context the generator context
- * @param {string} routerName - The name of the Angular router that is added to the admin menu.
- * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
- * @param {boolean} enableTranslation - If translations are enabled or not
- * @param {string} clientFramework - The name of the client framework
- * @param {string} translationKeyMenu - i18n key for entry in the admin menu
- */
-export const addAdminMenuEntry = (context, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu) => {
-  addAngularAdminMenuEntry(context, routerName, iconName, enableTranslation, translationKeyMenu);
 };

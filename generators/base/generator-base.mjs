@@ -71,7 +71,7 @@ import {
 } from '../generator-constants.mjs';
 import { removeFieldsWithUnsetValues } from './support/index.mjs';
 import { locateGenerator, parseCreationTimestamp } from './support/index.mjs';
-import { addAdminMenuEntry, addExternalResourcesToIndexHtml, addIconInImport, addMenuEntry } from '../client/support/index.mjs';
+import { addExternalResourcesToIndexHtml, addMenuEntry } from '../client/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -219,17 +219,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
-   * Add a new icon to icon imports.
-   *
-   * @param {string} iconName - The name of the Font Awesome icon.
-   * @param {string} clientFramework - The name of the client framework
-   */
-  addIcon(iconName, clientFramework) {
-    addIconInImport(this, iconName, clientFramework);
-  }
-
-  /**
-   * @private
    * Add a new menu element, at the root of the menu.
    *
    * @param {string} routerName - The name of the router that is added to the menu.
@@ -251,19 +240,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addExternalResourcesToRoot(resources, comment) {
     addExternalResourcesToIndexHtml(this, resources, comment);
-  }
-
-  /**
-   * Add a new menu element to the admin menu.
-   *
-   * @param {string} routerName - The name of the Angular router that is added to the admin menu.
-   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} translationKeyMenu - i18n key for entry in the admin menu
-   */
-  addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    addAdminMenuEntry(this, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
   }
 
   /**
