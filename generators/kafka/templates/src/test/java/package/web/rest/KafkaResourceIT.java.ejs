@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.cloud.stream.binder.test.InputDestination;
+import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
@@ -53,7 +54,10 @@ class <%= this.upperFirstCamelCase(baseName) %>KafkaResourceIT {
     private MockMvc restMockMvc;
 
     @Autowired
-    private InputDestination output;
+    private InputDestination input;
+
+    @Autowired
+    private OutputDestination output;
 
     @Test
     void producesMessages() throws Exception {
