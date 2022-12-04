@@ -31,9 +31,11 @@ import java.util.concurrent.BlockingQueue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.cloud.stream.binder.test.InputDestination;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
+import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
@@ -48,6 +50,7 @@ import <%= packageName %>.config.EmbeddedKafka;
 @AutoConfigureMockMvc
 @WithMockUser
 @EmbeddedKafka
+@ImportAutoConfiguration(TestChannelBinderConfiguration.class)
 class <%= this.upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
     @Autowired
