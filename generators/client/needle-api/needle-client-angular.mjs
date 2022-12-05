@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const _ = require('lodash');
-const needleClientBase = require('./needle-client.cjs');
-const constants = require('../../generator-constants.cjs');
-const jhipsterUtils = require('../../utils.cjs');
+import chalk from 'chalk';
+import _ from 'lodash';
+import needleClientBase from './needle-client.mjs';
+import constants from '../../generator-constants.cjs';
+import jhipsterUtils from '../../utils.cjs';
 
-module.exports = class extends needleClientBase {
+export default class needleClientAngular extends needleClientBase {
   addGlobalSCSSStyle(style, comment) {
     const filePath = `${this.clientSrcDir}content/scss/global.scss`;
     this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
@@ -251,4 +251,4 @@ module.exports = class extends needleClientBase {
     const adminModulePath = `${this.clientSrcDir}app/admin/admin-routing.module.ts`;
     this._addRoute(route, modulePath, moduleName, 'jhipster-needle-add-admin-route', adminModulePath, pageTitle);
   }
-};
+}

@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const needleClient = require('./needle-client.cjs');
+import chalk from 'chalk';
+import needleClient from './needle-client.mjs';
 
-module.exports = class extends needleClient {
+export default class needleClientI18n extends needleClient {
   addElementTranslationKey(key, value, language, webappSrcDir) {
     const errorMessage = ' not added as a new entity in the menu.';
     this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-element', webappSrcDir);
@@ -42,4 +42,4 @@ module.exports = class extends needleClient {
 
     this.addBlockContentToFile(rewriteFileModel, fullErrorMessage);
   }
-};
+}

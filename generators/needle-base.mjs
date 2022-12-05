@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const jhipsterUtils = require('./utils.cjs');
+import chalk from 'chalk';
+import jhipsterUtils from './utils.cjs';
 
-module.exports = class {
+export default class needleBase {
   constructor(generator) {
     this.generator = generator;
   }
@@ -60,4 +60,4 @@ module.exports = class {
       splicable: content,
     };
   }
-};
+}

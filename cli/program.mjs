@@ -25,13 +25,13 @@ import didYouMean from 'didyoumean';
 import fs from 'fs';
 import path from 'path';
 
+import { logo } from './logo.cjs';
 import EnvironmentBuilder from './environment-builder.cjs';
 import SUB_GENERATORS from './commands.cjs';
 import JHipsterCommand from './jhipster-command.cjs';
 import { CLI_NAME, logger, getCommand, done } from './utils.cjs';
 import { packageJson } from '../lib/index.cjs';
 import { packageNameToNamespace } from '../generators/utils.cjs';
-import { logo } from './logo.cjs';
 
 const { version: JHIPSTER_VERSION } = packageJson;
 const JHIPSTER_NS = CLI_NAME;
@@ -228,7 +228,11 @@ const buildCommands = ({
 
         if (cliOnly) {
           logger.debug('Executing CLI only script');
-          return loadCommand(cmdName)(args, options, env, envBuilder, createEnvBuilder);
+          let cmd = loadCommand(cmdName);
+          cmd += `cmd(${args}, ${options}, ${env}, ${envBuilder}, ${createEnvBuilder})`;
+          logger.info(`executing the following jhipster command:  ${cmd}`);
+          // eslint-disable-next-line no-eval
+          return eval(cmd);
         }
         await env.composeWith('jhipster:bootstrap', options);
 
@@ -259,7 +263,7 @@ const buildJHipster = ({
   env = envBuilder.getEnvironment(),
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
   loadCommand = key => {
-    return import(`./${key}.mjs`);
+    return `import cmd from './${key}.mjs';`;
   },
   defaultCommand,
 } = {}) => {

@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const _ = require('lodash');
+import chalk from 'chalk';
+import _ from 'lodash';
 
-const needleClientBase = require('./needle-client.cjs');
+import needleClientBase from './needle-client.mjs';
 
-module.exports = class extends needleClientBase {
+export default class needleClientReact extends needleClientBase {
   addAppSCSSStyle(style, comment) {
     const filePath = `${this.clientSrcDir}app/app.scss`;
     this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
@@ -86,4 +86,4 @@ module.exports = class extends needleClientBase {
     );
     this.addBlockContentToFile(reducerAddCombineRewriteFileModel, errorMessage(indexReducerPath));
   }
-};
+}

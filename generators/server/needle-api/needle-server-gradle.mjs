@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const needleServer = require('./needle-server.cjs');
+import chalk from 'chalk';
+import needleServer from './needle-server.mjs';
 
 const buildGradlePath = 'build.gradle';
 const gradleSettingsPath = 'settings.gradle';
 
-module.exports = class extends needleServer {
+export default class needleServerGradle extends needleServer {
   addProperty(name, value) {
     const gradlePropertiesPath = 'gradle.properties';
     const errorMessage = `${chalk.yellow('Reference to ')}gradle property (name: ${name}, value:${value})${chalk.yellow(' not added.')}`;
@@ -130,4 +130,4 @@ module.exports = class extends needleServer {
     );
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
-};
+}

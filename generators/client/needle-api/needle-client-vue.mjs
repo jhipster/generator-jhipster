@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const _ = require('lodash');
-const jhipsterUtils = require('../../utils.cjs');
-const needleClientBase = require('./needle-client.cjs');
+import chalk from 'chalk';
+import _ from 'lodash';
+import jhipsterUtils from '../../utils.cjs';
+import needleClientBase from './needle-client.mjs';
 
-module.exports = class extends needleClientBase {
+export default class needleClientVue extends needleClientBase {
   addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
     const filePath = `${this.clientSrcDir}/app/entities/entities-menu.vue`;
@@ -202,4 +202,4 @@ module.exports = class extends needleClientBase {
     const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-entities-component', entityEntry);
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
-};
+}
