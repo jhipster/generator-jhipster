@@ -11,8 +11,8 @@ entity MapstructExpressionTest {
 @ChangelogDate(20200804035353)
 entity MapstructExpressionRelatedFieldTest
 
-relationship ManyToOne {
-  MapstructExpressionRelatedFieldTest to MapstructExpressionTest{parent(value)}
+relationship OneToMany {
+  MapstructExpressionTest to MapstructExpressionRelatedFieldTest{parent(value)}
 }
 
 dto MapstructExpressionTest,MapstructExpressionRelatedFieldTest with mapstruct
