@@ -13,7 +13,7 @@
     "ngx-cookie-service": "14.0.1",
     "ngx-infinite-scroll": "14.0.1",
     "ngx-webstorage": "10.0.1",
-    "rxjs": "7.5.7",
+    "rxjs": "7.6.0",
     "tslib": "2.4.1",
     "zone.js": "0.12.0"
   },
