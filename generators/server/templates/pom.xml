@@ -7,7 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-        <liquibase.version>4.17.2</liquibase.version>
+        <liquibase.version>4.18.0</liquibase.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <hazelcast-spring.version>5.2.1</hazelcast-spring.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
