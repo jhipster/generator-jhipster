@@ -27,7 +27,7 @@ import EnvironmentBuilder from './environment-builder.cjs';
 import { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArgs } from './utils.cjs';
 import { packageJson as packagejs } from '../lib/index.cjs';
 import statistics from '../generators/statistics.cjs';
-import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.cjs';
+import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
 import { writeConfigFile } from './export-utils.cjs';
 
 const require = createRequire(import.meta.url);

@@ -228,11 +228,10 @@ const buildCommands = ({
 
         if (cliOnly) {
           logger.debug('Executing CLI only script');
-          let cmd = loadCommand(cmdName);
-          cmd += `cmd(${args}, ${options}, ${env}, ${envBuilder}, ${createEnvBuilder})`;
-          logger.info(`executing the following jhipster command:  ${cmd}`);
-          // eslint-disable-next-line no-eval
-          return eval(cmd);
+          console.info(`The cli will execute the following command: ${loadCommand(cmdName).toString()}`);
+          return Promise.resolve(loadCommand(cmdName)).then(module => {
+            module(args, options, env, envBuilder, createEnvBuilder);
+          });
         }
         await env.composeWith('jhipster:bootstrap', options);
 
@@ -263,7 +262,7 @@ const buildJHipster = ({
   env = envBuilder.getEnvironment(),
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
   loadCommand = key => {
-    return `import cmd from './${key}.mjs';`;
+    return import(`./${key}.mjs`);
   },
   defaultCommand,
 } = {}) => {

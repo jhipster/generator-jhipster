@@ -204,9 +204,13 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     try {
       this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
     } catch (error) {
-      const split = this.options.namespace.split(':', 2);
-      if (split && split.length === 2) {
-        this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
+      if (this.options.namespace) {
+        const split = this.options.namespace.split(':', 2);
+        if (split && split.length === 2) {
+          this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
+        }
+      } else {
+        this.warning('Unable to determine generator name from namespace');
       }
     }
     return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
