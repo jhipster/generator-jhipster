@@ -169,7 +169,8 @@ export default class DatabaseChangelogLiquibase extends BaseApplication {
           entityChanges.removedRelationships = databaseChangelog.removedRelationships
             .map(relationship => {
               const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-              relationship.otherEntity = this.configOptions.oldSharedEntities[otherEntityName];
+              relationship.otherEntity = this.sharedData.getEntity(otherEntityName);
+
               if (!relationship.otherEntity) {
                 throw new Error(`Error at entity ${entity.name}: could not find the entity of the relationship ${stringify(relationship)}`);
               }

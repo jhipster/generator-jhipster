@@ -140,7 +140,7 @@ exports[`generator - app - --incremental-changelog regenerating the application 
     -->
     <changeSet id="20200101000100-1" author="jhipster">
         <createTable tableName="one">
-            <column name="id" type="bigint">
+            <column name="one_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="original" type="varchar(255)">
@@ -169,7 +169,7 @@ exports[`generator - app - --incremental-changelog regenerating the application 
                   separator=";"
                   tableName="one"
                   usePreparedStatements="true">
-            <column name="id" type="numeric"/>
+            <column name="one_id" type="numeric"/>
             <column name="original" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
@@ -191,7 +191,7 @@ exports[`generator - app - --incremental-changelog regenerating the application 
     -->
     <changeSet id="20200101000200-1" author="jhipster">
         <createTable tableName="another">
-            <column name="id" type="bigint">
+            <column name="another_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="original" type="varchar(255)">
@@ -217,7 +217,7 @@ exports[`generator - app - --incremental-changelog regenerating the application 
                   separator=";"
                   tableName="another"
                   usePreparedStatements="true">
-            <column name="id" type="numeric"/>
+            <column name="another_id" type="numeric"/>
             <column name="original" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
@@ -260,7 +260,7 @@ ROLE_USER
     "stateCleared": "modified",
   },
   "src/main/resources/config/liquibase/fake-data/20200101000100_entity_one.csv": {
-    "contents": "id;original
+    "contents": "one_id;original
 1;Utah bottle asperiores
 2;compress 24/7
 3;Integration
@@ -274,7 +274,7 @@ ROLE_USER
 ",
   },
   "src/main/resources/config/liquibase/fake-data/20200101000200_entity_another.csv": {
-    "contents": "id;original
+    "contents": "another_id;original
 1;applications Beryllium
 2;yahoo
 3;Movies
@@ -1116,7 +1116,7 @@ exports[`generator - app - --incremental-changelog when adding a relationship sh
     -->
     <changeSet id="20200101000100-1" author="jhipster">
         <createTable tableName="one">
-            <column name="id" type="bigint">
+            <column name="one_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="original" type="varchar(255)">
@@ -1142,7 +1142,7 @@ exports[`generator - app - --incremental-changelog when adding a relationship sh
                   separator=";"
                   tableName="one"
                   usePreparedStatements="true">
-            <column name="id" type="numeric"/>
+            <column name="one_id" type="numeric"/>
             <column name="original" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
@@ -1164,7 +1164,7 @@ exports[`generator - app - --incremental-changelog when adding a relationship sh
     -->
     <changeSet id="20200101000200-1" author="jhipster">
         <createTable tableName="another">
-            <column name="id" type="bigint">
+            <column name="another_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="original" type="varchar(255)">
@@ -1190,7 +1190,7 @@ exports[`generator - app - --incremental-changelog when adding a relationship sh
                   separator=";"
                   tableName="another"
                   usePreparedStatements="true">
-            <column name="id" type="numeric"/>
+            <column name="another_id" type="numeric"/>
             <column name="original" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
@@ -1212,7 +1212,7 @@ exports[`generator - app - --incremental-changelog when adding a relationship sh
     -->
     <changeSet id="20200102000100-1-add-relationships" author="jhipster">
         <addColumn tableName="one">
-                <column name="another_id" type="bigint"/>
+                <column name="another_another_id" type="bigint"/>
         </addColumn>
         
     </changeSet>
@@ -1236,7 +1236,7 @@ exports[`generator - app - --incremental-changelog when adding a relationship sh
     <changeSet id="20200102000100-relationship-constraints" author="jhipster">
         <addUniqueConstraint tableName="one"
             columnNames="another_id"
-            constraintName="ux_one__another_id"/>
+            constraintName="ux_one__another_another_id"/>
     </changeSet>
 
 
@@ -1312,7 +1312,7 @@ ROLE_USER
     "stateCleared": "modified",
   },
   "src/main/resources/config/liquibase/fake-data/20200101000100_entity_one.csv": {
-    "contents": "id;original
+    "contents": "one_id;original
 1;Utah bottle asperiores
 2;compress 24/7
 3;Integration
@@ -1326,7 +1326,7 @@ ROLE_USER
 ",
   },
   "src/main/resources/config/liquibase/fake-data/20200102000100_entity_one.csv": {
-    "contents": "id
+    "contents": "one_id
 1
 2
 3
@@ -2304,6 +2304,329 @@ ROLE_USER
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20200102000100_updated_entity_Customer.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+</databaseChangeLog>
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - app - --incremental-changelog when removing a relationship should match snapshot 1`] = `
+{
+  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": {
+    "contents": "<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="00000000000000" author="jhipster">
+        <createSequence sequenceName="sequence_generator" startValue="1050" incrementBy="50"/>
+    </changeSet>
+
+    <!--
+        JHipster core tables.
+        The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
+    -->
+    <changeSet id="00000000000001" author="jhipster">
+        <createTable tableName="jhi_user">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="login" type="varchar(50)">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
+            </column>
+            <column name="password_hash" type="varchar(60)"/>
+            <column name="first_name" type="varchar(50)"/>
+            <column name="last_name" type="varchar(50)"/>
+            <column name="email" type="varchar(191)">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
+            </column>
+            <column name="image_url" type="varchar(256)"/>
+            <column name="activated" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+            <column name="lang_key" type="varchar(10)"/>
+            <column name="activation_key" type="varchar(20)"/>
+            <column name="reset_key" type="varchar(20)"/>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="reset_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+
+        <createTable tableName="jhi_authority">
+            <column name="name" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="jhi_user_authority">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
+
+        <addForeignKeyConstraint baseColumnNames="authority_name"
+                                 baseTableName="jhi_user_authority"
+                                 constraintName="fk_authority_name"
+                                 referencedColumnNames="name"
+                                 referencedTableName="jhi_authority"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="jhi_user_authority"
+                                 constraintName="fk_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addNotNullConstraint   columnName="password_hash"
+                                columnDataType="varchar(60)"
+                                tableName="jhi_user"/>
+        <loadData
+                  file="config/liquibase/data/authority.csv"
+                  separator=";"
+                  tableName="jhi_authority"
+                  usePreparedStatements="true">
+            <column name="name" type="string"/>
+        </loadData>
+        <loadData
+                  file="config/liquibase/data/user.csv"
+                  separator=";"
+                  tableName="jhi_user"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+        <loadData
+                  file="config/liquibase/data/user_authority.csv"
+                  separator=";"
+                  tableName="jhi_user_authority"
+                  usePreparedStatements="true">
+            <column name="user_id" type="numeric"/>
+        </loadData>
+        <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="\${datetimeType}"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000002" context="test">
+        <createTable tableName="jhi_date_time_wrapper">
+            <column  name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
+            </column>
+            <column name="instant" type="timestamp"/>
+            <column name="local_date_time" type="timestamp"/>
+            <column name="offset_date_time" type="timestamp"/>
+            <column name="zoned_date_time" type="timestamp"/>
+            <column name="local_time" type="time"/>
+            <column name="offset_time" type="time"/>
+            <column name="local_date" type="date"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
+",
+  },
+  "src/main/resources/config/liquibase/changelog/20200101000100_added_entity_One.xml": {
+    "contents": "<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity One.
+    -->
+    <changeSet id="20200101000100-1" author="jhipster">
+        <createTable tableName="one">
+            <column name="one_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="original" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="another_another_id" type="bigint">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_one__another_another_id" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20200101000100-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/20200101000100_entity_one.csv"
+                  separator=";"
+                  tableName="one"
+                  usePreparedStatements="true">
+            <column name="one_id" type="numeric"/>
+            <column name="original" type="string"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
+",
+  },
+  "src/main/resources/config/liquibase/changelog/20200101000200_added_entity_Another.xml": {
+    "contents": "<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity Another.
+    -->
+    <changeSet id="20200101000200-1" author="jhipster">
+        <createTable tableName="another">
+            <column name="another_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="original" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20200101000200-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/20200101000200_entity_another.csv"
+                  separator=";"
+                  tableName="another"
+                  usePreparedStatements="true">
+            <column name="another_id" type="numeric"/>
+            <column name="original" type="string"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
+",
+  },
+  "src/main/resources/config/liquibase/changelog/20200102000100_updated_entity_One.xml": {
+    "contents": "<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Dropped relationships to the entity One.
+    -->
+    <changeSet id="20200102000100-1-drop-relationships" author="jhipster">
+        <dropForeignKeyConstraint baseTableName="one" constraintName="fk_one__another_id"/>
+        <dropColumn tableName="one">
+            <column name="another_another_id"/>
+        </dropColumn>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+</databaseChangeLog>
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml": {
+    "contents": null,
+  },
+  "src/main/resources/config/liquibase/data/authority.csv": {
+    "contents": "name
+ROLE_ADMIN
+ROLE_USER
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/user.csv": {
+    "contents": "id;login;password_hash;first_name;last_name;email;image_url;activated;lang_key;created_by;last_modified_by
+1;admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;admin@localhost;;true;en;system;system
+2;user;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;User;user@localhost;;true;en;system;system
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/user_authority.csv": {
+    "contents": "user_id;authority_name
+1;ROLE_ADMIN
+1;ROLE_USER
+2;ROLE_USER
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/20200101000100_entity_one.csv": {
+    "contents": "one_id;original
+1;Utah bottle asperiores
+2;compress 24/7
+3;Integration
+4;bluetooth Borders content
+5;female West
+6;Gender
+7;Coordinator South
+8;degree
+9;neural Country Mouse
+10;magenta inventore
+",
+  },
+  "src/main/resources/config/liquibase/master.xml": {
+    "contents": "<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="floatType" value="float4" dbms="h2"/>
+    <property name="uuidType" value="uuid" dbms="h2"/>
+    <property name="datetimeType" value="datetime" dbms="h2"/>
+    <property name="clobType" value="longvarchar" dbms="h2"/>
+    <property name="blobType" value="blob" dbms="h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="floatType" value="float4" dbms="postgresql"/>
+    <property name="clobType" value="clob" dbms="postgresql"/>
+    <property name="blobType" value="blob" dbms="postgresql"/>
+    <property name="uuidType" value="uuid" dbms="postgresql"/>
+    <property name="datetimeType" value="datetime" dbms="postgresql"/>
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000200_added_entity_Another.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_constraints_One.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200102000100_updated_entity_One.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
 ",
