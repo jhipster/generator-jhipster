@@ -210,7 +210,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
         }
       } else {
-        this.warning('Unable to determine generator name from namespace');
+        this.warning('Unable to determine generator name from namespace, using command dir');
+        this._jhipsterGenerator = '';
       }
     }
     return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
@@ -2563,7 +2564,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {...string} subpath : the path to fetch from
    */
   fetchFromInstalledJHipster(...subpath) {
-    return path.join(__dirname, '..', ...subpath);
+    return (path ?? '').join(__dirname ?? '', '..', ...(subpath ?? ''));
   }
 
   /**

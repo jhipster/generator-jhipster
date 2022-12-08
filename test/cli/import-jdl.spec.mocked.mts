@@ -118,6 +118,7 @@ describe('JHipster generator import jdl', () => {
   // this test for some reason works only when put at the beginning.
   describe('runs in series with --interactive flag', () => {
     const options = { skipInstall: true, noInsight: true, interactive: true };
+<<<<<<< HEAD:test/cli/import-jdl.spec.mts
     let moduleToTest;
     beforeEach(async () => {
       logger.info('boom');
@@ -136,6 +137,13 @@ describe('JHipster generator import jdl', () => {
             cb(0);
           },
         };
+=======
+    beforeEach(() => {
+      return testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        return loadImportJdl()(['apps-and-entities-and-deployments.jdl'], options, env);
+>>>>>>> 6078abfb05 (testdoubles temptative):test/cli/import-jdl.spec.mocked.mts
       });
       logger.info('boom');
       const envMock = td.imitate(Environment.createEnv());

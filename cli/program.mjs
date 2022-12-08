@@ -230,7 +230,9 @@ const buildCommands = ({
           logger.debug('Executing CLI only script');
           console.info(`The cli will execute the following command: ${loadCommand(cmdName).toString()}`);
           return Promise.resolve(loadCommand(cmdName)).then(module => {
-            module(args, options, env, envBuilder, createEnvBuilder);
+            if (module instanceof Function) {
+              module(args, options, env, envBuilder, createEnvBuilder);
+            }
           });
         }
         await env.composeWith('jhipster:bootstrap', options);
