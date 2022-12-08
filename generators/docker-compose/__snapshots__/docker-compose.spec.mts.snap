@@ -582,6 +582,7 @@ eureka:
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
+      - xpack.security.enabled=false
     healthcheck:
       test:
         - CMD
@@ -940,6 +941,7 @@ eureka:
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
+      - xpack.security.enabled=false
     healthcheck:
       test:
         - CMD
@@ -1310,6 +1312,7 @@ eureka:
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
+      - xpack.security.enabled=false
     healthcheck:
       test:
         - CMD
@@ -1606,6 +1609,7 @@ eureka:
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
+      - xpack.security.enabled=false
     healthcheck:
       test:
         - CMD
@@ -2668,6 +2672,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
     environment:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
+      - xpack.security.enabled=false
     healthcheck:
       test:
         - CMD
