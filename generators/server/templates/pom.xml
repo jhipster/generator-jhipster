@@ -22,6 +22,8 @@
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <typesafe.version>1.4.2</typesafe.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
+        <r2dbc-mariadb.version>1.1.4</r2dbc-mariadb.version>
+        <spring-data-relational.version>3.0.4</spring-data-relational.version>
 
         <!-- Plugin versions -->
         <checkstyle.version>10.9.2</checkstyle.version>
@@ -123,6 +125,18 @@
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct</artifactId>
               <version>${mapstruct.version}</version>
+            </dependency>
+            <!-- TODO drop once spring-boot 3.1.0 is released https://github.com/spring-projects/spring-boot/issues/34625 -->
+            <dependency>
+                <groupId>org.mariadb</groupId>
+                <artifactId>r2dbc-mariadb</artifactId>
+                <version>${r2dbc-mariadb.version}</version>
+            </dependency>
+            <!-- TODO drop once spring-boot 3.0.5 is released, adds support to mariadb -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-relational</artifactId>
+                <version>${spring-data-relational.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
