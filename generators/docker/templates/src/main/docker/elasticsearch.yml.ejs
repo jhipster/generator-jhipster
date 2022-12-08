@@ -31,6 +31,7 @@ services:
     environment:
       - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
       - "discovery.type=single-node"
+      - "xpack.security.enabled=false"
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s']
       interval: 5s
