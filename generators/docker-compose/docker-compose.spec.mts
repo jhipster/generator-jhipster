@@ -1,7 +1,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import monitoringTypes from '../../jdl/jhipster/monitoring-types';
-import applicationTypes from '../../jdl/jhipster/application-types';
+import monitoringTypes from '../../jdl/jhipster/monitoring-types.js';
+import applicationTypes from '../../jdl/jhipster/application-types.js';
 import { deploymentTestSamples } from '../../test/support/mock-config.mjs';
 import { getGenerator } from '../../test/support/index.mjs';
 import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
