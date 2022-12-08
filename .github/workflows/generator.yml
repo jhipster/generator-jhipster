@@ -37,13 +37,11 @@ jobs:
   check-npm-test:
     if: >-
       github.event.action != 'closed'
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
     # Windows requires 60 min to finish
     timeout-minutes: 20
     strategy:
       fail-fast: false
-      matrix:
-        os: [ubuntu-20.04]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
