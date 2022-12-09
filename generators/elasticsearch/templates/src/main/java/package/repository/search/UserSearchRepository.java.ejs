@@ -19,6 +19,8 @@
 package <%= packageName %>.repository.search;
 
 import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= packageName %>.repository.<%= user.persistClass %>Repository;
+
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchTemplate;
 <%_ } else { _%>
@@ -28,6 +30,7 @@ import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
+import org.springframework.scheduling.annotation.Async;
 
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
@@ -41,10 +44,17 @@ import java.util.UUID;
 
 import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.queryStringQuery;
 
+<%_ 
+let userPrimaryKeyType = "";
+if (databaseTypeSql && !authenticationTypeOauth2) { 
+    userPrimaryKeyType = "Long";
+} else if ((databaseTypeCassandra || databaseTypeMongodb || databaseTypeNeo4j) || authenticationTypeOauth2) { 
+    userPrimaryKeyType = "String";
+} _%>
 /**
  * Spring Data Elasticsearch repository for the User entity.
  */
-public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= user.persistClass %>, <% if (databaseTypeSql && !authenticationTypeOauth2) { %>Long<% } %><% if ((databaseTypeCassandra || databaseTypeMongodb || databaseTypeNeo4j) || authenticationTypeOauth2) { %>String<% } %>>, UserSearchRepositoryInternal {
+public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= user.persistClass %>, <%= userPrimaryKeyType %>>, UserSearchRepositoryInternal {
 }
 <%_ if (reactive) { _%>
 
@@ -69,24 +79,42 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 <%_ } else { _%>
 
 interface UserSearchRepositoryInternal {
-    Stream<User> search(String query);
+    Stream<<%= user.persistClass %>> search(String query);
+
+    @Async
+    void index(<%= user.persistClass %> entity);
+
+    @Async
+    void deleteFromIndex(<%= user.persistClass %> entity);
 }
 
 class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 
     private final ElasticsearchTemplate elasticsearchTemplate;
+    private final UserRepository repository;
 
-    UserSearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate) {
+    UserSearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate, UserRepository repository) {
         this.elasticsearchTemplate = elasticsearchTemplate;
+        this.repository = repository;
     }
 
     @Override
-    public Stream<User> search(String query) {
+    public Stream<<%= user.persistClass %>> search(String query) {
         NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
         return elasticsearchTemplate
             .search(nativeQuery, User.class)
             .map(SearchHit::getContent)
             .stream();
+    }
+
+    @Override
+    public void index(<%= user.persistClass %> entity) {
+        repository.findById(entity.getId()).ifPresent(elasticsearchTemplate::save);
+    }
+
+    @Override
+    public void deleteFromIndex(<%= user.persistClass %> entity) {
+        elasticsearchTemplate.delete(entity);
     }
 }
 <%_ } _%>
