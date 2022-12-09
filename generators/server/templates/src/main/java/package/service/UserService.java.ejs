@@ -554,9 +554,7 @@ public class UserService {
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
       <%_ } _%>
-      <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
-      <%_ } _%>
       <%_ if (searchEngineElasticsearch) { _%>
                 userSearchRepository.index(user);
       <%_ } _%>
@@ -644,9 +642,7 @@ public class UserService {
             .doOnNext(user -> log.debug("Changed Information for User: {}", user))
             .then();
   <%_ } else { _%>
-    <%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra) { _%>
                 userRepository.save(user);
-    <%_ } _%>
     <%_ if (searchEngineElasticsearch) { _%>
                 userSearchRepository.index(user);
     <%_ } _%>

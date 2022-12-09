@@ -30,11 +30,15 @@ import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
-import org.springframework.scheduling.annotation.Async;
-
 <%_ if (reactive) { _%>
+
 import reactor.core.publisher.Flux;
 <%_ } else { _%>
+import org.springframework.scheduling.annotation.Async;
+    <%_ if (databaseTypeSql) { _%>
+import org.springframework.transaction.annotation.Transactional;
+    <%_ } _%>
+
 import java.util.stream.Stream;
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
@@ -44,22 +48,15 @@ import java.util.UUID;
 
 import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.queryStringQuery;
 
-<%_ 
-let userPrimaryKeyType = "";
-if (databaseTypeSql && !authenticationTypeOauth2) { 
-    userPrimaryKeyType = "Long";
-} else if ((databaseTypeCassandra || databaseTypeMongodb || databaseTypeNeo4j) || authenticationTypeOauth2) { 
-    userPrimaryKeyType = "String";
-} _%>
 /**
  * Spring Data Elasticsearch repository for the User entity.
  */
-public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= user.persistClass %>, <%= userPrimaryKeyType %>>, UserSearchRepositoryInternal {
+public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= user.persistClass %>, <%= user.primaryKey.type %>>, UserSearchRepositoryInternal {
 }
 <%_ if (reactive) { _%>
 
 interface UserSearchRepositoryInternal {
-    Flux<User> search(String query);
+    Flux<<%= user.persistClass %>> search(String query);
 }
 
 class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
@@ -71,7 +68,7 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     }
 
     @Override
-    public Flux<User> search(String query) {
+    public Flux<<%= user.persistClass %>> search(String query) {
         NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
         return reactiveElasticsearchTemplate.search(nativeQuery, User.class).map(SearchHit::getContent);
     }
@@ -82,9 +79,15 @@ interface UserSearchRepositoryInternal {
     Stream<<%= user.persistClass %>> search(String query);
 
     @Async
+    <%_ if (databaseTypeSql) { _%>
+    @Transactional
+    <%_ } _%>
     void index(<%= user.persistClass %> entity);
 
     @Async
+    <%_ if (databaseTypeSql) { _%>
+    @Transactional
+    <%_ } _%>
     void deleteFromIndex(<%= user.persistClass %> entity);
 }
 
