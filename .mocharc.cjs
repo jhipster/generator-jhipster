@@ -1,6 +1,6 @@
 const { pathToFileURL } = require('url');
 
-const loaderPath = require.resolve('@node-loaders/esbuild/strict');
+const loaderPath = require.resolve('@node-loaders/auto/strict');
 const loaderUrl = pathToFileURL(loaderPath).href;
 
 module.exports = {
