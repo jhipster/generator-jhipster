@@ -1,5 +1,5 @@
+const { mockRequire } = require('@node-loaders/mock/require');
 const path = require('path');
-const proxyquire = require('proxyquire');
 const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const expect = require('chai').expect;
@@ -76,7 +76,7 @@ const loadImportJdl = options => {
     },
     ...options,
   };
-  return proxyquire('../../cli/import-jdl.cjs', options);
+  return mockRequire('../../cli/import-jdl.cjs', options);
 };
 
 const defaultAddedOptions = {};

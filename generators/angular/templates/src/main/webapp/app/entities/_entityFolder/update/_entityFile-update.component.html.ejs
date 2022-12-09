@@ -44,7 +44,7 @@
   }
 _%>
 
-                <div class="row mb-3"<% if (field.autoGenerate) { %> *ngIf="editForm.controls.<%= field.fieldName %>.value !== null"<% } %>>
+                <div class="mb-3"<% if (field.autoGenerate) { %> *ngIf="editForm.controls.<%= field.fieldName %>.value !== null"<% } %>>
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
   <%_ if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
@@ -164,7 +164,7 @@ _%>
 _%>
   <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
 
-                <div class="row mb-3">
+                <div class="mb-3">
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%- getWebappTranslation(translationKey) %></label>
                     <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= propertyName %>" name="<%= relationshipName %>" formControlName="<%= propertyName %>" [compareWith]="compare<%= otherEntity.entityAngularName %>">
     <%_ if (!relationshipRequired) { _%>
@@ -179,7 +179,7 @@ _%>
                 </div>
   <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
 
-                <div class="row mb-3">
+                <div class="mb-3">
                     <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%- getWebappTranslation(translationKey) %></label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= propertyName %>" formControlName="<%= propertyName %>" [compareWith]="compare<%= otherEntity.entityAngularName %>">
                         <option [ngValue]="<%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
