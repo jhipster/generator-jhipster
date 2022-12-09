@@ -59,7 +59,7 @@ inputs:
   generator-jhipster-branch:
     description: 'JHipster Generator branch'
     required: false
-    default: spring-boot-3.0-m4
+    default: main
   jhipster-bom-repository:
     description: 'JHipster BOM repository'
     required: false
@@ -67,7 +67,7 @@ inputs:
   jhipster-bom-branch:
     description: 'JHipster BOM branch'
     required: false
-    default: spring-boot-3.0-m4
+    default: auto
   jhipster-bom-directory:
     description: 'JHipster BOM path'
     required: false
