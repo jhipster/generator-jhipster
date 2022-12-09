@@ -2,9 +2,9 @@ import path from 'path';
 import { expect } from 'chai';
 import { jestExpect } from 'mocha-expect-snapshot';
 import BaseGeneratorClass from '../generators/base/index.mjs';
-import databaseTypes from '../jdl/jhipster/database-types';
-import entityOptions from '../jdl/jhipster/entity-options';
-import fieldTypes from '../jdl/jhipster/field-types';
+import databaseTypes from '../jdl/jhipster/database-types.js';
+import entityOptions from '../jdl/jhipster/entity-options.js';
+import fieldTypes from '../jdl/jhipster/field-types.js';
 
 const { CASSANDRA, MONGODB, MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;

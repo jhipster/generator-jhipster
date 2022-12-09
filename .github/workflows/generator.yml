@@ -38,6 +38,7 @@ jobs:
     if: >-
       github.event.action != 'closed'
     runs-on: ubuntu-20.04
+    # Windows requires 60 min to finish
     timeout-minutes: 20
     strategy:
       fail-fast: false
