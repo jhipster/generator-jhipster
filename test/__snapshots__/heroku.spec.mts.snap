@@ -18,7 +18,7 @@ Object {
     \\"enableTranslation\\": false,
     \\"herokuAppName\\": \\"jhipster-test\\",
     \\"herokuDeployType\\": \\"jar\\",
-    \\"herokuJavaVersion\\": \\"11\\",
+    \\"herokuJavaVersion\\": \\"17\\",
     \\"jhiPrefix\\": \\"jhi\\",
     \\"jhipsterVersion\\": \\"4.14.0\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
@@ -95,7 +95,7 @@ spring:
     "stateCleared": "modified",
   },
   "system.properties": Object {
-    "contents": "java.runtime.version=11 ",
+    "contents": "java.runtime.version=17 ",
     "stateCleared": "modified",
   },
 }
@@ -610,7 +610,7 @@ Object {
     \\"enableTranslation\\": true,
     \\"herokuAppName\\": \\"jhipster-existing\\",
     \\"herokuDeployType\\": \\"git\\",
-    \\"herokuJavaVersion\\": \\"11\\",
+    \\"herokuJavaVersion\\": \\"17\\",
     \\"languages\\": [\\"en\\", \\"fr\\"],
     \\"nativeLanguage\\": \\"en\\",
     \\"packageFolder\\": \\"com/mycompany/myapp\\",
@@ -671,7 +671,7 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": Object {
-    "contents": "java.runtime.version=11 ",
+    "contents": "java.runtime.version=17 ",
     "stateCleared": "modified",
   },
 }

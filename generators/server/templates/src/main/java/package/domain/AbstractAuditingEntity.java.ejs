@@ -43,11 +43,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.io.Serializable;
 import java.time.Instant;
 <%_ if (databaseTypeSql) { _%>
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
 <%_ } _%>
 
 /**

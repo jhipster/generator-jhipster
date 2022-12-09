@@ -35,7 +35,7 @@ import java.time.ZonedDateTime;
 import java.time.Duration;
 <%_ } _%>
 <%_ if (validation) { _%>
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 <%_ } _%>
 import java.io.Serializable;
 <%_ if (fieldsContainBigDecimal) { _%>
@@ -52,7 +52,7 @@ import java.util.Set;
 import java.util.UUID;
 <%_ } _%>
 <%_ if (fieldsContainBlob && databaseTypeSql) { _%>
-import javax.persistence.Lob;
+import jakarta.persistence.Lob;
 <%_ } _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;

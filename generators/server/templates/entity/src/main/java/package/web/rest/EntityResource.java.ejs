@@ -94,11 +94,11 @@ import reactor.core.publisher.Mono;
 <%_ } _%>
 
 <%_ if (validation) { _%>
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 <%_ } _%>
 
 <%_ if (validation && !readOnly) { _%>
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 <%_ } _%>
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -124,7 +124,7 @@ import java.util.stream.StreamSupport;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !reactive) { _%>
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.*;
 <%_ } _%>
 
 /**

@@ -831,7 +831,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -1015,7 +1015,7 @@ spec:
               value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
             - name: SPRING_ELASTICSEARCH_REST_URIS
               value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -1579,7 +1579,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_R2DBC_URL
               value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -2111,7 +2111,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_R2DBC_URL
               value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -2287,7 +2287,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -2927,7 +2927,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_R2DBC_URL
               value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -3590,7 +3590,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_R2DBC_URL
               value: r2dbc:mariadb://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -3771,7 +3771,7 @@ spec:
                 secretKeyRef:
                   name: msmariadb-mariadb
                   key: mariadb-root-password
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -3945,7 +3945,7 @@ spec:
               value: msmongodb
             - name: SPRING_DATA_MONGODB_URI
               value: \\"mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017\\"
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -4117,7 +4117,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -4301,7 +4301,7 @@ spec:
               value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
             - name: SPRING_ELASTICSEARCH_REST_URIS
               value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -7579,9 +7579,9 @@ spec:
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
+            - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
               value: \\"true\\"
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -8082,7 +8082,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_LIQUIBASE_URL
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
@@ -8585,7 +8585,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_R2DBC_URL
               value: r2dbc:mariadb://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: \\"x-request-id,x-ot-span-context\\"
             - name: JAVA_OPTS
               value: \\" -Xmx256m -Xms256m\\"
