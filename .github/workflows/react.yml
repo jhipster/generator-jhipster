@@ -27,6 +27,7 @@ on:
     branches-ignore:
       - 'dependabot/**'
       - 'skip_ci*'
+      - 'revert-*'
     paths-ignore:
       - 'package*.json'
       - 'generators/angular/**'
