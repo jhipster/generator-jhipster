@@ -118,6 +118,10 @@ management:
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
+<%_ if (databaseTypeNeo4j && reactive) { _%>
+    neo4j:
+      enabled: false # The health check for Neo4j doesn't work with WebFlux
+<%_ } _%>
   prometheus:
     metrics:
       export:
