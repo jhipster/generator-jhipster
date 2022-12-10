@@ -29,7 +29,6 @@
     },
     {
       "name": "vue-session-cassandra-fr",
-      "disabled": "needs adjusts for sb3",
       "app-sample": "vue-session-cassandra-fr",
       "entity": "cassandra",
       "environment": "dev"
