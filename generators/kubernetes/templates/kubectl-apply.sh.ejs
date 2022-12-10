@@ -59,6 +59,11 @@ logSummary() {
         echo "Kiali - http://kiali.istio-system.<%= ingressDomain %>"
     <%_ } _%>
   <%_ } _%>
+  <%_ if (useKeycloak) { _%>
+    <%_ if (ingressDomain) { _%>
+      echo "Keycloak - https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+    <%_ } _%>
+  <%_ } _%>
         echo "#####################################################"
 <%_ } _%>
 }

@@ -42,9 +42,21 @@ const appOut = appName.concat('-', suffix); _%>
 - <%= appOut %>/<%= appName %>-virtual-service.yml
   <%_  } _%>
 <%_ }) _%>
+<%_ if (useKeycloak) { _%>
+# cert-manager
+- cert-manager/ca-secret.yml
+- cert-manager/cluster-issuer.yml
 # keycloak
+- keycloak-<%= suffix %>/keycloak-cert.yml
 - keycloak-<%= suffix %>/keycloak-configmap.yml
 - keycloak-<%= suffix %>/keycloak.yml
+  <%_ if (istio) { _%>
+- keycloak-<%= suffix %>/keycloak-gateway.yml  
+  <%_ } _%>
+  <%_ if (kubernetesServiceTypeIngress) { _%>
+- keycloak-<%= suffix %>/keycloak-ingress.yml
+  <%_ } _%>
+<%_ } _%>  
 <%_ if (useKafka) { _%>
 # messagebroker
 - messagebroker-<%= suffix %>/kafka.yml
