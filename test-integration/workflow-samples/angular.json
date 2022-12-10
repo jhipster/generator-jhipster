@@ -87,6 +87,7 @@
     },
     {
       "name": "ng-webflux-couchbase",
+      "disabled": "needs adjusts for sb3",
       "app-sample": "webflux-couchbase",
       "entity": "couchbase"
     },
