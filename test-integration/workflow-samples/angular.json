@@ -31,11 +31,13 @@
     },
     {
       "name": "ng-couchbase",
+      "disabled": "needs adjusts for sb3",
       "app-sample": "ng-couchbase",
       "entity": "couchbase"
     },
     {
       "name": "ng-gradle-couchbase-search",
+      "disabled": "needs adjusts for sb3",
       "app-sample": "ng-gradle-couchbase-search",
       "entity": "couchbase"
     },
@@ -85,6 +87,7 @@
     },
     {
       "name": "ng-webflux-couchbase",
+      "disabled": "needs adjusts for sb3",
       "app-sample": "webflux-couchbase",
       "entity": "couchbase"
     },
