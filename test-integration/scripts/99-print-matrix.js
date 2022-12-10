@@ -26,7 +26,7 @@ writeFileSync(
           .slice(2)
           .map(file => {
             try {
-              return JSON.parse(readFileSync(join(__dirname, `../../${file}`))).include;
+              return JSON.parse(readFileSync(join(__dirname, `../../${file}`))).include.filter(sample => !sample.disabled);
             } catch (_) {
               console.log(`File ${file} not found`);
               return [];
