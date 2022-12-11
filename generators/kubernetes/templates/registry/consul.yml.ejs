@@ -101,7 +101,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: "consul"
-        image: <%= DOCKER_CONSUL %>
+        image: <%- dockerContainers.consul %>
         imagePullPolicy: "Always"
         ports:
         - name: http

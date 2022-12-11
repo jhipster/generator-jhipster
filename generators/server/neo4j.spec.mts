@@ -3,11 +3,13 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport, buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
+import { buildServerMatrix, entitiesSimple as entities } from '../../test/support/index.mjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
+import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from './__test-support/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -42,7 +44,7 @@ describe(`JHipster ${databaseType} generator`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
@@ -59,7 +61,7 @@ describe(`JHipster ${databaseType} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(['jhipster:languages', 'jhipster:common']);
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -73,6 +75,8 @@ describe(`JHipster ${databaseType} generator`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
+      shouldComposeWithKafka(sample, () => runResult);
+      shouldComposeWithLiquibase(false, () => runResult);
     });
   });
 });

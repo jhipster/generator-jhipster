@@ -75,7 +75,7 @@ export default class HerokuGenerator extends BaseGenerator {
     this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_HEROKU);
     }
@@ -83,14 +83,14 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       loadCommonConfig() {
         this.loadAppConfig();
         this.loadServerConfig();
+        this.loadTranslationConfig();
         this.loadPlatformConfig();
+
+        this.loadDerivedAppConfig();
+        this.loadDerivedServerConfig();
       },
 
       initializing() {
@@ -112,8 +112,7 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -261,8 +260,7 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -293,28 +291,7 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get loading() {
-    return {
-      loadSharedConfig() {
-        this.loadAppConfig();
-        this.loadDerivedAppConfig();
-        this.loadClientConfig();
-        this.loadDerivedClientConfig();
-        this.loadServerConfig();
-        this.loadTranslationConfig();
-        this.loadPlatformConfig();
-      },
-    };
-  }
-
-  get [BaseGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get default() {
@@ -589,19 +566,18 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.DEFAULT]() {
-    if (this.delegateToBlueprint) return {};
-    return this.default;
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
       copyHerokuFiles() {
         if (this.abort) return;
 
         this.log(chalk.bold('\nCreating Heroku deployment files'));
 
         this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
-        this.template('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
+        this.renderTemplate('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, this);
         this.template('Procfile.ejs', 'Procfile');
         this.template('system.properties.ejs', 'system.properties');
         if (this.buildTool === GRADLE) {
@@ -632,12 +608,11 @@ export default class HerokuGenerator extends BaseGenerator {
           });
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get end() {
@@ -864,7 +839,6 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 }

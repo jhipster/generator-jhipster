@@ -145,7 +145,7 @@
 <%_ } _%>
     <logger name="io.swagger.v3" level="INFO"/>
     <logger name="sun.rmi" level="WARN"/>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (enableLiquibase) { _%>
     <logger name="liquibase" level="WARN"/>
     <logger name="LiquibaseSchemaResolver" level="INFO"/>
 <%_ } _%>

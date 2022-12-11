@@ -17,11 +17,18 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
 import fse from 'fs-extra';
-import path, { dirname } from 'path';
+import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } from '../generators/generator-list.mjs';
+import {
+  GENERATOR_ANGULAR,
+  GENERATOR_CLIENT,
+  GENERATOR_COMMON,
+  GENERATOR_CYPRESS,
+  GENERATOR_REACT,
+  GENERATOR_VUE,
+} from '../generators/generator-list.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -49,6 +56,9 @@ describe('Enforce some developments patterns', () => {
   describe('at client/common generators', () => {
     const filesToTest = [
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_CLIENT)),
+      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_ANGULAR)),
+      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_REACT)),
+      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_VUE)),
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_COMMON)),
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_CYPRESS)),
     ].filter(file => !/\.spec\.[mc]?[jt]s(.snap)?$/.test(file));
@@ -60,8 +70,8 @@ describe('Enforce some developments patterns', () => {
         });
 
         [
-          ['src/main/webapp', '<%= CLIENT_MAIN_SRC_DIR %>'],
-          ['src/test/javascript', '<%= CLIENT_TEST_SRC_DIR %>'],
+          ['src/main/webapp', '<%= clientSrcDir %>'],
+          ['src/test/javascript', '<%= clientTestDir %>'],
           ['jhiTranslate', '<%= jhiPrefix %>Translate'],
           [' Java ', ' <%= backendType %> '],
         ].forEach(([notSpected, replacement]) => {
@@ -83,6 +93,38 @@ describe('Enforce some developments patterns', () => {
           it(`should not contain ${notSpected}`, () => {
             assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
           });
+        });
+      });
+    });
+    ['server', 'client', 'common'].forEach(generator => {
+      const templateFiles = readDir(path.join(__dirname, '..', 'generators', generator))
+        .filter(file => file.endsWith('.ejs'))
+        .filter(file => {
+          return (
+            !/DatabaseConfiguration_.*.java.ejs/.test(file) &&
+            !/docker\/.*.yml.ejs/.test(file) &&
+            !/OAuth2.*RefreshTokensWebFilter.java.ejs/.test(file)
+          );
+        });
+      const jsFiles = readDir(path.join(__dirname, '..', 'generators', generator))
+        .filter(file => file.endsWith('.mjs') || file.endsWith('.mts') || file.endsWith('.ejs'))
+        .sort((a, b) => {
+          if (a.includes('files')) return -1;
+          if (b.includes('files')) return 1;
+          if (a.includes('generator.')) return -1;
+          if (b.includes('generator.')) return 1;
+          if (a.endsWith('.ejs')) return 1;
+          if (b.endsWith('.ejs')) return -1;
+          return 0;
+        });
+      templateFiles.forEach(templateFile => {
+        const reference = basename(templateFile, '.ejs');
+        it(`${templateFile} must have referenced with ${reference}`, () => {
+          const found = jsFiles.find(jsFile => {
+            const content = readFileSync(jsFile).toString();
+            return content.includes(`/${reference}`) || content.includes(`'${reference}`);
+          });
+          if (!found) throw new Error(`File ${templateFile} is not referenced`);
         });
       });
     });

@@ -56,7 +56,7 @@ const { EPHEMERAL, PERSISTENT } = StorageTypes;
  * @extends {BaseDockerGenerator}
  */
 export default class OpenshiftGenerator extends BaseDockerGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_OPENSHIFT);
     }
@@ -105,8 +105,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -125,8 +124,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -174,16 +172,18 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get loading() {
     return {
       loadSharedConfig() {
         this.appConfigs.forEach(element => {
+          this.loadAppConfig(element, element);
           this.loadServerConfig(element, element);
+
           this.loadDerivedAppConfig(element);
+          this.loadDerivedServerConfig(element);
         });
         this.loadDeploymentConfig(this);
         this._loadDerivedOpenshiftConfig(this);
@@ -192,8 +192,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get writing() {
@@ -201,8 +200,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get end() {
@@ -276,8 +274,7 @@ export default class OpenshiftGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   _loadDerivedOpenshiftConfig(dest = this) {

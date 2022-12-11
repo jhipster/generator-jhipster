@@ -215,7 +215,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: <%= DOCKER_MONGODB %>
+          image: <%- dockerContainers.mongodb %>
           command:
             - /work-dir/peer-finder
           args:
@@ -245,7 +245,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: <%= DOCKER_MONGODB %>
+          image: <%- dockerContainers.mongodb %>
           imagePullPolicy: "IfNotPresent"
           env:
             - name: POD_NAMESPACE

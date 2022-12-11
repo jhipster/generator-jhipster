@@ -24,7 +24,7 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles, prettierConfigFiles } from './files.mjs';
 import constants from '../generator-constants.cjs';
 import { packageJson } from '../../lib/index.mjs';
-import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
+import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.mjs';
 
 /**
  * @class
@@ -50,7 +50,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     this.loadRuntimeOptions();
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_COMMON);
@@ -77,8 +77,19 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get composing() {
+    return {
+      async composing() {
+        await this.composeWithJHipster(GENERATOR_GIT);
+      },
+    };
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -105,18 +116,12 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return {
-      prepareForTemplates({ application }) {
-        application.BUILD_DIR = this.getBuildDirectoryForBuildTool(application.buildTool);
-        application.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(application.buildTool) + constants.CLIENT_DIST_DIR;
-      },
-
       setupConstants({ application }) {
         // Make constants available in templates
         application.MAIN_DIR = constants.MAIN_DIR;
@@ -133,8 +138,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -164,8 +168,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get postWriting() {
@@ -186,7 +189,6 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.postWriting;
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

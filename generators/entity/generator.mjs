@@ -147,16 +147,6 @@ export default class EntityGenerator extends BaseGenerator {
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
-      isBuiltInEntity() {
-        if (this.isBuiltInUser(this.context.name) || this.isBuiltInAuthority(this.context.name)) {
-          throw new Error(`Is not possible to override built in ${this.context.name}`);
-        }
-      },
-
       /* Use need microservice path to load the entity file */
       askForMicroserviceJson: prompts.askForMicroserviceJson,
 
@@ -172,6 +162,12 @@ export default class EntityGenerator extends BaseGenerator {
         this.loadDerivedClientConfig(this.application);
         this.loadDerivedServerConfig(this.application);
         this.loadDerivedPlatformConfig(this.application);
+      },
+
+      isBuiltInEntity() {
+        if (this.isBuiltInUser(this.context.name) || this.isBuiltInAuthority(this.context.name)) {
+          throw new Error(`Is not possible to override built in ${this.context.name}`);
+        }
       },
 
       setupMicroServiceEntity() {
@@ -267,8 +263,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -289,8 +284,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -311,8 +305,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.COMPOSING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.composing;
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -335,38 +328,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get install() {
-    return {
-      afterRunHook() {
-        try {
-          const modules = this.getModuleHooks();
-          if (modules.length > 0) {
-            this.log(`\n${chalk.bold.green('Running post run module hooks\n')}`);
-            // form the data to be passed to modules
-            const context = this.context;
-
-            // run through all post entity creation module hooks
-            this.callHooks(GENERATOR_ENTITY, 'post', {
-              entityConfig: context,
-              force: this.options.force,
-            });
-          }
-        } catch (err) {
-          this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.')}`);
-          this.debug('Error:', err);
-        }
-      },
-    };
-  }
-
-  get [BaseGenerator.INSTALL]() {
-    if (this.delegateToBlueprint) return {};
-    return this.install;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -379,8 +341,7 @@ export default class EntityGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   /**
@@ -446,5 +407,45 @@ export default class EntityGenerator extends BaseGenerator {
       return 'The entity name cannot contain a Java or JHipster reserved keyword';
     }
     return true;
+  }
+
+  /**
+   * @private
+   * Verify if the entity is a built-in User.
+   * @param {String} entityName - Entity name to verify.
+   * @return {boolean} true if the entity is User and is built-in.
+   */
+  isBuiltInUser(entityName) {
+    return this.generateBuiltInUserEntity && this.isUserEntity(entityName);
+  }
+
+  /**
+   * @private
+   * Verify if the entity is a User entity.
+   * @param {String} entityName - Entity name to verify.
+   * @return {boolean} true if the entity is User.
+   */
+  isUserEntity(entityName) {
+    return _.upperFirst(entityName) === 'User';
+  }
+
+  /**
+   * @private
+   * Verify if the entity is a Authority entity.
+   * @param {String} entityName - Entity name to verify.
+   * @return {boolean} true if the entity is Authority.
+   */
+  isAuthorityEntity(entityName) {
+    return _.upperFirst(entityName) === 'Authority';
+  }
+
+  /**
+   * @private
+   * Verify if the entity is a built-in Authority.
+   * @param {String} entityName - Entity name to verify.
+   * @return {boolean} true if the entity is Authority and is built-in.
+   */
+  isBuiltInAuthority(entityName) {
+    return this.generateBuiltInAuthorityEntity && this.isAuthorityEntity(entityName);
   }
 }

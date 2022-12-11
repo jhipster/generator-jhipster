@@ -67,7 +67,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
     this.azureSpringCloudSkipInsights = this.options.skipInsights;
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_AZURE_APP_SERVICE);
     }
@@ -76,13 +76,6 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
   get initializing() {
     return {
       sayHello() {
-        if (!this.options.fromCli) {
-          this.warning(
-            `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-              'jhipster <command>'
-            )} instead of ${chalk.red('yo jhipster:<command>')}`
-          );
-        }
         this.log(chalk.bold('Azure App Service configuration is starting'));
       },
       getSharedConfig() {
@@ -106,8 +99,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -253,8 +245,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -272,8 +263,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
   }
 
   get [BaseGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get default() {
@@ -492,14 +482,15 @@ which is free for the first 30 days`);
   }
 
   get [BaseGenerator.DEFAULT]() {
-    if (this.delegateToBlueprint) return {};
-    return this.default;
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   _computeDerivedConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     this.loadAppConfig(config, dest);
     this.loadServerConfig(config, dest);
-    super.loadDerivedAppConfig(dest);
+
+    this.loadDerivedAppConfig(dest);
+    this.loadDerivedServerConfig(dest, dest);
     dest.azureAppInsightsInstrumentationKeyEmpty = config.azureAppInsightsInstrumentationKey === '';
   }
 
@@ -513,8 +504,7 @@ which is free for the first 30 days`);
   }
 
   get [BaseGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get writing() {
@@ -531,8 +521,7 @@ which is free for the first 30 days`);
   }
 
   get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get end() {
@@ -655,7 +644,6 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
   }
 
   get [BaseGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 }

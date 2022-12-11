@@ -23,7 +23,6 @@ import { cleanupOldFiles } from './entity-cleanup.mjs';
 import utils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
 import { databaseTypes, searchEngineTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
-import { writeEntityCouchbaseFiles } from './entity-files-couchbase.mjs';
 
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
@@ -33,7 +32,6 @@ const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 
 /* Constants use throughout */
-const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
@@ -235,7 +233,7 @@ export const restFiles = {
 export const filteringFiles = {
   filteringFiles: [
     {
-      condition: generator => generator.jpaMetamodelFiltering,
+      condition: generator => generator.jpaMetamodelFiltering && !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -245,6 +243,21 @@ export const filteringFiles = {
         {
           file: 'package/service/EntityQueryService.java',
           renameTo: generator => `${generator.entityAbsoluteFolder}/service/${generator.entityClass}QueryService.java`,
+        },
+      ],
+    },
+  ],
+};
+
+const filteringReactiveFiles = {
+  filteringReactiveFiles: [
+    {
+      condition: generator => generator.jpaMetamodelFiltering && generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/service/criteria/EntityCriteria.java',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/criteria/${generator.entityClass}Criteria.java`,
         },
       ],
     },
@@ -406,7 +419,6 @@ export const gatlingFiles = {
       templates: [
         {
           file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
-          options: { interpolate: INTERPOLATE_REGEX },
           renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
         },
       ],
@@ -420,6 +432,7 @@ export const serverFiles = {
   ...entityFiles,
   ...restFiles,
   ...filteringFiles,
+  ...filteringReactiveFiles,
   ...elasticSearchFiles,
   ...respositoryFiles,
   ...serviceFiles,
@@ -468,7 +481,6 @@ export function writeFiles() {
         }
       }
     },
-    ...writeEntityCouchbaseFiles(),
   };
 }
 

@@ -20,7 +20,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { GENERATOR_APP } from '../generator-list.mjs';
+import { GENERATOR_ANGULAR, GENERATOR_APP, GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.mjs';
 
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import BaseGenerator from '../base/index.mjs';
@@ -36,7 +36,7 @@ const {
  * @class
  * @extends {BaseGenerator}
  */
-export default class UpgradeGenerator extends BaseGenerator {
+export default class WorkspacesGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -59,7 +59,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints('workspaces');
     }
@@ -67,14 +67,26 @@ export default class UpgradeGenerator extends BaseGenerator {
     this.loadRuntimeOptions();
   }
 
-  get initializing() {
+  get configuring() {
     return {
-      initializeGit() {
-        if (!this.options.monorepository) return;
-        this.checkGit();
-        this.initializeGitRepository();
+      async configure() {
+        this.jhipsterConfig.baseName = this.jhipsterConfig.baseName || 'workspaces';
       },
+    };
+  }
 
+  get [BaseGenerator.CONFIGURING]() {
+    if (this.delegateToBlueprint) return {};
+    return this.configuring;
+  }
+
+  get composing() {
+    return {
+      async composeGit() {
+        if (this.options.monorepository) {
+          await this.composeWithJHipster(GENERATOR_GIT);
+        }
+      },
       async generateJdl() {
         const { generateJdl } = this.options;
         if (generateJdl) {
@@ -84,9 +96,8 @@ export default class UpgradeGenerator extends BaseGenerator {
     };
   }
 
-  get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+  get [BaseGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get default() {
@@ -99,9 +110,10 @@ export default class UpgradeGenerator extends BaseGenerator {
         let clientPackageManager;
         if (applications.length > 0) {
           clientPackageManager = applications[0][1].config.clientPackageManager;
+          const { generateWith = GENERATOR_APP, generateApplications } = this.options;
           if (this.options.generateApplications) {
             for (const [appName, applicationWithEntities] of applications) {
-              await this.composeWithJHipster(GENERATOR_APP, { destinationRoot: this.destinationPath(appName), applicationWithEntities });
+              await this.composeWithJHipster(generateWith, { destinationRoot: this.destinationPath(appName), applicationWithEntities });
             }
           }
         }
@@ -153,33 +165,11 @@ export default class UpgradeGenerator extends BaseGenerator {
         this.packages = this.workspacesConfig.packages;
         this.env.options.nodePackageManager = this.workspacesConfig.clientPackageManager;
       },
-      loadDependabotPackageJson() {
-        if (!this.generateWorkspaces) return;
-
-        this._.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
-      },
     };
   }
 
   get [BaseGenerator.DEFAULT]() {
-    if (this.delegateToBlueprint) return {};
-    return this.default;
-  }
-
-  get writing() {
-    return this.asWritingTaskGroup({
-      async writeTemplates() {
-        if (!this.generateWorkspaces) return;
-        await this.writeFiles({
-          templates: ['.gitignore'],
-        });
-      },
-    });
-  }
-
-  get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get postWriting() {
@@ -189,7 +179,11 @@ export default class UpgradeGenerator extends BaseGenerator {
 
         const {
           dependencies: { rxjs },
-        } = this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'angular', 'package.json'));
+        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'templates', 'package.json'));
+
+        const {
+          devDependencies: { concurrently },
+        } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json'));
 
         this.packageJson.merge({
           workspaces: {
@@ -197,7 +191,7 @@ export default class UpgradeGenerator extends BaseGenerator {
           },
           devDependencies: {
             rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
-            concurrently: this.dependabotPackageJson.devDependencies.concurrently,
+            concurrently,
           },
           scripts: {
             'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
@@ -212,8 +206,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.POST_WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.postWriting;
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   _detectNodePackageManager() {
@@ -236,7 +229,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   _getOtherScripts() {
     if (this.dockerCompose) {
       return {
-        'docker-compose': 'docker compose -f docker-compose/docker-compose.yml up -d',
+        'docker-compose': 'docker compose -f docker-compose/docker-compose.yml up --wait',
         'ci:e2e:prepare': 'npm run docker-compose',
         'ci:e2e:teardown': 'docker compose -f docker-compose/docker-compose.yml down -v',
       };

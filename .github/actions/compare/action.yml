@@ -44,9 +44,19 @@ runs:
         # Verify if the generated source has changed
         git add .
         echo "Showing config diff changes (won't trigger builds)"
-        git -c color.ui=always diff -R --cached -- '.yo-rc.json' '**/.yo-rc.json' '.jhipster/**' '**/.jhipster/**'
+        git -c color.ui=always diff -R --cached -- \
+          '.yo-rc.json' '**/.yo-rc.json' \
+          '.gitignore' '**/.gitignore' \
+          '.gitattributes' '**/.gitattributes' \
+          '.jhipster/**' '**/.jhipster/**'
         echo "Showing source diff changes (will trigger builds)"
-        git -c color.ui=always diff -R --cached --exit-code -- . ':!.yo-rc.json' ':!**/.yo-rc.json' ':!.jhipster/**' ':!**/.jhipster/**' ':!package-lock.json' ':!**/package-lock.json' ':!**/keystore.p12' \
+        git -c color.ui=always diff -R --cached --exit-code -- . \
+          ':!.yo-rc.json' ':!**/.yo-rc.json' \
+          ':!.gitignore' ':!**/.gitignore' \
+          ':!.gitattributes' ':!**/.gitattributes' \
+          ':!.jhipster/**' ':!**/.jhipster/**' \
+          ':!package-lock.json' ':!**/package-lock.json' \
+          ':!**/keystore.p12' \
           && echo "::set-output name=equals::true" \
           || echo "::set-output name=has-changes::true"
       shell: bash

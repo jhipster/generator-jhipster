@@ -126,7 +126,6 @@ export default class EntitiesGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.COMPOSING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.composing;
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 }

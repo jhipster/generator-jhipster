@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "baseUrl": "<%= clientSrcDir %>app",
+        "outDir": "<%= temporaryDir %>out-tsc/dist",
+        "target": "es5",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": ["es7", "dom"],
+        "paths": {
+            "@/*": ["*"]
+        },
+        types: ["node"],
+        "importHelpers": false,
+        "allowJs": true
+    },
+    "include": [
+        "<%= clientSrcDir %>app"
+    ],
+    "exclude": ["node_modules"]
+}

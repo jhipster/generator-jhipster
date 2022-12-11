@@ -12,7 +12,7 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 - ms-micro-eureka
 - ms-micro-eureka-infinispan
 - ms-micro-eureka-jwt
-- ms-ngx-gateway-consul
+- ms-ng-gateway-consul
 - ms-ngx-gateway-eureka
 - ms-ngx-gateway-eureka-jwt
 - ms-ngx-gateway-eureka-oauth2

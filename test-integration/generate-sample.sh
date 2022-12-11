@@ -14,8 +14,8 @@ function usage() {
     echo "Usage: $me generate <destination> <sample_name> [sql|sqllight|sqlfull|micro|mongodb|cassandra|couchbase] | list"
     echo
     echo "Examples:"
-    echo "$me generate /tmp/ngx-default/ ngx-default sql"
-    echo "$me generate /tmp/ngx-default/ ngx-session-cassandra-fr cassandra"
+    echo "$me generate /tmp/ng-default/ ng-default sql"
+    echo "$me generate /tmp/ng-default/ ng-session-cassandra-fr cassandra"
     echo
     exit 2
 }

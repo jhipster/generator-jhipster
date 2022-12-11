@@ -41,7 +41,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheType
 
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
-const { PROTRACTOR, CYPRESS, CUCUMBER, GATLING } = testFrameworkTypes;
+const { CYPRESS, CUCUMBER, GATLING } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE, SVELTE, NO } = clientFrameworkTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
@@ -100,7 +100,6 @@ const optionNames = {
   MICROFRONTENDS: 'microfrontends',
   NATIVE_LANGUAGE: 'nativeLanguage',
   NPM: 'npm',
-  OTHER_MODULES: 'otherModules',
   PACKAGE_NAME: 'packageName',
   PACKAGE_FOLDER: 'packageFolder',
   PROD_DATABASE_TYPE: 'prodDatabaseType',
@@ -194,7 +193,6 @@ const optionValues: any = {
   [optionNames.MICROFRONTEND]: false,
   [optionNames.MICROFRONTENDS]: [],
   [optionNames.NPM]: true,
-  [optionNames.OTHER_MODULES]: [],
   [optionNames.PACKAGE_FOLDER]: 'com/mycompany/myapp',
   [optionNames.PACKAGE_NAME]: 'com.mycompany.myapp',
   [optionNames.PROD_DATABASE_TYPE]: {
@@ -228,7 +226,6 @@ const optionValues: any = {
   [optionNames.SKIP_SERVER]: false,
   [optionNames.SKIP_USER_MANAGEMENT]: false,
   [optionNames.TEST_FRAMEWORKS]: {
-    [PROTRACTOR]: PROTRACTOR,
     [CYPRESS]: CYPRESS,
     [CUCUMBER]: CUCUMBER,
     [GATLING]: GATLING,
@@ -278,7 +275,6 @@ const optionTypes = {
   [optionNames.MICROFRONTENDS]: { type: ApplicationOptionTypes.LIST },
   [optionNames.NATIVE_LANGUAGE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.NPM]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.OTHER_MODULES]: { type: ApplicationOptionTypes.LIST },
   [optionNames.PACKAGE_NAME]: { type: ApplicationOptionTypes.STRING },
   [optionNames.PACKAGE_FOLDER]: { type: ApplicationOptionTypes.STRING },
   [optionNames.PROD_DATABASE_TYPE]: { type: ApplicationOptionTypes.STRING },

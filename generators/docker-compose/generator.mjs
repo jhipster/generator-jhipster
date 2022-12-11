@@ -21,6 +21,7 @@ import shelljs from 'shelljs';
 import jsyaml from 'js-yaml';
 import pathjs from 'path';
 import normalize from 'normalize-path';
+import { faker } from '@faker-js/faker/locale/en';
 
 import BaseDockerGenerator from '../base-docker/index.mjs';
 
@@ -35,6 +36,7 @@ import {
   searchEngineTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
+import { stringHashCode } from '../utils.cjs';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -50,7 +52,7 @@ const { MEMCACHED, REDIS } = cacheTypes;
  * @extends {import('../base/index.mjs')}
  */
 export default class DockerComposeGenerator extends BaseDockerGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DOCKER_COMPOSE);
     }
@@ -94,8 +96,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -103,8 +104,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -131,8 +131,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get preparing() {
@@ -146,6 +145,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
       setAppsYaml() {
         this.appsYaml = [];
         this.keycloakRedirectUris = '';
+        this.includesApplicationTypeGateway = false;
         this.appConfigs.forEach(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           const parentConfiguration = {};
@@ -153,7 +153,24 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
           // Add application configuration
           const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
           const yamlConfig = yaml.services.app;
+          if (yamlConfig.depends_on) {
+            yamlConfig.depends_on = Object.fromEntries(
+              Object.entries(yamlConfig.depends_on).map(([serviceName, config]) => {
+                if (['keycloak', 'jhipster-registry', 'consul'].includes(serviceName)) {
+                  return [serviceName, config];
+                }
+                return [`${lowercaseBaseName}-${serviceName}`, config];
+              })
+            );
+          }
+          if (appConfig.applicationType === GATEWAY) {
+            this.includesApplicationTypeGateway = true;
+          }
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
+            if (this.keycloakSecrets === undefined && appConfig.authenticationType === 'oauth2') {
+              faker.seed(stringHashCode(appConfig.baseName));
+              this.keycloakSecrets = Array.from(Array(6), () => faker.datatype.uuid());
+            }
             this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {
               this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
@@ -269,8 +286,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.PREPARING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get loading() {
@@ -282,8 +298,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get writing() {
@@ -291,8 +306,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get end() {
@@ -320,7 +334,6 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
   }
 
   get [BaseDockerGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 }

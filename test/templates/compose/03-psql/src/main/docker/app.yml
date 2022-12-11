@@ -8,7 +8,7 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
             - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
     postgresql:
-        image: <%= DOCKER_POSTGRESQL %>
+        image: <%- dockerContainers.postgresql %>
         # volumes:
         #     - ~/volumes/jhipster/mspsql/postgresql/:/var/lib/postgresql/
         environment:
@@ -17,14 +17,14 @@ services:
         ports:
             - 5432:5432
     elasticsearch:
-        image: <%= DOCKER_ELASTICSEARCH %>
+        image: <%- dockerContainers.elasticsearch %>
         # volumes:
         #     - ~/volumes/jhipster/mspsql/elasticsearch/:/usr/share/elasticsearch/data/
         ports:
             - 9200:9200
             - 9300:9300
     jhipster-registry:
-        image: <%= DOCKER_JHIPSTER_REGISTRY %>
+        image: <%- dockerContainers.jhipsterRegistry %>
         volumes:
             - ./central-server-config:/central-config
         # By default the JHipster Registry runs with the "dev" and "native"

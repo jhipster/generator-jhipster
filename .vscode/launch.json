@@ -53,7 +53,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "jhipster generate sample-ngx-default (protractor)",
+            "name": "jhipster generate sample-ng-default (protractor)",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "timeout": 100000,
             "args": [
@@ -62,13 +62,13 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/test-integration/samples/ngx-default/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ng-default/",
             "console": "integratedTerminal"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "jhipster generate sample-ngx-default",
+            "name": "jhipster generate sample-ng-default",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "timeout": 100000,
             "args": [
@@ -77,13 +77,13 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/test-integration/samples/ngx-default/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ng-default/",
             "console": "integratedTerminal"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "jhipster generate sample-gateway-ngx-eureka",
+            "name": "jhipster generate sample-gateway-ng-eureka",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "timeout": 100000,
             "args": [
@@ -92,7 +92,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/test-integration/samples/ms-ngx-gateway-eureka/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ms-ng-gateway-eureka/",
             "console": "integratedTerminal"
         },
         {
@@ -113,7 +113,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "jhipster generate sample-ngx-gradle-fr",
+            "name": "jhipster generate sample-ng-gradle-fr",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "timeout": 100000,
             "args": [
@@ -122,7 +122,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/test-integration/samples/ngx-gradle-fr/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ng-gradle-fr/",
             "console": "integratedTerminal"
         },
         {

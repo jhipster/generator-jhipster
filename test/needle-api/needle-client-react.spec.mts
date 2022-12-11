@@ -55,7 +55,6 @@ describe('needle API React: JHipster client generator with blueprint', () => {
     result = await helpers
       .run(getGenerator('client'))
       .withOptions({
-        fromCli: true,
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',

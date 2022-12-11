@@ -132,7 +132,7 @@ objects:
 <%_ } _%>
           containers:
           - name: ${ZK_APPLICATION_NAME}
-            image: <%= DOCKER_ZOOKEEPER %>
+            image: <%- dockerContainers.zookeeper %>
             env:
             - name: ZOOKEEPER_CLIENT_PORT
               value: 2181
@@ -207,7 +207,7 @@ objects:
 <%_ } _%>
           containers:
           - name: ${APPLICATION_NAME}
-            image: <%= DOCKER_KAFKA %>
+            image: <%- dockerContainers.kafka %>
             env:
             - name: KAFKA_ADVERTISED_LISTENERS
               value: PLAINTEXT://${APPLICATION_NAME}:9092

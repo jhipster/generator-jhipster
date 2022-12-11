@@ -3,7 +3,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { buildServerMatrix, extendMatrix, extendFilteredMatrix, entitiesServerSamples as entities } from '../../test/support/index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
 
@@ -81,7 +81,7 @@ describe(`JHipster ${databaseType} generator`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withOptions(sample)
-          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:database-changelog']);
+          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:liquibase']);
       });
 
       after(() => runResult.cleanup());
@@ -92,8 +92,8 @@ describe(`JHipster ${databaseType} generator`, () => {
       it(`should ${enableTranslation ? '' : 'not '}compose with jhipster:languages`, () => {
         expect(runResult.mockedGenerators['jhipster:languages'].callCount).toBe(enableTranslation ? 1 : 0);
       });
-      it('should compose with jhipster:database-changelog', () => {
-        expect(runResult.mockedGenerators['jhipster:database-changelog'].callCount).toBe(1);
+      it('should compose with jhipster:liquibase', () => {
+        expect(runResult.mockedGenerators['jhipster:liquibase'].callCount).toBe(1);
       });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();

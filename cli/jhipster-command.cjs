@@ -181,6 +181,9 @@ class JHipsterCommand extends Command {
     const option = new Option(cmdString, optionDefinition.description + additionalDescription)
       .default(optionDefinition.default)
       .hideHelp(optionDefinition.hide);
+    if (optionDefinition.env) {
+      option.env(optionDefinition.env);
+    }
     if (optionDefinition.choices && optionDefinition.choices.length > 0) {
       option.choices(optionDefinition.choices);
     }

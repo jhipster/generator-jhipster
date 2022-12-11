@@ -35,7 +35,6 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
     helpers
       .run(getGenerator('client'))
       .withOptions({
-        fromCli: true,
         defaults: true,
         skipServer: true,
         db: 'postgresql',

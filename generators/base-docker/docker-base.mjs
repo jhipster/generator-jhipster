@@ -20,7 +20,7 @@ import { existsSync } from 'fs';
 import chalk from 'chalk';
 import _ from 'lodash';
 
-import { getBase64Secret } from '../utils.cjs';
+import { createBase64Secret } from '../../lib/utils/secret-utils.mjs';
 import { applicationTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
 
 const { MAVEN } = buildToolTypes;
@@ -69,7 +69,7 @@ export function checkImages() {
  */
 export function generateJwtSecret() {
   if (this.jwtSecretKey === undefined) {
-    this.jwtSecretKey = getBase64Secret.call(this);
+    this.jwtSecretKey = createBase64Secret.call(this);
   }
 }
 
@@ -116,8 +116,10 @@ export function loadConfigs() {
       _.defaults(config, this.getDefaultConfigForApplicationType(config.applicationType));
       this.loadAppConfig(config, config);
       this.loadServerConfig(config, config);
-      this.loadDerivedPlatformConfig(config);
+      this.loadPlatformConfig(config, config);
+
       this.loadDerivedAppConfig(config);
+      this.loadDerivedPlatformConfig(config);
       this.loadDerivedServerConfig(config);
 
       if (config.applicationType === MONOLITH) {
@@ -171,7 +173,7 @@ export function loadFromYoRc() {
     setClusteredApps.call(this);
     if (!this.adminPassword) {
       this.adminPassword = 'admin'; // TODO find a better way to do this
-      this.adminPasswordBase64 = getBase64Secret.call(this, this.adminPassword);
+      this.adminPasswordBase64 = createBase64Secret.call(this, this.adminPassword);
     }
   }
 }

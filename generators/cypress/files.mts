@@ -18,9 +18,9 @@
  */
 import constants from '../generator-constants.cjs';
 
-import type { WriteFileSection } from '../base/api.cjs';
+import type { WriteFileSection } from '../base/api.mjs';
 import type CypressGenerator from './generator.mjs';
-import type { CypressApplication } from './types.js';
+import type { CypressApplication } from './types.mjs';
 
 const { CLIENT_TEST_SRC_DIR } = constants;
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
@@ -55,7 +55,7 @@ export const cypressFiles: WriteFileSection<CypressGenerator, CypressApplication
       templates: ['e2e/account/login-page.cy.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => Boolean(generator.generateUserManagement),
       path: CYPRESS_TEMPLATE_SOURCE_DIR,
       renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: [
@@ -63,6 +63,7 @@ export const cypressFiles: WriteFileSection<CypressGenerator, CypressApplication
         'e2e/account/settings-page.cy.ts',
         'e2e/account/password-page.cy.ts',
         'e2e/account/reset-password-page.cy.ts',
+        'support/account.ts',
       ],
     },
     {

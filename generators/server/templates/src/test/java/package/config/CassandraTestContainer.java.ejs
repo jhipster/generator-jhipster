@@ -71,7 +71,7 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
     @Override
     public void afterPropertiesSet() {
         if (null == cassandraContainer) {
-            cassandraContainer = (CassandraContainer) new CassandraContainer("<%= DOCKER_CASSANDRA %>")
+            cassandraContainer = (CassandraContainer) new CassandraContainer("<%- dockerContainers.cassandra %>")
                 .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
                 .withLogConsumer(new Slf4jLogConsumer(log))
                 .withReuse(true);

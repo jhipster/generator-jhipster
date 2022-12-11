@@ -86,10 +86,5 @@ function cleanUpOptions(application) {
       baseName,
     }));
   }
-  if (application[GENERATOR_NAME].otherModules) {
-    application[GENERATOR_NAME].otherModules = application[GENERATOR_NAME].otherModules.map(moduleName => ({
-      name: moduleName,
-    }));
-  }
   return application;
 }

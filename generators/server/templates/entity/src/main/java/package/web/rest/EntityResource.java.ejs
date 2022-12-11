@@ -45,9 +45,11 @@ import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
 import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
   <%_ } _%>
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering) {  _%>
+<%_ if (jpaMetamodelFiltering && !reactive) {  _%>
 import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 import <%= entityAbsolutePackage %>.service.<%= entityClass %>QueryService;
+<%_ } else if (jpaMetamodelFiltering && reactive) { _%>
+import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
 <%_ } _%>
 
 import tech.jhipster.web.util.HeaderUtil;
@@ -152,7 +154,7 @@ public class <%= entityClass %>Resource {
     const instanceName = restInstance;
     const mapper = entityInstance  + 'Mapper';
     const entityToDtoReference = mapper + '::' + 'toDto';
-    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
+    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true, reactive: reactive}); -%>
 <%_ if (!readOnly) { _%>
 
     /**
@@ -364,7 +366,7 @@ public class <%= entityClass %>Resource {
 <%_ } _%>
 <%- include('../../common/get_all_template', {viaService}); -%>
 
-<%_ if (reactive && paginationNo) { _%>
+<%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
     /**
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %> as a stream.
      * @return the {@link Flux} of <%= entityInstancePlural %>.

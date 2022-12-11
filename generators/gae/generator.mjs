@@ -40,7 +40,7 @@ const { MAVEN, GRADLE } = buildToolTypes;
 const NO_CACHE_PROVIDER = cacheProviders.NO;
 
 export default class GaeGenerator extends BaseGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_GAE);
     }
@@ -95,8 +95,9 @@ export default class GaeGenerator extends BaseGenerator {
       loadCommonConfig() {
         this.loadAppConfig();
         this.loadServerConfig();
-        this.loadPlatformConfig();
-        this.loadClientConfig();
+
+        this.loadDerivedAppConfig();
+        this.loadDerivedServerConfig();
       },
 
       loadConfig() {
@@ -118,15 +119,13 @@ export default class GaeGenerator extends BaseGenerator {
         this.gaeMaxInstances = configuration.get('gaeMaxInstances');
         this.gaeMinInstances = configuration.get('gaeMinInstances');
         this.gaeCloudSQLInstanceNeeded = configuration.get('gaeCloudSQLInstanceNeeded');
-        this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.config.buildTool) + constants.CLIENT_DIST_DIR;
         this.dasherizedBaseName = _.kebabCase(this.baseName);
       },
     };
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -611,8 +610,7 @@ export default class GaeGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -752,8 +750,7 @@ export default class GaeGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get loading() {
@@ -765,8 +762,7 @@ export default class GaeGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get writing() {
@@ -835,8 +831,7 @@ export default class GaeGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get end() {
@@ -881,8 +876,7 @@ export default class GaeGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   _defaultProjectId() {

@@ -61,17 +61,15 @@ const fatal = function (msg, trace) {
   process.exit(1);
 };
 
-const init = function (program) {
-  program.option('-d, --debug', 'enable debugger');
-
-  this.debugEnabled = process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
-  if (this.debugEnabled) {
-    info('Debug logging is on');
-  }
-};
-
 const logger = {
-  init,
+  init(program) {
+    program.option('-d, --debug', 'enable debugger');
+
+    this.debugEnabled = process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
+    if (this.debugEnabled) {
+      info('Debug logging is on');
+    }
+  },
   debug,
   info,
   log,

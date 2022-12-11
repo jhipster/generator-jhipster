@@ -26,16 +26,8 @@ const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 
 const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
-export async function askForModuleName() {
-  if (this.jhipsterConfig.baseName) return;
-
-  await this.askModuleName(this);
-}
-
-export async function askForClient() {
-  if (this.existingProject) return;
-
-  const applicationType = this.applicationType;
+export async function askForClient({ control }) {
+  if (control.existingProject && !this.options.askAnswered) return;
 
   const choices = [
     {
@@ -56,97 +48,88 @@ export async function askForClient() {
     },
   ];
 
-  const answers = await this.prompt({
-    type: 'list',
-    name: 'clientFramework',
-    when: () => applicationType !== 'microservice',
-    message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
-    choices,
-    default: clientDefaultConfig.clientFramework,
-  });
+  const answers = await this.prompt(
+    {
+      type: 'list',
+      name: 'clientFramework',
+      when: () => this.jhipsterConfig.applicationType !== 'microservice',
+      message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
+      choices,
+      default: clientDefaultConfig.clientFramework,
+    },
+    this.config
+  );
 
-  this.clientFramework = this.jhipsterConfig.clientFramework = answers.clientFramework;
-  if (this.clientFramework === NO_CLIENT_FRAMEWORK) {
+  if (answers.clientFramework === NO_CLIENT_FRAMEWORK) {
     this.skipClient = this.jhipsterConfig.skipClient = true;
     this.cancelCancellableTasks();
   }
 }
 
-export async function askForClientTheme() {
-  if (this.existingProject) {
-    return;
-  }
+export async function askForClientTheme({ control }) {
+  if (control.existingProject && !this.options.askAnswered) return;
 
-  const self = this;
-  const skipClient = this.skipClient;
-  const defaultJHipsterChoices = [
+  const answers = await this.prompt(
     {
-      value: 'none',
-      name: 'Default JHipster',
+      type: 'list',
+      name: 'clientTheme',
+      when: () => !this.jhipsterConfig.skipClient,
+      message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
+      choices: async () => {
+        const bootswatchChoices = await retrieveOnlineBootswatchThemes(this).catch(errorMessage => {
+          this.warning(errorMessage);
+          return retrieveLocalBootswatchThemes();
+        });
+        return [
+          {
+            value: 'none',
+            name: 'Default JHipster',
+          },
+          ...bootswatchChoices,
+        ];
+      },
+      default: clientDefaultConfig.clientTheme,
     },
-  ];
-
-  const bootswatchChoices = await retrieveOnlineBootswatchThemes(self).catch(errorMessage => {
-    self.warning(errorMessage);
-    return retrieveLocalBootswatchThemes();
-  });
-  const answers = await this.prompt({
-    type: 'list',
-    name: 'clientTheme',
-    when: () => !skipClient,
-    message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
-    choices: [...defaultJHipsterChoices, ...bootswatchChoices],
-    default: clientDefaultConfig.clientTheme,
-  });
-
-  this.clientTheme = this.jhipsterConfig.clientTheme = answers.clientTheme;
+    this.config
+  );
 }
 
-export async function askForClientThemeVariant() {
-  if (this.existingProject) {
-    return;
-  }
-  if (this.clientTheme === 'none') {
-    this.clientThemeVariant = '';
+export async function askForClientThemeVariant({ control }) {
+  if (control.existingProject && !this.options.askAnswered) return;
+  if (this.jhipsterConfig.clientTheme === 'none') {
     return;
   }
 
-  const skipClient = this.skipClient;
-
-  const choices = [
-    { value: 'primary', name: 'Primary' },
-    { value: 'dark', name: 'Dark' },
-    { value: 'light', name: 'Light' },
-  ];
-
-  const answers = await this.prompt({
-    type: 'list',
-    name: 'clientThemeVariant',
-    when: () => !skipClient,
-    message: 'Choose a Bootswatch variant navbar theme (https://bootswatch.com/)?',
-    choices,
-    default: clientDefaultConfig.clientThemeVariant,
-  });
-
-  this.clientThemeVariant = this.jhipsterConfig.clientThemeVariant = answers.clientThemeVariant;
+  const answers = await this.prompt(
+    {
+      type: 'list',
+      name: 'clientThemeVariant',
+      when: () => !this.jhipsterConfig.skipClient,
+      message: 'Choose a Bootswatch variant navbar theme (https://bootswatch.com/)?',
+      choices: [
+        { value: 'primary', name: 'Primary' },
+        { value: 'dark', name: 'Dark' },
+        { value: 'light', name: 'Light' },
+      ],
+      default: clientDefaultConfig.clientThemeVariant,
+    },
+    this.config
+  );
 }
 
-export async function askForAdminUi() {
-  if (this.existingProject) {
-    return;
-  }
+export async function askForAdminUi({ control }) {
+  if (control.existingProject && !this.options.askAnswered) return;
 
-  const skipClient = this.skipClient;
-
-  const answers = await this.prompt({
-    type: 'confirm',
-    name: 'withAdminUi',
-    when: () => !skipClient,
-    message: 'Do you want to generate the admin UI?',
-    default: clientDefaultConfig.withAdminUi,
-  });
-
-  this.withAdminUi = this.jhipsterConfig.withAdminUi = answers.withAdminUi;
+  const answers = await this.prompt(
+    {
+      type: 'confirm',
+      name: 'withAdminUi',
+      when: () => !this.jhipsterConfig.skipClient,
+      message: 'Do you want to generate the admin UI?',
+      default: clientDefaultConfig.withAdminUi,
+    },
+    this.config
+  );
 }
 
 async function retrieveOnlineBootswatchThemes(generator) {

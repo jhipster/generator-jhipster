@@ -37,7 +37,7 @@ export default function cleanupOldServerFiles(generator, javaDir, testDir, mainR
     generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
   }
   if (generator.isJhipsterVersionLessThan('7.7.1')) {
-    if (!generator.skipUserManagement) {
+    if (generator.generateUserManagement) {
       generator.removeFile(`${testDir}repository/search/UserSearchRepositoryMockConfiguration.java`);
     }
   }

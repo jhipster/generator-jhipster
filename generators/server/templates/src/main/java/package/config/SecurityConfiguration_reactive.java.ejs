@@ -39,19 +39,18 @@ import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
   <%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.core.ParameterizedTypeReference;
   <%_ } _%>
 <%_ } _%>
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 <%_ if (authenticationTypeSession) { _%>
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -79,7 +78,6 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
-import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -93,7 +91,7 @@ import org.springframework.security.core.userdetails.MapReactiveUserDetailsServi
 import org.springframework.security.core.userdetails.UserDetails;
   <%_ } _%>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
@@ -102,7 +100,10 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
+<%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestAttributeHandler;
 <%_ } _%>
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode;
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
@@ -114,8 +115,6 @@ import org.springframework.security.web.server.util.matcher.OrServerWebExchangeM
 <%_ if (skipUserManagement && !authenticationTypeOauth2) { _%>
 import org.springframework.util.StringUtils;
 <%_ } _%>
-import org.springframework.web.cors.reactive.CorsWebFilter;
-// import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
 <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
@@ -143,7 +142,6 @@ import static org.springframework.security.web.server.util.matcher.ServerWebExch
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-// @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
@@ -165,22 +163,17 @@ public class SecurityConfiguration {
 
   <%_ } _%>
 <%_ } _%>
-//    private final SecurityProblemSupport problemSupport;
-    private final CorsWebFilter corsWebFilter;
 
     public SecurityConfiguration(
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
         ReactiveClientRegistrationRepository clientRegistrationRepository,
 <%_ } _%>
-        JHipsterProperties jHipsterProperties,
-        CorsWebFilter corsWebFilter
+        JHipsterProperties jHipsterProperties
     ) {
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
         this.clientRegistrationRepository = clientRegistrationRepository;
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
-//        this.problemSupport = problemSupport;
-        this.corsWebFilter = corsWebFilter;
     }
 
 <%_ if (!skipUserManagement && !authenticationTypeOauth2) { _%>
@@ -219,25 +212,21 @@ public class SecurityConfiguration {
         // @formatter:off
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers("/app/**", "/_app/**", "/i18n/**", "/img/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**"),
-                pathMatchers(HttpMethod.OPTIONS, "/**")
+                pathMatchers("/app/**", "/_app/**", "/i18n/**", "/img/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**")
             )))
-            .csrf()
+            .csrf(csrf -> csrf
 <%_ if ((authenticationTypeSession || authenticationTypeOauth2) && !applicationTypeMicroservice) { _%>
                 .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
-        .and()
+                // See https://stackoverflow.com/q/74447118/65681
+                .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler()))
             // See https://github.com/spring-projects/spring-security/issues/5766
             .addFilterAt(new CookieCsrfFilter(), SecurityWebFiltersOrder.REACTOR_CONTEXT)
 <%_ } else { _%>
-                .disable()
+                .disable())
 <%_ } _%>
-            .addFilterBefore(corsWebFilter, SecurityWebFiltersOrder.REACTOR_CONTEXT)
 <%_ if (!skipClient) { _%>
             .addFilterAfter(new SpaWebFilter(), SecurityWebFiltersOrder.HTTPS_REDIRECT)
 <%_ } _%>
-//            .exceptionHandling()
-//                .accessDeniedHandler(problemSupport)
-//                .authenticationEntryPoint(problemSupport)
 <%_ if (authenticationTypeSession) { _%>
             .formLogin()
             .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
@@ -248,6 +237,7 @@ public class SecurityConfiguration {
             .logout()
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(new HttpStatusReturningServerLogoutSuccessHandler())
+        .and()
 <%_ } _%>
             .headers()
                 .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
@@ -269,7 +259,7 @@ public class SecurityConfiguration {
             .pathMatchers("/*.*").permitAll()
 <%_ } _%>
             .pathMatchers("/api/authenticate").permitAll()
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
             .pathMatchers("/api/register").permitAll()
             .pathMatchers("/api/activate").permitAll()
             .pathMatchers("/api/account/reset-password/init").permitAll()
@@ -286,6 +276,7 @@ public class SecurityConfiguration {
             .pathMatchers("/services/*/*.js").permitAll()
             .pathMatchers("/services/*/*.js.map").permitAll()
   <%_ } _%>
+            .pathMatchers("/services/*/management/health/readiness").permitAll()
             .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
@@ -300,7 +291,7 @@ public class SecurityConfiguration {
 <%_ if (authenticationTypeOauth2) { _%>
   <%_ if (!applicationTypeMicroservice) { _%>
             .oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))
-  <% } %>
+  <%_ } _%>
             .oauth2Client()
         .and()
             .oauth2ResourceServer()

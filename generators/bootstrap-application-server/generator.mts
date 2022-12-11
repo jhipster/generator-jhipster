@@ -28,11 +28,13 @@ import {
   prepareEntityServerForTemplates,
   prepareEntityPrimaryKeyForTemplates,
 } from '../../utils/entity.mjs';
-import type { SpringBootApplication } from './types.js';
+import type { SpringBootApplication } from '../server/types.mjs';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
-import { getDockerfileContainers, getPomVersionProperties } from '../server/index.mjs';
+import { getPomVersionProperties } from '../server/index.mjs';
+import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
+import { GRADLE_VERSION } from '../gradle/constants.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -54,9 +56,10 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
 
   get loading() {
     return this.asLoadingTaskGroup({
-      async loadApplication({ application }) {
+      async loadApplication({ application, control }) {
         this.loadServerConfig(undefined, application);
 
+        application.gradleVersion = control.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
         application.temporaryDir = application.buildTool === 'gradle' ? 'build/' : 'target/';
         application.buildDir = `${application.temporaryDir}${application.buildTool === 'gradle' ? 'resources/main/' : 'classes/'}`;
@@ -73,16 +76,13 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         );
 
         const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/Dockerfile'));
-        application.dockerContainers = this.prepareDependencies({
-          ...dockerContainers,
-          ...getDockerfileContainers(dockerfile),
-        });
-
-        // TODO v8 drop the following variables
-        const applicationAsAny = application as any;
-        applicationAsAny.DIST_DIR = application.clientDistDir;
-        applicationAsAny.BUILD_DIR = application.temporaryDir;
-        applicationAsAny.MAIN_SRC_DIR = application.srcMainWebapp;
+        application.dockerContainers = this.prepareDependencies(
+          {
+            ...dockerContainers,
+            ...getDockerfileContainers(dockerfile),
+          },
+          dockerPlaceholderGenerator
+        );
       },
     });
   }
@@ -95,8 +95,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
         this.loadDerivedServerConfig(application);
-        application.javaPackageSrcDir = `${constants.SERVER_MAIN_SRC_DIR}${application.packageFolder}/`;
-        application.javaPackageTestDir = `${constants.SERVER_TEST_SRC_DIR}${application.packageFolder}/`;
       },
     });
   }

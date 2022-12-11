@@ -86,7 +86,7 @@ class WebConfigurerTest {
         assertThat(container.getMimeMappings().get("html")).isEqualTo("text/html");
         assertThat(container.getMimeMappings().get("json")).isEqualTo("application/json");
         if (container.getDocumentRoot() != null) {
-            assertThat(container.getDocumentRoot()).isEqualTo(new File("<%= CLIENT_DIST_DIR %>"));
+            assertThat(container.getDocumentRoot()).isEqualTo(new File("<%= clientDistDir %>"));
         }
     }
 

@@ -65,9 +65,25 @@ const PRE_CONFLICTS_QUEUE = `${QUEUE_PREFIX}${PRE_CONFLICTS}`;
  */
 const CUSTOM_PRIORITIES = [
   {
+    priorityName: INITIALIZING,
+    args: generator => generator.getArgsForPriority(INITIALIZING),
+    edit: true,
+  },
+  {
+    priorityName: PROMPTING,
+    args: generator => generator.getArgsForPriority(PROMPTING),
+    edit: true,
+  },
+  {
+    priorityName: CONFIGURING,
+    args: generator => generator.getArgsForPriority(CONFIGURING),
+    edit: true,
+  },
+  {
     priorityName: COMPOSING,
     queueName: COMPOSING_QUEUE,
     before: LOADING,
+    args: generator => generator.getArgsForPriority(COMPOSING),
   },
   {
     priorityName: LOADING,

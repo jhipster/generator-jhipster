@@ -45,7 +45,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
     this.defaultOption = this.options.default;
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SPRING_SERVICE, { arguments: [this.name] });
     }
@@ -54,10 +54,6 @@ export default class SpringServiceGenerator extends BaseGenerator {
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-
       initializing() {
         this.log(`The service ${this.name} is being created.`);
         const configuration = this.config;
@@ -70,8 +66,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -100,8 +95,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -114,8 +108,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -128,8 +121,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.DEFAULT]() {
-    if (this.delegateToBlueprint) return {};
-    return this.default;
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -157,7 +149,6 @@ export default class SpringServiceGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 }

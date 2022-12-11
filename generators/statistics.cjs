@@ -175,7 +175,6 @@ class Statistics {
     this.insight.trackWithEvent('generator', 'app');
     this.insight.track('app/applicationType', yorc.applicationType);
     this.insight.track('app/testFrameworks', yorc.testFrameworks);
-    this.insight.track('app/otherModules', yorc.otherModules);
     this.insight.track('app/clientPackageManager', yorc.clientPackageManager);
   }
 

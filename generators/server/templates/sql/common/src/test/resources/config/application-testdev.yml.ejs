@@ -40,17 +40,17 @@ spring:
 <%_ if (reactive) { _%>
   <%_ if (devDatabaseTypeH2Any) { _%>
   r2dbc:
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
+    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
     username: <%= lowercaseBaseName %>
     password:
   liquibase:
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
   <%_ } _%>
 <%_ } else { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
   <%_ if (devDatabaseTypeH2Any) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${BUILD_DIR}`, prodDatabaseType }) %>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
     username: <%= baseName %>
     password:
   <%_ } _%>
@@ -83,7 +83,7 @@ spring:
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
-      hibernate.hbm2ddl.auto: validate
+      hibernate.hbm2ddl.auto: none #TODO: temp relief for integration tests, revisit required
       hibernate.jdbc.time_zone: UTC
       hibernate.query.fail_on_pagination_over_collection_fetch: true
 <%_ } _%>

@@ -46,7 +46,6 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
     helpers
       .run(getGenerator('client'))
       .withOptions({
-        fromCli: true,
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',

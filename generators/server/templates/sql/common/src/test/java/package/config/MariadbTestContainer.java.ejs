@@ -42,7 +42,7 @@ public class MariadbTestContainer implements SqlTestContainer {
     @Override
     public void afterPropertiesSet() {
         if (null == mariaDBContainer) {
-            mariaDBContainer = new MariaDBContainer<>("<%= DOCKER_MARIADB %>")
+            mariaDBContainer = new MariaDBContainer<>("<%- dockerContainers.mariadb %>")
                 .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))

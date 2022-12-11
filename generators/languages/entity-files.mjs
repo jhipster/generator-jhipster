@@ -54,7 +54,7 @@ export const enumClientI18nFiles = {
 export function writeEntityFiles() {
   return {
     async writeEnumFiles({ entities, application }) {
-      if (application.skipClient) return;
+      if (!application.enableTranslation || application.skipClient) return;
       entities = entities.filter(entity => !entity.skipClient && !entity.builtIn);
       const { clientSrcDir, packageName, frontendAppName } = application;
       await Promise.all(
@@ -85,7 +85,7 @@ export function writeEntityFiles() {
     },
 
     async writeClientFiles({ application, entities }) {
-      if (application.skipClient) return;
+      if (!application.enableTranslation || application.skipClient) return;
       entities = entities.filter(entity => !entity.skipClient && !entity.builtIn);
 
       // Copy each

@@ -84,8 +84,8 @@ const mockBlueprintSubGen: any = class extends ServerGenerator {
 };
 
 describe('needle API server liquibase: JHipster server generator with blueprint', () => {
-  before(done => {
-    helpers
+  before(async () => {
+    await helpers
       .run(getGenerator('server'))
       .inTmpDir(dir => {
         fse.copySync(
@@ -94,10 +94,10 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
         );
       })
       .withOptions({
-        fromCli: true,
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
+        skipPriorities: ['prompting'],
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
       .withPrompts({
@@ -117,8 +117,7 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
         buildTool: 'maven',
         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
         serverSideOptions: [],
-      })
-      .on('end', done);
+      });
   });
 
   it('Assert changelog is added to master.xml', () => {

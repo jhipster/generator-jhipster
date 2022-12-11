@@ -20,7 +20,7 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { basicTests, testBlueprintSupport } from '../../test/support/index.mjs';
+import { basicTests, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

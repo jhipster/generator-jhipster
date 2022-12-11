@@ -6,7 +6,7 @@ import ChildProcess from 'child_process';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import constants from '../generators/generator-constants.cjs';
-import { getTemplatePath, getGenerator } from './support/index.cjs';
+import { getTemplatePath, getGenerator } from './support/index.mjs';
 
 const expectedFiles = {
   monolith: [

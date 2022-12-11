@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
@@ -21,15 +22,20 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
-import { askForModuleName, askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
+
+import serverOptions from './options.mjs';
+import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 import {
-  GENERATOR_COMMON,
-  GENERATOR_LANGUAGES,
-  GENERATOR_SERVER,
   GENERATOR_BOOTSTRAP_APPLICATION,
-  GENERATOR_DATABASE_CHANGELOG,
+  GENERATOR_COMMON,
+  GENERATOR_COUCHBASE,
+  GENERATOR_DOCKER,
   GENERATOR_GRADLE,
+  GENERATOR_KAFKA,
+  GENERATOR_LANGUAGES,
+  GENERATOR_LIQUIBASE,
   GENERATOR_MAVEN,
+  GENERATOR_SERVER,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
@@ -45,29 +51,29 @@ import {
   buildToolTypes,
   databaseTypes,
   cacheTypes,
-  searchEngineTypes,
   serviceDiscoveryTypes,
   websocketTypes,
   fieldTypes,
   entityOptions,
   validations,
   reservedKeywords,
+  messageBrokerTypes,
 } from '../../jdl/jhipster/index.mjs';
 
 import { stringify } from '../../utils/index.mjs';
-import generatorUtils from '../utils.cjs';
+import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
+import { normalizePathEnd } from '../base/utils.mjs';
 
 const { isReservedTableName } = reservedKeywords;
-const { getBase64Secret, getRandomHex } = generatorUtils;
 const { defaultConfig } = generatorDefaults;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
-const { ELASTICSEARCH } = searchEngineTypes;
 const { EUREKA } = serviceDiscoveryTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
 const { FALSE: NO_WEBSOCKET } = websocketTypes;
-const { CASSANDRA, COUCHBASE, ORACLE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
+const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
+const { KAFKA } = messageBrokerTypes;
 
 const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, MAIN_DIR, TEST_DIR } = constants;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -84,9 +90,14 @@ const { SUPPORTED_VALIDATION_RULES } = constants;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-server/types.js').SpringBootApplication>}
+ * @extends {BaseApplicationGenerator<import('./types.mjs').SpringBootApplication>}
  */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
+  /** @type {string} */
+  jhipsterDependenciesVersion;
+  /** @type {string} */
+  projectVersion;
+
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
 
@@ -95,6 +106,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
       type: Boolean,
     });
+    this.jhipsterOptions(serverOptions);
 
     if (this.options.help) {
       return;
@@ -107,7 +119,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
@@ -140,7 +152,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get initializing() {
-    return this.asInitialingTaskGroup({
+    return this.asInitializingTaskGroup({
       displayLogo() {
         if (this.logo) {
           this.printJHipsterLogo();
@@ -152,37 +164,15 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           this.jhipsterConfig.applicationType = defaultConfig.applicationType;
         }
       },
-
-      verifyExistingProject() {
-        const serverConfigFound =
-          this.jhipsterConfig.packageName !== undefined &&
-          this.jhipsterConfig.authenticationType !== undefined &&
-          this.jhipsterConfig.cacheProvider !== undefined &&
-          this.jhipsterConfig.websocket !== undefined &&
-          this.jhipsterConfig.databaseType !== undefined &&
-          this.jhipsterConfig.devDatabaseType !== undefined &&
-          this.jhipsterConfig.prodDatabaseType !== undefined &&
-          this.jhipsterConfig.searchEngine !== undefined &&
-          this.jhipsterConfig.buildTool !== undefined;
-
-        if (this.jhipsterConfig.baseName !== undefined && serverConfigFound) {
-          this.log(
-            chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \nto re-generate the project...\n')
-          );
-
-          this.existingProject = true;
-        }
-      },
     });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitialingTaskGroup(this.delegateToBlueprint ? {} : this.initializing);
+    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
   }
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      askForModuleName,
       askForServerSideOpts,
       askForOptionalItems,
     });
@@ -215,7 +205,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.asConfiguringTaskGroup(this.delegateToBlueprint ? {} : this.configuring);
+    return this.asConfiguringTaskGroup(this.delegateTasksToBlueprint(() => this.configuring));
   }
 
   get composing() {
@@ -225,7 +215,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
 
       async composing() {
-        const { buildTool, enableTranslation } = this.jhipsterConfigWithDefaults;
+        const { buildTool, enableTranslation, databaseType, messageBroker } = this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
           await this.composeWithJHipster(GENERATOR_GRADLE);
         } else if (buildTool === MAVEN) {
@@ -234,26 +224,31 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           throw new Error(`Build tool ${buildTool} is not supported`);
         }
 
+        await this.composeWithJHipster(GENERATOR_DOCKER);
+
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
+        }
+        if (databaseType === SQL) {
+          await this.composeWithJHipster(GENERATOR_LIQUIBASE);
+        } else if (databaseType === COUCHBASE) {
+          await this.composeWithJHipster(GENERATOR_COUCHBASE);
+        }
+        if (messageBroker === KAFKA) {
+          await this.composeWithJHipster(GENERATOR_KAFKA);
         }
       },
     });
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateToBlueprint ? {} : this.composing);
+    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
   }
 
   get preparing() {
     return this.asPreparingTaskGroup({
       loadEnvironmentVariables({ application }) {
-        if (process.env.JHI_BOM_VERSION) {
-          application.jhiBomVersion = process.env.JHI_BOM_VERSION;
-          this.info(`Using JHipster BOM version ${process.env.JHI_BOM_VERSION}`);
-        }
-
         application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (application.defaultPackaging === 'war') {
           this.info(`Using ${application.defaultPackaging} as default packaging`);
@@ -266,11 +261,10 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
 
-      setupServerconsts({ application }) {
+      setupServerconsts({ control, application }) {
         // Make constants available in templates
         application.MAIN_DIR = constants.MAIN_DIR;
         application.TEST_DIR = constants.TEST_DIR;
-        application.DOCKER_DIR = constants.DOCKER_DIR;
         application.LOGIN_REGEX = constants.LOGIN_REGEX;
         application.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
         application.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
@@ -278,41 +272,31 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
         application.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
-        application.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-        application.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
-        application.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
-        application.DOCKER_MYSQL = constants.DOCKER_MYSQL;
-        application.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-        application.DOCKER_MONGODB = constants.DOCKER_MONGODB;
-        application.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
-        application.DOCKER_MSSQL = constants.DOCKER_MSSQL;
-        application.DOCKER_NEO4J = constants.DOCKER_NEO4J;
-        application.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
-        application.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
-        application.DOCKER_REDIS = constants.DOCKER_REDIS;
-        application.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-        application.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-        application.KAFKA_VERSION = constants.KAFKA_VERSION;
-        application.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-        application.DOCKER_SONAR = constants.DOCKER_SONAR;
-        application.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-        application.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-        application.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
-        application.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-        application.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-        application.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
-
-        application.JAVA_VERSION = constants.JAVA_VERSION;
+        application.JAVA_VERSION = control.useVersionPlaceholders ? 'JAVA_VERSION' : constants.JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
 
-        application.NODE_VERSION = constants.NODE_VERSION;
-        application.NPM_VERSION = constants.NPM_VERSION;
+        if (this.projectVersion) {
+          this.info(`Using projectVersion: ${application.jhipsterDependenciesVersion}`);
+          application.projectVersion = this.projectVersion;
+        } else {
+          application.projectVersion = '0.0.1-SNAPSHOT';
+        }
 
-        application.JHIPSTER_DEPENDENCIES_VERSION = application.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
-        application.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
-        application.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
-        application.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
-        application.JACOCO_VERSION = constants.JACOCO_VERSION;
+        if (control.useVersionPlaceholders) {
+          application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
+        } else if (this.jhipsterDependenciesVersion) {
+          application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
+          this.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
+        } else {
+          application.jhipsterDependenciesVersion = constants.JHIPSTER_DEPENDENCIES_VERSION;
+        }
+        application.SPRING_BOOT_VERSION = control.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : constants.SPRING_BOOT_VERSION;
+        application.SPRING_CLOUD_VERSION = control.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : constants.SPRING_CLOUD_VERSION;
+        application.HIBERNATE_VERSION = control.useVersionPlaceholders ? 'HIBERNATE_VERSION' : constants.HIBERNATE_VERSION;
+        application.JACKSON_DATABIND_NULLABLE_VERSION = control.useVersionPlaceholders
+          ? 'JACKSON_DATABIND_NULLABLE_VERSION'
+          : constants.JACKSON_DATABIND_NULLABLE_VERSION;
+        application.JACOCO_VERSION = control.useVersionPlaceholders ? 'JACOCO_VERSION' : constants.JACOCO_VERSION;
 
         application.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
         application.VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
@@ -322,12 +306,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.jhipsterPackageJson = packagejs;
       },
 
-      setSharedConfigOptions({ application }) {
-        // Make dist dir available in templates
-        application.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool);
-        application.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool) + constants.CLIENT_DIST_DIR;
-      },
-
       prepareForTemplates({ application }) {
         // Application name modified, using each technology's conventions
         application.frontendAppName = this.getFrontendAppName(application.baseName);
@@ -335,27 +313,24 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.cacheManagerIsAvailable = [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(
           application.cacheProvider
         );
-        application.testsNeedCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
+        application.authenticationUsesCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
 
         application.jhiTablePrefix = this.getTableName(application.jhiPrefix);
 
         application.mainJavaDir = SERVER_MAIN_SRC_DIR;
-        application.mainJavaPackageDir = `${SERVER_MAIN_SRC_DIR}${application.packageFolder}/`;
+        application.mainJavaPackageDir = normalizePathEnd(`${SERVER_MAIN_SRC_DIR}${application.packageFolder}`);
         application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
         application.testJavaDir = SERVER_TEST_SRC_DIR;
-        application.testJavaPackageDir = `${SERVER_TEST_SRC_DIR}${application.packageFolder}/`;
+        application.testJavaPackageDir = normalizePathEnd(`${SERVER_TEST_SRC_DIR}${application.packageFolder}`);
         application.testResourceDir = SERVER_TEST_RES_DIR;
         application.srcMainDir = MAIN_DIR;
         application.srcTestDir = TEST_DIR;
-
-        application.builtInUser = this.isUsingBuiltInUser();
-        application.builtInAuthority = this.isUsingBuiltInAuthority();
       },
     });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.asPreparingTaskGroup(this.delegateToBlueprint ? {} : this.preparing);
+    return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
   }
 
   get configuringEachEntity() {
@@ -405,12 +380,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
       configureModelFiltering({ application, entityConfig }) {
-        const { databaseTypeSql, applicationTypeGateway, reactive } = application;
+        const { databaseTypeSql, applicationTypeGateway } = application;
         if (
           // Don't touch the configuration for microservice entities published at gateways
           !(applicationTypeGateway && entityConfig.microserviceName) &&
           entityConfig.jpaMetamodelFiltering &&
-          (!databaseTypeSql || entityConfig.service === NO_SERVICE || reactive)
+          (!databaseTypeSql || entityConfig.service === NO_SERVICE)
         ) {
           this.warning('Not compatible with jpaMetamodelFiltering, disabling');
           entityConfig.jpaMetamodelFiltering = false;
@@ -518,7 +493,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
-    return this.asConfiguringEachEntityTaskGroup(this.delegateToBlueprint ? {} : this.configuringEachEntity);
+    return this.asConfiguringEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.configuringEachEntity));
   }
 
   /** @inheritdoc */
@@ -553,7 +528,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    return this.asDefaultTaskGroup(this.delegateToBlueprint ? {} : this.default);
+    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
   }
 
   /** @inheritdoc */
@@ -567,219 +542,30 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.asWritingTaskGroup(this.delegateToBlueprint ? {} : this.writing);
+    return this.asWritingTaskGroup(this.delegateTasksToBlueprint(() => this.writing));
   }
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
       ...writeEntityFiles(),
-
-      async databaseChangelog({ application, entities }) {
-        if (!application.databaseTypeSql || this.options.skipDbChangelog) {
-          return;
-        }
-        const filteredEntities = entities.filter(entity => !entity.builtIn && !entity.skipServer);
-        if (filteredEntities.length === 0) {
-          return;
-        }
-        await this.composeWithJHipster(
-          GENERATOR_DATABASE_CHANGELOG,
-          filteredEntities.map(entity => entity.name)
-        );
-      },
     });
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.asWritingEntitiesTaskGroup(this.delegateToBlueprint ? {} : this.writingEntities);
+    return this.asWritingEntitiesTaskGroup(this.delegateTasksToBlueprint(() => this.writingEntities));
   }
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      async dockerServices({ application }) {
-        const { createDockerComposeFile, createDockerExtendedServices } = await import('../base-docker/utils.mjs');
-
-        const dockerFile = createDockerComposeFile(application.lowercaseBaseName);
-        this.writeDestination(`${application.dockerServicesDir}services.yml`, dockerFile);
-
-        if (application.databaseTypeCouchbase) {
-          const extendedCouchbaseServices = createDockerExtendedServices({ serviceName: application.databaseType });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCouchbaseServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCouchbaseServices);
-        }
-
-        if (application.databaseTypeSql && !application.prodDatabaseTypeOracle) {
-          const extendedDatabaseServices = createDockerExtendedServices({ serviceName: application.prodDatabaseType });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedDatabaseServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedDatabaseServices);
-        }
-
-        if (application.databaseTypeCassandra) {
-          const extendedCassandraServices = createDockerExtendedServices(
-            { serviceName: 'cassandra' },
-            { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' }
-          );
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCassandraServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCassandraServices);
-        } else if (!application.databaseTypeSql && !application.databaseTypeCouchbase) {
-          const extendedDatabaseServices = createDockerExtendedServices({ serviceName: application.databaseType });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedDatabaseServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedDatabaseServices);
-        }
-        if (application.searchEngineElasticsearch) {
-          const extendedElasticsearchServices = createDockerExtendedServices({ serviceName: application.searchEngine });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedElasticsearchServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedElasticsearchServices);
-        }
-        if (application.cacheProviderMemcached || application.cacheProviderRedis) {
-          const extendedCacheProviderServices = createDockerExtendedServices({ serviceName: application.cacheProvider });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedCacheProviderServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedCacheProviderServices);
-        }
-        if (application.authenticationTypeOauth2) {
-          const extendedOauth2Services = createDockerExtendedServices({ serviceName: 'keycloak' });
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedOauth2Services);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedOauth2Services);
-        }
-        if (application.serviceDiscoveryEureka) {
-          const extendedEurekaServices = createDockerExtendedServices({
-            serviceName: 'jhipster-registry',
-            additionalConfig: {
-              environment: [application.authenticationTypeOauth2 ? 'JHIPSTER_SLEEP=40' : 'JHIPSTER_SLEEP=20'],
-            },
-          });
-
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedEurekaServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedEurekaServices);
-        }
-        if (application.serviceDiscoveryConsul) {
-          const extendedConsulServices = createDockerExtendedServices(
-            { serviceName: 'consul' },
-            { serviceFile: './consul.yml', serviceName: 'consul-config-loader' }
-          );
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedConsulServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedConsulServices);
-        }
-        if (application.messageBrokerKafka) {
-          const extendedKafkaServices = createDockerExtendedServices(
-            { serviceName: 'kafka' },
-            { serviceFile: './kafka.yml', serviceName: 'zookeeper' }
-          );
-          this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedKafkaServices);
-          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedKafkaServices);
-        }
-      },
       packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
         packageJsonConfigStorage.packaging = application.defaultPackaging;
         packageJsonConfigStorage.default_environment = application.defaultEnvironment;
       },
-      packageJsonDockerScripts({ application }) {
-        const scriptsStorage = this.packageJson.createStorage('scripts');
-        const { databaseType, prodDatabaseType } = this.jhipsterConfig;
-        const { databaseTypeSql, prodDatabaseTypeMysql, authenticationTypeOauth2, applicationTypeMicroservice } = application;
-        const dockerAwaitScripts = [];
-        if (databaseTypeSql) {
-          if (prodDatabaseTypeMysql) {
-            scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for MySQL to start" && wait-on -t ${WAIT_TIMEOUT} tcp:3306 && sleep 20 && echo "MySQL started"`,
-            });
-          }
-          if (prodDatabaseType === NO_DATABASE || prodDatabaseType === ORACLE) {
-            scriptsStorage.set(
-              'docker:db:up',
-              `echo "Docker for db ${prodDatabaseType} not configured for application ${application.baseName}"`
-            );
-          } else {
-            scriptsStorage.set({
-              'docker:db:up': `docker compose -f src/main/docker/${prodDatabaseType}.yml up -d`,
-              'docker:db:down': `docker compose -f src/main/docker/${prodDatabaseType}.yml down -v`,
-            });
-          }
-        } else {
-          const dockerFile = `src/main/docker/${databaseType}.yml`;
-          if (databaseType === CASSANDRA) {
-            scriptsStorage.set({
-              'docker:db:await': `wait-on -t ${WAIT_TIMEOUT} tcp:9042 && sleep 20`,
-            });
-          }
-          if (databaseType === COUCHBASE) {
-            scriptsStorage.set({
-              'docker:db:await': `echo "Waiting for Couchbase to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"`,
-            });
-          }
-          if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
-            scriptsStorage.set({
-              'docker:db:build': `docker compose -f ${dockerFile} build`,
-              'docker:db:up': `docker compose -f ${dockerFile} up -d`,
-              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
-            });
-          } else if (this.fs.exists(this.destinationPath(dockerFile))) {
-            scriptsStorage.set({
-              'docker:db:up': `docker compose -f ${dockerFile} up -d`,
-              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
-            });
-          } else {
-            scriptsStorage.set(
-              'docker:db:up',
-              `echo "Docker for db ${databaseType} not configured for application ${application.baseName}"`
-            );
-          }
-        }
-        if (this.jhipsterConfig.searchEngine === ELASTICSEARCH) {
-          dockerAwaitScripts.push(
-            `echo "Waiting for Elasticsearch to start" && wait-on -t ${WAIT_TIMEOUT} "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"`
-          );
-        }
-
-        const dockerOthersUp = [];
-        const dockerOthersDown = [];
-        const dockerBuild = [];
-        ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(dockerConfig => {
-          const dockerFile = `src/main/docker/${dockerConfig}.yml`;
-          if (this.fs.exists(this.destinationPath(dockerFile))) {
-            if (['cassandra', 'couchbase'].includes(dockerConfig)) {
-              scriptsStorage.set(`docker:${dockerConfig}:build`, `docker compose -f ${dockerFile} build`);
-              dockerBuild.push(`npm run docker:${dockerConfig}:build`);
-            } else if (dockerConfig === 'jhipster-registry') {
-              if (authenticationTypeOauth2 && !applicationTypeMicroservice) {
-                dockerOthersUp.push('npm run docker:keycloak:await');
-              }
-              scriptsStorage.set(
-                'docker:jhipster-registry:await',
-                `echo "Waiting for jhipster-registry to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8761/management/health && echo "jhipster-registry started"`
-              );
-              dockerAwaitScripts.push('npm run docker:jhipster-registry:await');
-            } else if (dockerConfig === 'keycloak') {
-              scriptsStorage.set(
-                'docker:keycloak:await',
-                `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
-              );
-              dockerAwaitScripts.push('npm run docker:keycloak:await');
-            }
-
-            scriptsStorage.set(`docker:${dockerConfig}:up`, `docker compose -f ${dockerFile} up -d`);
-            dockerOthersUp.push(`npm run docker:${dockerConfig}:up`);
-            scriptsStorage.set(`docker:${dockerConfig}:down`, `docker compose -f ${dockerFile} down -v`);
-            dockerOthersDown.push(`npm run docker:${dockerConfig}:down`);
-          }
-        });
-        scriptsStorage.set({
-          'docker:app:up': `docker compose -f ${application.DOCKER_DIR}app.yml up -d`,
-          'docker:others:await': dockerAwaitScripts.join(' && '),
-          'predocker:others:up': dockerBuild.join(' && '),
-          'docker:others:up': dockerOthersUp.join(' && '),
-          'docker:others:down': dockerOthersDown.join(' && '),
-          'ci:e2e:prepare:docker': 'docker compose -f src/main/docker/services.yml up -d && docker ps -a',
-          'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',
-          'ci:e2e:teardown:docker': 'docker compose -f src/main/docker/services.yml down -v && docker ps -a',
-          'ci:e2e:teardown': 'npm run ci:e2e:teardown:docker',
-        });
-      },
       packageJsonBackendScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
+        const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
         const javaTestLog =
           '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
 
@@ -831,7 +617,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
-          'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
+          'preci:e2e:server:start': 'npm run services:db:await --if-present && npm run services:others:await --if-present',
           'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=e2e,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
@@ -840,8 +626,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
         if (scriptsStorage.get('e2e')) {
           const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
+          const applicationEndpoint = application.applicationTypeMicroservice
+            ? `http-get://localhost:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
+            : 'http-get://localhost:$npm_package_config_backend_port/management/health';
+
           scriptsStorage.set({
-            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"`,
+            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
             'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
@@ -853,17 +643,40 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
+    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
   }
 
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       customizeFiles,
+
+      packageJsonE2eScripts({ application, entities }) {
+        if (application.applicationTypeGateway) {
+          const { serverPort, lowercaseBaseName } = application;
+          const microservices = [...new Set(entities.map(entity => entity.microserviceName))].filter(Boolean).map(ms => ms.toLowerCase());
+          const scriptsStorage = this.packageJson.createStorage('scripts');
+          const waitServices = microservices
+            .concat(lowercaseBaseName)
+            .map(ms => `npm run ci:server:await:${ms}`)
+            .join(' && ');
+
+          scriptsStorage.set({
+            [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:$npm_package_config_backend_port/management/health`,
+            ...Object.fromEntries(
+              microservices.map(ms => [
+                `ci:server:await:${ms}`,
+                `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:${serverPort}/services/${ms}/management/health/readiness`,
+              ])
+            ),
+            'ci:server:await': `echo "Waiting for services to start" && ${waitServices} && echo "Services started"`,
+          });
+        }
+      },
     });
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.asPostWritingEntitiesTaskGroup(this.delegateToBlueprint ? {} : this.postWritingEntities);
+    return this.asPostWritingEntitiesTaskGroup(this.delegateTasksToBlueprint(() => this.postWritingEntities));
   }
 
   get end() {
@@ -893,7 +706,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup(this.delegateToBlueprint ? {} : this.end);
+    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
   }
 
   _configureServer(config = this.jhipsterConfig) {
@@ -908,11 +721,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
       config.jwtSecretKey === undefined
     ) {
-      config.jwtSecretKey = getBase64Secret.call(this, null, 64);
+      config.jwtSecretKey = createBase64Secret.call(this, null, 64);
     }
     // Generate remember me key if key does not already exist in config
     if (config.authenticationType === SESSION && !config.rememberMeKey) {
-      config.rememberMeKey = getRandomHex();
+      config.rememberMeKey = createSecret();
     }
 
     if (config.authenticationType === OAUTH2) {

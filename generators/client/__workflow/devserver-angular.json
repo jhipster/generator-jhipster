@@ -1,7 +1,7 @@
 {
   "include": [
     {
-      "app-sample": "ngx-default",
+      "app-sample": "ng-default",
       "cache": "angular",
       "entity": "sqllight",
       "environment": "prod",

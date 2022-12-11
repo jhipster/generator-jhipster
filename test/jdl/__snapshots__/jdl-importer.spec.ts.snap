@@ -1060,7 +1060,7 @@ Array [
       "serviceDiscoveryType": false,
       "skipUserManagement": false,
       "testFrameworks": Array [
-        "protractor",
+        "cypress",
       ],
       "websocket": false,
       "withAdminUi": true,

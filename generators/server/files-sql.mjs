@@ -17,27 +17,12 @@
  * limitations under the License.
  */
 import { mergeSections, addSectionsCondition } from './utils.mjs';
-import { DOCKER_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
-
-export const dockerFiles = {
-  docker: [
-    {
-      condition: generator => !generator.prodDatabaseTypeOracle,
-      path: DOCKER_DIR,
-      templates: [{ file: generator => `${generator.prodDatabaseType}.yml` }],
-    },
-    {
-      condition: generator => !generator.devDatabaseTypeOracle && !generator.devDatabaseTypeH2Any,
-      path: DOCKER_DIR,
-      templates: [{ file: generator => `${generator.devDatabaseType}.yml` }],
-    },
-  ],
-};
+import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 
 export const sqlFiles = {
   reactiveJavaUserManagement: [
     {
-      condition: generator => generator.reactive && (!generator.skipUserManagement || generator.authenticationTypeOauth2),
+      condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -47,7 +32,7 @@ export const sqlFiles = {
       ],
     },
     {
-      condition: generator => generator.reactive && (!generator.skipUserManagement || generator.authenticationTypeOauth2),
+      condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -69,17 +54,6 @@ export const sqlFiles = {
         {
           file: 'package/repository/EntityManager.java',
           renameTo: generator => `${generator.javaDir}repository/EntityManager.java`,
-        },
-      ],
-    },
-  ],
-  liquibase: [
-    {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/LiquibaseConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/LiquibaseConfiguration.java`,
         },
       ],
     },
@@ -150,10 +124,6 @@ export const mysqlFiles = {
         },
       ],
     },
-    {
-      path: DOCKER_DIR,
-      templates: [{ file: 'config/mysql/my.cnf', noEjs: true }],
-    },
   ],
 };
 
@@ -171,10 +141,6 @@ export const mariadbFiles = {
     {
       path: SERVER_TEST_RES_DIR,
       templates: [{ file: 'testcontainers/mariadb/my.cnf', noEjs: true }],
-    },
-    {
-      path: DOCKER_DIR,
-      templates: [{ file: 'config/mariadb/my.cnf', noEjs: true }],
     },
   ],
 };
@@ -209,7 +175,6 @@ export const postgresFiles = {
 
 export const serverFiles = mergeSections(
   sqlFiles,
-  dockerFiles,
   addSectionsCondition(h2Files, context => context.devDatabaseTypeH2Any),
   addSectionsCondition(mysqlFiles, context => context.devDatabaseTypeMysql || context.prodDatabaseTypeMysql),
   addSectionsCondition(mariadbFiles, context => context.devDatabaseTypeMariadb || context.prodDatabaseTypeMariadb),

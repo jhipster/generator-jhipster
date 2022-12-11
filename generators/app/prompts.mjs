@@ -24,14 +24,12 @@ import { applicationTypes, testFrameworkTypes } from '../../jdl/jhipster/index.m
 
 const { appDefaultConfig, defaultConfigMicroservice } = generatorsDefaults;
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
-const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = testFrameworkTypes;
+const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 
 export default {
   askForInsightOptIn,
   askForApplicationType,
-  askForModuleName,
   askForTestOpts,
-  askForMoreModules,
 };
 
 export async function askForInsightOptIn() {
@@ -57,8 +55,8 @@ const promptValueToMicrofrontends = answer =>
         .map(baseName => ({ baseName }))
     : [];
 
-export async function askForApplicationType() {
-  if (this.existingProject && this.options.askAnswered !== true) return;
+export async function askForApplicationType({ control }) {
+  if (control.existingProject && this.options.askAnswered !== true) return;
 
   const applicationTypeChoices = [
     {
@@ -124,19 +122,13 @@ export async function askForApplicationType() {
   this.applicationType = applicationType;
 }
 
-export function askForModuleName() {
-  if (this.existingProject || this.jhipsterConfig.baseName) return undefined;
-  return this.askModuleName(this);
-}
-
-export async function askForTestOpts() {
-  if (this.existingProject) return undefined;
+export async function askForTestOpts({ control }) {
+  if (control.existingProject && this.options.askAnswered !== true) return;
 
   const choices = [];
   if (!this.skipClient) {
     // all client side test frameworks should be added here
     choices.push({ name: 'Cypress', value: CYPRESS });
-    choices.push({ name: '[DEPRECATED] Protractor', value: PROTRACTOR });
   }
   if (!this.skipServer) {
     // all server side test frameworks should be added here
@@ -152,73 +144,4 @@ export async function askForTestOpts() {
 
   const answers = await this.prompt(PROMPT);
   this.testFrameworks = this.jhipsterConfig.testFrameworks = answers.testFrameworks;
-  return answers;
-}
-
-export function askForMoreModules() {
-  if (this.existingProject) {
-    return undefined;
-  }
-
-  return this.prompt({
-    type: 'confirm',
-    name: 'installModules',
-    message: 'Would you like to install other generators from the JHipster Marketplace?',
-    default: false,
-  }).then(answers => {
-    if (answers.installModules) {
-      return new Promise(resolve => askModulesToBeInstalled(resolve, this));
-    }
-    return undefined;
-  });
-}
-
-export function askModulesToBeInstalled(done, generator) {
-  const jHipsterMajorVersion = packagejs.version.match(/^(\d+)/g);
-
-  generator.httpsGet(
-    `https://api.npms.io/v2/search?q=keywords:jhipster-module+jhipster-${jHipsterMajorVersion}&from=0&size=50`,
-    body => {
-      try {
-        const moduleResponse = JSON.parse(body);
-        const choices = [];
-        moduleResponse.results.forEach(modDef => {
-          choices.push({
-            value: { name: modDef.package.name, version: modDef.package.version },
-            name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description}`,
-          });
-        });
-        if (choices.length > 0) {
-          generator
-            .prompt({
-              type: 'checkbox',
-              name: 'otherModules',
-              message: 'Which other modules would you like to use?',
-              choices,
-              default: [],
-            })
-            .then(answers => {
-              // [ {name: [moduleName], version:[version]}, ...]
-              answers.otherModules.forEach(module => {
-                generator.otherModules = generator.otherModules || [];
-                generator.otherModules.push({ name: module.name, version: module.version });
-              });
-              generator.jhipsterConfig.otherModules = generator.otherModules;
-              done();
-            });
-        } else {
-          done();
-        }
-      } catch (err) {
-        generator.warning(`Error while parsing. Please install the modules manually or try again later. ${err.message}`);
-        generator.debug('Error:', err);
-        done();
-      }
-    },
-    error => {
-      generator.warning(`Unable to contact server to fetch additional modules: ${error.message}`);
-      generator.debug('Error:', error);
-      done();
-    }
-  );
 }

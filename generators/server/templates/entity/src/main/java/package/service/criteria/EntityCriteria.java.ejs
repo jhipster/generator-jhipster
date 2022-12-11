@@ -1,4 +1,4 @@
-package <%= entityAbsolutePackage %>.service.criteria;
+package <%= entityAbsolutePackage %>.<%_ if(jpaMetamodelFiltering && reactive) { _%>domain<%_ } else { _%>service<%_ } _%>.criteria;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,6 +10,7 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 import tech.jhipster.service.filter.*;
 
 <%_
+var effectiveRelationships = reactive ? reactiveEagerRelations : relationships;
 var filterVariables = [];
 var extraFilters = {};
 fields.filter(field => !field.transient).forEach((field) => {
@@ -30,7 +31,7 @@ fields.filter(field => !field.transient).forEach((field) => {
       fieldInJavaBeanMethod: field.fieldInJavaBeanMethod });
   }
 });
-relationships.forEach((relationship) => {
+effectiveRelationships.forEach((relationship) => {
 const relationshipType = relationship.otherEntity.primaryKey.type;
 const referenceFilterType = '' + relationshipType + 'Filter';
 // user has a String PK when using OAuth, so change relationships accordingly

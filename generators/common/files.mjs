@@ -32,21 +32,7 @@ export const prettierConfigFiles = {
 export const commonFiles = {
   global: [
     {
-      templates: [
-        'README.md.jhi',
-        {
-          file: 'gitignore',
-          renameTo: () => '.gitignore',
-        },
-        {
-          file: 'gitattributes',
-          renameTo: () => '.gitattributes',
-        },
-        {
-          file: 'editorconfig',
-          renameTo: () => '.editorconfig',
-        },
-      ],
+      templates: ['README.md.jhi', '.editorconfig'],
     },
   ],
   sonar: [

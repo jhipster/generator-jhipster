@@ -19,12 +19,9 @@
 import { cleanupOldServerFiles } from './cleanup.mjs';
 import constants from '../generator-constants.cjs';
 import { addSectionsCondition, mergeSections } from './utils.mjs';
-import { writeCouchbaseFiles } from './files-couchbase.mjs';
 import { writeSqlFiles } from './files-sql.mjs';
 
 /* Constants use throughout */
-const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
-const DOCKER_DIR = constants.DOCKER_DIR;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -43,36 +40,7 @@ const moveToJavaPackageSrcDir = (data, filePath) => `${data.javaPackageSrcDir}${
  */
 const moveToJavaPackageTestDir = (data, filePath) => `${data.javaPackageTestDir}${filePath.replace(/_\w*/, '')}`;
 
-const shouldSkipUserManagement = generator =>
-  generator.skipUserManagement && (!generator.applicationTypeMonolith || !generator.authenticationTypeOauth2);
-
-export const liquibaseFiles = {
-  serverResource: [
-    {
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        {
-          override: generator => !generator.incrementalChangelog || generator.recreateInitialChangelog,
-          file: 'config/liquibase/changelog/initial_schema.xml',
-          renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
-          options: { interpolate: INTERPOLATE_REGEX },
-        },
-        {
-          override: generator => !generator.incrementalChangelog || generator.recreateInitialChangelog,
-          file: 'config/liquibase/master.xml',
-        },
-      ],
-    },
-  ],
-};
-
 export const mongoDbFiles = {
-  docker: [
-    {
-      path: DOCKER_DIR,
-      templates: ['mongodb.yml', 'mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
-    },
-  ],
   serverResource: [
     {
       path: SERVER_MAIN_SRC_DIR,
@@ -84,7 +52,7 @@ export const mongoDbFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement || (generator.skipUserManagement && generator.authenticationTypeOauth2),
+      condition: generator => generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -110,15 +78,9 @@ export const mongoDbFiles = {
 };
 
 export const neo4jFiles = {
-  docker: [
-    {
-      path: DOCKER_DIR,
-      templates: ['neo4j.yml'],
-    },
-  ],
   serverResource: [
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
+      condition: generator => generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -132,7 +94,7 @@ export const neo4jFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
+      condition: generator => generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/neo4j/migrations/user__admin.json', 'config/neo4j/migrations/user__user.json'],
     },
@@ -155,22 +117,6 @@ export const neo4jFiles = {
 };
 
 export const cassandraFiles = {
-  docker: [
-    {
-      path: DOCKER_DIR,
-      templates: [
-        // docker-compose files
-        'cassandra.yml',
-        'cassandra-cluster.yml',
-        'cassandra-migration.yml',
-        // dockerfiles
-        'cassandra/Cassandra-Migration.Dockerfile',
-        // scripts
-        'cassandra/scripts/autoMigrate.sh',
-        'cassandra/scripts/execute-cql.sh',
-      ],
-    },
-  ],
   serverResource: [
     {
       path: SERVER_MAIN_RES_DIR,
@@ -182,8 +128,7 @@ export const cassandraFiles = {
       ],
     },
     {
-      condition: generator =>
-        !generator.applicationTypeMicroservice && (!generator.skipUserManagement || generator.authenticationTypeOauth2),
+      condition: generator => !generator.applicationTypeMicroservice && generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         { file: 'config/cql/changelog/create-tables.cql', renameTo: () => 'config/cql/changelog/00000000000000_create-tables.cql' },
@@ -233,6 +178,12 @@ const jwtFiles = {
         'security/jwt/TokenAuthenticationSecurityMetersIT.java',
         'security/jwt/TokenAuthenticationIT.java',
       ],
+    },
+    {
+      condition: data => data.applicationTypeMicroservice,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['security/jwt/TestAuthenticationResource.java'],
     },
   ],
   gatewayRelayFiles: [
@@ -284,94 +235,10 @@ export const baseServerFiles = {
       templates: ['package.json'],
     },
   ],
-  docker: [
-    {
-      path: DOCKER_DIR,
-      templates: [
-        'app.yml',
-        'jhipster-control-center.yml',
-        'sonar.yml',
-        'monitoring.yml',
-        'prometheus/prometheus.yml',
-        'grafana/provisioning/dashboards/dashboard.yml',
-        'grafana/provisioning/dashboards/JVM.json',
-        'grafana/provisioning/datasources/datasource.yml',
-      ],
-    },
-    {
-      condition: generator => generator.cacheProviderHazelcast,
-      path: DOCKER_DIR,
-      templates: ['hazelcast-management-center.yml'],
-    },
-    {
-      condition: generator => generator.cacheProviderMemcached,
-      path: DOCKER_DIR,
-      templates: ['memcached.yml'],
-    },
-    {
-      condition: generator => generator.cacheProviderRedis,
-      path: DOCKER_DIR,
-      templates: ['redis.yml', 'redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh'],
-    },
-    {
-      condition: generator => generator.searchEngineElasticsearch,
-      path: DOCKER_DIR,
-      templates: ['elasticsearch.yml'],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka,
-      path: DOCKER_DIR,
-      templates: ['kafka.yml'],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny,
-      path: DOCKER_DIR,
-      templates: [{ file: 'config/README.md', renameTo: () => 'central-server-config/README.md' }],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryConsul,
-      path: DOCKER_DIR,
-      templates: [
-        'consul.yml',
-        'config/git2consul.json',
-        { file: 'config/consul-config/application.yml', renameTo: () => 'central-server-config/application.yml' },
-      ],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryEureka,
-      path: DOCKER_DIR,
-      templates: [
-        'jhipster-registry.yml',
-        {
-          file: 'config/docker-config/application.yml',
-          renameTo: () => 'central-server-config/docker-config/application.yml',
-        },
-        {
-          file: 'config/localhost-config/application.yml',
-          renameTo: () => 'central-server-config/localhost-config/application.yml',
-        },
-      ],
-    },
-    {
-      condition: generator => !!generator.enableSwaggerCodegen,
-      path: DOCKER_DIR,
-      templates: ['swagger-editor.yml'],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
-      path: DOCKER_DIR,
-      templates: ['keycloak.yml', { file: 'config/realm-config/jhipster-realm.json', renameTo: () => 'realm-config/jhipster-realm.json' }],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny || generator.applicationTypeGateway || generator.applicationTypeMicroservice,
-      path: DOCKER_DIR,
-      templates: ['zipkin.yml'],
-    },
-  ],
   serverBuild: [
     {
       templates: [
-        { file: 'checkstyle.xml', options: { interpolate: INTERPOLATE_REGEX } },
+        'checkstyle.xml',
         { file: 'devcontainer/devcontainer.json', renameTo: () => '.devcontainer/devcontainer.json' },
         { file: 'devcontainer/Dockerfile', renameTo: () => '.devcontainer/Dockerfile' },
       ],
@@ -384,8 +251,8 @@ export const baseServerFiles = {
         'gradle.properties',
         'gradle/sonar.gradle',
         'gradle/docker.gradle',
-        { file: 'gradle/profile_dev.gradle', options: { interpolate: INTERPOLATE_REGEX } },
-        { file: 'gradle/profile_prod.gradle', options: { interpolate: INTERPOLATE_REGEX } },
+        'gradle/profile_dev.gradle',
+        'gradle/profile_prod.gradle',
         'gradle/war.gradle',
         'gradle/zipkin.gradle',
       ],
@@ -396,7 +263,7 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.buildToolMaven,
-      templates: [{ file: 'pom.xml', options: { interpolate: INTERPOLATE_REGEX } }],
+      templates: ['pom.xml'],
     },
     {
       condition: generator => !generator.skipClient,
@@ -523,7 +390,7 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationTypeSession && !generator.reactive,
+      condition: generator => generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -538,10 +405,7 @@ export const baseServerFiles = {
     },
     {
       condition: generator =>
-        !shouldSkipUserManagement(generator) &&
-        generator.authenticationTypeSession &&
-        !generator.reactive &&
-        !generator.databaseTypeCouchbase,
+        generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive && !generator.databaseTypeCouchbase,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -596,7 +460,7 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && !generator.authenticationTypeOauth2,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -868,7 +732,7 @@ export const baseServerFiles = {
     },
     {
       condition: generator =>
-        !generator.skipUserManagement ||
+        generator.generateUserManagement ||
         generator.databaseTypeSql ||
         generator.databaseTypeMongodb ||
         generator.databaseTypeCouchbase ||
@@ -907,8 +771,7 @@ export const baseServerFiles = {
         generator.cacheProviderHazelcast ||
         generator.cacheProviderInfinispan ||
         generator.cacheProviderMemcached ||
-        generator.cacheProviderRedis ||
-        generator.applicationTypeGateway,
+        generator.cacheProviderRedis,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1013,7 +876,7 @@ export const baseServerFiles = {
   ],
   serverJavaServiceError: [
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1035,20 +898,6 @@ export const baseServerFiles = {
     {
       path: SERVER_MAIN_SRC_DIR,
       templates: [{ file: 'package/service/package-info.java', renameTo: generator => `${generator.javaDir}service/package-info.java` }],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/KafkaSseConsumer.java',
-          renameTo: generator => `${generator.javaDir}config/KafkaSseConsumer.java`,
-        },
-        {
-          file: 'package/config/KafkaSseProducer.java',
-          renameTo: generator => `${generator.javaDir}config/KafkaSseProducer.java`,
-        },
-      ],
     },
   ],
   serverJavaWebError: [
@@ -1078,7 +927,7 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1127,26 +976,6 @@ export const baseServerFiles = {
         {
           file: 'package/web/filter/SpaWebFilter.java',
           renameTo: generator => `${generator.javaDir}web/filter/SpaWebFilter.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka && generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/KafkaResource_reactive.java',
-          renameTo: generator => `${generator.javaDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResource.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka && !generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/KafkaResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResource.java`,
         },
       ],
     },
@@ -1338,7 +1167,7 @@ export const baseServerFiles = {
       templates: [{ file: 'package/features/gitkeep', renameTo: generator => `${generator.testDir}cucumber/gitkeep`, noEjs: true }],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && !generator.authenticationTypeOauth2,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         // Create auth config test files
@@ -1348,50 +1177,16 @@ export const baseServerFiles = {
         },
       ],
     },
-    {
-      condition: generator => generator.messageBrokerKafka,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/KafkaTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/KafkaTestContainer.java`,
-        },
-        {
-          file: 'package/config/EmbeddedKafka.java',
-          renameTo: generator => `${generator.testDir}config/EmbeddedKafka.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka && !generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/KafkaResourceIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResourceIT.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka && generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/KafkaResourceIT_reactive.java',
-          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCaseBaseName}KafkaResourceIT.java`,
-        },
-      ],
-    },
   ],
   accountResource: [
     {
-      condition: data => data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      condition: data => !data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['web/rest/AccountResource_skipUserManagement.java'],
     },
     {
-      condition: data => data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      condition: data => !data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/rest/AccountResourceIT_skipUserManagement.java'],
@@ -1409,13 +1204,13 @@ export const baseServerFiles = {
       templates: ['web/rest/AccountResourceIT_oauth2.java'],
     },
     {
-      condition: data => !data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      condition: data => data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['web/rest/AccountResource.java'],
     },
     {
-      condition: data => !data.skipUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
+      condition: data => data.generateUserManagement && !data.authenticationTypeOauth2 && !data.applicationTypeMicroservice,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/rest/AccountResourceIT.java'],
@@ -1423,7 +1218,7 @@ export const baseServerFiles = {
   ],
   serverJavaUserManagement: [
     {
-      condition: generator => generator.builtInUser,
+      condition: generator => generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1433,7 +1228,7 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.builtInAuthority,
+      condition: generator => generator.generateBuiltInAuthorityEntity,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
@@ -1442,20 +1237,6 @@ export const baseServerFiles = {
           renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`,
         },
       ],
-    },
-    {
-      condition: generator =>
-        (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice) ||
-        (!generator.skipUserManagement && generator.databaseTypeSql),
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['config/liquibase/data/user.csv'],
-    },
-    {
-      condition: generator =>
-        (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice && generator.databaseTypeSql) ||
-        (!generator.skipUserManagement && generator.databaseTypeSql),
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['config/liquibase/data/authority.csv', 'config/liquibase/data/user_authority.csv'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
@@ -1478,7 +1259,7 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2 && !generator.databaseTypeNo,
+      condition: generator => generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1542,24 +1323,19 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_RES_DIR,
       templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_TEST_RES_DIR,
       templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
-        {
-          file: 'package/repository/UserRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/UserRepository.java`,
-        },
-
         /* User management java service files */
         { file: 'package/service/UserService.java', renameTo: generator => `${generator.javaDir}service/UserService.java` },
         { file: 'package/service/MailService.java', renameTo: generator => `${generator.javaDir}service/MailService.java` },
@@ -1582,14 +1358,10 @@ export const baseServerFiles = {
           renameTo: generator => `${generator.javaDir}service/dto/PasswordChangeDTO.java`,
         },
         {
-          file: 'package/web/rest/vm/ManagedUserVM.java',
-          renameTo: generator => `${generator.javaDir}web/rest/vm/ManagedUserVM.java`,
+          file: 'package/web/rest/AccountResource.java',
+          renameTo: generator => `${generator.javaDir}web/rest/AccountResource.java`,
         },
         { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
-        {
-          file: 'package/web/rest/PublicUserResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`,
-        },
         {
           file: 'package/web/rest/vm/KeyAndPasswordVM.java',
           renameTo: generator => `${generator.javaDir}web/rest/vm/KeyAndPasswordVM.java`,
@@ -1598,14 +1370,10 @@ export const baseServerFiles = {
           file: 'package/service/mapper/package-info.java',
           renameTo: generator => `${generator.javaDir}service/mapper/package-info.java`,
         },
-        {
-          file: 'package/service/mapper/UserMapper.java',
-          renameTo: generator => `${generator.javaDir}service/mapper/UserMapper.java`,
-        },
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.searchEngineElasticsearch,
+      condition: generator => generator.generateBuiltInUserEntity && generator.searchEngineElasticsearch,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1673,7 +1441,7 @@ export const baseServerFiles = {
     },
     {
       condition: generator =>
-        !generator.skipUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
+        generator.generateUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1684,7 +1452,7 @@ export const baseServerFiles = {
     },
     {
       condition: generator =>
-        !generator.skipUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
+        generator.generateUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
       path: SERVER_TEST_RES_DIR,
       templates: [
         {
@@ -1694,7 +1462,7 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_TEST_RES_DIR,
       templates: [
         /* User management java test files */
@@ -1702,12 +1470,12 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && !generator.enableTranslation,
+      condition: generator => generator.generateUserManagement && !generator.enableTranslation,
       path: SERVER_TEST_RES_DIR,
       templates: ['i18n/messages_en.properties'],
     },
     {
-      condition: generator => !generator.skipUserManagement,
+      condition: generator => generator.generateUserManagement,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1746,7 +1514,6 @@ export const baseServerFiles = {
 
 export const serverFiles = mergeSections(
   baseServerFiles,
-  addSectionsCondition(liquibaseFiles, context => context.databaseTypeSql),
   addSectionsCondition(mongoDbFiles, context => context.databaseTypeMongodb),
   addSectionsCondition(neo4jFiles, context => context.databaseTypeNeo4j),
   addSectionsCondition(cassandraFiles, context => context.databaseTypeCassandra),
@@ -1786,7 +1553,6 @@ export function writeFiles() {
         },
       });
     },
-    ...writeCouchbaseFiles.call(this),
     ...writeSqlFiles.call(this),
   });
 }

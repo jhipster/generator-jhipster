@@ -17,7 +17,4 @@
  * limitations under the License.
  */
 export { default } from './generator.mjs';
-export { files as angularFiles } from './files-angular.mjs';
 export { files as commonFiles } from './files-common.mjs';
-export { files as reactFiles } from './files-react.mjs';
-export { vueFiles } from './files-vue.mjs';

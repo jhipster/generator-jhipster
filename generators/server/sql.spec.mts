@@ -3,12 +3,13 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { testBlueprintSupport, buildServerMatrix, extendMatrix, extendFilteredMatrix } from '../../test/support/index.mjs';
+import { buildServerMatrix, extendMatrix, extendFilteredMatrix } from '../../test/support/index.mjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
-import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
-import { databaseTypes, cacheTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
+import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
+import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from './__test-support/index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -21,7 +22,6 @@ const generatorFile = join(__dirname, 'index.mjs');
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
-const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 
 let sqlSamples = buildServerMatrix({
   prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE],
@@ -77,7 +77,7 @@ describe(`JHipster ${databaseType} generator`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
@@ -94,10 +94,7 @@ describe(`JHipster ${databaseType} generator`, () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers
-          .run(generatorFile)
-          .withOptions(sample)
-          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:database-changelog']);
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -108,8 +105,8 @@ describe(`JHipster ${databaseType} generator`, () => {
       it(`should ${enableTranslation ? '' : 'not '}compose with jhipster:languages`, () => {
         expect(runResult.mockedGenerators['jhipster:languages'].callCount).toBe(enableTranslation ? 1 : 0);
       });
-      it('should not compose with jhipster:database-changelog', () => {
-        expect(runResult.mockedGenerators['jhipster:database-changelog'].callCount).toBe(0);
+      it('should compose with jhipster:liquibase', () => {
+        expect(runResult.mockedGenerators['jhipster:liquibase'].callCount).toBe(1);
       });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -120,11 +117,8 @@ describe(`JHipster ${databaseType} generator`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
-
-      describe('serviceDiscoveryType', () => {
-        matchEureka(() => runResult, sampleConfig.serviceDiscoveryType === EUREKA);
-        matchConsul(() => runResult, sampleConfig.serviceDiscoveryType === CONSUL);
-      });
+      shouldComposeWithKafka(sample, () => runResult);
+      shouldComposeWithLiquibase(sample, () => runResult);
     });
   });
 });

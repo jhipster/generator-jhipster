@@ -20,7 +20,7 @@
 
 User-agent: *
 Disallow: /api/account
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
 Disallow: /api/account/change-password
 Disallow: /api/account/sessions
 <%_ } _%>

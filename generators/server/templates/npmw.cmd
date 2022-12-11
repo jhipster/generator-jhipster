@@ -17,7 +17,7 @@ if exist "%NPMW_DIR%mvnw.cmd" (
 )
 
 if not exist %NPM_EXE% (
-  call %INSTALL_NPM_COMMAND% 
+  call %INSTALL_NPM_COMMAND%
 )
 
 if exist %NODE_EXE% (

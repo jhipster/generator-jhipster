@@ -109,9 +109,6 @@ function cleanYoRcFileContent(yoRcFileContent) {
   if (yoRcFileContent[generatorName].microfrontends) {
     yoRcFileContent[generatorName].microfrontends = yoRcFileContent[generatorName].microfrontends.map(({ baseName }) => baseName);
   }
-  if (yoRcFileContent[generatorName].otherModules) {
-    yoRcFileContent[generatorName].otherModules = yoRcFileContent[generatorName].otherModules.map(module => module.name);
-  }
   return yoRcFileContent;
 }
 

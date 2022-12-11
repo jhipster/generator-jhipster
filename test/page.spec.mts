@@ -15,7 +15,6 @@ const createClientProject = options =>
   helpers
     .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
     .withOptions({
-      fromCli: true,
       skipInstall: true,
       defaults: true,
       skipServer: true, // We don't need server for this test
@@ -23,14 +22,11 @@ const createClientProject = options =>
     })
     .run();
 
-const createPage = (cwd, options?) =>
-  (helpers as any)
+const createPage = runResult =>
+  runResult
     .create('jhipster:page', {}, { createEnv: EnvironmentBuilder.createEnv })
-    .setDir(cwd)
     .withOptions({
-      fromCli: true,
       skipInstall: true,
-      ...options,
     })
     .withPrompts({
       pageName,
@@ -69,12 +65,9 @@ describe('Page subgenerator', () => {
     };
 
     describe('creating a new page', () => {
-      before(() => {
-        return createClientProject({ localConfig: { clientFramework: 'vue' } })
-          .then(result1 => createPage(result1.cwd))
-          .then(result1 => {
-            runResult = result1;
-          });
+      before(async () => {
+        runResult = await createClientProject({ localConfig: { clientFramework: 'vue' } });
+        runResult = await createPage(runResult);
       });
 
       containsVueFiles();

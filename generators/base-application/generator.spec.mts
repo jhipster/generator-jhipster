@@ -26,7 +26,7 @@ import { fileURLToPath } from 'url';
 import EnvironmentBuilder from '../../cli/environment-builder.cjs';
 import Generator from './index.mjs';
 import type { BaseApplication } from '../bootstrap-application-base/types.js';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 const { snakeCase } = lodash;
 
@@ -40,7 +40,7 @@ describe(`JHipster ${generator} generator`, () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
 
@@ -81,7 +81,7 @@ describe(`JHipster ${generator} generator`, () => {
     const postWritingEntities = jestMock.fn();
 
     class CustomGenerator extends Generator<BaseApplication> {
-      async _postConstruct() {
+      async beforeQueue() {
         await this.dependsOnJHipster('bootstrap-application');
       }
 
@@ -190,13 +190,18 @@ describe(`JHipster ${generator} generator`, () => {
     });
 
     it('should call priorities with correct arguments', async () => {
-      expect(initializing).toBeCalledWith();
-      expect(prompting).toBeCalledWith();
-      expect(configuring).toBeCalledWith();
-      expect(composing).toBeCalledWith();
+      const controlArg = {
+        control: expect.any(Object),
+      };
 
       const applicationArg = {
+        ...controlArg,
         application: expect.any(Object),
+      };
+
+      const applicationSourceArg = {
+        ...applicationArg,
+        source: expect.any(Object),
       };
 
       const entityConfiguringArg = {
@@ -204,10 +209,6 @@ describe(`JHipster ${generator} generator`, () => {
         entityStorage: expect.any(Object),
         entityConfig: expect.any(Object),
       };
-      expect(configuringEachEntity).toBeCalledTimes(3);
-      expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
-      expect(configuringEachEntity).toHaveBeenNthCalledWith(2, { ...entityConfiguringArg, entityName: 'Two' });
-      expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
 
       const entityArg = {
         ...applicationArg,
@@ -216,17 +217,40 @@ describe(`JHipster ${generator} generator`, () => {
         description: expect.any(String),
       };
 
-      expect(preparingEachEntity).toBeCalledTimes(4);
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'One' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Two' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'Three' });
-
       const fieldArg = {
         ...entityArg,
         fieldName: expect.any(String),
         field: expect.any(Object),
       };
+
+      const relationshipArg = {
+        ...entityArg,
+        entityName: expect.any(String),
+        relationshipName: expect.any(String),
+        relationship: expect.any(Object),
+      };
+
+      const entitiesArg = {
+        ...controlArg,
+        ...applicationArg,
+        entities: [expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object)],
+      };
+
+      expect(initializing).toBeCalledWith(controlArg);
+      expect(prompting).toBeCalledWith(controlArg);
+      expect(configuring).toBeCalledWith(controlArg);
+      expect(composing).toBeCalledWith(controlArg);
+
+      expect(configuringEachEntity).toBeCalledTimes(3);
+      expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
+      expect(configuringEachEntity).toHaveBeenNthCalledWith(2, { ...entityConfiguringArg, entityName: 'Two' });
+      expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
+
+      expect(preparingEachEntity).toBeCalledTimes(4);
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'One' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Two' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'Three' });
 
       expect(preparingEachEntityField).toBeCalledTimes(8);
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(1, { ...fieldArg, description: 'User#id' });
@@ -237,13 +261,6 @@ describe(`JHipster ${generator} generator`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(6, { ...fieldArg, description: 'Two#id' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(7, { ...fieldArg, description: 'Two#name' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(8, { ...fieldArg, description: 'Three#id' });
-
-      const relationshipArg = {
-        ...entityArg,
-        entityName: expect.any(String),
-        relationshipName: expect.any(String),
-        relationship: expect.any(Object),
-      };
 
       expect(preparingEachEntityRelationship).toBeCalledTimes(3);
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(1, { ...relationshipArg, description: 'One#two' });
@@ -256,19 +273,16 @@ describe(`JHipster ${generator} generator`, () => {
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Two' });
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'Three' });
 
-      const entitiesArg = {
-        ...applicationArg,
-        entities: [expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object)],
-      };
-
       expect(defaultTask).toBeCalledWith(entitiesArg);
       expect(writingEntities).toBeCalledWith(entitiesArg);
       expect(postWritingEntities).toBeCalledWith(entitiesArg);
 
       expect(writing).toBeCalledWith(applicationArg);
-      expect(postWriting).toBeCalledWith(applicationArg);
       expect(install).toBeCalledWith(applicationArg);
       expect(end).toBeCalledWith(applicationArg);
+
+      expect(preparing).toBeCalledWith(applicationSourceArg);
+      expect(postWriting).toBeCalledWith(applicationSourceArg);
     });
   });
 
@@ -298,7 +312,7 @@ describe(`JHipster ${generator} generator`, () => {
     const postWritingEntities = jestMock.fn();
 
     class CustomGenerator extends Generator<BaseApplication> {
-      async _postConstruct() {
+      async beforeQueue() {
         await this.dependsOnJHipster('bootstrap-application');
       }
 
@@ -408,13 +422,18 @@ describe(`JHipster ${generator} generator`, () => {
     });
 
     it('should call writingEntities and postWriting priorities with filtered entities', async () => {
-      expect(initializing).toBeCalledWith();
-      expect(prompting).toBeCalledWith();
-      expect(configuring).toBeCalledWith();
-      expect(composing).toBeCalledWith();
+      const controlArg = {
+        control: expect.any(Object),
+      };
 
       const applicationArg = {
+        ...controlArg,
         application: expect.any(Object),
+      };
+
+      const applicationSourceArg = {
+        ...applicationArg,
+        source: expect.any(Object),
       };
 
       const entityConfiguringArg = {
@@ -422,10 +441,6 @@ describe(`JHipster ${generator} generator`, () => {
         entityStorage: expect.any(Object),
         entityConfig: expect.any(Object),
       };
-      expect(configuringEachEntity).toBeCalledTimes(3);
-      expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
-      expect(configuringEachEntity).toHaveBeenNthCalledWith(2, { ...entityConfiguringArg, entityName: 'Two' });
-      expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
 
       const entityArg = {
         ...applicationArg,
@@ -434,17 +449,44 @@ describe(`JHipster ${generator} generator`, () => {
         description: expect.any(String),
       };
 
-      expect(preparingEachEntity).toBeCalledTimes(4);
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'One' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Two' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'Three' });
-
       const fieldArg = {
         ...entityArg,
         fieldName: expect.any(String),
         field: expect.any(Object),
       };
+
+      const relationshipArg = {
+        ...entityArg,
+        entityName: expect.any(String),
+        relationshipName: expect.any(String),
+        relationship: expect.any(Object),
+      };
+
+      const entitiesArg = {
+        ...applicationArg,
+        entities: [expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object)],
+      };
+
+      const writingEntitiesArg = {
+        ...applicationArg,
+        entities: [expect.any(Object), expect.any(Object)],
+      };
+
+      expect(initializing).toBeCalledWith(controlArg);
+      expect(prompting).toBeCalledWith(controlArg);
+      expect(configuring).toBeCalledWith(controlArg);
+      expect(composing).toBeCalledWith(controlArg);
+
+      expect(configuringEachEntity).toBeCalledTimes(3);
+      expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
+      expect(configuringEachEntity).toHaveBeenNthCalledWith(2, { ...entityConfiguringArg, entityName: 'Two' });
+      expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
+
+      expect(preparingEachEntity).toBeCalledTimes(4);
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'One' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Two' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'Three' });
 
       expect(preparingEachEntityField).toBeCalledTimes(8);
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(1, { ...fieldArg, description: 'User#id' });
@@ -455,13 +497,6 @@ describe(`JHipster ${generator} generator`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(6, { ...fieldArg, description: 'Two#id' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(7, { ...fieldArg, description: 'Two#name' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(8, { ...fieldArg, description: 'Three#id' });
-
-      const relationshipArg = {
-        ...entityArg,
-        entityName: expect.any(String),
-        relationshipName: expect.any(String),
-        relationship: expect.any(Object),
-      };
 
       expect(preparingEachEntityRelationship).toBeCalledTimes(3);
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(1, { ...relationshipArg, description: 'One#two' });
@@ -474,25 +509,17 @@ describe(`JHipster ${generator} generator`, () => {
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Two' });
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'Three' });
 
-      const entitiesArg = {
-        ...applicationArg,
-        entities: [expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object)],
-      };
-
       expect(defaultTask).toBeCalledWith(entitiesArg);
-
-      const writingEntitiesArg = {
-        ...applicationArg,
-        entities: [expect.any(Object), expect.any(Object)],
-      };
 
       expect(writingEntities).toBeCalledWith(writingEntitiesArg);
       expect(postWritingEntities).toBeCalledWith(writingEntitiesArg);
 
       expect(writing).toBeCalledWith(applicationArg);
-      expect(postWriting).toBeCalledWith(applicationArg);
       expect(install).toBeCalledWith(applicationArg);
       expect(end).toBeCalledWith(applicationArg);
+
+      expect(preparing).toBeCalledWith(applicationSourceArg);
+      expect(postWriting).toBeCalledWith(applicationSourceArg);
     });
   });
 });

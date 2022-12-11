@@ -1,0 +1,244 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<nav data-cy="navbar" class="navbar navbar-<% if (clientThemeNone || clientThemePrimary) { %>dark<% } else { %><%= clientThemeVariant %><% } %> navbar-expand-md <% if (clientThemeNone) { %>bg-dark<% } else { %>bg-<%= clientThemeVariant %><% } %>">
+  <div class="container-fluid">
+  <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
+    <span class="logo-img"></span>
+    <span <%= jhiPrefix %>Translate="global.title" class="navbar-title"><%- getWebappTranslation('global.title') %></span>
+    <span class="navbar-version">{{ version }}</span>
+  </a>
+  <a
+    class="navbar-toggler d-lg-none"
+    href="javascript:void(0);"
+    data-toggle="collapse"
+    data-target="#navbarResponsive"
+    aria-controls="navbarResponsive"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+    (click)="toggleNavbar()"
+  >
+    <fa-icon icon="bars"></fa-icon>
+  </a>
+  <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
+          <span>
+            <fa-icon icon="home"></fa-icon>
+            <span <%= jhiPrefix %>Translate="global.menu.home"><%- getWebappTranslation('global.menu.home') %></span>
+          </span>
+        </a>
+      </li>
+      <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+      <li
+        *ngSwitchCase="true"
+        ngbDropdown
+        class="nav-item dropdown pointer"
+        display="dynamic"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+          <span>
+            <fa-icon icon="th-list"></fa-icon>
+            <span <%= jhiPrefix %>Translate="global.menu.entities.main"><%- getWebappTranslation('global.menu.entities.main') %></span>
+          </span>
+        </a>
+        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+<%_ if (applicationTypeGateway) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+          <li *ngFor="let entityNavbarItem of <%= remote.lowercaseBaseName %>EntityNavbarItems">
+            <a
+              class="dropdown-item"
+              [routerLink]="entityNavbarItem.route"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span
+    <%_ if (enableTranslation) { _%>
+              [<%= jhiPrefix %>Translate]="entityNavbarItem.translationKey"
+    <%_ } _%>
+              >{{entityNavbarItem.name}}</span>
+            </a>
+          </li>
+  <%_ } _%>
+<%_ } _%>
+          <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
+        </ul>
+      </li>
+      <li
+        *<%= jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'"
+        ngbDropdown
+        class="nav-item dropdown pointer"
+        display="dynamic"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu" data-cy="adminMenu">
+          <span>
+            <fa-icon icon="users-cog"></fa-icon>
+            <span <%= jhiPrefix %>Translate="global.menu.admin.main"><%- getWebappTranslation('global.menu.admin.main') %></span>
+          </span>
+        </a>
+        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+          <li>
+            <a class="dropdown-item" routerLink="admin/gateway" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="road" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.admin.gateway"><%- getWebappTranslation('global.menu.admin.gateway') %></span>
+            </a>
+          </li>
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+          <li>
+            <a class="dropdown-item" routerLink="admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="users" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.admin.userManagement"><%- getWebappTranslation('global.menu.admin.userManagement') %></span>
+            </a>
+          </li>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
+          <li>
+            <a class="dropdown-item" routerLink="admin/tracker" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="eye" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.admin.tracker"><%- getWebappTranslation('global.menu.admin.tracker') %></span>
+            </a>
+          </li>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+          <li>
+            <a class="dropdown-item" routerLink="admin/metrics" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="tachometer-alt" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.admin.metrics"><%- getWebappTranslation('global.menu.admin.metrics') %></span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="admin/health" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="heart" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.admin.health"><%- getWebappTranslation('global.menu.admin.health') %></span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="admin/configuration" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="cogs" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.admin.configuration"><%- getWebappTranslation('global.menu.admin.configuration') %></span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="admin/logs" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="tasks" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.admin.logs"><%- getWebappTranslation('global.menu.admin.logs') %></span>
+            </a>
+          </li>
+<%_ } _%>
+<%_ if (!applicationTypeMicroservice) { _%>
+          <li *ngIf="openAPIEnabled">
+            <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.admin.apidocs"><%- getWebappTranslation('global.menu.admin.apidocs') %></span>
+            </a>
+          </li>
+<%_ } _%>
+          <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
+<%_ if (devDatabaseTypeH2Any || devDatabaseTypeCouchbase) { _%>
+          <li *ngIf="!inProduction">
+            <a class="dropdown-item" href="<% if (devDatabaseTypeCouchbase) { %>http://localhost:8091/<% } else if (reactive) { %> http://localhost:8092/ <% } else { %>./h2-console/<% } %>" target="_tab" (click)="collapseNavbar()">
+              <fa-icon icon="database" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.admin.database"><%- getWebappTranslation('global.menu.admin.database') %></span>
+            </a>
+          </li>
+<%_ } _%>
+        </ul>
+      </li>
+<%_ if (enableTranslation) { _%>
+      <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" *ngIf="languages && languages.length > 1">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
+          <span>
+            <fa-icon icon="flag"></fa-icon>
+            <span <%= jhiPrefix %>Translate="global.menu.language"><%- getWebappTranslation('global.menu.language') %></span>
+          </span>
+        </a>
+        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
+          <li *ngFor="let language of languages">
+            <a class="dropdown-item" [<%= jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
+          </li>
+        </ul>
+      </li>
+<%_ } _%>
+      <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu" data-cy="accountMenu">
+          <span *ngIf="!account?.imageUrl">
+            <fa-icon icon="user"></fa-icon>
+            <span <%= jhiPrefix %>Translate="global.menu.account.main"><%- getWebappTranslation('global.menu.account.main') %></span>
+          </span>
+          <span *ngIf="account?.imageUrl">
+            <img [src]="account!.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
+          </span>
+        </a>
+        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
+<%_ if (generateUserManagement) { _%>
+          <li *ngSwitchCase="true">
+            <a class="dropdown-item" routerLink="account/settings" routerLinkActive="active" (click)="collapseNavbar()" data-cy="settings">
+              <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.account.settings"><%- getWebappTranslation('global.menu.account.settings') %></span>
+            </a>
+          </li>
+          <li *ngSwitchCase="true">
+            <a class="dropdown-item" routerLink="account/password" routerLinkActive="active" (click)="collapseNavbar()" data-cy="passwordItem">
+              <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.account.password"><%- getWebappTranslation('global.menu.account.password') %></span>
+            </a>
+          </li>
+<%_ } _%>
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
+          <li *ngSwitchCase="true">
+            <a class="dropdown-item" routerLink="account/sessions" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="cloud" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.account.sessions"><%- getWebappTranslation('global.menu.account.sessions') %></span>
+            </a>
+          </li>
+<%_ } _%>
+          <li *ngSwitchCase="true">
+            <a class="dropdown-item" (click)="logout()" id="logout" data-cy="logout">
+              <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.account.logout"><%- getWebappTranslation('global.menu.account.logout') %></span>
+            </a>
+          </li>
+          <li *ngSwitchCase="false">
+            <a class="dropdown-item" (click)="login()" id="login" data-cy="login">
+              <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.account.login"><%- getWebappTranslation('global.menu.account.login') %></span>
+            </a>
+          </li>
+<%_ if (generateUserManagement) { _%>
+          <li *ngSwitchCase="false">
+            <a class="dropdown-item" routerLink="account/register" routerLinkActive="active" (click)="collapseNavbar()" data-cy="register">
+              <fa-icon icon="user-plus" [fixedWidth]="true"></fa-icon>
+              <span <%= jhiPrefix %>Translate="global.menu.account.register"><%- getWebappTranslation('global.menu.account.register') %></span>
+            </a>
+          </li>
+<%_ } _%>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  </div>
+</nav>

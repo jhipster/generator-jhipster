@@ -7,6 +7,7 @@ const {
 export const entitySimple = {
   name: 'Simple',
   changelogDate: '20220129000100',
+  jpaMetamodelFiltering: true,
   fields: [{ fieldName: 'simpleName', fieldType: 'String' }],
 };
 

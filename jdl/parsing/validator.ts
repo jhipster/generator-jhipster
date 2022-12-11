@@ -175,11 +175,6 @@ const configPropsValidations = {
     pattern: LANGUAGE_PATTERN,
     msg: 'nativeLanguage property',
   },
-  OTHER_MODULES: {
-    type: 'list',
-    pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
-    msg: 'otherModules property',
-  },
   PACKAGE_NAME: {
     type: 'qualifiedName',
     pattern: PACKAGE_NAME_PATTERN,

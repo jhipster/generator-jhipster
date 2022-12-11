@@ -84,7 +84,6 @@ function checkForValidValues(jdlApplication) {
     'jhipsterVersion',
     'dtoSuffix',
     'entitySuffix',
-    'otherModules',
     'creationTimestamp',
     'blueprints',
     'gradleEnterpriseHost',

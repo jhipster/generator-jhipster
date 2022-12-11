@@ -97,11 +97,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
-<%_ if (reactive && testsNeedCsrf) { _%>
+<%_ if (reactive && authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } else if (!reactive) { _%>
 import static org.hamcrest.Matchers.hasItem;
-  <%_ if (testsNeedCsrf) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
   <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -206,7 +206,7 @@ class UserResourceIT {
     }
 
 <%_ } _%>
-<%_ if (reactive && testsNeedCsrf) { _%>
+<%_ if (reactive && authenticationUsesCsrf) { _%>
     @BeforeEach
     public void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
@@ -309,7 +309,7 @@ class UserResourceIT {
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isCreated());
   <%_ } _%>
@@ -372,7 +372,7 @@ class UserResourceIT {
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -422,7 +422,7 @@ class UserResourceIT {
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -472,7 +472,7 @@ class UserResourceIT {
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -668,7 +668,7 @@ class UserResourceIT {
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
   <%_ } _%>
@@ -734,7 +734,7 @@ class UserResourceIT {
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
   <%_ } _%>
@@ -824,7 +824,7 @@ class UserResourceIT {
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -900,7 +900,7 @@ class UserResourceIT {
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -929,7 +929,7 @@ class UserResourceIT {
             .expectStatus().isNoContent();
   <%_ } else { _%>
         restUserMockMvc.perform(delete("/api/admin/users/{login}", user.getLogin())
-            .accept(MediaType.APPLICATION_JSON)<% if (testsNeedCsrf) { %>
+            .accept(MediaType.APPLICATION_JSON)<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isNoContent());
   <%_ } _%>

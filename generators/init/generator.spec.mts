@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { basename, dirname, join, resolve } from 'path';
+import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { access } from 'fs/promises';
 
-import { basicTests, testBlueprintSupport } from '../../test/support/index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { basicTests, testBlueprintSupport } from '../../test/support/tests.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { defaultConfig, requiredConfig } from './config.mjs';
 import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import { GENERATOR_INIT } from '../generator-list.mjs';
@@ -33,7 +32,7 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorPath = join(__dirname, 'index.mjs');
 
-const contextBuilder = () => helpers.create(generatorPath).withOptions({ skipGit: true });
+const contextBuilder = () => helpers.create(generatorPath);
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', () => {
@@ -58,57 +57,18 @@ describe(`JHipster ${generator} generator`, () => {
     });
     describe('skipCommitHook option', () => {
       let runResult;
-      const options = { skipCommitHook: true };
+      const options = { skipCommitHook: true, baseName: 'jhipster' };
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ ...options });
+        runResult = await helpers
+          .run(generatorPath)
+          .withMockedGenerators(['jhipster:git'])
+          .withOptions({ ...options });
       });
       it('should write options to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: options });
       });
       it('should not create husky files and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
-      });
-    });
-  });
-  describe('git feature', () => {
-    describe('with default option', () => {
-      let runResult;
-      before(async () => {
-        runResult = await helpers.run(generatorPath);
-      });
-      it('should create .git', async () => {
-        await expect(access(resolve(runResult.cwd, '.git'))).resolves.toBeUndefined();
-      });
-      it('should create 1 commit', async () => {
-        const git = runResult.generator.createGit();
-        await expect(git.log()).resolves.toMatchObject({
-          total: 1,
-          latest: { message: expect.stringMatching(/^Initial version of/) },
-        });
-      });
-    });
-    describe('with skipGit option', () => {
-      let runResult;
-      before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ skipGit: true });
-      });
-      it('should not create .git', async () => {
-        await expect(access(resolve(runResult.cwd, '.git'))).rejects.toMatchObject({ code: 'ENOENT' });
-      });
-    });
-    describe('regenerating', () => {
-      let runResult;
-      before(async () => {
-        runResult = await helpers.run(generatorPath);
-        runResult = await runResult.create(generatorPath).withOptions({ skipPrettier: true, skipCommitHook: true }).run();
-      });
-      it('should have 1 commit', async () => {
-        const git = runResult.generator.createGit();
-        await expect(git.log()).resolves.toMatchObject({ total: 1 });
-      });
-      it('should have uncommited files', async () => {
-        const git = runResult.generator.createGit();
-        await expect(git.diff()).resolves.toMatch(/\+ {4}"skipCommitHook": true/);
       });
     });
   });

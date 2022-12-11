@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
       - name: kafka
-        image: <%= DOCKER_KAFKA %>
+        image: <%- dockerContainers.kafka %>
         env:
         - name: KAFKA_ADVERTISED_LISTENERS
           value: 'PLAINTEXT://jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
@@ -89,7 +89,7 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: <%= DOCKER_ZOOKEEPER %>
+        image: <%- dockerContainers.zookeeper %>
         env:
         - name: ZOOKEEPER_CLIENT_PORT
           value: '2181'

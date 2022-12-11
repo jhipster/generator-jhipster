@@ -62,11 +62,11 @@ const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL, ORACLE, MYSQL, POSTGRESQL, MA
 const { MAVEN } = buildToolTypes;
 
 /**
- * @typedef {import('./api.cjs').JHipsterGeneratorOptions} JHipsterGeneratorOptions
+ * @typedef {import('./api.mjs').JHipsterGeneratorOptions} JHipsterGeneratorOptions
  */
 
 /**
- * @typedef {import('./api.cjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
+ * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
  */
 
 /**
@@ -87,6 +87,11 @@ export default class PrivateBase extends Generator {
    */
   constructor(args, options, features) {
     super(args, options, features);
+    if (!this.options.sharedData) {
+      // Make sure sharedData is loaded.
+      // Tests that instantiates the Generator direcly 'options.sharedData' may be missing.
+      this.options.sharedData = this.env.sharedOptions.sharedData;
+    }
     // expose lodash to templates
     this._ = _;
   }
@@ -135,16 +140,6 @@ export default class PrivateBase extends Generator {
    */
   usage() {
     return super.usage().replace('yo jhipster:', 'jhipster ');
-  }
-
-  /**
-   * TODO v8 drop customizer
-   * Override yeoman generator's destinationPath to apply custom output dir.
-   */
-  destinationPath(...paths) {
-    paths = path.join(...paths);
-    paths = this.applyOutputPathCustomizer(paths);
-    return paths ? super.destinationPath(paths) : paths;
   }
 
   /**
@@ -366,87 +361,6 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * Checks if git is installed.
-   *
-   * @param {function} callback[optional] - function to be called after checking if git is installed. The callback will receive the code of the shell command executed.
-   *
-   * @return {boolean} true if installed; false otherwise.
-   */
-  isGitInstalled(callback) {
-    const gitInstalled = jhipsterUtils.isGitInstalled(callback);
-    if (!gitInstalled) {
-      this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
-    }
-    return gitInstalled;
-  }
-
-  /**
-   * @private
-   * Initialize git repository.
-   */
-  initializeGitRepository() {
-    if (this.gitInstalled || this.isGitInstalled()) {
-      const gitDir = this.gitExec('rev-parse --is-inside-work-tree', { trace: false }).stdout;
-      // gitDir has a line break to remove (at least on windows)
-      if (gitDir && gitDir.trim() === 'true') {
-        this.gitInitialized = true;
-      } else {
-        const shellStr = this.gitExec('init', { trace: false });
-        this.gitInitialized = shellStr.code === 0;
-        if (this.gitInitialized) this.log(chalk.green.bold('Git repository initialized.'));
-        else this.warning(`Failed to initialize Git repository.\n ${shellStr.stderr}`);
-      }
-    } else {
-      this.warning('Git repository could not be initialized, as Git is not installed on your system');
-    }
-  }
-
-  /**
-   * @private
-   * Commit pending files to git.
-   */
-  commitFilesToGit(commitMsg, done) {
-    if (this.gitInitialized) {
-      this.debug('Committing files to git');
-      this.gitExec('log --oneline -n 1 -- .', { trace: false }, (code, commits) => {
-        if (code !== 0 || !commits || !commits.trim()) {
-          // if no files in Git from current folder then we assume that this is initial application generation
-          this.gitExec('add .', { trace: false }, code => {
-            if (code === 0) {
-              this.gitExec(`commit --no-verify -m "${commitMsg}" -- .`, { trace: false }, code => {
-                if (code === 0) {
-                  this.log(chalk.green.bold(`Application successfully committed to Git from ${process.cwd()}.`));
-                } else {
-                  this.log(chalk.red.bold(`Application commit to Git failed from ${process.cwd()}. Try to commit manually.`));
-                }
-                done();
-              });
-            } else {
-              this.warning(`The generated application could not be committed to Git, because ${chalk.bold('git add')} command failed.`);
-              done();
-            }
-          });
-        } else {
-          // if found files in Git from current folder then we assume that this is application regeneration
-          // if there are changes in current folder then inform user about manual commit needed
-          this.gitExec('diff --name-only .', { trace: false }, (code, diffs) => {
-            if (code === 0 && diffs && diffs.trim()) {
-              this.log(
-                `Found commits in Git from ${process.cwd()}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`
-              );
-            }
-            done();
-          });
-        }
-      });
-    } else {
-      this.warning('The generated application could not be committed to Git, as a Git repository could not be initialized.');
-      done();
-    }
-  }
-
-  /**
-   * @private
    * Get Option From Array
    *
    * @param {Array} array - array
@@ -545,22 +459,6 @@ export default class PrivateBase extends Generator {
   }
 
   /**
-   * @private
-   * Utility function to copy files.
-   *
-   * @param {string} source - Original file.
-   * @param {string} destination - The resulting file.
-   */
-  copy(source, destination) {
-    const customDestination = this.destinationPath(destination);
-    if (!customDestination) {
-      this.debug(`File ${destination} ignored`);
-      return;
-    }
-    this.fs.copy(this.templatePath(source), customDestination);
-  }
-
-  /**
    * Print a debug message.
    *
    * @param {string} msg - message to print
@@ -620,15 +518,6 @@ export default class PrivateBase extends Generator {
         'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
       );
     }
-  }
-
-  /**
-   * @private
-   * Check if Git is installed
-   */
-  checkGit() {
-    if (this.skipChecks || this.skipClient) return;
-    this.gitInstalled = this.isGitInstalled();
   }
 
   /**
@@ -775,7 +664,7 @@ export default class PrivateBase extends Generator {
       const otherEntityAngularName = relationship.otherEntityAngularName;
       const importType = `I${otherEntityAngularName}`;
       let importPath;
-      if (this.isBuiltInUser(otherEntityAngularName)) {
+      if (relationship.otherEntity?.builtInUser) {
         importPath = clientFramework === ANGULAR ? 'app/entities/user/user.model' : 'app/shared/model/user.model';
       } else {
         importPath =
@@ -1178,20 +1067,6 @@ export default class PrivateBase extends Generator {
       return '';
     }
     return `${entityFolderPathAddition}/`;
-  }
-
-  /**
-   * @private
-   * Check if the subgenerator has been invoked from JHipster CLI or from Yeoman (yo jhipster:subgenerator)
-   */
-  checkInvocationFromCLI() {
-    if (!this.options.fromCli) {
-      this.warning(
-        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-          'jhipster <command>'
-        )} instead of ${chalk.red('yo jhipster:<command>')}`
-      );
-    }
   }
 
   /**

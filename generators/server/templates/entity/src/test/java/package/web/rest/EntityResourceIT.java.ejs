@@ -19,6 +19,7 @@
 package <%= entityAbsolutePackage %>.web.rest;
 
 <%_
+var filterTestableRelationships = reactive ? reactiveEagerRelations : relationships;
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
 let mapsIdEntity;
 let mapsIdEntityInstance;
@@ -76,6 +77,12 @@ import <%= entityAbsolutePackage %>.domain.<%= relationship.otherEntity.persistC
     }
   }
 } _%>
+<%_
+if(jpaMetamodelFiltering && reactive) {
+  filterTestableRelationships.forEach(relationship => { _%>
+import <%= entityAbsolutePackage %>.repository.<%= relationship.otherEntityNameCapitalized %>Repository;
+<%_ });
+ } _%>
 <%_ if (saveUserSnapshot) { _%>
 import <%= entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
@@ -96,7 +103,7 @@ import <%= entityAbsolutePackage %>.service.<%= entityClass %>Service;
 import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
 import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering) { _%>
+<%_ if (jpaMetamodelFiltering & !reactive) { _%>
 import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -209,7 +216,7 @@ import static org.hamcrest.Matchers.hasItem;
 <%_ if (reactive) { _%>
 import static org.hamcrest.Matchers.is;
 <%_ } _%>
-<%_ if (testsNeedCsrf) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
   <%_ if (reactive) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
   <%_ } else { _%>
@@ -476,6 +483,12 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 
     private <%= persistClass %> <%= persistInstance %>;
 
+<%_ if(jpaMetamodelFiltering && reactive) {
+filterTestableRelationships.forEach((relationship) => { _%>
+    @Autowired
+    private <%= relationship.otherEntity.persistClass %>Repository <%= relationship.otherEntity.persistInstance %>Repository;
+<%_ });
+}_%>
 <%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
     /**
      * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
@@ -593,7 +606,7 @@ _%>
     }
 
 <%_ } _%>
-<%_ if (reactive && testsNeedCsrf) { _%>
+<%_ if (reactive && authenticationUsesCsrf) { _%>
     @BeforeEach
     public void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
@@ -635,7 +648,7 @@ _%>
             .exchange()
             .expectStatus().isCreated();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isCreated());
@@ -698,7 +711,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -766,7 +779,7 @@ _%>
             .exchange()
             .expectStatus().isOk();
     <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>)))
             .andExpect(status().isOk());
@@ -818,7 +831,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -839,7 +852,7 @@ _%>
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
-<%_ if (reactive && paginationNo) { _%>
+<%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
 
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>AsStream() {
@@ -1165,7 +1178,7 @@ _%>
 
     <%_ } _%>
   <%_ }); _%>
-  <%_ relationships.forEach((relationship) => { _%>
+  <%_ filterTestableRelationships.forEach((relationship) => { _%>
 
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
@@ -1184,20 +1197,29 @@ _%>
       <%_ } else { _%>
         <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
       <%_ } _%>
+      <%_ if(reactive) { _%>
+        <%= relationship.otherEntity.persistInstance %>Repository.<%= saveMethod %>(<%= relationship.relationshipFieldName %>)<%= callBlock %>;
+      <%_ } else { _%>
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
-      <%_ if (relationship.relationshipManyToMany || relationship.relationshipOneToMany) { _%>
+      <%_ } _%>
+      <%_ if (!reactive && (relationship.relationshipManyToMany || relationship.relationshipOneToMany)) { _%>
         <%= persistInstance %>.add<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
-      <%_ } else { _%>
+      <%_ } else if (!reactive) { _%>
         <%= persistInstance %>.set<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
         <%_ if (!relationship.ownerSide) { _%>
         <%= relationship.relationshipFieldName %>.set<%= relationship.otherEntityRelationshipNameCapitalized %>(<%= persistInstance %>);
         <%_ } _%>
+      <%_ } else { _%>
+        <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>();
+        <%= persistInstance %>.set<%= relationship.relationshipNameCapitalized %>Id(<%= relationship.relationshipFieldName %>Id);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
       <%_ } _%>
     <%_ } _%>
+    <%_ if(!reactive) { _%>
         <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
         <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>();
-
+    <%_ } _%>
         // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= relationship.relationshipFieldName %>Id
         default<%= entityClass %>ShouldBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%= relationship.relationshipFieldName %>Id);
 
@@ -1247,7 +1269,13 @@ _%>
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody().json("1");
+                .expectBody()
+      <%_ if(reactive) { _%>
+                .jsonPath("$")
+                .value(is(1));
+      <%_ } else { _%>
+                .json("1");
+      <%_ } _%>
     }
   <%_ } else { _%>
     private void default<%= entityClass %>ShouldBeFound(String filter) throws Exception {
@@ -1306,7 +1334,13 @@ _%>
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .expectBody().json("0");
+            .expectBody()
+      <%_ if(reactive) { _%>
+            .jsonPath("$")
+            .value(is(0));
+      <%_ } else { _%>
+            .json("0");
+      <%_ } _%>
     }
   <%_ } else { _%>
     private void default<%= entityClass %>ShouldNotBeFound(String filter) throws Exception {
@@ -1385,7 +1419,7 @@ _%>
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>)))
             .andExpect(status().isOk());
@@ -1453,7 +1487,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1493,7 +1527,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- this.getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- this.getJavaValueGeneratorForType(primaryKey.type) %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1532,7 +1566,7 @@ _%>
             .exchange()
             .expectStatus().isEqualTo(405);
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
@@ -1608,7 +1642,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType("application/merge-patch+json")
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1647,7 +1681,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- this.getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- this.getJavaValueGeneratorForType(primaryKey.type) %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1686,7 +1720,7 @@ _%>
             .exchange()
             .expectStatus().isEqualTo(405);
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
@@ -1732,7 +1766,7 @@ _%>
             .exchange()
             .expectStatus().isNoContent();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
   <%_ } _%>

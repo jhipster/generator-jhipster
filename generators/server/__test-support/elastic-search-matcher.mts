@@ -1,6 +1,6 @@
 import type { RunResult } from 'yeoman-test';
 import type BaseApplicationGenerator from '../../base-application/index.mjs';
-import type { SpringBootApplication } from '../../bootstrap-application-server/types.js';
+import type { SpringBootApplication } from '../../server/types.mjs';
 
 import constants from '../../generator-constants.cjs';
 import { matchWrittenConfig, matchWrittenFiles } from '../../../test/support/matcher.mjs';
@@ -22,8 +22,11 @@ const desiredConfig = {
   },
 };
 
-export const matchElasticSearch = (resultGetter: () => RunResult, shouldMatch: boolean) => {
+export const matchElasticSearchDocker = (resultGetter: () => RunResult, shouldMatch: boolean) => {
   matchWrittenFiles('elaticsearch', resultGetter, expectedElasticsearchFiles, shouldMatch);
+};
+
+export const matchElasticSearch = (resultGetter: () => RunResult, shouldMatch: boolean) => {
   matchWrittenConfig('elaticsearch', resultGetter, desiredConfig, shouldMatch);
 };
 

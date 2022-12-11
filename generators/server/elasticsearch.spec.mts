@@ -3,10 +3,11 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { buildServerMatrix, extendMatrix, entitiesServerSamples as entities } from '../../test/support/index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.mjs';
 
 import { databaseTypes, searchEngineTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';
+import { mockedGenerators, shouldComposeWithKafka, shouldComposeWithLiquibase } from './__test-support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -55,10 +56,7 @@ describe('JHipster elasticsearch generator', () => {
       let runResult;
 
       before(async () => {
-        runResult = await helpers
-          .run(generatorFile)
-          .withOptions(sample)
-          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:database-changelog']);
+        runResult = await helpers.run(generatorFile).withOptions(sample).withMockedGenerators(mockedGenerators);
       });
 
       after(() => runResult.cleanup());
@@ -81,6 +79,8 @@ describe('JHipster elasticsearch generator', () => {
           elasticsearch && (sampleConfig.authenticationType === OAUTH2 || !sampleConfig.skipUserManagement)
         );
       });
+      shouldComposeWithKafka(sample, () => runResult);
+      shouldComposeWithLiquibase(sample, () => runResult);
     });
   });
 });

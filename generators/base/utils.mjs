@@ -16,31 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { platform } from 'os';
-import generatorUtils from '../utils.cjs';
-
-const { normalizeLineEndings } = generatorUtils;
-
-const isWin32 = platform() === 'win32';
-
-/**
- * Converts multiples EditFileCallback callbacks into one.
- *
- * @param {...import('./index.cjs').EditFileCallback} callbacks
- * @returns {import('./index.cjs').EditFileCallback}
- */
-export const joinCallbacks = (...callbacks) => {
-  return function (content, filePath) {
-    if (isWin32 && content.match(/\r\n/)) {
-      callbacks = [ct => normalizeLineEndings(ct, '\n')].concat(callbacks).concat(ct => normalizeLineEndings(ct, '\r\n'));
-    }
-    for (const callback of callbacks) {
-      content = callback.call(this, content, filePath);
-    }
-    return content;
-  };
-};
-
 export function formatDateForChangelog(now) {
   const nowUTC = new Date(
     now.getUTCFullYear(),
@@ -81,8 +56,14 @@ export function formatDateForChangelog(now) {
 }
 
 export function parseChangelog(changelogDate) {
-  if (!changelogDate || changelogDate.length !== 14) {
-    throw new Error(`${changelogDate} is not a valid changelogDate.`);
+  if (!changelogDate) {
+    throw new Error('changelogDate is required.');
+  }
+  if (typeof changelogDate !== 'string') {
+    throw new Error(`changelogDate ${changelogDate} must be a string.`);
+  }
+  if (changelogDate.length !== 14) {
+    throw new Error(`changelogDate ${changelogDate} is not a valid changelogDate.`);
   }
   const formattedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(
     6,
@@ -90,3 +71,16 @@ export function parseChangelog(changelogDate) {
   )}T${changelogDate.substring(8, 10)}:${changelogDate.substring(10, 12)}:${changelogDate.substring(12, 14)}+00:00`;
   return new Date(Date.parse(formattedDate));
 }
+
+/**
+ * Replace line endings with the specified one.
+ *
+ * @param {string} str
+ * @param {string} lineEnding
+ * @returns {string} normalized line ending string
+ */
+export function normalizeLineEndings(str, lineEnding) {
+  return str.replace(/\r\n|\r|\n/g, lineEnding);
+}
+
+export const normalizePathEnd = directory => (directory.endsWith('/') ? directory : `${directory}/`);

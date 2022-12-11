@@ -40,7 +40,7 @@ const exec = childProcess.exec;
 
 /* eslint-disable consistent-return */
 export default class CloudfoundryGenerator extends BaseGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLOUDFOUNDRY);
     }
@@ -54,9 +54,11 @@ export default class CloudfoundryGenerator extends BaseGenerator {
 
       getSharedConfig() {
         this.loadAppConfig();
-        this.loadClientConfig();
         this.loadServerConfig();
         this.loadPlatformConfig();
+
+        this.loadDerivedAppConfig();
+        this.loadDerivedServerConfig();
       },
       getConfig() {
         const configuration = this.config;
@@ -69,8 +71,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -78,8 +79,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -118,8 +118,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get default() {
@@ -185,8 +184,7 @@ export default class CloudfoundryGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.DEFAULT]() {
-    if (this.delegateToBlueprint) return {};
-    return this.default;
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get end() {
@@ -235,7 +233,6 @@ export default class CloudfoundryGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 }

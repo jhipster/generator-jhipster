@@ -21,7 +21,7 @@ import pluralize from 'pluralize';
 import path from 'path';
 
 import { hibernateSnakeCase } from './db.mjs';
-import { parseChangelog } from '../generators/base/utils.mjs';
+import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
 import generatorDefaults from '../generators/generator-defaults.cjs';
 import { fieldToReference } from './field.mjs';
 import constants from '../generators/generator-constants.cjs';
@@ -39,7 +39,7 @@ const { entityDefaultConfig } = generatorDefaults;
 const { ELASTICSEARCH } = searchEngineTypes;
 const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
-const { OAUTH2, SESSION } = authenticationTypes;
+const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 const { isReservedTableName } = reservedKeywords;
 
@@ -162,8 +162,6 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
     entityWithConfig.skipServer = true;
   }
 
-  entityWithConfig.builtInUser = generator.isBuiltInUser(entityName);
-
   _.defaults(entityWithConfig, {
     entityNameCapitalized: entityName,
     entityClass: _.upperFirst(entityName),
@@ -244,10 +242,10 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
       ? `${microserviceName.toLowerCase()}/${entityFileName}`
       : `${entityFileName}`;
 
-  const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
+  const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => relationship.otherEntity.builtInUser);
   entityWithConfig.saveUserSnapshot =
-    entityWithConfig.applicationType === MICROSERVICE &&
-    entityWithConfig.authenticationType === OAUTH2 &&
+    application.applicationType === MICROSERVICE &&
+    application.authenticationType === OAUTH2 &&
     hasBuiltInUserField &&
     entityWithConfig.dto === NO_MAPPER;
 
@@ -273,11 +271,14 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
 
 export function prepareEntityServerForTemplates(entity) {
   const { entityPackage, packageName, packageFolder, persistClass } = entity;
-  let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder } = entity;
+  let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder, entityJavaPackageFolder = packageFolder } = entity;
   if (entityPackage) {
+    entityJavaPackageFolder = `${entityPackage.replace(/\./g, '/')}/`;
     entityAbsolutePackage = [packageName, entityPackage].join('.');
-    entityAbsoluteFolder = path.join(packageFolder, entityPackage.replace(/\./g, '/'));
+    entityAbsoluteFolder = path.join(packageFolder, entityJavaPackageFolder);
   }
+  entityAbsoluteFolder = normalizePathEnd(entityAbsoluteFolder);
+  entity.entityJavaPackageFolder = entityJavaPackageFolder;
   entity.entityAbsolutePackage = entityAbsolutePackage;
   entity.entityAbsoluteFolder = entityAbsoluteFolder;
   entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
@@ -705,8 +706,7 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
 }
 
 export function preparePostEntityServerDerivedProperties(entity) {
-  const { databaseType, authenticationType, reactive } = entity;
-  entity.testsNeedCsrf = [OAUTH2, SESSION].includes(authenticationType);
+  const { databaseType, reactive } = entity;
   entity.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[databaseType];
   let springDataDatabase;
   if (entity.databaseType !== SQL) {
@@ -751,11 +751,9 @@ export function preparePostEntityServerDerivedProperties(entity) {
   if (entity.primaryKey && entity.primaryKey.derived) {
     entity.isUsingMapsId = true;
     entity.mapsIdAssoc = entity.relationships.find(rel => rel.id);
-    entity.hasOauthUser = entity.mapsIdAssoc.otherEntityName === 'user' && entity.authenticationType === OAUTH2;
   } else {
     entity.isUsingMapsId = false;
     entity.mapsIdAssoc = null;
-    entity.hasOauthUser = false;
   }
   entity.reactiveOtherEntities = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity));
   entity.reactiveUniqueEntityTypes = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntityNameCapitalized));
@@ -791,10 +789,4 @@ export function preparePostEntityClientDerivedProperties(entity) {
   if (entity.primaryKey) {
     entity.tsKeyType = getTypescriptKeyType(entity.primaryKey.type);
   }
-}
-
-export function prepareReactEntity({ entity, application }) {
-  entity.entityReactState = application.applicationTypeMonolith
-    ? entity.entityInstance
-    : `${application.lowercaseBaseName}.${entity.entityInstance}`;
 }

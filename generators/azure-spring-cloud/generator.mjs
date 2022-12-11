@@ -54,7 +54,7 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
     this.azureSpringCloudSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_AZURE_SPRING_CLOUD);
     }
@@ -63,19 +63,16 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
   get initializing() {
     return {
       sayHello() {
-        if (!this.options.fromCli) {
-          this.warning(
-            `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-              'jhipster <command>'
-            )} instead of ${chalk.red('yo jhipster:<command>')}`
-          );
-        }
         this.log(chalk.bold('Azure Spring Cloud configuration is starting'));
       },
       getSharedConfig() {
         this.loadAppConfig();
         this.loadServerConfig();
         this.loadPlatformConfig();
+
+        this.loadDerivedAppConfig();
+        this.loadDerivedServerConfig();
+        this.loadDerivedPlatformConfig();
       },
       getConfig() {
         this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
@@ -94,8 +91,7 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -260,8 +256,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -277,8 +272,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
   }
 
   get [BaseGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get default() {
@@ -320,8 +314,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
   }
 
   get [BaseGenerator.DEFAULT]() {
-    if (this.delegateToBlueprint) return {};
-    return this.default;
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get loading() {
@@ -336,8 +329,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
   }
 
   get [BaseGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get writing() {
@@ -364,8 +356,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
   }
 
   get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get end() {
@@ -490,7 +481,6 @@ for more detailed information.`
   }
 
   get [BaseGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 }

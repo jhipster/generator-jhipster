@@ -25,20 +25,19 @@ import shelljs from 'shelljs';
 import semver from 'semver';
 import { exec } from 'child_process';
 import os from 'os';
-import normalize from 'normalize-path';
-import simpleGit from 'simple-git';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
+import jhipster7Proxy from './jhipster7-proxy.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import jhipsterUtils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.cjs';
 import generatorDefaults from '../generator-defaults.cjs';
-import commonOptions from '../options.mjs';
+import commonOptions from './options.mjs';
 import detectLanguage from '../languages/detect-language.mjs';
-import { formatDateForChangelog } from './utils.mjs';
+import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
 import {
   defaultApplicationOptions,
@@ -57,9 +56,9 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 
 import databaseData from '../sql-constants.mjs';
-import { joinCallbacks } from './utils.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
+import { NODE_VERSION } from '../generator-constants.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -80,7 +79,6 @@ const {
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
-const { kebabCase } = _;
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
@@ -91,7 +89,7 @@ const { GRADLE, MAVEN } = buildToolTypes;
 const { SPRING_WEBSOCKET } = websocketTypes;
 const { KAFKA } = messageBrokerTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
-const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = testFrameworkTypes;
+const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
@@ -125,8 +123,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @param {string | string[]} args
-   * @param {import('./base/api.cjs').JHipsterGeneratorOptions} options
-   * @param {import('./base/api.cjs').JHipsterGeneratorFeatures} features
+   * @param {import('./base/api.mjs').JHipsterGeneratorOptions} options
+   * @param {import('./base/api.mjs').JHipsterGeneratorFeatures} features
    */
   constructor(args, options, features) {
     super(args, options, features);
@@ -173,26 +171,25 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
     this.parseTestOptions();
 
-    if (this.configOptions.existingProject === undefined) {
-      this.configOptions.existingProject = Boolean(this.jhipsterConfig.baseName);
-    }
-    // TODO v8 rename to existingProject.
-    this.existingModularProject = this.configOptions.existingProject;
-
     this.loadRuntimeOptions();
     this.loadStoredAppOptions();
 
     if (this.options.namespace !== 'jhipster:bootstrap') {
-      /*
-      // eslint-disable-next-line global-require
-      import boostrapGen from './bootstrap';
-      boostrapGen.namespace = 'jhipster:bootstrap';
-      const generator = this.env.instantiate(boostrapGen, { ...this.options, configOptions: this.configOptions });
-      if (this.env.queueGenerator) {
-        this.env.queueGenerator(generator, true);
-      }
-      */
-      this.composeWithJHipster(GENERATOR_BOOTSTRAP, { ...this.options, configOptions: this.configOptions });
+      this.env.runLoop.add(
+        'environment:run',
+        async (done, stop) => {
+          try {
+            await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
+            done();
+          } catch (error) {
+            stop(error);
+          }
+        },
+        {
+          once: 'queueJhipsterBootstrap',
+          run: false,
+        }
+      );
     }
   }
 
@@ -222,122 +219,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getPossibleDependencies() {
     return [];
-  }
-
-  /**
-   * @deprecated
-   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
-   */
-  get CLIENT_MAIN_SRC_DIR() {
-    return CLIENT_MAIN_SRC_DIR;
-  }
-
-  /**
-   * @deprecated
-   * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
-   */
-  get CLIENT_TEST_SRC_DIR() {
-    return CLIENT_TEST_SRC_DIR;
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a built-in Entity.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is built-in.
-   */
-  isBuiltInEntity(entityName) {
-    return this.isBuiltInUser(entityName) || this.isBuiltInAuthority(entityName);
-  }
-
-  /**
-   * @private
-   * Verify if the application is using built-in User.
-   * @return {boolean} true if the User is built-in.
-   */
-  isUsingBuiltInUser() {
-    return (
-      !this.jhipsterConfig ||
-      (!this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.databaseType !== NO_DATABASE) ||
-      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
-    );
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a User entity.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is User.
-   */
-  isUserEntity(entityName) {
-    return _.upperFirst(entityName) === 'User';
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a built-in User.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is User and is built-in.
-   */
-  isBuiltInUser(entityName) {
-    return this.isUsingBuiltInUser() && this.isUserEntity(entityName);
-  }
-
-  /**
-   * @private
-   * Verify if the application is using built-in Authority.
-   * @return {boolean} true if the Authority is built-in.
-   */
-  isUsingBuiltInAuthority() {
-    return (
-      !this.jhipsterConfig ||
-      (!this.jhipsterConfig.skipUserManagement && [SQL, MONGODB, COUCHBASE, NEO4J].includes(this.jhipsterConfig.databaseType)) ||
-      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
-    );
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a Authority entity.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is Authority.
-   */
-  isAuthorityEntity(entityName) {
-    return _.upperFirst(entityName) === 'Authority';
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a built-in Authority.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is Authority and is built-in.
-   */
-  isBuiltInAuthority(entityName) {
-    return this.isUsingBuiltInAuthority() && this.isAuthorityEntity(entityName);
-  }
-
-  /**
-   * @private
-   * Apply output customizer.
-   *
-   * @param {string} outputPath - Path to customize.
-   */
-  applyOutputPathCustomizer(outputPath) {
-    let outputPathCustomizer = this.options.outputPathCustomizer;
-    if (!outputPathCustomizer && this.configOptions) {
-      outputPathCustomizer = this.configOptions.outputPathCustomizer;
-    }
-    if (!outputPathCustomizer) {
-      return outputPath;
-    }
-    outputPath = outputPath ? normalize(outputPath) : outputPath;
-    if (Array.isArray(outputPathCustomizer)) {
-      outputPathCustomizer.forEach(customizer => {
-        outputPath = customizer.call(this, outputPath);
-      });
-      return outputPath;
-    }
-    return outputPathCustomizer.call(this, outputPath);
   }
 
   /**
@@ -550,7 +431,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addElementTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addElementTranslationKey(key, value, language, webappSrcDir);
   }
 
@@ -562,7 +443,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addAdminElementTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addAdminElementTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language, webappSrcDir);
   }
 
@@ -574,36 +455,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} value - Default translated value
    * @param {string} language - The language to which this translation should be added
    */
-  addEntityTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addEntityTranslationKey(key, value, language, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     this.needleApi.clientI18n.addEntityTranslationKey(key, value, language, webappSrcDir);
-  }
-
-  /**
-   * @private
-   * Add a new entry as a root param in "global.json" translations.
-   *
-   * @param {string} key - Key for the entry
-   * @param {string} value - Default translated value or object with multiple key and translated value
-   * @param {string} language - The language to which this translation should be added
-   */
-  addGlobalTranslationKey(key, value, language, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
-    const fullPath = `${webappSrcDir}i18n/${language}/global.json`;
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          jsonObj[key] = value;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}(key: ${key}, value:${value})${chalk.yellow(
-          ' not added to global translations.\n'
-        )}`
-      );
-      this.debug('Error:', e);
-    }
   }
 
   /**
@@ -615,7 +468,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} method - The method to be run with provided key and value from above
    * @param {string} enableTranslation - specify if i18n is enabled
    */
-  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  addTranslationKeyToAllLanguages(key, value, method, enableTranslation, webappSrcDir = this.sharedData.getApplication().clientSrcDir) {
     if (enableTranslation) {
       this.getAllInstalledLanguages().forEach(language => {
         this[method](key, value, language, webappSrcDir);
@@ -631,7 +484,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const languages = [];
     this.getAllSupportedLanguages().forEach(language => {
       try {
-        const stats = fs.lstatSync(`${this.CLIENT_MAIN_SRC_DIR}i18n/${language}`);
+        const stats = fs.lstatSync(`${this.sharedData.getApplication().clientSrcDir}i18n/${language}`);
         if (stats.isDirectory()) {
           languages.push(language);
         }
@@ -700,96 +553,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   getAllSupportedLanguageOptions() {
     return constants.LANGUAGES;
-  }
-
-  /**
-   * @private
-   * Add a new dependency in the "package.json".
-   *
-   * @param {string} name - dependency name
-   * @param {string} version - dependency version
-   */
-  addNpmDependency(name, version) {
-    const fullPath = 'package.json';
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          if (jsonObj.dependencies === undefined) {
-            jsonObj.dependencies = {};
-          }
-          jsonObj.dependencies[name] = version;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${
-          chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
-        }npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
-      );
-      this.debug('Error:', e);
-    }
-  }
-
-  /**
-   * @private
-   * Add a new devDependency in the "package.json".
-   *
-   * @param {string} name - devDependency name
-   * @param {string} version - devDependency version
-   */
-  addNpmDevDependency(name, version) {
-    const fullPath = 'package.json';
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          if (jsonObj.devDependencies === undefined) {
-            jsonObj.devDependencies = {};
-          }
-          jsonObj.devDependencies[name] = version;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${
-          chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
-        }npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
-      );
-      this.debug('Error:', e);
-    }
-  }
-
-  /**
-   * @private
-   * Add a new script in the "package.json".
-   *
-   * @param {string} name - script name
-   * @param {string} data - script version
-   */
-  addNpmScript(name, data) {
-    const fullPath = 'package.json';
-    try {
-      jhipsterUtils.rewriteJSONFile(
-        fullPath,
-        jsonObj => {
-          if (jsonObj.scripts === undefined) {
-            jsonObj.scripts = {};
-          }
-          jsonObj.scripts[name] = data;
-        },
-        this
-      );
-    } catch (e) {
-      this.log(
-        `${
-          chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
-        }npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`
-      );
-      this.debug('Error:', e);
-    }
   }
 
   /**
@@ -1340,102 +1103,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @private
-   * Register a module configuration to .jhipster/modules/jhi-hooks.json
-   *
-   * @param {string} npmPackageName - npm package name of the generator
-   * @param {string} hookFor - from which JHipster generator this should be hooked ( 'entity' or 'app')
-   * @param {string} hookType - where to hook this at the generator stage ( 'pre' or 'post')
-   * @param {string} callbackSubGenerator[optional] - sub generator to invoke, if this is not given the module's main generator will be called, i.e app
-   * @param {string} description[optional] - description of the generator
-   */
-  registerModule(npmPackageName, hookFor, hookType, callbackSubGenerator, description) {
-    try {
-      let modules;
-      let error;
-      let duplicate;
-      const moduleName = _.startCase(npmPackageName.replace(`${GENERATOR_JHIPSTER}-`, ''));
-      const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
-      const generatorCallback = `${generatorName}:${callbackSubGenerator || 'app'}`;
-      const moduleConfig = {
-        name: `${moduleName} generator`,
-        npmPackageName,
-        description: description || `A JHipster module to generate ${moduleName}`,
-        hookFor,
-        hookType,
-        generatorCallback,
-      };
-      try {
-        // if file is not present, we got an empty list, no exception
-        // TODO 7.0 this.destinationPath(MODULES_HOOK_FILE);
-        modules = this.fs.readJSON(MODULES_HOOK_FILE, []);
-        duplicate = _.findIndex(modules, moduleConfig) !== -1;
-      } catch (err) {
-        error = true;
-        this.log(chalk.red('The JHipster module configuration file could not be read!'));
-        this.debug('Error:', err);
-      }
-      if (!error && !duplicate) {
-        modules.push(moduleConfig);
-        this.fs.writeJSON(MODULES_HOOK_FILE, modules, null, 4);
-      }
-    } catch (err) {
-      this.log(`\n${chalk.bold.red('Could not add jhipster module configuration')}`);
-      this.debug('Error:', err);
-    }
-  }
-
-  /**
-   * @private
-   * get the module hooks config json
-   */
-  getModuleHooks() {
-    let modulesConfig = [];
-    try {
-      if (shelljs.test('-f', MODULES_HOOK_FILE)) {
-        modulesConfig = this.fs.readJSON(MODULES_HOOK_FILE);
-      }
-    } catch (err) {
-      this.log(chalk.red('The module configuration file could not be read!'));
-    }
-
-    return modulesConfig;
-  }
-
-  /**
-   * @private
-   * Call all the module hooks with the given options.
-   * @param {string} hookFor - "app" or "entity"
-   * @param {string} hookType - "pre" or "post"
-   * @param {any} options - the options to pass to the hooks
-   * @param {function} cb - callback to trigger at the end
-   */
-  callHooks(hookFor, hookType, options, cb) {
-    const modules = this.getModuleHooks();
-    // run through all module hooks, which matches the hookFor and hookType
-    modules.forEach(module => {
-      this.debug('Composing module with config:', module);
-      if (module.hookFor === hookFor && module.hookType === hookType) {
-        // compose with the modules callback generator
-        const hook = module.generatorCallback.split(':')[1];
-        try {
-          this.composeExternalModule(module.npmPackageName, hook || 'app', options);
-        } catch (e) {
-          this.log(
-            chalk.red('Could not compose module ') +
-              chalk.bold.yellow(module.npmPackageName) +
-              chalk.red('. \nMake sure you have installed the module with ') +
-              chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`)
-          );
-          this.debug('ERROR:', e);
-        }
-      }
-    });
-    this.debug('calling callback');
-    cb && cb();
-  }
-
-  /**
    * Compose with a jhipster generator using default jhipster config.
    * @param {string} generator - jhipster generator.
    * @param {object} [args] - args to pass
@@ -1487,27 +1154,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   dependsOnJHipster(generator, args, options) {
     return this.composeWithJHipster(generator, args, options, { immediately: true });
-  }
-
-  /**
-   * @private
-   * Compose an external generator with Yeoman.
-   * @param {string} npmPackageName - package name
-   * @param {string} subGen - sub generator name
-   * @param {any} options - options to pass
-   * @return {object} the composed generator
-   */
-  composeExternalModule(npmPackageName, subGen, options = {}) {
-    const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
-    const generatorCallback = `${generatorName}:${subGen}`;
-    if (!this.env.isPackageRegistered(generatorName)) {
-      this.env.lookup({ filterPaths: true, packagePatterns: npmPackageName });
-    }
-    if (!this.env.get(generatorCallback)) {
-      throw new Error(`Generator ${generatorCallback} isn't registered.`);
-    }
-    options.configOptions = options.configOptions || this.configOptions;
-    return this.composeWith(generatorCallback, options, true);
   }
 
   /**
@@ -1569,7 +1215,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
     const entities = [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
       .map(entityName => ({ name: entityName, definition: this.readEntityJson(entityName) }))
-      .filter(entity => entity && !this.isBuiltInUser(entity.name) && !this.isBuiltInAuthority(entity.name) && entity.definition)
+      .filter(entity => entity && !entity.builtInUser && entity.definition)
       .sort(isBefore);
     this.jhipsterConfig.entities = entities.map(({ name }) => name);
     return entities;
@@ -1587,20 +1233,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       return false;
     }
     return semver.lt(jhipsterOldVersion, version);
-  }
-
-  /**
-   * @deprecated
-   * executes a Git command using shellJS
-   * gitExec(args [, options] [, callback])
-   *
-   * @param {string|array} args - can be an array of arguments or a string command
-   * @param {object} options[optional] - takes any of child process options
-   * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
-   * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
-   */
-  gitExec(args, options, callback) {
-    return jhipsterUtils.gitExec(args, options, callback);
   }
 
   /**
@@ -1990,36 +1622,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * @private
-   * ask a prompt for apps name.
-   *
-   * @param {object} generator - generator instance to use
-   */
-  async askModuleName(generator) {
-    const defaultAppBaseName = this.getDefaultAppName();
-    const answers = await generator.prompt({
-      type: 'input',
-      name: 'baseName',
-      validate: input => {
-        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-          return 'Your base name cannot contain special characters or a blank space';
-        }
-        if (generator.applicationType === 'microservice' && /_/.test(input)) {
-          return 'Your base name cannot contain underscores as this does not meet the URI spec';
-        }
-        if (input === 'application') {
-          return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
-        }
-        return true;
-      },
-      message: 'What is the base name of your application?',
-      default: defaultAppBaseName,
-    });
-
-    generator.baseName = generator.jhipsterConfig.baseName = answers.baseName;
-  }
-
-  /**
    * build a generated application.
    *
    * @param {String} buildTool - maven | gradle
@@ -2085,7 +1687,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * write the given files using provided options.
    *
    * @template DataType
-   * @param {import('./api.cjs').WriteFileOptions<this, DataType>} options
+   * @param {import('./api.mjs').WriteFileOptions<this, DataType>} options
    * @return {Promise<string[]>}
    */
   async writeFiles(options) {
@@ -2131,7 +1733,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         return val;
       }
       if (typeof val === 'function') {
-        return val.call(this, context, this) || false;
+        return val.call(this, context) || false;
       }
       throw new Error(`Type not supported ${val}`);
     };
@@ -2146,10 +1748,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         destinationFile = resolveCallback(destinationFile);
       } else {
         destinationFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
-      }
-      // TODO v8 drop
-      if (typeof context.customizeDestination === 'function') {
-        destinationFile = context.customizeDestination(context, destinationFile);
       }
 
       let sourceFileFrom;
@@ -2195,7 +1793,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           Object.values(this.configOptions?.sharedEntities ?? {}).forEach(entity => {
             entity.resetFakerSeed(seed);
           });
-          Object.values(this.options.sharedData.applications?.[context.baseName]?.sharedEntities ?? {}).forEach(entity => {
+          Object.values(this.sharedData.getApplication()?.sharedEntities ?? {}).forEach(entity => {
             entity.resetFakerSeed(seed);
           });
           // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
@@ -2207,10 +1805,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
         };
+        // TODO drop for v8 final release
+        const data = jhipster7Proxy(this, context, { ignoreWarnings: true });
         if (useAsync) {
-          await this.renderTemplateAsync(sourceFileFrom, destinationFile, context, renderOptions);
+          await this.renderTemplateAsync(sourceFileFrom, destinationFile, data, renderOptions);
         } else {
-          this.renderTemplate(sourceFileFrom, destinationFile, context, renderOptions);
+          this.renderTemplate(sourceFileFrom, destinationFile, data, renderOptions);
         }
       }
       if (!binary && transform && transform.length) {
@@ -2348,23 +1948,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} [dest] - object to write to.
    */
   parseCommonRuntimeOptions(options = this.options, dest = this.configOptions) {
-    if (options.outputPathCustomizer) {
-      if (dest.outputPathCustomizer === undefined) {
-        dest.outputPathCustomizer = [];
-      } else if (!Array.isArray(dest.outputPathCustomizer)) {
-        dest.outputPathCustomizer = [dest.outputPathCustomizer];
-      }
-      if (Array.isArray(options.outputPathCustomizer)) {
-        options.outputPathCustomizer.forEach(customizer => {
-          if (!dest.outputPathCustomizer.includes(customizer)) {
-            dest.outputPathCustomizer.push(customizer);
-          }
-        });
-      } else if (!dest.outputPathCustomizer.includes(options.outputPathCustomizer)) {
-        dest.outputPathCustomizer.push(options.outputPathCustomizer);
-      }
-    }
-
     if (dest.jhipsterOldVersion === undefined) {
       // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
       dest.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;
@@ -2613,24 +2196,28 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadAppConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
+    if (this.sharedData.getControl().useVersionPlaceholders) {
+      dest.nodeVersion = 'NODE_VERSION';
+    } else {
+      dest.nodeVersion = NODE_VERSION;
+    }
+
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
-    dest.projectVersion = process.env.JHI_PROJECT_VERSION || '0.0.1-SNAPSHOT';
     dest.applicationType = config.applicationType;
     dest.reactive = config.reactive;
     dest.jhiPrefix = config.jhiPrefix;
     dest.skipFakeData = config.skipFakeData;
     dest.entitySuffix = config.entitySuffix;
     dest.dtoSuffix = config.dtoSuffix;
-    dest.skipUserManagement = config.skipUserManagement;
     dest.skipCheckLengthOfIdentifier = config.skipCheckLengthOfIdentifier;
     dest.microfrontend = config.microfrontend;
     dest.microfrontends = config.microfrontends;
 
     dest.skipServer = config.skipServer;
     dest.skipCommitHook = config.skipCommitHook;
-    dest.otherModules = config.otherModules || [];
+    dest.blueprints = config.blueprints || [];
     dest.skipClient = config.skipClient;
     dest.prettierJava = config.prettierJava;
     dest.pages = config.pages;
@@ -2649,13 +2236,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.gatlingTests = dest.testFrameworks.includes(GATLING);
     dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
-    dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
     dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
 
     dest.authenticationType = config.authenticationType;
     dest.rememberMeKey = config.rememberMeKey;
     dest.jwtSecretKey = config.jwtSecretKey;
     dest.fakerSeed = config.fakerSeed;
+    dest.skipUserManagement = config.skipUserManagement;
   }
 
   /**
@@ -2686,7 +2273,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
       dest.projectDescription = dest.projectDescription || `Description for ${dest.baseName}`;
-      dest.endpointPrefix = !dest.applicationType || dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
+      dest.endpointPrefix = dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
     }
 
     if (dest.microfrontends && dest.microfrontends.length > 0) {
@@ -2712,6 +2299,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.authenticationTypeSession = dest.authenticationType === SESSION;
     dest.authenticationTypeJwt = dest.authenticationType === JWT;
     dest.authenticationTypeOauth2 = dest.authenticationType === OAUTH2;
+
+    dest.generateUserManagement = !dest.skipUserManagement && dest.authenticationType !== OAUTH2 && dest.applicationType !== MICROSERVICE;
+    dest.generateBuiltInUserEntity = dest.generateUserManagement;
   }
 
   /**
@@ -2721,7 +2311,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadClientConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.clientPackageManager = config.clientPackageManager;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
@@ -2765,7 +2355,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadTranslationConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.enableTranslation = config.enableTranslation;
     dest.nativeLanguage = config.nativeLanguage;
     dest.languages = config.languages;
@@ -2779,9 +2369,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {Object} config - config to load config from
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
-  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadServerConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.packageName = config.packageName;
-    dest.packageFolder = config.packageFolder;
+    dest.packageFolder = config.packageFolder && normalizePathEnd(config.packageFolder);
     dest.serverPort = config.serverPort;
 
     dest.srcMainJava = SERVER_MAIN_SRC_DIR;
@@ -2815,8 +2405,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     } else {
       dest.gradleEnterpriseHost = config.gradleEnterpriseHost;
     }
-
-    this.loadDerivedServerConfig(dest);
   }
 
   /**
@@ -2824,8 +2412,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   loadDerivedServerConfig(dest = this) {
     if (!dest.packageFolder) {
-      dest.packageFolder = dest.packageName.replace(/\./g, '/');
+      dest.packageFolder = `${dest.packageName.replace(/\./g, '/')}/`;
     }
+
+    dest.javaPackageSrcDir = normalizePathEnd(`${dest.srcMainJava}${dest.packageFolder}`);
+    dest.javaPackageTestDir = normalizePathEnd(`${dest.srcTestJava}${dest.packageFolder}`);
 
     dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     // Convert to false for templates.
@@ -2885,6 +2476,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseTypeMariadb = dest.databaseType === SQL && (dest.devDatabaseType === MARIADB || dest.prodDatabaseType === MARIADB);
     dest.databaseTypePostgres = dest.databaseType === SQL && (dest.devDatabaseType === POSTGRESQL || dest.prodDatabaseType === POSTGRESQL);
 
+    dest.enableLiquibase = dest.databaseTypeSql;
+
     dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
 
     dest.messageBrokerKafka = dest.messageBroker === KAFKA;
@@ -2896,13 +2489,26 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
     dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
     dest.serviceDiscoveryAny = ![undefined, false, 'no'].includes(dest.serviceDiscoveryType);
+
+    if (dest.databaseType === NO_DATABASE) {
+      // User management requires a database.
+      dest.generateUserManagement = false;
+    }
+    // TODO make UserEntity optional on relationships for microservices and oauth2
+    // Used for relationships and syncWithIdp
+    dest.generateBuiltInUserEntity =
+      dest.generateUserManagement ||
+      dest.authenticationType === OAUTH2 ||
+      (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
+
+    dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
   }
 
   /**
    * @param {Object} config - config to load config from
    * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
-  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
+  loadPlatformConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
     dest.monitoring = config.monitoring;
     this.loadDerivedPlatformConfig(dest);
@@ -2980,12 +2586,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
     return {
-      ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
       ...(applicationType === MICROSERVICE ? defaultConfigMicroservice : defaultConfig),
+      ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
     };
   }
 
-  setConfigDefaults(defaults = this.jhipsterDefaults) {
+  setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {
     const jhipsterVersion = packagejs.version;
     const baseName = this.getDefaultAppName();
     const creationTimestamp = new Date().getTime();
@@ -3042,24 +2648,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * @experimental
-   * Check if modular generators should be composed.
-   * @return {Boolean}
-   */
-  shouldComposeModular() {
-    return !this.options.add && !this.options.regenerate;
-  }
-
-  /**
-   * @experimental
-   * Check if modular generators should skip write files.
-   * @return {Boolean}
-   */
-  shouldSkipFiles() {
-    return this.options.configure;
-  }
-
-  /**
    * @private
    * Load config for simulating existing project.
    */
@@ -3084,97 +2672,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.config.set(this.options.localConfig);
       delete this.options.localConfig;
     }
-  }
-
-  /**
-   * @experimental
-   * Load options from an object.
-   * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./base/api.cjs').JHipsterOptions} [options] - Object containing options.
-   */
-  jhipsterOptions(options = {}) {
-    options = _.cloneDeep(options);
-    Object.entries(options).forEach(([optionName, optionDesc]) => {
-      this.option(kebabCase(optionName), optionDesc);
-      if (!optionDesc.scope) return;
-      const optionValue = this.options[optionName];
-      if (optionValue !== undefined) {
-        if (optionDesc.scope === 'storage') {
-          this.config.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'blueprint') {
-          this.blueprintStorage.set(optionName, optionValue);
-        } else if (optionDesc.scope === 'runtime') {
-          this.configOptions[optionName] = optionValue;
-        } else if (optionDesc.scope === 'generator') {
-          this[optionName] = optionValue;
-        } else {
-          throw new Error(`Scope ${optionDesc.scope} not supported`);
-        }
-        delete this.options[optionName];
-      }
-    });
-  }
-
-  /**
-   * @protected
-   */
-  getArgsForPriority(priorityName) {
-    return this.args;
-  }
-
-  /**
-   * Create a simple-git instance using current destinationPath as baseDir.
-   * @return {import('simple-git').SimpleGit}
-   */
-  createGit() {
-    return simpleGit({ baseDir: this.destinationPath() }).env({
-      ...process.env,
-      LANG: 'en',
-    });
-  }
-
-  /**
-   * Edit file content
-   * @param {string} file
-   * @param {...import('./api.cjs').EditFileCallback} transformCallbacks
-   * @returns {import('./api.cjs').CascatedEditFileCallback}
-   */
-  editFile(file, ...transformCallbacks) {
-    let filePath = this.destinationPath(file);
-    if (!this.env.sharedFs.existsInMemory(filePath) && this.env.sharedFs.existsInMemory(`${filePath}.jhi`)) {
-      filePath = `${filePath}.jhi`;
-    }
-
-    let content;
-
-    try {
-      content = this.readDestination(filePath);
-    } catch (_error) {
-      if (transformCallbacks.length === 0) {
-        throw new Error(`File ${filePath} doesn't exist`);
-      }
-      // allow to edit non existing files
-      content = '';
-    }
-    if (isWin32 && content.match(/\r\n/)) {
-      transformCallbacks = [content => content.replace(/\r\n/g, '\n')].concat(transformCallbacks, content =>
-        content.replace(/\n/g, '\r\n')
-      );
-    }
-
-    const writeCallback = (...callbacks) => {
-      if (callbacks.length === 0) {
-        return writeCallback;
-      }
-      try {
-        content = joinCallbacks(...callbacks).call(this, content, filePath);
-        this.writeDestination(filePath, content);
-      } catch (error) {
-        throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
-      }
-      return writeCallback;
-    };
-
-    return writeCallback(...transformCallbacks);
   }
 }

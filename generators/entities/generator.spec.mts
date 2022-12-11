@@ -22,14 +22,13 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import constants from '../generator-constants.cjs';
-import testSupport from '../../test/support/index.cjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './generator.mjs';
-import { skipPrettierHelpers as helpers } from '../../test/utils/utils.mjs';
+import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 
 const { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
 
 const { snakeCase } = lodash;
-const { testBlueprintSupport } = testSupport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,14 +36,14 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorPath = `${__dirname}/index.mts`;
 
-const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };
+const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
   describe.skip('blueprint support', () => testBlueprintSupport(generator));

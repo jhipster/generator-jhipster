@@ -28,12 +28,27 @@ const { startCase } = _;
 
 /**
  * @class
- * @extends {BaseApplicationGenerator<import('../bootstrap-application-base/types.js').BaseApplication>}
+ * @extends {BaseApplicationGenerator<import('../base-application/types.mjs').BaseApplication>}
  */
 export default class ProjectNameGenerator extends BaseApplicationGenerator {
-  async _postConstruct() {
+  constructor(args, options, features) {
+    super(args, options, features);
+
+    if (this.options.help) return;
+
+    this.sharedData.getControl().existingProject =
+      this.options.defaults ||
+      this.options.withEntities ||
+      this.options.applicationWithConfig ||
+      (this.jhipsterConfig.baseName !== undefined && this.config.existed);
+  }
+
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
+    }
+    if (this.sharedData.getControl().existingProject && !this.jhipsterConfig.baseName) {
+      this.jhipsterConfig.baseName = this.getDefaultAppName();
     }
   }
 
@@ -57,25 +72,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return;
-    return this.prompting;
-  }
-
-  get configuring() {
-    return {
-      defaults() {
-        if (this.options.defaults) {
-          this.config.defaults({
-            baseName: this.getDefaultAppName(),
-          });
-        }
-      },
-    };
-  }
-
-  get [BaseApplicationGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return;
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get loading() {
@@ -89,8 +86,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return;
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -106,15 +102,14 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
           dasherizedBaseName: _.kebabCase(baseName),
           lowercaseBaseName: baseName.toLowerCase(),
           upperFirstCamelCaseBaseName: this.upperFirstCamelCase(baseName),
-          projectDescription: `${humanizedBaseName} Project`,
+          projectDescription: `Description for ${humanizedBaseName}`,
         });
       },
     });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    if (this.delegateToBlueprint) return;
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   /*
@@ -133,7 +128,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
     if (/_/.test(input)) {
       return 'Your base name cannot contain underscores as this does not meet the URI spec';
     }
-    if (input === 'application') {
+    if (input?.toLowerCase() === 'application') {
       return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
     }
     return true;

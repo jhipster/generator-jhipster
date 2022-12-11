@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import { XMLParser } from 'fast-xml-parser';
-import { DockerfileParser } from 'dockerfile-ast';
 
 /**
  * Extract properties from pom content
@@ -39,36 +38,6 @@ export function getPomVersionProperties(pomContent) {
       .filter(([property]) => property.endsWith('.version'))
       .map(([property, value]) => [property.slice(0, -8), value])
   );
-}
-
-/**
- * Extract version properties from pom content
- * @param {string} pomContent
- * @returns {Record<string, string>}
- */
-export function getDockerfileContainers(dockerfileContent) {
-  const dockerfile = DockerfileParser.parse(dockerfileContent);
-  const containers = {};
-  let imageWithTag;
-  let image;
-  let tag;
-  for (const instruction of dockerfile.getInstructions()) {
-    if (instruction.getKeyword() === 'FROM') {
-      imageWithTag = instruction.getArgumentsContent();
-      const split = instruction.getArgumentsContent().split(':');
-      image = split[0];
-      tag = split[1];
-      containers[image] = imageWithTag;
-    } else if (instruction.getKeyword() === 'LABEL') {
-      const split = instruction.getArgumentsContent().split('=');
-      if (split[0].toUpperCase() === 'ALIAS') {
-        containers[split[1]] = imageWithTag;
-        containers[`${split[1]}Tag`] = tag;
-        containers[`${split[1]}Image`] = image;
-      }
-    }
-  }
-  return containers;
 }
 
 /**
@@ -115,3 +84,27 @@ export function mergeSections(...allFiles) {
   }
   return generated;
 }
+
+const replaceFilePathVariables = (data, filePath) => filePath?.replace(/_package_/, data.package)?.replace(/_\w*/, '');
+
+const replaceEntityFilePathVariables = (data, filePath) =>
+  filePath
+    ?.replace(/_package_/, data.entityJavaPackageFolder)
+    ?.replace(/_PersistClass_/, data.persistClass)
+    ?.replace(/_EntityClass_/, data.entityClass)
+    ?.replace(/_\w*/, '');
+
+/**
+ * Move the template to `javaPackageSrcDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).
+ * Removes trailing specifiers.
+ */
+export const moveToJavaPackageSrcDir = (data, filePath) => `${data.javaPackageSrcDir}${replaceFilePathVariables(data, filePath) ?? ''}`;
+
+/**
+ * Move the template to `javaPackageTestDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).
+ * Removes trailing specifiers.
+ */
+export const moveToJavaPackageTestDir = (data, filePath) => `${data.javaPackageTestDir}${replaceFilePathVariables(data, filePath) ?? ''}`;
+
+export const moveToJavaEntityPackageSrcDir = (data, filePath) =>
+  `${data.srcMainJava}${data.entityAbsoluteFolder}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
