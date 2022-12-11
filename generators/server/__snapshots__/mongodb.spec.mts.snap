@@ -2477,6 +2477,9 @@ Object {
   "src/main/java/tech/jhipster/service/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
@@ -2484,9 +2487,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
@@ -2658,9 +2658,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
@@ -3264,6 +3261,9 @@ Object {
   "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
@@ -3271,9 +3271,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/LogoutResource.java": Object {
@@ -3403,9 +3400,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": Object {
@@ -4072,13 +4066,13 @@ Object {
   "src/main/java/tech/jhipster/service/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
@@ -4235,9 +4229,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
