@@ -36,9 +36,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+<%_ if (!skipClient || authenticationTypeSession || authenticationTypeOauth2) { _%>
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+<%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import tech.jhipster.web.filter.CookieCsrfFilter;
+<%_ } _%>
+<%_ if (!skipClient) { _%>
+import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -155,6 +160,9 @@ public class SecurityConfiguration {
 <%_ } else { _%>
                 .disable())
 <%_ } _%>
+<%_ if (!skipClient) { _%>
+            .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
+<%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
   <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
             .addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class)
@@ -174,12 +182,8 @@ public class SecurityConfiguration {
             .authorizeHttpRequests()
 <%_ if (!applicationTypeMicroservice) { _%>
   <%_ if (!skipClient) { _%>
-            .requestMatchers("/*","/*/*","/*/*/*","/*/*/*/*").permitAll()
-            .requestMatchers("/*.css", "/*.js", "/*.ico", "/*.webapp").permitAll()
-            .requestMatchers("/app/*.html").permitAll()
-            .requestMatchers("/app/*/*.html").permitAll()
-            .requestMatchers("/app/*.js").permitAll()
-            .requestMatchers("/app/*/*.js").permitAll()
+            .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
+            .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
             .requestMatchers("/i18n/**").permitAll()
             .requestMatchers("/content/**").permitAll()
   <%_ } _%>
