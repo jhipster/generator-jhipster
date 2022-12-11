@@ -46,6 +46,9 @@ plugins {
     id "org.sonarqube"
     id "io.spring.nohttp"
     id "com.github.andygoossens.gradle-modernizer-plugin"
+<%_ if (gatlingTests) { _%>
+    id "io.gatling.gradle"
+<%_ } _%>
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -137,6 +140,19 @@ test {
 <%_ } _%>
 }
 
+<%_ if (gatlingTests) { _%>
+sourceSets {
+    gatling {
+        java.srcDirs = ["src/test/java/gatling/simulations"]
+        resources.srcDirs = ["src/test/gatling/conf"]
+    }
+}
+
+gatling {
+    simulations = { include "**/*Test*.java" }
+}
+
+<%_ } _%>
 modernizer {
     failOnViolations = true
     includeTestClasses = true
@@ -521,6 +537,9 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "io.cucumber:cucumber-spring"
     testImplementation "org.junit.platform:junit-platform-console"
     testImplementation "org.testng:testng"
+<%_ } _%>
+<%_ if (gatlingTests) { _%>
+    testImplementation "io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}"
 <%_ } _%>
 <%_ if (enableLiquibase) { _%>
     liquibaseRuntime sourceSets.main.compileClasspath

@@ -1891,10 +1891,10 @@ Object {
   "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/IntegrationTest.java": Object {
@@ -2298,12 +2298,6 @@ Object {
   "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
@@ -2380,6 +2374,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": Object {
@@ -4417,10 +4417,10 @@ Object {
   "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/IntegrationTest.java": Object {
@@ -4794,12 +4794,6 @@ Object {
   "src/test/gatling/conf/logback.xml": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
@@ -4861,6 +4855,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": Object {

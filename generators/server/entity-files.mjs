@@ -418,8 +418,8 @@ export const gatlingFiles = {
       path: TEST_DIR,
       templates: [
         {
-          file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
-          renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
+          file: 'java/gatling/simulations/EntityGatlingTest.java',
+          renameTo: generator => `java/gatling/simulations/${generator.entityClass}GatlingTest.java`,
         },
       ],
     },

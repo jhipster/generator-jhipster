@@ -568,16 +568,16 @@ Object {
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
@@ -723,18 +723,6 @@ Object {
   "src/main/java/com/package/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
     "stateCleared": "modified",
   },
@@ -763,6 +751,18 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
 }
@@ -1342,16 +1342,16 @@ Object {
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": Object {
@@ -1497,18 +1497,6 @@ Object {
   "src/main/java/com/package/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/gatling/user-files/simulations/AnotherSimpleGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/user-files/simulations/EntityWithCustomIdGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/user-files/simulations/MicroserviceGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/user-files/simulations/SimpleGatlingTest.scala": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": Object {
     "stateCleared": "modified",
   },
@@ -1537,6 +1525,18 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/AnotherSimpleGatlingTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/EntityWithCustomIdGatlingTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/MicroserviceGatlingTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/gatling/simulations/SimpleGatlingTest.java": Object {
     "stateCleared": "modified",
   },
 }
