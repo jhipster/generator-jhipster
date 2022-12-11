@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 export { createProgram, buildCommands, buildJHipster, runJHipster, printJHipsterLogo, done, logger } from './program.mjs';
-export { default as EnvironmentBuilder } from './environment-builder.cjs';
+export { default as EnvironmentBuilder } from './environment-builder.mjs';

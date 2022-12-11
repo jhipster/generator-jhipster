@@ -9,7 +9,7 @@ module.exports = {
   slow: 0,
   timeout: 50000,
   ui: 'bdd',
-  extension: ['js', 'spec.cjs', 'spec.mjs', 'spec.ts', 'spec.mts'],
+  extension: ['spec.cjs', 'spec.mjs', 'spec.ts', 'spec.mts'],
   require: ['mocha-expect-snapshot/old-format', 'test/mocha.config.cjs'],
   // Resolve absolute path for test with fork and different cwd.
   // `loader` options is passed to forks, but `require` is not.

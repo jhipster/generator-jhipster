@@ -72,7 +72,8 @@
     "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java,xml}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java,xml}\"",
     "pretest": "npm run lint",
-    "test": "mocha --no-insight --forbid-only --parallel --max-old-space-size=4096 test generators && mocha --config .mocharc.mocked.cjs --no-insight --forbid-only --parallel --max-old-space-size=4096 ./test/cli",
+    "test": "mocha -config .mocharc.cjs --no-insight --forbid-only --parallel --max-old-space-size=4096 test generators",
+    "test-mocked": "NODE_OPTIONS=\"--loader=testdouble\" mocha --config .mocharc.mocked.cjs --no-insight --forbid-only --parallel --max-old-space-size=4096 ./test/cli",
     "update-snapshot": "mocha --no-insight --no-parallel --updateSnapshot --",
     "update-snapshots": "mocha test generators --require test/mocha-update-snapshots.config.cjs --no-insight --forbid-only",
     "watch": "concurrently \"tsc --watch\" \"node ./watch.mjs\""

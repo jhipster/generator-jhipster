@@ -26,7 +26,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { logo } from './logo.cjs';
-import EnvironmentBuilder from './environment-builder.cjs';
+import EnvironmentBuilder from './environment-builder.mjs';
 import SUB_GENERATORS from './commands.cjs';
 import JHipsterCommand from './jhipster-command.cjs';
 import { CLI_NAME, logger, getCommand, done } from './utils.cjs';

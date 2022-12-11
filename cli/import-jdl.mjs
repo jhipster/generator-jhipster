@@ -23,7 +23,7 @@ import path from 'path';
 import pluralize from 'pluralize';
 import { createRequire } from 'module';
 import { fork as forkProcess } from 'child_process';
-import EnvironmentBuilder from './environment-builder.cjs';
+import EnvironmentBuilder from './environment-builder.mjs';
 import { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArgs } from './utils.mjs';
 import { packageJson as packagejs } from '../lib/index.cjs';
 import statistics from '../generators/statistics.cjs';

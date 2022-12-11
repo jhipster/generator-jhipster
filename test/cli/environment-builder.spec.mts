@@ -23,7 +23,7 @@ import fs from 'fs';
 import sinon from 'sinon';
 import helpers from 'yeoman-test';
 
-import EnvironmentBuilder from '../../cli/environment-builder.cjs';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
 import { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } from './utils/utils.cjs';
