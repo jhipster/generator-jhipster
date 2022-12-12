@@ -29,6 +29,7 @@ export const deploymentTestSamples = {
     prodDatabaseType: 'mysql',
     serviceDiscoveryType: 'eureka',
     serverPort: 8080,
+    authenticationType: 'oauth2'
   },
   '02-mysql': {
     applicationType: 'microservice',
@@ -37,6 +38,7 @@ export const deploymentTestSamples = {
     prodDatabaseType: 'mysql',
     serviceDiscoveryType: 'eureka',
     serverPort: 8081,
+    authenticationType: 'oauth2'
   },
   '03-psql': {
     applicationType: 'microservice',

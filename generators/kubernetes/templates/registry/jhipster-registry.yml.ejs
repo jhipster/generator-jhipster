@@ -89,7 +89,7 @@ spec:
         # StatefulSet specific configuration
         # Registry configuration
         - name: SPRING_PROFILES_ACTIVE
-          value: prod,k8s<%_ if (useKeycloak && usesOauth2) { _%>,oauth2<% } %>
+          value: prod,k8s<%_ if (useKeycloak) { _%>,oauth2<% } %>
         - name: SPRING_SECURITY_USER_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -125,7 +125,7 @@ spec:
           value: 'true'
         - name: K8S_CONFIG_PATH
           value: '/central-config/'
-  <%_ if (useKeycloak && usesOauth2) { _%>
+  <%_ if (useKeycloak) { _%>
     <%_ if (ingressDomain) { _%>        
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
           value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
@@ -144,7 +144,7 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /central-config
-    <%_ if (useKeycloak && usesOauth2) { _%>
+    <%_ if (useKeycloak) { _%>
         # if using self-signed certificates, for a successful start, add keycloak certificate to java truststore 
         - name: java-truststore
           mountPath: /etc/pki/java
@@ -153,7 +153,7 @@ spec:
       - name: config-volume
         configMap:
           name: application-config
-  <%_ if (useKeycloak && usesOauth2) { _%>
+  <%_ if (useKeycloak) { _%>
       - name: java-truststore
         secret:
           secretName: keycloak-tls-secret

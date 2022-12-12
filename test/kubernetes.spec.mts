@@ -389,12 +389,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
     it('creates expected default files', () => {
       assert.file(expectedFiles.monolith);
     });
-    it('create the expected cert-manager files', () => {
-      assert.file(expectedFiles.certmanager);
-    });
-    it('create the expected keycloak files', () => {
-      assert.file(expectedFiles.keycloak);
-    });
     it('create the apply script', () => {
       assert.file(expectedFiles.applyScript);
     });

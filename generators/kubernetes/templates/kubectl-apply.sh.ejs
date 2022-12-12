@@ -61,7 +61,7 @@ logSummary() {
   <%_ } _%>
   <%_ if (useKeycloak) { _%>
     <%_ if (ingressDomain) { _%>
-      echo "Keycloak - https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+        echo "Keycloak - https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
     <%_ } _%>
   <%_ } _%>
         echo "#####################################################"
@@ -70,13 +70,15 @@ logSummary() {
 
 default() {
     suffix=k8s
-    kubectl apply -f cert-manager/
 <%_ if (!kubernetesNamespaceDefault) { _%>
     kubectl apply -f namespace.yml
 <%_ } _%> <%_ if (istio) { _%>
     kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
 <%_ } _%> 
+<%_ if (useKeycloak) { _%>    
+    kubectl apply -f cert-manager/
     kubectl apply -f keycloak-${suffix}/
+<%_ } _%>
 <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
     kubectl apply -f registry-${suffix}/
     <%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>

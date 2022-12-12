@@ -95,6 +95,7 @@ export function writeFiles() {
     },
 
     writeKeycloak() {
+      if (!this.useKeycloak) return;
       const keycloakOut = 'keycloak'.concat('-', suffix);
       this.entryPort ='8080';
       this.keycloakRedirectUris = '';
