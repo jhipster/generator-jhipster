@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import JDLField from '../../models/jdl-field';
-import { formatComment } from '../../utils/format-utils';
-import { lowerFirst } from '../../utils/string-utils';
+import JDLField from '../../models/jdl-field.js';
+import { formatComment } from '../../utils/format-utils.js';
+import { lowerFirst } from '../../utils/string-utils.js';
 
 export default { convertField };
 

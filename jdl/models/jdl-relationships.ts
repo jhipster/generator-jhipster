@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import RelationshipTypes from '../jhipster/relationship-types';
+import RelationshipTypes from '../jhipster/relationship-types.js';
 
 export default class JDLRelationships {
   relationships: { OneToOne: Map<any, any>; OneToMany: Map<any, any>; ManyToOne: Map<any, any>; ManyToMany: Map<any, any> };

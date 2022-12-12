@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import entityOptions from './entity-options';
+import entityOptions from './entity-options.js';
 
 const { MapperTypes, PaginationTypes, SearchTypes, ServiceTypes } = entityOptions;
 

@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import { isEqual } from 'lodash';
-import DeploymentOptions from '../jhipster/deployment-options';
-import { merge as mergeObjects } from '../utils/object-utils';
-import { join } from '../utils/set-utils';
+import DeploymentOptions from '../jhipster/deployment-options.js';
+import { merge as mergeObjects } from '../utils/object-utils.js';
+import { join } from '../utils/set-utils.js';
 
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
 

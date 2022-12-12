@@ -26,7 +26,7 @@ import JDLEnum from '../../../../jdl/models/jdl-enum.js';
 import JDLValidation from '../../../../jdl/models/jdl-validation.js';
 import FieldTypes from '../../../../jdl/jhipster/field-types.js';
 import Validations from '../../../../jdl/jhipster/validations.js';
-import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-to-json-field-converter';
+import { convert } from '../../../../jdl/converters/jdl-to-json/jdl/jdl-to-json-field-converter.js';
 
 const { CommonDBTypes } = FieldTypes;
 

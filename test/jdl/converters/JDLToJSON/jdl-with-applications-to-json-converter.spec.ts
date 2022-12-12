@@ -46,7 +46,7 @@ import RelationshipTypes from '../../../../jdl/jhipster/relationship-types.js';
 import RelationshipOptions from '../../../../jdl/jhipster/relationship-options.js';
 
 import logger from '../../../../jdl/utils/objects/logger.js';
-import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-with-applications-to-json-converter';
+import { convert } from '../../../../jdl/converters/jdl-to-json/jdl/jdl-with-applications-to-json-converter.js';
 
 const { CommonDBTypes } = FieldTypes;
 const { MONOLITH } = ApplicationTypes;

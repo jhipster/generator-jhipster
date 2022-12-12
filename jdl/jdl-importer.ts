@@ -17,19 +17,19 @@
  * limitations under the License.
  */
 import { uniqBy } from 'lodash';
-import * as JDLReader from './readers/jdl-reader';
-import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter';
-import { readJSONFile } from './readers/json-file-reader';
-import { doesFileExist } from './utils/file-utils';
-import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter';
-import JDLWithApplicationsToJSONConverter from './converters/jdl-to-json/jdl-with-applications-to-json-converter';
-import { exportApplication, exportApplications } from './exporters/applications/jhipster-application-exporter';
-import { formatApplicationToExport, formatApplicationsToExport } from './exporters/applications/jhipster-application-formatter';
-import exportDeployments from './exporters/jhipster-deployment-exporter';
-import exportEntities from './exporters/jhipster-entity-exporter';
-import createWithApplicationValidator from './validators/jdl-with-application-validator';
-import createWithoutApplicationValidator from './validators/jdl-without-application-validator';
-import { OptionNames } from './jhipster/application-options';
+import * as JDLReader from './readers/jdl-reader.js';
+import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import { readJSONFile } from './readers/json-file-reader.js';
+import { doesFileExist } from './utils/file-utils.js';
+import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
+import JDLWithApplicationsToJSONConverter from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
+import { exportApplication, exportApplications } from './exporters/applications/jhipster-application-exporter.js';
+import { formatApplicationToExport, formatApplicationsToExport } from './exporters/applications/jhipster-application-formatter.js';
+import exportDeployments from './exporters/jhipster-deployment-exporter.js';
+import exportEntities from './exporters/jhipster-entity-exporter.js';
+import createWithApplicationValidator from './validators/jdl-with-application-validator.js';
+import createWithoutApplicationValidator from './validators/jdl-without-application-validator.js';
+import { OptionNames } from './jhipster/application-options.js';
 
 const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
 

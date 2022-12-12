@@ -22,7 +22,7 @@ import fs from 'fs';
 import path from 'path';
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import { convertToJDL, convertSingleContentToJDL } from '../../../jdl/converters/json-to-jdl-converter';
+import { convertToJDL, convertSingleContentToJDL } from '../../../jdl/converters/jdl/json-to-jdl-converter.js';
 
 describe('JSONToJDLConverter', () => {
   describe('convertToJDL', () => {

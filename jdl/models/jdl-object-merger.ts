@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import JDLObject from './jdl-object';
+import JDLObject from './jdl-object.js';
 
 /**
  * Merges two JDL objects together, without altering any of the two passed objects.

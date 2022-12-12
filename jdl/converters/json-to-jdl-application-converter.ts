@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import JDLObject from '../models/jdl-object';
-import { createJDLApplication } from '../models/jdl-application-factory';
+import JDLObject from '../models/jdl-object.js';
+import { createJDLApplication } from '../models/jdl-application-factory.js';
 
 const GENERATOR_NAME = 'generator-jhipster';
 

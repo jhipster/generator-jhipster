@@ -26,7 +26,7 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 import { expect } from 'chai';
 
-import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-without-application-to-json-converter';
+import { convert } from '../../../../jdl/converters/jdl-to-json/jdl/jdl-without-application-to-json-converter.js';
 
 import ApplicationTypes from '../../../../jdl/jhipster/application-types.js';
 import DatabaseTypes from '../../../../jdl/jhipster/database-types.js';

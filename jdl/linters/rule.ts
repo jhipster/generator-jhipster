@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { RuleLevel, INFO } from './rule-levels';
+import { RuleLevel, INFO } from './rule-levels.js';
 
 import objectUtils = require('../utils/object-utils');
 

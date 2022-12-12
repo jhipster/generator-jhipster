@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import { readFile } from '../readers/file-reader';
-import * as JDLReader from '../readers/jdl-reader';
-import Issues from './issues/issues';
-import { checkEntities, EntityDeclaration } from './entity-linter';
-import { checkFields } from './field-linter';
-import { checkEnums } from './enum-linter';
-import { checkRelationships } from './relationship-linter';
+import { readFile } from '../readers/file-reader.js';
+import * as JDLReader from '../readers/jdl-reader.js';
+import Issues from './issues/issues.js';
+import { checkEntities, EntityDeclaration } from './entity-linter.js';
+import { checkFields } from './field-linter.js';
+import { checkEnums } from './enum-linter.js';
+import { checkRelationships } from './relationship-linter.js';
 
 export type JDLLinter = {
   check: () => Issues;

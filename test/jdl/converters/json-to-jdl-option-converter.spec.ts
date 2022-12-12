@@ -20,7 +20,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import { convertServerOptionsToJDL } from '../../../jdl/converters/json-to-jdl-option-converter';
+import { convertServerOptionsToJDL } from '../../../jdl/converters/jdl/json-to-jdl-option-converter.js';
 import JDLObject from '../../../jdl/models/jdl-object.js';
 import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
 import UnaryOptions from '../../../jdl/jhipster/unary-options.js';

@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import ApplicationOptions from '../jhipster/application-options';
-import ApplicationTypes from '../jhipster/application-types';
-import DatabaseTypes from '../jhipster/database-types';
-import BinaryOptionValidator from './binary-option-validator';
-import UnaryOptionValidator from './unary-option-validator';
-import Validator from './validator';
+import ApplicationOptions from '../jhipster/application-options.js';
+import ApplicationTypes from '../jhipster/application-types.js';
+import DatabaseTypes from '../jhipster/database-types.js';
+import BinaryOptionValidator from './binary-option-validator.js';
+import UnaryOptionValidator from './unary-option-validator.js';
+import Validator from './validator.js';
 
-import BinaryOptions from '../jhipster/binary-options';
+import BinaryOptions from '../jhipster/binary-options.js';
 
 const { OptionNames, OptionValues, getTypeForOption, doesOptionExist, doesOptionValueExist } = ApplicationOptions;
 const { MICROSERVICE } = ApplicationTypes;

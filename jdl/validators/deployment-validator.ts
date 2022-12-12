@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import Validator from './validator';
-import ApplicationTypes from '../jhipster/application-types';
-import DatabaseTypes from '../jhipster/database-types';
-import SearchEngineTypes from '../jhipster/search-engine-types';
-import DeploymentOptions from '../jhipster/deployment-options';
+import Validator from './validator.js';
+import ApplicationTypes from '../jhipster/application-types.js';
+import DatabaseTypes from '../jhipster/database-types.js';
+import SearchEngineTypes from '../jhipster/search-engine-types.js';
+import DeploymentOptions from '../jhipster/deployment-options.js';
 
 const { MICROSERVICE } = ApplicationTypes;
 const { NO } = DatabaseTypes;

@@ -22,7 +22,7 @@ import { expect } from 'chai';
 
 import fs from 'fs';
 import path from 'path';
-import { convertEntitiesToJDL } from '../../../jdl/converters/json-to-jdl-entity-converter';
+import { convertEntitiesToJDL } from '../../../jdl/converters/jdl/json-to-jdl-entity-converter.js';
 import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
 import RelationshipOptions from '../../../jdl/jhipster/relationship-options.js';
 import BinaryOptions from '../../../jdl/jhipster/binary-options.js';

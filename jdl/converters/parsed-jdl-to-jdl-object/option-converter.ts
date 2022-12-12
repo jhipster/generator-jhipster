@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import JDLUnaryOption from '../../models/jdl-unary-option';
-import JDLBinaryOption from '../../models/jdl-binary-option';
-import UnaryOptions from '../../jhipster/unary-options';
-import BinaryOptions, { OptionValues, getOptionName } from '../../jhipster/binary-options';
+import JDLUnaryOption from '../../models/jdl-unary-option.js';
+import JDLBinaryOption from '../../models/jdl-binary-option.js';
+import UnaryOptions from '../../jhipster/unary-options.js';
+import BinaryOptions, { OptionValues, getOptionName } from '../../jhipster/binary-options.js';
 
 export default { convertOptions };
 

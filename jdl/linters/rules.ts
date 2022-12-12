@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import Rule from './rule';
-import { INFO, WARNING, ERROR } from './rule-levels';
+import Rule from './rule.js';
+import { INFO, WARNING, ERROR } from './rule-levels.js';
 
 export const rulesNames = {
   ENT_SHORTER_DECL: 'ENT_SHORTER_DECL',

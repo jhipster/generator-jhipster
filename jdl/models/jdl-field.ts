@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { merge } from '../utils/object-utils';
+import { merge } from '../utils/object-utils.js';
 
 export default class JDLField {
   name: any;

@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import BasicEntityConverter from './jdl-to-json-basic-entity-converter';
-import FieldConverter from './jdl-to-json-field-converter';
-import RelationshipConverter from './jdl-to-json-relationship-converter';
-import OptionConverter from './jdl-to-json-option-converter';
+import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
+import FieldConverter from './jdl-to-json-field-converter.js';
+import RelationshipConverter from './jdl-to-json-relationship-converter.js';
+import OptionConverter from './jdl-to-json-option-converter.js';
 
 const USER = 'user';
 const AUTHORITY = 'authority';

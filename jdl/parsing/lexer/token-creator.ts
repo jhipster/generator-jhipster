@@ -20,7 +20,7 @@
 import { isString } from 'lodash';
 import { createToken } from 'chevrotain';
 
-import { NAME, KEYWORD, namePattern } from './shared-tokens';
+import { NAME, KEYWORD, namePattern } from './shared-tokens.js';
 
 export default function createTokenFromConfig(config) {
   if (!config) {

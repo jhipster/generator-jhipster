@@ -19,15 +19,15 @@
 
 import path from 'path';
 import fs from 'fs';
-import JDLObject from '../models/jdl-object';
-import mergeJDLObjects from '../models/jdl-object-merger';
-import { doesFileExist, doesDirectoryExist } from '../utils/file-utils';
-import { readJSONFile } from '../readers/json-file-reader';
-import { convertApplicationToJDL } from './json-to-jdl-application-converter';
-import { convertEntitiesToJDL } from './json-to-jdl-entity-converter';
-import exportJDLObject from '../exporters/jdl-exporter';
-import ApplicationOptions from '../jhipster/application-options';
-import { Entity } from './types';
+import JDLObject from '../models/jdl-object.js';
+import mergeJDLObjects from '../models/jdl-object-merger.js';
+import { doesFileExist, doesDirectoryExist } from '../utils/file-utils.js';
+import { readJSONFile } from '../readers/json-file-reader.js';
+import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
+import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
+import exportJDLObject from '../exporters/jdl-exporter.js';
+import ApplicationOptions from '../jhipster/application-options.js';
+import { Entity } from './types.js';
 
 const { OptionNames } = ApplicationOptions;
 

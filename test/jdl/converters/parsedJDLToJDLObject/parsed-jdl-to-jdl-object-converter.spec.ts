@@ -21,7 +21,7 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import path from 'path';
-import matchEntity from '../../matchers/entity-matcher';
+import matchEntity from '../../matchers/jdl/entity-matcher.js';
 import * as JDLReader from '../../../../jdl/readers/jdl-reader.js';
 import ParsedJDLToJDLObjectConverter from '../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import JDLEntity from '../../../../jdl/models/jdl-entity.js';

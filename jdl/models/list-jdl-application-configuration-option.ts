@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import JDLApplicationConfigurationOption from './jdl-application-configuration-option';
-import { join } from '../utils/set-utils';
+import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
+import { join } from '../utils/set-utils.js';
 
 export default class ListJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {
   constructor(name, value) {

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import logger from './objects/logger';
+import logger from './objects/logger.js';
 
 /**
  * Displays a deprecation message,for objects.

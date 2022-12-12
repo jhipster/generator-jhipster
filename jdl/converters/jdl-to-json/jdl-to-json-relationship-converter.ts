@@ -18,11 +18,11 @@
  */
 
 import _ from 'lodash';
-import RelationshipTypes from '../../jhipster/relationship-types';
-import RelationshipOptions from '../../jhipster/relationship-options';
-import Validations from '../../jhipster/validations';
-import { camelCase, lowerFirst } from '../../utils/string-utils';
-import JDLRelationship from '../../models/jdl-relationship';
+import RelationshipTypes from '../../jhipster/relationship-types.js';
+import RelationshipOptions from '../../jhipster/relationship-options.js';
+import Validations from '../../jhipster/validations.js';
+import { camelCase, lowerFirst } from '../../utils/string-utils.js';
+import JDLRelationship from '../../models/jdl-relationship.js';
 
 const { REQUIRED } = Validations;
 const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
