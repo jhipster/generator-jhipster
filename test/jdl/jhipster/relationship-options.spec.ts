@@ -20,7 +20,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import relationshipOptions from '../../../jdl/jhipster/relationship-options';
+import relationshipOptions from '../../../jdl/jhipster/relationship-options.js';
 
 const { JPA_DERIVED_IDENTIFIER, exists } = relationshipOptions;
 

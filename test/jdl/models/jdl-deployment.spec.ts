@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import JDLDeployment from '../../../jdl/models/jdl-deployment';
+import JDLDeployment from '../../../jdl/models/jdl-deployment.js';
 
 describe('JDLDeployment', () => {
   describe('new', () => {

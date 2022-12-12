@@ -21,20 +21,20 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 
-import { MONOLITH } from '../../../jdl/jhipster/application-types';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
-import UnaryOptions from '../../../jdl/jhipster/unary-options';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types';
-import JDLObject from '../../../jdl/models/jdl-object';
-import createJDLApplication from '../../../jdl/models/jdl-application-factory';
-import JDLDeployment from '../../../jdl/models/jdl-deployment';
-import JDLEntity from '../../../jdl/models/jdl-entity';
-import JDLField from '../../../jdl/models/jdl-field';
-import JDLValidation from '../../../jdl/models/jdl-validation';
-import JDLEnum from '../../../jdl/models/jdl-enum';
-import JDLRelationship from '../../../jdl/models/jdl-relationship';
-import JDLUnaryOption from '../../../jdl/models/jdl-unary-option';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
+import { MONOLITH } from '../../../jdl/jhipster/application-types.js';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
+import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
+import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
+import JDLObject from '../../../jdl/models/jdl-object.js';
+import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
+import JDLDeployment from '../../../jdl/models/jdl-deployment.js';
+import JDLEntity from '../../../jdl/models/jdl-entity.js';
+import JDLField from '../../../jdl/models/jdl-field.js';
+import JDLValidation from '../../../jdl/models/jdl-validation.js';
+import JDLEnum from '../../../jdl/models/jdl-enum.js';
+import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
 
 describe('JDLObject', () => {
   describe('addApplication', () => {

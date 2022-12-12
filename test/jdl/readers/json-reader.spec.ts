@@ -23,7 +23,7 @@ import { join } from 'path';
 import { expect } from 'chai';
 
 import parseFromDir from '../../../jdl/readers/json-reader';
-import { SKIP_CLIENT, SKIP_SERVER } from '../../../jdl/jhipster/unary-options';
+import { SKIP_CLIENT, SKIP_SERVER } from '../../../jdl/jhipster/unary-options.js';
 
 describe('JSONReader', () => {
   describe('parseFromDir', () => {

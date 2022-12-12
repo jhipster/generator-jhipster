@@ -23,10 +23,10 @@ import fse from 'fs-extra';
 import path from 'path';
 import { expect } from 'chai';
 
-import ApplicationTypes from '../../jdl/jhipster/application-types';
-import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
-import DatabaseTypes from '../../jdl/jhipster/database-types';
-import { createImporterFromFiles, createImporterFromContent } from '../../jdl/jdl-importer';
+import ApplicationTypes from '../../jdl/jhipster/application-types.js';
+import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
+import DatabaseTypes from '../../jdl/jhipster/database-types.js';
+import { createImporterFromFiles, createImporterFromContent } from '../../jdl/jdl-importer.js';
 
 const { NO: NO_CLIENT_FRAMEWORK } = ClientFrameworkTypes;
 

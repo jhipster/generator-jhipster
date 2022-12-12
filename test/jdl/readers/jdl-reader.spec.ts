@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import * as JDLReader from '../../../jdl/readers/jdl-reader';
+import * as JDLReader from '../../../jdl/readers/jdl-reader.js';
 
 describe('JDLReader', () => {
   describe('parseFromFiles', () => {

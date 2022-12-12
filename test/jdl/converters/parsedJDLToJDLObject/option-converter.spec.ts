@@ -18,11 +18,11 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import UnaryOptions from '../../../../jdl/jhipster/unary-options';
-import BinaryOptions from '../../../../jdl/jhipster/binary-options';
-import { convertOptions } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/option-converter';
-import EntityOptions from '../../../../jdl/jhipster/entity-options';
-import SearchEngineTypes from '../../../../jdl/jhipster/search-engine-types';
+import UnaryOptions from '../../../../jdl/jhipster/unary-options.js';
+import BinaryOptions from '../../../../jdl/jhipster/binary-options.js';
+import { convertOptions } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/option-converter.js';
+import EntityOptions from '../../../../jdl/jhipster/entity-options.js';
+import SearchEngineTypes from '../../../../jdl/jhipster/search-engine-types.js';
 
 const { MapperTypes, PaginationTypes } = EntityOptions;
 const { COUCHBASE } = SearchEngineTypes;

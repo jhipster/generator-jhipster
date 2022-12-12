@@ -21,10 +21,10 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 
-import DatabaseTypes from '../../../jdl/jhipster/database-types';
-import FieldTypes from '../../../jdl/jhipster/field-types';
-import Validations from '../../../jdl/jhipster/validations';
-import JDLEnum from '../../../jdl/models/jdl-enum';
+import DatabaseTypes from '../../../jdl/jhipster/database-types.js';
+import FieldTypes from '../../../jdl/jhipster/field-types.js';
+import Validations from '../../../jdl/jhipster/validations.js';
+import JDLEnum from '../../../jdl/models/jdl-enum.js';
 
 describe('FieldTypes', () => {
   describe('isCommonDBType', () => {

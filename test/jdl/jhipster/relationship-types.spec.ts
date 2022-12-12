@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types';
+import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
 
 describe('RelationshipTypes', () => {
   describe('exists', () => {

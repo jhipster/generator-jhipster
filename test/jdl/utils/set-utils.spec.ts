@@ -18,7 +18,7 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { addAll, join } from '../../../jdl/utils/set-utils';
+import { addAll, join } from '../../../jdl/utils/set-utils.js';
 
 describe('SetUtils', () => {
   describe('addAll', () => {

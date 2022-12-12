@@ -25,20 +25,20 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const { expect } = chai;
 
-import ApplicationValidator from '../../../jdl/validators/application-validator';
+import ApplicationValidator from '../../../jdl/validators/application-validator.js';
 
-import { OptionNames, OptionValues } from '../../../jdl/jhipster/application-options';
-import { SPRING_WEBSOCKET } from '../../../jdl/jhipster/websocket-types';
-import { MAVEN } from '../../../jdl/jhipster/build-tool-types';
-import { MONOLITH, MICROSERVICE, GATEWAY } from '../../../jdl/jhipster/application-types';
-import { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } from '../../../jdl/jhipster/database-types';
-import { JWT } from '../../../jdl/jhipster/authentication-types';
-import { READ_ONLY } from '../../../jdl/jhipster/unary-options';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
-import JDLApplication from '../../../jdl/models/jdl-application';
-import JDLUnaryOption from '../../../jdl/models/jdl-unary-option';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
-import logger from '../../../jdl/utils/objects/logger';
+import { OptionNames, OptionValues } from '../../../jdl/jhipster/application-options.js';
+import { SPRING_WEBSOCKET } from '../../../jdl/jhipster/websocket-types.js';
+import { MAVEN } from '../../../jdl/jhipster/build-tool-types.js';
+import { MONOLITH, MICROSERVICE, GATEWAY } from '../../../jdl/jhipster/application-types.js';
+import { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } from '../../../jdl/jhipster/database-types.js';
+import { JWT } from '../../../jdl/jhipster/authentication-types.js';
+import { READ_ONLY } from '../../../jdl/jhipster/unary-options.js';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
+import JDLApplication from '../../../jdl/models/jdl-application.js';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import logger from '../../../jdl/utils/objects/logger.js';
 
 describe('ApplicationValidator', () => {
   let validator;

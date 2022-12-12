@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import UnaryOptions from '../../../jdl/jhipster/unary-options';
+import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
 
 describe('UnaryOptions', () => {
   describe('exists', () => {

@@ -23,11 +23,11 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import { writeFileSync, unlinkSync } from 'fs';
 import path from 'path';
-import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from '../../../jdl/linters/jdl-linter';
-import Issues from '../../../jdl/linters/issues/issues';
-import EntityIssue from '../../../jdl/linters/issues/entity-issue';
-import EnumIssue from '../../../jdl/linters/issues/enum-issue';
-import relationshipIssue from '../../../jdl/linters/issues/relationship-issue';
+import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from '../../../jdl/linters/jdl-linter.js';
+import Issues from '../../../jdl/linters/issues/issues.js';
+import EntityIssue from '../../../jdl/linters/issues/entity-issue.js';
+import EnumIssue from '../../../jdl/linters/issues/enum-issue.js';
+import relationshipIssue from '../../../jdl/linters/issues/relationship-issue.js';
 
 describe('JDLLinter', () => {
   describe('createJDLLinterFromFile', () => {

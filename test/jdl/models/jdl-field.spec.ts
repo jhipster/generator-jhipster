@@ -21,9 +21,9 @@
 import { expect } from 'chai';
 
 import matchField from '../matchers/field-matcher';
-import JDLField from '../../../jdl/models/jdl-field';
-import JDLValidation from '../../../jdl/models/jdl-validation';
-import Validations from '../../../jdl/jhipster/validations';
+import JDLField from '../../../jdl/models/jdl-field.js';
+import JDLValidation from '../../../jdl/models/jdl-validation.js';
+import Validations from '../../../jdl/jhipster/validations.js';
 
 describe('JDLField', () => {
   describe('new', () => {

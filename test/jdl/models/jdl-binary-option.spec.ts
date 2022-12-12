@@ -19,8 +19,8 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
 
 describe('JDLBinaryOption', () => {
   describe('new', () => {

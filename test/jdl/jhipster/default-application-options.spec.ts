@@ -25,7 +25,7 @@ import {
   getConfigForGatewayApplication,
   getConfigForMicroserviceApplication,
   getDefaultConfigForNewApplication,
-} from '../../../jdl/jhipster/default-application-options';
+} from '../../../jdl/jhipster/default-application-options.js';
 
 describe('DefaultApplicationOptions', () => {
   describe('getConfigForMonolithApplication', () => {

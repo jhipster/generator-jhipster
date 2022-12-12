@@ -18,8 +18,8 @@
  */
 
 import { expect } from 'chai';
-import JDLEnum from '../../../jdl/models/jdl-enum';
-import EnumValidator from '../../../jdl/validators/enum-validator';
+import JDLEnum from '../../../jdl/models/jdl-enum.js';
+import EnumValidator from '../../../jdl/validators/enum-validator.js';
 
 describe('EnumValidator', () => {
   let validator;

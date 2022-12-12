@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'chai';
-import deduplicate from '../../../jdl/utils/array-utils';
+import deduplicate from '../../../jdl/utils/array-utils.js';
 
 describe('ArrayUtils', () => {
   describe('deduplicate', () => {

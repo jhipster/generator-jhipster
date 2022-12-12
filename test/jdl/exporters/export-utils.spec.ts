@@ -21,7 +21,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import path from 'path';
 import { readFileSync, unlinkSync, writeFileSync } from 'fs';
-import { writeConfigFile } from '../../../jdl/exporters/export-utils';
+import { writeConfigFile } from '../../../jdl/exporters/export-utils.js';
 
 describe('ExportUtils', () => {
   describe('writeConfigFile', () => {

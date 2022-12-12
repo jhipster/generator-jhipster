@@ -18,10 +18,10 @@
  */
 
 import { expect } from 'chai';
-import { createJDLApplication } from '../../../jdl/models/jdl-application-factory';
+import { createJDLApplication } from '../../../jdl/models/jdl-application-factory.js';
 import { convertApplicationsToJDL } from '../../../jdl/converters/json-to-jdl-application-converter';
-import JDLObject from '../../../jdl/models/jdl-object';
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
+import JDLObject from '../../../jdl/models/jdl-object.js';
+import ApplicationTypes from '../../../jdl/jhipster/application-types.js';
 
 const { MONOLITH } = ApplicationTypes;
 

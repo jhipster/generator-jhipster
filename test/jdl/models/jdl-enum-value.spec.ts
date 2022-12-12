@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import JDLEnumValue from '../../../jdl/models/jdl-enum-value';
+import JDLEnumValue from '../../../jdl/models/jdl-enum-value.js';
 
 describe('JDLEnumValue', () => {
   describe('new', () => {
