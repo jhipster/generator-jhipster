@@ -57,7 +57,7 @@
     "jest": "29.3.1",
     "jest-environment-jsdom": "29.3.1",
     "jest-junit": "15.0.0",
-    "jest-sonar": "0.2.12",
+    "jest-sonar": "0.2.15",
     "json-loader": "0.5.7",
     "merge-jsons-webpack-plugin": "2.0.1",
     "mini-css-extract-plugin": "2.7.2",
