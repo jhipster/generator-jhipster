@@ -22,7 +22,7 @@ import { renameSync } from 'fs';
 import { join } from 'path';
 import { expect } from 'chai';
 
-import parseFromDir from '../../../jdl/readers/jdl/json-reader.js';
+import parseFromDir from '../../../jdl/readers/json-reader.js';
 import { SKIP_CLIENT, SKIP_SERVER } from '../../../jdl/jhipster/unary-options.js';
 
 describe('JSONReader', () => {

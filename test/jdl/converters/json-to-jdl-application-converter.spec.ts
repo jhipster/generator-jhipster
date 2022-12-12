@@ -19,7 +19,7 @@
 
 import { expect } from 'chai';
 import { createJDLApplication } from '../../../jdl/models/jdl-application-factory.js';
-import { convertApplicationsToJDL } from '../../../jdl/converters/jdl/json-to-jdl-application-converter.js';
+import { convertApplicationsToJDL } from '../../../jdl/converters/json-to-jdl-application-converter.js';
 import JDLObject from '../../../jdl/models/jdl-object.js';
 import ApplicationTypes from '../../../jdl/jhipster/application-types.js';
 
