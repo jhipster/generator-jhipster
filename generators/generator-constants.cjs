@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 const validationOptions = require('../jdl/jhipster/validations');
-const databaseTypes = require('../jdl/jhipster/database-types');
 const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
-const commonPackageJson = require('./common/templates/package.json');
 
 // Version of Java
 const JAVA_VERSION = '17';
@@ -104,56 +102,6 @@ const SUPPORTED_CLIENT_FRAMEWORKS = {
 // documentation constants
 const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
-
-const OFFICIAL_DATABASE_TYPE_NAMES = {
-  cassandra: 'Cassandra',
-  couchbase: 'Couchbase',
-  mongodb: 'MongoDB',
-  neo4j: 'Neo4j',
-  sql: 'SQL',
-};
-
-const R2DBC_DB_OPTIONS = [
-  {
-    value: databaseTypes.POSTGRESQL,
-    name: 'PostgreSQL',
-  },
-  {
-    value: databaseTypes.MYSQL,
-    name: 'MySQL',
-  },
-  {
-    value: databaseTypes.MARIADB,
-    name: 'MariaDB',
-  },
-  {
-    value: databaseTypes.MSSQL,
-    name: 'Microsoft SQL Server',
-  },
-];
-
-const SQL_DB_OPTIONS = [
-  {
-    value: databaseTypes.POSTGRESQL,
-    name: 'PostgreSQL',
-  },
-  {
-    value: databaseTypes.MYSQL,
-    name: 'MySQL',
-  },
-  {
-    value: databaseTypes.MARIADB,
-    name: 'MariaDB',
-  },
-  {
-    value: databaseTypes.ORACLE,
-    name: 'Oracle',
-  },
-  {
-    value: databaseTypes.MSSQL,
-    name: 'Microsoft SQL Server',
-  },
-];
 
 const LANGUAGES = [
   {
@@ -316,12 +264,6 @@ const constants = {
   SERVER_TEST_SRC_DIR: `${TEST_DIR}java/`,
   SERVER_TEST_RES_DIR: `${TEST_DIR}resources/`,
   PRETTIER_EXTENSIONS: 'md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,vue,svelte,java',
-
-  R2DBC_DB_OPTIONS,
-  SQL_DB_OPTIONS,
-
-  // server related
-  OFFICIAL_DATABASE_TYPE_NAMES,
 
   // entity related
   SUPPORTED_VALIDATION_RULES,

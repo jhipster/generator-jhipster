@@ -21,6 +21,8 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import path from 'path';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../../../jdl/readers/jdl-reader.js';
 import ParsedJDLToJDLObjectConverter from '../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
@@ -42,6 +44,9 @@ const { OptionNames } = ApplicationOptions;
 import EntityOptions from '../../../../jdl/jhipster/entity-options.js';
 
 import BinaryOptions from '../../../../jdl/jhipster/binary-options.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const { MapperTypes, ServiceTypes, PaginationTypes } = EntityOptions;
 

@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import constants from '../generator-constants.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { clientDefaultConfig } = generatorDefaults;

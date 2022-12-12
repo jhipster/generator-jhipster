@@ -22,7 +22,7 @@ import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 import prompts from './prompts.mjs';
 import statistics from '../statistics.cjs';
 import constants from '../generator-constants.cjs';

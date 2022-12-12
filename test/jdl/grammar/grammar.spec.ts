@@ -19,14 +19,14 @@
 
 /* eslint-disable no-unused-expressions */
 
-const { jestExpect } = require('mocha-expect-snapshot');
-const { expect } = require('chai');
-const { parseFromContent } = require('../../../jdl/readers/jdl-reader');
-const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../../jdl/jhipster/relationship-types');
-const { MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN, REQUIRED, UNIQUE } = require('../../../jdl/jhipster/validations');
-const { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED } = require('../../../jdl/jhipster/unary-options');
+import { jestExpect } from 'mocha-expect-snapshot';
+import { expect } from 'chai';
+import { parseFromContent } from '../../../jdl/readers/jdl-reader.js';
+import { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } from '../../../jdl/jhipster/relationship-types.js';
+import { MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN, REQUIRED, UNIQUE } from '../../../jdl/jhipster/validations.js';
+import { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED } from '../../../jdl/jhipster/unary-options.js';
 
-const { Options, Values, OptionValues } = require('../../../jdl/jhipster/binary-options');
+import { Options, Values, OptionValues } from '../../../jdl/jhipster/binary-options.js';
 
 const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX, MICROSERVICE } = Options;
 

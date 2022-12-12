@@ -374,7 +374,7 @@ class JDLProcessor {
 
     let importer;
     // eslint-disable-next-line global-require
-    const { createImporterFromContent, createImporterFromFiles } = require('../jdl/jdl-importer');
+    const { createImporterFromContent, createImporterFromFiles } = await import('../jdl/jdl-importer.js');
     if (this.jdlContent) {
       importer = createImporterFromContent(this.jdlContent, configuration);
     } else {

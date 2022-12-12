@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
-const applicationOptions = require('../jdl/jhipster/application-options');
-const { MONOLITH } = require('../jdl/jhipster/application-types');
-const binaryOptions = require('../jdl/jhipster/binary-options');
+const defaultApplicationOptions = require('../jdl/jhipster/default-application-options.js');
+const applicationOptions = require('../jdl/jhipster/application-options.js');
+const { MONOLITH } = require('../jdl/jhipster/application-types.js');
+const binaryOptions = require('../jdl/jhipster/binary-options.js');
 
 const optionNames = applicationOptions.OptionNames;
 const defaultNewApplicationOptions = defaultApplicationOptions.getConfigForApplicationType();

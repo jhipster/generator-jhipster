@@ -22,9 +22,8 @@ import path from 'path';
 
 import { hibernateSnakeCase } from './db.mjs';
 import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
-import generatorDefaults from '../generators/generator-defaults.cjs';
+import generatorDefaults from '../generators/generator-defaults.mjs';
 import { fieldToReference } from './field.mjs';
-import constants from '../generators/generator-constants.cjs';
 import {
   applicationTypes,
   authenticationTypes,
@@ -34,6 +33,7 @@ import {
   reservedKeywords,
   searchEngineTypes,
 } from '../jdl/jhipster/index.mjs';
+import { OFFICIAL_DATABASE_TYPE_NAMES } from '../generators/server/support/database.mjs';
 
 const { entityDefaultConfig } = generatorDefaults;
 const { ELASTICSEARCH } = searchEngineTypes;
@@ -707,7 +707,7 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
 
 export function preparePostEntityServerDerivedProperties(entity) {
   const { databaseType, reactive } = entity;
-  entity.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[databaseType];
+  entity.officialDatabaseType = OFFICIAL_DATABASE_TYPE_NAMES[databaseType];
   let springDataDatabase;
   if (entity.databaseType !== SQL) {
     springDataDatabase = entity.officialDatabaseType;

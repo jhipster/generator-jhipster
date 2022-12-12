@@ -43,7 +43,7 @@ import { writeFiles as writeEntityFiles, customizeFiles } from './entity-files.m
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import constants from '../generator-constants.cjs';
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 
 import {
   applicationTypes,

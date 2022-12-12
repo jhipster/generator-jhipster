@@ -19,7 +19,6 @@
 /* eslint-disable no-console */
 
 const path = require('path');
-const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
 const os = require('os');
@@ -36,7 +35,6 @@ module.exports = {
   getJavadoc,
   buildEnumInfo,
   getEnumInfo,
-  getDBTypeFromDBValue,
   checkStringInFile,
   checkRegexInFile,
   packageNameToNamespace,
@@ -46,10 +44,6 @@ module.exports = {
   vueAddPageServiceToMainImport,
   vueAddPageServiceToMain,
 };
-
-const databaseTypes = require('../jdl/jhipster/database-types');
-
-const SQL = databaseTypes.SQL;
 
 /**
  * Rewrite file with passed arguments
@@ -390,17 +384,6 @@ function getEnums(enums, customValuesState, comments) {
 
 function doesTheEnumValueHaveACustomValue(enumValue) {
   return enumValue.includes('(');
-}
-
-/**
- * Get DB type from DB value
- * @param {string} db - db
- */
-function getDBTypeFromDBValue(db) {
-  if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
-    return SQL;
-  }
-  return db;
 }
 
 /**

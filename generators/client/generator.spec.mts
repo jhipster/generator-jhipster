@@ -25,7 +25,7 @@ import assert from 'assert';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
-import defaults from '../generator-defaults.cjs';
+import defaults from '../generator-defaults.mjs';
 import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { snakeCase } = lodash;
