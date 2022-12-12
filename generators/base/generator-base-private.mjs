@@ -33,9 +33,10 @@ import generatorConstants from '../generator-constants.cjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
+import { ANGULAR, REACT, VUE } from '../../jdl/jhipster/client-framework-types.js';
+import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
-const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
-const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
+const { JAVA_COMPATIBLE_VERSIONS } = generatorConstants;
 const dbTypes = fieldTypes;
 const { REQUIRED } = validations;
 
@@ -708,7 +709,7 @@ export default class PrivateBase extends Generator {
    * @param {string} db - db
    */
   getDBTypeFromDBValue(db) {
-    return jhipsterUtils.getDBTypeFromDBValue(db);
+    return getDBTypeFromDBValue(db);
   }
 
   /**

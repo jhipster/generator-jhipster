@@ -16,9 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const validationOptions = require('../jdl/jhipster/validations');
-const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
-
 // Version of Java
 const JAVA_VERSION = '17';
 const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19'];
@@ -88,16 +85,6 @@ const TEST_DIR = 'src/test/';
 
 // Note: this will be prepended with 'target/classes' for Maven, or with 'build/resources/main' for Gradle.
 const CLIENT_DIST_DIR = 'static/';
-
-const SUPPORTED_VALIDATION_RULES = Object.keys(validationOptions)
-  .map(key => validationOptions[key])
-  .filter(e => typeof e === 'string');
-
-const SUPPORTED_CLIENT_FRAMEWORKS = {
-  ANGULAR,
-  REACT,
-  VUE,
-};
 
 // documentation constants
 const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
@@ -249,7 +236,7 @@ const constants = {
   LOGIN_REGEX,
   LOGIN_REGEX_JS,
   // supported client frameworks
-  SUPPORTED_CLIENT_FRAMEWORKS,
+  SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR: 'angular', REACT: 'react', VUE: 'vue' },
 
   CLIENT_MAIN_SRC_DIR: `${MAIN_DIR}webapp/`,
   CLIENT_TEST_SRC_DIR: `${TEST_DIR}javascript/`,
@@ -264,9 +251,6 @@ const constants = {
   SERVER_TEST_SRC_DIR: `${TEST_DIR}java/`,
   SERVER_TEST_RES_DIR: `${TEST_DIR}resources/`,
   PRETTIER_EXTENSIONS: 'md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,vue,svelte,java',
-
-  // entity related
-  SUPPORTED_VALIDATION_RULES,
 
   JHIPSTER_DOCUMENTATION_URL,
   JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
