@@ -35,10 +35,12 @@ public class SpaWebFilter implements WebFilter {
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
             && !path.startsWith("/services") && !path.startsWith("/v3/api-docs")
 <%_ } _%>
-            && path.matches("[^\\\\.]*")) {
-            return chain.filter(
-                exchange.mutate().request(exchange.getRequest().mutate().path("/index.html").build()
-                ).build());
+<%_ if (communicationSpringWebsocket) { _%>
+            && !path.startsWith("/websocket")
+<%_ } _%>
+            && !path.contains(".") && path.matches("/(.*)")
+        ) {
+            return chain.filter(exchange.mutate().request(exchange.getRequest().mutate().path("/index.html").build() ).build());
         }
         return chain.filter(exchange);
     }
