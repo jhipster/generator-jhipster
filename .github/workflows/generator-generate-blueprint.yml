@@ -110,7 +110,7 @@ jobs:
           ls template-file-server
       - name: 'TESTS: backend'
         id: backend
-        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1
+        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 'true'
         run: npm run ci:backend:test
       - name: 'BACKEND: Store failure logs'
         uses: actions/upload-artifact@v3
