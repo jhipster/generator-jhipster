@@ -90,6 +90,7 @@ services:
     command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
   consul-config-loader:
     image: <%- dockerContainers.consulConfigLoader %>
+    platform: linux/amd64
     volumes:
       - ./central-server-config:/config
     environment:
