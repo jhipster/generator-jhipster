@@ -180,11 +180,11 @@ public class SecurityConfiguration {
   <%_ if (!skipClient) { _%>
                 .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
                 .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
+                .requestMatchers("/app/**").permitAll()
                 .requestMatchers("/i18n/**").permitAll()
                 .requestMatchers("/content/**").permitAll()
   <%_ } _%>
                 .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/test/**").permitAll()
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
                 .requestMatchers("/h2-console/**").permitAll()
