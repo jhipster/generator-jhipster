@@ -27,8 +27,7 @@ writeFileSync(
           .map(file => {
             try {
               return JSON.parse(readFileSync(join(__dirname, `../../${file}`)))
-                .include
-                .filter(sample => !sample.disabled)
+                .include.filter(sample => !sample.disabled)
                 .map(sample => ({
                   ...sample,
                   'skip-backend-tests': Boolean(sample['skip-backend-tests']),
