@@ -213,7 +213,7 @@ public class SecurityConfiguration {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers("/app/**", "/_app/**", "/i18n/**", "/img/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**")
+                pathMatchers("/i18n/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**")
             )))
             .csrf(csrf -> csrf
 <%_ if ((authenticationTypeSession || authenticationTypeOauth2) && !applicationTypeMicroservice) { _%>
