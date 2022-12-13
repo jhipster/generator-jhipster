@@ -135,6 +135,8 @@ import java.util.Set;
   <%_ if (!applicationTypeMicroservice) { _%>
 import java.util.function.Consumer;
   <%_ } _%>
+
+import static org.springframework.security.config.Customizer.withDefaults;
 <%_ } _%>
 
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
@@ -209,7 +211,6 @@ public class SecurityConfiguration {
 <%_ } _%>
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        // @formatter:off
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
                 pathMatchers("/app/**", "/_app/**", "/i18n/**", "/img/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**")
@@ -228,84 +229,70 @@ public class SecurityConfiguration {
             .addFilterAfter(new SpaWebFilter(), SecurityWebFiltersOrder.HTTPS_REDIRECT)
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
-            .formLogin()
-            .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
-            .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.OK))
-            .authenticationSuccessHandler(this::onAuthenticationSuccess)
-            .authenticationFailureHandler(this::onAuthenticationError)
-        .and()
-            .logout()
-            .logoutUrl("/api/logout")
-            .logoutSuccessHandler(new HttpStatusReturningServerLogoutSuccessHandler())
-        .and()
+            .formLogin(formLogin -> formLogin
+                .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
+                .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.OK))
+                .authenticationSuccessHandler(this::onAuthenticationSuccess)
+                .authenticationFailureHandler(this::onAuthenticationError))
+            .logout(logout -> logout
+                .logoutUrl("/api/logout")
+                .logoutSuccessHandler(new HttpStatusReturningServerLogoutSuccessHandler()))
 <%_ } _%>
-            .headers()
-                .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
-            .and()
-                .referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-            .and()
-                .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
-            .and()
-                .frameOptions().mode(Mode.DENY)
+            .headers(headers -> headers
+                .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
+                .frameOptions(frameOptions -> frameOptions.mode(Mode.DENY))
+                .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                .permissionsPolicy(permissions ->
+                    permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")))
 <%_ if (applicationTypeMicroservice) { _%>
-        .and()
-            .requestCache()
-            .requestCache(NoOpServerRequestCache.getInstance())
+            .requestCache(cache -> cache.requestCache(NoOpServerRequestCache.getInstance()))
 <%_ } _%>
-        .and()
-            .authorizeExchange()
+            .authorizeExchange(authz -> authz
 <%_ if (!skipClient) { _%>
-            .pathMatchers("/").permitAll()
-            .pathMatchers("/*.*").permitAll()
+                .pathMatchers("/").permitAll()
+                .pathMatchers("/*.*").permitAll()
 <%_ } _%>
-            .pathMatchers("/api/authenticate").permitAll()
+                .pathMatchers("/api/authenticate").permitAll()
 <%_ if (generateUserManagement) { _%>
-            .pathMatchers("/api/register").permitAll()
-            .pathMatchers("/api/activate").permitAll()
-            .pathMatchers("/api/account/reset-password/init").permitAll()
-            .pathMatchers("/api/account/reset-password/finish").permitAll()
+                .pathMatchers("/api/register").permitAll()
+                .pathMatchers("/api/activate").permitAll()
+                .pathMatchers("/api/account/reset-password/init").permitAll()
+                .pathMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-            .pathMatchers("/api/auth-info").permitAll()
+                .pathMatchers("/api/auth-info").permitAll()
 <%_ } _%>
-            .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .pathMatchers("/api/**").authenticated()
+                .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                .pathMatchers("/api/**").authenticated()
 <%_ if (applicationTypeGateway) { _%>
   <%_ if (microfrontend) { _%>
-            // microfrontend resources are loaded by webpack without authentication, they need to be public
-            .pathMatchers("/services/*/*.js").permitAll()
-            .pathMatchers("/services/*/*.js.map").permitAll()
+                // microfrontend resources are loaded by webpack without authentication, they need to be public
+                .pathMatchers("/services/*/*.js").permitAll()
+                .pathMatchers("/services/*/*.js.map").permitAll()
   <%_ } _%>
-            .pathMatchers("/services/*/management/health/readiness").permitAll()
-            .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
+                .pathMatchers("/services/*/management/health/readiness").permitAll()
+                .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
-            .pathMatchers("/services/**").authenticated()
+                .pathMatchers("/services/**").authenticated()
 <%_ } _%>
-            .pathMatchers("/management/health").permitAll()
-            .pathMatchers("/management/health/**").permitAll()
-            .pathMatchers("/management/info").permitAll()
-            .pathMatchers("/management/prometheus").permitAll()
-            .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-        .and()
+                .pathMatchers("/management/health").permitAll()
+                .pathMatchers("/management/health/**").permitAll()
+                .pathMatchers("/management/info").permitAll()
+                .pathMatchers("/management/prometheus").permitAll()
+                .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN));
 <%_ if (authenticationTypeOauth2) { _%>
   <%_ if (!applicationTypeMicroservice) { _%>
             .oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))
   <%_ } _%>
-            .oauth2Client()
-        .and()
-            .oauth2ResourceServer()
-                .jwt()
-                    .jwtAuthenticationConverter(jwtAuthenticationConverter());
+            .oauth2Client(withDefaults())
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                    .jwtAuthenticationConverter(jwtAuthenticationConverter())));
 <%_ } else if (authenticationTypeJwt) { _%>
-            .httpBasic()
-                .disable()
-            .oauth2ResourceServer()
-                .jwt();
-<%_ } else { _%>
-        ;
+            .httpBasic(basic -> basic.disable())
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt());
 <%_ } _%>
-        // @formatter:on
         return http.build();
     }
 
