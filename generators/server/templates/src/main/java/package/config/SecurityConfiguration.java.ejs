@@ -227,7 +227,7 @@ public class SecurityConfiguration {
                 .failureHandler(ajaxAuthenticationFailureHandler())
             .logout(logout -> logout
                 .logoutUrl("/api/logout")
-                .logoutSuccessHandler(ajaxLogoutSuccessHandler());
+                .logoutSuccessHandler(ajaxLogoutSuccessHandler()));
 <%_ } else if (authenticationTypeJwt) { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling((exceptions) -> exceptions

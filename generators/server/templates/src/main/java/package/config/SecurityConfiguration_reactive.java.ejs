@@ -280,7 +280,7 @@ public class SecurityConfiguration {
                 .pathMatchers("/management/health/**").permitAll()
                 .pathMatchers("/management/info").permitAll()
                 .pathMatchers("/management/prometheus").permitAll()
-                .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN));
+                .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeOauth2) { _%>
   <%_ if (!applicationTypeMicroservice) { _%>
             .oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))
@@ -292,7 +292,7 @@ public class SecurityConfiguration {
 <%_ } else if (authenticationTypeJwt) { _%>
             .httpBasic(basic -> basic.disable())
             .oauth2ResourceServer(oauth2 -> oauth2.jwt());
-<%_ } _%>
+<%_ } else { _%>;<%_ } _%>
         return http.build();
     }
 
