@@ -175,45 +175,47 @@ public class SecurityConfiguration {
                 .permissionsPolicy(permissions ->
                     permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")))
 <%_ } _%>
-            .authorizeHttpRequests(authz -> authz
+            .authorizeHttpRequests(authz ->
+                // prettier-ignore
+                authz
 <%_ if (!applicationTypeMicroservice) { _%>
   <%_ if (!skipClient) { _%>
-                .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
-                .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
-                .requestMatchers("/app/**").permitAll()
-                .requestMatchers("/i18n/**").permitAll()
-                .requestMatchers("/content/**").permitAll()
+                    .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
+                    .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
+                    .requestMatchers("/app/**").permitAll()
+                    .requestMatchers("/i18n/**").permitAll()
+                    .requestMatchers("/content/**").permitAll()
   <%_ } _%>
-                .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers("/swagger-ui/**").permitAll()
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
-                .requestMatchers("/h2-console/**").permitAll()
+                    .requestMatchers("/h2-console/**").permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-                .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
 <%_ } else { _%>
-                .requestMatchers("/api/authenticate").permitAll()
+                    .requestMatchers("/api/authenticate").permitAll()
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2 && !skipUserManagement) { _%>
-                .requestMatchers("/api/register").permitAll()
-                .requestMatchers("/api/activate").permitAll()
-                .requestMatchers("/api/account/reset-password/init").permitAll()
-                .requestMatchers("/api/account/reset-password/finish").permitAll()
+                    .requestMatchers("/api/register").permitAll()
+                    .requestMatchers("/api/activate").permitAll()
+                    .requestMatchers("/api/account/reset-password/init").permitAll()
+                    .requestMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-                .requestMatchers("/api/auth-info").permitAll()
+                    .requestMatchers("/api/auth-info").permitAll()
 <%_ } _%>
-                .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .requestMatchers("/api/**").authenticated()
+                    .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers("/api/**").authenticated()
 <%_ if (communicationSpringWebsocket) { _%>
-                .requestMatchers("/websocket/**").authenticated()
+                    .requestMatchers("/websocket/**").authenticated()
 <%_ } _%>
-                .requestMatchers("/management/health").permitAll()
-                .requestMatchers("/management/health/**").permitAll()
-                .requestMatchers("/management/info").permitAll()
-                .requestMatchers("/management/prometheus").permitAll()
-                .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
+                    .requestMatchers("/management/health").permitAll()
+                    .requestMatchers("/management/health/**").permitAll()
+                    .requestMatchers("/management/info").permitAll()
+                    .requestMatchers("/management/prometheus").permitAll()
+                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (!skipUserManagement) { _%>
             .rememberMe(rememberMe -> rememberMe
@@ -224,7 +226,7 @@ public class SecurityConfiguration {
             .formLogin(formLogin -> formLogin
                 .loginProcessingUrl("/api/authentication")
                 .successHandler(ajaxAuthenticationSuccessHandler())
-                .failureHandler(ajaxAuthenticationFailureHandler())
+                .failureHandler(ajaxAuthenticationFailureHandler()))
             .logout(logout -> logout
                 .logoutUrl("/api/logout")
                 .logoutSuccessHandler(ajaxLogoutSuccessHandler()));
