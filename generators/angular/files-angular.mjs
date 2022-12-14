@@ -193,7 +193,6 @@ export const files = {
         'admin/configuration/configuration.service.ts',
         'admin/configuration/configuration.model.ts',
         'admin/health/health.route.ts',
-        'admin/health/health.module.ts',
         'admin/health/health.component.ts',
         'admin/health/health.component.html',
         'admin/health/modal/health-modal.component.ts',
@@ -482,6 +481,7 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/health/health.module.ts`);
   }
 }
 

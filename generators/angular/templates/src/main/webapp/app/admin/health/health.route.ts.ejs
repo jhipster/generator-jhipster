@@ -18,10 +18,10 @@
 -%>
 import { Route } from '@angular/router';
 
-import { HealthComponent } from './health.component';
-
-export const healthRoute: Route = {
+export const healthRoute: Route[] = [{
   path: '',
-  component: HealthComponent,
+  loadComponent: () => import('./health.component'),
   title: 'health.title',
-};
+}];
+
+export default healthRoute;
