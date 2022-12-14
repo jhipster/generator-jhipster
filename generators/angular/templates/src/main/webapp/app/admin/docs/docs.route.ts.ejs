@@ -18,10 +18,10 @@
 -%>
 import { Route } from '@angular/router';
 
-import { DocsComponent } from './docs.component';
-
-export const docsRoute: Route = {
+const docsRoute: Route[] = [{
   path: '',
-  component: DocsComponent,
+  loadComponent: () => import('./docs.component'),
   title: 'global.menu.admin.apidocs',
-};
+}];
+
+export default docsRoute;

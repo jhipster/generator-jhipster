@@ -33,7 +33,7 @@ import { RouterModule } from '@angular/router';
       <%_ } _%>
       {
         path: 'docs',
-        loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule),
+        loadChildren: () => import('./docs/docs.route'),
       },
       <%_ if (withAdminUi) { _%>
       {
