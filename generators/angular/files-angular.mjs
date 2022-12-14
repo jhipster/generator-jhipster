@@ -81,7 +81,6 @@ export const files = {
         'layouts/main/main.component.html',
         'layouts/navbar/navbar.component.ts',
         'layouts/navbar/navbar.component.html',
-        'layouts/navbar/navbar.route.ts',
         'layouts/footer/footer.component.ts',
         'layouts/footer/footer.component.html',
         'layouts/error/error.route.ts',
@@ -482,6 +481,7 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}app/admin/health/health.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/layouts/navbar/navbar.route.ts`);
   }
 }
 

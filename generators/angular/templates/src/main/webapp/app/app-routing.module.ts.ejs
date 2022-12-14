@@ -20,7 +20,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { errorRoute } from './layouts/error/error.route';
-import { navbarRoute } from './layouts/navbar/navbar.route';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
 import { Authority } from 'app/config/authority.constants';
 
@@ -34,6 +33,11 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
           path: '',
           loadComponent: () => import('./home/home.component'),
           title: 'home.title',
+        },
+        {
+          path: '',
+          loadComponent: () => import('./layouts/navbar/navbar.component'),
+          outlet: 'navbar',
         },
 <%_ if (!applicationTypeMicroservice) { _%>
         {
@@ -69,7 +73,6 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
         },
   <%_ } _%>
 <%_ } _%>
-        navbarRoute,
         ...errorRoute,
       ],
       { enableTracing: DEBUG_INFO_ENABLED }
