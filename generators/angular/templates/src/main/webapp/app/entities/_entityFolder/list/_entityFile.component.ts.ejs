@@ -33,12 +33,14 @@ import { Component, OnInit } from '@angular/core';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
-import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, switchMap, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 
+import { SharedModule } from 'app/shared/shared.module';
+import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (!paginationNo) { %>
 import {
@@ -78,8 +80,10 @@ import { SortService } from 'app/shared/sort/sort.service';
 <%_ } _%>
 
 @Component({
+    standalone: true,
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
-    templateUrl: './<%= entityFileName %>.component.html'
+    templateUrl: './<%= entityFileName %>.component.html',
+    imports: [RouterModule, SharedModule, SortDirective, SortByDirective],
 })
 export class <%= componentName %> implements OnInit {
 

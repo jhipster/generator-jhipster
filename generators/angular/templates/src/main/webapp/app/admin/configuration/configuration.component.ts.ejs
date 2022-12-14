@@ -19,6 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { SharedModule } from 'app/shared/shared.module';
+import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { ConfigurationService } from './configuration.service';
 import { Bean, PropertySource } from './configuration.model';
 
@@ -26,7 +27,7 @@ import { Bean, PropertySource } from './configuration.model';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-configuration',
   templateUrl: './configuration.component.html',
-  imports: [SharedModule],
+  imports: [SharedModule, SortDirective, SortByDirective],
 })
 export default class ConfigurationComponent implements OnInit {
   allBeans!: Bean[];

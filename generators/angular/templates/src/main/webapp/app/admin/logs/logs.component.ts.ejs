@@ -19,6 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { SharedModule } from 'app/shared/shared.module';
+import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { Log, LoggersResponse, Level } from './log.model';
 import { LogsService } from './logs.service';
 
@@ -26,7 +27,7 @@ import { LogsService } from './logs.service';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-logs',
   templateUrl: './logs.component.html',
-  imports: [SharedModule],
+  imports: [SharedModule, SortDirective, SortByDirective],
 })
 export default class LogsComponent implements OnInit {
   loggers?: Log[];

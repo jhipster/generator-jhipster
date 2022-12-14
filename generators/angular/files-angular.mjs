@@ -320,6 +320,7 @@ export const files = {
         'shared/date/duration.pipe.ts',
         'shared/date/format-medium-date.pipe.ts',
         'shared/date/format-medium-datetime.pipe.ts',
+        'shared/sort/index.ts',
         'shared/sort/sort.directive.ts',
         'shared/sort/sort.service.ts',
         'shared/sort/sort-by.directive.ts',
