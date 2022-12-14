@@ -71,8 +71,6 @@ export const files = {
         'entities/entity-navbar-items.ts',
         'entities/entity-routing.module.ts',
         // home module
-        'home/home.module.ts',
-        'home/home.route.ts',
         'home/home.component.ts',
         'home/home.component.html',
         // layouts
@@ -482,6 +480,8 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}app/admin/gateway/gateway.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/docs/docs.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/configuration/configuration.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/home/home.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/home/home.route.ts`);
   }
 }
 

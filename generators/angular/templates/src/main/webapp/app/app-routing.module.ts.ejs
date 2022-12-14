@@ -30,6 +30,11 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
   imports: [
     RouterModule.forRoot(
       [
+        {
+          path: '',
+          loadComponent: () => import('./home/home.component'),
+          title: 'home.title',
+        },
 <%_ if (!applicationTypeMicroservice) { _%>
         {
           path: 'admin',
