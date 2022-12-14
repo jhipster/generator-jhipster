@@ -18,10 +18,10 @@
 -%>
 import { Route } from '@angular/router';
 
-import { ConfigurationComponent } from './configuration.component';
-
-export const configurationRoute: Route = {
+const configurationRoute: Route[] = [{
   path: '',
-  component: ConfigurationComponent,
+  loadComponent: () => import('./configuration.component'),
   title: 'configuration.title',
-};
+}];
+
+export default configurationRoute;

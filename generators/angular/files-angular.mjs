@@ -186,7 +186,6 @@ export const files = {
       templates: [
         // admin modules
         'admin/configuration/configuration.route.ts',
-        'admin/configuration/configuration.module.ts',
         'admin/configuration/configuration.component.ts',
         'admin/configuration/configuration.component.html',
         'admin/configuration/configuration.service.ts',
@@ -482,6 +481,7 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}app/admin/health/health.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/gateway/gateway.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/docs/docs.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/configuration/configuration.module.ts`);
   }
 }
 

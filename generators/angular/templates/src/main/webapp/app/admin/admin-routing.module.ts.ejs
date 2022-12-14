@@ -38,7 +38,7 @@ import { RouterModule } from '@angular/router';
       <%_ if (withAdminUi) { _%>
       {
         path: 'configuration',
-        loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
+        loadChildren: () => import('./configuration/configuration.route'),
       },
       {
         path: 'health',
