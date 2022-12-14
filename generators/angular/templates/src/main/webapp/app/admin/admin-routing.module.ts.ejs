@@ -27,7 +27,7 @@ import { RouterModule } from '@angular/router';
       <%_ if (generateUserManagement) { _%>
       {
         path: 'user-management',
-        loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule),
+        loadChildren: () => import('./user-management/user-management.route'),
         title: 'userManagement.home.title',
       },
       <%_ } _%>

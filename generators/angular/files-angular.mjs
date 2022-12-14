@@ -249,7 +249,6 @@ export const files = {
       ...clientApplicationBlock,
       templates: [
         'admin/user-management/user-management.route.ts',
-        'admin/user-management/user-management.module.ts',
         'admin/user-management/user-management.model.ts',
         'admin/user-management/list/user-management.component.ts',
         'admin/user-management/list/user-management.component.html',
@@ -480,6 +479,9 @@ export function cleanup({ application }) {
 
   if (this.isJhipsterVersionLessThan('7.6.1')) {
     this.removeFile(`${application.clientSrcDir}content/scss/rtl.scss`);
+  }
+  if (this.isJhipsterVersionLessThan('7.10.0')) {
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.module.ts`);
   }
 }
 

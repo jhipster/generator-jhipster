@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { HttpResponse<%_ if (!databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
 <%_ if (!databaseTypeCassandra) { _%>
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,6 +25,7 @@ import { combineLatest } from 'rxjs';
 <%_ } _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { SharedModule } from 'app/shared/shared.module';
 <%_ if (!databaseTypeCassandra) { _%>
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { ASC, DESC, SORT } from 'app/config/navigation.constants';
@@ -32,13 +34,15 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { UserManagementService } from '../service/user-management.service';
 import { User } from '../user-management.model';
-import { UserManagementDeleteDialogComponent } from '../delete/user-management-delete-dialog.component';
+import UserManagementDeleteDialogComponent from '../delete/user-management-delete-dialog.component';
 
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-user-mgmt',
   templateUrl: './user-management.component.html',
+  imports: [RouterModule, SharedModule, UserManagementDeleteDialogComponent],
 })
-export class UserManagementComponent implements OnInit {
+export default class UserManagementComponent implements OnInit {
   currentAccount: Account | null = null;
   users: User[] | null = null;
   isLoading = false;
