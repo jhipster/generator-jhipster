@@ -23,15 +23,41 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ClientForwardController {
+    // File names with extension.
+    public static final String FORBID_EXTENSION_PATTERN = "/{file:[^\\.]*}";
+
+    // Folders with trailing separator.
+    public static final String TRAILING_DIR_PATTERN = "/{traillingDir:.*}/";
+<%_ if (communicationSpringWebsocket) { _%>
+
+    // Root folders allow list. Folders that shouls not be forwarded to index.hml.
+    public static final String ALLOW_ROOT_PATTERN = "/{rootDir:^(?!websocket).*}";
+<%_ } _%>
 
     /**
-     * Forwards any unmapped paths (except those containing a period) to the client {@code index.html}.
+     * Forwards any unmapped paths (except file names containing a period) to the client {@code index.html}.
      * @return forward to client {@code index.html}.
      */
 <%_ if (communicationSpringWebsocket) { _%>
-    @GetMapping(value = {"/{path:[^\\.]*}", "/{path:^(?!websocket).*}/**/{path:[^\\.]*}"})
+    @GetMapping(value = {
+        FORBID_EXTENSION_PATTERN,
+        ALLOW_ROOT_PATTERN + FORBID_EXTENSION_PATTERN,
+        ALLOW_ROOT_PATTERN + "/*" + FORBID_EXTENSION_PATTERN,
+        TRAILING_DIR_PATTERN,
+        "/*" + TRAILING_DIR_PATTERN,
+        "/*/*" + TRAILING_DIR_PATTERN,
+        ALLOW_ROOT_PATTERN + "/*/*/*/{*remaining}",
+})
 <%_ } else { _%>
-    @GetMapping(value = "/**/{path:[^\\.]*}")
+    @GetMapping(value = {
+        FORBID_EXTENSION_PATTERN,
+        "/*" + FORBID_EXTENSION_PATTERN,
+        "/*/*" + FORBID_EXTENSION_PATTERN,
+        TRAILING_DIR_PATTERN,
+        "/*" + TRAILING_DIR_PATTERN,
+        "/*/*" + TRAILING_DIR_PATTERN,
+        "/*/*/*/*/{*remaining}",
+    })
 <%_ } _%>
     public String forward() {
         return "forward:/";

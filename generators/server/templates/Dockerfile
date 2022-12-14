@@ -38,7 +38,7 @@ LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.17-alpine
 
-FROM redis:7.0.5
+FROM redis:7.0.6
 
 FROM confluentinc/cp-kafka:7.3.0
 LABEL ALIAS=kafka
@@ -51,7 +51,7 @@ LABEL ALIAS=sonar
 
 FROM consul:1.14.2
 
-FROM prom/prometheus:v2.40.5
+FROM prom/prometheus:v2.40.6
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.24.0
@@ -69,7 +69,7 @@ LABEL ALIAS=grafana-watcher
 FROM jenkins/jenkins:lts-jdk11
 LABEL ALIAS=jenkins
 
-FROM eclipse-temurin:11-jre-focal
+FROM eclipse-temurin:17-jre-focal
 LABEL ALIAS=java-jre
 
 FROM swaggerapi/swagger-editor:latest

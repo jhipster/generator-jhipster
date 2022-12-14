@@ -59,7 +59,7 @@ describe('JHipster Heroku Sub Generator', () => {
             herokuJHipsterRegistryApp: 'sushi',
             herokuJHipsterRegistryUsername: 'admin',
             herokuJHipsterRegistryPassword: 'changeme',
-            herokuJavaVersion: '11',
+            herokuJavaVersion: '17',
             useOkta: false,
           })
           .run();

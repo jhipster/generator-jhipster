@@ -87,8 +87,8 @@ export const entityFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/domain/Entity.java.jhi.javax_validation',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.javax_validation`,
+          file: 'package/domain/Entity.java.jhi.jakarta_validation',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.jakarta_validation`,
         },
       ],
     },
@@ -127,8 +127,8 @@ export const entityFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/domain/Entity.java.jhi.javax_lifecycle_events',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.javax_lifecycle_events`,
+          file: 'package/domain/Entity.java.jhi.jakarta_lifecycle_events',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.jakarta_lifecycle_events`,
         },
       ],
     },
@@ -157,8 +157,8 @@ export const entityFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/domain/Entity.java.jhi.javax_persistence',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.javax_persistence`,
+          file: 'package/domain/Entity.java.jhi.jakarta_persistence',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.jakarta_persistence`,
         },
       ],
     },

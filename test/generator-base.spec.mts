@@ -559,7 +559,7 @@ describe('Generator Base', () => {
     describe('when called for h2Disk', () => {
       it('return r2dbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1', () => {
         expect(BaseGenerator.getR2DBCUrl(H2_DISK, { databaseName: 'test', localDirectory: './build/h2db/db' })).to.equal(
-          'r2dbc:h2:file://./build/h2db/db/test;DB_CLOSE_DELAY=-1'
+          'r2dbc:h2:file:///./build/h2db/db/test;DB_CLOSE_DELAY=-1'
         );
       });
     });
@@ -567,7 +567,7 @@ describe('Generator Base', () => {
       it('return r2dbc:h2:file:://./build/h2db/db/test', () => {
         expect(
           BaseGenerator.getR2DBCUrl(H2_DISK, { databaseName: 'test', localDirectory: './build/h2db/db', skipExtraOptions: true })
-        ).to.equal('r2dbc:h2:file://./build/h2db/db/test');
+        ).to.equal('r2dbc:h2:file:///./build/h2db/db/test');
       });
     });
     describe('when called for h2Disk with missing `localDirectory` option', () => {

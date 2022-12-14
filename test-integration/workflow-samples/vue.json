@@ -29,12 +29,14 @@
     },
     {
       "name": "vue-session-cassandra-fr",
+      "disabled": "needs adjusts for sb3",
       "app-sample": "vue-session-cassandra-fr",
       "entity": "cassandra",
       "environment": "dev"
     },
     {
       "name": "ms-vue-eureka-jwt-couchbase-hazelcast",
+      "disabled": "needs adjusts for sb3",
       "jdl-samples": "ms-vue-eureka-jwt-couchbase-hazelcast",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true"

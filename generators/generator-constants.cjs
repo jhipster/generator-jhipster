@@ -22,8 +22,8 @@ const { ANGULAR, REACT, VUE } = require('../jdl/jhipster/client-framework-types'
 const commonPackageJson = require('./common/templates/package.json');
 
 // Version of Java
-const JAVA_VERSION = '11';
-const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17', '18'];
+const JAVA_VERSION = '17';
+const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19'];
 
 /**
  * Manually updated java dependencies
@@ -33,7 +33,7 @@ const javaDependencies = {};
 Object.freeze(javaDependencies);
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-const ELATICSEARCH_TAG = '7.17.4';
+const ELATICSEARCH_TAG = '8.5.0';
 const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
@@ -51,12 +51,13 @@ const NODE_VERSION = '16.17.0';
 const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.9.4-SNAPSHOT';
+const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.7.3';
-const HIBERNATE_VERSION = '5.6.10.Final';
+const SPRING_BOOT_VERSION = '3.0.0';
+const SPRING_CLOUD_VERSION = '2022.0.0-RC3';
+const HIBERNATE_VERSION = '6.1.5.Final';
 const JACOCO_VERSION = '0.8.8';
-const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.3';
+const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.4';
 
 // Kubernetes versions
 const KUBERNETES_CORE_API_VERSION = 'v1';
@@ -226,22 +227,7 @@ const LANGUAGES = [
   { name: 'Greek', dispName: 'Ελληνικά', value: 'el' },
   { name: 'Hindi', dispName: 'हिंदी', value: 'hi' },
   { name: 'Hungarian', dispName: 'Magyar', value: 'hu' },
-  {
-    name: 'Indonesian',
-    dispName: 'Bahasa Indonesia',
-    /*
-           JDK <17 ("Indonesian Locale does not comply with ISO 639")
-           The locale is set to "in" for Indonesia
-           See https://bugs.openjdk.java.net/browse/JDK-6457127
-           And https://github.com/jhipster/generator-jhipster/issues/9494
-           Java 17 supports 'id' locale, for compatibility with java 11, we will keep legacy 'in' value while we support java 11.
-           When running with java 17 users must set 'java.locale.useOldISOCodes=true' environment variable.
-           See https://bugs.openjdk.java.net/browse/JDK-8267069.
-        */
-    value: 'in',
-    localeId: 'id',
-    dayjsLocaleId: 'id',
-  },
+  { name: 'Indonesian', dispName: 'Bahasa Indonesia', value: 'id' },
   { name: 'Italian', dispName: 'Italiano', value: 'it' },
   { name: 'Japanese', dispName: '日本語', value: 'ja' },
   { name: 'Korean', dispName: '한국어', value: 'ko' },
@@ -353,6 +339,7 @@ const constants = {
   // Libraries
   JHIPSTER_DEPENDENCIES_VERSION,
   SPRING_BOOT_VERSION,
+  SPRING_CLOUD_VERSION,
   HIBERNATE_VERSION,
   JACOCO_VERSION,
   JACKSON_DATABIND_NULLABLE_VERSION,

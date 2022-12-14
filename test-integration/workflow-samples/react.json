@@ -18,11 +18,13 @@
     },
     {
       "name": "react-gradle-cassandra-session-redis",
+      "disabled": "needs adjusts for sb3",
       "app-sample": "react-gradle-cassandra-session-redis",
       "entity": "cassandra"
     },
     {
       "name": "ms-react-consul-jwt-cassandra-redis",
+      "disabled": "needs adjusts for sb3",
       "jdl-samples": "ms-react-consul-jwt-cassandra-redis",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true"

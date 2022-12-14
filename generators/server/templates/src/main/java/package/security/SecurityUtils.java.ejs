@@ -20,22 +20,21 @@ package <%= packageName %>.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-<%_ if (authenticationTypeOauth2) { _%>
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-<%_ } _%>
+import org.springframework.security.core.context.SecurityContext;
 <%_ if (reactive) { _%>
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-<%_ } _%>
-import org.springframework.security.core.context.SecurityContext;
-<%_ if (!reactive) { _%>
+<%_ } else { _%>
 import org.springframework.security.core.context.SecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.core.userdetails.UserDetails;
-<%_ if (authenticationTypeOauth2) { _%>
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+<%_ if (authenticationTypeJwt) { _%>
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.Jwt;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import java.util.*;
 import java.util.stream.Collectors;
   <%_ if (reactive) { _%>
@@ -60,6 +59,11 @@ import java.util.stream.Stream;
 public final class SecurityUtils {
 <%_ if (authenticationTypeOauth2) { _%>
     public static final String CLAIMS_NAMESPACE = "https://www.jhipster.tech/";
+<%_ } else if (authenticationTypeJwt) { _%>
+
+    public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
+
+    public static final String AUTHORITIES_KEY = "auth";
 <%_ } _%>
 
     private SecurityUtils() {
@@ -87,6 +91,11 @@ public final class SecurityUtils {
         } else if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
             return springSecurityUser.getUsername();
+<%_ if (authenticationTypeJwt) { _%>
+        } else if (authentication.getPrincipal() instanceof Jwt) {
+            Jwt jwt = (Jwt) authentication.getPrincipal();
+            return jwt.getSubject();
+<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
         } else if (authentication instanceof JwtAuthenticationToken) {
             return (String) ((JwtAuthenticationToken)authentication).getToken().getClaims().get("preferred_username");

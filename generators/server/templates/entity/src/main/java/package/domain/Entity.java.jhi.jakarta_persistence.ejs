@@ -21,9 +21,10 @@
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
 <&_ if (fragment.importSection) { -&>
-import javax.persistence.*;
+import jakarta.persistence.*;
 <%_ if ((databaseTypePostgres && fieldsContainTextBlob) || (fieldsContainUUID && (databaseTypeMysql || databaseTypeMariadb))) { _%>
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 <%_ } _%>
 <&_ } -&>
 
@@ -50,16 +51,13 @@ import org.hibernate.annotations.Type;
   <%_ } _%>
   <%_ if (field.fieldTypeBytes) { _%>
     @Lob
-    <%_ if (databaseTypePostgres && field.blobContentTypeText) { _%>
-    @Type(type = "org.hibernate.type.TextType")
-    <%_ } _%>
   <%_ } _%>
   <%_ if (field.fieldTypeTemporal || field.fieldTypeDuration) { _%>
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
   <%_ } else if (field.fieldTypeBigDecimal) { _%>
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", precision = 21, scale = 2<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
   <%_ } else if (field.fieldTypeUUID && (databaseTypeMysql || databaseTypeMariadb)) { _%>
-    @Type(type = "uuid-char")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
   <%_ } else { _%>
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidate === true) { %><% if (field.fieldValidationMaxLength) { %>, length = <%= field.fieldValidateRulesMaxlength %><% } %><% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %><% } %>)
@@ -79,14 +77,14 @@ import org.hibernate.annotations.Type;
 <%_ for (const relationship of relationships) { -%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipOneToMany) { -%>
-    @OneToMany(mappedBy = "<%= relationship.otherEntityRelationshipName %>")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "<%= relationship.otherEntityRelationshipName %>")
   <%_ } else if (relationship.relationshipManyToOne) { -%>
-    @ManyToOne<% if (relationship.relationshipRequired) { %>(optional = false)<% } %>
+    @ManyToOne(<% if (relationship.relationshipRequired) { %>optional = false<% } else { %>fetch = FetchType.LAZY<% } %>)
       <%_ if (relationship.relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
       <%_ } _%>
   <%_ } else if (relationship.relationshipManyToMany) { -%>
-    @ManyToMany<% if (!relationship.ownerSide) { %>(mappedBy = "<%= relationship.otherEntityRelationshipNamePlural %>")<% } %>
+    @ManyToMany(fetch = FetchType.LAZY<% if (!relationship.ownerSide) { %>, mappedBy = "<%= relationship.otherEntityRelationshipNamePlural %>"<% } %>)
       <%_ if (relationship.ownerSide) { _%>
         <%_ if (relationship.relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
@@ -112,7 +110,7 @@ import org.hibernate.annotations.Type;
     }, allowSetters = true)
       <%_ } _%>
       <%_ if (relationship.ownerSide) { -%>
-    @OneToOne<% if (relationship.relationshipRequired) { %>(optional = false)<% } %>
+    @OneToOne(fetch = FetchType.LAZY<% if (relationship.relationshipRequired) { %>, optional = false<% } %>)
         <%_ if (relationship.relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
         <%_ } _%>
@@ -123,7 +121,7 @@ import org.hibernate.annotations.Type;
     @JoinColumn(unique = true)
         <%_ } _%>
       <%_ } else { _%>
-    @OneToOne(mappedBy = "<%= relationship.otherEntityRelationshipName %>")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "<%= relationship.otherEntityRelationshipName %>")
       <%_ } -%>
   <%_ } -%>
 <&_ } -&>

@@ -107,16 +107,20 @@ export const classValid = <%_ if (clientFrameworkAngular) { _%>'ng-valid';
 Cypress.Commands.add('authenticatedRequest', (data) => {
 <%_ if (authenticationTypeJwt) { _%>
   <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
-  const bearerToken = JSON.parse(sessionStorage.getItem(Cypress.env('jwtStorageName')));
+  const jwtToken = sessionStorage.getItem(Cypress.env('jwtStorageName'));
+  const bearerToken = jwtToken && JSON.parse(jwtToken);
   <%_ } else { _%>
   const bearerToken = sessionStorage.getItem(Cypress.env('jwtStorageName'));
   <%_ } _%>
-  return cy.request({
-    ...data,
-    auth: {
-      bearer: bearerToken,
-    },
-  });
+  if (bearerToken) {
+    return cy.request({
+      ...data,
+      auth: {
+        bearer: bearerToken,
+      },
+    });
+  }
+  return cy.request(data);
 <%_ } else { _%>
   return cy.getCookie('XSRF-TOKEN').then(csrfCookie => {
     return cy.request({
