@@ -74,7 +74,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-import { FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter/filter.model';
+import { FilterComponent, FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter';
 <%_ } _%>
 <%_ if (paginationNo) { _%>
 import { SortService } from 'app/shared/sort/sort.service';
@@ -84,7 +84,18 @@ import { SortService } from 'app/shared/sort/sort.service';
     standalone: true,
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html',
-    imports: [RouterModule, SharedModule, SortDirective, SortByDirective, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    imports: [
+      RouterModule,
+      SharedModule,
+      SortDirective,
+      SortByDirective,
+      DurationPipe,
+      FormatMediumDatetimePipe,
+      FormatMediumDatePipe,
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      FilterComponent,
+<%_ } _%>
+    ],
 })
 export class <%= componentName %> implements OnInit {
 

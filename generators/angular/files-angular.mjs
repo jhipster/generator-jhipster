@@ -333,6 +333,7 @@ export const files = {
         'shared/alert/alert-error.component.html',
         'shared/alert/alert-error.model.ts',
         // filtering options
+        'shared/filter/index.ts',
         'shared/filter/filter.component.html',
         'shared/filter/filter.component.ts',
         'shared/filter/filter.model.spec.ts',
