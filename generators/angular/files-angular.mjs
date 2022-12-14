@@ -172,7 +172,6 @@ export const files = {
       ...clientApplicationBlock,
       templates: [
         'admin/admin-routing.module.ts',
-        'admin/docs/docs.route.ts',
         'admin/docs/docs.component.ts',
         'admin/docs/docs.component.html',
         'admin/docs/docs.component.scss',
@@ -183,24 +182,20 @@ export const files = {
       ...clientApplicationBlock,
       templates: [
         // admin modules
-        'admin/configuration/configuration.route.ts',
         'admin/configuration/configuration.component.ts',
         'admin/configuration/configuration.component.html',
         'admin/configuration/configuration.service.ts',
         'admin/configuration/configuration.model.ts',
-        'admin/health/health.route.ts',
         'admin/health/health.component.ts',
         'admin/health/health.component.html',
         'admin/health/modal/health-modal.component.ts',
         'admin/health/modal/health-modal.component.html',
         'admin/health/health.service.ts',
         'admin/health/health.model.ts',
-        'admin/logs/logs.route.ts',
         'admin/logs/log.model.ts',
         'admin/logs/logs.component.ts',
         'admin/logs/logs.component.html',
         'admin/logs/logs.service.ts',
-        'admin/metrics/metrics.route.ts',
         'admin/metrics/metrics.component.ts',
         'admin/metrics/metrics.component.html',
         'admin/metrics/metrics.service.ts',
@@ -258,7 +253,6 @@ export const files = {
       condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
       ...clientApplicationBlock,
       templates: [
-        'admin/gateway/gateway.route.ts',
         'admin/gateway/gateway-route.model.ts',
         'admin/gateway/gateway.component.ts',
         'admin/gateway/gateway.component.html',
@@ -482,6 +476,12 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}app/admin/configuration/configuration.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/home/home.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/home/home.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/configuration/configuration.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/docs/docs.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/gateway/gateway.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/health/health.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.route.ts`);
   }
 }
 

@@ -33,30 +33,36 @@ import { RouterModule } from '@angular/router';
       <%_ } _%>
       {
         path: 'docs',
-        loadChildren: () => import('./docs/docs.route'),
+        loadComponent: () => import('./docs/docs.component'),
+        title: 'global.menu.admin.apidocs',
       },
       <%_ if (withAdminUi) { _%>
       {
         path: 'configuration',
-        loadChildren: () => import('./configuration/configuration.route'),
+        loadComponent: () => import('./configuration/configuration.component'),
+        title: 'configuration.title',
       },
       {
         path: 'health',
-        loadChildren: () => import('./health/health.route'),
+        loadComponent: () => import('./health/health.component'),
+        title: 'health.title',
       },
       {
         path: 'logs',
-        loadChildren: () => import('./logs/logs.route'),
+        loadComponent: () => import('./logs/logs.component'),
+        title: 'logs.title',
       },
       {
         path: 'metrics',
-        loadChildren: () => import('./metrics/metrics.route'),
+        loadComponent: () => import('./metrics/metrics.component'),
+        title: 'metrics.title',
       },
       <%_ } _%>
       <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
       {
         path: 'gateway',
-        loadChildren: () => import('./gateway/gateway.route'),
+        loadComponent: () => import('./gateway/gateway.component'),
+        title: 'gateway.title',
       },
       <%_ } _%>
       <%_ if (communicationSpringWebsocket) { _%>
