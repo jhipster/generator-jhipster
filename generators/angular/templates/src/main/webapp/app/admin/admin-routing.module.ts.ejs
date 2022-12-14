@@ -50,7 +50,7 @@ import { RouterModule } from '@angular/router';
       },
       {
         path: 'metrics',
-        loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule),
+        loadChildren: () => import('./metrics/metrics.route'),
       },
       <%_ } _%>
       <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>

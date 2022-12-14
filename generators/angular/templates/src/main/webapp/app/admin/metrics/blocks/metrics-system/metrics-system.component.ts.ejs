@@ -17,13 +17,17 @@
  limitations under the License.
 -%>
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
+import { SharedModule } from 'app/shared/shared.module';
 import { ProcessMetrics } from 'app/admin/metrics/metrics.model';
 
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-metrics-system',
   templateUrl: './metrics-system.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, SharedModule],
 })
 export class MetricsSystemComponent {
   /**

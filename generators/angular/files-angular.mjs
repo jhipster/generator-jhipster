@@ -207,7 +207,6 @@ export const files = {
         'admin/logs/logs.component.html',
         'admin/logs/logs.service.ts',
         'admin/metrics/metrics.route.ts',
-        'admin/metrics/metrics.module.ts',
         'admin/metrics/metrics.component.ts',
         'admin/metrics/metrics.component.html',
         'admin/metrics/metrics.service.ts',
@@ -482,6 +481,7 @@ export function cleanup({ application }) {
   }
   if (this.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.module.ts`);
   }
 }
 

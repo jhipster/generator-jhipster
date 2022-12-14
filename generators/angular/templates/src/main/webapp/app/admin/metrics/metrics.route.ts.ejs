@@ -18,10 +18,10 @@
 -%>
 import { Route } from '@angular/router';
 
-import { MetricsComponent } from './metrics.component';
-
-export const metricsRoute: Route = {
+const metricsRoute: Route[] = [{
   path: '',
-  component: MetricsComponent,
+  loadComponent: () => import('./metrics.component'),
   title: 'metrics.title',
-};
+}];
+
+export default metricsRoute;

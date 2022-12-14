@@ -17,12 +17,16 @@
  limitations under the License.
 -%>
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
+import { SharedModule } from 'app/shared/shared.module';
 import { JvmMetrics } from 'app/admin/metrics/metrics.model';
 
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-jvm-memory',
   templateUrl: './jvm-memory.component.html',
+  imports: [CommonModule, SharedModule],
 })
 export class JvmMemoryComponent {
   /**
