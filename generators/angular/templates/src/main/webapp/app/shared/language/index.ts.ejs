@@ -16,32 +16,5 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Routes } from '@angular/router';
-
-export const errorRoute: Routes = [
-  {
-    path: 'error',
-    loadComponent: () => import('./error.component'),
-    title: 'error.title',
-  },
-  {
-    path: 'accessdenied',
-    loadComponent: () => import('./error.component'),
-    data: {
-      errorMessage: 'error.http.403',
-    },
-    title: 'error.title',
-  },
-  {
-    path: '404',
-    loadComponent: () => import('./error.component'),
-    data: {
-      errorMessage: 'error.http.404',
-    },
-    title: 'error.title',
-  },
-  {
-    path: '**',
-    redirectTo: '/404',
-  },
-];
+export { default as TranslateDirective } from './translate.directive';
+export { default as FindLanguageFromKeyPipe } from './find-language-from-key.pipe';

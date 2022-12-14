@@ -347,6 +347,7 @@ export const files = {
       condition: generator => generator.enableTranslation,
       ...clientApplicationBlock,
       templates: [
+        'shared/language/index.ts',
         'shared/language/translation.module.ts',
         'shared/language/find-language-from-key.pipe.ts',
         'shared/language/translate.directive.ts',
