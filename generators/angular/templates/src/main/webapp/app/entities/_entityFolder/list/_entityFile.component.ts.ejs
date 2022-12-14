@@ -41,6 +41,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { SharedModule } from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
+import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (!paginationNo) { %>
 import {
@@ -83,7 +84,7 @@ import { SortService } from 'app/shared/sort/sort.service';
     standalone: true,
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html',
-    imports: [RouterModule, SharedModule, SortDirective, SortByDirective],
+    imports: [RouterModule, SharedModule, SortDirective, SortByDirective, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
 })
 export class <%= componentName %> implements OnInit {
 

@@ -317,6 +317,7 @@ export const files = {
       templates: [
         'shared/shared.module.ts',
         'shared/shared-libs.module.ts',
+        'shared/date/index.ts',
         'shared/date/duration.pipe.ts',
         'shared/date/format-medium-date.pipe.ts',
         'shared/date/format-medium-datetime.pipe.ts',
