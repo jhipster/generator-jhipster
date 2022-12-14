@@ -18,11 +18,8 @@
 -%>
 import { NgModule } from '@angular/core';
 
+import AppCommonModule from 'app/app-common.module';
 import { SharedLibsModule } from './shared-libs.module';
-<%_ if (enableTranslation) { _%>
-import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
-import { TranslateDirective } from './language/translate.directive';
-<%_ } _%>
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { DurationPipe } from './date/duration.pipe';
@@ -34,12 +31,11 @@ import { ItemCountComponent } from './pagination/item-count.component';
 import { FilterComponent } from './filter/filter.component';
 
 @NgModule({
-  imports: [SharedLibsModule],
+  imports: [
+    AppCommonModule,
+    SharedLibsModule,
+  ],
   declarations: [
-<%_ if (enableTranslation) { _%>
-    FindLanguageFromKeyPipe,
-    TranslateDirective,
-<%_ } _%>
     AlertComponent,
     AlertErrorComponent,
     DurationPipe,
@@ -51,11 +47,8 @@ import { FilterComponent } from './filter/filter.component';
     FilterComponent,
   ],
   exports: [
+    AppCommonModule,
     SharedLibsModule,
-<%_ if (enableTranslation) { _%>
-    FindLanguageFromKeyPipe,
-    TranslateDirective,
-<%_ } _%>
     AlertComponent,
     AlertErrorComponent,
     DurationPipe,

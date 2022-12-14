@@ -31,10 +31,10 @@ import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-transla
 
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (enableI18nRTL) { _%>
-import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
+import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 
-import { MainComponent } from './main.component';
+import MainComponent from './main.component';
 import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 
 describe('MainComponent', () => {
@@ -207,7 +207,7 @@ describe('MainComponent', () => {
         translateService.onLangChange.emit(langChangeEvent);
 
         // THEN
-        expect(document.title).toBe(parentRoutePageTitle + ' translated');   
+        expect(document.title).toBe(parentRoutePageTitle + ' translated');
       }));
 
       it('should set page title to child route pageTitle if child routes exist and pageTitle is set for child route', fakeAsync(() => {
@@ -236,7 +236,7 @@ describe('MainComponent', () => {
         translateService.onLangChange.emit(langChangeEvent);
 
         // THEN
-        expect(document.title).toBe(childRoutePageTitle + ' translated'); 
+        expect(document.title).toBe(childRoutePageTitle + ' translated');
       }));
 
       it('should set page title to parent route pageTitle if child routes exists but pageTitle is not set for child route data', fakeAsync(() => {
@@ -265,7 +265,7 @@ describe('MainComponent', () => {
         translateService.onLangChange.emit(langChangeEvent);
 
         // THEN
-        expect(document.title).toBe(parentRoutePageTitle + ' translated'); 
+        expect(document.title).toBe(parentRoutePageTitle + ' translated');
       }));
     });
 <%_ } _%>

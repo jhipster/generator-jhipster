@@ -22,7 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 <%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language/translate.directive';
+import TranslateDirective from 'app/shared/language/translate.directive';
 <%_ } _%>
 
 import { ItemCountComponent } from './item-count.component';
@@ -35,13 +35,10 @@ describe('ItemCountComponent test', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
 <%_ if (enableTranslation) { _%>
-        imports: [TranslateModule.forRoot()],
+        imports: [TranslateModule.forRoot(), TranslateDirective],
 <%_ } _%>
         declarations: [
           ItemCountComponent,
-<%_ if (enableTranslation) { _%>
-          TranslateDirective,
-<%_ } _%>
         ],
       }).compileComponents();
     })

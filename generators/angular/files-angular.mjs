@@ -54,7 +54,7 @@ export const files = {
     },
     {
       ...clientApplicationBlock,
-      templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
+      templates: ['app-common.module.ts', 'app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
     },
   ],
   microfrontend: [

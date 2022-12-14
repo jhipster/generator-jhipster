@@ -17,24 +17,27 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CommonModule } from '@angular/common';
+
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import FindLanguageFromKeyPipe from './shared/language/find-language-from-key.pipe';
+import TranslateDirective from './shared/language/translate.directive';
 <%_ } _%>
 
 @NgModule({
-  exports: [
-    FormsModule,
-    NgbModule,
-    InfiniteScrollModule,
-    FontAwesomeModule,
-    ReactiveFormsModule,
+  imports: [
+    CommonModule,
 <%_ if (enableTranslation) { _%>
-    TranslateModule,
+    FindLanguageFromKeyPipe,
+    TranslateDirective,
+<%_ } _%>
+  ],
+  exports: [
+    CommonModule,
+<%_ if (enableTranslation) { _%>
+    FindLanguageFromKeyPipe,
+    TranslateDirective,
 <%_ } _%>
   ],
 })
-export class SharedLibsModule {}
+export default class AppCommonModule {}
