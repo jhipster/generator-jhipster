@@ -54,7 +54,7 @@ export const files = {
     },
     {
       ...clientApplicationBlock,
-      templates: ['app-common.module.ts', 'app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
+      templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
     },
   ],
   microfrontend: [
@@ -316,6 +316,8 @@ export const files = {
       ...clientApplicationBlock,
       templates: [
         'shared/shared.module.ts',
+        'shared/shared-app.module.ts',
+        'shared/shared-form.module.ts',
         'shared/shared-libs.module.ts',
         'shared/date/index.ts',
         'shared/date/duration.pipe.ts',

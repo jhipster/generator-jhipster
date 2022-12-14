@@ -17,27 +17,23 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-<%_ if (enableTranslation) { _%>
-import FindLanguageFromKeyPipe from './shared/language/find-language-from-key.pipe';
-import TranslateDirective from './shared/language/translate.directive';
-<%_ } _%>
+import SharedAppModule from 'app/shared/shared-app.module';
+import { AlertComponent } from './alert/alert.component';
+import { AlertErrorComponent } from './alert/alert-error.component';
 
 @NgModule({
   imports: [
-    CommonModule,
-<%_ if (enableTranslation) { _%>
-    FindLanguageFromKeyPipe,
-    TranslateDirective,
-<%_ } _%>
+    AlertComponent,
+    AlertErrorComponent,
   ],
   exports: [
-    CommonModule,
-<%_ if (enableTranslation) { _%>
-    FindLanguageFromKeyPipe,
-    TranslateDirective,
-<%_ } _%>
+    SharedAppModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AlertComponent,
+    AlertErrorComponent,
   ],
 })
-export default class AppCommonModule {}
+export default class SharedFormModule {}

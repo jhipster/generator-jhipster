@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -27,11 +26,9 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   exports: [
-    FormsModule,
     NgbModule,
     InfiniteScrollModule,
     FontAwesomeModule,
-    ReactiveFormsModule,
 <%_ if (enableTranslation) { _%>
     TranslateModule,
 <%_ } _%>

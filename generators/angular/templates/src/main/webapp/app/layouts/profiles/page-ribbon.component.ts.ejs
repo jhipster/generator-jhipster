@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import AppCommonModule from 'app/app-common.module';
+import SharedAppModule from 'app/shared/shared-app.module';
 import { ProfileService } from './profile.service';
 
 @Component({
@@ -32,7 +32,7 @@ import { ProfileService } from './profile.service';
     </div>
   `,
   styleUrls: ['./page-ribbon.component.scss'],
-  imports: [AppCommonModule],
+  imports: [SharedAppModule],
 })
 export default class PageRibbonComponent implements OnInit {
   ribbonEnv$?: Observable<string | undefined>;

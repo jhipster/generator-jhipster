@@ -22,8 +22,8 @@ import { By } from '@angular/platform-browser';
 import { FaIconComponent, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 
-import { SortByDirective } from './sort-by.directive';
-import { SortDirective } from './sort.directive';
+import SortByDirective from './sort-by.directive';
+import SortDirective from './sort.directive';
 
 @Component({
   template: `
@@ -55,7 +55,8 @@ describe('Directive: SortByDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestSortByDirectiveComponent, SortDirective, SortByDirective, FaIconComponent],
+      imports: [SortDirective, SortByDirective],
+      declarations: [TestSortByDirectiveComponent, FaIconComponent],
     });
     fixture = TestBed.createComponent(TestSortByDirectiveComponent);
     component = fixture.componentInstance;

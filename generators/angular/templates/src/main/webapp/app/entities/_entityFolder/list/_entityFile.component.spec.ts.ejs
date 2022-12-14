@@ -48,9 +48,9 @@ describe('<%= entityAngularName %> Management Component', () => {
         TestBed.configureTestingModule({
             imports: [
               RouterTestingModule.withRoutes([{ path: '<%= entityPage %>', component: <%= entityAngularName %>Component }]),
-              HttpClientTestingModule
+              HttpClientTestingModule,
+              <%= entityAngularName %>Component,
             ],
-            declarations: [<%= entityAngularName %>Component],
             providers: [
                 {
                     provide: ActivatedRoute,
