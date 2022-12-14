@@ -46,7 +46,7 @@ import { RouterModule } from '@angular/router';
       },
       {
         path: 'logs',
-        loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule),
+        loadChildren: () => import('./logs/logs.route'),
       },
       {
         path: 'metrics',

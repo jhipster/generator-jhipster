@@ -201,7 +201,6 @@ export const files = {
         'admin/health/health.service.ts',
         'admin/health/health.model.ts',
         'admin/logs/logs.route.ts',
-        'admin/logs/logs.module.ts',
         'admin/logs/log.model.ts',
         'admin/logs/logs.component.ts',
         'admin/logs/logs.component.html',
@@ -482,6 +481,7 @@ export function cleanup({ application }) {
   if (this.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.module.ts`);
   }
 }
 
