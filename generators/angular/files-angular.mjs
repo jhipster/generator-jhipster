@@ -325,6 +325,7 @@ export const files = {
         'shared/sort/sort.directive.ts',
         'shared/sort/sort.service.ts',
         'shared/sort/sort-by.directive.ts',
+        'shared/pagination/index.ts',
         'shared/pagination/item-count.component.ts',
         // alert service code
         'shared/alert/alert.component.ts',

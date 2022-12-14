@@ -16,27 +16,4 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule } from '@angular/core';
-
-import AppCommonModule from 'app/app-common.module';
-import { SharedLibsModule } from './shared-libs.module';
-import { AlertComponent } from './alert/alert.component';
-import { AlertErrorComponent } from './alert/alert-error.component';
-
-@NgModule({
-  imports: [
-    AppCommonModule,
-    SharedLibsModule,
-  ],
-  declarations: [
-    AlertComponent,
-    AlertErrorComponent,
-  ],
-  exports: [
-    AppCommonModule,
-    SharedLibsModule,
-    AlertComponent,
-    AlertErrorComponent,
-  ],
-})
-export class SharedModule {}
+export { default as ItemCountComponent } from './item-count.component';

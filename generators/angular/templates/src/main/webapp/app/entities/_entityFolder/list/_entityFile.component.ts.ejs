@@ -42,6 +42,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+<%_ if (paginationPagination) { _%>
+import { ItemCountComponent } from 'app/shared/pagination';
+<%_ } _%>
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (!paginationNo) { %>
 import {
@@ -94,6 +97,9 @@ import { SortService } from 'app/shared/sort/sort.service';
       FormatMediumDatePipe,
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
       FilterComponent,
+<%_ } _%>
+<%_ if (paginationPagination) { _%>
+      ItemCountComponent,
 <%_ } _%>
     ],
 })
