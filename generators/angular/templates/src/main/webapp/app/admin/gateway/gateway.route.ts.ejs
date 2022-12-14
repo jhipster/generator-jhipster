@@ -18,10 +18,10 @@
 -%>
 import { Route } from '@angular/router';
 
-import { GatewayComponent } from './gateway.component';
-
-export const gatewayRoute: Route = {
+const gatewayRoute: Route[] = [{
   path: '',
-  component: GatewayComponent,
+  loadComponent: () => import('./gateway.component'),
   title: 'gateway.title',
-};
+}];
+
+export default gatewayRoute;

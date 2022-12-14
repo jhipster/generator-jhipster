@@ -56,7 +56,7 @@ import { RouterModule } from '@angular/router';
       <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
       {
         path: 'gateway',
-        loadChildren: () => import('./gateway/gateway.module').then(m => m.GatewayModule),
+        loadChildren: () => import('./gateway/gateway.route'),
       },
       <%_ } _%>
       <%_ if (communicationSpringWebsocket) { _%>

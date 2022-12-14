@@ -263,7 +263,6 @@ export const files = {
       ...clientApplicationBlock,
       templates: [
         'admin/gateway/gateway.route.ts',
-        'admin/gateway/gateway.module.ts',
         'admin/gateway/gateway-route.model.ts',
         'admin/gateway/gateway.component.ts',
         'admin/gateway/gateway.component.html',
@@ -482,6 +481,7 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/health/health.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/gateway/gateway.module.ts`);
   }
 }
 
