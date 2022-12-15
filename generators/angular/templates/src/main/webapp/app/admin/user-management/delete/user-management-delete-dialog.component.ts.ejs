@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
@@ -27,7 +28,7 @@ import { UserManagementService } from '../service/user-management.service';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-user-mgmt-delete-dialog',
   templateUrl: './user-management-delete-dialog.component.html',
-  imports: [SharedModule],
+  imports: [SharedModule, FormsModule],
 })
 export default class UserManagementDeleteDialogComponent {
   user?: User;
