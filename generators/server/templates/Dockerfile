@@ -51,7 +51,7 @@ LABEL ALIAS=sonar
 
 FROM consul:1.14.2
 
-FROM prom/prometheus:v2.40.6
+FROM prom/prometheus:v2.40.7
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.24.0
