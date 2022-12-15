@@ -25,7 +25,7 @@ import { combineLatest } from 'rxjs';
 <%_ } _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { SharedModule } from 'app/shared/shared.module';
+import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 <%_ if (!databaseTypeCassandra) { _%>
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';

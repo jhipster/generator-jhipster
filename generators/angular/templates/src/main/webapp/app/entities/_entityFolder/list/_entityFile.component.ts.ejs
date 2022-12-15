@@ -39,7 +39,7 @@ import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, swi
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 
-import { SharedModule } from 'app/shared/shared.module';
+import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 <%_ if (paginationPagination) { _%>
@@ -82,6 +82,9 @@ import { FilterComponent, FilterOptions, IFilterOptions, IFilterOption } from 'a
 <%_ if (paginationNo) { _%>
 import { SortService } from 'app/shared/sort/sort.service';
 <%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+<%_ } _%>
 
 @Component({
     standalone: true,
@@ -100,6 +103,9 @@ import { SortService } from 'app/shared/sort/sort.service';
 <%_ } _%>
 <%_ if (paginationPagination) { _%>
       ItemCountComponent,
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+      InfiniteScrollModule,
 <%_ } _%>
     ],
 })

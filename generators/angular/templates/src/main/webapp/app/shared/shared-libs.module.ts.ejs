@@ -18,20 +18,10 @@
 -%>
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-<%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
-<%_ } _%>
 
 @NgModule({
   exports: [
     NgbModule,
-    InfiniteScrollModule,
-    FontAwesomeModule,
-<%_ if (enableTranslation) { _%>
-    TranslateModule,
-<%_ } _%>
   ],
 })
 export class SharedLibsModule {}

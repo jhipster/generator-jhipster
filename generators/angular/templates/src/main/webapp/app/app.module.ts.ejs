@@ -36,7 +36,6 @@ import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap'
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import './config/dayjs';
-import { SharedModule } from 'app/shared/shared.module';
 <%_ if (enableTranslation) { _%>
 import { TranslationModule } from 'app/shared/language/translation.module';
 <%_ } _%>
@@ -56,7 +55,6 @@ import { AppPageTitleStrategy } from './app-page-title-strategy';
 @NgModule({
   imports: [
     BrowserModule,
-    SharedModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     AppRoutingModule,
     // Set this to true to enable service worker (PWA)

@@ -19,21 +19,13 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import SharedAppModule from 'app/shared/shared-app.module';
-import { AlertComponent } from './alert/alert.component';
-import { AlertErrorComponent } from './alert/alert-error.component';
+import SharedModule from 'app/shared/shared.module';
 
 @NgModule({
-  imports: [
-    AlertComponent,
-    AlertErrorComponent,
-  ],
   exports: [
-    SharedAppModule,
+    SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    AlertComponent,
-    AlertErrorComponent,
   ],
 })
 export default class SharedFormModule {}
