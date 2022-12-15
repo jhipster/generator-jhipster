@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
-import SharedFormModule from 'app/shared/shared-form.module';
 import { <%= entityAngularName %>Component } from './list/<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './detail/<%= entityFileName %>-detail.component';
 <%_ if (!readOnly) { _%>
@@ -28,7 +27,6 @@ import { <%= entityAngularName %>RoutingModule } from './route/<%= entityFileNam
 
 @NgModule({
   imports: [
-    SharedFormModule,
     <%= entityAngularName %>RoutingModule,
     <%= entityAngularName %>Component,
     <%= entityAngularName %>DetailComponent,

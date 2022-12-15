@@ -45,6 +45,9 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 <%_ if (paginationPagination) { _%>
 import { ItemCountComponent } from 'app/shared/pagination';
 <%_ } _%>
+<%_ if (searchEngine) { _%>
+import { FormsModule } from '@angular/forms';
+<%_ } _%>
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (!paginationNo) { %>
 import {
@@ -92,6 +95,9 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     templateUrl: './<%= entityFileName %>.component.html',
     imports: [
       RouterModule,
+<%_ if (searchEngine) { _%>
+      FormsModule,
+<%_ } _%>
       SharedModule,
       SortDirective,
       SortByDirective,

@@ -18,7 +18,8 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 
-import SharedFormModule from 'app/shared/shared-form.module';
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule } from '@angular/forms';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { Log, LoggersResponse, Level } from './log.model';
 import { LogsService } from './logs.service';
@@ -27,7 +28,7 @@ import { LogsService } from './logs.service';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-logs',
   templateUrl: './logs.component.html',
-  imports: [SharedFormModule, SortDirective, SortByDirective],
+  imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
 })
 export default class LogsComponent implements OnInit {
   loggers?: Log[];
