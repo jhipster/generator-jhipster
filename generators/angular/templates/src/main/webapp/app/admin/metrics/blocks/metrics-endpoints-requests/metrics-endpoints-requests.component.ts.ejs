@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import SharedModule from 'app/shared/shared.module';
 import { Services } from 'app/admin/metrics/metrics.model';
@@ -26,7 +25,7 @@ import { Services } from 'app/admin/metrics/metrics.model';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-metrics-endpoints-requests',
   templateUrl: './metrics-endpoints-requests.component.html',
-  imports: [CommonModule, SharedModule],
+  imports: [SharedModule],
 })
 export class MetricsEndpointsRequestsComponent {
   /**

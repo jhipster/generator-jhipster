@@ -18,7 +18,6 @@
 -%>
 import { Component, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CommonModule } from '@angular/common';
 
 import SharedModule from 'app/shared/shared.module';
 import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
@@ -28,7 +27,7 @@ import { MetricsModalThreadsComponent } from '../metrics-modal-threads/metrics-m
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-jvm-threads',
   templateUrl: './jvm-threads.component.html',
-  imports: [CommonModule, SharedModule],
+  imports: [SharedModule],
 })
 export class JvmThreadsComponent {
   threadStats = {
