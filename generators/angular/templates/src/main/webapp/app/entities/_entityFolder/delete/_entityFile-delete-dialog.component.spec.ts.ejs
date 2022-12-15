@@ -39,8 +39,7 @@ describe('<%= entityAngularName %> Management Delete Component', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
-            declarations: [<%= entityAngularName %>DeleteDialogComponent],
+            imports: [HttpClientTestingModule, <%= entityAngularName %>DeleteDialogComponent],
             providers: [NgbActiveModal]
         })
         .overrideTemplate(<%= entityAngularName %>DeleteDialogComponent, '')

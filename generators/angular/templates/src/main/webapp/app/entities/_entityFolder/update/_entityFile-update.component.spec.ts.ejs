@@ -63,8 +63,11 @@ describe('<%= entityAngularName %> Management Update Component', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-            declarations: [<%= entityAngularName %>UpdateComponent],
+            imports: [
+                HttpClientTestingModule,
+                RouterTestingModule.withRoutes([]),
+                <%= entityAngularName %>UpdateComponent,
+            ],
             providers: [
               FormBuilder,
               {
