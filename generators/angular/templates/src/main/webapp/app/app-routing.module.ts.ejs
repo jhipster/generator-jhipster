@@ -23,6 +23,9 @@ import { errorRoute } from './layouts/error/error.route';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
 import { Authority } from 'app/config/authority.constants';
 
+import HomeComponent from './home/home.component';
+import NavbarComponent from './layouts/navbar/navbar.component';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
 @NgModule({
@@ -31,12 +34,12 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
       [
         {
           path: '',
-          loadComponent: () => import('./home/home.component'),
+          component: HomeComponent,
           title: 'home.title',
         },
         {
           path: '',
-          loadComponent: () => import('./layouts/navbar/navbar.component'),
+          component: NavbarComponent,
           outlet: 'navbar',
         },
 <%_ if (!applicationTypeMicroservice) { _%>

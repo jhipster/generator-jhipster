@@ -22,6 +22,9 @@ import { Observable, of } from 'rxjs';
 
 import { IUser } from './user-management.model';
 import { UserManagementService } from './service/user-management.service';
+import UserManagementComponent from './list/user-management.component';
+import UserManagementDetailComponent from './detail/user-management-detail.component';
+import UserManagementUpdateComponent from './update/user-management-update.component';
 
 @Injectable({ providedIn: 'root' })
 export class UserManagementResolve implements Resolve<IUser | null> {
@@ -39,28 +42,28 @@ export class UserManagementResolve implements Resolve<IUser | null> {
 const userManagementRoute: Routes = [
   {
     path: '',
-    loadComponent: () => import('./list/user-management.component'),
+    component: UserManagementComponent,
     data: {
       defaultSort: 'id,asc',
     },
   },
   {
     path: ':login/view',
-    loadComponent: () => import('./detail/user-management-detail.component'),
+    component: UserManagementDetailComponent,
     resolve: {
       user: UserManagementResolve,
     },
   },
   {
     path: 'new',
-    loadComponent: () => import('./update/user-management-update.component'),
+    component: UserManagementUpdateComponent,
     resolve: {
       user: UserManagementResolve,
     },
   },
   {
     path: ':login/edit',
-    loadComponent: () => import('./update/user-management-update.component'),
+    component: UserManagementUpdateComponent,
     resolve: {
       user: UserManagementResolve,
     },
