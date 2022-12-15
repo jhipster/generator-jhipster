@@ -33,10 +33,11 @@
     "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "useDefineForClassFields": false,
 <%_ if (microfrontend) { _%>
     "target": "es2017",
 <%_ } else { _%>
-    "target": "es2020",
+    "target": "es2022",
 <%_ } _%>
     "module": "es2020",
     "lib": ["es2018", "dom"]

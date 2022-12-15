@@ -36,7 +36,6 @@ export const files = {
         'webpack/environment.js',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',
-        '.browserslistrc',
         'webpack/logo-jhipster.png',
       ],
     },
@@ -472,6 +471,7 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}content/scss/rtl.scss`);
   }
   if (this.isJhipsterVersionLessThan('7.10.0')) {
+    this.removeFile('.browserslistrc');
     this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.module.ts`);
