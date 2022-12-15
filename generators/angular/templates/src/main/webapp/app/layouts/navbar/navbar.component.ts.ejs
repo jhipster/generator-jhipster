@@ -41,7 +41,14 @@ import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
   selector: '<%= jhiPrefixDashed %>-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
-  imports: [RouterModule, SharedModule, ActiveMenuDirective, HasAnyAuthorityDirective],
+  imports: [
+    RouterModule,
+    SharedModule,
+    HasAnyAuthorityDirective,
+<%_ if (enableTranslation) { _%>
+    ActiveMenuDirective,
+<%_ } _%>
+  ],
 })
 export default class NavbarComponent implements OnInit {
   inProduction?: boolean;
