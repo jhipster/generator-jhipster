@@ -49,7 +49,7 @@ export const files = {
   angularApp: [
     {
       ...clientSrcBlock,
-      templates: ['main.ts', 'bootstrap.ts', 'polyfills.ts', 'declarations.d.ts'],
+      templates: ['main.ts', 'bootstrap.ts', 'declarations.d.ts'],
     },
     {
       ...clientApplicationBlock,
@@ -472,6 +472,7 @@ export function cleanup({ application }) {
   }
   if (this.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile('.browserslistrc');
+    this.removeFile(`${application.clientSrcDir}polyfills.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.module.ts`);
