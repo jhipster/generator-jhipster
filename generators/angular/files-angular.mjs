@@ -103,13 +103,7 @@ export const files = {
     {
       ...clientApplicationBlock,
       condition: generator => !generator.authenticationTypeOauth2,
-      templates: [
-        'login/login.module.ts',
-        'login/login.route.ts',
-        'login/login.component.ts',
-        'login/login.component.html',
-        'login/login.model.ts',
-      ],
+      templates: ['login/login.component.ts', 'login/login.component.html', 'login/login.model.ts'],
     },
     {
       ...clientApplicationBlock,
@@ -489,6 +483,9 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/layouts/navbar/navbar.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/shared-libs.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/shared-libs.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/login/login.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/login/login.route.ts`);
   }
 }
 

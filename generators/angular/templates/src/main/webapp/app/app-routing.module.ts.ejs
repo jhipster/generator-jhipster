@@ -25,6 +25,9 @@ import { Authority } from 'app/config/authority.constants';
 
 import HomeComponent from './home/home.component';
 import NavbarComponent from './layouts/navbar/navbar.component';
+<%_ if (!authenticationTypeOauth2) { _%>
+import LoginComponent from './login/login.component';
+<%_ } _%>
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
@@ -61,7 +64,8 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 <%_ if (!authenticationTypeOauth2) { _%>
         {
           path: 'login',
-          loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
+          component: LoginComponent,
+          title: 'login.title',
         },
 <%_ } _%>
         {
