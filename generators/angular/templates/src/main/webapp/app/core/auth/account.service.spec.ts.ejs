@@ -17,9 +17,6 @@
  limitations under the License.
 -%>
 jest.mock('app/core/auth/state-storage.service');
-<%_ if (communicationSpringWebsocket) { _%>
-jest.mock('app/core/tracker/tracker.service');
-<%_ } _%>
 
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -34,9 +31,6 @@ import { NgxWebstorageModule<% if (enableTranslation) { %>, SessionStorageServic
 import { Account } from 'app/core/auth/account.model';
 import { Authority } from 'app/config/authority.constants';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-<%_ if (communicationSpringWebsocket) { _%>
-import { TrackerService } from 'app/core/tracker/tracker.service';
-<%_ } _%>
 <%_ if (generateUserManagement) { _%>
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 <%_ } _%>
@@ -64,9 +58,6 @@ describe('Account Service', () => {
   let httpMock: HttpTestingController;
   let mockStorageService: StateStorageService;
   let mockRouter: Router;
-<%_ if (communicationSpringWebsocket) { _%>
-  let mockTrackerService: TrackerService;
-<%_ } _%>
 <%_ if (enableTranslation) { _%>
   let mockTranslateService: TranslateService;
   let sessionStorageService: SessionStorageService;
@@ -83,9 +74,6 @@ describe('Account Service', () => {
         NgxWebstorageModule.forRoot()
       ],
       providers: [
-<%_ if (communicationSpringWebsocket) { _%>
-        TrackerService,
-<%_ } _%>
         StateStorageService,
       ],
     });
@@ -98,10 +86,6 @@ describe('Account Service', () => {
     mockStorageService = TestBed.inject(StateStorageService);
     mockRouter = TestBed.inject(Router);
     jest.spyOn(mockRouter, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
-<%_ if (communicationSpringWebsocket) { _%>
-
-    mockTrackerService = TestBed.inject(TrackerService);
-<%_ } _%>
 <%_ if (enableTranslation) { _%>
 
     mockTranslateService = TestBed.inject(TranslateService);
@@ -143,10 +127,6 @@ describe('save', () => {
       // THEN
       expect(userIdentity).toBeNull();
       expect(service.isAuthenticated()).toBe(false);
-<%_ if (communicationSpringWebsocket) { _%>
-      expect(mockTrackerService.disconnect).toHaveBeenCalled();
-      expect(mockTrackerService.connect).not.toHaveBeenCalled();
-<%_ } _%>
     });
 
     it('authenticationState should emit the same account as was in input parameter', () => {
@@ -161,10 +141,6 @@ describe('save', () => {
       // THEN
       expect(userIdentity).toEqual(expectedResult);
       expect(service.isAuthenticated()).toBe(true);
-<%_ if (communicationSpringWebsocket) { _%>
-      expect(mockTrackerService.connect).toHaveBeenCalled();
-      expect(mockTrackerService.disconnect).not.toHaveBeenCalled();
-<%_ } _%>
     });
   });
 

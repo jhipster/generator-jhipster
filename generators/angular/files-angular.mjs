@@ -215,6 +215,11 @@ export const files = {
     },
     {
       condition: generator => generator.communicationSpringWebsocket,
+      ...clientSrcBlock,
+      templates: ['sockjs-client.polyfill.ts'],
+    },
+    {
+      condition: generator => generator.communicationSpringWebsocket,
       ...clientApplicationBlock,
       templates: [
         'admin/tracker/tracker.route.ts',

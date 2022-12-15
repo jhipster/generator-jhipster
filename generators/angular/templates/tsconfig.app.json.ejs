@@ -22,6 +22,11 @@
     "outDir": "./<%= clientDistDir %>app",
     "types": ["@angular/localize"]
   },
-  "files": ["<%= clientSrcDir %>main.ts"],
+  "files": [
+<%_ if (communicationSpringWebsocket) { _%>
+    "<%= clientSrcDir %>sockjs-client.polyfill.ts",
+<%_ } _%>
+    "<%= clientSrcDir %>main.ts"
+  ],
   "include": ["<%= clientSrcDir %>**/*.d.ts"]
 }
