@@ -48,8 +48,7 @@ import { httpInterceptorProviders } from 'app/core/interceptor/index';
 import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 import MainComponent from './layouts/main/main.component';
-import FooterComponent from './layouts/footer/footer.component';
-import PageRibbonComponent from './layouts/profiles/page-ribbon.component';
+import MainModule from './layouts/main/main.module';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
 
 @NgModule({
@@ -61,8 +60,7 @@ import { AppPageTitleStrategy } from './app-page-title-strategy';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
     NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-', caseSensitive: true }),
-    PageRibbonComponent,
-    FooterComponent,
+    MainModule,
 <%_ if (enableTranslation) { _%>
     TranslationModule,
 <%_ } _%>
@@ -79,9 +77,6 @@ import { AppPageTitleStrategy } from './app-page-title-strategy';
 <%_ } _%>
     httpInterceptorProviders,
     { provide: TitleStrategy, useClass: AppPageTitleStrategy },
-  ],
-  declarations: [
-    MainComponent,
   ],
   bootstrap: [MainComponent],
 })

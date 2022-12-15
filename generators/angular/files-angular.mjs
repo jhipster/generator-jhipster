@@ -79,6 +79,7 @@ export const files = {
         'layouts/profiles/profile-info.model.ts',
         'layouts/main/main.component.ts',
         'layouts/main/main.component.html',
+        'layouts/main/main.module.ts',
         'layouts/navbar/navbar.component.ts',
         'layouts/navbar/navbar.component.html',
         'layouts/footer/footer.component.ts',
