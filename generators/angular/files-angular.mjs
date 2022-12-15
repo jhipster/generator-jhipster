@@ -316,9 +316,7 @@ export const files = {
       ...clientApplicationBlock,
       templates: [
         'shared/shared.module.ts',
-        'shared/shared-app.module.ts',
         'shared/shared-form.module.ts',
-        'shared/shared-libs.module.ts',
         'shared/date/index.ts',
         'shared/date/duration.pipe.ts',
         'shared/date/format-medium-date.pipe.ts',
@@ -489,6 +487,7 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/layouts/navbar/navbar.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/shared-libs.module.ts`);
   }
 }
 
