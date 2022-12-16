@@ -17,8 +17,13 @@
  limitations under the License.
 -%>
 import { Component, OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> } from '@angular/core';
+import {
 <%_ if (!authenticationTypeOauth2) { _%>
-import { Router, RouterModule } from '@angular/router';
+  Router,
+<%_ } _%>
+  RouterModule,
+} from '@angular/router';
+<%_ if (!authenticationTypeOauth2) { _%>
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 <%_ } _%>
