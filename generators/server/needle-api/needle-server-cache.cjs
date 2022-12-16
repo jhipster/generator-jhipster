@@ -19,7 +19,10 @@
 const chalk = require('chalk');
 const needleServer = require('./needle-server.cjs');
 const constants = require('../../generator-constants.cjs');
-const { CAFFEINE, EHCACHE, REDIS } = require('../../../jdl/jhipster/cache-types');
+// const { CAFFEINE, EHCACHE, REDIS } = require('../../../jdl/jhipster/cache-types');
+const CAFFEINE = 'caffeine';
+const EHCACHE = 'ehcache';
+const REDIS = 'redis';
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 

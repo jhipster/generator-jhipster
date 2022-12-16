@@ -18,19 +18,19 @@
  */
 
 import { expect } from 'chai';
-import JDLObject from '../../../jdl/models/jdl-object';
-import JDLEntity from '../../../jdl/models/jdl-entity';
-import JDLField from '../../../jdl/models/jdl-field';
-import JDLValidation from '../../../jdl/models/jdl-validation';
-import JDLRelationship from '../../../jdl/models/jdl-relationship';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
-import DatabaseTypes from '../../../jdl/jhipster/database-types';
-import FieldTypes from '../../../jdl/jhipster/field-types';
-import Validations from '../../../jdl/jhipster/validations';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
-import createValidator from '../../../jdl/validators/jdl-without-application-validator';
+import JDLObject from '../../../jdl/models/jdl-object.js';
+import JDLEntity from '../../../jdl/models/jdl-entity.js';
+import JDLField from '../../../jdl/models/jdl-field.js';
+import JDLValidation from '../../../jdl/models/jdl-validation.js';
+import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import ApplicationTypes from '../../../jdl/jhipster/application-types.js';
+import DatabaseTypes from '../../../jdl/jhipster/database-types.js';
+import FieldTypes from '../../../jdl/jhipster/field-types.js';
+import Validations from '../../../jdl/jhipster/validations.js';
+import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
+import createValidator from '../../../jdl/validators/jdl-without-application-validator.js';
 
 describe('JDLWithoutApplicationValidator', () => {
   describe('createValidator', () => {

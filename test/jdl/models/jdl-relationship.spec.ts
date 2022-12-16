@@ -20,9 +20,9 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 
-import JDLRelationship from '../../../jdl/models/jdl-relationship';
-import { JPA_DERIVED_IDENTIFIER } from '../../../jdl/jhipster/relationship-options';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types';
+import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
+import { JPA_DERIVED_IDENTIFIER } from '../../../jdl/jhipster/relationship-options.js';
+import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
 
 describe('JDLRelationship', () => {
   describe('new', () => {

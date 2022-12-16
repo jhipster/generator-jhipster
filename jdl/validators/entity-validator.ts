@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import Validator from './validator';
-import { isReservedClassName } from '../jhipster/reserved-keywords';
+import Validator from './validator.js';
+import { isReservedClassName } from '../jhipster/reserved-keywords.js';
 
 export default class EntityValidator extends Validator {
   constructor() {

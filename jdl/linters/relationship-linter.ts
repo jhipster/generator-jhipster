@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import RelationshipIssue from './issues/relationship-issue';
+import RelationshipIssue from './issues/relationship-issue.js';
 
-import { rulesNames } from './rules';
-import RelationshipTypes from '../jhipster/relationship-types';
+import { rulesNames } from './rules.js';
+import RelationshipTypes from '../jhipster/relationship-types.js';
 
 let issues: RelationshipIssue[];
 

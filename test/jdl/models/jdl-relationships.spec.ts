@@ -21,9 +21,9 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 
-import JDLRelationship from '../../../jdl/models/jdl-relationship';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types';
-import JDLRelationships from '../../../jdl/models/jdl-relationships';
+import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
+import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
+import JDLRelationships from '../../../jdl/models/jdl-relationships.js';
 
 describe('JDLRelationships', () => {
   describe('add', () => {

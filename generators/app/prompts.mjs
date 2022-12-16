@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import statistics from '../statistics.cjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
-import generatorsDefaults from '../generator-defaults.cjs';
+import generatorsDefaults from '../generator-defaults.mjs';
 import { applicationTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { appDefaultConfig, defaultConfigMicroservice } = generatorsDefaults;

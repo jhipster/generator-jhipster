@@ -17,22 +17,22 @@
  * limitations under the License.
  */
 
-import EntityValidator from './entity-validator';
-import FieldValidator from './field-validator';
-import FieldTypes from '../jhipster/field-types';
-import ApplicationTypes from '../jhipster/application-types';
-import ValidationValidator from './validation-validator';
-import RelationshipValidator from './relationship-validator';
-import EnumValidator from './enum-validator';
-import DeploymentValidator from './deployment-validator';
-import UnaryOptionValidator from './unary-option-validator';
-import BinaryOptionValidator from './binary-option-validator';
-import { OptionNames } from '../jhipster/application-options';
-import DatabaseTypes from '../jhipster/database-types';
-import BinaryOptions from '../jhipster/binary-options';
+import EntityValidator from './entity-validator.js';
+import FieldValidator from './field-validator.js';
+import FieldTypes from '../jhipster/field-types.js';
+import ApplicationTypes from '../jhipster/application-types.js';
+import ValidationValidator from './validation-validator.js';
+import RelationshipValidator from './relationship-validator.js';
+import EnumValidator from './enum-validator.js';
+import DeploymentValidator from './deployment-validator.js';
+import UnaryOptionValidator from './unary-option-validator.js';
+import BinaryOptionValidator from './binary-option-validator.js';
+import { OptionNames } from '../jhipster/application-options.js';
+import DatabaseTypes from '../jhipster/database-types.js';
+import BinaryOptions from '../jhipster/binary-options.js';
 
-import { isReservedFieldName, isReservedTableName, isReservedPaginationWords } from '../jhipster/reserved-keywords';
-import JDLObject from '../models/jdl-object';
+import { isReservedFieldName, isReservedTableName, isReservedPaginationWords } from '../jhipster/reserved-keywords.js';
+import JDLObject from '../models/jdl-object.js';
 
 /**
  * Constructor taking the jdl object to check against application settings.

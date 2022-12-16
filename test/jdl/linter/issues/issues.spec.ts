@@ -18,14 +18,14 @@
  */
 
 import { expect } from 'chai';
-import Issues from '../../../../jdl/linters/issues/issues';
-import { rulesNames } from '../../../../jdl/linters/rules';
-import RelationshipTypes from '../../../../jdl/jhipster/relationship-types';
-import EntityIssue from '../../../../jdl/linters/issues/entity-issue';
-import FieldIssue from '../../../../jdl/linters/issues/field-issue';
-import EnumIssue from '../../../../jdl/linters/issues/enum-issue';
-import RelationshipIssue from '../../../../jdl/linters/issues/relationship-issue';
-import AbstractIssue from '../../../../jdl/linters/issues/abstract-issue';
+import Issues from '../../../../jdl/linters/issues/issues.js';
+import { rulesNames } from '../../../../jdl/linters/rules.js';
+import RelationshipTypes from '../../../../jdl/jhipster/relationship-types.js';
+import EntityIssue from '../../../../jdl/linters/issues/entity-issue.js';
+import FieldIssue from '../../../../jdl/linters/issues/field-issue.js';
+import EnumIssue from '../../../../jdl/linters/issues/enum-issue.js';
+import RelationshipIssue from '../../../../jdl/linters/issues/relationship-issue.js';
+import AbstractIssue from '../../../../jdl/linters/issues/abstract-issue.js';
 
 describe('Issues', () => {
   describe('getNumberOfIssues', () => {

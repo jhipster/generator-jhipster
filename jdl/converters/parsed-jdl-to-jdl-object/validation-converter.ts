@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import JDLValidation from '../../models/jdl-validation';
-import Validations from '../../jhipster/validations';
+import JDLValidation from '../../models/jdl-validation.js';
+import Validations from '../../jhipster/validations.js';
 
 const { PATTERN } = Validations;
 

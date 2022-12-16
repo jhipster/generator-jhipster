@@ -18,11 +18,11 @@
  */
 
 import { expect } from 'chai';
-import { Options } from '../../../jdl/jhipster/deployment-options';
-import { MICROSERVICE } from '../../../jdl/jhipster/application-types';
-import { MONGODB, NO } from '../../../jdl/jhipster/database-types';
-import SearchEngineTypes from '../../../jdl/jhipster/search-engine-types';
-import DeploymentValidator from '../../../jdl/validators/deployment-validator';
+import { Options } from '../../../jdl/jhipster/deployment-options.js';
+import { MICROSERVICE } from '../../../jdl/jhipster/application-types.js';
+import { MONGODB, NO } from '../../../jdl/jhipster/database-types.js';
+import SearchEngineTypes from '../../../jdl/jhipster/search-engine-types.js';
+import DeploymentValidator from '../../../jdl/validators/deployment-validator.js';
 
 describe('DeploymentValidator', () => {
   let validator;

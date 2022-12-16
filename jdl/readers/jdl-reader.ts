@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import logger from '../utils/objects/logger';
+import logger from '../utils/objects/logger.js';
 
-import * as parser from '../parsing/api';
-import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks';
-import { readFile, readFiles } from './file-reader';
+import * as parser from '../parsing/api.js';
+import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.js';
+import { readFile, readFiles } from './file-reader.js';
 
 /**
  * Parses the given files and returns the resulting intermediate object.

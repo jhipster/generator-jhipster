@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { isEqual } from 'lodash';
-import DeploymentOptions from '../jhipster/deployment-options';
-import { merge as mergeObjects } from '../utils/object-utils';
-import { join } from '../utils/set-utils';
+import _ from 'lodash';
+import DeploymentOptions from '../jhipster/deployment-options.js';
+import { merge as mergeObjects } from '../utils/object-utils.js';
+import { join } from '../utils/set-utils.js';
 
+const { isEqual } = _;
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
 
 export default class JDLDeployment {

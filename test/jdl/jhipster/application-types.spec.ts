@@ -21,7 +21,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
+import ApplicationTypes from '../../../jdl/jhipster/application-types.js';
 
 describe('ApplicationTypes', () => {
   describe('exists', () => {

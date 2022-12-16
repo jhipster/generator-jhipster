@@ -19,7 +19,7 @@
 
 import _ from 'lodash';
 import { Lexer } from 'chevrotain';
-import TokenCollectorVisitor from './token-collector-visitor';
+import TokenCollectorVisitor from './token-collector-visitor.js';
 
 export function checkTokens(allDefinedTokens, rules) {
   const usedTokens = getUsedTokens(rules);

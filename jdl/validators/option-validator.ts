@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import Validator from './validator';
+import Validator from './validator.js';
 
 export default class OptionValidator extends Validator {
   constructor(optionType, additionalFieldToCheck?: any) {

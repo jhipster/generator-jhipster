@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { merge } from '../utils/object-utils';
-import Validations from '../jhipster/validations';
+import { merge } from '../utils/object-utils.js';
+import Validations from '../jhipster/validations.js';
 
 export default class JDLValidation {
   name: any;

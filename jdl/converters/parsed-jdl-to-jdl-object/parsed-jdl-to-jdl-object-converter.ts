@@ -17,22 +17,22 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import JDLObject from '../../models/jdl-object';
-import JDLEntity from '../../models/jdl-entity';
-import JDLUnaryOption from '../../models/jdl-unary-option';
-import JDLBinaryOption from '../../models/jdl-binary-option';
-import ApplicationTypes from '../../jhipster/application-types';
-import BinaryOptions from '../../jhipster/binary-options';
-import DatabaseTypes from '../../jhipster/database-types';
+import JDLObject from '../../models/jdl-object.js';
+import JDLEntity from '../../models/jdl-entity.js';
+import JDLUnaryOption from '../../models/jdl-unary-option.js';
+import JDLBinaryOption from '../../models/jdl-binary-option.js';
+import ApplicationTypes from '../../jhipster/application-types.js';
+import BinaryOptions from '../../jhipster/binary-options.js';
+import DatabaseTypes from '../../jhipster/database-types.js';
 
-import { convertApplications } from './application-converter';
-import { convertEntities } from './entity-converter';
-import { convertEnums } from './enum-converter';
-import { convertField } from './field-converter';
-import { convertValidations } from './validation-converter';
-import { convertOptions } from './option-converter';
-import { convertRelationships } from './relationship-converter';
-import { convertDeployments } from './deployment-converter';
+import { convertApplications } from './application-converter.js';
+import { convertEntities } from './entity-converter.js';
+import { convertEnums } from './enum-converter.js';
+import { convertField } from './field-converter.js';
+import { convertValidations } from './validation-converter.js';
+import { convertOptions } from './option-converter.js';
+import { convertRelationships } from './relationship-converter.js';
+import { convertDeployments } from './deployment-converter.js';
 
 export default {
   parseFromConfigurationObject,

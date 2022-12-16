@@ -18,8 +18,8 @@
  */
 
 import path from 'path';
-import { upperFirst } from '../utils/string-utils';
-import { readFile } from './file-reader';
+import { upperFirst } from '../utils/string-utils.js';
+import { readFile } from './file-reader.js';
 
 /**
  * Reads a JSON file.

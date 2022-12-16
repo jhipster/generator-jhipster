@@ -19,8 +19,8 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import JDLValidation from '../../../jdl/models/jdl-validation';
-import Validations from '../../../jdl/jhipster/validations';
+import JDLValidation from '../../../jdl/models/jdl-validation.js';
+import Validations from '../../../jdl/jhipster/validations.js';
 
 describe('JDLValidation', () => {
   describe('new', () => {

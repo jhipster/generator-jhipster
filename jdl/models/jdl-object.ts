@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import JDLEnums from './jdl-enums';
-import JDLRelationships from './jdl-relationships';
-import JDLOptions from './jdl-options';
-import BinaryOptions from '../jhipster/binary-options';
-import JDLEntity from './jdl-entity';
+import JDLEnums from './jdl-enums.js';
+import JDLRelationships from './jdl-relationships.js';
+import JDLOptions from './jdl-options.js';
+import BinaryOptions from '../jhipster/binary-options.js';
+import JDLEntity from './jdl-entity.js';
 
 /**
  * The JDL object class, containing applications, entities etc.

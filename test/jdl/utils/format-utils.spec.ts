@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import formatComment from '../../../jdl/utils/format-utils';
+import formatComment from '../../../jdl/utils/format-utils.js';
 
 describe('FormatUtils', () => {
   describe('formatComment', () => {

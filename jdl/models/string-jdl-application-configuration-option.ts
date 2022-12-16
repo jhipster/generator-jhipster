@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import JDLApplicationConfigurationOption from './jdl-application-configuration-option';
+import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
 export default class StringJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {
   quoted: boolean;

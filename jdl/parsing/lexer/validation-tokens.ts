@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import createTokenFromConfig from './token-creator';
-import MinMaxTokens from './minmax-tokens';
+import createTokenFromConfig from './token-creator.js';
+import MinMaxTokens from './minmax-tokens.js';
 
 const validationTokens = [
   { name: 'REQUIRED', pattern: 'required' },

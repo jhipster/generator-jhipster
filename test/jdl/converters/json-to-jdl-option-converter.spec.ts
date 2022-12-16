@@ -20,10 +20,10 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import { convertServerOptionsToJDL } from '../../../jdl/converters/json-to-jdl-option-converter';
-import JDLObject from '../../../jdl/models/jdl-object';
-import JDLUnaryOption from '../../../jdl/models/jdl-unary-option';
-import UnaryOptions from '../../../jdl/jhipster/unary-options';
+import { convertServerOptionsToJDL } from '../../../jdl/converters/json-to-jdl-option-converter.js';
+import JDLObject from '../../../jdl/models/jdl-object.js';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
+import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
 
 const { SKIP_CLIENT } = UnaryOptions;
 

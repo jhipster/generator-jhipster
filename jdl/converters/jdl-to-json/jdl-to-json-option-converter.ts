@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import logger from '../../utils/objects/logger';
-import UnaryOptions from '../../jhipster/unary-options';
+import logger from '../../utils/objects/logger.js';
+import UnaryOptions from '../../jhipster/unary-options.js';
 
-import BinaryOptions from '../../jhipster/binary-options';
-import EntityOptions from '../../jhipster/entity-options';
-import JDLObject from '../../models/jdl-object';
-import JDLApplication from '../../models/jdl-application';
+import BinaryOptions from '../../jhipster/binary-options.js';
+import EntityOptions from '../../jhipster/entity-options.js';
+import JDLObject from '../../models/jdl-object.js';
+import JDLApplication from '../../models/jdl-application.js';
 
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = UnaryOptions;
 

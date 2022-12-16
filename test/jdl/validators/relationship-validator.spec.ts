@@ -18,11 +18,11 @@
  */
 
 import { expect } from 'chai';
-import JDLRelationship from '../../../jdl/models/jdl-relationship';
-import RelationshipValidator from '../../../jdl/validators/relationship-validator';
+import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
+import RelationshipValidator from '../../../jdl/validators/relationship-validator.js';
 
-import { JPA_DERIVED_IDENTIFIER } from '../../../jdl/jhipster/relationship-options';
-import { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } from '../../../jdl/jhipster/relationship-types';
+import { JPA_DERIVED_IDENTIFIER } from '../../../jdl/jhipster/relationship-options.js';
+import { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } from '../../../jdl/jhipster/relationship-types.js';
 
 describe('RelationshipValidator', () => {
   let validator;

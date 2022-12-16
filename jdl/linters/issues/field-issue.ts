@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import AbstractIssue, { AbstractIssueArgs } from './abstract-issue';
+import AbstractIssue, { AbstractIssueArgs } from './abstract-issue.js';
 
 type FieldIssueArgs = AbstractIssueArgs & { fieldName: string; entityName: string };
 

@@ -21,7 +21,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 
-import { lowerFirst, camelCase, upperFirst } from '../../../jdl/utils/string-utils';
+import { lowerFirst, camelCase, upperFirst } from '../../../jdl/utils/string-utils.js';
 
 describe('StringUtils', () => {
   describe('camelCase', () => {

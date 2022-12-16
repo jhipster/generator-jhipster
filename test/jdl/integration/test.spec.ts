@@ -22,10 +22,15 @@ import fs from 'fs';
 import path from 'path';
 import { expect } from 'chai';
 
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
-import { parseFromFiles } from '../../../jdl/readers/jdl-reader';
-import DocumentParser from '../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter';
-import exportToJDL from '../../../jdl/exporters/jdl-exporter';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import ApplicationTypes from '../../../jdl/jhipster/application-types.js';
+import { parseFromFiles } from '../../../jdl/readers/jdl-reader.js';
+import DocumentParser from '../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import exportToJDL from '../../../jdl/exporters/jdl-exporter.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 describe('integration tests', () => {
   context('when parsing and exporting a JDL', () => {

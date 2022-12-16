@@ -19,7 +19,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import { getRule, rules, rulesNames } from '../../../jdl/linters/rules';
+import { getRule, rules, rulesNames } from '../../../jdl/linters/rules.js';
 
 describe('Rules', () => {
   describe('getRules', () => {

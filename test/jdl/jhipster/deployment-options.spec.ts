@@ -21,7 +21,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import deploymentOptions from '../../../jdl/jhipster/deployment-options';
+import deploymentOptions from '../../../jdl/jhipster/deployment-options.js';
 
 const { DeploymentTypes, Options } = deploymentOptions;
 

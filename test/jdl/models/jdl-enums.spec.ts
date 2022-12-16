@@ -20,8 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import JDLEnums from '../../../jdl/models/jdl-enums';
-import JDLEnum from '../../../jdl/models/jdl-enum';
+import JDLEnums from '../../../jdl/models/jdl-enums.js';
+import JDLEnum from '../../../jdl/models/jdl-enum.js';
 
 describe('JDLEnums', () => {
   describe('add', () => {

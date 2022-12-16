@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import Validator from './validator';
-import Validations from '../jhipster/validations';
+import Validator from './validator.js';
+import Validations from '../jhipster/validations.js';
 
 const { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES } = Validations;
 

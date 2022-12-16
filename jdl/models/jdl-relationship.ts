@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import logger from '../utils/objects/logger';
-import RelationshipTypes from '../jhipster/relationship-types';
-import { lowerFirst } from '../utils/string-utils';
-import Validations from '../jhipster/validations';
+import logger from '../utils/objects/logger.js';
+import RelationshipTypes from '../jhipster/relationship-types.js';
+import { lowerFirst } from '../utils/string-utils.js';
+import Validations from '../jhipster/validations.js';
 
 const { REQUIRED } = Validations;
 

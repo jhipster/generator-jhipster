@@ -22,8 +22,13 @@ import { renameSync } from 'fs';
 import { join } from 'path';
 import { expect } from 'chai';
 
-import parseFromDir from '../../../jdl/readers/json-reader';
-import { SKIP_CLIENT, SKIP_SERVER } from '../../../jdl/jhipster/unary-options';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import parseFromDir from '../../../jdl/readers/json-reader.js';
+import { SKIP_CLIENT, SKIP_SERVER } from '../../../jdl/jhipster/unary-options.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 describe('JSONReader', () => {
   describe('parseFromDir', () => {

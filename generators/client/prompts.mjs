@@ -17,14 +17,12 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import constants from '../generator-constants.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { ANGULAR, REACT, VUE } from '../../jdl/jhipster/client-framework-types.js';
 
 const { clientDefaultConfig } = generatorDefaults;
 const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
-
-const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 export async function askForClient({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;

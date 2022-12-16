@@ -19,11 +19,11 @@
 
 import fs from 'fs';
 import path from 'path';
-import ApplicationTypes from '../jhipster/application-types';
-import { toFilePath, readJSONFile } from '../readers/json-file-reader';
-import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils';
+import ApplicationTypes from '../jhipster/application-types.js';
+import { toFilePath, readJSONFile } from '../readers/json-file-reader.js';
+import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
 
-import { areEntitiesEqual as areJHipsterEntitiesEqual } from '../utils/object-utils';
+import { areEntitiesEqual as areJHipsterEntitiesEqual } from '../utils/object-utils.js';
 
 let configuration: any = {};
 

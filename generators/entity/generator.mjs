@@ -25,7 +25,7 @@ import path from 'path';
 import BaseGenerator from '../base/index.mjs';
 
 import prompts from './prompts.mjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 import constants from '../generator-constants.cjs';
 import { applicationTypes, clientFrameworkTypes, reservedKeywords } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';

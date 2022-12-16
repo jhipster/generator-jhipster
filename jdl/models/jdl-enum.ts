@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { merge } from '../utils/object-utils';
-import JDLEnumValue from './jdl-enum-value';
+import { merge } from '../utils/object-utils.js';
+import JDLEnumValue from './jdl-enum-value.js';
 
 export default class JDLEnum {
   comment: any;

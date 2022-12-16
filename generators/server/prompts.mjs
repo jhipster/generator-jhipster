@@ -19,8 +19,7 @@
 
 import chalk from 'chalk';
 
-import constants from '../generator-constants.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 
 import {
   applicationOptions,
@@ -31,6 +30,7 @@ import {
   cacheTypes,
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
+import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
 
 const { OptionNames } = applicationOptions;
 const { serverDefaultConfig } = generatorDefaults;
@@ -185,7 +185,7 @@ export async function askForServerSideOpts({ control }) {
       type: 'list',
       name: PROD_DATABASE_TYPE,
       message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
-      choices: answers => (answers.reactive ? constants.R2DBC_DB_OPTIONS : constants.SQL_DB_OPTIONS),
+      choices: answers => (answers.reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS),
       default: serverDefaultConfig.prodDatabaseType,
     },
     {
@@ -203,7 +203,7 @@ export async function askForServerSideOpts({ control }) {
             value: H2_MEMORY,
             name: 'H2 with in-memory persistence',
           },
-        ].concat(constants.SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
+        ].concat(SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
       default: serverDefaultConfig.devDatabaseType,
     },
     {

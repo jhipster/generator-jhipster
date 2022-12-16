@@ -22,11 +22,11 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import exportEntities from '../../../jdl/exporters/jhipster-entity-exporter';
+import exportEntities from '../../../jdl/exporters/jhipster-entity-exporter.js';
 
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
-import { MapperTypes, PaginationTypes, ServiceTypes } from '../../../jdl/jhipster/entity-options';
-import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../../../jdl/utils/file-utils';
+import ApplicationTypes from '../../../jdl/jhipster/application-types.js';
+import { MapperTypes, PaginationTypes, ServiceTypes } from '../../../jdl/jhipster/entity-options.js';
+import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../../../jdl/utils/file-utils.js';
 
 const { SERVICE_CLASS } = ServiceTypes;
 const NO_DTO = MapperTypes.NO;

@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import Validations from '../../../jdl/jhipster/validations';
+import Validations from '../../../jdl/jhipster/validations.js';
 
 describe('Validations', () => {
   describe('exists', () => {

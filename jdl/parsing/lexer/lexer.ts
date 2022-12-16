@@ -19,15 +19,15 @@
 
 import { Lexer } from 'chevrotain';
 
-import { NAME, UNARY_OPTION, BINARY_OPTION } from './shared-tokens';
+import { NAME, UNARY_OPTION, BINARY_OPTION } from './shared-tokens.js';
 
-import ValidationTokens from './validation-tokens';
-import ApplicationTokens from './application-tokens';
-import DeploymentTokens from './deployment-tokens';
-import RelationshipTypeTokens from './relationship-type-tokens';
-import OptionTokens from './option-tokens';
+import ValidationTokens from './validation-tokens.js';
+import ApplicationTokens from './application-tokens.js';
+import DeploymentTokens from './deployment-tokens.js';
+import RelationshipTypeTokens from './relationship-type-tokens.js';
+import OptionTokens from './option-tokens.js';
 
-import createTokenFromConfigCreator from './token-creator';
+import createTokenFromConfigCreator from './token-creator.js';
 
 export const tokens: any = {};
 

@@ -18,9 +18,9 @@
  */
 
 import _ from 'lodash';
-import JDLRelationship from '../../models/jdl-relationship';
-import { lowerFirst, upperFirst } from '../../utils/string-utils';
-import { formatComment } from '../../utils/format-utils';
+import JDLRelationship from '../../models/jdl-relationship.js';
+import { lowerFirst, upperFirst } from '../../utils/string-utils.js';
+import { formatComment } from '../../utils/format-utils.js';
 
 export default { convertRelationships };
 

@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import kubernetesPlatformTypes from './kubernetes-platform-types';
-import openshiftPlatformTypes from './openshift-platform-types';
-import monitoringTypes from './monitoring-types';
-import serviceDiscoveryTypes from './service-discovery-types';
+import kubernetesPlatformTypes from './kubernetes-platform-types.js';
+import openshiftPlatformTypes from './openshift-platform-types.js';
+import monitoringTypes from './monitoring-types.js';
+import serviceDiscoveryTypes from './service-discovery-types.js';
 
 const { LOAD_BALANCER, NODE_PORT, INGRESS } = kubernetesPlatformTypes.ServiceTypes;
 const { NGINX, GKE } = kubernetesPlatformTypes.IngressTypes;

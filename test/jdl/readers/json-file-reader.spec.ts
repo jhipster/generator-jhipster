@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import path from 'path';
 
-import * as JSONFileReader from '../../../jdl/readers/json-file-reader';
+import * as JSONFileReader from '../../../jdl/readers/json-file-reader.js';
 
 describe('JSONFileReader', () => {
   describe('toFilePath', () => {

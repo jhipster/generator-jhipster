@@ -19,8 +19,8 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
 
 describe('AbstractJDLOption', () => {
   describe('resolveEntityNames', () => {
