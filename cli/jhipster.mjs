@@ -19,10 +19,8 @@
  */
 import semver from 'semver';
 import path from 'path';
-import cliUtils from './utils.cjs';
+import { logger } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
-
-const { logger } = cliUtils;
 
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;

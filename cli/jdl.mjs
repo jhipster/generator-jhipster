@@ -19,11 +19,9 @@
 import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
-import cliUtils from './utils.cjs';
+import { logger } from './utils.mjs';
 import importJdl from './import-jdl.mjs';
-import download from './download.cjs';
-
-const { logger } = cliUtils;
+import download from './download.mjs';
 
 /**
  * Add jdl extension to the file

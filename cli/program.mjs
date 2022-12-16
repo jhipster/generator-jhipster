@@ -29,7 +29,7 @@ import { logo } from './logo.cjs';
 import EnvironmentBuilder from './environment-builder.mjs';
 import SUB_GENERATORS from './commands.cjs';
 import JHipsterCommand from './jhipster-command.cjs';
-import { CLI_NAME, logger, getCommand, done } from './utils.cjs';
+import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
 import { packageJson } from '../lib/index.cjs';
 import { packageNameToNamespace } from '../generators/utils.cjs';
 

@@ -6,11 +6,9 @@ import assert from 'yeoman-assert';
 import * as td from 'testdouble';
 import Environment from 'yeoman-environment';
 
-import * as utils from '../../cli/utils.mjs';
 import { testInTempDir, revertTempDir } from './utils/utils.cjs';
 import { getTemplatePath } from '../support/index.mjs';
-import { logger } from '../../cli/utils.mjs';
-import { EnvironmentBuilder } from '../../cli/index.mjs';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 
 chai.use(tdChai(td));
 
@@ -44,63 +42,29 @@ const env = {
   },
 };
 
-const loadImportJdl = options => {
-  options = {
-    './utils.mjs': {
-      ...utils,
-      logger: {
-        ...utils.logger,
-        info: () => {},
+async function loadImportJdl() {
+  const childProcessForkToMock = await td.replaceEsm('child_process');
+  const forkArgvCaptor = td.matchers.captor();
+  td.when(childProcessForkToMock.fork(td.matchers.anything(), forkArgvCaptor.capture(), td.matchers.anything())).thenDo(() => {
+    const command = forkArgvCaptor.value[0];
+    const options = forkArgvCaptor.value.slice(1);
+    pushCall(command, options);
+    return {
+      on(code, cb) {
+        cb(0);
       },
-      printSuccess: () => {},
-    },
-    child_process: {
-      fork: (runYeomanProcess, argv, opts) => {
-        const command = argv[0];
-        const options = argv.slice(1);
-        pushCall(command, options);
-        return {
-          on(code, cb) {
-            cb(0);
-          },
-        };
-      },
-    },
-    './environment-builder.cjs': {
-      createDefaultBuilder: () => {
-        return {
-          getEnvironment: () => {
-            return {
-              composeWith() {},
-              run: (generatorArgs, generatorOptions) => {
-                pushCall(generatorArgs, generatorOptions);
-                return Promise.resolve();
-              },
-            };
-          },
-        };
-      },
-    },
-    ...options,
-  };
-  return rewiremock.proxy('../../dist/cli/import-jdl.mjs', options);
-};
+    };
+  });
+
+  const envBuilderMockEsm = (await td.replaceEsm('../../cli/environment-builder.mjs')).default;
+  const envBuilderMock = td.instance(EnvironmentBuilder);
+  td.when(envBuilderMockEsm.createDefaultBuilder(td.matchers.anything(), td.matchers.anything())).thenReturn(envBuilderMock);
+
+  td.when(envBuilderMock.getEnvironment()).thenReturn(env);
+  return (await import('../../cli/import-jdl.mjs')).default;
+}
 
 const defaultAddedOptions = {};
-
-function testDocumentsRelationships() {
-  it('creates entity json files', () => {
-    expect(subGenCallParams.entities).to.eql(['Customer', 'CustomerOrder', 'OrderedItem', 'PaymentDetails', 'ShippingDetails']);
-  });
-  it('calls entity subgenerator', () => {
-    expect(subGenCallParams.count).to.equal(1);
-    expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
-    expect(subGenCallParams.options[0]).to.eql({
-      ...defaultAddedOptions,
-      fromJdl: true,
-    });
-  });
-}
 
 describe('JHipster generator import jdl', () => {
   let originalCwd;
@@ -120,46 +84,7 @@ describe('JHipster generator import jdl', () => {
     const options = { skipInstall: true, noInsight: true, interactive: true };
     let moduleToTest;
     beforeEach(async () => {
-      logger.info('boom');
-      const utilsToMock = await td.replaceEsm('../../cli/utils.mjs');
-      td.when(utilsToMock.logger.info(td.matchers.anything())).thenDo(() => {});
-      td.when(utilsToMock.printSuccess(td.matchers.anything())).thenDo(() => {});
-      logger.info('boom');
-      const childProcessForkToMock = (await td.replaceEsm('child_process')).fork;
-      const forkArgvCaptor = td.matchers.captor();
-      td.when(childProcessForkToMock(td.matchers.anything(), forkArgvCaptor.capture(), td.matchers.anything())).thenReturn(() => {
-        const command = forkArgvCaptor.value[0];
-        const options = forkArgvCaptor.value.slice(1);
-        pushCall(command, options);
-        return {
-          on(code, cb) {
-            cb(0);
-          },
-        };
-      });
-      logger.info('boom');
-      const envMock = td.imitate(Environment.createEnv());
-      const generatorArgsCaptor = td.matchers.captor();
-      const generatorOptionsCaptor = td.matchers.captor();
-      td.when(envMock.run(generatorArgsCaptor.capture(), generatorOptionsCaptor.capture())).thenReturn(() => {
-        pushCall(generatorArgsCaptor.value, generatorOptionsCaptor.value);
-        return Promise.resolve();
-      });
-      td.when(envMock.composeWith(td.matchers.anything(), td.matchers.anything(), td.matchers.anything())).thenReturn(() => {});
-      logger.info('boom4');
-      const envBuilderMock = new EnvironmentBuilder(envMock);
-      logger.info('boom4');
-      logger.info(JSON.stringify(envBuilderMock));
-      td.when(envBuilderMock.getEnvironment()).thenReturn(envMock);
-      logger.info('boom4');
-
-      const environmentMockESM = (await td.replaceEsm('../../cli/environment-builder.mjs')).default;
-      logger.info('boom5');
-      logger.info(JSON.stringify(environmentMockESM));
-      td.when(environmentMockESM).thenReturn(envMock);
-      // generator, args, options, schedule = true
-      moduleToTest = (await import('../../cli/import-jdl.mjs')).default;
-      logger.info('boom6');
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => {
@@ -172,6 +97,7 @@ describe('JHipster generator import jdl', () => {
         fse.copySync(getTemplatePath('import-jdl/common'), dir);
         fse.removeSync(`${dir}/.yo-rc.json`);
         moduleToTest(['apps-and-entities-and-deployments.jdl'], options, env).then(() => {
+          console.info(JSON.stringify(subGenCallParams));
           expect(subGenCallParams.count).to.equal(5);
           expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'jhipster:docker-compose', 'jhipster:kubernetes']);
           expect(subGenCallParams.options[0]).to.eql([
@@ -197,59 +123,94 @@ describe('JHipster generator import jdl', () => {
 
   describe('imports a JDL entity model from single file with --json-only flag', () => {
     const options = { jsonOnly: true, skipInstall: true, databaseType: 'postgresql', baseName: 'jhipster' };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        return loadImportJdl()(['jdl.jdl'], options, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates entity json files', () => {
-      assert.file([
-        '.jhipster/Department.json',
-        '.jhipster/JobHistory.json',
-        '.jhipster/Job.json',
-        '.jhipster/Employee.json',
-        '.jhipster/Location.json',
-        '.jhipster/Task.json',
-        '.jhipster/Country.json',
-        '.jhipster/Region.json',
-      ]);
+    it('creates entity json files', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['jdl.jdl'], options, env).then(() => {
+          assert.file([
+            '.jhipster/Department.json',
+            '.jhipster/JobHistory.json',
+            '.jhipster/Job.json',
+            '.jhipster/Employee.json',
+            '.jhipster/Location.json',
+            '.jhipster/Task.json',
+            '.jhipster/Country.json',
+            '.jhipster/Region.json',
+          ]);
+          done();
+        });
+      });
     });
-    it('does not call entity sub generator', () => {
-      expect(subGenCallParams.count).to.equal(0);
+    it('does not call entity sub generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['jdl.jdl'], options, env).then(() => {
+          expect(subGenCallParams.count).to.equal(0);
+          done();
+        });
+      });
     });
   });
 
   describe('imports a JDL entity model from single file with --skip-db-changelog', () => {
     const options = { skipDbChangelog: true, databaseType: 'postgresql', baseName: 'jhipster' };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        return loadImportJdl()(['jdl.jdl'], options, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('passes entities to entities generator', () => {
-      expect(subGenCallParams.entities).to.eql(['Region', 'Country', 'Location', 'Department', 'Task', 'Employee', 'Job', 'JobHistory']);
+    it('passes entities to entities generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['jdl.jdl'], options, env).then(() => {
+          expect(subGenCallParams.entities).to.eql([
+            'Region',
+            'Country',
+            'Location',
+            'Department',
+            'Task',
+            'Employee',
+            'Job',
+            'JobHistory',
+          ]);
+        });
+        done();
+      });
     });
-    it('calls entity subgenerator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
+    it('calls entity subgenerator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['jdl.jdl'], options, env).then(() => {
+          expect(subGenCallParams.count).to.equal(1);
+          expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
+          done();
+        });
+      });
     });
 
-    it('calls entity subgenerator with correct options', () => {
-      subGenCallParams.options.slice(0, subGenCallParams.options.length - 1).forEach(subGenOptions => {
-        expect(subGenOptions).to.eql({
-          ...options,
-          ...defaultAddedOptions,
-          skipInstall: true,
-          regenerate: true,
-          interactive: false,
+    it('calls entity subgenerator with correct options', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['jdl.jdl'], options, env).then(() => {
+          subGenCallParams.options.slice(0, subGenCallParams.options.length - 1).forEach(subGenOptions => {
+            expect(subGenOptions).to.eql({
+              ...options,
+              ...defaultAddedOptions,
+              skipInstall: true,
+              regenerate: true,
+              interactive: false,
+            });
+          });
+          done();
         });
       });
     });
@@ -257,163 +218,246 @@ describe('JHipster generator import jdl', () => {
 
   describe('imports a JDL entity model from single file in interactive mode by default', () => {
     const options = { skipInstall: true, databaseType: 'postgresql', baseName: 'jhipster' };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        return loadImportJdl()(['jdl.jdl'], options, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('passes entities to entities generator', () => {
-      expect(subGenCallParams.entities).to.eql(['Region', 'Country', 'Location', 'Department', 'Task', 'Employee', 'Job', 'JobHistory']);
+    it('passes entities to entities generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['jdl.jdl'], options, env).then(() => {
+          expect(subGenCallParams.entities).to.eql([
+            'Region',
+            'Country',
+            'Location',
+            'Department',
+            'Task',
+            'Employee',
+            'Job',
+            'JobHistory',
+          ]);
+          done();
+        });
+      });
     });
-    it('calls entities subgenerator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
-      expect(subGenCallParams.options[0]).to.eql({
-        ...options,
-        ...defaultAddedOptions,
-        fromJdl: true,
+    it('calls entities subgenerator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['jdl.jdl'], options, env).then(() => {
+          expect(subGenCallParams.count).to.equal(1);
+          expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
+          expect(subGenCallParams.options[0]).to.eql({
+            ...options,
+            ...defaultAddedOptions,
+            fromJdl: true,
+          });
+          done();
+        });
       });
     });
   });
 
   describe('imports a JDL entity model from multiple files', () => {
     const options = { skipInstall: true, databaseType: 'postgresql', baseName: 'jhipster' };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        return loadImportJdl()(['jdl.jdl', 'jdl2.jdl', 'jdl-ambiguous.jdl'], options, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('passes entities to entities generator', () => {
-      expect(subGenCallParams.entities).to.eql([
-        'Region',
-        'Country',
-        'Location',
-        'Department',
-        'Task',
-        'Employee',
-        'Job',
-        'JobHistory',
-        'DepartmentAlt',
-        'JobHistoryAlt',
-        'WishList',
-        'Profile',
-        'Listing',
-      ]);
+    it('passes entities to entities generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['jdl.jdl', 'jdl2.jdl', 'jdl-ambiguous.jdl'], options, env).then(() => {
+          expect(subGenCallParams.entities).to.eql([
+            'Region',
+            'Country',
+            'Location',
+            'Department',
+            'Task',
+            'Employee',
+            'Job',
+            'JobHistory',
+            'DepartmentAlt',
+            'JobHistoryAlt',
+            'WishList',
+            'Profile',
+            'Listing',
+          ]);
+          done();
+        });
+      });
     });
-    it('calls entities subgenerator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
-      expect(subGenCallParams.options[0]).to.eql({
-        ...options,
-        ...defaultAddedOptions,
-        fromJdl: true,
+    it('calls entities subgenerator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['jdl.jdl', 'jdl2.jdl', 'jdl-ambiguous.jdl'], options, env).then(() => {
+          expect(subGenCallParams.count).to.equal(1);
+          expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
+          expect(subGenCallParams.options[0]).to.eql({
+            ...options,
+            ...defaultAddedOptions,
+            fromJdl: true,
+          });
+          done();
+        });
       });
     });
   });
 
   describe('imports a JDL entity model which excludes Elasticsearch for a class', () => {
     const options = { skipInstall: true };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        return loadImportJdl()(['search.jdl'], { ...options, interactive: false }, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('should not create entity json files', () => {
-      assert.noFile(['.jhipster/WithSearch.json', '.jhipster/WithoutSearch.json']);
+    it('should not create entity json files', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['search.jdl'], { ...options, interactive: false }, env).then(() => {
+          assert.noFile(['.jhipster/WithSearch.json', '.jhipster/WithoutSearch.json']);
+          done();
+        });
+      });
     });
-    it('calls entities subgenerator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
-      expect(subGenCallParams.options[0]).to.eql({
-        ...options,
-        ...defaultAddedOptions,
-        fromJdl: true,
+
+    it('calls entities subgenerator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['search.jdl'], { ...options, interactive: false }, env).then(() => {
+          expect(subGenCallParams.count).to.equal(1);
+          expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
+          expect(subGenCallParams.options[0]).to.eql({
+            ...options,
+            ...defaultAddedOptions,
+            fromJdl: true,
+          });
+          done();
+        });
       });
     });
   });
 
   describe('imports single app and entities with --fork', () => {
     const options = { skipInstall: true, noInsight: true, skipGit: false };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        fse.removeSync(`${dir}/.yo-rc.json`);
-        return loadImportJdl()(['single-app-and-entities.jdl'], { ...options, fork: true }, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the application', () => {
-      assert.file(['.yo-rc.json']);
-      assert.JSONFileContent('.yo-rc.json', {
-        'generator-jhipster': { baseName: 'jhipsterApp' },
+    it('creates the application', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-and-entities.jdl'], { ...options, fork: true }, env).then(() => {
+          assert.file(['.yo-rc.json']);
+          assert.JSONFileContent('.yo-rc.json', {
+            'generator-jhipster': { baseName: 'jhipsterApp' },
+          });
+          done();
+        });
       });
     });
-    it('creates the entities', () => {
-      const aFile = path.join('.jhipster', 'A.json');
-      assert.file([aFile, path.join('.jhipster', 'B.json')]);
+    it('creates the entities', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-and-entities.jdl'], { ...options, fork: true }, env).then(() => {
+          const aFile = path.join('.jhipster', 'A.json');
+          assert.file([aFile, path.join('.jhipster', 'B.json')]);
+          done();
+        });
+      });
     });
-    it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+    it('calls application generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-and-entities.jdl'], { ...options, fork: true }, env).then(() => {
+          expect(subGenCallParams.count).to.equal(1);
+          expect(subGenCallParams.commands).to.eql(['app']);
+          expect(subGenCallParams.options[0]).to.eql([
+            '--reproducible',
+            '--force',
+            '--with-entities',
+            '--skip-install',
+            '--no-insight',
+            '--no-skip-git',
+            '--from-jdl',
+          ]);
+          done();
+        });
+      });
     });
   });
 
   describe('imports single app and entities', () => {
     const options = { skipInstall: true, noInsight: true, skipGit: false, creationTimestamp: '2019-01-01' };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        fse.removeSync(`${dir}/.yo-rc.json`);
-        return loadImportJdl()(['single-app-and-entities.jdl'], options, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('should not create .yo-rc.json', () => {
-      assert.noFile(['.yo-rc.json']);
+    it('should not create .yo-rc.json', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-and-entities.jdl'], options, env).then(() => {
+          assert.noFile(['.yo-rc.json']);
+          done();
+        });
+      });
     });
-    it('should not create entity files', () => {
-      const aFile = path.join('.jhipster', 'A.json');
-      assert.noFile([aFile, path.join('.jhipster', 'B.json')]);
+    it('should not create entity files', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-and-entities.jdl'], options, env).then(() => {
+          const aFile = path.join('.jhipster', 'A.json');
+          assert.noFile([aFile, path.join('.jhipster', 'B.json')]);
+          done();
+        });
+      });
     });
-    it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
-      expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
+    it('calls application generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-and-entities.jdl'], options, env).then(() => {
+          expect(subGenCallParams.count).to.equal(1);
+          expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+          expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
+          done();
+        });
+      });
     });
-    it('calls application generator with options', () => {
-      expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
-        ...options,
-        ...defaultAddedOptions,
-        reproducible: true,
-        withEntities: true,
-        force: true,
-        applicationWithEntities: undefined,
-        fromJdl: true,
+    it('calls application generator with options', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-and-entities.jdl'], options, env).then(() => {
+          expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
+            ...options,
+            ...defaultAddedOptions,
+            reproducible: true,
+            withEntities: true,
+            force: true,
+            applicationWithEntities: undefined,
+            fromJdl: true,
+          });
+          done();
+        });
       });
     });
   });
@@ -425,32 +469,46 @@ describe('JHipster generator import jdl', () => {
       skipGit: false,
       inline: 'application { config { baseName jhapp } entities * } entity Customer',
     };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        return loadImportJdl()([], { ...options, fork: true }, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the application', () => {
-      assert.file(['.yo-rc.json']);
+    it('creates the application', done => {
+      testInTempDir(dir => {
+        moduleToTest([], { ...options, fork: true }, env).then(() => {
+          assert.file(['.yo-rc.json']);
+          done();
+        });
+      });
     });
-    it('creates the entities', () => {
-      assert.file([path.join('.jhipster', 'Customer.json')]);
+    it('creates the entities', done => {
+      testInTempDir(dir => {
+        moduleToTest([], { ...options, fork: true }, env).then(() => {
+          assert.file([path.join('.jhipster', 'Customer.json')]);
+          done();
+        });
+      });
     });
-    it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+    it('calls application generator', done => {
+      testInTempDir(dir => {
+        moduleToTest([], { ...options, fork: true }, env).then(() => {
+          expect(subGenCallParams.count).to.equal(1);
+          expect(subGenCallParams.commands).to.eql(['app']);
+          expect(subGenCallParams.options[0]).to.eql([
+            '--reproducible',
+            '--force',
+            '--with-entities',
+            '--skip-install',
+            '--no-insight',
+            '--no-skip-git',
+            '--from-jdl',
+          ]);
+          done();
+        });
+      });
     });
   });
 
@@ -460,363 +518,560 @@ describe('JHipster generator import jdl', () => {
       noInsight: true,
       skipGit: false,
     };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        return loadImportJdl()([], { ...options, inline: 'application { config { baseName jhapp } entities * } entity Customer' }, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('should not create .yo-rc.json', () => {
-      assert.noFile(['.yo-rc.json']);
+    it('should not create .yo-rc.json', done => {
+      testInTempDir(dir => {
+        moduleToTest(
+          [],
+          {
+            ...options,
+            inline: 'application { config { baseName jhapp } entities * } entity Customer',
+          },
+          env
+        ).then(() => {
+          assert.noFile(['.yo-rc.json']);
+          done();
+        });
+      });
     });
-    it('should not create entity files', () => {
-      assert.noFile([path.join('.jhipster', 'Customer.json')]);
+    it('should not create entity files', done => {
+      testInTempDir(dir => {
+        moduleToTest(
+          [],
+          {
+            ...options,
+            inline: 'application { config { baseName jhapp } entities * } entity Customer',
+          },
+          env
+        ).then(() => {
+          assert.noFile([path.join('.jhipster', 'Customer.json')]);
+          done();
+        });
+      });
     });
-    it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
-      expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
-      expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
-        ...options,
-        ...defaultAddedOptions,
-        reproducible: true,
-        withEntities: true,
-        force: true,
-        fromJdl: true,
-        applicationWithEntities: undefined,
+    it('calls application generator', done => {
+      testInTempDir(dir => {
+        moduleToTest(
+          [],
+          {
+            ...options,
+            inline: 'application { config { baseName jhapp } entities * } entity Customer',
+          },
+          env
+        ).then(() => {
+          expect(subGenCallParams.count).to.equal(1);
+          expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+          expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
+          expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
+            ...options,
+            ...defaultAddedOptions,
+            reproducible: true,
+            withEntities: true,
+            force: true,
+            fromJdl: true,
+            applicationWithEntities: undefined,
+          });
+          done();
+        });
       });
     });
   });
 
   describe('imports single app only with --fork', () => {
     const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        fse.removeSync(`${dir}/.yo-rc.json`);
-        return loadImportJdl()(['single-app-only.jdl'], { ...options, fork: true }, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the application', () => {
-      assert.file(['.yo-rc.json']);
+    it('creates the application', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-only.jdl'], { ...options, fork: true }, env).then(() => {
+          assert.file(['.yo-rc.json']);
+          done();
+        });
+      });
     });
-    it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+    it('calls application generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-only.jdl'], { ...options, fork: true }, env).then(() => {
+          expect(subGenCallParams.count).to.equal(1);
+          expect(subGenCallParams.commands).to.eql(['app']);
+          expect(subGenCallParams.options[0]).to.eql([
+            '--reproducible',
+            '--force',
+            '--skip-install',
+            '--no-insight',
+            '--no-skip-git',
+            '--from-jdl',
+          ]);
+          done();
+        });
+      });
     });
   });
 
   describe('imports single app only', () => {
     const options = { skipInstall: true, noInsight: true, skipGit: false };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        fse.removeSync(`${dir}/.yo-rc.json`);
-        return loadImportJdl()(['single-app-only.jdl'], { ...options, interactive: false }, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('should not create .yo-rc.json', () => {
-      assert.noFile(['.yo-rc.json']);
+    it('should not create .yo-rc.json', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-only.jdl'], { ...options, interactive: false }, env).then(() => {
+          assert.noFile(['.yo-rc.json']);
+          done();
+        });
+      });
     });
-    it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(1);
-      expect(subGenCallParams.commands).to.eql(['jhipster:app']);
-      expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
-      expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
-        ...options,
-        ...defaultAddedOptions,
-        reproducible: true,
-        force: true,
-        applicationWithEntities: undefined,
-        fromJdl: true,
+    it('calls application generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['single-app-only.jdl'], { ...options, interactive: false }, env).then(() => {
+          expect(subGenCallParams.count).to.equal(1);
+          expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+          expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
+          expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
+            ...options,
+            ...defaultAddedOptions,
+            reproducible: true,
+            force: true,
+            applicationWithEntities: undefined,
+            fromJdl: true,
+          });
+          done();
+        });
       });
     });
   });
 
   describe('imports multiple JDL apps and entities', () => {
     const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        fse.removeSync(`${dir}/.yo-rc.json`);
-        return loadImportJdl()(['apps-and-entities.jdl'], options, env);
-      });
+
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the applications', () => {
-      assert.file([
-        path.join('myFirstApp', '.yo-rc.json'),
-        path.join('mySecondApp', '.yo-rc.json'),
-        path.join('myThirdApp', '.yo-rc.json'),
-      ]);
+    it('creates the applications', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['apps-and-entities.jdl'], options, env).then(() => {
+          assert.file([
+            path.join('myFirstApp', '.yo-rc.json'),
+            path.join('mySecondApp', '.yo-rc.json'),
+            path.join('myThirdApp', '.yo-rc.json'),
+          ]);
+          done();
+        });
+      });
     });
-    it('creates the entities', () => {
-      assert.file([
-        path.join('myFirstApp', '.jhipster', 'A.json'),
-        path.join('myFirstApp', '.jhipster', 'B.json'),
-        path.join('myFirstApp', '.jhipster', 'E.json'),
-        path.join('myFirstApp', '.jhipster', 'F.json'),
-        path.join('mySecondApp', '.jhipster', 'E.json'),
-        path.join('myThirdApp', '.jhipster', 'F.json'),
-      ]);
+    it('creates the entities', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['apps-and-entities.jdl'], options, env).then(() => {
+          assert.file([
+            path.join('myFirstApp', '.jhipster', 'A.json'),
+            path.join('myFirstApp', '.jhipster', 'B.json'),
+            path.join('myFirstApp', '.jhipster', 'E.json'),
+            path.join('myFirstApp', '.jhipster', 'F.json'),
+            path.join('mySecondApp', '.jhipster', 'E.json'),
+            path.join('myThirdApp', '.jhipster', 'F.json'),
+          ]);
+          done();
+        });
+      });
     });
-    it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(3);
-      expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+    it('calls application generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['apps-and-entities.jdl'], options, env).then(() => {
+          expect(subGenCallParams.count).to.equal(3);
+          expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
+          expect(subGenCallParams.options[0]).to.eql([
+            '--reproducible',
+            '--force',
+            '--with-entities',
+            '--skip-install',
+            '--no-insight',
+            '--no-skip-git',
+            '--from-jdl',
+          ]);
+          done();
+        });
+      });
     });
   });
 
   describe('imports multiple JDL apps one with and one without entities', () => {
     const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        fse.removeSync(`${dir}/.yo-rc.json`);
-        return loadImportJdl()(['apps-with-and-without-entities.jdl'], options, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the applications', () => {
-      assert.file([path.join('app1', '.yo-rc.json'), path.join('app2', '.yo-rc.json')]);
+    it('creates the applications', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['apps-with-and-without-entities.jdl'], options, env).then(() => {
+          assert.file([path.join('app1', '.yo-rc.json'), path.join('app2', '.yo-rc.json')]);
+          done();
+        });
+      });
     });
-    it('creates the entities in one app only', () => {
-      assert.noFile([path.join('app1', '.jhipster', 'BankAccount.json')]);
-      assert.file([path.join('app2', '.jhipster', 'BankAccount.json')]);
+    it('creates the entities in one app only', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['apps-with-and-without-entities.jdl'], options, env).then(() => {
+          assert.noFile([path.join('app1', '.jhipster', 'BankAccount.json')]);
+          assert.file([path.join('app2', '.jhipster', 'BankAccount.json')]);
+          done();
+        });
+      });
     });
-    it('calls application generator', () => {
-      expect(subGenCallParams.count).to.equal(2);
-      expect(subGenCallParams.commands).to.eql(['app', 'app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
+    it('calls application generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['apps-with-and-without-entities.jdl'], options, env).then(() => {
+          expect(subGenCallParams.count).to.equal(2);
+          expect(subGenCallParams.commands).to.eql(['app', 'app']);
+          expect(subGenCallParams.options[0]).to.eql([
+            '--reproducible',
+            '--force',
+            '--with-entities',
+            '--skip-install',
+            '--no-insight',
+            '--no-skip-git',
+            '--from-jdl',
+          ]);
+          done();
+        });
+      });
     });
   });
 
   describe('skips JDL apps with --ignore-application', () => {
     const options = { skipInstall: true, ignoreApplication: true, fork: true, skipGit: false };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        fse.removeSync(`${dir}/.yo-rc.json`);
-        return loadImportJdl()(['apps-and-entities.jdl'], options, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('should not create the application config', () => {
-      assert.noFile([
-        path.join('myFirstApp', '.yo-rc.json'),
-        path.join('mySecondApp', '.yo-rc.json'),
-        path.join('myThirdApp', '.yo-rc.json'),
-      ]);
+    it('should not create the application config', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['apps-and-entities.jdl'], options, env).then(() => {
+          assert.noFile([
+            path.join('myFirstApp', '.yo-rc.json'),
+            path.join('mySecondApp', '.yo-rc.json'),
+            path.join('myThirdApp', '.yo-rc.json'),
+          ]);
+          done();
+        });
+      });
     });
-    it('creates the entities', () => {
-      assert.file([
-        path.join('myFirstApp', '.jhipster', 'A.json'),
-        path.join('myFirstApp', '.jhipster', 'B.json'),
-        path.join('myFirstApp', '.jhipster', 'E.json'),
-        path.join('myFirstApp', '.jhipster', 'F.json'),
-        path.join('mySecondApp', '.jhipster', 'E.json'),
-        path.join('myThirdApp', '.jhipster', 'F.json'),
-      ]);
+    it('creates the entities', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['apps-and-entities.jdl'], options, env).then(() => {
+          assert.file([
+            path.join('myFirstApp', '.jhipster', 'A.json'),
+            path.join('myFirstApp', '.jhipster', 'B.json'),
+            path.join('myFirstApp', '.jhipster', 'E.json'),
+            path.join('myFirstApp', '.jhipster', 'F.json'),
+            path.join('mySecondApp', '.jhipster', 'E.json'),
+            path.join('myThirdApp', '.jhipster', 'F.json'),
+          ]);
+          done();
+        });
+      });
     });
-    it('does not call application generator', () => {
-      expect(subGenCallParams.count).to.equal(3);
-      expect(subGenCallParams.commands).to.eql(['entities', 'entities', 'entities']);
-      expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-skip-git', '--from-jdl']);
+    it('does not call application generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        fse.removeSync(`${dir}/.yo-rc.json`);
+        moduleToTest(['apps-and-entities.jdl'], options, env).then(() => {
+          expect(subGenCallParams.count).to.equal(3);
+          expect(subGenCallParams.commands).to.eql(['entities', 'entities', 'entities']);
+          expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-skip-git', '--from-jdl']);
+          done();
+        });
+      });
     });
   });
 
   describe('imports JDL deployments only', () => {
     const options = { skipInstall: true, interactive: false, skipGit: false };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        return loadImportJdl()(['deployments.jdl'], options, env);
-      });
+    let moduleToTest;
+    beforeEach(async () => {
+      moduleToTest = await loadImportJdl();
     });
 
     afterEach(() => revertTempDir(originalCwd));
 
-    it('creates the deployments', () => {
-      assert.file([
-        path.join('docker-compose', '.yo-rc.json'),
-        path.join('kubernetes', '.yo-rc.json'),
-        path.join('openshift', '.yo-rc.json'),
-      ]);
+    it('creates the deployments', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['deployments.jdl'], options, env).then(() => {
+          assert.file([
+            path.join('docker-compose', '.yo-rc.json'),
+            path.join('kubernetes', '.yo-rc.json'),
+            path.join('openshift', '.yo-rc.json'),
+          ]);
+          done();
+        });
+      });
     });
-    it('calls deployment generator', () => {
-      const invokedSubgens = ['jhipster:docker-compose', 'jhipster:kubernetes', 'jhipster:openshift'];
-      expect(subGenCallParams.commands).to.eql(invokedSubgens);
-      expect(subGenCallParams.count).to.equal(invokedSubgens.length);
-      expect(subGenCallParams.options[0]).to.eql({
-        force: true,
-        skipInstall: true,
-        skipGit: false,
-        fromJdl: true,
-        skipPrompts: true,
+    it('calls deployment generator', done => {
+      testInTempDir(dir => {
+        fse.copySync(getTemplatePath('import-jdl/common'), dir);
+        moduleToTest(['deployments.jdl'], options, env).then(() => {
+          const invokedSubgens = ['jhipster:docker-compose', 'jhipster:kubernetes', 'jhipster:openshift'];
+          expect(subGenCallParams.commands).to.eql(invokedSubgens);
+          expect(subGenCallParams.count).to.equal(invokedSubgens.length);
+          expect(subGenCallParams.options[0]).to.eql({
+            force: true,
+            skipInstall: true,
+            skipGit: false,
+            fromJdl: true,
+            skipPrompts: true,
+          });
+          done();
+        });
       });
     });
   });
 
   describe('imports multiple JDL apps, deployments and entities', () => {
     describe('calls generators', () => {
+      let moduleToTest;
+      beforeEach(async () => {
+        moduleToTest = await loadImportJdl();
+      });
+
       const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
-      beforeEach(() => {
-        return testInTempDir(dir => {
+
+      afterEach(() => revertTempDir(originalCwd));
+
+      it('calls generator in order', done => {
+        testInTempDir(dir => {
           fse.copySync(getTemplatePath('import-jdl/common'), dir);
           fse.removeSync(`${dir}/.yo-rc.json`);
-          return loadImportJdl()(['apps-and-entities-and-deployments.jdl'], options, env);
+          moduleToTest(['apps-and-entities-and-deployments.jdl'], options, env).then(() => {
+            expect(subGenCallParams.count).to.equal(5);
+            expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'jhipster:docker-compose', 'jhipster:kubernetes']);
+            expect(subGenCallParams.options[0]).to.eql([
+              '--reproducible',
+              '--force',
+              '--with-entities',
+              '--skip-install',
+              '--no-insight',
+              '--no-skip-git',
+              '--from-jdl',
+            ]);
+            expect(subGenCallParams.options[3]).to.eql({
+              force: true,
+              skipInstall: true,
+              skipGit: false,
+              noInsight: true,
+              fromJdl: true,
+              skipPrompts: true,
+            });
+            done();
+          });
         });
+      });
+      describe('creates config files', () => {
+        const options = { skipInstall: true };
+        let moduleToTest;
+        beforeEach(async () => {
+          moduleToTest = await loadImportJdl();
+        });
+
+        afterEach(() => revertTempDir(originalCwd));
+
+        it('creates the applications', done => {
+          testInTempDir(dir => {
+            fse.copySync(getTemplatePath('import-jdl/common'), dir);
+            fse.removeSync(`${dir}/.yo-rc.json`);
+            moduleToTest(['apps-and-entities-and-deployments.jdl'], options, env).then(() => {
+              assert.file([
+                path.join('myFirstApp', '.yo-rc.json'),
+                path.join('mySecondApp', '.yo-rc.json'),
+                path.join('myThirdApp', '.yo-rc.json'),
+              ]);
+              done();
+            });
+          });
+        });
+        it('creates the entities', done => {
+          testInTempDir(dir => {
+            fse.copySync(getTemplatePath('import-jdl/common'), dir);
+            fse.removeSync(`${dir}/.yo-rc.json`);
+            moduleToTest(['apps-and-entities-and-deployments.jdl'], options, env).then(() => {
+              assert.file([
+                path.join('myFirstApp', '.jhipster', 'A.json'),
+                path.join('myFirstApp', '.jhipster', 'B.json'),
+                path.join('myFirstApp', '.jhipster', 'E.json'),
+                path.join('myFirstApp', '.jhipster', 'F.json'),
+                path.join('mySecondApp', '.jhipster', 'E.json'),
+                path.join('myThirdApp', '.jhipster', 'F.json'),
+              ]);
+              done();
+            });
+          });
+        });
+        it('creates the deployments', done => {
+          testInTempDir(dir => {
+            fse.copySync(getTemplatePath('import-jdl/common'), dir);
+            fse.removeSync(`${dir}/.yo-rc.json`);
+            moduleToTest(['apps-and-entities-and-deployments.jdl'], options, env).then(() => {
+              assert.file([path.join('docker-compose', '.yo-rc.json'), path.join('kubernetes', '.yo-rc.json')]);
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    describe('skips JDL deployments with --ignore-deployments flag', () => {
+      const options = {
+        skipInstall: true,
+        noInsight: true,
+        ignoreDeployments: true,
+        interactive: false,
+        skipGit: false,
+      };
+      let moduleToTest;
+      beforeEach(async () => {
+        moduleToTest = await loadImportJdl();
       });
 
       afterEach(() => revertTempDir(originalCwd));
 
-      it('calls generator in order', () => {
-        expect(subGenCallParams.count).to.equal(5);
-        expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'jhipster:docker-compose', 'jhipster:kubernetes']);
-        expect(subGenCallParams.options[0]).to.eql([
-          '--reproducible',
-          '--force',
-          '--with-entities',
-          '--skip-install',
-          '--no-insight',
-          '--no-skip-git',
-          '--from-jdl',
-        ]);
-        expect(subGenCallParams.options[3]).to.eql({
-          force: true,
-          skipInstall: true,
-          skipGit: false,
-          noInsight: true,
-          fromJdl: true,
-          skipPrompts: true,
+      it('calls generator in order', done => {
+        testInTempDir(dir => {
+          fse.copySync(getTemplatePath('import-jdl/common'), dir);
+          fse.removeSync(`${dir}/.yo-rc.json`);
+          return moduleToTest(['apps-and-entities-and-deployments.jdl'], options, env).then(() => {
+            expect(subGenCallParams.count).to.equal(3);
+            expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
+            expect(subGenCallParams.options[0]).to.eql([
+              '--reproducible',
+              '--force',
+              '--with-entities',
+              '--skip-install',
+              '--no-insight',
+              '--no-skip-git',
+              '--from-jdl',
+            ]);
+            done();
+          });
         });
       });
     });
-    describe('creates config files', () => {
-      const options = { skipInstall: true };
-      beforeEach(() => {
-        return testInTempDir(dir => {
-          fse.copySync(getTemplatePath('import-jdl/common'), dir);
-          fse.removeSync(`${dir}/.yo-rc.json`);
-          return loadImportJdl()(['apps-and-entities-and-deployments.jdl'], options, env);
-        });
+
+    describe('imports a JDL entity model with relations for mongodb', () => {
+      let moduleToTest;
+      beforeEach(async () => {
+        moduleToTest = await loadImportJdl();
       });
 
       afterEach(() => revertTempDir(originalCwd));
 
-      it('creates the applications', () => {
-        assert.file([
-          path.join('myFirstApp', '.yo-rc.json'),
-          path.join('mySecondApp', '.yo-rc.json'),
-          path.join('myThirdApp', '.yo-rc.json'),
-        ]);
+      it('creates entity json files', done => {
+        testInTempDir(dir => {
+          fse.copySync(getTemplatePath('import-jdl/documents-with-relations'), dir);
+          fse.copySync(getTemplatePath('import-jdl/mongodb-with-relations'), dir);
+          moduleToTest(['orders-model.jdl'], {}, env).then(() => {
+            expect(subGenCallParams.entities).to.eql(['Customer', 'CustomerOrder', 'OrderedItem', 'PaymentDetails', 'ShippingDetails']);
+            done();
+          });
+        });
       });
-      it('creates the entities', () => {
-        assert.file([
-          path.join('myFirstApp', '.jhipster', 'A.json'),
-          path.join('myFirstApp', '.jhipster', 'B.json'),
-          path.join('myFirstApp', '.jhipster', 'E.json'),
-          path.join('myFirstApp', '.jhipster', 'F.json'),
-          path.join('mySecondApp', '.jhipster', 'E.json'),
-          path.join('myThirdApp', '.jhipster', 'F.json'),
-        ]);
-      });
-      it('creates the deployments', () => {
-        assert.file([path.join('docker-compose', '.yo-rc.json'), path.join('kubernetes', '.yo-rc.json')]);
-      });
-    });
-  });
 
-  describe('skips JDL deployments with --ignore-deployments flag', () => {
-    const options = { skipInstall: true, noInsight: true, ignoreDeployments: true, interactive: false, skipGit: false };
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('import-jdl/common'), dir);
-        fse.removeSync(`${dir}/.yo-rc.json`);
-        return loadImportJdl()(['apps-and-entities-and-deployments.jdl'], options, env);
+      it('calls entity subgenerator', done => {
+        testInTempDir(dir => {
+          fse.copySync(getTemplatePath('import-jdl/documents-with-relations'), dir);
+          fse.copySync(getTemplatePath('import-jdl/mongodb-with-relations'), dir);
+          moduleToTest(['orders-model.jdl'], {}, env).then(() => {
+            expect(subGenCallParams.count).to.equal(1);
+            expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
+            expect(subGenCallParams.options[0]).to.eql({
+              ...defaultAddedOptions,
+              fromJdl: true,
+            });
+            done();
+          });
+        });
       });
     });
 
-    afterEach(() => revertTempDir(originalCwd));
+    describe('imports a JDL entity model with relations for couchbase', () => {
+      let moduleToTest;
+      beforeEach(async () => {
+        moduleToTest = await loadImportJdl();
+      });
 
-    it('calls generator in order', () => {
-      expect(subGenCallParams.count).to.equal(3);
-      expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
-      expect(subGenCallParams.options[0]).to.eql([
-        '--reproducible',
-        '--force',
-        '--with-entities',
-        '--skip-install',
-        '--no-insight',
-        '--no-skip-git',
-        '--from-jdl',
-      ]);
-    });
-  });
-
-  describe('imports a JDL entity model with relations for mongodb', () => {
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('documents-with-relations'), dir);
-        fse.copySync(getTemplatePath('mongodb-with-relations'), dir);
-        return loadImportJdl()(['orders-model.jdl'], {}, env);
+      afterEach(() => revertTempDir(originalCwd));
+      it('creates entity json files', done => {
+        testInTempDir(dir => {
+          fse.copySync(getTemplatePath('import-jdl/documents-with-relations'), dir);
+          fse.copySync(getTemplatePath('import-jdl/couchbase-with-relations'), dir);
+          moduleToTest(['orders-model.jdl'], {}, env).then(() => {
+            expect(subGenCallParams.entities).to.eql(['Customer', 'CustomerOrder', 'OrderedItem', 'PaymentDetails', 'ShippingDetails']);
+            done();
+          });
+        });
+      });
+      it('calls entity subgenerator', done => {
+        testInTempDir(dir => {
+          fse.copySync(getTemplatePath('import-jdl/documents-with-relations'), dir);
+          fse.copySync(getTemplatePath('import-jdl/couchbase-with-relations'), dir);
+          moduleToTest(['orders-model.jdl'], {}, env).then(() => {
+            expect(subGenCallParams.count).to.equal(1);
+            expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
+            expect(subGenCallParams.options[0]).to.eql({
+              ...defaultAddedOptions,
+              fromJdl: true,
+            });
+            done();
+          });
+        });
       });
     });
-
-    afterEach(() => revertTempDir(originalCwd));
-
-    testDocumentsRelationships();
-  });
-
-  describe('imports a JDL entity model with relations for couchbase', () => {
-    beforeEach(() => {
-      return testInTempDir(dir => {
-        fse.copySync(getTemplatePath('documents-with-relations'), dir);
-        fse.copySync(getTemplatePath('couchbase-with-relations'), dir);
-        return loadImportJdl()(['orders-model.jdl'], {}, env);
-      });
-    });
-
-    afterEach(() => revertTempDir(originalCwd));
-
-    testDocumentsRelationships();
   });
 });

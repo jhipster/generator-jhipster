@@ -24,14 +24,13 @@ import pluralize from 'pluralize';
 import { createRequire } from 'module';
 import { fork as forkProcess } from 'child_process';
 import EnvironmentBuilder from './environment-builder.mjs';
-import { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArgs } from './utils.mjs';
+import { CLI_NAME, GENERATOR_NAME, logger, toStringJoinArgs, printSuccess, getOptionAsArgs } from './utils.mjs';
 import { packageJson as packagejs } from '../lib/index.cjs';
 import statistics from '../generators/statistics.cjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
 import { writeConfigFile } from './export-utils.cjs';
 
 const require = createRequire(import.meta.url);
-
 const jhipsterCli = require.resolve('./cli.mjs');
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 
@@ -212,7 +211,7 @@ function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOp
  * Imports the Applications and Entities defined in JDL
  * The app .yo-rc.json files and entity json files are written to disk
  */
-function importJdl(jdlImporter) {
+function importJDL(jdlImporter) {
   logger.info('The JDL is being parsed.');
 
   try {
@@ -295,7 +294,6 @@ const generateApplicationFiles = ({ processor, applicationWithEntities }) => {
   if (!fork) {
     generatorOptions.applicationWithEntities = applicationWithEntities;
   }
-
   return runGenerator('app', { cwd, fork, createEnvBuilder }, generatorOptions);
 };
 
@@ -351,7 +349,7 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
 class JDLProcessor {
   constructor(jdlFiles, jdlContent, options, createEnvBuilder) {
     logger.debug(
-      `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${toString(options)}`
+      `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${toStringJoinArgs(options)}`
     );
     this.jdlFiles = jdlFiles;
     this.jdlContent = jdlContent;
@@ -380,7 +378,7 @@ class JDLProcessor {
     } else {
       importer = createImporterFromFiles(this.jdlFiles, configuration);
     }
-    this.importState = importJdl.call(this, importer);
+    this.importState = importJDL.call(this, importer);
   }
 
   config() {
@@ -527,7 +525,7 @@ class JDLProcessor {
  */
 const jdl = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
   logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
-  logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
+  logger.debug(chalk.yellow(`Options: ${toStringJoinArgs({ ...options, inline: options.inline ? 'inline content' : '' })}`));
   try {
     const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options, createEnvBuilder);
     await jdlImporter.importJDL();

@@ -12,9 +12,8 @@ import * as td from 'testdouble';
 
 import { testInTempDir, revertTempDir } from './utils/utils.cjs';
 import packageJson from '../../package.json';
-import cliUtils from '../../cli/utils.cjs';
+import { logger } from '../../cli/utils.mjs';
 
-const { logger } = cliUtils;
 chai.use(tdChai(td));
 
 describe('jdl mocked command test', () => {

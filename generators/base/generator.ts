@@ -17,12 +17,7 @@
  * limitations under the License.
  */
 
-import { runJHipster } from './program.mjs';
-import { done, logger } from './utils.mjs';
-
-export default runJHipster().catch(done);
-
-process.on('unhandledRejection', up => {
-  logger.error('Unhandled promise rejection at:');
-  logger.fatal(up);
-});
+// Workaround https://github.com/esbuild-kit/esm-loader/issues/41
+// requires extension-less to import typescript at javascript files.
+// eslint-disable-next-line import/prefer-default-export
+export { default } from './generator.mjs';

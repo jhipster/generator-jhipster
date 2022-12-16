@@ -12,7 +12,7 @@ import { fileURLToPath } from 'url';
 
 import { createProgram, buildJHipster } from '../../cli/program.mjs';
 import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from './utils/utils.cjs';
-import { logger } from '../../cli/utils.cjs';
+import { logger } from '../../cli/utils.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
