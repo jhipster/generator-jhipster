@@ -27,7 +27,7 @@ import { cleanupOldFiles, upgradeFiles } from '../cleanup.mjs';
 import prompts from './prompts.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 import {
   GENERATOR_APP,
   GENERATOR_COMMON,

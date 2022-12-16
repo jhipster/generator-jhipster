@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import EntityIssue from './entity-issue';
-import FieldIssue from './field-issue';
-import EnumIssue from './enum-issue';
-import RelationshipIssue from './relationship-issue';
+import EntityIssue from './entity-issue.js';
+import FieldIssue from './field-issue.js';
+import EnumIssue from './enum-issue.js';
+import RelationshipIssue from './relationship-issue.js';
 
 export default class Issues {
   entityIssues: EntityIssue[];

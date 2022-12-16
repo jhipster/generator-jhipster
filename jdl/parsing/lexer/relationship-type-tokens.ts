@@ -18,7 +18,7 @@
  */
 
 import { Lexer } from 'chevrotain';
-import createTokenFromConfig from './token-creator';
+import createTokenFromConfig from './token-creator.js';
 
 const relationshipTypeCategoryToken = createTokenFromConfig({ name: 'RELATIONSHIP_TYPE', pattern: Lexer.NA });
 

@@ -43,7 +43,7 @@ import { writeFiles as writeEntityFiles, customizeFiles } from './entity-files.m
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import constants from '../generator-constants.cjs';
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 
 import {
   applicationTypes,
@@ -63,6 +63,7 @@ import {
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
+import { SUPPORTED_VALIDATION_RULES } from '../../jdl/jhipster/validations.js';
 
 const { isReservedTableName } = reservedKeywords;
 const { defaultConfig } = generatorDefaults;
@@ -85,8 +86,6 @@ const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validati
 const WAIT_TIMEOUT = 3 * 60000;
 const { NO: NO_PAGINATION } = PaginationTypes;
 const { NO: NO_SERVICE } = ServiceTypes;
-
-const { SUPPORTED_VALIDATION_RULES } = constants;
 
 /**
  * @class

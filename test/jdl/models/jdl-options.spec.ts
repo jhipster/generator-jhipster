@@ -21,11 +21,11 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 
-import JDLOptions from '../../../jdl/models/jdl-options';
-import JDLUnaryOption from '../../../jdl/models/jdl-unary-option';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
-import UnaryOptions from '../../../jdl/jhipster/unary-options';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
+import JDLOptions from '../../../jdl/models/jdl-options.js';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
 
 describe('JDLOptions', () => {
   describe('addOption', () => {

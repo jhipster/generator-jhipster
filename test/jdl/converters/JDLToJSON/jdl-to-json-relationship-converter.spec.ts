@@ -20,10 +20,10 @@
 
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import JDLRelationship from '../../../../jdl/models/jdl-relationship';
-import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-to-json-relationship-converter';
-import RelationshipTypes from '../../../../jdl/jhipster/relationship-types';
-import RelationshipOptions from '../../../../jdl/jhipster/relationship-options';
+import JDLRelationship from '../../../../jdl/models/jdl-relationship.js';
+import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-to-json-relationship-converter.js';
+import RelationshipTypes from '../../../../jdl/jhipster/relationship-types.js';
+import RelationshipOptions from '../../../../jdl/jhipster/relationship-options.js';
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = RelationshipTypes;
 const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;

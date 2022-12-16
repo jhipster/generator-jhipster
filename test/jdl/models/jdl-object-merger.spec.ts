@@ -18,18 +18,18 @@
  */
 
 import { expect } from 'chai';
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
-import FieldTypes from '../../../jdl/jhipster/field-types';
-import UnaryOptions from '../../../jdl/jhipster/unary-options';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types';
-import JDLObject from '../../../jdl/models/jdl-object';
-import createJDLApplication from '../../../jdl/models/jdl-application-factory';
-import JDLEntity from '../../../jdl/models/jdl-entity';
-import JDLField from '../../../jdl/models/jdl-field';
-import JDLEnum from '../../../jdl/models/jdl-enum';
-import JDLRelationship from '../../../jdl/models/jdl-relationship';
-import JDLUnaryOption from '../../../jdl/models/jdl-unary-option';
-import mergeJDLObjects from '../../../jdl/models/jdl-object-merger';
+import ApplicationTypes from '../../../jdl/jhipster/application-types.js';
+import FieldTypes from '../../../jdl/jhipster/field-types.js';
+import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
+import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
+import JDLObject from '../../../jdl/models/jdl-object.js';
+import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
+import JDLEntity from '../../../jdl/models/jdl-entity.js';
+import JDLField from '../../../jdl/models/jdl-field.js';
+import JDLEnum from '../../../jdl/models/jdl-enum.js';
+import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
+import mergeJDLObjects from '../../../jdl/models/jdl-object-merger.js';
 
 describe('JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {

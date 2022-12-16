@@ -17,19 +17,19 @@
  * limitations under the License.
  */
 
-import JHipsterReservedKeywords from './reserved-keywords/jhipster';
-import PagingReservedKeywords from './reserved-keywords/paging';
-import AngularReservedKeywords from './reserved-keywords/angular';
-import MySQLReservedKeywords from './reserved-keywords/mysql';
-import JavaReservedKeywords from './reserved-keywords/java';
-import TypescriptReservedKeywords from './reserved-keywords/typescript';
-import PostgresqlReservedKeywords from './reserved-keywords/postgresql';
-import CassandraReservedKeywords from './reserved-keywords/cassandra';
-import CouchbaseReservedKeywords from './reserved-keywords/couchbase';
-import OracleReservedKeywords from './reserved-keywords/oracle';
-import MsSQLReservedKeywords from './reserved-keywords/mssql';
-import Neo4JReservedKeywords from './reserved-keywords/neo4j';
-import applicationOptions from './application-options';
+import JHipsterReservedKeywords from './reserved-keywords/jhipster.js';
+import PagingReservedKeywords from './reserved-keywords/paging.js';
+import AngularReservedKeywords from './reserved-keywords/angular.js';
+import MySQLReservedKeywords from './reserved-keywords/mysql.js';
+import JavaReservedKeywords from './reserved-keywords/java.js';
+import TypescriptReservedKeywords from './reserved-keywords/typescript.js';
+import PostgresqlReservedKeywords from './reserved-keywords/postgresql.js';
+import CassandraReservedKeywords from './reserved-keywords/cassandra.js';
+import CouchbaseReservedKeywords from './reserved-keywords/couchbase.js';
+import OracleReservedKeywords from './reserved-keywords/oracle.js';
+import MsSQLReservedKeywords from './reserved-keywords/mssql.js';
+import Neo4JReservedKeywords from './reserved-keywords/neo4j.js';
+import applicationOptions from './application-options.js';
 
 const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK];
 

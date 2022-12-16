@@ -22,16 +22,16 @@ import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 import prompts from './prompts.mjs';
 import statistics from '../statistics.cjs';
 import constants from '../generator-constants.cjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
+import { REACT } from '../../jdl/jhipster/client-framework-types.js';
 
 const { defaultConfig } = generatorDefaults;
 const { MAVEN, GRADLE } = buildToolTypes;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 /**
  * @class
@@ -128,7 +128,6 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
       getConstants() {
         this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-        this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
         this.JAVA_VERSION = constants.JAVA_VERSION;
       },
     };

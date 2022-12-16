@@ -18,8 +18,8 @@
  */
 
 import { expect } from 'chai';
-import { NAME, KEYWORD } from '../../../../jdl/parsing/lexer/shared-tokens';
-import createTokenFromConfig from '../../../../jdl/parsing/lexer/token-creator';
+import { NAME, KEYWORD } from '../../../../jdl/parsing/lexer/shared-tokens.js';
+import createTokenFromConfig from '../../../../jdl/parsing/lexer/token-creator.js';
 
 describe('TokenCreator', () => {
   describe('createTokenFromConfig', () => {

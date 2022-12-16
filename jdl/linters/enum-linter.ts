@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { rulesNames } from './rules';
-import EnumIssue from './issues/enum-issue';
-import { FieldDeclaration } from './field-linter';
+import { rulesNames } from './rules.js';
+import EnumIssue from './issues/enum-issue.js';
+import { FieldDeclaration } from './field-linter.js';
 
 let issues: EnumIssue[];
 

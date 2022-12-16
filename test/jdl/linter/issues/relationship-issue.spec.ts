@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'chai';
-import RelationshipIssue from '../../../../jdl/linters/issues/relationship-issue';
+import RelationshipIssue from '../../../../jdl/linters/issues/relationship-issue.js';
 
 describe('RelationshipIssue', () => {
   describe('new', () => {

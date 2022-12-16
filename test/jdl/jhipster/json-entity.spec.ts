@@ -20,7 +20,7 @@
 /* eslint-disable no-new,no-unused-expressions */
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import JSONEntity from '../../../jdl/jhipster/json-entity';
+import JSONEntity from '../../../jdl/jhipster/json-entity.js';
 
 describe('JSONEntity', () => {
   describe('new', () => {

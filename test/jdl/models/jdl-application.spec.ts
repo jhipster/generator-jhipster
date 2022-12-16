@@ -20,11 +20,11 @@
 
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import { OptionNames } from '../../../jdl/jhipster/application-options';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
-import StringJDLApplicationConfigurationOption from '../../../jdl/models/string-jdl-application-configuration-option';
-import JDLApplication from '../../../jdl/models/jdl-application';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
+import { OptionNames } from '../../../jdl/jhipster/application-options.js';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
+import StringJDLApplicationConfigurationOption from '../../../jdl/models/string-jdl-application-configuration-option.js';
+import JDLApplication from '../../../jdl/models/jdl-application.js';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
 
 describe('JDLApplication', () => {
   describe('hasConfigurationOption', () => {

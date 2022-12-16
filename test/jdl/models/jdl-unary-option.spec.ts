@@ -20,8 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 
-import JDLUnaryOption from '../../../jdl/models/jdl-unary-option';
-import UnaryOptions from '../../../jdl/jhipster/unary-options';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
+import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
 
 describe('JDLUnaryOption', () => {
   describe('new', () => {

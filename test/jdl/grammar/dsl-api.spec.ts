@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const { tokens } = require('../../../jdl/parsing/lexer/lexer');
+import { expect } from 'chai';
+import { tokens } from '../../../jdl/parsing/lexer/lexer.js';
 
-const { getSyntacticAutoCompleteSuggestions, parse } = require('../../../jdl/parsing/api');
+import { getSyntacticAutoCompleteSuggestions, parse } from '../../../jdl/parsing/api.js';
 
 describe('JDL DSL API', () => {
   context('when wanting an AST', () => {

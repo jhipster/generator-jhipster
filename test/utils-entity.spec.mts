@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import { prepareEntityPrimaryKeyForTemplates } from '../utils/entity.mjs';
 import { formatDateForChangelog } from '../generators/base/utils.mjs';
-import generatorDefaults from '../generators/generator-defaults.cjs';
+import generatorDefaults from '../generators/generator-defaults.mjs';
 import BaseGenerator from '../generators/base/index.mjs';
 
 const { defaultConfig, entityDefaultConfig } = generatorDefaults;

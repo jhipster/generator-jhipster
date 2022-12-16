@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import JDLDeployment from '../../models/jdl-deployment';
+import JDLDeployment from '../../models/jdl-deployment.js';
 
 export default { convertDeployments };
 

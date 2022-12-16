@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import OptionValidator from './option-validator';
+import OptionValidator from './option-validator.js';
 
 export default class UnaryOptionValidator extends OptionValidator {
   constructor() {

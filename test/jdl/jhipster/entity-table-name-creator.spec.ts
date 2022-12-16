@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'chai';
-import getTableNameFromEntityName from '../../../jdl/jhipster/entity-table-name-creator';
+import getTableNameFromEntityName from '../../../jdl/jhipster/entity-table-name-creator.js';
 
 describe('EntityTableNameCreator', () => {
   describe('getTableNameFromEntityName', () => {

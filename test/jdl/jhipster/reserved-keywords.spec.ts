@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import ReservedKeywords from '../../../jdl/jhipster/reserved-keywords';
+import ReservedKeywords from '../../../jdl/jhipster/reserved-keywords.js';
 
 describe('ReservedKeywords', () => {
   describe('isReserved', () => {

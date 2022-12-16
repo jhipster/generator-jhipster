@@ -18,13 +18,13 @@
  */
 
 import _ from 'lodash';
-import Validations from '../../jhipster/validations';
-import formatComment from '../../utils/format-utils';
-import { camelCase } from '../../utils/string-utils';
-import fieldTypes from '../../jhipster/field-types';
-import JDLObject from '../../models/jdl-object';
-import { Field } from '../types';
-import JDLEntity from '../../models/jdl-entity';
+import Validations from '../../jhipster/validations.js';
+import formatComment from '../../utils/format-utils.js';
+import { camelCase } from '../../utils/string-utils.js';
+import fieldTypes from '../../jhipster/field-types.js';
+import JDLObject from '../../models/jdl-object.js';
+import { Field } from '../types.js';
+import JDLEntity from '../../models/jdl-entity.js';
 
 const { UNIQUE, REQUIRED } = Validations;
 

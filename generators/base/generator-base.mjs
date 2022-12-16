@@ -34,7 +34,7 @@ import jhipsterUtils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 import commonOptions from './options.mjs';
 import detectLanguage from '../languages/detect-language.mjs';
 import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';

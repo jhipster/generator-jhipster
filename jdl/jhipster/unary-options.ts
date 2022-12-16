@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import applicationOptions from './application-options';
+import applicationOptions from './application-options.js';
 
 const Options: any = {
   SKIP_CLIENT: applicationOptions.OptionNames.SKIP_CLIENT,

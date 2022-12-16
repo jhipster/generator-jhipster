@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import ApplicationTypes from '../jhipster/application-types';
+import ApplicationTypes from '../jhipster/application-types.js';
 import {
   getDefaultConfigForNewApplication,
   getConfigForMonolithApplication,
   getConfigForGatewayApplication,
   getConfigForMicroserviceApplication,
-} from '../jhipster/default-application-options';
-import JDLApplication from './jdl-application';
+} from '../jhipster/default-application-options.js';
+import JDLApplication from './jdl-application.js';
 
 export { createJDLApplication };
 

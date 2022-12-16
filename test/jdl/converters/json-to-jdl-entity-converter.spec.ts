@@ -22,10 +22,15 @@ import { expect } from 'chai';
 
 import fs from 'fs';
 import path from 'path';
-import { convertEntitiesToJDL } from '../../../jdl/converters/json-to-jdl-entity-converter';
-import UnaryOptions from '../../../jdl/jhipster/unary-options';
-import RelationshipOptions from '../../../jdl/jhipster/relationship-options';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { convertEntitiesToJDL } from '../../../jdl/converters/json-to-jdl-entity-converter.js';
+import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
+import RelationshipOptions from '../../../jdl/jhipster/relationship-options.js';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
 

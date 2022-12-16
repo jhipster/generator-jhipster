@@ -22,7 +22,12 @@
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } from '../../../jdl/utils/file-utils';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } from '../../../jdl/utils/file-utils.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 describe('FileUtils', () => {
   describe('doesFileExist', () => {

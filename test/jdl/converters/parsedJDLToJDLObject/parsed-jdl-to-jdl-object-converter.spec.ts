@@ -21,27 +21,32 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import path from 'path';
-import matchEntity from '../../matchers/entity-matcher';
-import * as JDLReader from '../../../../jdl/readers/jdl-reader';
-import ParsedJDLToJDLObjectConverter from '../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter';
-import JDLEntity from '../../../../jdl/models/jdl-entity';
-import JDLEnum from '../../../../jdl/models/jdl-enum';
-import JDLField from '../../../../jdl/models/jdl-field';
-import JDLValidation from '../../../../jdl/models/jdl-validation';
-import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option';
-import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option';
-import ApplicationTypes from '../../../../jdl/jhipster/application-types';
-import FieldTypes from '../../../../jdl/jhipster/field-types';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import matchEntity from '../../matchers/entity-matcher.js';
+import * as JDLReader from '../../../../jdl/readers/jdl-reader.js';
+import ParsedJDLToJDLObjectConverter from '../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import JDLEntity from '../../../../jdl/models/jdl-entity.js';
+import JDLEnum from '../../../../jdl/models/jdl-enum.js';
+import JDLField from '../../../../jdl/models/jdl-field.js';
+import JDLValidation from '../../../../jdl/models/jdl-validation.js';
+import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option.js';
+import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option.js';
+import ApplicationTypes from '../../../../jdl/jhipster/application-types.js';
+import FieldTypes from '../../../../jdl/jhipster/field-types.js';
 
-import Validations from '../../../../jdl/jhipster/validations';
-import UnaryOptions from '../../../../jdl/jhipster/unary-options';
-import ApplicationOptions from '../../../../jdl/jhipster/application-options';
+import Validations from '../../../../jdl/jhipster/validations.js';
+import UnaryOptions from '../../../../jdl/jhipster/unary-options.js';
+import ApplicationOptions from '../../../../jdl/jhipster/application-options.js';
 
 const { OptionNames } = ApplicationOptions;
 
-import EntityOptions from '../../../../jdl/jhipster/entity-options';
+import EntityOptions from '../../../../jdl/jhipster/entity-options.js';
 
-import BinaryOptions from '../../../../jdl/jhipster/binary-options';
+import BinaryOptions from '../../../../jdl/jhipster/binary-options.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const { MapperTypes, ServiceTypes, PaginationTypes } = EntityOptions;
 

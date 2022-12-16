@@ -26,26 +26,26 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 import { expect } from 'chai';
 
-import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-without-application-to-json-converter';
+import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 
-import ApplicationTypes from '../../../../jdl/jhipster/application-types';
-import DatabaseTypes from '../../../../jdl/jhipster/database-types';
+import ApplicationTypes from '../../../../jdl/jhipster/application-types.js';
+import DatabaseTypes from '../../../../jdl/jhipster/database-types.js';
 
-import JDLObject from '../../../../jdl/models/jdl-object';
-import JDLEntity from '../../../../jdl/models/jdl-entity';
-import JDLField from '../../../../jdl/models/jdl-field';
-import JDLEnum from '../../../../jdl/models/jdl-enum';
-import JDLValidation from '../../../../jdl/models/jdl-validation';
-import JDLRelationship from '../../../../jdl/models/jdl-relationship';
-import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option';
-import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option';
-import FieldTypes from '../../../../jdl/jhipster/field-types';
-import Validations from '../../../../jdl/jhipster/validations';
-import UnaryOptions from '../../../../jdl/jhipster/unary-options';
-import BinaryOptions from '../../../../jdl/jhipster/binary-options';
-import RelationshipTypes from '../../../../jdl/jhipster/relationship-types';
-import RelationshipOptions from '../../../../jdl/jhipster/relationship-options';
-import logger from '../../../../jdl/utils/objects/logger';
+import JDLObject from '../../../../jdl/models/jdl-object.js';
+import JDLEntity from '../../../../jdl/models/jdl-entity.js';
+import JDLField from '../../../../jdl/models/jdl-field.js';
+import JDLEnum from '../../../../jdl/models/jdl-enum.js';
+import JDLValidation from '../../../../jdl/models/jdl-validation.js';
+import JDLRelationship from '../../../../jdl/models/jdl-relationship.js';
+import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option.js';
+import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option.js';
+import FieldTypes from '../../../../jdl/jhipster/field-types.js';
+import Validations from '../../../../jdl/jhipster/validations.js';
+import UnaryOptions from '../../../../jdl/jhipster/unary-options.js';
+import BinaryOptions from '../../../../jdl/jhipster/binary-options.js';
+import RelationshipTypes from '../../../../jdl/jhipster/relationship-types.js';
+import RelationshipOptions from '../../../../jdl/jhipster/relationship-options.js';
+import logger from '../../../../jdl/utils/objects/logger.js';
 
 const { CommonDBTypes } = FieldTypes;
 const { MONOLITH } = ApplicationTypes;

@@ -18,9 +18,9 @@
  */
 
 import path from 'path';
-import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils';
-import DeploymentValidator from '../validators/deployment-validator';
-import { GENERATOR_NAME, writeConfigFile } from './export-utils';
+import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils.js';
+import DeploymentValidator from '../validators/deployment-validator.js';
+import { GENERATOR_NAME, writeConfigFile } from './export-utils.js';
 
 /**
  * Exports JDL deployments to .yo-rc.json files in separate folders (based on deployment type).

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { CstParser } from 'chevrotain';
-import { tokens as LexerTokens } from './lexer/lexer';
+import { tokens as LexerTokens } from './lexer/lexer.js';
 
 let instance;
 

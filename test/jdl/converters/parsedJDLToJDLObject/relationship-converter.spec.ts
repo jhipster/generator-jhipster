@@ -18,7 +18,7 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { convertRelationships } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/relationship-converter';
+import { convertRelationships } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/relationship-converter.js';
 
 describe('RelationshipConverter', () => {
   describe('convertRelationships', () => {

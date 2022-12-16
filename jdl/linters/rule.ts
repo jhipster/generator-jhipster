@@ -17,11 +17,9 @@
  * limitations under the License.
  */
 
-import { RuleLevel, INFO } from './rule-levels';
+import { RuleLevel, INFO } from './rule-levels.js';
 
-import objectUtils = require('../utils/object-utils');
-
-const { merge } = objectUtils;
+import { merge } from '../utils/object-utils.js';
 
 /**
  * Represents a rule for the linters.

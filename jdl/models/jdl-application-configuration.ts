@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import ApplicationOptions from '../jhipster/application-options';
+import ApplicationOptions from '../jhipster/application-options.js';
 
 const { OptionNames } = ApplicationOptions;
 

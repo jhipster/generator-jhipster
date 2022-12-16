@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import createApplicationConfigurationFromObject from './jdl-application-configuration-factory';
-import JDLApplicationEntities from './jdl-application-entities';
-import JDLOptions from './jdl-options';
+import createApplicationConfigurationFromObject from './jdl-application-configuration-factory.js';
+import JDLApplicationEntities from './jdl-application-entities.js';
+import JDLOptions from './jdl-options.js';
 
 export default class JDLApplication {
   config: any;
