@@ -374,9 +374,6 @@ Object {
   "src/main/webapp/WEB-INF/web.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/account/account.module.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/account/account.route.ts": Object {
     "stateCleared": "modified",
   },
