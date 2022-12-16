@@ -228,8 +228,6 @@ export const files = {
       condition: generator => generator.communicationSpringWebsocket,
       ...clientApplicationBlock,
       templates: [
-        'admin/tracker/tracker.route.ts',
-        'admin/tracker/tracker.module.ts',
         'admin/tracker/tracker.component.ts',
         'admin/tracker/tracker.component.html',
         'core/tracker/tracker-activity.model.ts',
@@ -497,6 +495,8 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}app/shared/shared-libs.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/login/login.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/login/login.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/tracker/tracker.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/tracker/tracker.module.ts`);
   }
 }
 
