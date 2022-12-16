@@ -228,7 +228,6 @@ const buildCommands = ({
 
         if (cliOnly) {
           logger.debug('Executing CLI only script');
-          console.info(`The cli will execute the following command: ${loadCommand(cmdName).toString()}`);
           return Promise.resolve(loadCommand(cmdName)).then(module => {
             if (module instanceof Function) {
               module(args, options, env, envBuilder, createEnvBuilder);

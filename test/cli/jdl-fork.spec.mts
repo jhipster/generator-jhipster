@@ -1,14 +1,10 @@
 /* eslint-disable no-unused-expressions, no-console */
 
-import path from 'path';
 import sinon from 'sinon';
 
-import { fileURLToPath } from 'url';
 import { prepareTempDir } from './utils/utils.cjs';
 import { runJHipster } from '../../cli/program.mjs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { getTemplatePath } from '../support/index.mjs';
 
 describe('jhipster cli with jdl fork', () => {
   let cleanup;
@@ -26,7 +22,7 @@ describe('jhipster cli with jdl fork', () => {
           'jhipster',
           'jhipster',
           'jdl',
-          path.join(__dirname, '..', 'templates', 'import-jdl', 'common', 'single-app-only.jdl'),
+          getTemplatePath('import-jdl/common/single-app-only.jdl'),
           '--skip-install',
           '--fork',
           '--skip-sample-repository',
@@ -52,7 +48,7 @@ describe('jhipster cli with jdl fork', () => {
           'jhipster',
           'jhipster',
           'jdl',
-          path.join(__dirname, '..', 'templates', 'import-jdl', 'common', 'jdl.jdl'),
+          getTemplatePath('import-jdl/common/jdl.jdl'),
           '--base-name',
           'jhipsterApp',
           '--db',
@@ -83,7 +79,7 @@ describe('jhipster cli with jdl fork', () => {
           'jhipster',
           'jhipster',
           'jdl',
-          path.join(__dirname, '..', 'templates', 'import-jdl', 'common', 'apps-and-entities-and-deployments.jdl'),
+          getTemplatePath('import-jdl/common/apps-and-entities-and-deployments.jdl'),
           '--skip-install',
           '--fork',
           '--skip-prettier',

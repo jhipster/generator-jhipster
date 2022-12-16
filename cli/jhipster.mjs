@@ -19,6 +19,7 @@
  */
 import semver from 'semver';
 import path from 'path';
+import { pathToFileURL } from 'url';
 import { logger } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
 
@@ -63,6 +64,7 @@ async function requireCLI(preferLocal) {
         /* eslint-disable import/no-dynamic-require */
         logger.info(LOCAL_VERSION_MESSAGE);
         await import(localCLI);
+        // await import(pathToFileURL(localCLI).href);
         return;
       }
     } catch (e) {

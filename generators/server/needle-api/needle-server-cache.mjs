@@ -19,11 +19,10 @@
 
 import chalk from 'chalk';
 import needleServer from './needle-server.mjs';
-import constants from '../../generator-constants.mjs';
+import { SERVER_MAIN_SRC_DIR } from '../../generator-constants.mjs';
 import { cacheTypes } from '../../../jdl/jhipster/index.mjs';
 
 const { CAFFEINE, EHCACHE, REDIS } = cacheTypes;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 export default class needleServerCache extends needleServer {
   addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider) {
