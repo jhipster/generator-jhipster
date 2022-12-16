@@ -233,6 +233,10 @@ gitProperties {
     keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
 }
 
+tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
+  outputs.doNotCacheIf("Task is always executed") { true }
+}
+
 checkstyle {
     toolVersion "${checkstyleVersion}"
     configFile file("checkstyle.xml")
