@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit<% if (microfrontend && enableTranslation && applicationTypeGateway) { %>, createNgModule, Injector, Type<% } %> } from '@angular/core';
+import { Component, OnInit<% if (microfrontend && enableTranslation && applicationTypeGateway) { %>, createNgModule, Injector<% } %> } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -38,6 +38,7 @@ import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
 <% if (microfrontend && applicationTypeGateway) { %>
 import { loadNavbarItems, loadTranslationModule } from 'app/core/microfrontend';
 <%_ } _%>
+import NavbarItem from './navbar-item.model';
 
 @Component({
   standalone: true,
@@ -62,10 +63,10 @@ export default class NavbarComponent implements OnInit {
   openAPIEnabled?: boolean;
   version = '';
   account: Account | null = null;
-  entitiesNavbarItems: any[] = [];
+  entitiesNavbarItems: NavbarItem[] = [];
 <%_ if (applicationTypeGateway) { _%>
   <%_ for (const remote of microfrontends) { _%>
-  <%= remote.lowercaseBaseName %>EntityNavbarItems: any[] = [];
+  <%= remote.lowercaseBaseName %>EntityNavbarItems: NavbarItem[] = [];
   <%_ } _%>
 <%_ } _%>
 
@@ -97,25 +98,7 @@ export default class NavbarComponent implements OnInit {
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-  <%_ for (const remote of microfrontends) { _%>
-      loadNavbarItems('<%= remote.lowercaseBaseName %>').then(
-        async items => {
-          this.<%= remote.lowercaseBaseName %>EntityNavbarItems = items;
-    <%_ if (enableTranslation && applicationTypeGateway) { _%>
-          try {
-            const LazyTranslationModule = await loadTranslationModule('<%= remote.lowercaseBaseName %>');
-            createNgModule(LazyTranslationModule as Type<any>, this.injector);
-          } catch (error) {
-            console.log('Error loading <%= remote.lowercaseBaseName %> translation module', error);
-          }
-    <%_ } _%>
-        },
-        error => {
-          // eslint-disable-next-line no-console
-          console.log('Error loading <%= remote.lowercaseBaseName %> entities', error);
-        }
-      );
-  <%_ } _%>
+      this.loadMicrofrontendsEntities();
 <%_ } _%>
     });
   }
@@ -147,5 +130,30 @@ export default class NavbarComponent implements OnInit {
 
   toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
+  }
+
+  loadMicrofrontendsEntities(): void {
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+    loadNavbarItems('<%= remote.lowercaseBaseName %>').then(
+      async items => {
+        this.<%= remote.lowercaseBaseName %>EntityNavbarItems = items;
+    <%_ if (enableTranslation && applicationTypeGateway) { _%>
+        try {
+          const LazyTranslationModule = await loadTranslationModule('<%= remote.lowercaseBaseName %>');
+          createNgModule(LazyTranslationModule, this.injector);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.log('Error loading <%= remote.lowercaseBaseName %> translation module', error);
+        }
+    <%_ } _%>
+      },
+      error => {
+        // eslint-disable-next-line no-console
+        console.log('Error loading <%= remote.lowercaseBaseName %> entities', error);
+      }
+    );
+  <%_ } _%>
+<%_ } _%>
   }
 }

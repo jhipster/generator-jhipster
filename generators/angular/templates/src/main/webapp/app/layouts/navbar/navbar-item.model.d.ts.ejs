@@ -16,16 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import NavbarItem from 'app/layouts/navbar/navbar-item.model';
+type NavbarItem = {
+  name: string;
+  route: string;
+  translationKey: string;
+};
 
-export const EntityNavbarItems: NavbarItem[] = [
-<%_ for (const entity of this.localEntities) { _%>
-  {
-    name: '<%= entity.entityAngularName %>',
-    route: '<%= entity.entityPage %>',
-  <%_ if (enableTranslation) { _%>
-    translationKey: 'global.menu.entities.<%= entity.entityTranslationKey %>',
-  <%_ } _%>
-  },
-<%_ } _%>
-];
+export default NavbarItem;

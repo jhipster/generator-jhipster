@@ -73,6 +73,9 @@ describe('Navbar Component', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NavbarComponent);
     comp = fixture.componentInstance;
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+    comp.loadMicrofrontendsEntities = jest.fn();
+<%_ } _%>
     accountService = TestBed.inject(AccountService);
     profileService = TestBed.inject(ProfileService);
   });
