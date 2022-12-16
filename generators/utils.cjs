@@ -26,13 +26,14 @@ const os = require('os');
 const constants = require('./generator-constants.cjs');
 
 module.exports = {
+  rewrite,
   rewriteFile,
   replaceContent,
   renderContent,
   deepFind,
+  escapeRegExp,
   getJavadoc,
   getEnumInfo,
-  escapeRegExp,
   checkStringInFile,
   checkRegexInFile,
   packageNameToNamespace,
@@ -288,6 +289,51 @@ function getEnumInfo(field, clientRootFolder) {
     enumValues: getEnums(enums, customValuesState, field.fieldValuesJavadocs),
     clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
   };
+}
+
+/**
+ * @Deprecated
+ * Build an enum object, deprecated use getEnumInfoInstead
+ * @param {any} field : entity field
+ * @param {string} frontendAppName
+ * @param {string} packageName
+ * @param {string} clientRootFolder
+ */
+function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
+  const fieldType = field.fieldType;
+  field.enumInstance = _.lowerFirst(fieldType);
+  const enums = field.fieldValues.replace(/\s/g, '').split(',');
+  const enumsWithCustomValue = getEnumsWithCustomValue(enums);
+  return {
+    enumName: fieldType,
+    enumValues: field.fieldValues.split(',').join(', '),
+    enumInstance: field.enumInstance,
+    enums,
+    enumsWithCustomValue,
+    frontendAppName,
+    packageName,
+    clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
+  };
+}
+
+/**
+ * @deprecated
+ * private function to remove for jhipster v7
+ * @param enums
+ * @return {*}
+ */
+function getEnumsWithCustomValue(enums) {
+  return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
+    if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
+      const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
+      const enumValueName = matches[1];
+      const enumValueCustomValue = matches[3];
+      enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
+    } else {
+      enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
+    }
+    return enumsWithCustomValueArray;
+  }, []);
 }
 
 function getCustomValuesState(enumValues) {
