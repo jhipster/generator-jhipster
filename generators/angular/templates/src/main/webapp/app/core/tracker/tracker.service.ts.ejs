@@ -84,7 +84,7 @@ export class TrackerService {
     if (!this.rxStomp) {
       throw new Error('Stomp connection not initialized');
     }
-    return this.rxStomp!;
+    return this.rxStomp;
   }
 
   public subscribe(observer: Partial<Observer<TrackerActivity>>): Subscription {
