@@ -19,7 +19,9 @@
 type NavbarItem = {
   name: string;
   route: string;
+<% if (enableTranslation) { %>
   translationKey: string;
+<% } %>
 };
 
 export default NavbarItem;
