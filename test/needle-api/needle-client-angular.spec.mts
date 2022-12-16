@@ -163,7 +163,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
       '      {\n' +
         "        path: 'entityUrl',\n" +
         "        data: { pageTitle: 'entity.home.title' },\n" +
-        "        loadChildren: () => import('./entityFolderName/entityFileName.module').then(m => m.MicroserviceNameentityNameModule),\n" +
+        "        loadChildren: () => import('./entityFolderName/entityFileName.routes'),\n" +
         '      }'
     );
   });
