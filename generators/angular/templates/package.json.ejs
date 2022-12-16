@@ -66,6 +66,9 @@
     "zone.js": "<%= this.dependabotPackageJson.dependencies['zone.js'] %>"
   },
   "devDependencies": {
+<%_ if (microfrontend && applicationTypeGateway) { _%>
+    "@angular-architects/module-federation": "<%= this.dependabotPackageJson.devDependencies['@angular-architects/module-federation'] %>",
+<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
     "@types/sockjs-client": "1.5.1",
 <%_ } _%>

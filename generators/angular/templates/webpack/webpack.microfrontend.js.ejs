@@ -22,8 +22,14 @@ const appVersion = packageJson.version;
 
 module.exports = (config, options, targetOptions) => {
   return {
+    experiments: {
+      outputModule: true,
+    },
     plugins: [
       new ModuleFederationPlugin({
+        library: {
+          type: 'module',
+        },
 <%_ if (applicationTypeMicroservice) { _%>
         name: '<%= lowercaseBaseName %>',
         filename: 'remoteEntry.js',
@@ -36,11 +42,7 @@ module.exports = (config, options, targetOptions) => {
         },
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
-        remotes: {
-  <%_ for (const remote of microfrontends) { _%>
-          '<%= remote.lowercaseBaseName %>': '<%= remote.lowercaseBaseName %>@/<%= remote.endpointPrefix %>/remoteEntry.js',
-  <%_ } _%>
-        },
+        remotes: {},
 <%_ } _%>
         shared: {
           // { eager?, import?, packageName?, requiredVersion?, shareKey?, shareScope?, singleton?, strictVersion?, version? }
@@ -144,7 +146,6 @@ module.exports = (config, options, targetOptions) => {
     output: {
       publicPath: 'auto',
       uniqueName: '<%= lowercaseBaseName %>',
-      scriptType: 'text/javascript',
     },
     optimization: {
       runtimeChunk: false,

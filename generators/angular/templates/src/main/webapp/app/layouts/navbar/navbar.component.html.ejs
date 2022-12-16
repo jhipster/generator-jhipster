@@ -63,6 +63,9 @@
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
 <%_ if (applicationTypeGateway) { _%>
   <%_ for (const remote of microfrontends) { _%>
+          <li *ngIf="<%= remote.lowercaseBaseName %>EntityNavbarItems.length === 0">
+            <span class="dropdown-item">Failed to load <%= remote.lowercaseBaseName %> entities</span>
+          </li>
           <li *ngFor="let entityNavbarItem of <%= remote.lowercaseBaseName %>EntityNavbarItems">
             <a
               class="dropdown-item"

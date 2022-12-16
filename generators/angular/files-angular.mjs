@@ -61,6 +61,11 @@ export const files = {
       condition: generator => generator.microfrontend,
       templates: ['webpack/webpack.microfrontend.js'],
     },
+    {
+      condition: generator => generator.microfrontend,
+      ...clientApplicationBlock,
+      templates: ['core/microfrontend/index.ts'],
+    },
   ],
   angularMain: [
     {
