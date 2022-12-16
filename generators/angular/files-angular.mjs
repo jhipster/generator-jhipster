@@ -123,7 +123,6 @@ export const files = {
       condition: generator => generator.generateUserManagement,
       templates: [
         'account/account.route.ts',
-        'account/account.module.ts',
         'account/activate/activate.route.ts',
         'account/activate/activate.component.ts',
         'account/activate/activate.component.html',
@@ -497,6 +496,7 @@ export function cleanup({ application }) {
     this.removeFile(`${application.clientSrcDir}app/login/login.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/tracker/tracker.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/tracker/tracker.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/account/account.module.ts`);
   }
 }
 

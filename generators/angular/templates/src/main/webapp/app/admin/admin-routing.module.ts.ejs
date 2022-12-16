@@ -68,7 +68,8 @@ import { RouterModule } from '@angular/router';
       <%_ if (communicationSpringWebsocket) { _%>
       {
         path: 'tracker',
-        loadChildren: () => import('./tracker/tracker.module').then(m => m.TrackerModule),
+        loadComponent: () => import('./tracker/tracker.component'),
+        title: 'tracker.title',
       },
       <%_ } _%>
       /* jhipster-needle-add-admin-route - JHipster will add admin routes here */

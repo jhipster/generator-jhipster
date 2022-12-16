@@ -61,7 +61,7 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 <%_ if (generateUserManagement) { _%>
         {
           path: 'account',
-          loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
+          loadChildren: () => import('./account/account.route'),
         },
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>

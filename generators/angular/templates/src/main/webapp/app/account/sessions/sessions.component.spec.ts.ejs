@@ -46,8 +46,7 @@ describe('SessionsComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [SessionsComponent],
+      imports: [HttpClientTestingModule, SessionsComponent],
       providers: [AccountService],
     })
       .overrideTemplate(SessionsComponent, '')
