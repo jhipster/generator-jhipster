@@ -131,9 +131,10 @@ export default class NavbarComponent implements OnInit {
   toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
+<%_ if (applicationTypeGateway && microfrontend) { _%>
 
   loadMicrofrontendsEntities(): void {
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+    // Lazy load microfrontend entities.
   <%_ for (const remote of microfrontends) { _%>
     loadNavbarItems('<%= remote.lowercaseBaseName %>').then(
       async items => {
@@ -154,6 +155,6 @@ export default class NavbarComponent implements OnInit {
       }
     );
   <%_ } _%>
-<%_ } _%>
   }
+<%_ } _%>
 }
