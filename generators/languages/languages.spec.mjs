@@ -19,7 +19,6 @@ const createClientProject = options =>
   helpers
     .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
     .withOptions({
-      fromCli: true,
       skipInstall: true,
       defaults: true,
       ...options,
@@ -183,8 +182,7 @@ describe('JHipster generator languages', () => {
   });
   context('should create default i18n files for the native language and an additional language', () => {
     describe('by default', () => {
-      before(() => helpers.run(generatorPath).withOptions({ skipInstall: true, skipPrompts: true, baseName: 'jhipster' }));
-      containsLanguageFiles('fr');
+      before(() => helpers.run(generatorPath).withOptions({ skipInstall: true, reproducible: true, baseName: 'jhipster' }));
       containsLanguageFiles('en');
     });
     describe('using prompts', () => {
@@ -255,9 +253,8 @@ describe('JHipster generator languages', () => {
         createClientProject({
           localConfig: { clientFramework: 'vue', enableTranslation: true, nativeLanguage: 'en' },
         }).then(result =>
-          helpers
+          result
             .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
-            .setDir(result.cwd)
             .withOptions({ skipInstall: true, baseName: 'jhipster' })
             .withPrompts({
               languages: ['fr', 'de'],
@@ -282,9 +279,8 @@ describe('JHipster generator languages', () => {
         createClientProject({
           localConfig: { clientFramework: 'vue', enableTranslation: true, nativeLanguage: 'en' },
         }).then(result =>
-          helpers
+          result
             .create('jhipster:languages', {}, { createEnv: EnvironmentBuilder.createEnv })
-            .setDir(result.cwd)
             .withOptions({ skipInstall: true, languages: ['fr', 'de'], baseName: 'jhipster' })
             .run()
         )

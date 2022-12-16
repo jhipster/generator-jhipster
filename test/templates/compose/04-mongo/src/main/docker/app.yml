@@ -8,13 +8,13 @@ services:
             - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
             - SPRING_DATA_MONGODB_DATABASE=msmongodb
     mongodb:
-        image: <%= DOCKER_MONGODB %>
+        image: <%- dockerContainers.mongodb %>
         ports:
             - "27017:27017"
         # volumes:
         #     - ~/volumes/jhipster/msmongodb/mongodb/:/data/db/
     jhipster-registry:
-        image: <%= DOCKER_JHIPSTER_REGISTRY %>
+        image: <%- dockerContainers.jhipsterRegistry %>
         volumes:
             - ./central-server-config:/central-config
         # By default the JHipster Registry runs with the "dev" and "native"

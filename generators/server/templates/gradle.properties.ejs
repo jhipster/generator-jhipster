@@ -20,27 +20,35 @@ rootProject.name=<%= dasherizedBaseName %>
 profile=dev
 
 # Dependency versions
-jhipsterDependenciesVersion=<%= JHIPSTER_DEPENDENCIES_VERSION %>
+jhipsterDependenciesVersion=<%= jhipsterDependenciesVersion %>
 # The spring-boot version should match the one managed by
-# https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/<%= JHIPSTER_DEPENDENCIES_VERSION %>
+# https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/<%= jhipsterDependenciesVersion %>
 springBootVersion=<%= SPRING_BOOT_VERSION %>
 # The hibernate version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
-mapstructVersion=1.5.2.Final
-archunitJunit5Version=1.0.0
+mapstructVersion=1.5.3.Final
+archunitJunit5Version=1.0.1
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
-caffeineVersion=3.1.1
+caffeineVersion=3.1.2
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
 typesafeConfigVersion=1.4.2
 <%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-liquibaseHibernate5Version=<%= LIQUIBASE_VERSION %>
+<%_ if (enableLiquibase && databaseTypeSql && !reactive) { _%>
+liquibaseHibernate5Version=<%- javaDependencies.liquibase %>
+<%_ } _%>
+<%_ if (enableLiquibase) { _%>
 liquibaseTaskPrefix=liquibase
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
+hazelcastSpringVersion=<%- javaDependencies['hazelcast-spring'] %>
+  <%_ if (enableHibernateCache) { _%>
+hazelcastHibernate53Version=<%- javaDependencies['hazelcast-hibernate53'] %>
+  <%_ } _%>
 <%_ } _%>
 
 <%_ if (databaseTypeSql && reactive) { _%>
@@ -49,37 +57,37 @@ commonsBeanutilsVersion=1.9.4
 
 <%_ if (reactive) { _%>
 blockhoundJunitPlatformVersion=1.0.6.RELEASE
-junitPlatformLauncherVersion=1.9.0
+junitPlatformLauncherVersion=1.9.1
 <%_ } _%>
 
 <%_ if (databaseTypeSql) { _%>
-jaxbRuntimeVersion=4.0.0
+jaxbRuntimeVersion=4.0.1
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 # The cassandra driver version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %>
-cassandraDriverVersion=4.14.1
+cassandraDriverVersion=4.15.0
 <%_ } _%>
 
 # gradle plugin version
-jibPluginVersion=<%= JIB_VERSION %>
+jibPluginVersion=<%- javaDependencies['jib-maven-plugin'] %>
 gitPropertiesPluginVersion=2.4.1
 <%_ if (!skipClient) { _%>
-gradleNodePluginVersion=3.4.0
+gradleNodePluginVersion=3.5.0
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 liquibasePluginVersion=2.1.1
 <%_ } _%>
-sonarqubePluginVersion=3.4.0.2513
+sonarqubePluginVersion=3.5.0.2730
 <%_ if (enableSwaggerCodegen) { _%>
-openapiPluginVersion=6.0.1
+openapiPluginVersion=6.2.1
 <%_ } _%>
 noHttpCheckstyleVersion=0.0.10
-checkstyleVersion=10.3.2
+checkstyleVersion=10.4
 modernizerPluginVersion=1.6.2
 <%_ if (enableGradleEnterprise) { _%>
-gradleEnterprisePluginVersion=3.11.1
-gradleCommonCustomUserDataPluginVersion=1.8
+gradleEnterprisePluginVersion=3.11.4
+gradleCommonCustomUserDataPluginVersion=1.8.2
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 awaitilityVersion=4.2.0

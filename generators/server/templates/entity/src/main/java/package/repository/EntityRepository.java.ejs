@@ -97,14 +97,14 @@ public interface <%= entityClass %>Repository extends <% if (containsBagRelation
     }
     <%_ if (containsToOneEagerRelationship) { _%>
 
-    @Query(value = "select distinct <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
+    @Query(value = "select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
       for (const relationship of relationships) {
         if (relationship.relationshipEagerLoad && !relationship.bagRelationship) { %> left join fetch <%= entityInstanceDbSafe %>.<%= relationship.reference.name %><% }
       } %>",
-        countQuery = "select count(distinct <%= entityInstanceDbSafe %>) from <%= persistClass %> <%= entityInstanceDbSafe %>")
+        countQuery = "select count(<%= entityInstanceDbSafe %>) from <%= persistClass %> <%= entityInstanceDbSafe %>")
     Page<<%= persistClass %>> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select distinct <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
+    @Query("select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
       for (const relationship of relationships) {
         if (relationship.relationshipEagerLoad && !relationship.bagRelationship) { %> left join fetch <%= entityInstanceDbSafe %>.<%= relationship.reference.name %><% }
       } %>")

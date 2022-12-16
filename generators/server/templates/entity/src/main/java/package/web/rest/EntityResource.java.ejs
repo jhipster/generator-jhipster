@@ -45,9 +45,11 @@ import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
 import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
   <%_ } _%>
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering) {  _%>
+<%_ if (jpaMetamodelFiltering && !reactive) {  _%>
 import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 import <%= entityAbsolutePackage %>.service.<%= entityClass %>QueryService;
+<%_ } else if (jpaMetamodelFiltering && reactive) { _%>
+import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
 <%_ } _%>
 
 import tech.jhipster.web.util.HeaderUtil;
@@ -92,11 +94,11 @@ import reactor.core.publisher.Mono;
 <%_ } _%>
 
 <%_ if (validation) { _%>
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 <%_ } _%>
 
 <%_ if (validation && !readOnly) { _%>
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 <%_ } _%>
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -122,7 +124,7 @@ import java.util.stream.StreamSupport;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !reactive) { _%>
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.*;
 <%_ } _%>
 
 /**
@@ -152,7 +154,7 @@ public class <%= entityClass %>Resource {
     const instanceName = restInstance;
     const mapper = entityInstance  + 'Mapper';
     const entityToDtoReference = mapper + '::' + 'toDto';
-    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
+    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true, reactive: reactive}); -%>
 <%_ if (!readOnly) { _%>
 
     /**
@@ -364,7 +366,7 @@ public class <%= entityClass %>Resource {
 <%_ } _%>
 <%- include('../../common/get_all_template', {viaService}); -%>
 
-<%_ if (reactive && paginationNo) { _%>
+<%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
     /**
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %> as a stream.
      * @return the {@link Flux} of <%= entityInstancePlural %>.

@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
       - name: jhipster-grafana
-        image: <%= DOCKER_GRAFANA %>
+        image: <%- dockerContainers.grafana %>
         ports:
         - containerPort: 3000
           name: http
@@ -116,6 +116,6 @@ spec:
         backend:
           service:
             name: jhipster-grafana
-            port: 
+            port:
               number: 3000
 <%_ } _%>

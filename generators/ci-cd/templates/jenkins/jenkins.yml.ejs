@@ -19,7 +19,7 @@
 version: '2'
 services:
   jenkins:
-    image: <%= DOCKER_JENKINS %>
+    image: <%- dockerContainers.jenkins %>
     ports:
       - 49001:8080
       - 50000:50000

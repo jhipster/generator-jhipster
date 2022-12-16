@@ -35,7 +35,7 @@ module.exports = class extends needleClient {
     this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-entry', webappSrcDir);
   }
 
-  _addTranslationKey(key, value, language, errorMessage, needle, webappSrcDir = this.CLIENT_MAIN_SRC_DIR) {
+  _addTranslationKey(key, value, language, errorMessage, needle, webappSrcDir = this.clientSrcDir) {
     const fullErrorMessage = `${chalk.yellow(' Reference to ') + language} ${chalk.yellow(errorMessage)}`;
     const fullPath = `${webappSrcDir}i18n/${language}/global.json`;
     const rewriteFileModel = this.generateFileModel(fullPath, needle, `"${key}": "${value}",`);

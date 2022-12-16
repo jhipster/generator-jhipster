@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/en';
 import _ from 'lodash';
 
 import utils from '../utils.cjs';
@@ -25,7 +25,7 @@ import { cypressFiles, cypressEntityFiles } from './files.mjs';
 import constants from '../generator-constants.cjs';
 import { GENERATOR_CYPRESS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 
-import type { CypressApplication } from './types.js';
+import type { CypressApplication } from './types.mjs';
 import type {
   LoadingTaskGroup,
   PostWritingTaskGroup,
@@ -34,7 +34,7 @@ import type {
   PromptingTaskGroup,
   WritingEntitiesTaskGroup,
   WritingTaskGroup,
-} from '../base-application/tasks.js';
+} from '../base-application/tasks.mjs';
 
 const { stringHashCode } = utils;
 
@@ -53,7 +53,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
     this.loadRuntimeOptions();
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
@@ -63,10 +63,8 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
 
   get prompting(): PromptingTaskGroup<this> {
     return {
-      async askForCypressOptions() {
-        if (this.options.existingProject) {
-          return;
-        }
+      async askForCypressOptions({ control }) {
+        if (control.existingProject && !this.options.askAnswered) return;
         await (this.prompt as any)(
           [
             {
@@ -88,7 +86,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateToBlueprint ? {} : this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get loading(): LoadingTaskGroup<this, CypressApplication> {
@@ -102,7 +100,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateToBlueprint ? {} : this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing(): PreparingTaskGroup<this, CypressApplication> {
@@ -117,7 +115,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateToBlueprint ? {} : this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get preparingEachEntity(): PreparingEachEntityTaskGroup<this, CypressApplication> {
@@ -129,12 +127,12 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateToBlueprint ? {} : this.preparingEachEntity;
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get writing(): WritingTaskGroup<this, CypressApplication> {
     return {
-      cleanup({ application: { authenticationTypeOauth2, skipUserManagement, cypressDir } }) {
+      cleanup({ application: { authenticationTypeOauth2, generateUserManagement, cypressDir } }) {
         if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
           this.removeFile(`${cypressDir}support/keycloak-oauth2.ts`);
           this.removeFile(`${cypressDir}fixtures/users/user.json`);
@@ -148,7 +146,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
           if (!authenticationTypeOauth2) {
             this.removeFile(`${cypressDir}integration/account/login-page.spec.ts`);
           }
-          if (!skipUserManagement) {
+          if (generateUserManagement) {
             this.removeFile(`${cypressDir}integration/account/register-page.spec.ts`);
             this.removeFile(`${cypressDir}integration/account/settings-page.spec.ts`);
             this.removeFile(`${cypressDir}integration/account/password-page.spec.ts`);
@@ -170,7 +168,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateToBlueprint ? {} : this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get writingEntities(): WritingEntitiesTaskGroup<this, CypressApplication> {
@@ -195,7 +193,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateToBlueprint ? {} : this.writingEntities;
+    return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   get postWriting(): PostWritingTaskGroup<this, CypressApplication> {
@@ -284,6 +282,6 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateToBlueprint ? {} : this.postWriting;
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

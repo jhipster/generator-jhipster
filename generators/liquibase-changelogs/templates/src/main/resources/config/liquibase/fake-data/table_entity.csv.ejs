@@ -1,0 +1,94 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+let table = [];
+
+// Generate CSV header
+let header = [];
+const fieldsToGenerate = [...allFields.filter(f => f.id), ...fields.filter(f => !f.id)];
+for (field of fieldsToGenerate) {
+  header.push(field.columnName);
+  if (field.shouldCreateContentType) {
+    header.push(field.columnName + '_content_type');
+  }
+}
+for (relationship of relationships) {
+  const { relationshipType, joinColumnNames } = relationship;
+  if (
+    (relationshipType === "many-to-one"
+      || (relationshipType === "one-to-one" && relationship.ownerSide === true
+         && (relationship.id == null || relationship.id === false))
+    ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
+  ) {
+    header.push(joinColumnNames[0]);
+  }
+}
+table.push(header);
+
+// Generate CSV rows
+
+for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
+  const rowData = entity.liquibaseFakeData[lineNb];
+  let line = [];
+  for (field of fieldsToGenerate) {
+    let data = rowData[field.fieldName];
+    // manage required
+    if (data === undefined) {
+      if (field.id || (field.fieldValidateRules && field.fieldValidateRules.includes('required'))) {
+        // Remove row;
+        line = [];
+        break;
+      }
+      data = '';
+    }
+
+    line.push(data);
+    if (field.shouldCreateContentType) {
+      line.push('image/png');
+    }
+  }
+
+  for (relationship of relationships) {
+    const relationshipType = relationship.relationshipType;
+    if (
+      (relationshipType === "many-to-one"
+        || (relationshipType === "one-to-one" && relationship.ownerSide === true
+           && (relationship.id == null || relationship.id === false))
+      ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
+    ) {
+      const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
+      let relationshipRow = lineNb;
+      if (relationship.otherEntity.fakeDataCount > 0 && relationshipRow >= relationship.otherEntity.fakeDataCount && !relationship.unique) {
+        relationshipRow = entity.faker.datatype.number({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
+      }
+      if (relationshipRow < relationship.otherEntity.fakeDataCount) {
+        line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);
+      }
+    }
+  }
+  if (line.length === header.length) {
+    table.push(line);
+  }
+}
+
+let result = table
+      .map(line => line.join(';'))
+      .join('\n');
+_%>
+<%- result %>

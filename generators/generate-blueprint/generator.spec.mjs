@@ -21,12 +21,11 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
-import testSupport from '../../test/support/index.cjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
-const { testBlueprintSupport } = testSupport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,12 +33,15 @@ const __dirname = dirname(__filename);
 const generatorPath = join(__dirname, 'index.mjs');
 const generator = basename(__dirname);
 
+const mockedGenerators = ['jhipster:init'];
+
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    const generatorList = await import('../generator-list.mjs');
+    await expect(generatorList[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
@@ -48,7 +50,10 @@ describe(`JHipster ${generator} generator`, () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ defaults: true });
+        runResult = await helpers.run(generatorPath).withOptions({ defaults: true }).withMockedGenerators(mockedGenerators);
+      });
+      it('should compose with init generator', () => {
+        expect(runResult.mockedGenerators['jhipster:init'].calledOnce).toBe(true);
       });
       it('should write files and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -57,7 +62,10 @@ describe(`JHipster ${generator} generator`, () => {
     describe('all option', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ allGenerators: true });
+        runResult = await helpers.run(generatorPath).withOptions({ allGenerators: true }).withMockedGenerators(mockedGenerators);
+      });
+      it('should compose with init generator', () => {
+        expect(runResult.mockedGenerators['jhipster:init'].calledOnce).toBe(true);
       });
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -66,7 +74,10 @@ describe(`JHipster ${generator} generator`, () => {
     describe('local-blueprint option', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ localBlueprint: true });
+        runResult = await helpers.run(generatorPath).withOptions({ localBlueprint: true }).withMockedGenerators(mockedGenerators);
+      });
+      it('should not compose with init generator', () => {
+        expect(runResult.mockedGenerators['jhipster:init'].calledOnce).toBe(false);
       });
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
@@ -81,7 +92,13 @@ Object {
     describe('local-blueprint option and app generator', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ localBlueprint: true, subGenerators: ['app'], allPriorities: true });
+        runResult = await helpers
+          .run(generatorPath)
+          .withOptions({ localBlueprint: true, subGenerators: ['app'], allPriorities: true })
+          .withMockedGenerators(mockedGenerators);
+      });
+      it('should not compose with init generator', () => {
+        expect(runResult.mockedGenerators['jhipster:init'].calledOnce).toBe(false);
       });
       it('should write java files with gradle build tool and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`

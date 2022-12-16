@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (databaseTypeCassandra && (!skipUserManagement || authenticationTypeOauth2)) { _%>
+<%_ if (databaseTypeCassandra && (generateBuiltInUserEntity)) { _%>
 CREATE TABLE IF NOT EXISTS user (
     id text,
     login text,

@@ -140,12 +140,12 @@ const defaultCommands = {
     jhipster jdl myfile1.jdl myfile2.jdl
     jhipster jdl https://gist.githubusercontent.com/user/path/app.jdl
     jhipster jdl jdl-name-from-jdl-samples-repo.jdl (just pass any file name from https://github.com/jhipster/jdl-samples)
-    jhipster jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
+    jhipster jdl --inline "application { config { baseName jhapp, testFrameworks [cypress] }}"
     jhipster jdl --inline \\
         "application {
             config {
                 baseName jhapp,
-                testFrameworks [protractor]
+                testFrameworks [cypress]
             }
         }"
     `,

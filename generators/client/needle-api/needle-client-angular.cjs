@@ -24,17 +24,17 @@ const jhipsterUtils = require('../../utils.cjs');
 
 module.exports = class extends needleClientBase {
   addGlobalSCSSStyle(style, comment) {
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}content/scss/global.scss`;
+    const filePath = `${this.clientSrcDir}content/scss/global.scss`;
     this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
   }
 
   addVendorSCSSStyle(style, comment) {
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`;
+    const filePath = `${this.clientSrcDir}content/scss/vendor.scss`;
     super.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-vendor');
   }
 
   addModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
-    const modulePath = `${this.CLIENT_MAIN_SRC_DIR}app/app.module.ts`;
+    const modulePath = `${this.clientSrcDir}app/app.module.ts`;
     const importNeedle = 'jhipster-needle-angular-add-module-import';
     const moduleNeedle = 'jhipster-needle-angular-add-module';
 
@@ -52,7 +52,7 @@ module.exports = class extends needleClientBase {
   }
 
   addToAdminModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
-    const adminModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`;
+    const adminModulePath = `${this.clientSrcDir}app/admin/admin-routing.module.ts`;
     const importNeedle = 'jhipster-needle-add-admin-module-import';
     const moduleNeedle = 'jhipster-needle-add-admin-module';
 
@@ -122,7 +122,7 @@ module.exports = class extends needleClientBase {
   }
 
   addIcon(iconName) {
-    const iconsPath = `${this.CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`;
+    const iconsPath = `${this.clientSrcDir}app/config/font-awesome-icons.ts`;
     const iconImport = `fa${this.generator.upperFirstCamelCase(iconName)}`;
     if (!jhipsterUtils.checkRegexInFile(iconsPath, new RegExp(`\\b${iconImport}\\b`), this.generator)) {
       try {
@@ -155,7 +155,7 @@ module.exports = class extends needleClientBase {
     jhiPrefix = 'jhi'
   ) {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
-    const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
+    const entityMenuPath = `${this.clientSrcDir}app/layouts/navbar/navbar.component.html`;
     const routerLink = `routerLink="${routerName}"`;
     const entityEntry =
       // prettier-ignore
@@ -173,7 +173,7 @@ module.exports = class extends needleClientBase {
 
   addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName, jhiPrefix = 'jhi') {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
-    const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
+    const entityMenuPath = `${this.clientSrcDir}app/layouts/navbar/navbar.component.html`;
     const routerLink = `routerLink="${routerName}"`;
     // prettier-ignore
     const entityEntry = `<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
@@ -191,7 +191,7 @@ module.exports = class extends needleClientBase {
 
   addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName, jhiPrefix = 'jhi') {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to admin menu.\n')}`;
-    const navbarAdminPath = `${this.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
+    const navbarAdminPath = `${this.clientSrcDir}app/layouts/navbar/navbar.component.html`;
     const routerLink = `routerLink="${routerName}"`;
     // prettier-ignore
     const entityEntry = `<li>
@@ -230,7 +230,7 @@ module.exports = class extends needleClientBase {
   }
 
   addEntityToModule(entityAngularName, entityFolderName, entityFileName, entityUrl, microserviceName, pageTitle) {
-    const entityModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`;
+    const entityModulePath = `${this.clientSrcDir}app/entities/entity-routing.module.ts`;
     try {
       const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, `path: '${entityUrl}'`, this.generator);
 
@@ -248,7 +248,7 @@ module.exports = class extends needleClientBase {
   }
 
   addAdminRoute(route, modulePath, moduleName, pageTitle) {
-    const adminModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`;
+    const adminModulePath = `${this.clientSrcDir}app/admin/admin-routing.module.ts`;
     this._addRoute(route, modulePath, moduleName, 'jhipster-needle-add-admin-route', adminModulePath, pageTitle);
   }
 };

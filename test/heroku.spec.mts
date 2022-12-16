@@ -6,7 +6,7 @@ import ChildProcess from 'child_process';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import constants from '../generators/generator-constants.cjs';
-import { getTemplatePath, getGenerator } from './support/index.cjs';
+import { getTemplatePath, getGenerator } from './support/index.mjs';
 
 const expectedFiles = {
   monolith: [
@@ -59,7 +59,7 @@ describe('JHipster Heroku Sub Generator', () => {
             herokuJHipsterRegistryApp: 'sushi',
             herokuJHipsterRegistryUsername: 'admin',
             herokuJHipsterRegistryPassword: 'changeme',
-            herokuJavaVersion: '11',
+            herokuJavaVersion: '17',
             useOkta: false,
           })
           .run();

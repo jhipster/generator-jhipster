@@ -2,28 +2,13 @@
 
 exports[`JHipster generate-blueprint generator with all option should match snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintrc.json": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
     "stateCleared": "modified",
   },
   ".github/workflows/generator.yml": Object {
     "stateCleared": "modified",
   },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
   ".mocharc.cjs": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc.yml": Object {
     "stateCleared": "modified",
   },
   ".yo-rc.json": Object {
@@ -35,16 +20,16 @@ Object {
   "cli/cli.mjs": Object {
     "stateCleared": "modified",
   },
-  "generators/add/generator.mjs": Object {
+  "generators/angular/generator.mjs": Object {
     "stateCleared": "modified",
   },
-  "generators/add/generator.spec.mjs": Object {
+  "generators/angular/generator.spec.mjs": Object {
     "stateCleared": "modified",
   },
-  "generators/add/index.mjs": Object {
+  "generators/angular/index.mjs": Object {
     "stateCleared": "modified",
   },
-  "generators/add/templates/template-file-add.ejs": Object {
+  "generators/angular/templates/template-file-angular.ejs": Object {
     "stateCleared": "modified",
   },
   "generators/app/generator.mjs": Object {
@@ -105,6 +90,18 @@ Object {
     "stateCleared": "modified",
   },
   "generators/base-application/templates/template-file-base-application.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-docker/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-docker/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-docker/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base-docker/templates/template-file-base-docker.ejs": Object {
     "stateCleared": "modified",
   },
   "generators/base/generator.mjs": Object {
@@ -227,6 +224,18 @@ Object {
   "generators/common/templates/template-file-common.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/couchbase/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/couchbase/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/couchbase/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/couchbase/templates/template-file-couchbase.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/cypress/generator.mjs": Object {
     "stateCleared": "modified",
   },
@@ -239,30 +248,6 @@ Object {
   "generators/cypress/templates/template-file-cypress.ejs": Object {
     "stateCleared": "modified",
   },
-  "generators/database-changelog-liquibase/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/database-changelog-liquibase/generator.spec.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/database-changelog-liquibase/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/database-changelog-liquibase/templates/template-file-database-changelog-liquibase.ejs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/database-changelog/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/database-changelog/generator.spec.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/database-changelog/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/database-changelog/templates/template-file-database-changelog.ejs": Object {
-    "stateCleared": "modified",
-  },
   "generators/docker-compose/generator.mjs": Object {
     "stateCleared": "modified",
   },
@@ -273,6 +258,18 @@ Object {
     "stateCleared": "modified",
   },
   "generators/docker-compose/templates/template-file-docker-compose.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/docker/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/docker/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/docker/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/docker/templates/template-file-docker.ejs": Object {
     "stateCleared": "modified",
   },
   "generators/entities/generator.mjs": Object {
@@ -332,6 +329,18 @@ Object {
   "generators/generate-blueprint/templates/template-file-generate-blueprint.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/git/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/git/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/git/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/git/templates/template-file-git.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/gradle/generator.mjs": Object {
     "stateCleared": "modified",
   },
@@ -380,16 +389,16 @@ Object {
   "generators/init/templates/template-file-init.ejs": Object {
     "stateCleared": "modified",
   },
-  "generators/java/generator.mjs": Object {
+  "generators/kafka/generator.mjs": Object {
     "stateCleared": "modified",
   },
-  "generators/java/generator.spec.mjs": Object {
+  "generators/kafka/generator.spec.mjs": Object {
     "stateCleared": "modified",
   },
-  "generators/java/index.mjs": Object {
+  "generators/kafka/index.mjs": Object {
     "stateCleared": "modified",
   },
-  "generators/java/templates/template-file-java.ejs": Object {
+  "generators/kafka/templates/template-file-kafka.ejs": Object {
     "stateCleared": "modified",
   },
   "generators/kubernetes-helm/generator.mjs": Object {
@@ -438,6 +447,30 @@ Object {
     "stateCleared": "modified",
   },
   "generators/languages/templates/template-file-languages.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase-changelogs/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase-changelogs/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase-changelogs/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase-changelogs/templates/template-file-liquibase-changelogs.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/liquibase/templates/template-file-liquibase.ejs": Object {
     "stateCleared": "modified",
   },
   "generators/maven/generator.mjs": Object {
@@ -500,6 +533,18 @@ Object {
   "generators/project-name/templates/template-file-project-name.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/react/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/react/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/react/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/react/templates/template-file-react.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/server/generator.mjs": Object {
     "stateCleared": "modified",
   },
@@ -510,18 +555,6 @@ Object {
     "stateCleared": "modified",
   },
   "generators/server/templates/template-file-server.ejs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/spring-boot/generator.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/spring-boot/generator.spec.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/spring-boot/index.mjs": Object {
-    "stateCleared": "modified",
-  },
-  "generators/spring-boot/templates/template-file-spring-boot.ejs": Object {
     "stateCleared": "modified",
   },
   "generators/spring-controller/generator.mjs": Object {
@@ -560,6 +593,18 @@ Object {
   "generators/upgrade/templates/template-file-upgrade.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/vue/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/vue/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/vue/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/vue/templates/template-file-vue.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/workspaces/generator.mjs": Object {
     "stateCleared": "modified",
   },
@@ -583,28 +628,13 @@ Object {
 
 exports[`JHipster generate-blueprint generator with default config should write files and match snapshot 1`] = `
 Object {
-  ".editorconfig": Object {
-    "stateCleared": "modified",
-  },
   ".eslintrc.json": Object {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": Object {
     "stateCleared": "modified",
   },
   ".github/workflows/generator.yml": Object {
     "stateCleared": "modified",
   },
-  ".gitignore": Object {
-    "stateCleared": "modified",
-  },
   ".mocharc.cjs": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": Object {
-    "stateCleared": "modified",
-  },
-  ".prettierrc.yml": Object {
     "stateCleared": "modified",
   },
   ".yo-rc.json": Object {

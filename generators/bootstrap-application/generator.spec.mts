@@ -22,7 +22,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import Generator from './index.mjs';
-import { dryRunHelpers as helpers } from '../../test/utils/utils.mjs';
+import { dryRunHelpers as helpers } from '../../test/support/helpers.mjs';
 import fieldTypes from '../../jdl/jhipster/field-types.js';
 
 const {
@@ -85,10 +85,10 @@ const expectedEntity = entity => ({
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
 
@@ -144,7 +144,7 @@ Object {
 `);
       });
       it('should prepare entities', () => {
-        expect(Object.keys(runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities)).toMatchInlineSnapshot(`
+        expect(Object.keys(runResult.generator.sharedData.getEntitiesMap())).toMatchInlineSnapshot(`
 Array [
   "User",
   "EntityA",
@@ -152,7 +152,7 @@ Array [
 `);
       });
       it('should prepare User', () => {
-        const entity = runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities.User;
+        const entity = runResult.generator.sharedData.getEntitiesMap().User;
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
@@ -181,7 +181,7 @@ Object {
   "eagerRelations": Array [],
   "embedded": false,
   "entityAbsoluteClass": "com.mycompany.myapp.domain.User",
-  "entityAbsoluteFolder": "com/mycompany/myapp",
+  "entityAbsoluteFolder": "com/mycompany/myapp/",
   "entityAbsolutePackage": "com.mycompany.myapp",
   "entityAngularJSSuffix": undefined,
   "entityAngularName": "User",
@@ -199,6 +199,7 @@ Object {
   "entityInstance": "user",
   "entityInstanceDbSafe": "jhiUser",
   "entityInstancePlural": "users",
+  "entityJavaPackageFolder": "com/mycompany/myapp/",
   "entityModelFileName": "user",
   "entityNameCapitalized": "User",
   "entityNamePlural": "Users",
@@ -537,7 +538,6 @@ Object {
   "fluentMethods": true,
   "frontendAppName": "jhipsterApp",
   "generateFakeData": Any<Function>,
-  "hasOauthUser": false,
   "haveFieldWithJavadoc": false,
   "i18nAlertHeaderPrefix": "jhipsterApp.user",
   "i18nKeyPrefix": "jhipsterApp.user",
@@ -567,7 +567,7 @@ Object {
   "otherEntityPrimaryKeyTypesIncludesUUID": false,
   "otherReferences": Any<Array>,
   "otherRelationships": Array [],
-  "packageFolder": "com/mycompany/myapp",
+  "packageFolder": "com/mycompany/myapp/",
   "packageName": "com.mycompany.myapp",
   "pagination": "no",
   "paginationInfiniteScroll": false,
@@ -629,7 +629,6 @@ Object {
   "serviceNo": true,
   "skipUiGrouping": false,
   "springDataDescription": "Spring Data JPA",
-  "testsNeedCsrf": false,
   "tsKeyType": "number",
   "uniqueEnums": Object {},
   "updatableEntity": true,
@@ -642,7 +641,7 @@ Object {
         );
       });
       it('should prepare EntityA', () => {
-        const entity = runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities.EntityA;
+        const entity = runResult.generator.sharedData.getEntitiesMap().EntityA;
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
@@ -652,7 +651,6 @@ Object {
   "authenticationType": "jwt",
   "baseName": "jhipster",
   "blobFields": Any<Array>,
-  "builtInUser": false,
   "changelogDate": "20220129025419",
   "changelogDateForRecent": 2022-01-29T02:54:19.000Z,
   "clientFramework": "angular",
@@ -669,7 +667,7 @@ Object {
   "eagerRelations": Array [],
   "embedded": false,
   "entityAbsoluteClass": "com.mycompany.myapp.domain.EntityA",
-  "entityAbsoluteFolder": "com/mycompany/myapp",
+  "entityAbsoluteFolder": "com/mycompany/myapp/",
   "entityAbsolutePackage": "com.mycompany.myapp",
   "entityAngularJSSuffix": undefined,
   "entityAngularName": "EntityA",
@@ -687,6 +685,7 @@ Object {
   "entityInstance": "entityA",
   "entityInstanceDbSafe": "entityA",
   "entityInstancePlural": "entityAS",
+  "entityJavaPackageFolder": "com/mycompany/myapp/",
   "entityModelFileName": "entity-a",
   "entityNameCapitalized": "EntityA",
   "entityNamePlural": "EntityAS",
@@ -809,7 +808,6 @@ Object {
   "fluentMethods": true,
   "frontendAppName": "jhipsterApp",
   "generateFakeData": Any<Function>,
-  "hasOauthUser": false,
   "haveFieldWithJavadoc": false,
   "i18nAlertHeaderPrefix": "jhipsterApp.entityA",
   "i18nKeyPrefix": "jhipsterApp.entityA",
@@ -832,7 +830,7 @@ Object {
   "otherEntityPrimaryKeyTypesIncludesUUID": false,
   "otherReferences": Any<Array>,
   "otherRelationships": Array [],
-  "packageFolder": "com/mycompany/myapp",
+  "packageFolder": "com/mycompany/myapp/",
   "packageName": "com.mycompany.myapp",
   "pagination": "no",
   "paginationInfiniteScroll": false,
@@ -897,7 +895,6 @@ Object {
   "serviceNo": true,
   "skipUiGrouping": false,
   "springDataDescription": "Spring Data JPA",
-  "testsNeedCsrf": false,
   "tsKeyType": "string",
   "uniqueEnums": Object {},
   "updatableEntity": false,
@@ -959,14 +956,14 @@ Object {
 `);
       });
       it('should prepare entities', () => {
-        expect(Object.keys(runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities)).toMatchInlineSnapshot(`
+        expect(Object.keys(runResult.generator.sharedData.getEntitiesMap())).toMatchInlineSnapshot(`
 Array [
   "EntityA",
 ]
 `);
       });
       it('should prepare EntityA', () => {
-        const entity = runResult.env.sharedOptions.sharedData.applications.jhipster.sharedEntities.EntityA;
+        const entity = runResult.generator.sharedData.getEntitiesMap().EntityA;
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
@@ -976,7 +973,6 @@ Object {
   "authenticationType": "jwt",
   "baseName": "jhipster",
   "blobFields": Any<Array>,
-  "builtInUser": false,
   "changelogDate": "20220129025419",
   "changelogDateForRecent": 2022-01-29T02:54:19.000Z,
   "clientFramework": "angular",
@@ -993,7 +989,7 @@ Object {
   "eagerRelations": Array [],
   "embedded": false,
   "entityAbsoluteClass": "com.mycompany.myapp.domain.EntityA",
-  "entityAbsoluteFolder": "com/mycompany/myapp",
+  "entityAbsoluteFolder": "com/mycompany/myapp/",
   "entityAbsolutePackage": "com.mycompany.myapp",
   "entityAngularJSSuffix": undefined,
   "entityAngularName": "EntityA",
@@ -1011,6 +1007,7 @@ Object {
   "entityInstance": "entityA",
   "entityInstanceDbSafe": "entityA",
   "entityInstancePlural": "entityAS",
+  "entityJavaPackageFolder": "com/mycompany/myapp/",
   "entityModelFileName": "entity-a",
   "entityNameCapitalized": "EntityA",
   "entityNamePlural": "EntityAS",
@@ -1133,7 +1130,6 @@ Object {
   "fluentMethods": true,
   "frontendAppName": "jhipsterApp",
   "generateFakeData": Any<Function>,
-  "hasOauthUser": false,
   "haveFieldWithJavadoc": false,
   "i18nAlertHeaderPrefix": "jhipsterApp.entityA",
   "i18nKeyPrefix": "jhipsterApp.entityA",
@@ -1156,7 +1152,7 @@ Object {
   "otherEntityPrimaryKeyTypesIncludesUUID": false,
   "otherReferences": Any<Array>,
   "otherRelationships": Array [],
-  "packageFolder": "com/mycompany/myapp",
+  "packageFolder": "com/mycompany/myapp/",
   "packageName": "com.mycompany.myapp",
   "pagination": "no",
   "paginationInfiniteScroll": false,
@@ -1221,7 +1217,6 @@ Object {
   "serviceNo": true,
   "skipUiGrouping": false,
   "springDataDescription": "Spring Data JPA",
-  "testsNeedCsrf": false,
   "tsKeyType": "string",
   "uniqueEnums": Object {},
   "updatableEntity": false,

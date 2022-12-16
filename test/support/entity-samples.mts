@@ -1,10 +1,13 @@
-import { CommonDBTypes } from '../../jdl/jhipster/field-types.js';
+import fieldTypes from '../../jdl/jhipster/field-types.js';
 
-const { UUID } = CommonDBTypes;
+const {
+  CommonDBTypes: { UUID },
+} = fieldTypes;
 
 export const entitySimple = {
   name: 'Simple',
   changelogDate: '20220129000100',
+  jpaMetamodelFiltering: true,
   fields: [{ fieldName: 'simpleName', fieldType: 'String' }],
 };
 

@@ -1,5 +1,5 @@
 @ChangelogDate(20200804035352)
-entity JdlFieldTest {
+entity MapstructExpressionTest {
   id Long
 
   name String
@@ -8,4 +8,11 @@ entity JdlFieldTest {
   value String
 }
 
-dto JdlFieldTest with mapstruct
+@ChangelogDate(20200804035353)
+entity MapstructExpressionRelatedFieldTest
+
+relationship OneToMany {
+  MapstructExpressionTest to MapstructExpressionRelatedFieldTest{parent(value)}
+}
+
+dto MapstructExpressionTest,MapstructExpressionRelatedFieldTest with mapstruct

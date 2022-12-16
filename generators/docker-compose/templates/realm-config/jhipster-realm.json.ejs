@@ -105,7 +105,9 @@
       }
     ],
     "client": {
+<%_ if (includesApplicationTypeGateway) { _%>
       "internal": [],
+<%_ } _%>
       "realm-management": [
         {
           "id": "a6249a12-d76c-4514-b137-e3018b243e25",
@@ -405,6 +407,15 @@
           "attributes": {}
         },
         {
+          "id": "16925eed-a410-4241-9af8-cc7992c42f7a",
+          "name": "view-groups",
+          "description": "${role_view-groups}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "6cc5a716-0880-47dc-b714-9a4967246b2f",
+          "attributes": {}
+        },
+        {
           "id": "a7f45fab-19c3-4c48-aca3-85f828ca0fed",
           "name": "manage-account-links",
           "description": "${role_manage-account-links}",
@@ -457,9 +468,10 @@
   "otpPolicyDigits": 6,
   "otpPolicyLookAheadWindow": 1,
   "otpPolicyPeriod": 30,
+  "otpPolicyCodeReusable": false,
   "otpSupportedApplications": [
-    "FreeOTP",
-    "Google Authenticator"
+    "totpAppGoogleName",
+    "totpAppFreeOTPName"
   ],
   "webAuthnPolicyRpEntityName": "keycloak",
   "webAuthnPolicySignatureAlgorithms": [
@@ -516,7 +528,8 @@
       {
         "client": "account-console",
         "roles": [
-          "manage-account"
+          "manage-account",
+          "view-groups"
         ]
       }
     ]
@@ -532,7 +545,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= keycloakSecrets[0] %>",
       "redirectUris": [
         "/realms/jhipster/account/*"
       ],
@@ -576,7 +589,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= keycloakSecrets[1] %>",
       "redirectUris": [
         "/realms/jhipster/account/*"
       ],
@@ -629,7 +642,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= keycloakSecrets[2] %>",
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -669,7 +682,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= keycloakSecrets[3] %>",
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -701,6 +714,7 @@
         "microprofile-jwt"
       ]
     },
+<%_ if (includesApplicationTypeGateway) { _%>
     {
       "id": "10e6ea34-9f1e-49ef-8e28-7eb851459694",
       "clientId": "internal",
@@ -800,6 +814,7 @@
         "microprofile-jwt"
       ]
     },
+<%_ } _%>
     {
       "id": "1acf7ad0-68cb-46a6-a3e4-8b2f2abecb85",
       "clientId": "jhipster-control-center",
@@ -932,7 +947,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= keycloakSecrets[4] %>",
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -974,7 +989,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "<%= keycloakSecrets[5] %>",
       "redirectUris": [
         "/admin/jhipster/console/*"
       ],
@@ -2507,10 +2522,11 @@
     "parRequestUriLifespan": "60",
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5",
+    "realmReusableOtpCode": "false",
     "frontendUrl": "",
     "acr.loa.map": "[]"
   },
-  "keycloakVersion": "19.0.1",
+  "keycloakVersion": "20.0.1",
   "userManagedAccessAllowed": false,
   "clientProfiles": {
     "profiles": []

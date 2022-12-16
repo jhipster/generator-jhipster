@@ -1,12 +1,12 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
-import ServerGenerator from '../../generators/server/index.cjs';
+import ServerGenerator from '../../generators/server/index.mjs';
 import constants from '../../generators/generator-constants.cjs';
 import { getGenerator } from '../support/index.mjs';
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };
+const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ServerGenerator {

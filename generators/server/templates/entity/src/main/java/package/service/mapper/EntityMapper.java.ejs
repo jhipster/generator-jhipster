@@ -109,9 +109,17 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= dtoClass %>, 
     @Mapping(target = "<%= field.propertyName %>", source = "<%= field.propertyName %>")
     <%_ } _%>
     <%_ if (!relatedField.id) { _%>
+      <%_ if (relatedField.mapstructExpression) { _%>
+    @Mapping(target = "<%= relatedField.propertyName %>", expression = "<%- relatedField.mapstructExpression %>")
+      <%_ } else { _%>
     @Mapping(target = "<%= relatedField.propertyName %>", source = "<%= relatedField.propertyName %>")
+      <%_ } _%>
     <%_ } _%>
+      <%_ if (relatedField.mapstructExpression) { _%>
+    <%- otherEntity.dtoClass %> toDto<%= this._.upperFirst(mapperName) %>(<%- otherEntity.persistClass %> s);
+    <%_ } else { _%>
     <%- otherEntity.dtoClass %> toDto<%= this._.upperFirst(mapperName) %>(<%- otherEntity.persistClass %> <%= otherEntity.persistInstance %>);
+      <%_ } _%>
     <%_ if (collection) { %>
       <%_ const collectionMapperName = otherEntity.entityInstance + this._.upperFirst(relatedField.propertyName) + 'Set'; _%>
 

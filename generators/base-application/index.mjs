@@ -20,4 +20,4 @@
 /*
  * Register generator-base at yeoman-environment
  */
-export { default } from './generator.cjs';
+export { default } from './generator.mjs';

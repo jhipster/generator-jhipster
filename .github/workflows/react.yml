@@ -27,10 +27,11 @@ on:
     branches-ignore:
       - 'dependabot/**'
       - 'skip_ci*'
+      - 'revert-*'
     paths-ignore:
       - 'package*.json'
-      - 'generators/*client/templates/angular/**'
-      - 'generators/*client/templates/vue/**'
+      - 'generators/angular/**'
+      - 'generators/vue/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:
@@ -199,7 +200,7 @@ jobs:
       - name: 'TESTS: packaging'
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:package
-        timeout-minutes: 7
+        timeout-minutes: 12
       - name: 'TESTS: Start docker compose containers for e2e tests'
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:prepare

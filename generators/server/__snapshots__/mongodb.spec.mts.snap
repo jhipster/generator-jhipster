@@ -41,19 +41,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -68,49 +56,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -129,9 +75,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/CRLFLogConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/CacheConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/Constants.java": Object {
@@ -159,6 +102,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/package/config/SecurityJwtConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/WebConfigurer.java": Object {
@@ -221,13 +167,7 @@ Object {
   "src/main/java/com/package/security/UserNotActivatedException.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/jwt/JWTFilter.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/jwt/JWTRelayGatewayFilterFactory.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/security/jwt/TokenProvider.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/package-info.java": Object {
@@ -293,13 +233,13 @@ Object {
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/web/rest/AuthenticateController.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/web/rest/PublicUserResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/SimpleResource.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/rest/UserJWTController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/UserResource.java": Object {
@@ -419,13 +359,16 @@ Object {
   "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/JWTFilterTest.java": Object {
+  "src/test/java/com/package/security/jwt/AuthenticationIntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/MailServiceIT.java": Object {
@@ -449,6 +392,9 @@ Object {
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/rest/AuthenticateControllerIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/PublicUserResourceIT.java": Object {
     "stateCleared": "modified",
   },
@@ -456,9 +402,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/TestUtil.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/web/rest/UserJWTControllerIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/UserResourceIT.java": Object {
@@ -520,25 +463,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -553,67 +481,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/GeneratedByJHipster.java": Object {
@@ -632,9 +500,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/CacheConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": Object {
@@ -841,9 +706,6 @@ Object {
   "src/main/resources/config/bootstrap.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
@@ -993,31 +855,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
-    "stateCleared": "modified",
-  },
-  "npmw": Object {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
@@ -1026,49 +867,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -1125,7 +924,7 @@ Object {
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": Object {
+  "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
@@ -1179,25 +978,10 @@ Object {
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/security/DomainUserDetailsService.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/SecurityUtils.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/SpringSecurityAuditorAware.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/UserNotActivatedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/jwt/JWTConfigurer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/jwt/JWTFilter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/jwt/TokenProvider.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/package-info.java": Object {
@@ -1206,34 +990,7 @@ Object {
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/MailService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UserService.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/UserDTO.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": Object {
@@ -1254,13 +1011,7 @@ Object {
   "src/main/java/tech/jhipster/service/package-info.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
@@ -1269,13 +1020,7 @@ Object {
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": Object {
@@ -1287,19 +1032,10 @@ Object {
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/errors/package-info.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": Object {
@@ -1338,15 +1074,6 @@ Object {
   "src/main/resources/templates/error.html": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/passwordResetEmail.html": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
@@ -1363,9 +1090,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": Object {
@@ -1395,25 +1119,22 @@ Object {
   "src/test/java/tech/jhipster/management/SecurityMetersServiceTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/security/jwt/JWTFilterTest.java": Object {
+  "src/test/java/tech/jhipster/security/jwt/AuthenticationIntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/tech/jhipster/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/tech/jhipster/security/jwt/TestAuthenticationResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/MailServiceIT.java": Object {
+  "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationIT.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/UserServiceIT.java": Object {
+  "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": Object {
@@ -1422,28 +1143,13 @@ Object {
   "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": Object {
@@ -1461,9 +1167,6 @@ Object {
   "src/test/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/i18n/messages_en.properties": Object {
-    "stateCleared": "modified",
-  },
   "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
@@ -1471,18 +1174,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/tech/jhipster/cucumber/gitkeep": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/activationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/creationEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/passwordResetEmail.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/testEmail.html": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/testcontainers.properties": Object {
@@ -1532,25 +1223,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
-    "stateCleared": "modified",
-  },
-  "npmw": Object {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
@@ -1559,61 +1232,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -1667,6 +1286,9 @@ Object {
   "src/main/java/com/package/config/SecurityConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/config/SecurityJwtConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/config/WebConfigurer.java": Object {
     "stateCleared": "modified",
   },
@@ -1706,12 +1328,6 @@ Object {
   "src/main/java/com/package/security/SecurityUtils.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/jwt/JWTFilter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -1731,9 +1347,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
@@ -1835,13 +1448,19 @@ Object {
   "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/JWTFilterTest.java": Object {
+  "src/test/java/com/package/security/jwt/AuthenticationIntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/package/security/jwt/TestAuthenticationResource.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
@@ -1906,31 +1525,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
-    "stateCleared": "modified",
-  },
-  "npmw": Object {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
@@ -1939,61 +1537,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -2057,9 +1601,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": Object {
@@ -2170,9 +1711,6 @@ Object {
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
     "stateCleared": "modified",
   },
@@ -2269,9 +1807,6 @@ Object {
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
@@ -2312,9 +1847,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
@@ -2400,25 +1932,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
-    "stateCleared": "modified",
-  },
-  "npmw": Object {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
@@ -2427,61 +1941,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -2629,9 +2089,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/service/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/web/filter/SpaWebFilter.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
@@ -2828,25 +2285,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -2861,61 +2303,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -2964,6 +2352,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": Object {
@@ -3032,15 +2423,6 @@ Object {
   "src/main/java/tech/jhipster/security/UserNotActivatedException.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/security/jwt/JWTConfigurer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/jwt/JWTFilter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -3101,6 +2483,9 @@ Object {
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
@@ -3108,9 +2493,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/UserJWTController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserResource.java": Object {
@@ -3242,13 +2624,16 @@ Object {
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/security/jwt/JWTFilterTest.java": Object {
+  "src/test/java/tech/jhipster/security/jwt/AuthenticationIntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/tech/jhipster/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/MailServiceIT.java": Object {
@@ -3272,6 +2657,9 @@ Object {
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
@@ -3282,9 +2670,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/UserJWTControllerIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": Object {
@@ -3376,19 +2761,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -3403,46 +2776,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -3493,6 +2827,9 @@ Object {
   "src/main/java/com/package/config/SecurityConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/package/config/SecurityJwtConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/package/config/WebConfigurer.java": Object {
     "stateCleared": "modified",
   },
@@ -3532,12 +2869,6 @@ Object {
   "src/main/java/com/package/security/SecurityUtils.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/jwt/JWTFilter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -3568,10 +2899,10 @@ Object {
   "src/main/java/com/package/web/rest/AnotherSimpleResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
+  "src/main/java/com/package/web/rest/AuthenticateController.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/UserJWTController.java": Object {
+  "src/main/java/com/package/web/rest/SimpleResource.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": Object {
@@ -3670,13 +3001,16 @@ Object {
   "src/test/java/com/package/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/JWTFilterTest.java": Object {
+  "src/test/java/com/package/security/jwt/AuthenticationIntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": Object {
@@ -3691,13 +3025,13 @@ Object {
   "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/web/rest/AuthenticateControllerIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/TestUtil.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/web/rest/UserJWTControllerIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": Object {
@@ -3747,25 +3081,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -3780,52 +3099,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -4050,9 +3324,6 @@ Object {
   "src/main/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
@@ -4220,19 +3491,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -4247,67 +3506,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/docker-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-registry.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/keycloak.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/realm-config/jhipster-realm.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -4532,9 +3731,6 @@ Object {
   "src/main/resources/config/bootstrap.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/data/user.csv": Object {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/tls/keystore.p12": Object {
     "stateCleared": "modified",
   },
@@ -4681,25 +3877,10 @@ Object {
   ".jhipster/Simple.json": Object {
     "stateCleared": "modified",
   },
-  ".mvn/jvm.config": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  ".mvn/wrapper/maven-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
   "checkstyle.xml": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw": Object {
-    "stateCleared": "modified",
-  },
-  "mvnw.cmd": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -4714,46 +3895,7 @@ Object {
   "pom.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": Object {
@@ -5193,19 +4335,7 @@ Object {
   "gradle/war.gradle": Object {
     "stateCleared": "modified",
   },
-  "gradle/wrapper/gradle-wrapper.jar": Object {
-    "stateCleared": "modified",
-  },
-  "gradle/wrapper/gradle-wrapper.properties": Object {
-    "stateCleared": "modified",
-  },
   "gradle/zipkin.gradle": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew": Object {
-    "stateCleared": "modified",
-  },
-  "gradlew.bat": Object {
     "stateCleared": "modified",
   },
   "npmw": Object {
@@ -5220,61 +4350,7 @@ Object {
   "settings.gradle": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/app.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/README.md": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/central-server-config/application.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/git2consul.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jhipster-control-center.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/MongoDB.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/mongodb/scripts/init_replicaset.js": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/monitoring.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/GeneratedByJHipster.java": Object {
@@ -5580,6 +4656,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5637,6 +4714,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5694,6 +4772,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5750,6 +4829,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5808,6 +4888,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5863,6 +4944,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5920,6 +5002,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -5976,6 +5059,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6030,6 +5114,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6087,6 +5172,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6144,6 +5230,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {
@@ -6202,6 +5289,7 @@ Object {
               "fieldType": "String",
             },
           ],
+          "jpaMetamodelFiltering": true,
           "name": "Simple",
         },
         Object {

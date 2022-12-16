@@ -25,7 +25,7 @@ import type { ExecaReturnValue } from 'execa';
 import BaseGenerator from '../base/index.mjs';
 import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
-import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.cjs';
+import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
 
 export default class InfoGenerator extends BaseGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
@@ -44,7 +44,7 @@ export default class InfoGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    return this.asInitialingTaskGroup({
+    return this.asInitializingTaskGroup({
       sayHello() {
         this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
       },

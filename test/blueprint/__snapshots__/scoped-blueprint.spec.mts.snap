@@ -170,6 +170,9 @@ Object {
   "src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": Object {
     "stateCleared": "modified",
   },
@@ -218,15 +221,6 @@ Object {
   "src/main/java/com/mycompany/myapp/security/UserNotActivatedException.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/security/jwt/JWTConfigurer.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/security/jwt/JWTFilter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -269,13 +263,13 @@ Object {
   "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/web/rest/ClientForwardController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/UserJWTController.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/UserResource.java": Object {
@@ -360,9 +354,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages_en.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/i18n/messages_fr.properties": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": Object {
@@ -1193,51 +1184,6 @@ Object {
   "src/main/webapp/i18n/en/user-management.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/fr/activate.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/configuration.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/error.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/global.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/health.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/home.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/login.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/logs.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/metrics.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/password.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/register.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/reset.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/sessions.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/settings.json": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/user-management.json": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/index.html": Object {
     "stateCleared": "modified",
   },
@@ -1310,13 +1256,16 @@ Object {
   "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/AuthenticationIntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/JwtAuthenticationTestUtils.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationIT.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationSecurityMetersIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -1331,6 +1280,9 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/rest/ClientForwardControllerTest.java": Object {
     "stateCleared": "modified",
   },
@@ -1338,9 +1290,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/UserJWTControllerIT.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/UserResourceIT.java": Object {
@@ -1368,9 +1317,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_en.properties": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/i18n/messages_fr.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/junit-platform.properties": Object {

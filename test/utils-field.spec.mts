@@ -18,16 +18,13 @@
  */
 
 import { expect } from 'chai';
-import entityUtils from '../utils/entity.cjs';
-import liquibaseUtils from '../utils/liquibase.cjs';
-import generatorDefaults from '../generators/generator-defaults.cjs';
-import BaseGenerator from '../generators/base/index.cjs';
-import fieldUtils from '../utils/field.cjs';
+import { prepareEntityForTemplates, loadRequiredConfigIntoEntity } from '../utils/entity.mjs';
+import { formatDateForChangelog } from '../generators/base/utils.mjs';
+import generatorDefaults from '../generators/generator-defaults.mjs';
+import BaseGenerator from '../generators/base/index.mjs';
+import { prepareFieldForTemplates, getEnumValuesWithCustomValues } from '../utils/field.mjs';
 
 const { defaultConfig } = generatorDefaults;
-const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = entityUtils;
-const { formatDateForChangelog } = liquibaseUtils;
-const { prepareFieldForTemplates, getEnumValuesWithCustomValues } = fieldUtils;
 
 describe('main utilities', () => {
   const defaultGenerator = { jhipsterConfig: defaultConfig };
@@ -36,7 +33,7 @@ describe('main utilities', () => {
   const defaultEntity = prepareEntityForTemplates(
     loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' }, defaultConfig),
     defaultGenerator,
-    {}
+    defaultConfig
   );
 
   describe('prepareFieldForTemplates', () => {

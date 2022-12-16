@@ -1,0 +1,97 @@
+import {Authority} from "@/shared/security/authority";
+
+<%_ if (generateUserManagement) { _%>
+  const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('@/admin/user-management/user-management.vue');
+  const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('@/admin/user-management/user-management-view.vue');
+  const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('@/admin/user-management/user-management-edit.vue');
+<%_ } _%>
+  const <%= jhiPrefixCapitalized %>DocsComponent = () => import('@/admin/docs/docs.vue');
+<%_ if (withAdminUi) { _%>
+  const <%= jhiPrefixCapitalized %>ConfigurationComponent = () => import('@/admin/configuration/configuration.vue');
+  const <%= jhiPrefixCapitalized %>HealthComponent = () => import('@/admin/health/health.vue');
+  const <%= jhiPrefixCapitalized %>LogsComponent = () => import('@/admin/logs/logs.vue');
+  const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('@/admin/metrics/metrics.vue');
+<%_ } _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+  const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('@/admin/gateway/gateway.vue');
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
+  const <%= jhiPrefixCapitalized %>TrackerComponent = () => import('@/admin/tracker/tracker.vue');
+<%_ } _%>
+
+export default [
+<%_ if (generateUserManagement) { _%>
+    {
+      path: '/admin/user-management',
+      name: '<%= jhiPrefixCapitalized %>User',
+      component: <%= jhiPrefixCapitalized %>UserManagementComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    },
+    {
+      path: '/admin/user-management/new',
+      name: '<%= jhiPrefixCapitalized %>UserCreate',
+      component: <%= jhiPrefixCapitalized %>UserManagementEditComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    },
+    {
+      path: '/admin/user-management/:userId/edit',
+      name: '<%= jhiPrefixCapitalized %>UserEdit',
+      component: <%= jhiPrefixCapitalized %>UserManagementEditComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    },
+    {
+      path: '/admin/user-management/:userId/view',
+      name: '<%= jhiPrefixCapitalized %>UserView',
+      component: <%= jhiPrefixCapitalized %>UserManagementViewComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    },
+<%_ } _%>
+    {
+      path: '/admin/docs',
+      name: '<%= jhiPrefixCapitalized %>DocsComponent',
+      component: <%= jhiPrefixCapitalized %>DocsComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    },
+<%_ if (withAdminUi) { _%>
+    {
+      path: '/admin/health',
+      name: '<%= jhiPrefixCapitalized %>HealthComponent',
+      component: <%= jhiPrefixCapitalized %>HealthComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    },
+    {
+      path: '/admin/logs',
+      name: '<%= jhiPrefixCapitalized %>LogsComponent',
+      component: <%= jhiPrefixCapitalized %>LogsComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    },
+    {
+      path: '/admin/metrics',
+      name: '<%= jhiPrefixCapitalized %>MetricsComponent',
+      component: <%= jhiPrefixCapitalized %>MetricsComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    },
+    {
+      path: '/admin/configuration',
+      name: '<%= jhiPrefixCapitalized %>ConfigurationComponent',
+      component: <%= jhiPrefixCapitalized %>ConfigurationComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    },
+<%_ } _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+    {
+      path: '/admin/gateway',
+      name: '<%= jhiPrefixCapitalized %>GatewayComponent',
+      component: <%= jhiPrefixCapitalized %>GatewayComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    },
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
+    {
+      path: '/admin/tracker',
+      name: '<%= jhiPrefixCapitalized %>TrackerComponent',
+      component: <%= jhiPrefixCapitalized %>TrackerComponent,
+      meta: { authorities: [Authority.ADMIN] }
+    }
+<%_ } _%>
+]

@@ -30,6 +30,9 @@ import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
 <%_ } else { _%>
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_ } _%>
+<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
+<%_ }  _%>
 <%_ if (!paginationNo || implementsEagerLoadApis) { _%>
 
   <%_ if (!reactive) { _%>
@@ -88,6 +91,24 @@ public interface <%= entityClass %>Service {
      * @return the list of entities.
      */
     <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>);
+
+    <%_ if (jpaMetamodelFiltering && reactive) {  _%>
+      /**
+      * Find <%= entityInstancePlural %> by criteria.
+      *<% if (!paginationNo) { %>
+      * @param pageable the pagination information.<% } %>
+      * @return the list of entities.
+      */
+      <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findByCriteria(<%= entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+
+      /**
+      * Find the count of <%= entityInstancePlural %> by criteria.
+      * @param criteria filtering criteria
+      * @return the count of <%= entityInstancePlural %>
+      */
+      public Mono<Long> countByCriteria(<%= entityClass %>Criteria criteria);
+    <%_ } _%>
+
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.relationshipOneToOne && !relationship.ownerSide) { _%>
     /**

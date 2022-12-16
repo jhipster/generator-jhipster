@@ -106,7 +106,7 @@ objects:
 <%_ } _%>
           containers:
           - name: ${APPLICATION_NAME}
-            image: <%= DOCKER_ELASTICSEARCH %>
+            image: <%- dockerContainers.elasticsearch %>
             ports:
             - containerPort: 9200
               name: http

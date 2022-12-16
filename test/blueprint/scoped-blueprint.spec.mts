@@ -17,10 +17,9 @@ describe('JHipster application generator with scoped blueprint', () => {
           // Fake the presence of the blueprint in node_modules
           const fakeBlueprintModuleDir = path.join(dir, 'node_modules/@jhipster/generator-jhipster-scoped-blueprint');
           fse.ensureDirSync(fakeBlueprintModuleDir);
-          fse.copySync(getTemplatePath('fake-blueprint'), fakeBlueprintModuleDir);
+          fse.copySync(getTemplatePath('blueprints/fake-blueprint'), fakeBlueprintModuleDir);
         })
         .withOptions({
-          fromCli: true,
           skipInstall: true,
           skipChecks: true,
           blueprints: '@jhipster/generator-jhipster-scoped-blueprint',

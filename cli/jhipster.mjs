@@ -19,6 +19,8 @@
  */
 import semver from 'semver';
 import path from 'path';
+import { pathToFileURL } from 'url';
+
 import cliUtils from './utils.cjs';
 import { packageJson } from '../lib/index.mjs';
 
@@ -57,14 +59,14 @@ async function requireCLI(preferLocal) {
   /* eslint-disable global-require */
   if (preferLocal) {
     try {
-      const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'cli', 'cli.mjs'));
+      const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'dist', 'cli', 'cli.mjs'));
       if (__dirname === path.dirname(localCLI)) {
         message = LOCAL_VERSION_MESSAGE;
       } else {
         // load local version
         /* eslint-disable import/no-dynamic-require */
         logger.info(LOCAL_VERSION_MESSAGE);
-        await import(localCLI);
+        await import(pathToFileURL(localCLI).href);
         return;
       }
     } catch (e) {

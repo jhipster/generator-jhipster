@@ -3,19 +3,18 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { buildServerMatrix, extendMatrix, extendFilteredMatrix, entitiesServerSamples as entities } from '../../test/support/index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
-import DatabaseTypes from '../../jdl/jhipster/database-types.js';
-import CacheTypes from '../../jdl/jhipster/cache-types.js';
+import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generatorFile = join(__dirname, 'index.mjs');
 
-const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = DatabaseTypes;
+const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
-const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = CacheTypes;
+const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 
 let sqlSamples = buildServerMatrix();
 
@@ -82,7 +81,7 @@ describe(`JHipster ${databaseType} generator`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withOptions(sample)
-          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:database-changelog']);
+          .withMockedGenerators(['jhipster:languages', 'jhipster:common', 'jhipster:liquibase']);
       });
 
       after(() => runResult.cleanup());
@@ -93,8 +92,8 @@ describe(`JHipster ${databaseType} generator`, () => {
       it(`should ${enableTranslation ? '' : 'not '}compose with jhipster:languages`, () => {
         expect(runResult.mockedGenerators['jhipster:languages'].callCount).toBe(enableTranslation ? 1 : 0);
       });
-      it('should compose with jhipster:database-changelog', () => {
-        expect(runResult.mockedGenerators['jhipster:database-changelog'].callCount).toBe(1);
+      it('should compose with jhipster:liquibase', () => {
+        expect(runResult.mockedGenerators['jhipster:liquibase'].callCount).toBe(1);
       });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();

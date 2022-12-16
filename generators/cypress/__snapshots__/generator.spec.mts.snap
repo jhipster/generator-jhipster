@@ -44,6 +44,9 @@ Object {
   "test/cypress/plugins/index.ts": Object {
     "stateCleared": "modified",
   },
+  "test/cypress/support/account.ts": Object {
+    "stateCleared": "modified",
+  },
   "test/cypress/support/commands.ts": Object {
     "stateCleared": "modified",
   },
@@ -116,6 +119,9 @@ Object {
     "stateCleared": "modified",
   },
   "test/cypress/plugins/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "test/cypress/support/account.ts": Object {
     "stateCleared": "modified",
   },
   "test/cypress/support/commands.ts": Object {
@@ -445,6 +451,9 @@ Object {
   "src/test/javascript2/cypress/plugins/index.ts": Object {
     "stateCleared": "modified",
   },
+  "src/test/javascript2/cypress/support/account.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/test/javascript2/cypress/support/commands.ts": Object {
     "stateCleared": "modified",
   },
@@ -517,6 +526,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/plugins/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/account.ts": Object {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/support/commands.ts": Object {

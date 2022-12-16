@@ -64,7 +64,7 @@ spec:
     spec:
       containers:
       - name: <%= app.baseName.toLowerCase() %>-couchbase
-        image: <%= DOCKER_COUCHBASE %>
+        image: <%- dockerContainers.couchbase %>
         env:
         - name: APPLICATION_NAME
           value: <%= app.baseName.toLowerCase() %>-couchbase

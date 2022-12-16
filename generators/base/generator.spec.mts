@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 
 import EnvironmentBuilder from '../../cli/environment-builder.cjs';
 import BaseGenerator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 const { snakeCase } = lodash;
 
@@ -35,10 +35,10 @@ const generator = basename(__dirname);
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new BaseGenerator([], { help: true }, { bar: true });
+    const instance = new BaseGenerator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
 

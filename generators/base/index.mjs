@@ -17,9 +17,4 @@
  * limitations under the License.
  */
 
-/*
- * Register generator-base at yeoman-environment
- */
-import BaseGenerator from './generator.cjs';
-
-export default BaseGenerator;
+export { default } from './generator.mjs';

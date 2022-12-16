@@ -17,7 +17,7 @@ services:
         ports:
             - 8080:8080
     mysql:
-        image: <%= DOCKER_MYSQL %>
+        image: <%- dockerContainers.mysql %>
         # volumes:
         #     - ~/volumes/jhipster/sampleKafka/mysql/:/var/lib/mysql/
         environment:
@@ -27,7 +27,7 @@ services:
             - 3306:3306
         command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     kafka:
-        image: <%= DOCKER_KAFKA %>
+        image: <%- dockerContainers.kafka %>
         environment:
             KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
             KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -37,7 +37,7 @@ services:
         ports:
             - 9092:9092
     zookeeper:
-        image: <%= DOCKER_ZOOKEEPER %>
+        image: <%- dockerContainers.zookeeper %>
         environment:
             ZOOKEEPER_CLIENT_PORT: 2181
             ZOOKEEPER_TICK_TIME: 2000

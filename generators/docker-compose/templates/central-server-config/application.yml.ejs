@@ -28,9 +28,9 @@ jhipster:
         base64-secret: <%= jwtSecretKey %>
 <%_ if (monitoringPrometheus) { _%>
 management:
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka) { _%>

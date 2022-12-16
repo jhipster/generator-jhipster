@@ -73,7 +73,7 @@ spec:
           privileged: true
       containers:
       - name: elasticsearch
-        image: <%= DOCKER_ELASTICSEARCH %>
+        image: <%- dockerContainers.elasticsearch %>
         env:
         - name: discovery.type
           value: single-node

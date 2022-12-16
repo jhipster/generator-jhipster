@@ -1,6 +1,6 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
-import ServerGenerator from '../../generators/server/index.cjs';
+import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -96,7 +96,6 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
     helpers
       .run(getGenerator('server'))
       .withOptions({
-        fromCli: true,
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,

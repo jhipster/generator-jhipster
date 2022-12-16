@@ -20,7 +20,7 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { insertContentIntoApplicationProperties } from './needles.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -33,7 +33,7 @@ describe(`JHipster ${generator} needles`, () => {
   describe('generated project', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorPath);
+      runResult = await helpers.run(generatorPath).withMockedGenerators(['jhipster:common', 'jhipster:languages']);
     });
 
     it('should match state snapshot', () => {

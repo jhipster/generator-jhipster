@@ -30,4 +30,7 @@ export const {
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
   DOCKER_DIR,
+
+  javaDependencies,
+  dockerContainers,
 } = constants;

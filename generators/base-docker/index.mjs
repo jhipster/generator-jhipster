@@ -20,6 +20,6 @@
 /*
  * Register generator-base at yeoman-environment
  */
-import BaseDockerGenerator from './generator.cjs';
+import BaseDockerGenerator from './generator.mjs';
 
 export default BaseDockerGenerator;

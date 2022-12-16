@@ -18,7 +18,7 @@
 -%>
 jib {
     from {
-        image = "<%= DOCKER_JAVA_JRE %>"
+        image = "<%- dockerContainers.javaJre %>"
         platforms {
             platform {
                 architecture = "${findProperty('jibArchitecture') ?: 'amd64'}"
@@ -43,7 +43,7 @@ jib {
         user = 1000
     }
     extraDirectories {
-      paths = file("<%= DOCKER_DIR %>jib")
+      paths = file("<%= dockerServicesDir %>jib")
       permissions = ["/entrypoint.sh": "755"]
     }
 }

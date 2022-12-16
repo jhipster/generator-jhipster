@@ -148,7 +148,7 @@ objects:
 <%_ } _%>
           containers:
           - name: ${APPLICATION_NAME}
-            image: <%= DOCKER_MYSQL %>
+            image: <%- dockerContainers.mysql %>
             env:
 #            - name: MYSQL_USER
 #              value: root

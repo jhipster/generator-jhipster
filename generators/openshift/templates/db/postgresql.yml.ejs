@@ -145,7 +145,7 @@ objects:
 <%_ } _%>
           containers:
           - name: ${APPLICATION_NAME}
-            image: <%= DOCKER_POSTGRESQL %>
+            image: <%- dockerContainers.postgresql %>
             env:
             - name: POSTGRES_DATABASE
               value: ${DATABASE_NAME}

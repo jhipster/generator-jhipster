@@ -2,7 +2,7 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import { getGenerator } from '../support/index.mjs';
 
-import ClientGenerator from '../../generators/client/index.cjs';
+import ClientGenerator from '../../generators/client/index.mjs';
 import constants from '../../generators/generator-constants.cjs';
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
@@ -56,7 +56,6 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     runContext = helpers.create(getGenerator('client'));
     runResult = await runContext
       .withOptions({
-        fromCli: true,
         defaults: true,
         skipInstall: true,
         blueprint: 'myblueprint',
@@ -70,7 +69,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     await runResult
       .create('jhipster-myblueprint:client')
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-      .withOptions({ fromCli: true, force: false, bail: true, skipChecks: true, skipInstall: true })
+      .withOptions({ force: false, bail: true, skipChecks: true, skipInstall: true })
       .run();
   });
 

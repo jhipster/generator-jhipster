@@ -1,6 +1,6 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
-import ServerGenerator from '../../generators/server/index.cjs';
+import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,7 +40,6 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
     helpers
       .run(getGenerator('server'))
       .withOptions({
-        fromCli: true,
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
@@ -72,7 +71,7 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
   });
 
   it('Assert gradle.properties has not snake case properties', () => {
-    assert.noFileContent('gradle.properties', /^(?!.*#).*_.*$/m); // Not comment and contains underscore
+    assert.noFileContent('gradle.properties', /^(?!.*#).*_.*[$|=]/m); // Not comment and contains underscore
   });
 
   it('Assert gradle.properties has the plugin added', () => {

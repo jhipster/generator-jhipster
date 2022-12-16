@@ -73,7 +73,7 @@ spec:
 <%_ } _%>
       containers:
       - name: postgres
-        image: <%= DOCKER_POSTGRESQL %>
+        image: <%- dockerContainers.postgresql %>
         env:
         - name: POSTGRES_USER
           value: <%= app.baseName %>

@@ -24,9 +24,8 @@ const sinon = require('sinon');
 const helpers = require('yeoman-test');
 
 const EnvironmentBuilder = require('../../cli/environment-builder.cjs');
-const { getTemplatePath } = require('../support/index.cjs');
 
-const { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } = require('../utils/utils.cjs');
+const { getTemplatePath, prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } = require('./utils/utils.cjs');
 
 describe('Environment builder', () => {
   let cleanup;
@@ -235,8 +234,8 @@ describe('Environment builder', () => {
         oldArgv = process.argv;
         oldCwd = testInTempDir(tmpdir => {
           lnYeoman(tmpdir);
-          copyBlueprint(getTemplatePath('blueprint-cli'), tmpdir, 'cli');
-          copyBlueprint(getTemplatePath('blueprint-cli-shared'), tmpdir, 'cli-shared');
+          copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
+          copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
         }, true);
 
         process.argv = ['--blueprints', 'cli,cli-shared'];
@@ -273,8 +272,8 @@ describe('Environment builder', () => {
         oldArgv = process.argv;
         oldCwd = testInTempDir(tmpdir => {
           lnYeoman(tmpdir);
-          copyBlueprint(getTemplatePath('blueprint-cli'), tmpdir, 'cli');
-          copyBlueprint(getTemplatePath('blueprint-cli-shared'), tmpdir, 'cli-shared');
+          copyBlueprint(getTemplatePath('cli/blueprint-cli'), tmpdir, 'cli');
+          copyBlueprint(getTemplatePath('cli/blueprint-cli-shared'), tmpdir, 'cli-shared');
         }, true);
 
         process.argv = ['--blueprints', 'cli,cli-shared'];

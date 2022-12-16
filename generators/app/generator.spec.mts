@@ -21,12 +21,11 @@ import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import testSupport from '../../test/support/index.cjs';
-import { defaultHelpers as helpers } from '../../test/utils/utils.mjs';
+import { testBlueprintSupport } from '../../test/support/tests.mjs';
+import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
-const { testBlueprintSupport } = testSupport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,10 +35,10 @@ const generatorPath = join(__dirname, 'index.mjs');
 
 describe(`JHipster ${generator} generator`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.cjs')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
@@ -55,7 +54,7 @@ describe(`JHipster ${generator} generator`, () => {
       });
 
       it('should match snapshot', () => {
-        expect(runResult.env.sharedOptions.sharedData.applications.jhipster.sharedApplication).toMatchSnapshot({
+        expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
@@ -75,7 +74,7 @@ describe(`JHipster ${generator} generator`, () => {
       });
 
       it('should match snapshot', () => {
-        expect(runResult.env.sharedOptions.sharedData.applications.jhipster.sharedApplication).toMatchSnapshot({
+        expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
@@ -95,7 +94,7 @@ describe(`JHipster ${generator} generator`, () => {
       });
 
       it('should match snapshot', () => {
-        expect(runResult.env.sharedOptions.sharedData.applications.jhipster.sharedApplication).toMatchSnapshot({
+        expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
         });

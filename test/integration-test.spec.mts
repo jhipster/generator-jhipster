@@ -26,14 +26,13 @@ import { fileURLToPath } from 'url';
 import authenticationTypes from '../jdl/jhipster/authentication-types.js';
 import applicationTypes from '../jdl/jhipster/application-types.js';
 
-import liquibaseUtils from '../utils/liquibase.cjs';
+import { formatDateForChangelog } from '../generators/base/utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const { JWT, SESSION } = authenticationTypes;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
-const { formatDateForChangelog } = liquibaseUtils;
 
 const fixSamples = process.argv.includes('--fix-samples');
 const itSamplesPath = path.join(__dirname, '..', 'test-integration', 'samples');

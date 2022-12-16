@@ -19,20 +19,17 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import entityUtils from '../../utils/entity.cjs';
-import fieldUtils from '../../utils/field.cjs';
-import relationshipUtils from '../../utils/relationship.cjs';
-import utils from '../../utils/index.cjs';
-import userUtils from '../../utils/user.cjs';
-import { DOCKER_DIR, NODE_VERSION } from '../generator-constants.mjs';
-import type { CommonClientServerApplication } from './types.js';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
+import { prepareEntityForTemplates } from '../../utils/entity.mjs';
+import { prepareFieldForTemplates } from '../../utils/field.mjs';
+import { prepareRelationshipForTemplates } from '../../utils/relationship.mjs';
+import { stringify } from '../../utils/index.mjs';
+import { createUserEntity } from './utils.mjs';
+import { DOCKER_DIR } from '../generator-constants.mjs';
+import type { CommonClientServerApplication } from '../base-application/types.mjs';
+import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
+import { addFakerToEntity } from './faker.mjs';
+import { packageJson } from '../../lib/index.mjs';
 
-const { prepareEntityForTemplates } = entityUtils;
-const { prepareFieldForTemplates } = fieldUtils;
-const { prepareRelationshipForTemplates } = relationshipUtils;
-const { stringify } = utils;
-const { createUserEntity } = userUtils;
 const { upperFirst } = _;
 
 /**
@@ -48,7 +45,8 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
     this.loadStoredAppOptions();
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
+    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
   }
 
@@ -72,6 +70,17 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
         this.loadAppConfig(undefined, application);
         this.loadTranslationConfig(undefined, application);
       },
+      loadNodeDependencies({ application }) {
+        const commonDependencies = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'templates', 'package.json')) as any;
+        application.nodeDependencies = this.prepareDependencies({
+          ...(application.nodeDependencies ?? {}),
+          prettier: packageJson.dependencies.prettier,
+          'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
+          'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
+          ...(commonDependencies.dependencies ?? {}),
+          ...(commonDependencies.devDependencies ?? {}),
+        });
+      },
     });
   }
 
@@ -85,15 +94,12 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
         this.loadDerivedAppConfig(application);
 
         application.nodePackageManager = 'npm';
-        application.nodeDestinationVersion = NODE_VERSION;
         application.dockerServicesDir = DOCKER_DIR;
 
         // TODO v8 drop the following variables
         const anyApplication = application as any;
 
         anyApplication.clientPackageManager = application.nodePackageManager;
-        anyApplication.protractorTests = false;
-        anyApplication.NODE_VERSION = NODE_VERSION;
       },
     });
   }
@@ -121,16 +127,15 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
   get loadingEntities() {
     return this.asLoadingEntitiesTaskGroup({
       loadUser({ application }) {
-        if (application.skipUserManagement && !application.authenticationTypeOauth2) {
-          return;
-        }
-        if (this.sharedData.hasEntity('User')) {
-          throw new Error("Fail to bootstrap 'User', already exists.");
-        }
+        if (application.generateBuiltInUserEntity) {
+          if (this.sharedData.hasEntity('User')) {
+            throw new Error("Fail to bootstrap 'User', already exists.");
+          }
 
-        const user = createUserEntity.call(this, {}, application);
-        this.sharedData.setEntity('User', user);
-        application.user = user;
+          const user = createUserEntity.call(this, {}, application);
+          this.sharedData.setEntity('User', user);
+          application.user = user;
+        }
       },
       loadingEntities({ entitiesToLoad }) {
         for (const { entityName, entityStorage } of entitiesToLoad) {
@@ -177,7 +182,8 @@ export default class BootStrapApplicationBase extends BaseApplicationGenerator<C
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      preparingEachEntity({ application, entity }) {
+      async preparingEachEntity({ application, entity }) {
+        await addFakerToEntity(entity, application.nativeLanguage);
         prepareEntityForTemplates(entity, this, application);
       },
     });

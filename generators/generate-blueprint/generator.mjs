@@ -19,8 +19,7 @@
 import chalk from 'chalk';
 import lodash from 'lodash';
 
-import BaseGenerator from '../base/index.cjs';
-import { SKIP_COMMIT_HOOK } from '../init/constants.cjs';
+import BaseGenerator from '../base/index.mjs';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.mjs';
 
 import {
@@ -43,9 +42,10 @@ import {
   ALL_PRIORITIES,
 } from './constants.mjs';
 
-import GENERATOR_LIST from '../generator-list.cjs';
+import * as GENERATOR_LIST from '../generator-list.mjs';
 import { files, generatorFiles } from './files.mjs';
 import { packageJson } from '../../lib/index.mjs';
+import { SKIP_COMMIT_HOOK } from '../init/constants.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
@@ -85,13 +85,6 @@ export default class extends BaseGenerator {
 
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-      sayHello() {
-        if (!this.showHello()) return;
-        this.log(chalk.white('⬢ Welcome to the JHipster Generate Blueprint ⬢'));
-      },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
       },
@@ -99,8 +92,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -139,8 +131,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -159,22 +150,20 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.CONFIGURING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get composing() {
     return {
       async compose() {
-        const configure = this.options.configure || !this.shouldComposeModular() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION];
-        await this.composeWithJHipster(GENERATOR_INIT, [], { configure });
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        await this.composeWithJHipster(GENERATOR_INIT);
       },
     };
   }
 
   get [BaseGenerator.COMPOSING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.composing;
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get loading() {
@@ -189,8 +178,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.LOADING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -212,14 +200,12 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.PREPARING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.preparing;
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
     return {
       async writing() {
-        if (this.shouldSkipFiles()) return;
         await this.writeFiles({
           sections: files,
           context: this.application,
@@ -258,14 +244,13 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get postWriting() {
     return {
       packageJson() {
-        if (this.shouldSkipFiles() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
         this.packageJson.merge({
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
@@ -307,7 +292,7 @@ export default class extends BaseGenerator {
         });
       },
       addCliToPackageJson() {
-        if (this.shouldSkipFiles() || !this.jhipsterConfig.cli || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        if (!this.jhipsterConfig.cli || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { baseName, cliName = `jhipster-${baseName}` } = this.application;
         this.packageJson.merge({
           bin: {
@@ -317,7 +302,7 @@ export default class extends BaseGenerator {
         });
       },
       addGeneratorJHipsterDependency() {
-        if (this.shouldSkipFiles() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
         if (this.jhipsterConfig.dynamic) {
           this.packageJson.merge({
@@ -340,8 +325,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.POST_WRITING]() {
-    if (this.delegateToBlueprint) return {};
-    return this.postWriting;
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get postInstall() {
@@ -376,8 +360,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
   }
 
   get [BaseGenerator.POST_INSTALL]() {
-    if (this.delegateToBlueprint) return {};
-    return this.postInstall;
+    return this.delegateTasksToBlueprint(() => this.postInstall);
   }
 
   get end() {
@@ -401,8 +384,7 @@ To begin to work:
   }
 
   get [BaseGenerator.END]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   getSubGeneratorStorage(subGenerator) {

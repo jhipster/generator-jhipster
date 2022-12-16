@@ -1,0 +1,84 @@
+package <%= packageName %>.security.jwt;
+
+import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.*;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
+<%_ if (reactive) { %>
+import <%= packageName %>.IntegrationTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
+<%_ } else { _%>
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+@AutoConfigureMockMvc
+<%_ } _%>
+@AuthenticationIntegrationTest
+class TokenAuthenticationIT {
+
+    @Autowired
+<%_ if (reactive) { _%>
+    private WebTestClient webTestClient;
+<%_ } else { _%>
+    private MockMvc mvc;
+<%_ } _%>
+
+    @Value("${jhipster.security.authentication.jwt.base64-secret}")
+    private String jwtKey;
+
+    @Test
+    public void testLoginWithValidToken() throws Exception {
+        expectOk(createValidToken(jwtKey));
+    }
+
+    @Test
+    public void testReturnFalseWhenJWThasInvalidSignature() throws Exception {
+        expectUnauthorized(createTokenWithDifferentSignature());
+    }
+
+    @Test
+    public void testReturnFalseWhenJWTisMalformed() throws Exception {
+        expectUnauthorized(createSignedInvalidJwt(jwtKey));
+    }
+
+    @Test
+    public void testReturnFalseWhenJWTisExpired() throws Exception {
+        expectUnauthorized(createExpiredToken(jwtKey));
+    }
+<%_ if (reactive) { %>
+
+    private void expectOk(String token) {
+        webTestClient.get().uri("/api/authenticate").headers(headers -> headers.setBearerAuth(token)).exchange().expectStatus().isOk();
+    }
+
+    private void expectUnauthorized(String token) {
+        webTestClient
+            .get()
+            .uri("/api/authenticate")
+            .headers(headers -> headers.setBearerAuth(token))
+            .exchange()
+            .expectStatus()
+            .isUnauthorized();
+    }
+<%_ } else { _%>
+
+    private void expectOk(String token) throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/authenticate").header(AUTHORIZATION, BEARER + token)).andExpect(status().isOk());
+    }
+
+    private void expectUnauthorized(String token) throws Exception {
+        mvc
+            .perform(MockMvcRequestBuilders.get("/api/authenticate").header(AUTHORIZATION, BEARER + token))
+            .andExpect(status().isUnauthorized());
+    }
+<%_ } _%>
+}
