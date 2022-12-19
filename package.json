@@ -136,7 +136,7 @@
     "chokidar": "3.5.3",
     "concurrently": "7.6.0",
     "ejs-lint": "2.0.0",
-    "esbuild": "0.15.16",
+    "esbuild": "0.16.9",
     "eslint": "8.30.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",
