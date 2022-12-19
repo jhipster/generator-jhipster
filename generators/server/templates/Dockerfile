@@ -49,7 +49,7 @@ LABEL ALIAS=zookeeper
 FROM sonarqube:9.7.1-community
 LABEL ALIAS=sonar
 
-FROM consul:1.14.2
+FROM consul:1.14.3
 
 FROM prom/prometheus:v2.40.6
 LABEL ALIAS=prometheus
