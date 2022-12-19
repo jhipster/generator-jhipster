@@ -17,13 +17,10 @@
  * limitations under the License.
  */
 
-export const StorageTypes = {
+const StorageTypes = {
   EPHEMERAL: 'ephemeral',
   PERSISTENT: 'persistent',
 };
-
-export const EPHEMERAL = StorageTypes.EPHEMERAL;
-export const PERSISTENT = StorageTypes.PERSISTENT;
 
 export default {
   StorageTypes,

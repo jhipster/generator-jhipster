@@ -17,16 +17,11 @@
  * limitations under the License.
  */
 
-const Types = {
+const serviceDiscoveryTypes = {
   EUREKA: 'eureka',
   CONSUL: 'consul',
   NO: 'no',
   FALSE: false,
 };
 
-export const EUREKA = Types.EUREKA;
-export const CONSUL = Types.CONSUL;
-export const NO = Types.NO;
-export const FALSE = Types.FALSE;
-
-export default Types;
+export default serviceDiscoveryTypes;

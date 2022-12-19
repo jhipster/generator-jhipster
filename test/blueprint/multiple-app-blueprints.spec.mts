@@ -7,10 +7,7 @@ import ClientGenerator from '../../generators/client/index.mjs';
 import ServerGenerator from '../../generators/server/index.mjs';
 import CommonGenerator from '../../generators/common/index.mjs';
 import LanguagesGenerator from '../../generators/languages/index.mjs';
-import databaseTypes from '../../jdl/jhipster/database-types.js';
-import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
-import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
-import cacheTypes from '../../jdl/jhipster/cache-types.js';
+import { databaseTypes, clientFrameworkTypes, authenticationTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
 import { getGenerator } from '../support/index.mjs';
 
 const { MYSQL, SQL, H2_MEMORY } = databaseTypes;

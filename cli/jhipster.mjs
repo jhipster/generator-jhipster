@@ -19,12 +19,9 @@
  */
 import semver from 'semver';
 import path from 'path';
-import { pathToFileURL } from 'url';
 
-import cliUtils from './utils.cjs';
+import { logger } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
-
-const { logger } = cliUtils;
 
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;
@@ -66,7 +63,8 @@ async function requireCLI(preferLocal) {
         // load local version
         /* eslint-disable import/no-dynamic-require */
         logger.info(LOCAL_VERSION_MESSAGE);
-        await import(pathToFileURL(localCLI).href);
+        await import(localCLI);
+        // await import(pathToFileURL(localCLI).href);
         return;
       }
     } catch (e) {
@@ -75,6 +73,6 @@ async function requireCLI(preferLocal) {
   }
   // load current jhipster
   logger.info(message);
-  await import('./cli.cjs');
+  await import('./cli.mjs');
   /* eslint-enable  */
 }

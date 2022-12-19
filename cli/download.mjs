@@ -16,13 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const fs = require('fs');
-const https = require('https');
-const path = require('path');
-const cliUtils = require('./utils.cjs');
-const { packageJson } = require('../lib/index.cjs');
-
-const { logger, toString } = cliUtils;
+import fs from 'fs';
+import https from 'https';
+import path from 'path';
+import { logger, toStringJoinArgs } from './utils.mjs';
+import { packageJson } from '../lib/index.mjs';
 
 const downloadFile = (url, filename) => {
   return new Promise((resolve, reject) => {
@@ -52,9 +50,9 @@ const downloadFile = (url, filename) => {
  * @param {string[]} args[0] jdl files
  * @param {any} options options passed from CLI
  */
-module.exports = ([jdlFiles = []], options = {}) => {
+const downloadJdl = ([jdlFiles = []], options = {}) => {
   logger.debug('cmd: download');
-  logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
+  logger.debug(`jdlFiles: ${toStringJoinArgs(jdlFiles)}`);
   if (!jdlFiles || jdlFiles.length === 0) {
     return Promise.reject(new Error('\nAt least one jdl file is required.\n'));
   }
@@ -80,3 +78,5 @@ module.exports = ([jdlFiles = []], options = {}) => {
     })
   );
 };
+
+export default downloadJdl;

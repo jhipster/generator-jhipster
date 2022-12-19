@@ -1,11 +1,11 @@
-const { mockRequire } = require('@node-loaders/mock/require');
-const path = require('path');
-const fse = require('fs-extra');
-const assert = require('yeoman-assert');
-const expect = require('chai').expect;
-const utils = require('../../cli/utils.cjs');
+import { mockRequire } from '@node-loaders/mock';
+import path from 'path';
+import fse from 'fs-extra';
+import assert from 'yeoman-assert';
+import { expect } from 'chai';
+import * as utils from '../../cli/utils.mjs';
 
-const { getTemplatePath, testInTempDir, revertTempDir } = require('./utils/utils.cjs');
+import { getTemplatePath, testInTempDir, revertTempDir } from './utils/utils.cjs';
 
 let subGenCallParams = {
   count: 0,
@@ -76,7 +76,7 @@ const loadImportJdl = options => {
     },
     ...options,
   };
-  return mockRequire('../../cli/import-jdl.cjs', options);
+  return mockRequire('../../cli/import-jdl.mjs', options);
 };
 
 const defaultAddedOptions = {};

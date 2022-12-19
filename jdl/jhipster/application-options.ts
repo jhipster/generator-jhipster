@@ -20,7 +20,7 @@
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
-import applicationOptions from './application-options.js';
+
 import cacheTypes from './cache-types.js';
 import serviceDiscoveryTypes from './service-discovery-types.js';
 import clientFrameworkTypes from './client-framework-types.js';
@@ -304,20 +304,6 @@ const QuotedOptionNames = [
   optionNames.GRADLE_ENTERPRISE_HOST,
 ];
 
-export { optionNames as OptionNames };
-export { optionValues as OptionValues };
-
-export default {
-  OptionTypes: ApplicationOptionTypes,
-  OptionNames: optionNames,
-  OptionValues: optionValues,
-  QuotedOptionNames,
-  getTypeForOption,
-  doesOptionExist,
-  doesOptionValueExist,
-  shouldTheValueBeQuoted,
-};
-
 /**
  * Returns the option's type, one of string, boolean, list or integer.
  * @param {String} optionName - the option's name.
@@ -364,3 +350,14 @@ function shouldTheValueBeQuoted(optionName) {
   }
   return QuotedOptionNames.includes(optionName);
 }
+
+export default {
+  OptionTypes: ApplicationOptionTypes,
+  OptionNames: optionNames,
+  OptionValues: optionValues,
+  QuotedOptionNames,
+  getTypeForOption,
+  doesOptionExist,
+  doesOptionValueExist,
+  shouldTheValueBeQuoted,
+};

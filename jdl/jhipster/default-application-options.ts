@@ -86,7 +86,7 @@ const commonDefaultOptions = {
   [BUILD_TOOL]: MAVEN,
 };
 
-export function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
+function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
   if (applicationType === MONOLITH) {
     return getConfigForMonolithApplication(customOptions);
   }
@@ -99,7 +99,7 @@ export function getConfigForApplicationType(applicationType = undefined, customO
   return getDefaultConfigForNewApplication(customOptions);
 }
 
-export function getConfigForMonolithApplication(customOptions: any = {}): any {
+function getConfigForMonolithApplication(customOptions: any = {}): any {
   const options = {
     ...commonDefaultOptions,
     [CACHE_PROVIDER]: EHCACHE,
@@ -128,7 +128,7 @@ export function getConfigForMonolithApplication(customOptions: any = {}): any {
   };
 }
 
-export function getConfigForGatewayApplication(customOptions: any = {}): any {
+function getConfigForGatewayApplication(customOptions: any = {}): any {
   const options = {
     ...commonDefaultOptions,
     [CLIENT_FRAMEWORK]: ANGULAR,
@@ -162,7 +162,7 @@ export function getConfigForGatewayApplication(customOptions: any = {}): any {
   };
 }
 
-export function getConfigForMicroserviceApplication(customOptions: any = {}): any {
+function getConfigForMicroserviceApplication(customOptions: any = {}): any {
   const DEFAULT_SERVER_PORT = '8081';
   const options = {
     ...commonDefaultOptions,
@@ -197,7 +197,7 @@ export function getConfigForMicroserviceApplication(customOptions: any = {}): an
   };
 }
 
-export function getDefaultConfigForNewApplication(customOptions: any = {}): any {
+function getDefaultConfigForNewApplication(customOptions: any = {}): any {
   const options = {
     ...commonDefaultOptions,
     [BASE_NAME]: OptionValues[BASE_NAME],
@@ -257,3 +257,11 @@ export function getDefaultConfigForNewApplication(customOptions: any = {}): any 
   }
   return options;
 }
+
+export default {
+  getConfigForApplicationType,
+  getConfigForMonolithApplication,
+  getConfigForGatewayApplication,
+  getConfigForMicroserviceApplication,
+  getDefaultConfigForNewApplication,
+};

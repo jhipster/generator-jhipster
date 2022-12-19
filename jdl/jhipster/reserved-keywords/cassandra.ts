@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+const cassandra = [
   'ADD',
   'ALL',
   'ALTER',
@@ -112,3 +112,5 @@ export default [
   'MACADDR',
   'BITSTRING',
 ];
+
+export default cassandra;

@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 /* eslint-disable no-console */
-const chalk = require('chalk');
-const _ = require('lodash');
+import chalk from 'chalk';
+import _ from 'lodash';
 
-const CLI_NAME = 'jhipster';
-const GENERATOR_NAME = 'generator-jhipster';
+export const CLI_NAME = 'jhipster';
+export const GENERATOR_NAME = 'generator-jhipster';
 
 const SUCCESS_MESSAGE = 'Congratulations, JHipster execution is complete!';
 const SPONSOR_MESSAGE = 'Sponsored with ❤️  by @oktadev.';
@@ -61,7 +61,7 @@ const fatal = function (msg, trace) {
   process.exit(1);
 };
 
-const logger = {
+export const logger = {
   init(program) {
     program.option('-d, --debug', 'enable debugger');
 
@@ -77,20 +77,20 @@ const logger = {
   fatal,
 };
 
-const toString = item => {
+export const toStringJoinArgs = item => {
   if (typeof item == 'object') {
     if (Array.isArray(item)) {
-      return item.map(it => toString(it)).join(', ');
+      return item.map(it => toStringJoinArgs(it)).join(', ');
     }
     return Object.keys(item)
-      .map(k => `${k}: ${typeof item[k] != 'function' && typeof item[k] != 'object' ? toString(item[k]) : 'Object'}`)
+      .map(k => `${k}: ${typeof item[k] != 'function' && typeof item[k] != 'object' ? toStringJoinArgs(item[k]) : 'Object'}`)
       .join(', ');
   }
   return item ? item.toString() : item;
 };
 
 /* Convert option objects to command line args */
-const getOptionAsArgs = (options = {}) => {
+export const getOptionAsArgs = (options = {}) => {
   options = Object.fromEntries(
     Object.entries(options).map(([key, value]) => {
       return [_.kebabCase(key), value];
@@ -115,7 +115,7 @@ const getOptionAsArgs = (options = {}) => {
 /**
  *  Get options for the command
  */
-const getCommand = (cmd, args = []) => {
+export const getCommand = (cmd, args = []) => {
   let cmdArgs;
   if (args.length > 0) {
     logger.debug('Arguments found');
@@ -126,7 +126,7 @@ const getCommand = (cmd, args = []) => {
   return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
-const doneFactory = (successMsg, sponsorMsg) => {
+export const doneFactory = (successMsg, sponsorMsg) => {
   return errorOrMsg => {
     if (errorOrMsg instanceof Error) {
       logger.error(`ERROR! ${errorOrMsg.message}`, errorOrMsg);
@@ -139,7 +139,7 @@ const doneFactory = (successMsg, sponsorMsg) => {
   };
 };
 
-const printSuccess = () => {
+export const printSuccess = () => {
   if (process.exitCode === undefined || process.exitCode === 0) {
     logger.log(chalk.green.bold(SUCCESS_MESSAGE));
     logger.log(chalk.cyan.bold(SPONSOR_MESSAGE));
@@ -148,14 +148,4 @@ const printSuccess = () => {
   }
 };
 
-module.exports = {
-  CLI_NAME,
-  GENERATOR_NAME,
-  toString,
-  logger,
-  getCommand,
-  doneFactory,
-  done: doneFactory(SUCCESS_MESSAGE, SPONSOR_MESSAGE),
-  printSuccess,
-  getOptionAsArgs,
-};
+export const done = () => doneFactory(SUCCESS_MESSAGE, SPONSOR_MESSAGE);

@@ -52,27 +52,27 @@ const ReservedWords = {
   NEO4J: Neo4JReservedKeywords,
 };
 
-export function isReserved(keyword?: any, type?: any) {
+function isReserved(keyword?: any, type?: any) {
   return !!keyword && !!type && !!ReservedWords[type.toUpperCase()] && ReservedWords[type.toUpperCase()].includes(keyword.toUpperCase());
 }
 
-export function isReservedClassName(keyword) {
+function isReservedClassName(keyword) {
   return (
     isReserved(keyword, 'JHIPSTER') || isReserved(keyword, 'ANGULAR') || isReserved(keyword, 'TYPESCRIPT') || isReserved(keyword, 'JAVA')
   );
 }
 
-export function isReservedTableName(keyword, databaseType) {
+function isReservedTableName(keyword, databaseType) {
   return databaseType.toUpperCase() === 'SQL'
     ? isReserved(keyword, 'MYSQL') || isReserved(keyword, 'POSTGRESQL') || isReserved(keyword, 'ORACLE') || isReserved(keyword, 'MSSQL')
     : isReserved(keyword, databaseType);
 }
 
-export function isReservedPaginationWords(keyword) {
+function isReservedPaginationWords(keyword) {
   return isReserved(keyword, 'PAGING');
 }
 
-export function isReservedFieldName(keyword, clientFramework?: any) {
+function isReservedFieldName(keyword, clientFramework?: any) {
   if (clientFramework) {
     if (clientFramework === clientFrameworks.angular) {
       // Angular client framework

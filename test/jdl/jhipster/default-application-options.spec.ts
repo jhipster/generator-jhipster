@@ -20,12 +20,14 @@
 
 import { expect } from 'chai';
 
-import {
+import { defaultApplicationOptions } from '../../../jdl/jhipster/index.mjs';
+
+const {
   getConfigForMonolithApplication,
   getConfigForGatewayApplication,
   getConfigForMicroserviceApplication,
   getDefaultConfigForNewApplication,
-} from '../../../jdl/jhipster/default-application-options.js';
+} = defaultApplicationOptions;
 
 describe('DefaultApplicationOptions', () => {
   describe('getConfigForMonolithApplication', () => {

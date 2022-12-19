@@ -16,23 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const fs = require('fs');
-const _ = require('lodash');
-const path = require('path');
-const pluralize = require('pluralize');
-const { fork: forkProcess } = require('child_process');
+import chalk from 'chalk';
+import fs from 'fs';
+import _ from 'lodash';
+import path from 'path';
+import pluralize from 'pluralize';
+import { createRequire } from 'module';
+import { fork as forkProcess } from 'child_process';
+import EnvironmentBuilder from './environment-builder.mjs';
+import { CLI_NAME, GENERATOR_NAME, logger, toStringJoinArgs, printSuccess, getOptionAsArgs } from './utils.mjs';
+import { packageJson as packagejs } from '../lib/index.cjs';
+import statistics from '../generators/statistics.cjs';
+import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
+import { writeConfigFile } from './export-utils.cjs';
 
-const EnvironmentBuilder = require('./environment-builder.cjs');
-const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArgs } = require('./utils.cjs');
-
-const { packageJson: packagejs } = require('../lib/index.cjs');
-const statistics = require('../generators/statistics.cjs');
-const { JHIPSTER_CONFIG_DIR } = require('../generators/generator-constants.cjs');
-
-const jhipsterCli = require.resolve('./cli.cjs');
-const { writeConfigFile } = require('./export-utils.cjs');
-
+const require = createRequire(import.meta.url);
+const jhipsterCli = require.resolve('./cli.mjs');
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 
 /**
@@ -212,7 +211,7 @@ function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOp
  * Imports the Applications and Entities defined in JDL
  * The app .yo-rc.json files and entity json files are written to disk
  */
-function importJDL(jdlImporter) {
+function importJdl(jdlImporter) {
   logger.info('The JDL is being parsed.');
 
   try {
@@ -295,7 +294,6 @@ const generateApplicationFiles = ({ processor, applicationWithEntities }) => {
   if (!fork) {
     generatorOptions.applicationWithEntities = applicationWithEntities;
   }
-
   return runGenerator('app', { cwd, fork, createEnvBuilder }, generatorOptions);
 };
 
@@ -351,7 +349,7 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
 class JDLProcessor {
   constructor(jdlFiles, jdlContent, options, createEnvBuilder) {
     logger.debug(
-      `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${toString(options)}`
+      `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${toStringJoinArgs(options)}`
     );
     this.jdlFiles = jdlFiles;
     this.jdlContent = jdlContent;
@@ -380,7 +378,7 @@ class JDLProcessor {
     } else {
       importer = createImporterFromFiles(this.jdlFiles, configuration);
     }
-    this.importState = importJDL.call(this, importer);
+    this.importState = importJdl.call(this, importer);
   }
 
   config() {
@@ -525,9 +523,9 @@ class JDLProcessor {
  * @param {any} [options] options passed from CLI
  * @param {any} [env] the yeoman environment
  */
-module.exports = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
+const jdl = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
   logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
-  logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
+  logger.debug(chalk.yellow(`Options: ${toStringJoinArgs({ ...options, inline: options.inline ? 'inline content' : '' })}`));
   try {
     const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options, createEnvBuilder);
     await jdlImporter.importJDL();
@@ -558,3 +556,5 @@ module.exports = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuild
     return Promise.reject(new Error(`Error during import-jdl: ${e.message}`));
   }
 };
+
+export default jdl;

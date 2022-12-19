@@ -16,30 +16,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const MapperTypes = {
+const MapperTypes = {
   MAPSTRUCT: 'mapstruct',
   NO: 'no',
 };
 
-export const ServiceTypes = {
+const ServiceTypes = {
   SERVICE_CLASS: 'serviceClass',
   SERVICE_IMPL: 'serviceImpl',
   NO: 'no',
 };
 
-export const PaginationTypes = {
+const PaginationTypes = {
   PAGINATION: 'pagination',
   INFINITE_SCROLL: 'infinite-scroll',
   NO: 'no',
 };
 
-export const SearchTypes = {
+const SearchTypes = {
   ELASTICSEARCH: 'elasticsearch',
   COUCHBASE: 'couchbase',
   NO: 'no',
 };
 
-export const FilteringTypes = {
+const FilteringTypes = {
   JPA_METAMODEL: 'jpaMetamodel',
   NO: 'no',
 };

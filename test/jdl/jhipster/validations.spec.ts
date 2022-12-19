@@ -19,26 +19,26 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import Validations from '../../../jdl/jhipster/validations.js';
+import { validations } from '../../../jdl/jhipster/index.mjs';
 
 describe('Validations', () => {
   describe('exists', () => {
     describe('when checking for a valid validation', () => {
       it('should return true', () => {
-        expect(Validations.exists(Validations.MAXBYTES)).to.be.true;
+        expect(validations.exists(validations.MAXBYTES)).to.be.true;
       });
     });
     describe('when checking for an invalid validation', () => {
       it('should return false', () => {
-        expect(Validations.exists('NOTHING')).to.be.false;
+        expect(validations.exists('NOTHING')).to.be.false;
       });
     });
   });
   describe('needsValue', () => {
     describe('when checking whether a validation needs a value', () => {
       it('should return so', () => {
-        expect(Validations.needsValue(Validations.MAXLENGTH)).to.be.true;
-        expect(Validations.needsValue(Validations.REQUIRED)).to.be.false;
+        expect(validations.needsValue(validations.MAXLENGTH)).to.be.true;
+        expect(validations.needsValue(validations.REQUIRED)).to.be.false;
       });
     });
   });

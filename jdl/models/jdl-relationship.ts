@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 import logger from '../utils/objects/logger.js';
-import RelationshipTypes from '../jhipster/relationship-types.js';
-import { lowerFirst } from '../utils/string-utils.js';
-import Validations from '../jhipster/validations.js';
+import { relationshipTypes, validations } from '../jhipster/index.mjs';
+import stringUtils from '../utils/string-utils.js';
 
-const { REQUIRED } = Validations;
+const { lowerFirst } = stringUtils;
+const { REQUIRED } = validations;
 
 export default class JDLRelationship {
   from: any;
@@ -41,11 +41,11 @@ export default class JDLRelationship {
       throw new Error('Source and destination entities must be passed to create a relationship.');
     }
     checkFromAndToTypesAreString(merged);
-    if (!RelationshipTypes.exists(merged.type) || !(merged.injectedFieldInFrom || merged.injectedFieldInTo)) {
+    if (!relationshipTypes.exists(merged.type) || !(merged.injectedFieldInFrom || merged.injectedFieldInTo)) {
       throw new Error('A valid type and at least one injected field must be passed to create a relationship.');
     }
     if (
-      merged.type === RelationshipTypes.ONE_TO_MANY &&
+      merged.type === relationshipTypes.ONE_TO_MANY &&
       (!merged.injectedFieldInFrom || !merged.injectedFieldInTo) &&
       !merged.unidirectionalRelationships
     ) {
@@ -174,7 +174,7 @@ function mergeDefaultsWithOverrides(overrides) {
 
 function defaults() {
   return {
-    type: RelationshipTypes.ONE_TO_ONE,
+    type: relationshipTypes.ONE_TO_ONE,
     injectedFieldInFrom: null,
     injectedFieldInTo: null,
     isInjectedFieldInFromRequired: false,

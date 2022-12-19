@@ -23,10 +23,6 @@ const ApplicationTypes: any = {
   GATEWAY: 'gateway',
 };
 
-export const MONOLITH = ApplicationTypes.MONOLITH;
-export const MICROSERVICE = ApplicationTypes.MICROSERVICE;
-export const GATEWAY = ApplicationTypes.GATEWAY;
-
 ApplicationTypes.exists = applicationType => !!applicationType && !!ApplicationTypes[applicationType.toUpperCase()];
 
 export default ApplicationTypes;

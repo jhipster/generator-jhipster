@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+const postgres = [
   'ALL',
   'ANALYSE',
   'ANALYZE',
@@ -117,3 +117,5 @@ export default [
   'WINDOW',
   'WITH',
 ];
+
+export default postgres;

@@ -1,6 +1,6 @@
 import yeomanHelpers from 'yeoman-test';
 
-import EnvironmentBuilder from '../../cli/environment-builder.cjs';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 
 const { createHelpers } = yeomanHelpers;
 

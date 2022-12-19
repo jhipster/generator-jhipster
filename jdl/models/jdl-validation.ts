@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 
-import { merge } from '../utils/object-utils.js';
-import Validations from '../jhipster/validations.js';
+import { validations } from '../jhipster/index.mjs';
+import objectUtils from '../utils/object-utils.js';
 
+const { merge } = objectUtils;
 export default class JDLValidation {
   name: any;
   value: any;
@@ -41,13 +42,13 @@ export default class JDLValidation {
 
 function defaults() {
   return {
-    name: Validations.REQUIRED,
+    name: validations.REQUIRED,
     value: '',
   };
 }
 
 function formatValidationValue(name, value) {
-  if (name === Validations.PATTERN) {
+  if (name === validations.PATTERN) {
     return getPatternValidationValue(value);
   }
   return value;

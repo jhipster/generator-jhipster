@@ -17,18 +17,18 @@
  * limitations under the License.
  */
 
-export const ServiceTypes = {
+const ServiceTypes = {
   LOAD_BALANCER: 'LoadBalancer',
   INGRESS: 'Ingress',
   NODE_PORT: 'NodePort',
 };
 
-export const IngressTypes = {
+const IngressTypes = {
   NGINX: 'nginx',
   GKE: 'gke',
 };
 
-export const GeneratorTypes = {
+const GeneratorTypes = {
   K8S: 'k8s',
   HELM: 'helm',
 };

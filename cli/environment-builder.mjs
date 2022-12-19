@@ -16,15 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const assert = require('assert');
-const chalk = require('chalk');
-const _ = require('lodash');
-const path = require('path');
-const { existsSync, readFileSync } = require('fs');
-const Environment = require('yeoman-environment');
-const { CLI_NAME, logger } = require('./utils.cjs');
-const { packageNameToNamespace } = require('../generators/utils.cjs');
-const { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } = require('../utils/blueprint.cjs');
+import assert from 'assert';
+import chalk from 'chalk';
+import _ from 'lodash';
+import { existsSync, readFileSync } from 'fs';
+import Environment from 'yeoman-environment';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+import { CLI_NAME, logger } from './utils.mjs';
+import { packageNameToNamespace } from '../generators/utils.cjs';
+import { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } from '../utils/blueprint.cjs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function loadYoRc(filePath = '.yo-rc.json') {
   if (!existsSync(filePath)) {
@@ -45,7 +50,7 @@ const createEnvironment = (args, options = {}, adapter) => {
   return Environment.createEnv(args, { newErrorHandler: true, ...options, sharedOptions }, adapter);
 };
 
-module.exports = class EnvironmentBuilder {
+export default class EnvironmentBuilder {
   /**
    * Creates a new EnvironmentBuilder with a new Environment.
    *
@@ -418,4 +423,4 @@ module.exports = class EnvironmentBuilder {
     });
     return result;
   }
-};
+}

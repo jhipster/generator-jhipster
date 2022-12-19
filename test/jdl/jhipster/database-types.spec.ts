@@ -19,7 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import databaseTypes from '../../../jdl/jhipster/database-types.js';
+import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
 
 const { isSql, CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 

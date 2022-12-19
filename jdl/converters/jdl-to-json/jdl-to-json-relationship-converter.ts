@@ -21,9 +21,10 @@ import _ from 'lodash';
 import RelationshipTypes from '../../jhipster/relationship-types.js';
 import RelationshipOptions from '../../jhipster/relationship-options.js';
 import Validations from '../../jhipster/validations.js';
-import { camelCase, lowerFirst } from '../../utils/string-utils.js';
+import stringUtils from '../../utils/string-utils.js';
 import JDLRelationship from '../../models/jdl-relationship.js';
 
+const { camelCase, lowerFirst } = stringUtils;
 const { REQUIRED } = Validations;
 const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
 const { MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY, ONE_TO_ONE } = RelationshipTypes;

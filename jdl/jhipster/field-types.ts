@@ -25,7 +25,7 @@ import databaseTypes from './database-types.js';
 const { REQUIRED, UNIQUE, MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN } = validations;
 const { MONGODB, MARIADB, COUCHBASE, NEO4J, CASSANDRA, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 
-export const CommonDBTypes = {
+const CommonDBTypes = {
   STRING: 'String',
   INTEGER: 'Integer',
   LONG: 'Long',
@@ -45,12 +45,12 @@ export const CommonDBTypes = {
   DURATION: 'Duration',
 };
 
-export const RelationalOnlyDBTypes = {
+const RelationalOnlyDBTypes = {
   BYTES: 'byte[]',
   BYTE_BUFFER: 'ByteBuffer',
 };
 
-export const BlobTypes = {
+const BlobTypes = {
   IMAGE: 'image',
   ANY: 'any',
   TEXT: 'text',
@@ -76,17 +76,7 @@ const CommonDBValidations = {
   Duration: new Set([REQUIRED, UNIQUE]),
 };
 
-export default {
-  CommonDBTypes,
-  RelationalOnlyDBTypes,
-  isCommonDBType,
-  hasValidation,
-  getIsType,
-  isBlobType,
-  BlobTypes,
-};
-
-export function isCommonDBType(type) {
+function isCommonDBType(type) {
   if (!type) {
     throw new Error('The passed type must not be nil.');
   }
@@ -94,7 +84,7 @@ export function isCommonDBType(type) {
   return _.snakeCase(type).toUpperCase() in CommonDBTypes || type instanceof JDLEnum;
 }
 
-export function isBlobType(type?: any) {
+function isBlobType(type?: any) {
   if (!type) {
     return false;
   }
@@ -103,7 +93,7 @@ export function isBlobType(type?: any) {
   );
 }
 
-export function hasValidation(type, validation, isAnEnum?: any) {
+function hasValidation(type, validation, isAnEnum?: any) {
   if (!type || !validation) {
     throw new Error('The passed type and value must not be nil.');
   }
@@ -113,7 +103,7 @@ export function hasValidation(type, validation, isAnEnum?: any) {
   return isCommonDBType(type) && CommonDBValidations[type].has(validation);
 }
 
-export function getIsType(databaseType, callback?: any) {
+function getIsType(databaseType, callback?: any) {
   if (!databaseType) {
     throw new Error('The passed type must not be nil.');
   }
@@ -143,3 +133,13 @@ export function getIsType(databaseType, callback?: any) {
   }
   return isType;
 }
+
+export default {
+  CommonDBTypes,
+  RelationalOnlyDBTypes,
+  isCommonDBType,
+  hasValidation,
+  getIsType,
+  isBlobType,
+  BlobTypes,
+};

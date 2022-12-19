@@ -20,11 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
+import { applicationTypes, binaryOptions, unaryOptions, relationshipTypes } from '../../../jdl/jhipster/index.mjs';
 
-import { MONOLITH } from '../../../jdl/jhipster/application-types.js';
-import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
-import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
 import JDLObject from '../../../jdl/models/jdl-object.js';
 import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
 import JDLDeployment from '../../../jdl/models/jdl-deployment.js';
@@ -35,6 +32,8 @@ import JDLEnum from '../../../jdl/models/jdl-enum.js';
 import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
 import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+
+const { MONOLITH } = applicationTypes;
 
 describe('JDLObject', () => {
   describe('addApplication', () => {
@@ -603,7 +602,7 @@ Array [
             object.addRelationship(
               new JDLRelationship({
                 to: 'Valid',
-                type: RelationshipTypes.MANY_TO_MANY,
+                type: relationshipTypes.MANY_TO_MANY,
                 injectedFieldInFrom: 'something',
               })
             );
@@ -620,7 +619,7 @@ Array [
         relationship = new JDLRelationship({
           from: 'Valid2',
           to: 'Valid',
-          type: RelationshipTypes.MANY_TO_MANY,
+          type: relationshipTypes.MANY_TO_MANY,
           injectedFieldInFrom: 'something',
           injectedFieldInTo: 'somethingElse',
         });
@@ -639,7 +638,7 @@ Array [
         const relationship = new JDLRelationship({
           from: 'Valid2',
           to: 'Valid',
-          type: RelationshipTypes.MANY_TO_MANY,
+          type: relationshipTypes.MANY_TO_MANY,
           injectedFieldInFrom: 'something',
           injectedFieldInTo: 'somethingElse',
         });
@@ -671,7 +670,7 @@ Array [
           new JDLRelationship({
             from: 'A',
             to: 'B',
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'b',
           })
         );
@@ -692,7 +691,7 @@ Array [
           from: 'Abc',
           to: 'Abc2',
           injectedFieldInFrom: 'something',
-          type: RelationshipTypes.ONE_TO_ONE,
+          type: relationshipTypes.ONE_TO_ONE,
         })
       );
       jdlObject.addRelationship(
@@ -700,7 +699,7 @@ Array [
           from: 'Abc',
           to: 'Abc2',
           injectedFieldInFrom: 'something',
-          type: RelationshipTypes.ONE_TO_MANY,
+          type: relationshipTypes.ONE_TO_MANY,
         })
       );
     });
@@ -750,7 +749,7 @@ Array [
     });
     context('when adding a valid option', () => {
       it('should work', () => {
-        new JDLObject().addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT }));
+        new JDLObject().addOption(new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT }));
       });
     });
   });
@@ -772,7 +771,7 @@ Array [
     });
     context('when checking for an absent option', () => {
       it('should return an empty array', () => {
-        expect(jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)).to.be.empty;
+        expect(jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)).to.be.empty;
       });
     });
     context('when checking for a present option', () => {
@@ -782,15 +781,15 @@ Array [
 
       before(() => {
         option1 = new JDLUnaryOption({
-          name: UnaryOptions.SKIP_CLIENT,
+          name: unaryOptions.SKIP_CLIENT,
         });
         option2 = new JDLBinaryOption({
-          name: BinaryOptions.Options.SERVICE,
-          value: BinaryOptions.Values.service.SERVICE_CLASS,
+          name: binaryOptions.Options.SERVICE,
+          value: binaryOptions.Values.service.SERVICE_CLASS,
         });
         option3 = new JDLBinaryOption({
-          name: BinaryOptions.Options.SERVICE,
-          value: BinaryOptions.Values.service.SERVICE_IMPL,
+          name: binaryOptions.Options.SERVICE,
+          value: binaryOptions.Values.service.SERVICE_IMPL,
         });
 
         jdlObject.addOption(option1);
@@ -799,8 +798,8 @@ Array [
       });
 
       it('should return it', () => {
-        expect(jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)).to.deep.equal([option1]);
-        expect(jdlObject.getOptionsForName(BinaryOptions.Options.SERVICE)).to.deep.equal([option2, option3]);
+        expect(jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)).to.deep.equal([option1]);
+        expect(jdlObject.getOptionsForName(binaryOptions.Options.SERVICE)).to.deep.equal([option2, option3]);
       });
     });
   });
@@ -821,7 +820,7 @@ Array [
       before(() => {
         jdlObject.addOption(
           new JDLUnaryOption({
-            name: UnaryOptions.SKIP_CLIENT,
+            name: unaryOptions.SKIP_CLIENT,
           })
         );
       });
@@ -838,12 +837,12 @@ Array [
       jdlObject = new JDLObject();
       jdlObject.addOption(
         new JDLUnaryOption({
-          name: UnaryOptions.SKIP_CLIENT,
+          name: unaryOptions.SKIP_CLIENT,
         })
       );
       jdlObject.addOption(
         new JDLUnaryOption({
-          name: UnaryOptions.SKIP_SERVER,
+          name: unaryOptions.SKIP_SERVER,
         })
       );
     });
@@ -891,7 +890,7 @@ Array [
         jdlObject = new JDLObject();
         jdlObject.addOption(
           new JDLUnaryOption({
-            name: UnaryOptions.READ_ONLY,
+            name: unaryOptions.READ_ONLY,
           })
         );
       });
@@ -903,7 +902,7 @@ Array [
       });
       context('for an existing option', () => {
         it('should return false', () => {
-          expect(jdlObject.hasOption(UnaryOptions.READ_ONLY)).to.be.true;
+          expect(jdlObject.hasOption(unaryOptions.READ_ONLY)).to.be.true;
         });
       });
     });
@@ -916,7 +915,7 @@ Array [
         before(() => {
           jdlObject = new JDLObject();
           const microserviceOption = new JDLBinaryOption({
-            name: BinaryOptions.Options.MICROSERVICE,
+            name: binaryOptions.Options.MICROSERVICE,
             value: 'toto',
           });
           jdlObject.addOption(microserviceOption);
@@ -931,7 +930,7 @@ Array [
         before(() => {
           jdlObject = new JDLObject();
           const microserviceOption = new JDLBinaryOption({
-            name: BinaryOptions.Options.MICROSERVICE,
+            name: binaryOptions.Options.MICROSERVICE,
             value: 'toto',
             entityNames: ['A'],
           });
@@ -947,7 +946,7 @@ Array [
       before(() => {
         jdlObject = new JDLObject();
         const microserviceOption = new JDLBinaryOption({
-          name: BinaryOptions.Options.MICROSERVICE,
+          name: binaryOptions.Options.MICROSERVICE,
           value: 'toto',
           entityNames: ['A'],
         });
@@ -993,17 +992,17 @@ Array [
       relationship = new JDLRelationship({
         from: entityA.name,
         to: entityB.name,
-        type: RelationshipTypes.ONE_TO_ONE,
+        type: relationshipTypes.ONE_TO_ONE,
         injectedFieldInFrom: 'entityB',
         injectedFieldInTo: 'entityA(myField)',
       });
       object.addRelationship(relationship);
-      option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+      option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
       option.excludeEntityName(entityA.name);
       object.addOption(option);
       option2 = new JDLBinaryOption({
-        name: BinaryOptions.Options.DTO,
-        value: BinaryOptions.Values.dto.MAPSTRUCT,
+        name: binaryOptions.Options.DTO,
+        value: binaryOptions.Values.dto.MAPSTRUCT,
       });
       option2.addEntityName(entityB.name);
       object.addOption(option2);

@@ -19,21 +19,18 @@
 
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
-import FieldTypes from '../jhipster/field-types.js';
-import ApplicationTypes from '../jhipster/application-types.js';
+import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, reservedKeywords } from '../jhipster/index.mjs';
 import ValidationValidator from './validation-validator.js';
 import RelationshipValidator from './relationship-validator.js';
 import EnumValidator from './enum-validator.js';
 import DeploymentValidator from './deployment-validator.js';
 import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
-import DatabaseTypes from '../jhipster/database-types.js';
-import BinaryOptions from '../jhipster/binary-options.js';
 import ApplicationValidator from './application-validator.js';
 
-import { isReservedFieldName, isReservedTableName, isReservedPaginationWords } from '../jhipster/reserved-keywords.js';
 import JDLObject from '../models/jdl-object.js';
 
+const { isReservedFieldName, isReservedTableName, isReservedPaginationWords } = reservedKeywords;
 /**
  * Constructor taking the jdl object to check against application settings.
  * @param {JDLObject} jdlObject -  the jdl object to check.
@@ -130,7 +127,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     Object.keys(jdlField.validations).forEach(validationName => {
       const jdlValidation = jdlField.validations[validationName];
       validator.validate(jdlValidation);
-      if (!FieldTypes.hasValidation(jdlField.type, jdlValidation.name, isAnEnum)) {
+      if (!fieldTypes.hasValidation(jdlField.type, jdlValidation.name, isAnEnum)) {
         throw new Error(`The validation '${jdlValidation.name}' isn't supported for the type '${jdlField.type}'.`);
       }
     });
@@ -202,8 +199,8 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
 
 function checkForPaginationInAppWithCassandra(jdlOption, jdlApplication) {
   if (
-    jdlApplication.getConfigurationOptionValue('databaseType') === DatabaseTypes.CASSANDRA &&
-    jdlOption.name === BinaryOptions.Options.PAGINATION
+    jdlApplication.getConfigurationOptionValue('databaseType') === databaseTypes.CASSANDRA &&
+    jdlOption.name === binaryOptions.Options.PAGINATION
   ) {
     throw new Error("Pagination isn't allowed when the application uses Cassandra.");
   }
@@ -234,10 +231,10 @@ function isTableNameReserved(tableName, jdlApplication: any = []) {
 }
 
 function getTypeCheckingFunction(entityName, jdlApplication) {
-  if (jdlApplication.getConfigurationOptionValue('applicationType') === ApplicationTypes.GATEWAY) {
+  if (jdlApplication.getConfigurationOptionValue('applicationType') === applicationTypes.GATEWAY) {
     return () => true;
   }
-  return FieldTypes.getIsType(jdlApplication.getConfigurationOptionValue('databaseType'));
+  return fieldTypes.getIsType(jdlApplication.getConfigurationOptionValue('databaseType'));
 }
 
 function checkIfRelationshipIsBetweenApplications({ jdlRelationship, applicationsPerEntityName }) {

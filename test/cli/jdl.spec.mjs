@@ -1,18 +1,16 @@
 /* eslint-disable no-unused-expressions, no-console */
 
-const assert = require('yeoman-assert');
-const expect = require('chai').expect;
-const https = require('https');
-const fse = require('fs-extra');
-const { mockRequire } = require('@node-loaders/mock/require');
-const sinon = require('sinon');
+import assert from 'yeoman-assert';
+import { expect } from 'chai';
+import https from 'https';
+import fse from 'fs-extra';
+import { mockRequire } from '@node-loaders/mock';
+import sinon from 'sinon';
 
-const { testInTempDir, revertTempDir } = require('./utils/utils.cjs');
-const { buildJHipster } = require('../../cli/program.cjs');
-const packageJson = require('../../package.json');
-const cliUtils = require('../../cli/utils.cjs');
-
-const { logger } = cliUtils;
+import { testInTempDir, revertTempDir } from './utils/utils.cjs';
+import { buildJHipster } from '../../cli/program.mjs';
+import packageJson from '../../package.json' assert { type: 'json' };
+import { logger } from '../../cli/utils.mjs';
 
 const mockCli = (opts = {}) => {
   opts.loadCommand = key => opts[`./${key}`];
@@ -95,7 +93,7 @@ describe('jdl command test', () => {
       const env = { env: 'foo' };
       const fork = { fork: 'foo' };
       beforeEach(() => {
-        return mockRequire('../../cli/jdl.cjs', { './import-jdl.cjs': importJdlStub })([['foo.jdl']], options, env, fork).then(jdlFiles => {
+        return mockRequire('../../cli/jdl.mjs', { './import-jdl.mjs': importJdlStub })([['foo.jdl']], options, env, fork).then(jdlFiles => {
           resolved = jdlFiles;
         });
       });
@@ -139,7 +137,7 @@ describe('jdl command test', () => {
           https.get.restore();
         });
         it('should return file not found', () => {
-          return mockRequire('../../cli/jdl.cjs', {})(
+          return mockRequire('../../cli/jdl.mjs', {})(
             [['foo.jdl']],
             { bar: 'foo', skipSampleRepository: true },
             { env: 'foo' },
@@ -172,7 +170,7 @@ describe('jdl command test', () => {
           https.get.restore();
         });
         it('should call https.get', () => {
-          return mockRequire('../../cli/jdl.cjs', { './import-jdl.cjs': importJdlStub })(
+          return mockRequire('../../cli/jdl.mjs', { './import-jdl.mjs': importJdlStub })(
             [['https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl']],
             { bar: 'foo', skipSampleRepository: true },
             { env: 'foo' },
@@ -183,7 +181,7 @@ describe('jdl command test', () => {
           });
         });
         it('should call importJdl', () => {
-          return mockRequire('../../cli/jdl.cjs', { './import-jdl.cjs': importJdlStub })(
+          return mockRequire('../../cli/jdl.mjs', { './import-jdl.mjs': importJdlStub })(
             [['https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl']],
             { bar: 'foo', skipSampleRepository: true },
             { env: 'foo' },
@@ -226,7 +224,7 @@ describe('jdl command test', () => {
         const env = { env: 'foo' };
         const fork = { fork: 'foo' };
         beforeEach(() => {
-          return mockRequire('../../cli/jdl.cjs', { './import-jdl.cjs': importJdlStub })([['foo.jh']], options, env, fork).then(
+          return mockRequire('../../cli/jdl.mjs', { './import-jdl.mjs': importJdlStub })([['foo.jh']], options, env, fork).then(
             jdlFiles => {
               resolved = jdlFiles;
             }
@@ -256,7 +254,7 @@ describe('jdl command test', () => {
 
       describe('when passing foo', () => {
         beforeEach(() => {
-          return mockRequire('../../cli/jdl.cjs', { './import-jdl.cjs': importJdlStub })([['foo']]);
+          return mockRequire('../../cli/jdl.mjs', { './import-jdl.mjs': importJdlStub })([['foo']]);
         });
         it('should append jdl extension and pass to https.get with jdl-sample repository', () => {
           expect(https.get.getCall(0).args[0]).to.be.equal(
@@ -275,7 +273,7 @@ describe('jdl command test', () => {
       describe('with a complete url', () => {
         const url = 'https://raw.githubusercontent.com/jhipster/jdl-samples/main/bar.jdl';
         beforeEach(() => {
-          return mockRequire('../../cli/jdl.cjs', { './import-jdl.cjs': importJdlStub })([[url]]);
+          return mockRequire('../../cli/jdl.mjs', { './import-jdl.mjs': importJdlStub })([[url]]);
         });
         it('should forward the url to get', () => {
           expect(https.get.getCall(0).args[0]).to.be.equal(url);
@@ -308,14 +306,14 @@ describe('jdl command test', () => {
         });
 
         it('should not create the destination file', done => {
-          mockRequire('../../cli/jdl.cjs', { './import-jdl.cjs': () => {} })([['foo.jh']]).catch(error => {
+          mockRequire('../../cli/jdl.mjs', { './import-jdl.mjs': () => {} })([['foo.jh']]).catch(error => {
             assert.noFile('foo.jh');
             done();
           });
         });
 
         it('should print error message', done => {
-          mockRequire('../../cli/jdl.cjs', { './import-jdl.cjs': () => {} })([['foo.jh']]).catch(error => {
+          mockRequire('../../cli/jdl.mjs', { './import-jdl.mjs': () => {} })([['foo.jh']]).catch(error => {
             assert.equal(
               error.message,
               'Error downloading https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jh: 404 - Custom message'

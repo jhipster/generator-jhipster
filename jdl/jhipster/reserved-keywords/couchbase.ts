@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+const couchbase = [
   'ALL',
   'AND',
   'ANY',
@@ -129,3 +129,5 @@ export default [
   'WITH',
   'WRITE',
 ];
+
+export default couchbase;

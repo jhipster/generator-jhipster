@@ -19,7 +19,9 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import { areEntitiesEqual, merge } from '../../../jdl/utils/object-utils.js';
+import objectUtils from '../../../jdl/utils/object-utils.js';
+
+const { areEntitiesEqual, merge } = objectUtils;
 
 describe('ObjectUtils', () => {
   describe('merge', () => {

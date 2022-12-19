@@ -27,7 +27,7 @@
  * @returns {Object} the object result of the merge
  */
 // TODO move it to a JHipsterEntityEqualityChecker file or inside the JSONEntity
-export function merge<A, B>(object1: A, object2: B) {
+function merge<A, B>(object1: A, object2: B) {
   if (!object1 || Object.keys(object1).length === 0) {
     return object2;
   }
@@ -48,7 +48,7 @@ function removeEntriesWithUndefinedValue(entity: any) {
   });
 }
 
-export function areEntitiesEqual(firstEntity: any, secondEntity: any) {
+function areEntitiesEqual(firstEntity: any, secondEntity: any) {
   removeEntriesWithUndefinedValue(firstEntity);
   removeEntriesWithUndefinedValue(secondEntity);
   if (
@@ -108,3 +108,8 @@ function areOptionsTheSame(firstEntity: any, secondEntity: any) {
     firstEntity.jpaMetamodelFiltering === secondEntity.jpaMetamodelFiltering
   );
 }
+
+export default {
+  merge,
+  areEntitiesEqual,
+};

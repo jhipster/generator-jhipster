@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+const neo4j = [
   'CALL',
   'CREATE',
   'DELETE',
@@ -90,3 +90,5 @@ export default [
   'REQUIRE',
   'SCALAR',
 ];
+
+export default neo4j;

@@ -17,4 +17,6 @@
  * limitations under the License.
  */
 
-export default ['SIZE', 'SORT', 'PAGE'];
+const paging = ['SIZE', 'SORT', 'PAGE'];
+
+export default paging;

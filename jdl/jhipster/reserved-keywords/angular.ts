@@ -17,4 +17,5 @@
  * limitations under the License.
  */
 
-export default ['CLASS', 'NODENAME', 'NODETYPE', 'COMPONENT', 'SUBSCRIPTION', 'RESPONSE', 'OBSERVABLE', 'INJECTABLE', 'HTTP', 'ROUTER'];
+const angular = ['CLASS', 'NODENAME', 'NODETYPE', 'COMPONENT', 'SUBSCRIPTION', 'RESPONSE', 'OBSERVABLE', 'INJECTABLE', 'HTTP', 'ROUTER'];
+export default angular;

@@ -19,8 +19,9 @@
 
 import { RuleLevel, INFO } from './rule-levels.js';
 
-import { merge } from '../utils/object-utils.js';
+import objectUtils from '../utils/object-utils.js';
 
+const { merge } = objectUtils;
 /**
  * Represents a rule for the linters.
  */

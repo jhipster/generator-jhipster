@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+const mssql = [
   'ADD',
   'ALL',
   'ALTER',
@@ -204,3 +204,5 @@ export default [
   'WITHIN GROUP',
   'WRITETEXT',
 ];
+
+export default mssql;

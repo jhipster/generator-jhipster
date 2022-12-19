@@ -98,7 +98,7 @@ const baseOptions = {
   },
 };
 
-const Options: any = {
+export const Options: any = {
   ...baseOptions,
   deploymentType: {
     dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
@@ -155,8 +155,6 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
     registryReplicas: Options.registryReplicas.two,
   };
 };
-
-export { Options };
 
 export default {
   Options,

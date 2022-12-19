@@ -18,9 +18,10 @@
  */
 
 import path from 'path';
-import { upperFirst } from '../utils/string-utils.js';
+import stringUtils from '../utils/string-utils.js';
 import { readFile } from './file-reader.js';
 
+const { upperFirst } = stringUtils;
 /**
  * Reads a JSON file.
  * @param filePath the JSON file's path

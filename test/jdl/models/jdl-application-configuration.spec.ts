@@ -21,7 +21,9 @@
 import { expect } from 'chai';
 import JDLApplicationConfiguration from '../../../jdl/models/jdl-application-configuration.js';
 import StringJDLApplicationConfigurationOption from '../../../jdl/models/string-jdl-application-configuration-option.js';
-import { OptionNames } from '../../../jdl/jhipster/application-options.js';
+import { applicationOptions } from '../../../jdl/jhipster/index.mjs';
+
+const { OptionNames } = applicationOptions;
 
 describe('JDLApplicationConfiguration', () => {
   describe('hasOption', () => {

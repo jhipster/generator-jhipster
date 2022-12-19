@@ -26,9 +26,9 @@ import JDLObject from '../../../jdl/models/jdl-object.js';
 import JDLEntity from '../../../jdl/models/jdl-entity.js';
 import exportToJDL from '../../../jdl/exporters/jdl-exporter.js';
 import JDLApplication from '../../../jdl/models/jdl-application.js';
-import applicationOptions from '../../../jdl/jhipster/application-options.js';
-import { NO as NO_CLIENT_FRAMEWORK } from '../../../jdl/jhipster/client-framework-types.js';
+import { applicationOptions, clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
 
+const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const {
   OptionNames: { CLIENT_FRAMEWORK },
 } = applicationOptions;

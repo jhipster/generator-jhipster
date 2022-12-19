@@ -19,9 +19,10 @@
 
 import _ from 'lodash';
 import JDLRelationship from '../../models/jdl-relationship.js';
-import { lowerFirst, upperFirst } from '../../utils/string-utils.js';
+import stringUtils from '../../utils/string-utils.js';
 import { formatComment } from '../../utils/format-utils.js';
 
+const { lowerFirst, upperFirst } = stringUtils;
 export default { convertRelationships };
 
 /**

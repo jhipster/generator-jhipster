@@ -76,6 +76,7 @@ const {
   CLIENT_TEST_SRC_DIR,
 } = constants;
 
+const { getConfigForApplicationType } = defaultApplicationOptions;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
@@ -2587,7 +2588,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
     return {
       ...(applicationType === MICROSERVICE ? defaultConfigMicroservice : defaultConfig),
-      ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
+      ...getConfigForApplicationType(applicationType),
     };
   }
 

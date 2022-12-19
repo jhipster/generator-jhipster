@@ -17,16 +17,11 @@
  * limitations under the License.
  */
 
-const Types = {
+const SearchEngineTypes = {
   ELASTICSEARCH: 'elasticsearch',
   COUCHBASE: 'couchbase',
   NO: 'no',
   FALSE: false,
 };
 
-export const ELASTICSEARCH = Types.ELASTICSEARCH;
-export const COUCHBASE = Types.COUCHBASE;
-export const NO = Types.NO;
-export const FALSE = Types.FALSE;
-
-export default Types;
+export default SearchEngineTypes;

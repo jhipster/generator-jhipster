@@ -25,7 +25,9 @@ import { expect } from 'chai';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import parseFromDir from '../../../jdl/readers/json-reader.js';
-import { SKIP_CLIENT, SKIP_SERVER } from '../../../jdl/jhipster/unary-options.js';
+import { unaryOptions } from '../../../jdl/jhipster/index.mjs';
+
+const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
