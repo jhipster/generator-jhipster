@@ -20,9 +20,8 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import JDLObject from '../../../../jdl/models/jdl-object.js';
-import { JDLEntity } from '../../../../jdl/models/index.mjs';
+import { JDLEntity, JDLEnum } from '../../../../jdl/models/index.mjs';
 import JDLField from '../../../../jdl/models/jdl-field.js';
-import JDLEnum from '../../../../jdl/models/jdl-enum.js';
 import JDLValidation from '../../../../jdl/models/jdl-validation.js';
 import { fieldTypes, validations } from '../../../../jdl/jhipster/index.mjs';
 import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-to-json-field-converter.js';

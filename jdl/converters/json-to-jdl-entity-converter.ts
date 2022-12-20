@@ -18,10 +18,9 @@
  */
 
 import JDLObject from '../models/jdl-object.js';
-import { JDLEntity } from '../models/index.mjs';
+import { JDLEntity, JDLEnum } from '../models/index.mjs';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
-import JDLEnum from '../models/jdl-enum.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';

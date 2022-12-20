@@ -22,7 +22,7 @@
 import { expect } from 'chai';
 
 import { databaseTypes, fieldTypes, validations } from '../../../jdl/jhipster/index.mjs';
-import JDLEnum from '../../../jdl/models/jdl-enum.js';
+import { JDLEnum } from '../../../jdl/models/index.mjs';
 
 const {
   Validations: { MIN, MAXLENGTH, PATTERN },

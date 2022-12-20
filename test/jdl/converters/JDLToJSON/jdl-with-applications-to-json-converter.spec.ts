@@ -38,9 +38,8 @@ import {
 } from '../../../../jdl/jhipster/index.mjs';
 import createJDLApplication from '../../../../jdl/models/jdl-application-factory.js';
 import JDLObject from '../../../../jdl/models/jdl-object.js';
-import { JDLEntity } from '../../../../jdl/models/index.mjs';
+import { JDLEntity, JDLEnum } from '../../../../jdl/models/index.mjs';
 import JDLField from '../../../../jdl/models/jdl-field.js';
-import JDLEnum from '../../../../jdl/models/jdl-enum.js';
 import JDLValidation from '../../../../jdl/models/jdl-validation.js';
 import JDLRelationship from '../../../../jdl/models/jdl-relationship.js';
 import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option.js';

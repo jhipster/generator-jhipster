@@ -18,3 +18,4 @@
  */
 // eslint-disable-next-line import/prefer-default-export
 export { JDLEntity } from './jdl-entity.js';
+export { JDLEnum } from './jdl-enum.js';

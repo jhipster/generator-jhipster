@@ -22,7 +22,7 @@ import objectUtils from '../utils/object-utils.js';
 
 const { merge } = objectUtils;
 
-class JDLEnum {
+export class JDLEnum {
   comment: any;
   name: any;
   values: Map<any, any>;
