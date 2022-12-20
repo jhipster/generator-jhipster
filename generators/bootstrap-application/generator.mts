@@ -42,7 +42,8 @@ const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = BlobTypes;
 
 const {
-  Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN, SUPPORTED_VALIDATION_RULES },
+  Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
+  SUPPORTED_VALIDATION_RULES,
 } = validations;
 
 /**

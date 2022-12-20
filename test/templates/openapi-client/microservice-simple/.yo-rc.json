@@ -12,7 +12,7 @@
     "databaseType": "sql",
     "devDatabaseType": "h2Memory",
     "prodDatabaseType": "mysql",
-    "searchEngine": false,
+    "searchEngine": "no",
     "messageBroker": false,
     "serviceDiscoveryType": "consul",
     "buildTool": "maven",

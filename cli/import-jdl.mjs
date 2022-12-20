@@ -31,7 +31,9 @@ import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
 import { writeConfigFile } from './export-utils.cjs';
 
 const require = createRequire(import.meta.url);
-const jhipsterCli = require.resolve('./cli.mjs');
+
+const jhipsterCli = require('./cli.mjs');
+
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 
 /**
@@ -372,7 +374,7 @@ class JDLProcessor {
 
     let importer;
     // eslint-disable-next-line global-require
-    const { createImporterFromContent, createImporterFromFiles } = require('../jdl/jdl-importer.js');
+    const { createImporterFromContent, createImporterFromFiles } = await import('../jdl/jdl-importer.js');
     if (this.jdlContent) {
       importer = createImporterFromContent(this.jdlContent, configuration);
     } else {
