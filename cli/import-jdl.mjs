@@ -211,7 +211,7 @@ function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOp
  * Imports the Applications and Entities defined in JDL
  * The app .yo-rc.json files and entity json files are written to disk
  */
-function importJdl(jdlImporter) {
+function importJDL(jdlImporter) {
   logger.info('The JDL is being parsed.');
 
   try {
@@ -378,7 +378,7 @@ class JDLProcessor {
     } else {
       importer = createImporterFromFiles(this.jdlFiles, configuration);
     }
-    this.importState = importJdl.call(this, importer);
+    this.importState = importJDL.call(this, importer);
   }
 
   config() {
