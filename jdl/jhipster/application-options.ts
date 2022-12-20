@@ -46,7 +46,7 @@ const { ANGULAR, REACT, VUE, SVELTE, NO } = clientFrameworkTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
 const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
-const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const COUCHBASE_SEARCH_ENGINE = searchEngineTypes.COUCHBASE;
 
 const { EUREKA, CONSUL } = serviceDiscoveryTypes;
@@ -209,7 +209,6 @@ const optionValues: any = {
     [COUCHBASE_SEARCH_ENGINE]: COUCHBASE_SEARCH_ENGINE,
     // TODO: Boolean as key, probably a bug.
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     [NO_SEARCH_ENGINE]: NO_SEARCH_ENGINE,
   },
   [optionNames.SERVER_PORT]: '8080',

@@ -22,6 +22,5 @@ const applicationTypes = {
   MICROSERVICE: 'microservice',
   GATEWAY: 'gateway',
 };
-
 // eslint-disable-next-line import/prefer-default-export
 export { applicationTypes };

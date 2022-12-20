@@ -58,9 +58,7 @@ const jdl = ([jdlFiles = []], options = {}, env, envBuilder, createEnvBuilder) =
     }
     return Promise.resolve(filename);
   });
-  return Promise.all(promises).then(jdlFiles => {
-    return importJdl(jdlFiles.flat(), options, env, envBuilder, createEnvBuilder);
-  });
+  return Promise.all(promises).then(jdlFiles => importJdl(jdlFiles.flat(), options, env, envBuilder, createEnvBuilder));
 };
 
 export default jdl;

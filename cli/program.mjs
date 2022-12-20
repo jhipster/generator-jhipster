@@ -28,7 +28,7 @@ import path from 'path';
 import { logo } from './logo.cjs';
 import EnvironmentBuilder from './environment-builder.mjs';
 import SUB_GENERATORS from './commands.mjs';
-import JHipsterCommand from './jhipster-command.mjs';
+import JHipsterCommand from './j-hipster-command.mjs';
 import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
 import { packageJson } from '../lib/index.cjs';
 import { packageNameToNamespace } from '../generators/utils.cjs';

@@ -21,7 +21,6 @@ const searchEngineTypes = {
   ELASTICSEARCH: 'elasticsearch',
   COUCHBASE: 'couchbase',
   NO: 'no',
-  FALSE: false,
 };
 // eslint-disable-next-line import/prefer-default-export
 export { searchEngineTypes };

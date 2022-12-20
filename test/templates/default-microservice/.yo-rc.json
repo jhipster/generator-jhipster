@@ -15,7 +15,7 @@
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "mysql",
-    "searchEngine": false,
+    "searchEngine": "no",
     "messageBroker": false,
     "serviceDiscoveryType": "eureka",
     "buildTool": "maven",
