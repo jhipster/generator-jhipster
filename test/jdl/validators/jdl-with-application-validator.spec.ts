@@ -30,7 +30,7 @@ import {
 import JDLObject from '../../../jdl/models/jdl-object.js';
 import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
 import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
-import { JDLEntity } from '../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../jdl/models/index.mjs';
 import JDLField from '../../../jdl/models/jdl-field.js';
 import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';

@@ -24,7 +24,7 @@ import stringUtils from '../../utils/string-utils.js';
 import fieldTypes from '../../jhipster/field-types.js';
 import JDLObject from '../../models/jdl-object.js';
 import { Field } from '../types.js';
-import { JDLEntity } from '../../models/jdl-entity.js';
+import { JDLEntity } from '../../models/index.mjs';
 
 const {
   Validations: { UNIQUE, REQUIRED },

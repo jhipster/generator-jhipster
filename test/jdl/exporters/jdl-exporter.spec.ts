@@ -23,7 +23,7 @@ import { jestExpect } from 'mocha-expect-snapshot';
 
 import fs from 'fs';
 import JDLObject from '../../../jdl/models/jdl-object.js';
-import { JDLEntity } from '../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../jdl/models/index.mjs';
 import exportToJDL from '../../../jdl/exporters/jdl-exporter.js';
 import JDLApplication from '../../../jdl/models/jdl-application.js';
 import { applicationOptions, clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';

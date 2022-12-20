@@ -18,7 +18,7 @@
  */
 
 import JDLObject from '../models/jdl-object.js';
-import { JDLEntity } from '../models/jdl-entity.js';
+import { JDLEntity } from '../models/index.mjs';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
 import JDLEnum from '../models/jdl-enum.js';

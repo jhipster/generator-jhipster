@@ -18,7 +18,7 @@
  */
 import _ from 'lodash';
 import JDLObject from '../../models/jdl-object.js';
-import { JDLEntity } from '../../models/jdl-entity.js';
+import { JDLEntity } from '../../models/index.mjs';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import { applicationTypes, binaryOptions, databaseTypes } from '../../jhipster/index.mjs';

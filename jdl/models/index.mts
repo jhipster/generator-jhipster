@@ -16,12 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-const searchEngineTypes = {
-  ELASTICSEARCH: 'elasticsearch',
-  COUCHBASE: 'couchbase',
-  NO: 'no',
-  FALSE: false,
-};
 // eslint-disable-next-line import/prefer-default-export
-export { searchEngineTypes };
+export { JDLEntity } from './jdl-entity.js';

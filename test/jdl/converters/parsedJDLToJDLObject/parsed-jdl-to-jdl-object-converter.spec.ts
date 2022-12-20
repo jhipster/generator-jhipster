@@ -26,7 +26,7 @@ import { fileURLToPath } from 'url';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../../../jdl/readers/jdl-reader.js';
 import ParsedJDLToJDLObjectConverter from '../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
-import { JDLEntity } from '../../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../../jdl/models/index.mjs';
 import JDLEnum from '../../../../jdl/models/jdl-enum.js';
 import JDLField from '../../../../jdl/models/jdl-field.js';
 import JDLValidation from '../../../../jdl/models/jdl-validation.js';

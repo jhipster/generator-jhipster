@@ -32,7 +32,6 @@ const { JWT } = authenticationTypes;
 const { PROMETHEUS } = monitoringTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { COUCHBASE } = databaseTypes;
-const { databaseType: databaseTypes } = databaseTypes;
 const { GeneratorTypes } = kubernetesPlatformTypes;
 
 const NO_DATABASE_TYPE = databaseTypes.NO;

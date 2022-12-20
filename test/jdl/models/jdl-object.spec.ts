@@ -25,7 +25,7 @@ import { applicationTypes, binaryOptions, unaryOptions, relationshipTypes } from
 import JDLObject from '../../../jdl/models/jdl-object.js';
 import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
 import JDLDeployment from '../../../jdl/models/jdl-deployment.js';
-import { JDLEntity } from '../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../jdl/models/index.mjs';
 import JDLField from '../../../jdl/models/jdl-field.js';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';
 import JDLEnum from '../../../jdl/models/jdl-enum.js';
