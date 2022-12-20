@@ -23,11 +23,13 @@ import { existsSync, readFileSync } from 'fs';
 import Environment from 'yeoman-environment';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
 
 import { CLI_NAME, logger } from './utils.mjs';
 import { packageNameToNamespace } from '../generators/utils.cjs';
 import { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } from '../utils/blueprint.cjs';
 
+const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -352,7 +354,7 @@ export default class EnvironmentBuilder {
         try {
           blueprintCommand = require(`${packagePath}/cli/commands`);
         } catch (e) {
-          blueprintCommand = require(`${packagePath}/cli/commands.cjs`);
+          blueprintCommand = require(`${packagePath}/cli/commands.mjs`);
         }
         const blueprintCommands = _.cloneDeep(blueprintCommand);
         Object.entries(blueprintCommands).forEach(([_command, commandSpec]) => {

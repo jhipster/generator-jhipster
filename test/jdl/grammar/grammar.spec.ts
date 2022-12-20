@@ -25,7 +25,9 @@ import { parseFromContent } from '../../../jdl/readers/jdl-reader.js';
 import { relationshipTypes, validations, unaryOptions, binaryOptions } from '../../../jdl/jhipster/index.mjs';
 
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = relationshipTypes;
-const { MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN, REQUIRED, UNIQUE } = validations;
+const {
+  Validations: { MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN, REQUIRED, UNIQUE },
+} = validations;
 const { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED } = unaryOptions;
 
 const { Options, Values, OptionValues } = binaryOptions;

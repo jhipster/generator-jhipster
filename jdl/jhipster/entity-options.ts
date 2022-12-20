@@ -20,7 +20,6 @@ const MapperTypes = {
   MAPSTRUCT: 'mapstruct',
   NO: 'no',
 };
-
 const ServiceTypes = {
   SERVICE_CLASS: 'serviceClass',
   SERVICE_IMPL: 'serviceImpl',

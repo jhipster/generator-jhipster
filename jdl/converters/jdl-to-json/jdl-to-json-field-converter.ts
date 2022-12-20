@@ -24,9 +24,11 @@ import stringUtils from '../../utils/string-utils.js';
 import fieldTypes from '../../jhipster/field-types.js';
 import JDLObject from '../../models/jdl-object.js';
 import { Field } from '../types.js';
-import JDLEntity from '../../models/jdl-entity.js';
+import { JDLEntity } from '../../models/jdl-entity.js';
 
-const { UNIQUE, REQUIRED } = validations;
+const {
+  Validations: { UNIQUE, REQUIRED },
+} = validations;
 const { camelCase } = stringUtils;
 const { isBlobType } = fieldTypes;
 const { ANY_BLOB, BLOB, IMAGE_BLOB, TEXT_BLOB } = fieldTypes.CommonDBTypes;

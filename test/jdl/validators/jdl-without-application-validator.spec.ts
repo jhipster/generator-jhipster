@@ -19,7 +19,7 @@
 
 import { expect } from 'chai';
 import JDLObject from '../../../jdl/models/jdl-object.js';
-import JDLEntity from '../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../jdl/models/jdl-entity.js';
 import JDLField from '../../../jdl/models/jdl-field.js';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';
 import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
@@ -35,6 +35,9 @@ import {
 import createValidator from '../../../jdl/validators/jdl-without-application-validator.js';
 
 const { GATEWAY } = applicationTypes;
+const {
+  Validations: { MIN },
+} = validations;
 
 describe('JDLWithoutApplicationValidator', () => {
   describe('createValidator', () => {
@@ -199,7 +202,7 @@ describe('JDLWithoutApplicationValidator', () => {
         });
         field.addValidation(
           new JDLValidation({
-            name: validations.MIN,
+            name: MIN,
             value: 42,
           })
         );

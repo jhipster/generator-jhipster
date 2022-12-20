@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import logger from '../utils/objects/logger.js';
+import { logger } from '../utils/objects/logger.js';
 
 import * as parser from '../parsing/api.js';
 import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.js';

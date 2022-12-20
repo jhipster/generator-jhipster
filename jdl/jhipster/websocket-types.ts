@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-const WebsocketTypes = {
+const websocketTypes = {
   SPRING_WEBSOCKET: 'spring-websocket',
-  FALSE: false,
+  NO: 'no',
 };
-
-export default WebsocketTypes;
+// eslint-disable-next-line import/prefer-default-export
+export { websocketTypes };

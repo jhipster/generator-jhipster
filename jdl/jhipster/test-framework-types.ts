@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-const TestFrameworkTypes = {
+const testFrameworkTypes = {
   CYPRESS: 'cypress',
   CUCUMBER: 'cucumber',
   GATLING: 'gatling',
   NO: 'no',
 };
-
-export default TestFrameworkTypes;
+// eslint-disable-next-line import/prefer-default-export
+export { testFrameworkTypes };

@@ -23,29 +23,24 @@ const MARIADB = 'mariadb';
 const POSTGRESQL = 'postgresql';
 const MSSQL = 'mssql';
 const ORACLE = 'oracle';
-const MONGODB = 'mongodb';
-const CASSANDRA = 'cassandra';
-const COUCHBASE = 'couchbase';
-const NEO4J = 'neo4j';
 const H2_DISK = 'h2Disk';
 const H2_MEMORY = 'h2Memory';
-const NO = 'no';
 
+const databaseTypes: any = {
+  SQL: 'sql',
+  MYSQL: 'mysql',
+  MARIADB: 'mariadb',
+  POSTGRESQL: 'postgresql',
+  MSSQL: 'mssql',
+  ORACLE: 'oracle',
+  MONGODB: 'mongodb',
+  CASSANDRA: 'cassandra',
+  COUCHBASE: 'couchbase',
+  NEO4J: 'neo4j',
+  H2_DISK: 'h2Disk',
+  H2_MEMORY: 'h2Memory',
+  NO: 'no',
+};
 const isSql = type => [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL, H2_DISK, H2_MEMORY].includes(type);
 
-export default {
-  SQL,
-  MYSQL,
-  MARIADB,
-  POSTGRESQL,
-  MSSQL,
-  ORACLE,
-  MONGODB,
-  CASSANDRA,
-  COUCHBASE,
-  NEO4J,
-  H2_DISK,
-  H2_MEMORY,
-  NO,
-  isSql,
-};
+export { databaseTypes, isSql };

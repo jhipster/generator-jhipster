@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 
-import logger from '../utils/objects/logger.js';
+import { logger } from '../utils/objects/logger.js';
 import JDLApplicationConfiguration from './jdl-application-configuration.js';
 import StringJDLApplicationConfigurationOption from './string-jdl-application-configuration-option.js';
 import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-configuration-option.js';
 import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-configuration-option.js';
 import ListJDLApplicationConfigurationOption from './list-jdl-application-configuration-option.js';
-import ApplicationOptions from '../jhipster/application-options.js';
+import { applicationOptions } from '../jhipster/index.mjs';
 
-const { getTypeForOption, doesOptionExist, OptionTypes, shouldTheValueBeQuoted } = ApplicationOptions;
+const { getTypeForOption, doesOptionExist, OptionTypes, shouldTheValueBeQuoted } = applicationOptions;
 
 export default function createApplicationConfigurationFromObject(configurationObject = {}) {
   const configuration = new JDLApplicationConfiguration();

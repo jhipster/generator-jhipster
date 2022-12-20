@@ -22,7 +22,8 @@ import JDLField from './jdl-field.js';
 import objectUtils from '../utils/object-utils.js';
 
 const { merge } = objectUtils;
-export default class JDLEntity {
+// eslint-disable-next-line import/prefer-default-export
+export class JDLEntity {
   name: any;
   tableName: any;
   fields: Record<string, JDLField>;

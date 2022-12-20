@@ -16,12 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import logger from '../utils/objects/logger.js';
+import { logger } from '../utils/objects/logger.js';
 import { relationshipTypes, validations } from '../jhipster/index.mjs';
 import stringUtils from '../utils/string-utils.js';
 
 const { lowerFirst } = stringUtils;
-const { REQUIRED } = validations;
+const {
+  Validations: { REQUIRED },
+} = validations;
 
 export default class JDLRelationship {
   from: any;

@@ -17,18 +17,16 @@
  * limitations under the License.
  */
 
-import ApplicationOptions from '../jhipster/application-options.js';
-import ApplicationTypes from '../jhipster/application-types.js';
-import DatabaseTypes from '../jhipster/database-types.js';
+import { applicationOptions, applicationTypes, databaseTypes } from '../jhipster/index.mjs';
 import BinaryOptionValidator from './binary-option-validator.js';
 import UnaryOptionValidator from './unary-option-validator.js';
 import Validator from './validator.js';
 
 import BinaryOptions from '../jhipster/binary-options.js';
 
-const { OptionNames, OptionValues, getTypeForOption, doesOptionExist, doesOptionValueExist } = ApplicationOptions;
-const { MICROSERVICE } = ApplicationTypes;
-const { COUCHBASE, NEO4J, CASSANDRA, MONGODB, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = DatabaseTypes;
+const { OptionNames, OptionValues, getTypeForOption, doesOptionExist, doesOptionValueExist } = applicationOptions;
+const { MICROSERVICE } = applicationTypes;
+const { COUCHBASE, NEO4J, CASSANDRA, MONGODB, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 const { Options } = BinaryOptions;
 
 export default class ApplicationValidator extends Validator {

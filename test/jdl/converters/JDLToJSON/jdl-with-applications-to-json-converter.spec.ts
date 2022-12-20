@@ -38,7 +38,7 @@ import {
 } from '../../../../jdl/jhipster/index.mjs';
 import createJDLApplication from '../../../../jdl/models/jdl-application-factory.js';
 import JDLObject from '../../../../jdl/models/jdl-object.js';
-import JDLEntity from '../../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../../jdl/models/jdl-entity.js';
 import JDLField from '../../../../jdl/models/jdl-field.js';
 import JDLEnum from '../../../../jdl/models/jdl-enum.js';
 import JDLValidation from '../../../../jdl/models/jdl-validation.js';
@@ -49,6 +49,9 @@ import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option.js';
 import logger from '../../../../jdl/utils/objects/logger.js';
 import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
 
+const {
+  Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },
+} = validations;
 const { MONOLITH } = applicationTypes;
 const { CommonDBTypes } = fieldTypes;
 const { SQL } = databaseTypes;
@@ -773,40 +776,40 @@ JSONEntity {
               type: CommonDBTypes.ANY_BLOB,
             });
             const requiredValidation = new JDLValidation({
-              name: validations.REQUIRED,
+              name: REQUIRED,
               value: true,
             });
             const uniqueValidation = new JDLValidation({
-              name: validations.UNIQUE,
+              name: UNIQUE,
               value: true,
             });
             const minValidation = new JDLValidation({
-              name: validations.MIN,
+              name: MIN,
               value: 0,
             });
             const maxValidation = new JDLValidation({
-              name: validations.MAX,
+              name: MAX,
               value: 10,
             });
             const minLengthValidation = new JDLValidation({
-              name: validations.MINLENGTH,
+              name: MINLENGTH,
               value: 0,
             });
             const maxLengthValidation = new JDLValidation({
-              name: validations.MAXLENGTH,
+              name: MAXLENGTH,
               value: 10,
             });
             const patternValidation = new JDLValidation({
-              name: validations.PATTERN,
+              name: PATTERN,
               // eslint-disable-next-line prettier/prettier,no-useless-escape
               value: '^d$',
             });
             const minBytesValidation = new JDLValidation({
-              name: validations.MINBYTES,
+              name: MINBYTES,
               value: 0,
             });
             const maxBytesValidation = new JDLValidation({
-              name: validations.MAXBYTES,
+              name: MAXBYTES,
               value: 10,
             });
             stringField.addValidation(requiredValidation);

@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import applicationTypes from './application-types.js';
-import authenticationTypes from './authentication-types.js';
-import databaseTypes from './database-types.js';
+import { applicationTypes } from './application-types.js';
+import { authenticationTypes } from './authentication-types.js';
+import { databaseTypes } from './database-types.js';
 import applicationOptions from './application-options.js';
-import cacheProviderType from './cache-types.js';
-import serviceDiscoveryTypes from './service-discovery-types.js';
-import clientFrameworkTypes from './client-framework-types.js';
-import buildToolTypes from './build-tool-types.js';
+import { cacheTypes } from './cache-types.js';
+import { serviceDiscoveryTypes } from './service-discovery-types.js';
+import { clientFrameworkTypes } from './client-framework-types.js';
+import { buildToolTypes } from './build-tool-types.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { EUREKA } = serviceDiscoveryTypes;
@@ -33,9 +33,9 @@ const NO_DATABASE_TYPE = databaseTypes.NO;
 const { OptionNames, OptionValues } = applicationOptions;
 const { JWT, OAUTH2 } = authenticationTypes;
 const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
-const { EHCACHE, HAZELCAST } = cacheProviderType;
+const { EHCACHE, HAZELCAST } = cacheTypes;
 
-const NO_CACHE_PROVIDER = cacheProviderType.NO;
+const NO_CACHE_PROVIDER = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 const { MAVEN } = buildToolTypes;

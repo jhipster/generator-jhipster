@@ -61,8 +61,6 @@ describe('jhipster cli', () => {
   });
 
   it('should return error on unknown command', function (done) {
-    this.timeout(10000);
-
     exec(`${cmd} junkcmd`, (error, stdout, stderr) => {
       expect(error).to.not.be.null;
       expect(error.code).to.equal(1);

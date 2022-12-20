@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
-const ClientFrameworkTypes = {
+const clientFrameworkTypes = {
   ANGULAR: 'angular',
   REACT: 'react',
   VUE: 'vue',
   SVELTE: 'svelte',
   NO: 'no',
 };
-
-export default ClientFrameworkTypes;
+// eslint-disable-next-line import/prefer-default-export
+export { clientFrameworkTypes };

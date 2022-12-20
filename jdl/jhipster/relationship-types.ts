@@ -19,13 +19,13 @@
 
 import _ from 'lodash';
 
-const RelationshipTypes: any = {
+const relationshipTypes: any = {
   ONE_TO_ONE: 'OneToOne',
   ONE_TO_MANY: 'OneToMany',
   MANY_TO_ONE: 'ManyToOne',
   MANY_TO_MANY: 'ManyToMany',
 };
 
-RelationshipTypes.exists = relationship => Object.values(RelationshipTypes).includes(_.upperFirst(_.camelCase(relationship)));
+relationshipTypes.exists = relationship => Object.values(relationshipTypes).includes(_.upperFirst(_.camelCase(relationship)));
 
-export default RelationshipTypes;
+export default relationshipTypes;

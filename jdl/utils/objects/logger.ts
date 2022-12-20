@@ -24,8 +24,10 @@ const { printf, combine } = format;
 
 const myFormat = printf(info => `${info.level}: ${info.message}`);
 
-export default createLogger({
+const logger = createLogger({
   transports: [new Console()],
   format: combine(myFormat),
   handleExceptions: true,
 });
+// eslint-disable-next-line import/prefer-default-export
+export { logger };

@@ -19,15 +19,11 @@
 import entityOptions from './entity-options.js';
 
 const { MapperTypes, PaginationTypes, SearchTypes, ServiceTypes } = entityOptions;
-
 const { MAPSTRUCT } = MapperTypes;
 const NO_MAPPER = MapperTypes.NO;
-
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 const NO_SERVICE = ServiceTypes.NO;
-
 const { ELASTICSEARCH, COUCHBASE, NO: NO_SEARCH } = SearchTypes;
-
 const Options = {
   DTO: 'dto',
   SERVICE: 'service',

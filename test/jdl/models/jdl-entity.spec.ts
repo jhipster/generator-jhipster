@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import JDLEntity from '../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../jdl/models/jdl-entity.js';
 import JDLField from '../../../jdl/models/jdl-field.js';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';
 

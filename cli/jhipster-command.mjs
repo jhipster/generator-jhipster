@@ -17,18 +17,18 @@
  * limitations under the License.
  */
 
-const chalk = require('chalk');
-const { Command, Option } = require('commander');
+import chalk from 'chalk';
+import { Command, Option } from 'commander';
 
-class JHipsterCommand extends Command {
+export default class JhipsterCommand extends Command {
   createCommand(name) {
-    return new JHipsterCommand(name);
+    return new JhipsterCommand(name);
   }
 
   /**
    * Alternative for alias() accepting chaining with undefined value.
    * @param {String} alias
-   * @return {JHipsterCommand} this;
+   * @return {JhipsterCommand} this;
    */
   addAlias(alias) {
     if (alias) {
@@ -41,7 +41,7 @@ class JHipsterCommand extends Command {
    * Register a callback to be executed before _parseCommand.
    * Used to lazy load options.
    * @param {Function} lazyBuildCommandCallBack
-   * @return {JHipsterCommand} this;
+   * @return {JhipsterCommand} this;
    */
   lazyBuildCommand(lazyBuildCommandCallBack) {
     this._lazyBuildCommandCallBack = lazyBuildCommandCallBack;
@@ -51,7 +51,7 @@ class JHipsterCommand extends Command {
   /**
    * Register callback to customize _excessArguments behavior.
    * @param {Function} excessArgumentsCallback
-   * @return {JHipsterCommand} this;
+   * @return {JhipsterCommand} this;
    */
   excessArgumentsCallback(excessArgumentsCallback) {
     this._excessArgumentsCallback = excessArgumentsCallback;
@@ -84,7 +84,7 @@ class JHipsterCommand extends Command {
   /**
    * Override addOption to register a negative alternative for every option.
    * @param {Option} option
-   * @return {JHipsterCommand} this;
+   * @return {JhipsterCommand} this;
    */
   addOption(option) {
     if (!option.long || option.required || option.optional) {
@@ -106,7 +106,7 @@ class JHipsterCommand extends Command {
   /**
    * Register arguments using cli/commands.js structure.
    * @param {String[]} args
-   * @return {JHipsterCommand} this;
+   * @return {JhipsterCommand} this;
    */
   addCommandArguments(args) {
     if (Array.isArray(args)) {
@@ -118,7 +118,7 @@ class JHipsterCommand extends Command {
   /**
    * Register options using cli/commands.js structure.
    * @param {object[]} [opts]
-   * @return {JHipsterCommand} this;
+   * @return {JhipsterCommand} this;
    */
   addCommandOptions(opts = []) {
     opts.forEach(opt => this._addCommandOption(opt));
@@ -133,7 +133,7 @@ class JHipsterCommand extends Command {
   /**
    * Register arguments using generator._arguments structure.
    * @param {object[]} generatorArgs
-   * @return {JHipsterCommand} this;
+   * @return {JhipsterCommand} this;
    */
   addGeneratorArguments(generatorArgs = []) {
     if (!generatorArgs) return this;
@@ -149,7 +149,7 @@ class JHipsterCommand extends Command {
    * Register options using generator._options structure.
    * @param {object} options
    * @param {string} blueprintOptionDescription - description of the blueprint that adds the option
-   * @return {JHipsterCommand} this;
+   * @return {JhipsterCommand} this;
    */
   addGeneratorOptions(options = {}, blueprintOptionDescription) {
     Object.entries(options).forEach(([key, value]) => {
@@ -190,5 +190,3 @@ class JHipsterCommand extends Command {
     return this.addOption(option);
   }
 }
-
-module.exports = JHipsterCommand;

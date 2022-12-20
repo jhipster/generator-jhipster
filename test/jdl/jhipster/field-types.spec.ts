@@ -24,6 +24,10 @@ import { expect } from 'chai';
 import { databaseTypes, fieldTypes, validations } from '../../../jdl/jhipster/index.mjs';
 import JDLEnum from '../../../jdl/models/jdl-enum.js';
 
+const {
+  Validations: { MIN, MAXLENGTH, PATTERN },
+} = validations;
+
 describe('FieldTypes', () => {
   describe('isCommonDBType', () => {
     context('when passing an invalid argument', () => {
@@ -105,7 +109,7 @@ describe('FieldTypes', () => {
           fieldTypes.hasValidation();
         }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {
-          fieldTypes.hasValidation(null, validations.MAXLENGTH);
+          fieldTypes.hasValidation(null, MAXLENGTH);
         }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {
           // @ts-expect-error
@@ -115,12 +119,12 @@ describe('FieldTypes', () => {
     });
     context('when passing a false argument', () => {
       it('should return false', () => {
-        expect(fieldTypes.hasValidation(fieldTypes.CommonDBTypes.BIG_DECIMAL, validations.PATTERN)).to.be.false;
+        expect(fieldTypes.hasValidation(fieldTypes.CommonDBTypes.BIG_DECIMAL, PATTERN)).to.be.false;
       });
     });
     context('when passing a valid argument', () => {
       it('should return true', () => {
-        expect(fieldTypes.hasValidation(fieldTypes.CommonDBTypes.BIG_DECIMAL, validations.MIN)).to.be.true;
+        expect(fieldTypes.hasValidation(fieldTypes.CommonDBTypes.BIG_DECIMAL, MIN)).to.be.true;
       });
     });
   });

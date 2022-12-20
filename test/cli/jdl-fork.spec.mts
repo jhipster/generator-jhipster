@@ -91,7 +91,6 @@ describe('jhipster cli with jdl fork', () => {
     });
 
     it('should succeed', function () {
-      this.timeout(60000);
       return runJHipster();
     });
   });

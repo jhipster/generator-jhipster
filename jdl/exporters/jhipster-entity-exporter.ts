@@ -19,7 +19,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import ApplicationTypes from '../jhipster/application-types.js';
+import { applicationTypes } from '../jhipster/index.mjs';
 import { toFilePath, readJSONFile } from '../readers/json-file-reader.js';
 import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils.js';
 import objectUtils from '../utils/object-utils.js';
@@ -118,7 +118,7 @@ function filterOutUnchangedEntities(subFolder) {
 
 function shouldFilterOutEntitiesBasedOnMicroservice() {
   return (
-    configuration.application.type && configuration.application.type === ApplicationTypes.MICROSERVICE && configuration.application.name
+    configuration.application.type && configuration.application.type === applicationTypes.MICROSERVICE && configuration.application.name
   );
 }
 

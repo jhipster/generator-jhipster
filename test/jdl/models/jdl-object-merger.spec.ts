@@ -21,7 +21,7 @@ import { expect } from 'chai';
 import { applicationTypes, fieldTypes, unaryOptions, relationshipTypes } from '../../../jdl/jhipster/index.mjs';
 import JDLObject from '../../../jdl/models/jdl-object.js';
 import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
-import JDLEntity from '../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../jdl/models/jdl-entity.js';
 import JDLField from '../../../jdl/models/jdl-field.js';
 import JDLEnum from '../../../jdl/models/jdl-enum.js';
 import JDLRelationship from '../../../jdl/models/jdl-relationship.js';

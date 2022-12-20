@@ -306,7 +306,7 @@ describe('jdl command test', () => {
         });
 
         it('should not create the destination file', done => {
-          mockRequire('../../cli/jdl.mjs', { './import-jdl.mjs': () => {} })([['foo.jh']]).catch(error => {
+          mockRequire('../../cli/jdl.mjs', { './import-jdl.mjs': () => {} })([['foo.jh']]).catch(() => {
             assert.noFile('foo.jh');
             done();
           });

@@ -26,7 +26,7 @@ import { fileURLToPath } from 'url';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../../../jdl/readers/jdl-reader.js';
 import ParsedJDLToJDLObjectConverter from '../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
-import JDLEntity from '../../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../../jdl/models/jdl-entity.js';
 import JDLEnum from '../../../../jdl/models/jdl-enum.js';
 import JDLField from '../../../../jdl/models/jdl-field.js';
 import JDLValidation from '../../../../jdl/models/jdl-validation.js';
@@ -56,6 +56,9 @@ const { SKIP_CLIENT, SKIP_SERVER } = OptionNames;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
+const {
+  Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },
+} = validations;
 
 describe('ParsedJDLToJDLObjectConverter', () => {
   describe('parse', () => {
@@ -90,15 +93,15 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                   name: 'guid',
                   type: fieldTypes.CommonDBTypes.UUID,
                   validations: {
-                    required: new JDLValidation({ name: validations.REQUIRED }),
+                    required: new JDLValidation({ name: REQUIRED }),
                   },
                 }),
                 name: new JDLField({
                   name: 'name',
                   type: fieldTypes.CommonDBTypes.STRING,
                   validations: {
-                    required: new JDLValidation({ name: validations.REQUIRED }),
-                    unique: new JDLValidation({ name: validations.UNIQUE }),
+                    required: new JDLValidation({ name: REQUIRED }),
+                    unique: new JDLValidation({ name: UNIQUE }),
                   },
                 }),
                 description: new JDLField({
@@ -150,11 +153,11 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                   type: fieldTypes.CommonDBTypes.STRING,
                   validations: {
                     minlength: new JDLValidation({
-                      name: validations.MINLENGTH,
+                      name: MINLENGTH,
                       value: '5',
                     }),
                     maxlength: new JDLValidation({
-                      name: validations.MAXLENGTH,
+                      name: MAXLENGTH,
                       value: '25',
                     }),
                   },
@@ -324,7 +327,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
           });
           enumField.addValidation(
             new JDLValidation({
-              name: validations.REQUIRED,
+              name: REQUIRED,
             })
           );
         });

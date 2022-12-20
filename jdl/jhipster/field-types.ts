@@ -20,9 +20,11 @@
 import _ from 'lodash';
 import validations from './validations.js';
 import JDLEnum from '../models/jdl-enum.js';
-import databaseTypes from './database-types.js';
+import { databaseTypes } from './database-types.js';
 
-const { REQUIRED, UNIQUE, MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN } = validations;
+const {
+  Validations: { REQUIRED, UNIQUE, MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN },
+} = validations;
 const { MONGODB, MARIADB, COUCHBASE, NEO4J, CASSANDRA, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 
 const CommonDBTypes = {

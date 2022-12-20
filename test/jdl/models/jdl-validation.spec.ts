@@ -22,6 +22,10 @@ import { expect } from 'chai';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';
 import { validations } from '../../../jdl/jhipster/index.mjs';
 
+const {
+  Validations: { PATTERN },
+} = validations;
+
 describe('JDLValidation', () => {
   describe('new', () => {
     context('when not passing any argument', () => {
@@ -86,7 +90,7 @@ describe('JDLValidation', () => {
       it('should format it', () => {
         expect(
           new JDLValidation({
-            name: validations.PATTERN,
+            name: PATTERN,
             value: '[A-z0-9]',
           }).toString()
         ).to.equal('pattern(/[A-z0-9]/)');

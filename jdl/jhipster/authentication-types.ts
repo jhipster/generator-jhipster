@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 
-const Types = {
+const authenticationTypes = {
   JWT: 'jwt',
   OAUTH2: 'oauth2',
   SESSION: 'session',
 };
 
-export default Types;
+// eslint-disable-next-line import/prefer-default-export
+export { authenticationTypes };

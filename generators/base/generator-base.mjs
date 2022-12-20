@@ -96,9 +96,9 @@ const { ELASTICSEARCH } = searchEngineTypes;
 
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
-const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
-const NO_WEBSOCKET = websocketTypes.FALSE;
+const NO_WEBSOCKET = websocketTypes.NO;
 
 const isWin32 = os.platform() === 'win32';
 
@@ -205,10 +205,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     try {
       this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
     } catch (error) {
-      const split = this.options.namespace.split(':', 2);
-      this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
+      if (this.options.namespace) {
+        const split = this.options.namespace.split(':', 2);
+        this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
+      }
     }
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
+    return this.fetchFromInstalledJHipster(this._jhipsterGenerator ?? '', 'templates', ...args);
   }
 
   /**

@@ -26,7 +26,7 @@ chai.use(sinonChai);
 import { expect } from 'chai';
 
 import JDLObject from '../../../../jdl/models/jdl-object.js';
-import JDLEntity from '../../../../jdl/models/jdl-entity.js';
+import { JDLEntity } from '../../../../jdl/models/jdl-entity.js';
 import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option.js';
 import { unaryOptions, binaryOptions } from '../../../../jdl/jhipster/index.mjs';

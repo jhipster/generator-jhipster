@@ -18,9 +18,11 @@
  */
 
 import JDLValidation from '../../models/jdl-validation.js';
-import Validations from '../../jhipster/validations.js';
+import { validations } from '../../jhipster/index.mjs';
 
-const { PATTERN } = Validations;
+const {
+  Validations: { PATTERN },
+} = validations;
 
 export default { convertValidations };
 

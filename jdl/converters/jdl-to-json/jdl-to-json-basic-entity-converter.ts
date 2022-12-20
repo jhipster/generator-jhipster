@@ -20,8 +20,8 @@
 import JSONEntity from '../../jhipster/json-entity.js';
 import formatComment from '../../utils/format-utils.js';
 import getTableNameFromEntityName from '../../jhipster/entity-table-name-creator.js';
-import logger from '../../utils/objects/logger.js';
-import JDLEntity from '../../models/jdl-entity.js';
+import { logger } from '../../utils/objects/logger.js';
+import { JDLEntity } from '../../models/jdl-entity.js';
 
 const USER = 'user';
 const AUTHORITY = 'authority';

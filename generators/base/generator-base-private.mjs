@@ -38,7 +38,9 @@ import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const { JAVA_COMPATIBLE_VERSIONS } = generatorConstants;
 const dbTypes = fieldTypes;
-const { REQUIRED } = validations;
+const {
+  Validations: { REQUIRED },
+} = validations;
 
 const {
   STRING: TYPE_STRING,

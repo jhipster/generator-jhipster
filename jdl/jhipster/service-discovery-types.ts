@@ -17,11 +17,9 @@
  * limitations under the License.
  */
 
-const serviceDiscoveryTypes = {
+// eslint-disable-next-line import/prefer-default-export
+export const serviceDiscoveryTypes = {
   EUREKA: 'eureka',
   CONSUL: 'consul',
   NO: 'no',
-  FALSE: false,
 };
-
-export default serviceDiscoveryTypes;

@@ -30,5 +30,4 @@ function getTableNameFromEntityName(entityName: string): string {
   }
   return _.snakeCase(entityName);
 }
-
 export default getTableNameFromEntityName;

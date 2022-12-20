@@ -21,24 +21,28 @@
 import { expect } from 'chai';
 import { validations } from '../../../jdl/jhipster/index.mjs';
 
+const {
+  Validations: { REQUIRED, MAXLENGTH, MAXBYTES },
+} = validations;
+
 describe('Validations', () => {
   describe('exists', () => {
     describe('when checking for a valid validation', () => {
       it('should return true', () => {
-        expect(validations.exists(validations.MAXBYTES)).to.be.true;
+        expect(validations.Validations.exists(MAXBYTES)).to.be.true;
       });
     });
     describe('when checking for an invalid validation', () => {
       it('should return false', () => {
-        expect(validations.exists('NOTHING')).to.be.false;
+        expect(validations.Validations.exists('NOTHING')).to.be.false;
       });
     });
   });
   describe('needsValue', () => {
     describe('when checking whether a validation needs a value', () => {
       it('should return so', () => {
-        expect(validations.needsValue(validations.MAXLENGTH)).to.be.true;
-        expect(validations.needsValue(validations.REQUIRED)).to.be.false;
+        expect(validations.Validations.needsValue(MAXLENGTH)).to.be.true;
+        expect(validations.Validations.needsValue(REQUIRED)).to.be.false;
       });
     });
   });

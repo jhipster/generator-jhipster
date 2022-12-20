@@ -17,11 +17,10 @@
  * limitations under the License.
  */
 
-const SearchEngineTypes = {
+const searchEngineTypes = {
   ELASTICSEARCH: 'elasticsearch',
   COUCHBASE: 'couchbase',
   NO: 'no',
   FALSE: false,
 };
-
-export default SearchEngineTypes;
+export { searchEngineTypes };

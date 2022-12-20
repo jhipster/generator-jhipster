@@ -25,6 +25,10 @@ import JDLField from '../../../jdl/models/jdl-field.js';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';
 import { validations } from '../../../jdl/jhipster/index.mjs';
 
+const {
+  Validations: { MIN },
+} = validations;
+
 describe('JDLField', () => {
   describe('new', () => {
     context('when not passing any argument', () => {
@@ -93,13 +97,13 @@ describe('JDLField', () => {
       let validation;
 
       before(() => {
-        validation = { name: validations.MIN, value: 42 };
+        validation = { name: MIN, value: 42 };
         field.addValidation(validation);
       });
 
       it('should add it', () => {
         field.forEachValidation(validation => {
-          expect(validation.name).to.equal(validations.MIN);
+          expect(validation.name).to.equal(MIN);
           expect(validation.value).to.equal(42);
         });
       });
