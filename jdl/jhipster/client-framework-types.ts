@@ -24,5 +24,4 @@ const clientFrameworkTypes = {
   SVELTE: 'svelte',
   NO: 'no',
 };
-// eslint-disable-next-line import/prefer-default-export
-export { clientFrameworkTypes };
+export default clientFrameworkTypes;

@@ -19,7 +19,7 @@
 import kubernetesPlatformTypes from './kubernetes-platform-types.js';
 import openshiftPlatformTypes from './openshift-platform-types.js';
 import monitoringTypes from './monitoring-types.js';
-import { serviceDiscoveryTypes } from './service-discovery-types.js';
+import serviceDiscoveryTypes from './service-discovery-types.js';
 
 const { LOAD_BALANCER, NODE_PORT, INGRESS } = kubernetesPlatformTypes.ServiceTypes;
 const { NGINX, GKE } = kubernetesPlatformTypes.IngressTypes;

@@ -26,6 +26,6 @@
       "relationshipType": "one-to-one"
     }
   ],
-  "searchEngine": false,
+  "searchEngine": "no",
   "service": "no"
 }

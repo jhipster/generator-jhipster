@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import { applicationTypes } from './application-types.js';
-import { authenticationTypes } from './authentication-types.js';
+import applicationTypes from './application-types.js';
+import authenticationTypes from './authentication-types.js';
 import { databaseTypes } from './database-types.js';
 import applicationOptions from './application-options.js';
-import { cacheTypes } from './cache-types.js';
-import { serviceDiscoveryTypes } from './service-discovery-types.js';
-import { clientFrameworkTypes } from './client-framework-types.js';
-import { buildToolTypes } from './build-tool-types.js';
+import cacheTypes from './cache-types.js';
+import serviceDiscoveryTypes from './service-discovery-types.js';
+import clientFrameworkTypes from './client-framework-types.js';
+import buildToolTypes from './build-tool-types.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { EUREKA } = serviceDiscoveryTypes;

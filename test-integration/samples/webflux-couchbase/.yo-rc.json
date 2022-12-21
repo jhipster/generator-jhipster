@@ -20,9 +20,9 @@
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "couchbase",
     "reactive": true,
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
     "testFrameworks": ["gatling", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

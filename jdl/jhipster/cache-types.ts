@@ -27,5 +27,4 @@ const cacheTypes = {
   NO: 'no',
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { cacheTypes };
+export default cacheTypes;

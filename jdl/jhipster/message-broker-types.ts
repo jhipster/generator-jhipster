@@ -19,7 +19,6 @@
 
 const messageBrokerTypes = {
   KAFKA: 'kafka',
-  NO: false,
+  NO: 'no',
 };
-// eslint-disable-next-line import/prefer-default-export
-export { messageBrokerTypes };
+export default messageBrokerTypes;

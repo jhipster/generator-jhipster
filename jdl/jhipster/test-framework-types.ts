@@ -23,5 +23,4 @@ const testFrameworkTypes = {
   GATLING: 'gatling',
   NO: 'no',
 };
-// eslint-disable-next-line import/prefer-default-export
-export { testFrameworkTypes };
+export default testFrameworkTypes;

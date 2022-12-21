@@ -22,5 +22,4 @@ const searchEngineTypes = {
   COUCHBASE: 'couchbase',
   NO: 'no',
 };
-// eslint-disable-next-line import/prefer-default-export
-export { searchEngineTypes };
+export default searchEngineTypes;

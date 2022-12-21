@@ -22,4 +22,4 @@ const buildToolTypes = {
   GRADLE: 'gradle',
 };
 // eslint-disable-next-line import/prefer-default-export
-export { buildToolTypes };
+export default buildToolTypes;

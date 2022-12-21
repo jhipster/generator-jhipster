@@ -21,5 +21,4 @@ const websocketTypes = {
   SPRING_WEBSOCKET: 'spring-websocket',
   NO: 'no',
 };
-// eslint-disable-next-line import/prefer-default-export
-export { websocketTypes };
+export default websocketTypes;

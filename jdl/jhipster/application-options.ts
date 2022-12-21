@@ -17,18 +17,17 @@
  * limitations under the License.
  */
 
-import { applicationTypes } from './application-types.js';
-import { authenticationTypes } from './authentication-types.js';
+import applicationTypes from './application-types.js';
+import authenticationTypes from './authentication-types.js';
 import { databaseTypes } from './database-types.js';
-
-import { cacheTypes } from './cache-types.js';
-import { serviceDiscoveryTypes } from './service-discovery-types.js';
-import { clientFrameworkTypes } from './client-framework-types.js';
-import { buildToolTypes } from './build-tool-types.js';
-import { messageBrokerTypes } from './message-broker-types.js';
-import { searchEngineTypes } from './search-engine-types.js';
-import { testFrameworkTypes } from './test-framework-types.js';
-import { websocketTypes } from './websocket-types.js';
+import cacheTypes from './cache-types.js';
+import serviceDiscoveryTypes from './service-discovery-types.js';
+import clientFrameworkTypes from './client-framework-types.js';
+import buildToolTypes from './build-tool-types.js';
+import messageBrokerTypes from './message-broker-types.js';
+import searchEngineTypes from './search-engine-types.js';
+import testFrameworkTypes from './test-framework-types.js';
+import websocketTypes from './websocket-types.js';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, ORACLE, POSTGRESQL, SQL, H2_DISK, H2_MEMORY } = databaseTypes;

@@ -23,5 +23,4 @@ const authenticationTypes = {
   SESSION: 'session',
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { authenticationTypes };
+export default authenticationTypes;
