@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 import constants from '../generator-constants.cjs';
-import EnvironmentBuilder from '../../cli/environment-builder.cjs';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 
 const generatorPath = join(__dirname, 'index.mjs');
 
-const createClientProject = options =>
+const createClientProject = async options =>
   helpers
     .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
     .withOptions({

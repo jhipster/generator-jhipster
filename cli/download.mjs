@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import fs from 'fs';
-import https from 'https';
+import { get } from 'https';
 import path from 'path';
 import { logger, toStringJoinArgs } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
@@ -25,22 +25,20 @@ import { packageJson } from '../lib/index.mjs';
 const downloadFile = (url, filename) => {
   return new Promise((resolve, reject) => {
     logger.info(`Downloading file: ${url}`);
-    https
-      .get(url, response => {
-        if (response.statusCode !== 200) {
-          return reject(new Error(`Error downloading ${url}: ${response.statusCode} - ${response.statusMessage}`));
-        }
+    get(url, response => {
+      if (response.statusCode !== 200) {
+        return reject(new Error(`Error downloading ${url}: ${response.statusCode} - ${response.statusMessage}`));
+      }
 
-        logger.debug(`Creating file: ${path.join(filename)}`);
-        const fileStream = fs.createWriteStream(`${filename}`);
-        fileStream.on('finish', () => fileStream.close());
-        fileStream.on('close', () => resolve(filename));
-        response.pipe(fileStream);
-        return undefined;
-      })
-      .on('error', e => {
-        reject(e);
-      });
+      logger.debug(`Creating file: ${path.join(filename)}`);
+      const fileStream = fs.createWriteStream(`${filename}`);
+      fileStream.on('finish', () => fileStream.close());
+      fileStream.on('close', () => resolve(filename));
+      response.pipe(fileStream);
+      return undefined;
+    }).on('error', e => {
+      reject(e);
+    });
   });
 };
 

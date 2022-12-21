@@ -32,7 +32,7 @@ import { writeConfigFile } from './export-utils.cjs';
 
 const require = createRequire(import.meta.url);
 
-const jhipsterCli = require('./cli.mjs');
+const jhipsterCli = require.resolve('./cli.mjs');
 
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 
@@ -145,7 +145,7 @@ function writeApplicationConfig(applicationWithEntities, basePath) {
  * @param {Environment} options.env
  * @param {Object} [generatorOptions]
  */
-function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOptions = {}) {
+async function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOptions = {}) {
   const { workspaces } = generatorOptions;
   generatorOptions = {
     ...generatorOptions,
@@ -174,7 +174,7 @@ function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOp
   if (!fork) {
     const oldCwd = process.cwd();
     process.chdir(cwd);
-    env = env || createEnvBuilder(undefined, { cwd }).getEnvironment();
+    env = env || (await createEnvBuilder(undefined, { cwd })).getEnvironment();
     return env
       .run(`${CLI_NAME}:${command}`, generatorOptions)
       .then(
@@ -261,7 +261,7 @@ const shouldGenerateDeployments = processor =>
  * @param {any} config
  * @returns Promise
  */
-const generateDeploymentFiles = ({ processor, deployment }) => {
+const generateDeploymentFiles = async ({ processor, deployment }) => {
   const deploymentType = getDeploymentType(deployment);
   logger.info(`Generating deployment ${deploymentType} in a new parallel process`);
   logger.debug(`Generating deployment: ${JSON.stringify(deployment[GENERATOR_NAME], null, 2)}`);
@@ -278,7 +278,7 @@ const generateDeploymentFiles = ({ processor, deployment }) => {
  * @param {any} config
  * @returns Promise
  */
-const generateApplicationFiles = ({ processor, applicationWithEntities }) => {
+const generateApplicationFiles = async ({ processor, applicationWithEntities }) => {
   logger.debug(`Generating application: ${JSON.stringify(applicationWithEntities.config, null, 2)}`);
   const { inFolder, fork, force, reproducible, createEnvBuilder } = processor;
   const baseName = applicationWithEntities.config.baseName;
@@ -402,12 +402,12 @@ class JDLProcessor {
       .run('jhipster:workspaces', { workspaces: false, ...options, importState: this.importState, generateJdl });
   }
 
-  generateApplications() {
+  async generateApplications() {
     if (this.options.ignoreApplication) {
       logger.debug('Applications not generated');
       return Promise.resolve();
     }
-    const callGenerator = applicationWithEntities => {
+    const callGenerator = async applicationWithEntities => {
       try {
         return generateApplicationFiles({
           processor: this,
@@ -471,7 +471,7 @@ class JDLProcessor {
     return Promise.all(applicationsWithEntities.map(applicationWithEntities => callGenerator(applicationWithEntities)));
   }
 
-  generateDeployments() {
+  async generateDeployments() {
     if (!shouldGenerateDeployments(this)) {
       logger.debug('Deployments not generated');
       return Promise.resolve();
@@ -481,8 +481,8 @@ class JDLProcessor {
         `${pluralize('deployment', this.importState.exportedDeployments.length)}.`
     );
 
-    const callDeploymentGenerator = () => {
-      const callGenerator = deployment => {
+    const callDeploymentGenerator = async () => {
+      const callGenerator = async deployment => {
         try {
           return generateDeploymentFiles({
             processor: this,

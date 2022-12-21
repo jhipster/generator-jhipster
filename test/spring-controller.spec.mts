@@ -12,8 +12,8 @@ const generator = getGenerator('spring-controller');
 
 describe('JHipster generator spring-controller', () => {
   describe('creates spring controller', () => {
-    before(done => {
-      helpers
+    before(async () => {
+      await helpers
         .run(generator)
         .inTmpDir(dir => {
           fse.copySync(getTemplatePath('default'), dir);
@@ -21,8 +21,7 @@ describe('JHipster generator spring-controller', () => {
         .withArguments(['foo'])
         .withPrompts({
           actionAdd: false,
-        })
-        .on('end', done);
+        });
     });
 
     it('creates controller files', () => {
@@ -33,15 +32,14 @@ describe('JHipster generator spring-controller', () => {
   });
 
   describe('creates spring controller with --default flag', () => {
-    before(done => {
-      helpers
+    before(async () => {
+      await helpers
         .run(generator)
         .inTmpDir(dir => {
           fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])
-        .withOptions({ default: true })
-        .on('end', done);
+        .withOptions({ default: true });
     });
 
     it('creates controller files', () => {

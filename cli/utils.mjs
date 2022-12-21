@@ -148,4 +148,4 @@ export const printSuccess = () => {
   }
 };
 
-export const done = () => doneFactory(SUCCESS_MESSAGE, SPONSOR_MESSAGE);
+export const done = doneFactory(SUCCESS_MESSAGE, SPONSOR_MESSAGE);

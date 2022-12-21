@@ -22,7 +22,7 @@ import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object
 import { readJSONFile } from './readers/json-file-reader.js';
 import { doesFileExist } from './utils/file-utils.js';
 import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
-import JDLWithApplicationsToJSONConverter from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
+import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
 import { exportApplication, exportApplications } from './exporters/applications/jhipster-application-exporter.js';
 import { formatApplicationToExport, formatApplicationsToExport } from './exporters/applications/jhipster-application-formatter.js';
 import exportDeployments from './exporters/jhipster-deployment-exporter.js';
@@ -34,11 +34,6 @@ import { OptionNames } from './jhipster/application-options.js';
 const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
 
 const { uniqBy } = _;
-
-export default {
-  createImporterFromContent,
-  createImporterFromFiles,
-};
 
 /**
  * Creates a new JDL importer from files.
@@ -258,7 +253,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
   importState.exportedApplications.push(formattedApplication);
   const jdlApplication = jdlObject.getApplications()[0];
   const applicationName = jdlApplication.getConfigurationOptionValue(BASE_NAME);
-  const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
+  const entitiesPerApplicationMap = convert({
     jdlObject,
     unidirectionalRelationships,
   });
@@ -296,7 +291,7 @@ function importApplicationsAndEntities(jdlObject, configuration) {
   if (!skipFileGeneration) {
     exportApplications(formattedApplications);
   }
-  const entitiesPerApplicationMap: Map<any, any> = JDLWithApplicationsToJSONConverter.convert({
+  const entitiesPerApplicationMap: Map<any, any> = convert({
     jdlObject,
     unidirectionalRelationships,
   });

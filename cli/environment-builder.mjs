@@ -22,16 +22,15 @@ import _ from 'lodash';
 import { existsSync, readFileSync } from 'fs';
 import Environment from 'yeoman-environment';
 import path from 'path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { createRequire } from 'module';
 
 import { CLI_NAME, logger } from './utils.mjs';
 import { packageNameToNamespace } from '../generators/utils.cjs';
 import { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } from '../utils/blueprint.cjs';
 
-const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 
 function loadYoRc(filePath = '.yo-rc.json') {
   if (!existsSync(filePath)) {
@@ -77,8 +76,9 @@ export default class EnvironmentBuilder {
    * @param {...any} args - Arguments passed to Environment.createEnv().
    * @return {EnvironmentBuilder} envBuilder
    */
-  static createEnv(...args) {
-    return EnvironmentBuilder.createDefaultBuilder(...args).getEnvironment();
+  static async createEnv(...args) {
+    const builder = await EnvironmentBuilder.createDefaultBuilder(...args);
+    return builder.getEnvironment();
   }
 
   /**
@@ -87,7 +87,7 @@ export default class EnvironmentBuilder {
    * @param {...any} args - Arguments passed to Environment.createEnv().
    * @return {EnvironmentBuilder} envBuilder
    */
-  static createDefaultBuilder(...args) {
+  static async createDefaultBuilder(...args) {
     return EnvironmentBuilder.create(...args).prepare();
   }
 
@@ -102,8 +102,13 @@ export default class EnvironmentBuilder {
     this.env = env;
   }
 
-  prepare({ blueprints, lookups } = {}) {
-    this._lookupJHipster()._lookupLocalBlueprint()._loadBlueprints(blueprints)._lookups(lookups)._lookupBlueprints()._loadSharedOptions();
+  async prepare({ blueprints, lookups } = {}) {
+    await this._lookupJHipster()
+      ._lookupLocalBlueprint()
+      ._loadBlueprints(blueprints)
+      ._lookups(lookups)
+      ._lookupBlueprints()
+      ._loadSharedOptions();
     return this;
   }
 
@@ -217,12 +222,12 @@ export default class EnvironmentBuilder {
    * @private
    * Load sharedOptions from jhipster and blueprints.
    *
-   * @return {EnvironmentBuilder} this for chaining.
+   * @return {Promise<EnvironmentBuilder>} this for chaining.
    */
-  _loadSharedOptions() {
+  async _loadSharedOptions() {
     const blueprintsPackagePath = this._getBlueprintPackagePaths();
     if (blueprintsPackagePath) {
-      const sharedOptions = this._getSharedOptions(blueprintsPackagePath) || {};
+      const sharedOptions = (await this._getSharedOptions(blueprintsPackagePath)) ?? {};
       // Env will forward sharedOptions to every generator
       Object.assign(this.env.sharedOptions, sharedOptions);
     }
@@ -234,7 +239,7 @@ export default class EnvironmentBuilder {
    *
    * @return {Object[]} blueprint commands.
    */
-  getBlueprintCommands() {
+  async getBlueprintCommands() {
     const blueprintsPackagePath = this._getBlueprintPackagePaths();
     return this._getBlueprintCommands(blueprintsPackagePath);
   }
@@ -341,32 +346,37 @@ export default class EnvironmentBuilder {
    *
    * @return {Object[]} commands.
    */
-  _getBlueprintCommands(blueprintPackagePaths) {
+  async _getBlueprintCommands(blueprintPackagePaths) {
     if (!blueprintPackagePaths) {
       return undefined;
     }
     let result;
-    blueprintPackagePaths.forEach(([blueprint, packagePath]) => {
+    for (const [blueprint, packagePath] of blueprintPackagePaths) {
       /* eslint-disable import/no-dynamic-require */
       /* eslint-disable global-require */
-      try {
-        let blueprintCommand;
+      let blueprintCommand;
+      const blueprintCommandFile = `${packagePath}/cli/commands`;
+      const blueprintCommandExtension = ['.js', '.cjs', '.mjs'].find(extension => existsSync(`${blueprintCommandFile}${extension}`));
+      if (blueprintCommandExtension) {
+        const blueprintCommandsPath = `${blueprintCommandFile}${blueprintCommandExtension}`;
         try {
-          blueprintCommand = require(`${packagePath}/cli/commands`);
+          blueprintCommand = (await import(blueprintCommandsPath)).default;
+          const blueprintCommands = _.cloneDeep(blueprintCommand);
+          Object.entries(blueprintCommands).forEach(([_command, commandSpec]) => {
+            commandSpec.blueprint = commandSpec.blueprint || blueprint;
+          });
+          result = { ...result, ...blueprintCommands };
         } catch (e) {
-          blueprintCommand = require(`${packagePath}/cli/commands.mjs`);
+          const msg = `Error parsing custom commands found within blueprint: ${blueprint} at ${blueprintCommandsPath}`;
+          /* eslint-disable no-console */
+          console.info(`${chalk.green.bold('INFO!')} ${msg}`);
         }
-        const blueprintCommands = _.cloneDeep(blueprintCommand);
-        Object.entries(blueprintCommands).forEach(([_command, commandSpec]) => {
-          commandSpec.blueprint = commandSpec.blueprint || blueprint;
-        });
-        result = { ...result, ...blueprintCommands };
-      } catch (e) {
+      } else {
         const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
         /* eslint-disable no-console */
         console.info(`${chalk.green.bold('INFO!')} ${msg}`);
       }
-    });
+    }
     return result;
   }
 
@@ -376,7 +386,7 @@ export default class EnvironmentBuilder {
    *
    * @return {Object} sharedOptions.
    */
-  _getSharedOptions(blueprintPackagePaths) {
+  async _getSharedOptions(blueprintPackagePaths) {
     function joiner(objValue, srcValue) {
       if (objValue === undefined) {
         return srcValue;
@@ -393,11 +403,11 @@ export default class EnvironmentBuilder {
       return [objValue, srcValue];
     }
 
-    function loadSharedOptionsFromFile(sharedOptionsFile, msg, errorMsg) {
+    async function loadSharedOptionsFromFile(sharedOptionsFile, msg, errorMsg) {
       /* eslint-disable import/no-dynamic-require */
       /* eslint-disable global-require */
       try {
-        const opts = require(sharedOptionsFile);
+        const { default: opts } = await import(sharedOptionsFile);
         /* eslint-disable no-console */
         if (msg) {
           console.info(`${chalk.green.bold('INFO!')} ${msg}`);
@@ -412,17 +422,17 @@ export default class EnvironmentBuilder {
     }
 
     const localPath = './.jhipster/sharedOptions';
-    let result = loadSharedOptionsFromFile(path.resolve(localPath), `SharedOptions found at local config ${localPath}`);
+    let result = await loadSharedOptionsFromFile(path.resolve(localPath), `SharedOptions found at local config ${localPath}`);
 
     if (!blueprintPackagePaths) {
       return undefined;
     }
 
-    blueprintPackagePaths.forEach(([blueprint, packagePath]) => {
+    for (const [blueprint, packagePath] of blueprintPackagePaths) {
       const errorMsg = `No custom sharedOptions found within blueprint: ${blueprint} at ${packagePath}`;
-      const opts = loadSharedOptionsFromFile(`${packagePath}/cli/sharedOptions`, undefined, errorMsg);
+      const opts = await loadSharedOptionsFromFile(`${packagePath}/cli/sharedOptions.js`, undefined, errorMsg);
       result = _.mergeWith(result, opts, joiner);
-    });
+    }
     return result;
   }
 }

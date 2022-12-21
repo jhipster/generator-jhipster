@@ -261,9 +261,9 @@ describe('Environment builder', () => {
 
   describe('_loadSharedOptions', () => {
     let envBuilder;
-    beforeEach(() => {
+    beforeEach(async () => {
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
-      envBuilder = EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true })._loadSharedOptions();
+      envBuilder = await EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true })._loadSharedOptions();
     });
     describe('with multiple blueprints', () => {
       let oldCwd;
@@ -304,9 +304,11 @@ describe('Environment builder', () => {
       EnvironmentBuilder.prototype.getEnvironment.restore();
     });
     it('calls getEnvironment', () => {
-      return helpers.create('jhipster:info', {}, { createEnv: EnvironmentBuilder.createEnv }).run(() => {
-        expect(EnvironmentBuilder.prototype.getEnvironment.callCount).to.be.equal(1);
-      });
+      return helpers
+        .create('jhipster:info', { cwd: process.cwd(), autoCleanup: false }, { createEnv: EnvironmentBuilder.createEnv })
+        .run(() => {
+          expect(EnvironmentBuilder.prototype.getEnvironment.callCount).to.be.equal(1);
+        });
     });
   });
 });
