@@ -20,7 +20,7 @@
 import _ from 'lodash';
 import validations from './validations.js';
 import JDLEnum from '../models/jdl-enum.js';
-import { databaseTypes } from './database-types.js';
+import databaseTypes from './database-types.js';
 
 const {
   Validations: { REQUIRED, UNIQUE, MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN },

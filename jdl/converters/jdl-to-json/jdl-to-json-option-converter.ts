@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { logger } from '../../utils/objects/logger.js';
+import logger from '../../utils/objects/logger.js';
 import { unaryOptions, binaryOptions, entityOptions } from '../../jhipster/index.mjs';
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';

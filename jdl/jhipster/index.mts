@@ -5,7 +5,7 @@ export { default as binaryOptions } from './binary-options.js';
 export { default as buildToolTypes } from './build-tool-types.js';
 export { default as cacheTypes } from './cache-types.js';
 export { default as clientFrameworkTypes } from './client-framework-types.js';
-export { databaseTypes, isSql } from './database-types.js';
+export { default as databaseTypes } from './database-types.js';
 export { default as deploymentOptions } from './deployment-options.js';
 export { default as entityOptions } from './entity-options.js';
 export { default as entityTableNameCreator } from './entity-table-name-creator.js';

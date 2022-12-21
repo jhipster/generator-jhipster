@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { logger } from '../utils/objects/logger.js';
+import logger from '../utils/objects/logger.js';
 import JDLApplicationConfiguration from './jdl-application-configuration.js';
 import StringJDLApplicationConfigurationOption from './string-jdl-application-configuration-option.js';
 import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-configuration-option.js';

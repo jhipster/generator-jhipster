@@ -29,5 +29,4 @@ const logger = createLogger({
   format: combine(myFormat),
   handleExceptions: true,
 });
-// eslint-disable-next-line import/prefer-default-export
-export { logger };
+export default logger;
