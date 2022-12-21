@@ -18,11 +18,11 @@
  */
 
 import { expect } from 'chai';
-import { applicationTypes } from '../../../../jdl/jhipster/index.mjs';
-import createJDLApplication from '../../../../jdl/models/jdl-application-factory.js';
+import ApplicationTypes from '../../../../jdl/jhipster/application-types.js';
+import { createJDLApplication } from '../../../../jdl/models/jdl-application-factory.js';
 import { convertApplications } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/application-converter.js';
 
-const { MONOLITH } = applicationTypes;
+const { MONOLITH } = ApplicationTypes;
 
 describe('ApplicationConverter', () => {
   describe('convertApplications', () => {

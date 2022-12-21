@@ -19,15 +19,15 @@
 
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import { databaseTypes, isSql } from '../../../jdl/jhipster/index.mjs';
+import databaseTypes from '../../../jdl/jhipster/database-types.js';
 
-const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
+const { isSql, CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 
 describe('DatabaseTypes', () => {
   describe('isSql', () => {
     context('when not passing anything', () => {
       it('should return false', () => {
-        expect(isSql(undefined)).to.be.false;
+        expect(isSql()).to.be.false;
       });
     });
     context('when passing a SQL database type', () => {

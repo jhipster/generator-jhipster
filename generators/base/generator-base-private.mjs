@@ -25,7 +25,7 @@ import semver from 'semver';
 import { exec } from 'child_process';
 import https from 'https';
 
-import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { databaseTypes, buildToolTypes, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
 
 import { packageJson as packagejs } from '../../lib/index.mjs';
 import jhipsterUtils from '../utils.cjs';
@@ -33,14 +33,12 @@ import generatorConstants from '../generator-constants.cjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
+import { ANGULAR, REACT, VUE } from '../../jdl/jhipster/client-framework-types.js';
 import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
-const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const { JAVA_COMPATIBLE_VERSIONS } = generatorConstants;
 const dbTypes = fieldTypes;
-const {
-  Validations: { REQUIRED },
-} = validations;
+const { REQUIRED } = validations;
 
 const {
   STRING: TYPE_STRING,

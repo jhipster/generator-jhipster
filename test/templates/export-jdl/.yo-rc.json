@@ -12,7 +12,7 @@
     "databaseType": "sql",
     "devDatabaseType": "h2Memory",
     "prodDatabaseType": "postgresql",
-    "searchEngine": "no",
+    "searchEngine": false,
     "buildTool": "gradle",
     "rememberMeKey": "5f1100e7eae25e2abe32d7b2031ac1f2acc778d8",
         "applicationType": "monolith",

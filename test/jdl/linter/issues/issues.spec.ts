@@ -20,11 +20,12 @@
 import { expect } from 'chai';
 import Issues from '../../../../jdl/linters/issues/issues.js';
 import { rulesNames } from '../../../../jdl/linters/rules.js';
-import { relationshipTypes } from '../../../../jdl/jhipster/index.mjs';
+import RelationshipTypes from '../../../../jdl/jhipster/relationship-types.js';
 import EntityIssue from '../../../../jdl/linters/issues/entity-issue.js';
 import FieldIssue from '../../../../jdl/linters/issues/field-issue.js';
 import EnumIssue from '../../../../jdl/linters/issues/enum-issue.js';
 import RelationshipIssue from '../../../../jdl/linters/issues/relationship-issue.js';
+import AbstractIssue from '../../../../jdl/linters/issues/abstract-issue.js';
 
 describe('Issues', () => {
   describe('getNumberOfIssues', () => {
@@ -65,7 +66,7 @@ describe('Issues', () => {
             ruleName: rulesNames.REL_INDIVIDUAL_DECL,
             from: 'A',
             to: 'A',
-            type: relationshipTypes.ONE_TO_ONE,
+            type: RelationshipTypes.ONE_TO_ONE,
           }),
         ]);
       });
@@ -176,7 +177,7 @@ describe('Issues', () => {
             ruleName: rulesNames.REL_INDIVIDUAL_DECL,
             from: 'A',
             to: 'A',
-            type: relationshipTypes.ONE_TO_ONE,
+            type: RelationshipTypes.ONE_TO_ONE,
           }),
         ]);
       });
@@ -227,7 +228,7 @@ describe('Issues', () => {
           ruleName: rulesNames.REL_INDIVIDUAL_DECL,
           from: 'A',
           to: 'A',
-          type: relationshipTypes.ONE_TO_ONE,
+          type: RelationshipTypes.ONE_TO_ONE,
         });
 
         issues.addEntityIssues([entityIssue]);

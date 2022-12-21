@@ -20,19 +20,21 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import { applicationTypes, binaryOptions, unaryOptions, relationshipTypes } from '../../../jdl/jhipster/index.mjs';
 
+import { MONOLITH } from '../../../jdl/jhipster/application-types.js';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
+import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
+import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
 import JDLObject from '../../../jdl/models/jdl-object.js';
 import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
 import JDLDeployment from '../../../jdl/models/jdl-deployment.js';
-import { JDLEntity, JDLEnum } from '../../../jdl/models/index.mjs';
+import JDLEntity from '../../../jdl/models/jdl-entity.js';
 import JDLField from '../../../jdl/models/jdl-field.js';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';
+import JDLEnum from '../../../jdl/models/jdl-enum.js';
 import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
 import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
-
-const { MONOLITH } = applicationTypes;
 
 describe('JDLObject', () => {
   describe('addApplication', () => {
@@ -601,7 +603,7 @@ Array [
             object.addRelationship(
               new JDLRelationship({
                 to: 'Valid',
-                type: relationshipTypes.MANY_TO_MANY,
+                type: RelationshipTypes.MANY_TO_MANY,
                 injectedFieldInFrom: 'something',
               })
             );
@@ -618,7 +620,7 @@ Array [
         relationship = new JDLRelationship({
           from: 'Valid2',
           to: 'Valid',
-          type: relationshipTypes.MANY_TO_MANY,
+          type: RelationshipTypes.MANY_TO_MANY,
           injectedFieldInFrom: 'something',
           injectedFieldInTo: 'somethingElse',
         });
@@ -637,7 +639,7 @@ Array [
         const relationship = new JDLRelationship({
           from: 'Valid2',
           to: 'Valid',
-          type: relationshipTypes.MANY_TO_MANY,
+          type: RelationshipTypes.MANY_TO_MANY,
           injectedFieldInFrom: 'something',
           injectedFieldInTo: 'somethingElse',
         });
@@ -669,7 +671,7 @@ Array [
           new JDLRelationship({
             from: 'A',
             to: 'B',
-            type: relationshipTypes.ONE_TO_ONE,
+            type: RelationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'b',
           })
         );
@@ -690,7 +692,7 @@ Array [
           from: 'Abc',
           to: 'Abc2',
           injectedFieldInFrom: 'something',
-          type: relationshipTypes.ONE_TO_ONE,
+          type: RelationshipTypes.ONE_TO_ONE,
         })
       );
       jdlObject.addRelationship(
@@ -698,7 +700,7 @@ Array [
           from: 'Abc',
           to: 'Abc2',
           injectedFieldInFrom: 'something',
-          type: relationshipTypes.ONE_TO_MANY,
+          type: RelationshipTypes.ONE_TO_MANY,
         })
       );
     });
@@ -748,7 +750,7 @@ Array [
     });
     context('when adding a valid option', () => {
       it('should work', () => {
-        new JDLObject().addOption(new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT }));
+        new JDLObject().addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT }));
       });
     });
   });
@@ -770,7 +772,7 @@ Array [
     });
     context('when checking for an absent option', () => {
       it('should return an empty array', () => {
-        expect(jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)).to.be.empty;
+        expect(jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)).to.be.empty;
       });
     });
     context('when checking for a present option', () => {
@@ -780,15 +782,15 @@ Array [
 
       before(() => {
         option1 = new JDLUnaryOption({
-          name: unaryOptions.SKIP_CLIENT,
+          name: UnaryOptions.SKIP_CLIENT,
         });
         option2 = new JDLBinaryOption({
-          name: binaryOptions.Options.SERVICE,
-          value: binaryOptions.Values.service.SERVICE_CLASS,
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_CLASS,
         });
         option3 = new JDLBinaryOption({
-          name: binaryOptions.Options.SERVICE,
-          value: binaryOptions.Values.service.SERVICE_IMPL,
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_IMPL,
         });
 
         jdlObject.addOption(option1);
@@ -797,8 +799,8 @@ Array [
       });
 
       it('should return it', () => {
-        expect(jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)).to.deep.equal([option1]);
-        expect(jdlObject.getOptionsForName(binaryOptions.Options.SERVICE)).to.deep.equal([option2, option3]);
+        expect(jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)).to.deep.equal([option1]);
+        expect(jdlObject.getOptionsForName(BinaryOptions.Options.SERVICE)).to.deep.equal([option2, option3]);
       });
     });
   });
@@ -819,7 +821,7 @@ Array [
       before(() => {
         jdlObject.addOption(
           new JDLUnaryOption({
-            name: unaryOptions.SKIP_CLIENT,
+            name: UnaryOptions.SKIP_CLIENT,
           })
         );
       });
@@ -836,12 +838,12 @@ Array [
       jdlObject = new JDLObject();
       jdlObject.addOption(
         new JDLUnaryOption({
-          name: unaryOptions.SKIP_CLIENT,
+          name: UnaryOptions.SKIP_CLIENT,
         })
       );
       jdlObject.addOption(
         new JDLUnaryOption({
-          name: unaryOptions.SKIP_SERVER,
+          name: UnaryOptions.SKIP_SERVER,
         })
       );
     });
@@ -889,7 +891,7 @@ Array [
         jdlObject = new JDLObject();
         jdlObject.addOption(
           new JDLUnaryOption({
-            name: unaryOptions.READ_ONLY,
+            name: UnaryOptions.READ_ONLY,
           })
         );
       });
@@ -901,7 +903,7 @@ Array [
       });
       context('for an existing option', () => {
         it('should return false', () => {
-          expect(jdlObject.hasOption(unaryOptions.READ_ONLY)).to.be.true;
+          expect(jdlObject.hasOption(UnaryOptions.READ_ONLY)).to.be.true;
         });
       });
     });
@@ -914,7 +916,7 @@ Array [
         before(() => {
           jdlObject = new JDLObject();
           const microserviceOption = new JDLBinaryOption({
-            name: binaryOptions.Options.MICROSERVICE,
+            name: BinaryOptions.Options.MICROSERVICE,
             value: 'toto',
           });
           jdlObject.addOption(microserviceOption);
@@ -929,7 +931,7 @@ Array [
         before(() => {
           jdlObject = new JDLObject();
           const microserviceOption = new JDLBinaryOption({
-            name: binaryOptions.Options.MICROSERVICE,
+            name: BinaryOptions.Options.MICROSERVICE,
             value: 'toto',
             entityNames: ['A'],
           });
@@ -945,7 +947,7 @@ Array [
       before(() => {
         jdlObject = new JDLObject();
         const microserviceOption = new JDLBinaryOption({
-          name: binaryOptions.Options.MICROSERVICE,
+          name: BinaryOptions.Options.MICROSERVICE,
           value: 'toto',
           entityNames: ['A'],
         });
@@ -991,17 +993,17 @@ Array [
       relationship = new JDLRelationship({
         from: entityA.name,
         to: entityB.name,
-        type: relationshipTypes.ONE_TO_ONE,
+        type: RelationshipTypes.ONE_TO_ONE,
         injectedFieldInFrom: 'entityB',
         injectedFieldInTo: 'entityA(myField)',
       });
       object.addRelationship(relationship);
-      option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
+      option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
       option.excludeEntityName(entityA.name);
       object.addOption(option);
       option2 = new JDLBinaryOption({
-        name: binaryOptions.Options.DTO,
-        value: binaryOptions.Values.dto.MAPSTRUCT,
+        name: BinaryOptions.Options.DTO,
+        value: BinaryOptions.Values.dto.MAPSTRUCT,
       });
       option2.addEntityName(entityB.name);
       object.addOption(option2);

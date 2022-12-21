@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const typescript = [
+export default [
   'BREAK',
   'CASE',
   'CATCH',
@@ -65,4 +65,3 @@ const typescript = [
   'STATIC',
   'YIELD',
 ];
-export default typescript;

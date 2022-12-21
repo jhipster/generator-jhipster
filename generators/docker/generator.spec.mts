@@ -27,11 +27,19 @@ import { dryRunHelpers as helpers } from '../../test/support/helpers.mjs';
 import { matchElasticSearchDocker } from '../server/__test-support/elastic-search-matcher.mjs';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.mjs';
 
-import { databaseTypes, searchEngineTypes, serviceDiscoveryTypes, messageBrokerTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';
+import {
+  databaseTypes,
+  applicationTypes,
+  searchEngineTypes,
+  serviceDiscoveryTypes,
+  messageBrokerTypes,
+  cacheTypes,
+} from '../../jdl/jhipster/index.mjs';
 import { buildServerMatrix } from '../../test/support/server-samples.mjs';
 
 const { snakeCase } = lodash;
 
+const { MONOLITH, GATEWAY, MICROSERVICE } = applicationTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { NO: NO_SERVICE_DISCOVERY, EUREKA, CONSUL } = serviceDiscoveryTypes;

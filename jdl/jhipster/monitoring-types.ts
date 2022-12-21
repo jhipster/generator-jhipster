@@ -23,4 +23,8 @@ const MonitoringTypes = {
   NO: 'no',
 };
 
+export const PROMETHEUS = MonitoringTypes.PROMETHEUS;
+export const ELK = MonitoringTypes.ELK;
+export const NO = MonitoringTypes.NO;
+
 export default MonitoringTypes;

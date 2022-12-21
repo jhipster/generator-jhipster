@@ -16,6 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// eslint-disable-next-line import/prefer-default-export
-export { JDLEntity } from './jdl-entity.js';
-export { JDLEnum } from './jdl-enum.js';
+
+/* eslint-disable no-new */
+/* eslint-disable no-unused-expressions */
+
+import { expect } from 'chai';
+import ApplicationTypes from '../../../jdl/jhipster/application-types.js';
+
+describe('ApplicationTypes', () => {
+  describe('exists', () => {
+    context('when passing a nil arg', () => {
+      it('should return false', () => {
+        expect(ApplicationTypes.exists()).to.be.false;
+      });
+    });
+    context('when passing an invalid type', () => {
+      it('should return false', () => {
+        expect(ApplicationTypes.exists('NotAType')).to.be.false;
+      });
+    });
+  });
+});

@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 
-import objectUtils from '../utils/object-utils.js';
+import { merge } from '../utils/object-utils.js';
 import { addAll } from '../utils/set-utils.js';
 
-const { merge } = objectUtils;
 export default class AbstractJDLOption {
   name: any;
   entityNames: Set<string>;

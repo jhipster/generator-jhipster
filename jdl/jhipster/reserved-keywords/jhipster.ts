@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const jhipster = [
+export default [
   'ACCOUNT',
   'ACTIVATE',
   'AUDITS',
@@ -37,5 +37,3 @@ const jhipster = [
   'ENTITY',
   'RESULT',
 ];
-
-export default jhipster;

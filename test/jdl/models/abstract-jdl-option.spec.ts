@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
-import { binaryOptions } from '../../../jdl/jhipster/index.mjs';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
 
 describe('AbstractJDLOption', () => {
   describe('resolveEntityNames', () => {
@@ -28,8 +28,8 @@ describe('AbstractJDLOption', () => {
       it('should fail', () => {
         expect(() => {
           new JDLBinaryOption({
-            name: binaryOptions.Options.SERVICE,
-            value: binaryOptions.Values.service.SERVICE_CLASS,
+            name: BinaryOptions.Options.SERVICE,
+            value: BinaryOptions.Values.service.SERVICE_CLASS,
             // @ts-expect-error
           }).resolveEntityNames();
         }).toThrow(/^Entity names have to be passed to resolve the option's entities\.$/);
@@ -40,8 +40,8 @@ describe('AbstractJDLOption', () => {
 
       before(() => {
         const option = new JDLBinaryOption({
-          name: binaryOptions.Options.SERVICE,
-          value: binaryOptions.Values.service.SERVICE_CLASS,
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_CLASS,
           excludedNames: ['C'],
         });
         result = option.resolveEntityNames(['A', 'B', 'C']);

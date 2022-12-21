@@ -17,12 +17,18 @@
  * limitations under the License.
  */
 
-const clientFrameworkTypes = {
+const Types = {
   ANGULAR: 'angular',
   REACT: 'react',
   VUE: 'vue',
   SVELTE: 'svelte',
   NO: 'no',
 };
-// eslint-disable-next-line import/prefer-default-export
-export { clientFrameworkTypes };
+
+export const ANGULAR = Types.ANGULAR;
+export const REACT = Types.REACT;
+export const VUE = Types.VUE;
+export const SVELTE = Types.SVELTE;
+export const NO = Types.NO;
+
+export default Types;

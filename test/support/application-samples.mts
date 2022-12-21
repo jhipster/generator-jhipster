@@ -1,7 +1,9 @@
-import { applicationTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';
+import AuthenticationTypes from '../../jdl/jhipster/authentication-types.js';
+import ApplicationTypes from '../../jdl/jhipster/application-types.js';
 
-const { JWT, OAUTH2, SESSION } = authenticationTypes;
-const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+const { OAUTH2, JWT, SESSION } = AuthenticationTypes;
+const { MICROSERVICE, GATEWAY, MONOLITH } = ApplicationTypes;
+
 export const AuthenticationTypeMatrix = {
   authenticationType: [OAUTH2, JWT, SESSION],
 };

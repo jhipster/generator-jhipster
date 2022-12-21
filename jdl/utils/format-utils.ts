@@ -24,7 +24,7 @@ export { formatComment };
  * @param comment string.
  * @returns formatted comment string
  */
-function formatComment(comment?: string): string | undefined {
+export default function formatComment(comment?: string): string | undefined {
   if (!comment) {
     return undefined;
   }
@@ -43,5 +43,3 @@ function formatComment(comment?: string): string | undefined {
     return previousValue.concat(delimiter, currentValue.trim().replace(/[*]*\s*/, ''));
   }, '');
 }
-
-export default formatComment;

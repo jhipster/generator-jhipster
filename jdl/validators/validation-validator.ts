@@ -18,11 +18,9 @@
  */
 
 import Validator from './validator.js';
-import { validations } from '../jhipster/index.mjs';
+import Validations from '../jhipster/validations.js';
 
-const {
-  Validations: { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES },
-} = validations;
+const { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES } = Validations;
 
 export default class ValidationValidator extends Validator {
   constructor() {

@@ -26,10 +26,11 @@ chai.use(sinonChai);
 import { expect } from 'chai';
 
 import JDLObject from '../../../../jdl/models/jdl-object.js';
-import { JDLEntity } from '../../../../jdl/models/index.mjs';
+import JDLEntity from '../../../../jdl/models/jdl-entity.js';
 import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option.js';
-import { unaryOptions, binaryOptions } from '../../../../jdl/jhipster/index.mjs';
+import UnaryOptions from '../../../../jdl/jhipster/unary-options.js';
+import BinaryOptions from '../../../../jdl/jhipster/binary-options.js';
 import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-to-json-option-converter.js';
 import logger from '../../../../jdl/utils/objects/logger.js';
 
@@ -66,62 +67,62 @@ describe('JDLToJSONOptionConverter', () => {
           });
           const options = [
             new JDLUnaryOption({
-              name: unaryOptions.EMBEDDED,
+              name: UnaryOptions.EMBEDDED,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.NO_FLUENT_METHOD,
+              name: UnaryOptions.NO_FLUENT_METHOD,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.FILTER,
+              name: UnaryOptions.FILTER,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.READ_ONLY,
+              name: UnaryOptions.READ_ONLY,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.SKIP_CLIENT,
+              name: UnaryOptions.SKIP_CLIENT,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.SKIP_SERVER,
+              name: UnaryOptions.SKIP_SERVER,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.ANGULAR_SUFFIX,
+              name: BinaryOptions.Options.ANGULAR_SUFFIX,
               value: 'suffix',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.CLIENT_ROOT_FOLDER,
+              name: BinaryOptions.Options.CLIENT_ROOT_FOLDER,
               value: '../client_root_folder',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.DTO,
-              value: binaryOptions.Values.dto.MAPSTRUCT,
+              name: BinaryOptions.Options.DTO,
+              value: BinaryOptions.Values.dto.MAPSTRUCT,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.MICROSERVICE,
+              name: BinaryOptions.Options.MICROSERVICE,
               value: 'myMs',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.PAGINATION,
-              value: binaryOptions.Values.pagination.PAGINATION,
+              name: BinaryOptions.Options.PAGINATION,
+              value: BinaryOptions.Values.pagination.PAGINATION,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.SEARCH,
-              value: binaryOptions.Values.search.COUCHBASE,
+              name: BinaryOptions.Options.SEARCH,
+              value: BinaryOptions.Values.search.COUCHBASE,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.SERVICE,
-              value: binaryOptions.Values.service.SERVICE_IMPL,
+              name: BinaryOptions.Options.SERVICE,
+              value: BinaryOptions.Values.service.SERVICE_IMPL,
               entityNames: ['A'],
             }),
           ];
@@ -166,8 +167,8 @@ Object {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLBinaryOption({
-              name: binaryOptions.Options.DTO,
-              value: binaryOptions.Values.dto.MAPSTRUCT,
+              name: BinaryOptions.Options.DTO,
+              value: BinaryOptions.Values.dto.MAPSTRUCT,
               entityNames: ['A'],
             })
           );
@@ -209,7 +210,7 @@ Object {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLUnaryOption({
-              name: unaryOptions.FILTER,
+              name: UnaryOptions.FILTER,
               entityNames: ['A'],
             })
           );
@@ -249,8 +250,8 @@ Object {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLUnaryOption({
-              name: binaryOptions.Options.SEARCH,
-              values: binaryOptions.Values.search.COUCHBASE,
+              name: BinaryOptions.Options.SEARCH,
+              values: BinaryOptions.Values.search.COUCHBASE,
               entityNames: ['*'],
               excludedNames: ['A'],
             })

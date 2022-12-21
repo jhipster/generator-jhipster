@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
-import { createRequire } from 'module';
+import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 
-export const jdlImporter = await import('./jdl-importer.js');
+export const jdlImporter = require('./jdl-importer');

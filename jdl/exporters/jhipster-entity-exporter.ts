@@ -19,12 +19,11 @@
 
 import fs from 'fs';
 import path from 'path';
-import { applicationTypes } from '../jhipster/index.mjs';
+import ApplicationTypes from '../jhipster/application-types.js';
 import { toFilePath, readJSONFile } from '../readers/json-file-reader.js';
-import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils.js';
-import objectUtils from '../utils/object-utils.js';
+import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
 
-const { areEntitiesEqual } = objectUtils;
+import { areEntitiesEqual as areJHipsterEntitiesEqual } from '../utils/object-utils.js';
 
 let configuration: any = {};
 
@@ -112,13 +111,13 @@ function updateEntityToGenerateWithExistingOne(filePath, entity) {
 function filterOutUnchangedEntities(subFolder) {
   return configuration.entities.filter(entity => {
     const filePath = path.join(subFolder, toFilePath(entity.name));
-    return !(doesFileExist(filePath) && areEntitiesEqual(readJSONFile(filePath), entity));
+    return !(doesFileExist(filePath) && areJHipsterEntitiesEqual(readJSONFile(filePath), entity));
   });
 }
 
 function shouldFilterOutEntitiesBasedOnMicroservice() {
   return (
-    configuration.application.type && configuration.application.type === applicationTypes.MICROSERVICE && configuration.application.name
+    configuration.application.type && configuration.application.type === ApplicationTypes.MICROSERVICE && configuration.application.name
   );
 }
 

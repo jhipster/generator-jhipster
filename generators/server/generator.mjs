@@ -59,11 +59,12 @@ import {
   reservedKeywords,
   messageBrokerTypes,
 } from '../../jdl/jhipster/index.mjs';
+
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
+import { SUPPORTED_VALIDATION_RULES } from '../../jdl/jhipster/validations.js';
 
-const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { defaultConfig } = generatorDefaults;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
@@ -80,9 +81,7 @@ const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { INSTANT } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { PaginationTypes, ServiceTypes } = entityOptions;
-const {
-  Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
-} = validations;
+const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations;
 
 const WAIT_TIMEOUT = 3 * 60000;
 const { NO: NO_PAGINATION } = PaginationTypes;

@@ -25,9 +25,7 @@ import { stringify } from './index.mjs';
 const { isReservedTableName } = reservedKeywords;
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;
-const {
-  Validations: { REQUIRED },
-} = validations;
+const { REQUIRED } = validations;
 
 const { MAPSTRUCT } = MapperTypes;
 

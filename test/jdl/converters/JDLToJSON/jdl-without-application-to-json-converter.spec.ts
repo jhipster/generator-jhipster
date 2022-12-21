@@ -28,35 +28,31 @@ import { expect } from 'chai';
 
 import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 
-import {
-  applicationTypes,
-  databaseTypes,
-  fieldTypes,
-  validations,
-  unaryOptions,
-  binaryOptions,
-  relationshipTypes,
-  relationshipOptions,
-} from '../../../../jdl/jhipster/index.mjs';
+import ApplicationTypes from '../../../../jdl/jhipster/application-types.js';
+import DatabaseTypes from '../../../../jdl/jhipster/database-types.js';
 
 import JDLObject from '../../../../jdl/models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../../../../jdl/models/index.mjs';
+import JDLEntity from '../../../../jdl/models/jdl-entity.js';
 import JDLField from '../../../../jdl/models/jdl-field.js';
+import JDLEnum from '../../../../jdl/models/jdl-enum.js';
 import JDLValidation from '../../../../jdl/models/jdl-validation.js';
 import JDLRelationship from '../../../../jdl/models/jdl-relationship.js';
 import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option.js';
+import FieldTypes from '../../../../jdl/jhipster/field-types.js';
+import Validations from '../../../../jdl/jhipster/validations.js';
+import UnaryOptions from '../../../../jdl/jhipster/unary-options.js';
+import BinaryOptions from '../../../../jdl/jhipster/binary-options.js';
+import RelationshipTypes from '../../../../jdl/jhipster/relationship-types.js';
+import RelationshipOptions from '../../../../jdl/jhipster/relationship-options.js';
 import logger from '../../../../jdl/utils/objects/logger.js';
 
-const {
-  Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },
-} = validations;
-const { MONOLITH } = applicationTypes;
-const { CommonDBTypes } = fieldTypes;
-const { SQL } = databaseTypes;
+const { CommonDBTypes } = FieldTypes;
+const { MONOLITH } = ApplicationTypes;
+const { SQL } = DatabaseTypes;
 
-const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
-const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = RelationshipTypes;
+const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
 
 describe('JDLWithoutApplicationToJSONConverter', () => {
   describe('convert', () => {
@@ -190,62 +186,62 @@ JSONEntity {
           });
           const options = [
             new JDLUnaryOption({
-              name: unaryOptions.EMBEDDED,
+              name: UnaryOptions.EMBEDDED,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.NO_FLUENT_METHOD,
+              name: UnaryOptions.NO_FLUENT_METHOD,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.FILTER,
+              name: UnaryOptions.FILTER,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.READ_ONLY,
+              name: UnaryOptions.READ_ONLY,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.SKIP_CLIENT,
+              name: UnaryOptions.SKIP_CLIENT,
               entityNames: ['A'],
             }),
             new JDLUnaryOption({
-              name: unaryOptions.SKIP_SERVER,
+              name: UnaryOptions.SKIP_SERVER,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.ANGULAR_SUFFIX,
+              name: BinaryOptions.Options.ANGULAR_SUFFIX,
               value: 'suffix',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.CLIENT_ROOT_FOLDER,
+              name: BinaryOptions.Options.CLIENT_ROOT_FOLDER,
               value: '../client_root_folder',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.DTO,
-              value: binaryOptions.Values.dto.MAPSTRUCT,
+              name: BinaryOptions.Options.DTO,
+              value: BinaryOptions.Values.dto.MAPSTRUCT,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.MICROSERVICE,
+              name: BinaryOptions.Options.MICROSERVICE,
               value: 'myMs',
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.PAGINATION,
-              value: binaryOptions.Values.pagination.PAGINATION,
+              name: BinaryOptions.Options.PAGINATION,
+              value: BinaryOptions.Values.pagination.PAGINATION,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.SEARCH,
-              value: binaryOptions.Values.search.COUCHBASE,
+              name: BinaryOptions.Options.SEARCH,
+              value: BinaryOptions.Values.search.COUCHBASE,
               entityNames: ['A'],
             }),
             new JDLBinaryOption({
-              name: binaryOptions.Options.SERVICE,
-              value: binaryOptions.Values.service.SERVICE_IMPL,
+              name: BinaryOptions.Options.SERVICE,
+              value: BinaryOptions.Values.service.SERVICE_IMPL,
               entityNames: ['A'],
             }),
           ];
@@ -301,8 +297,8 @@ JSONEntity {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLBinaryOption({
-              name: binaryOptions.Options.DTO,
-              value: binaryOptions.Values.dto.MAPSTRUCT,
+              name: BinaryOptions.Options.DTO,
+              value: BinaryOptions.Values.dto.MAPSTRUCT,
               entityNames: ['A'],
             })
           );
@@ -360,7 +356,7 @@ JSONEntity {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLUnaryOption({
-              name: unaryOptions.FILTER,
+              name: UnaryOptions.FILTER,
               entityNames: ['A'],
             })
           );
@@ -416,8 +412,8 @@ JSONEntity {
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
             new JDLUnaryOption({
-              name: binaryOptions.Options.SEARCH,
-              values: binaryOptions.Values.search.COUCHBASE,
+              name: BinaryOptions.Options.SEARCH,
+              values: BinaryOptions.Values.search.COUCHBASE,
               entityNames: ['*'],
               excludedNames: ['A'],
             })
@@ -720,40 +716,40 @@ JSONEntity {
               type: CommonDBTypes.ANY_BLOB,
             });
             const requiredValidation = new JDLValidation({
-              name: REQUIRED,
+              name: Validations.REQUIRED,
               value: true,
             });
             const uniqueValidation = new JDLValidation({
-              name: UNIQUE,
+              name: Validations.UNIQUE,
               value: true,
             });
             const minValidation = new JDLValidation({
-              name: MIN,
+              name: Validations.MIN,
               value: 0,
             });
             const maxValidation = new JDLValidation({
-              name: MAX,
+              name: Validations.MAX,
               value: 10,
             });
             const minLengthValidation = new JDLValidation({
-              name: MINLENGTH,
+              name: Validations.MINLENGTH,
               value: 0,
             });
             const maxLengthValidation = new JDLValidation({
-              name: MAXLENGTH,
+              name: Validations.MAXLENGTH,
               value: 10,
             });
             const patternValidation = new JDLValidation({
-              name: PATTERN,
+              name: Validations.PATTERN,
               // eslint-disable-next-line prettier/prettier,no-useless-escape
               value: '^d$',
             });
             const minBytesValidation = new JDLValidation({
-              name: MINBYTES,
+              name: Validations.MINBYTES,
               value: 0,
             });
             const maxBytesValidation = new JDLValidation({
-              name: MAXBYTES,
+              name: Validations.MAXBYTES,
               value: 10,
             });
             stringField.addValidation(requiredValidation);

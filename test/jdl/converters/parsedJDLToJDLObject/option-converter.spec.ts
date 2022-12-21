@@ -18,11 +18,14 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../../../jdl/jhipster/index.mjs';
+import UnaryOptions from '../../../../jdl/jhipster/unary-options.js';
+import BinaryOptions from '../../../../jdl/jhipster/binary-options.js';
 import { convertOptions } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/option-converter.js';
+import EntityOptions from '../../../../jdl/jhipster/entity-options.js';
+import SearchEngineTypes from '../../../../jdl/jhipster/search-engine-types.js';
 
-const { MapperTypes, PaginationTypes } = entityOptions;
-const { COUCHBASE } = searchEngineTypes;
+const { MapperTypes, PaginationTypes } = EntityOptions;
+const { COUCHBASE } = SearchEngineTypes;
 
 const { MAPSTRUCT } = MapperTypes;
 const { PAGINATION } = PaginationTypes;
@@ -36,7 +39,7 @@ describe('OptionConverter', () => {
       });
     });
     context('when passing options', () => {
-      unaryOptions.forEach(unaryOptionName => {
+      UnaryOptions.forEach(unaryOptionName => {
         context(`such as ${unaryOptionName}`, () => {
           let convertedOptions;
 
@@ -54,16 +57,16 @@ describe('OptionConverter', () => {
           });
         });
       });
-      const BinaryOptions = new Map([
-        [binaryOptions.Options.DTO, binaryOptions.Values.dto.MAPSTRUCT],
-        [binaryOptions.Options.SERVICE, binaryOptions.Values.service.SERVICE_CLASS],
-        [binaryOptions.Options.PAGINATION, binaryOptions.Values.pagination.PAGINATION],
-        [binaryOptions.Options.SEARCH, binaryOptions.Values.search.ELASTICSEARCH],
-        [binaryOptions.Options.ANGULAR_SUFFIX, 'toto'],
-        [binaryOptions.Options.CLIENT_ROOT_FOLDER, 'toto'],
-        [binaryOptions.Options.MICROSERVICE, 'toto'],
+      const binaryOptions = new Map([
+        [BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT],
+        [BinaryOptions.Options.SERVICE, BinaryOptions.Values.service.SERVICE_CLASS],
+        [BinaryOptions.Options.PAGINATION, BinaryOptions.Values.pagination.PAGINATION],
+        [BinaryOptions.Options.SEARCH, BinaryOptions.Values.search.ELASTICSEARCH],
+        [BinaryOptions.Options.ANGULAR_SUFFIX, 'toto'],
+        [BinaryOptions.Options.CLIENT_ROOT_FOLDER, 'toto'],
+        [BinaryOptions.Options.MICROSERVICE, 'toto'],
       ]);
-      BinaryOptions.forEach((optionValue, optionName) => {
+      binaryOptions.forEach((optionValue, optionName) => {
         context(`such as ${optionName}`, () => {
           let convertedOptions;
 

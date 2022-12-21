@@ -47,9 +47,7 @@ const { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, ENUM, FLOAT, INTEGER, INSTANT, L
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { ANY, IMAGE, TEXT } = BlobTypes;
 
-const {
-  Validations: { PATTERN, MINBYTES, MAXBYTES, MINLENGTH, MAXLENGTH, MIN, MAX, REQUIRED, UNIQUE },
-} = validations;
+const { PATTERN, MINBYTES, MAXBYTES, MINLENGTH, MAXLENGTH, MIN, MAX, REQUIRED, UNIQUE } = validations;
 
 const prompts = {
   askForMicroserviceJson,

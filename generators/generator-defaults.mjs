@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { defaultApplicationOptions, applicationOptions, applicationTypes, binaryOptions } from '../jdl/jhipster/index.mjs';
+import { getConfigForApplicationType } from '../jdl/jhipster/default-application-options.js';
+import applicationOptions from '../jdl/jhipster/application-options.js';
+import { MONOLITH } from '../jdl/jhipster/application-types.js';
+import binaryOptions from '../jdl/jhipster/binary-options.js';
 
-const { MONOLITH } = applicationTypes;
-const { getConfigForApplicationType } = defaultApplicationOptions;
 const optionNames = applicationOptions.OptionNames;
 const defaultNewApplicationOptions = getConfigForApplicationType();
 const defaultMonolithOptions = getConfigForApplicationType(MONOLITH);

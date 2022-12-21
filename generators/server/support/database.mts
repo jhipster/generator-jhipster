@@ -1,4 +1,4 @@
-import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
+import databaseTypes from '../../../jdl/jhipster/database-types.js';
 
 const SQL = databaseTypes.SQL;
 

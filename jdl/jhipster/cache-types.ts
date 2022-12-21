@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const cacheTypes = {
+const Types = {
   CAFFEINE: 'caffeine',
   EHCACHE: 'ehcache',
   HAZELCAST: 'hazelcast',
@@ -27,5 +27,12 @@ const cacheTypes = {
   NO: 'no',
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { cacheTypes };
+export const CAFFEINE = Types.CAFFEINE;
+export const EHCACHE = Types.EHCACHE;
+export const HAZELCAST = Types.HAZELCAST;
+export const INFINISPAN = Types.INFINISPAN;
+export const MEMCACHED = Types.MEMCACHED;
+export const REDIS = Types.REDIS;
+export const NO = Types.NO;
+
+export default Types;

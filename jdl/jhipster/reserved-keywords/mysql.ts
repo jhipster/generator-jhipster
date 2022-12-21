@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const mysql = [
+export default [
   'ACCESSIBLE',
   'ADD',
   'ALL',
@@ -275,5 +275,3 @@ const mysql = [
   'SLOW',
   'WINDOW',
 ];
-
-export default mysql;

@@ -18,11 +18,16 @@
  */
 
 import JDLObject from '../models/jdl-object.js';
-import createJDLApplication from '../models/jdl-application-factory.js';
+import { createJDLApplication } from '../models/jdl-application-factory.js';
 
 const GENERATOR_NAME = 'generator-jhipster';
 
-function convertApplicationsToJDL({ applications, jdl }: any = {}) {
+export default {
+  convertApplicationToJDL,
+  convertApplicationsToJDL,
+};
+
+export function convertApplicationsToJDL({ applications, jdl }: any = {}) {
   const jsonApplications = applications || [];
   const jdlObject = jdl || new JDLObject();
   jsonApplications.forEach(application => {
@@ -32,10 +37,6 @@ function convertApplicationsToJDL({ applications, jdl }: any = {}) {
   return jdlObject;
 }
 
-function convertApplicationToJDL({ application }: any = {}) {
+export function convertApplicationToJDL({ application }: any = {}) {
   return createJDLApplication(application[GENERATOR_NAME]);
 }
-export default {
-  convertApplicationToJDL,
-  convertApplicationsToJDL,
-};

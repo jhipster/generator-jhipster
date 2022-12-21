@@ -23,13 +23,12 @@ import JDLObject from '../models/jdl-object.js';
 import mergeJDLObjects from '../models/jdl-object-merger.js';
 import { doesFileExist, doesDirectoryExist } from '../utils/file-utils.js';
 import { readJSONFile } from '../readers/json-file-reader.js';
-import jsonToJdlApplicationConverter from './json-to-jdl-application-converter.js';
+import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import exportJDLObject from '../exporters/jdl-exporter.js';
 import ApplicationOptions from '../jhipster/application-options.js';
 import { Entity } from './types.js';
 
-const { convertApplicationToJDL } = jsonToJdlApplicationConverter;
 const { OptionNames } = ApplicationOptions;
 
 export default {

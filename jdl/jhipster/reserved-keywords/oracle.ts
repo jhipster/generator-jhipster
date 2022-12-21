@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const oracle = [
+export default [
   'ACCESS',
   'ACCOUNT',
   'ACTIVATE',
@@ -500,5 +500,3 @@ const oracle = [
   'YEAR',
   'ZONE',
 ];
-
-export default oracle;

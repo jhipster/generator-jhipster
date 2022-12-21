@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-function camelCase(string: string): string {
+export function camelCase(string: string): string {
   checkStringIsValid(string);
   if (string === '') {
     return string;
@@ -26,7 +26,7 @@ function camelCase(string: string): string {
   return `${firstLetter.toLowerCase()}${rest.join('')}`;
 }
 
-function upperFirst(string: string): string {
+export function upperFirst(string: string): string {
   checkStringIsValid(string);
   if (string === '') {
     return string;
@@ -35,7 +35,7 @@ function upperFirst(string: string): string {
   return `${firstLetter.toUpperCase()}${rest.join('')}`;
 }
 
-function lowerFirst(string: string): string {
+export function lowerFirst(string: string): string {
   checkStringIsValid(string);
   if (string === '') {
     return string;
@@ -49,8 +49,3 @@ function checkStringIsValid(string: string) {
     throw new Error('The passed string cannot be nil.');
   }
 }
-export default {
-  lowerFirst,
-  upperFirst,
-  camelCase,
-};

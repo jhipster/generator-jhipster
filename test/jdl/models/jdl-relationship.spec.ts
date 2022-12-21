@@ -21,9 +21,8 @@
 import { expect } from 'chai';
 
 import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
-import { relationshipTypes, relationshipOptions } from '../../../jdl/jhipster/index.mjs';
-
-const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+import { JPA_DERIVED_IDENTIFIER } from '../../../jdl/jhipster/relationship-options.js';
+import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
 
 describe('JDLRelationship', () => {
   describe('new', () => {
@@ -33,7 +32,7 @@ describe('JDLRelationship', () => {
           new JDLRelationship({
             from: 'Abc',
             to: 'Abc2',
-            type: relationshipTypes.MANY_TO_MANY,
+            type: RelationshipTypes.MANY_TO_MANY,
           });
         }).to.throw('A valid type and at least one injected field must be passed to create a relationship.');
       });
@@ -58,7 +57,7 @@ describe('JDLRelationship', () => {
           from: 'Abc',
           to: 'Abc2',
           injectedFieldInFrom: 'something',
-          type: relationshipTypes.ONE_TO_ONE,
+          type: RelationshipTypes.ONE_TO_ONE,
         });
       });
 
@@ -66,7 +65,7 @@ describe('JDLRelationship', () => {
         expect(relationship.to).to.equal('Abc2');
         expect(relationship.from).to.equal('Abc');
         expect(relationship.injectedFieldInFrom).to.equal('something');
-        expect(relationship.type).to.equal(relationshipTypes.ONE_TO_ONE);
+        expect(relationship.type).to.equal(RelationshipTypes.ONE_TO_ONE);
       });
     });
     context('when passing an unidirectional one-to-many relationship', () => {
@@ -78,7 +77,7 @@ describe('JDLRelationship', () => {
             from: 'Abc',
             to: 'Abc2',
             injectedFieldInFrom: 'something',
-            type: relationshipTypes.ONE_TO_MANY,
+            type: RelationshipTypes.ONE_TO_MANY,
             unidirectionalRelationships: true,
           });
         });
@@ -97,7 +96,7 @@ describe('JDLRelationship', () => {
             from: 'Abc',
             to: 'Abc2',
             injectedFieldInFrom: 'something',
-            type: relationshipTypes.MANY_TO_ONE,
+            type: RelationshipTypes.MANY_TO_ONE,
             unidirectionalRelationships: true,
           });
         });
@@ -116,7 +115,7 @@ describe('JDLRelationship', () => {
             from: 'Abc',
             to: 'Abc2',
             injectedFieldInFrom: 'something',
-            type: relationshipTypes.ONE_TO_ONE,
+            type: RelationshipTypes.ONE_TO_ONE,
             unidirectionalRelationships: true,
           });
         });
@@ -135,7 +134,7 @@ describe('JDLRelationship', () => {
             from: 'Abc',
             to: 'Abc2',
             injectedFieldInFrom: 'something',
-            type: relationshipTypes.MANY_TO_MANY,
+            type: RelationshipTypes.MANY_TO_MANY,
             unidirectionalRelationships: true,
           });
         });
@@ -153,7 +152,7 @@ describe('JDLRelationship', () => {
       relationship = new JDLRelationship({
         from: 'A',
         to: 'B',
-        type: relationshipTypes.ONE_TO_ONE,
+        type: RelationshipTypes.ONE_TO_ONE,
         injectedFieldInFrom: 'b',
       });
     });
@@ -172,7 +171,7 @@ describe('JDLRelationship', () => {
         from: 'A',
         to: 'B',
         injectedFieldInTo: 'a',
-        type: relationshipTypes.ONE_TO_ONE,
+        type: RelationshipTypes.ONE_TO_ONE,
         options: {
           global: { [JPA_DERIVED_IDENTIFIER]: true },
           destination: {},
@@ -202,7 +201,7 @@ describe('JDLRelationship', () => {
         from: 'A',
         to: 'B',
         injectedFieldInTo: 'a',
-        type: relationshipTypes.ONE_TO_ONE,
+        type: RelationshipTypes.ONE_TO_ONE,
         options,
       });
     });
@@ -221,7 +220,7 @@ describe('JDLRelationship', () => {
         relationship = new JDLRelationship({
           from: 'A',
           to: 'B',
-          type: relationshipTypes.ONE_TO_ONE,
+          type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
         });
       });
@@ -241,7 +240,7 @@ describe('JDLRelationship', () => {
         relationship = new JDLRelationship({
           from: 'A',
           to: 'B',
-          type: relationshipTypes.ONE_TO_ONE,
+          type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
           commentInFrom: 'Some comment.',
           commentInTo: 'Some other comment.',
@@ -270,7 +269,7 @@ describe('JDLRelationship', () => {
         relationship = new JDLRelationship({
           from: 'A',
           to: 'B',
-          type: relationshipTypes.ONE_TO_ONE,
+          type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
           commentInFrom: 'Some comment.',
         });
@@ -294,7 +293,7 @@ describe('JDLRelationship', () => {
         relationship = new JDLRelationship({
           from: 'A',
           to: 'B',
-          type: relationshipTypes.ONE_TO_ONE,
+          type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
           commentInTo: 'Some other comment.',
         });
@@ -319,7 +318,7 @@ describe('JDLRelationship', () => {
         relationship = new JDLRelationship({
           from: 'A',
           to: 'B',
-          type: relationshipTypes.ONE_TO_ONE,
+          type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
         });
       });
@@ -339,7 +338,7 @@ describe('JDLRelationship', () => {
         relationship = new JDLRelationship({
           from: 'A',
           to: 'B',
-          type: relationshipTypes.ONE_TO_ONE,
+          type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
           injectedFieldInTo: 'a(id)',
         });
@@ -361,7 +360,7 @@ describe('JDLRelationship', () => {
           relationship = new JDLRelationship({
             from: 'A',
             to: 'B',
-            type: relationshipTypes.ONE_TO_ONE,
+            type: RelationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'b',
             injectedFieldInTo: 'a',
             options: {
@@ -388,7 +387,7 @@ describe('JDLRelationship', () => {
           relationship = new JDLRelationship({
             from: 'A',
             to: 'B',
-            type: relationshipTypes.ONE_TO_ONE,
+            type: RelationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'b',
             injectedFieldInTo: 'a',
             options: {

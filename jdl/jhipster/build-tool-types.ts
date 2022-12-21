@@ -17,9 +17,12 @@
  * limitations under the License.
  */
 
-const buildToolTypes = {
+const Types = {
   MAVEN: 'maven',
   GRADLE: 'gradle',
 };
-// eslint-disable-next-line import/prefer-default-export
-export { buildToolTypes };
+
+export const MAVEN = Types.MAVEN;
+export const GRADLE = Types.GRADLE;
+
+export default Types;

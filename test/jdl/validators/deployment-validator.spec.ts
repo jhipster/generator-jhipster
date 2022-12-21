@@ -18,13 +18,11 @@
  */
 
 import { expect } from 'chai';
-import { deploymentOptions, applicationTypes, databaseTypes, searchEngineTypes } from '../../../jdl/jhipster/index.mjs';
-
+import { Options } from '../../../jdl/jhipster/deployment-options.js';
+import { MICROSERVICE } from '../../../jdl/jhipster/application-types.js';
+import { MONGODB, NO } from '../../../jdl/jhipster/database-types.js';
+import SearchEngineTypes from '../../../jdl/jhipster/search-engine-types.js';
 import DeploymentValidator from '../../../jdl/validators/deployment-validator.js';
-
-const { MICROSERVICE } = applicationTypes;
-const { MONGODB, NO } = databaseTypes;
-const { Options } = deploymentOptions;
 
 describe('DeploymentValidator', () => {
   let validator;
@@ -277,7 +275,7 @@ describe('DeploymentValidator', () => {
                   directoryPath: '../',
                   storageType: Options.storageType.ephemeral,
                 },
-                { searchEngine: searchEngineTypes.ELASTICSEARCH }
+                { searchEngine: SearchEngineTypes.ELASTICSEARCH }
               )
             ).to.throw(/^Can't have the storageType option set when elasticsearch is the search engine.$/);
           });

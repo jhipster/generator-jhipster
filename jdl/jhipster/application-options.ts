@@ -17,18 +17,18 @@
  * limitations under the License.
  */
 
-import { applicationTypes } from './application-types.js';
-import { authenticationTypes } from './authentication-types.js';
-import { databaseTypes } from './database-types.js';
-
-import { cacheTypes } from './cache-types.js';
-import { serviceDiscoveryTypes } from './service-discovery-types.js';
-import { clientFrameworkTypes } from './client-framework-types.js';
-import { buildToolTypes } from './build-tool-types.js';
-import { messageBrokerTypes } from './message-broker-types.js';
-import { searchEngineTypes } from './search-engine-types.js';
-import { testFrameworkTypes } from './test-framework-types.js';
-import { websocketTypes } from './websocket-types.js';
+import applicationTypes from './application-types.js';
+import authenticationTypes from './authentication-types.js';
+import databaseTypes from './database-types.js';
+import applicationOptions from './application-options.js';
+import cacheTypes from './cache-types.js';
+import serviceDiscoveryTypes from './service-discovery-types.js';
+import clientFrameworkTypes from './client-framework-types.js';
+import buildToolTypes from './build-tool-types.js';
+import messageBrokerTypes from './message-broker-types.js';
+import searchEngineTypes from './search-engine-types.js';
+import testFrameworkTypes from './test-framework-types.js';
+import websocketTypes from './websocket-types.js';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, ORACLE, POSTGRESQL, SQL, H2_DISK, H2_MEMORY } = databaseTypes;
@@ -46,16 +46,17 @@ const { ANGULAR, REACT, VUE, SVELTE, NO } = clientFrameworkTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
 const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
-const NO_SEARCH_ENGINE = searchEngineTypes.NO;
+const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
 const COUCHBASE_SEARCH_ENGINE = searchEngineTypes.COUCHBASE;
 
 const { EUREKA, CONSUL } = serviceDiscoveryTypes;
 
+const FALSE_SERVICE_DISCOVERY = serviceDiscoveryTypes.FALSE;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 const { SPRING_WEBSOCKET } = websocketTypes;
 
-const NO_WEBSOCKET = websocketTypes.NO;
+const NO_WEBSOCKET = websocketTypes.FALSE;
 
 const ApplicationOptionTypes = {
   STRING: 'string',
@@ -217,6 +218,7 @@ const optionValues: any = {
     [EUREKA]: EUREKA,
     [CONSUL]: CONSUL,
     [NO_SERVICE_DISCOVERY]: NO_SERVICE_DISCOVERY,
+    [FALSE_SERVICE_DISCOVERY.toString()]: FALSE_SERVICE_DISCOVERY,
   },
   [optionNames.SKIP_CLIENT]: false,
   [optionNames.SKIP_GIT]: false,
@@ -302,6 +304,20 @@ const QuotedOptionNames = [
   optionNames.GRADLE_ENTERPRISE_HOST,
 ];
 
+export { optionNames as OptionNames };
+export { optionValues as OptionValues };
+
+export default {
+  OptionTypes: ApplicationOptionTypes,
+  OptionNames: optionNames,
+  OptionValues: optionValues,
+  QuotedOptionNames,
+  getTypeForOption,
+  doesOptionExist,
+  doesOptionValueExist,
+  shouldTheValueBeQuoted,
+};
+
 /**
  * Returns the option's type, one of string, boolean, list or integer.
  * @param {String} optionName - the option's name.
@@ -348,17 +364,3 @@ function shouldTheValueBeQuoted(optionName) {
   }
   return QuotedOptionNames.includes(optionName);
 }
-
-const OptionTypes = ApplicationOptionTypes;
-const OptionNames = optionNames;
-const OptionValues = optionValues;
-export default {
-  OptionTypes,
-  OptionNames,
-  OptionValues,
-  QuotedOptionNames,
-  getTypeForOption,
-  doesOptionExist,
-  doesOptionValueExist,
-  shouldTheValueBeQuoted,
-};

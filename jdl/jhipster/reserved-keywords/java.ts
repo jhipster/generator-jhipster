@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const java = [
+export default [
   'ABSTRACT',
   'CONTINUE',
   'FOR',
@@ -69,5 +69,3 @@ const java = [
   'SUPER',
   'WHILE',
 ];
-
-export default java;

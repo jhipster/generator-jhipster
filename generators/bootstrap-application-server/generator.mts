@@ -29,7 +29,8 @@ import {
   prepareEntityPrimaryKeyForTemplates,
 } from '../../utils/entity.mjs';
 import type { SpringBootApplication } from '../server/types.mjs';
-import { authenticationTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
+import fieldTypes from '../../jdl/jhipster/field-types.js';
+import authenticationTypes from '../../jdl/jhipster/authentication-types.js';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
 import { getPomVersionProperties } from '../server/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';

@@ -18,10 +18,12 @@
  */
 import _ from 'lodash';
 import JDLObject from '../../models/jdl-object.js';
-import { JDLEntity } from '../../models/index.mjs';
+import JDLEntity from '../../models/jdl-entity.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { applicationTypes, binaryOptions, databaseTypes } from '../../jhipster/index.mjs';
+import ApplicationTypes from '../../jhipster/application-types.js';
+import BinaryOptions from '../../jhipster/binary-options.js';
+import DatabaseTypes from '../../jhipster/database-types.js';
 
 import { convertApplications } from './application-converter.js';
 import { convertEntities } from './entity-converter.js';
@@ -31,6 +33,10 @@ import { convertValidations } from './validation-converter.js';
 import { convertOptions } from './option-converter.js';
 import { convertRelationships } from './relationship-converter.js';
 import { convertDeployments } from './deployment-converter.js';
+
+export default {
+  parseFromConfigurationObject,
+};
 
 const USER = 'User';
 
@@ -144,7 +150,7 @@ function addOptionsFromEntityAnnotations() {
         );
       } else if (annotation.type === 'BINARY') {
         if (annotationName === 'paginate') {
-          annotationName = binaryOptions.Options.PAGINATION;
+          annotationName = BinaryOptions.Options.PAGINATION;
         }
         jdlObject.addOption(
           new JDLBinaryOption({
@@ -191,7 +197,7 @@ function getConstantValueFromConstantName(constantName) {
 }
 
 function fillAssociations(conversionOptions: any = {}) {
-  const { unidirectionalRelationships = configuration.databaseType === databaseTypes.NEO4J } = conversionOptions;
+  const { unidirectionalRelationships = configuration.databaseType === DatabaseTypes.NEO4J } = conversionOptions;
   const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions, { unidirectionalRelationships });
   jdlRelationships.forEach(jdlRelationship => {
     // TODO: addRelationship only expects one argument.
@@ -223,7 +229,7 @@ function convertAnnotationsToOptions(annotations) {
 }
 
 function fillOptions() {
-  if (configuration.applicationType === applicationTypes.MICROSERVICE && !parsedContent.options.microservice) {
+  if (configuration.applicationType === ApplicationTypes.MICROSERVICE && !parsedContent.options.microservice) {
     globallyAddMicroserviceOption(configuration.applicationName);
   }
   fillUnaryAndBinaryOptions();
@@ -233,7 +239,7 @@ function fillOptions() {
 function globallyAddMicroserviceOption(applicationName) {
   jdlObject.addOption(
     new JDLBinaryOption({
-      name: binaryOptions.Options.MICROSERVICE,
+      name: BinaryOptions.Options.MICROSERVICE,
       value: applicationName,
       entityNames,
     })
@@ -242,10 +248,10 @@ function globallyAddMicroserviceOption(applicationName) {
 
 function fillUnaryAndBinaryOptions() {
   // TODO: move it to another file? it may not be the parser's responsibility to do it
-  if (configuration.applicationType === applicationTypes.MICROSERVICE) {
+  if (configuration.applicationType === ApplicationTypes.MICROSERVICE) {
     jdlObject.addOption(
       new JDLBinaryOption({
-        name: binaryOptions.Options.CLIENT_ROOT_FOLDER,
+        name: BinaryOptions.Options.CLIENT_ROOT_FOLDER,
         value: configuration.applicationName,
         entityNames,
       })
@@ -256,7 +262,3 @@ function fillUnaryAndBinaryOptions() {
     jdlObject.addOption(convertedOption);
   });
 }
-
-export default {
-  parseFromConfigurationObject,
-};

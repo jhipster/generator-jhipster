@@ -1,4 +1,4 @@
-import { fieldTypes } from '../../jdl/jhipster/index.mjs';
+import fieldTypes from '../../jdl/jhipster/field-types.js';
 
 const {
   CommonDBTypes: { UUID },

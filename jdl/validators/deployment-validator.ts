@@ -18,12 +18,15 @@
  */
 
 import Validator from './validator.js';
-import { applicationTypes, databaseTypes, searchEngineTypes, deploymentOptions } from '../jhipster/index.mjs';
+import ApplicationTypes from '../jhipster/application-types.js';
+import DatabaseTypes from '../jhipster/database-types.js';
+import SearchEngineTypes from '../jhipster/search-engine-types.js';
+import DeploymentOptions from '../jhipster/deployment-options.js';
 
-const { Options } = deploymentOptions;
-const { MICROSERVICE } = applicationTypes;
-const { NO } = databaseTypes;
-const { ELASTICSEARCH } = searchEngineTypes;
+const { MICROSERVICE } = ApplicationTypes;
+const { NO } = DatabaseTypes;
+const { ELASTICSEARCH } = SearchEngineTypes;
+const { Options } = DeploymentOptions;
 
 export default class DeploymentValidator extends Validator {
   constructor() {

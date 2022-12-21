@@ -20,9 +20,8 @@
 /* define global expect */
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import stringUtils from '../../../jdl/utils/string-utils.js';
 
-const { lowerFirst, camelCase, upperFirst } = stringUtils;
+import { lowerFirst, camelCase, upperFirst } from '../../../jdl/utils/string-utils.js';
 
 describe('StringUtils', () => {
   describe('camelCase', () => {

@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import { applicationTypes } from './application-types.js';
-import { authenticationTypes } from './authentication-types.js';
-import { databaseTypes } from './database-types.js';
+import applicationTypes from './application-types.js';
+import authenticationTypes from './authentication-types.js';
+import databaseTypes from './database-types.js';
 import applicationOptions from './application-options.js';
-import { cacheTypes } from './cache-types.js';
-import { serviceDiscoveryTypes } from './service-discovery-types.js';
-import { clientFrameworkTypes } from './client-framework-types.js';
-import { buildToolTypes } from './build-tool-types.js';
+import cacheProviderType from './cache-types.js';
+import serviceDiscoveryTypes from './service-discovery-types.js';
+import clientFrameworkTypes from './client-framework-types.js';
+import buildToolTypes from './build-tool-types.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { EUREKA } = serviceDiscoveryTypes;
@@ -33,9 +33,9 @@ const NO_DATABASE_TYPE = databaseTypes.NO;
 const { OptionNames, OptionValues } = applicationOptions;
 const { JWT, OAUTH2 } = authenticationTypes;
 const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
-const { EHCACHE, HAZELCAST } = cacheTypes;
+const { EHCACHE, HAZELCAST } = cacheProviderType;
 
-const NO_CACHE_PROVIDER = cacheTypes.NO;
+const NO_CACHE_PROVIDER = cacheProviderType.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 const { MAVEN } = buildToolTypes;
@@ -86,7 +86,7 @@ const commonDefaultOptions = {
   [BUILD_TOOL]: MAVEN,
 };
 
-function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
+export function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
   if (applicationType === MONOLITH) {
     return getConfigForMonolithApplication(customOptions);
   }
@@ -99,7 +99,7 @@ function getConfigForApplicationType(applicationType = undefined, customOptions 
   return getDefaultConfigForNewApplication(customOptions);
 }
 
-function getConfigForMonolithApplication(customOptions: any = {}): any {
+export function getConfigForMonolithApplication(customOptions: any = {}): any {
   const options = {
     ...commonDefaultOptions,
     [CACHE_PROVIDER]: EHCACHE,
@@ -128,7 +128,7 @@ function getConfigForMonolithApplication(customOptions: any = {}): any {
   };
 }
 
-function getConfigForGatewayApplication(customOptions: any = {}): any {
+export function getConfigForGatewayApplication(customOptions: any = {}): any {
   const options = {
     ...commonDefaultOptions,
     [CLIENT_FRAMEWORK]: ANGULAR,
@@ -162,7 +162,7 @@ function getConfigForGatewayApplication(customOptions: any = {}): any {
   };
 }
 
-function getConfigForMicroserviceApplication(customOptions: any = {}): any {
+export function getConfigForMicroserviceApplication(customOptions: any = {}): any {
   const DEFAULT_SERVER_PORT = '8081';
   const options = {
     ...commonDefaultOptions,
@@ -197,7 +197,7 @@ function getConfigForMicroserviceApplication(customOptions: any = {}): any {
   };
 }
 
-function getDefaultConfigForNewApplication(customOptions: any = {}): any {
+export function getDefaultConfigForNewApplication(customOptions: any = {}): any {
   const options = {
     ...commonDefaultOptions,
     [BASE_NAME]: OptionValues[BASE_NAME],
@@ -257,11 +257,3 @@ function getDefaultConfigForNewApplication(customOptions: any = {}): any {
   }
   return options;
 }
-
-export default {
-  getConfigForApplicationType,
-  getConfigForMonolithApplication,
-  getConfigForGatewayApplication,
-  getConfigForMicroserviceApplication,
-  getDefaultConfigForNewApplication,
-};

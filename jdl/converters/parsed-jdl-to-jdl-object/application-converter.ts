@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import createJDLApplication from '../../models/jdl-application-factory.js';
+import { createJDLApplication } from '../../models/jdl-application-factory.js';
 import { convertOptions } from './option-converter.js';
 import ApplicationOptions from '../../jhipster/application-options.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';

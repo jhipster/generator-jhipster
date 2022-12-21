@@ -24,10 +24,9 @@ import _ from 'lodash';
  * @param entityName - the entity's name
  * @returns the corresponding table name.
  */
-function getTableNameFromEntityName(entityName: string): string {
+export default function getTableNameFromEntityName(entityName: string): string {
   if (!entityName) {
     throw new Error('An entity name must be passed to get a table name.');
   }
   return _.snakeCase(entityName);
 }
-export default getTableNameFromEntityName;

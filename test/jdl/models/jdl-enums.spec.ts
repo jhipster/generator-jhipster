@@ -21,7 +21,7 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import JDLEnums from '../../../jdl/models/jdl-enums.js';
-import { JDLEnum } from '../../../jdl/models/index.mjs';
+import JDLEnum from '../../../jdl/models/jdl-enum.js';
 
 describe('JDLEnums', () => {
   describe('add', () => {

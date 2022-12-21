@@ -23,13 +23,11 @@ import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
 import exportEntities from '../../../jdl/exporters/jhipster-entity-exporter.js';
-import { applicationTypes } from '../../../jdl/jhipster/index.mjs';
 
-import entityOptions from '../../../jdl/jhipster/entity-options.js';
+import ApplicationTypes from '../../../jdl/jhipster/application-types.js';
+import { MapperTypes, PaginationTypes, ServiceTypes } from '../../../jdl/jhipster/entity-options.js';
 import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../../../jdl/utils/file-utils.js';
 
-const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;
-const { MONOLITH, MICROSERVICE } = applicationTypes;
 const { SERVICE_CLASS } = ServiceTypes;
 const NO_DTO = MapperTypes.NO;
 const NO_PAGINATION = PaginationTypes.NO;
@@ -80,7 +78,7 @@ describe('JHipsterEntityExporter', () => {
             entities,
             application: {
               name: 'MyApp',
-              type: MONOLITH,
+              type: ApplicationTypes.MONOLITH,
             },
           });
           aEntityContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));
@@ -106,7 +104,7 @@ describe('JHipsterEntityExporter', () => {
             entities: [],
             application: {
               name: 'MyApp',
-              type: MONOLITH,
+              type: ApplicationTypes.MONOLITH,
             },
           });
         });
@@ -150,7 +148,7 @@ describe('JHipsterEntityExporter', () => {
             entities,
             application: {
               name: 'MyApp',
-              type: MONOLITH,
+              type: ApplicationTypes.MONOLITH,
             },
           });
           previousChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
@@ -159,7 +157,7 @@ describe('JHipsterEntityExporter', () => {
               entities,
               application: {
                 name: 'MyApp',
-                type: MONOLITH,
+                type: ApplicationTypes.MONOLITH,
               },
             });
             newChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
@@ -301,7 +299,7 @@ Array [
               entities,
               application: {
                 name: 'client',
-                type: MONOLITH,
+                type: ApplicationTypes.MONOLITH,
               },
             });
           });
@@ -517,7 +515,7 @@ Array [
                 entities,
                 application: {
                   name: 'client',
-                  type: MICROSERVICE,
+                  type: ApplicationTypes.MICROSERVICE,
                 },
               });
             });
@@ -609,7 +607,7 @@ Array [
                 entities,
                 application: {
                   name: 'client',
-                  type: MICROSERVICE,
+                  type: ApplicationTypes.MICROSERVICE,
                 },
               });
             });
@@ -668,7 +666,7 @@ Array [
             entities,
             application: {
               name: 'MyApp',
-              type: MONOLITH,
+              type: ApplicationTypes.MONOLITH,
             },
           });
           newContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));

@@ -25,14 +25,15 @@ import { expect } from 'chai';
 
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { applicationTypes, clientFrameworkTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
+import ApplicationTypes from '../../jdl/jhipster/application-types.js';
+import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
+import DatabaseTypes from '../../jdl/jhipster/database-types.js';
 import { createImporterFromFiles, createImporterFromContent } from '../../jdl/jdl-importer.js';
 
-const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
+const { NO: NO_CLIENT_FRAMEWORK } = ClientFrameworkTypes;
 
 describe('JDLImporter', () => {
   describe('createImporterFromFiles', () => {
@@ -60,8 +61,8 @@ describe('JDLImporter', () => {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'big_sample.jdl')], {
           applicationName: 'MyApp',
-          applicationType: MONOLITH,
-          databaseType: databaseTypes.SQL,
+          applicationType: ApplicationTypes.MONOLITH,
+          databaseType: DatabaseTypes.SQL,
         });
         returned = importer.import();
         returned.exportedEntities = returned.exportedEntities
@@ -392,8 +393,8 @@ relationship OneToOne {
       before("importing a JDL file with the 'no' database type", () => {
         importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'simple.jdl')], {
           applicationName: 'MyApp',
-          applicationType: MONOLITH,
-          databaseType: databaseTypes.NO,
+          applicationType: ApplicationTypes.MONOLITH,
+          databaseType: DatabaseTypes.NO,
         });
       });
 
@@ -411,7 +412,7 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'annotations.jdl')], {
           applicationName: 'toto',
-          databaseType: databaseTypes.SQL,
+          databaseType: DatabaseTypes.SQL,
         });
         returned = importer.import();
       });
@@ -444,8 +445,8 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'regex_validation.jdl')], {
           applicationName: 'MyApp',
-          applicationType: MONOLITH,
-          databaseType: databaseTypes.SQL,
+          applicationType: ApplicationTypes.MONOLITH,
+          databaseType: DatabaseTypes.SQL,
         });
         returned = importer.import();
         entityContent = JSON.parse(fse.readFileSync(path.join('.jhipster', 'Customer.json'), { encoding: 'utf8' }));
@@ -468,8 +469,8 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'pattern_validation_with_quote.jdl')], {
           applicationName: 'MyApp',
-          applicationType: MONOLITH,
-          databaseType: databaseTypes.SQL,
+          applicationType: ApplicationTypes.MONOLITH,
+          databaseType: DatabaseTypes.SQL,
         });
         returned = importer.import();
       });

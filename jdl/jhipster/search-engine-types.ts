@@ -17,10 +17,16 @@
  * limitations under the License.
  */
 
-const searchEngineTypes = {
+const Types = {
   ELASTICSEARCH: 'elasticsearch',
   COUCHBASE: 'couchbase',
   NO: 'no',
+  FALSE: false,
 };
-// eslint-disable-next-line import/prefer-default-export
-export { searchEngineTypes };
+
+export const ELASTICSEARCH = Types.ELASTICSEARCH;
+export const COUCHBASE = Types.COUCHBASE;
+export const NO = Types.NO;
+export const FALSE = Types.FALSE;
+
+export default Types;

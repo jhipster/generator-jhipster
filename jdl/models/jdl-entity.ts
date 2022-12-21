@@ -17,13 +17,11 @@
  * limitations under the License.
  */
 
+import { merge } from '../utils/object-utils.js';
 import getTableNameFromEntityName from '../jhipster/entity-table-name-creator.js';
 import JDLField from './jdl-field.js';
-import objectUtils from '../utils/object-utils.js';
 
-const { merge } = objectUtils;
-// eslint-disable-next-line import/prefer-default-export
-export class JDLEntity {
+export default class JDLEntity {
   name: any;
   tableName: any;
   fields: Record<string, JDLField>;

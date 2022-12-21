@@ -19,13 +19,13 @@
 import JDLParser from './jdl-parser.js';
 import deduplicate from '../utils/array-utils.js';
 
-import { applicationOptions, entityOptions, validations } from '../jhipster/index.mjs';
+import ApplicationOptions from '../jhipster/application-options.js';
+import EntityOptions from '../jhipster/entity-options.js';
+import Validations from '../jhipster/validations.js';
 
-const { OptionNames } = applicationOptions;
-const { PaginationTypes } = entityOptions;
-const {
-  Validations: { PATTERN, REQUIRED, UNIQUE },
-} = validations;
+const { OptionNames } = ApplicationOptions;
+const { PaginationTypes } = EntityOptions;
+const { PATTERN, REQUIRED, UNIQUE } = Validations;
 
 const { PAGINATION } = PaginationTypes;
 const { PACKAGE_NAME } = OptionNames;

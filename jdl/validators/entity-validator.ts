@@ -18,9 +18,7 @@
  */
 
 import Validator from './validator.js';
-import { reservedKeywords } from '../jhipster/index.mjs';
-
-const { isReservedClassName } = reservedKeywords;
+import { isReservedClassName } from '../jhipster/reserved-keywords.js';
 
 export default class EntityValidator extends Validator {
   constructor() {

@@ -24,21 +24,13 @@ import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
 import { exportApplication, exportApplications } from '../../../jdl/exporters/applications/jhipster-application-exporter.js';
-import {
-  applicationTypes,
-  buildToolTypes,
-  cacheTypes,
-  authenticationTypes,
-  clientFrameworkTypes,
-  databaseTypes,
-} from '../../../jdl/jhipster/index.mjs';
 
-const { MONOLITH } = applicationTypes;
-const { MAVEN } = buildToolTypes;
-const { EHCACHE } = cacheTypes;
-const { JWT } = authenticationTypes;
-const { ANGULAR } = clientFrameworkTypes;
-const { SQL, H2_DISK, MYSQL } = databaseTypes;
+import { MONOLITH } from '../../../jdl/jhipster/application-types.js';
+import { MAVEN } from '../../../jdl/jhipster/build-tool-types.js';
+import { EHCACHE } from '../../../jdl/jhipster/cache-types.js';
+import { JWT } from '../../../jdl/jhipster/authentication-types.js';
+import { ANGULAR } from '../../../jdl/jhipster/client-framework-types.js';
+import { SQL, H2_DISK, MYSQL } from '../../../jdl/jhipster/database-types.js';
 
 describe('JHipsterApplicationExporter', () => {
   describe('exportApplication', () => {

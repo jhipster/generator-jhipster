@@ -18,18 +18,16 @@
  */
 
 import _ from 'lodash';
-import { validations } from '../../jhipster/index.mjs';
+import Validations from '../../jhipster/validations.js';
 import formatComment from '../../utils/format-utils.js';
-import stringUtils from '../../utils/string-utils.js';
+import { camelCase } from '../../utils/string-utils.js';
 import fieldTypes from '../../jhipster/field-types.js';
 import JDLObject from '../../models/jdl-object.js';
 import { Field } from '../types.js';
-import { JDLEntity } from '../../models/index.mjs';
+import JDLEntity from '../../models/jdl-entity.js';
 
-const {
-  Validations: { UNIQUE, REQUIRED },
-} = validations;
-const { camelCase } = stringUtils;
+const { UNIQUE, REQUIRED } = Validations;
+
 const { isBlobType } = fieldTypes;
 const { ANY_BLOB, BLOB, IMAGE_BLOB, TEXT_BLOB } = fieldTypes.CommonDBTypes;
 const { ANY, IMAGE, TEXT } = fieldTypes.BlobTypes;

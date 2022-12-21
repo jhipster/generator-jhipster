@@ -18,16 +18,18 @@
  */
 
 import { expect } from 'chai';
-import { applicationTypes, fieldTypes, unaryOptions, relationshipTypes } from '../../../jdl/jhipster/index.mjs';
+import ApplicationTypes from '../../../jdl/jhipster/application-types.js';
+import FieldTypes from '../../../jdl/jhipster/field-types.js';
+import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
+import RelationshipTypes from '../../../jdl/jhipster/relationship-types.js';
 import JDLObject from '../../../jdl/models/jdl-object.js';
 import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
-import { JDLEntity, JDLEnum } from '../../../jdl/models/index.mjs';
+import JDLEntity from '../../../jdl/models/jdl-entity.js';
 import JDLField from '../../../jdl/models/jdl-field.js';
+import JDLEnum from '../../../jdl/models/jdl-enum.js';
 import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
 import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
 import mergeJDLObjects from '../../../jdl/models/jdl-object-merger.js';
-
-const { MONOLITH } = applicationTypes;
 
 describe('JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {
@@ -88,7 +90,7 @@ describe('JDLObjectMerger', () => {
 function createFirstJDLObjectForTheMergeTest() {
   const jdlObject = new JDLObject();
   const application = createJDLApplication({
-    applicationType: MONOLITH,
+    applicationType: ApplicationTypes.MONOLITH,
     baseName: 'anApp',
     databaseType: 'sql',
   });
@@ -100,12 +102,12 @@ function createFirstJDLObjectForTheMergeTest() {
   });
   const fieldForA = new JDLField({
     name: 'aa',
-    type: fieldTypes.CommonDBTypes.STRING,
+    type: FieldTypes.CommonDBTypes.STRING,
   });
   const relationship = new JDLRelationship({
     from: entityA.name,
     to: entityB.name,
-    type: relationshipTypes.ONE_TO_ONE,
+    type: RelationshipTypes.ONE_TO_ONE,
     injectedFieldInFrom: 'b',
   });
   const enumeration = new JDLEnum({
@@ -113,7 +115,7 @@ function createFirstJDLObjectForTheMergeTest() {
     values: [{ key: 'AAA' }, { key: 'BBB' }],
   });
   const option = new JDLUnaryOption({
-    name: unaryOptions.FILTER,
+    name: UnaryOptions.FILTER,
     entityNames: [entityA.name, entityB.name],
   });
   entityA.addField(fieldForA);
@@ -129,7 +131,7 @@ function createFirstJDLObjectForTheMergeTest() {
 function createSecondJDLObjectForTheMergeTest() {
   const jdlObject = new JDLObject();
   const application = createJDLApplication({
-    applicationType: MONOLITH,
+    applicationType: ApplicationTypes.MONOLITH,
     baseName: 'anotherApp',
     databaseType: 'sql',
   });
@@ -138,12 +140,12 @@ function createSecondJDLObjectForTheMergeTest() {
   });
   const fieldForC = new JDLField({
     name: 'cc',
-    type: fieldTypes.CommonDBTypes.STRING,
+    type: FieldTypes.CommonDBTypes.STRING,
   });
   const relationship = new JDLRelationship({
     from: entityC.name,
     to: entityC.name,
-    type: relationshipTypes.MANY_TO_ONE,
+    type: RelationshipTypes.MANY_TO_ONE,
     injectedFieldInFrom: 'c2',
   });
   const enumeration = new JDLEnum({
@@ -151,7 +153,7 @@ function createSecondJDLObjectForTheMergeTest() {
     values: [{ key: 'CCC' }],
   });
   const option = new JDLUnaryOption({
-    name: unaryOptions.NO_FLUENT_METHOD,
+    name: UnaryOptions.NO_FLUENT_METHOD,
     entityNames: [entityC.name],
   });
   entityC.addField(fieldForC);

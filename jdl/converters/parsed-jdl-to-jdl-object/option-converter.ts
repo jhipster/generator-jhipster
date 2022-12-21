@@ -19,10 +19,9 @@
 
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import unaryOptions from '../../jhipster/unary-options.js';
-import binaryOptions from '../../jhipster/binary-options.js';
+import UnaryOptions from '../../jhipster/unary-options.js';
+import BinaryOptions, { OptionValues, getOptionName } from '../../jhipster/binary-options.js';
 
-const { OptionValues, getOptionName } = binaryOptions;
 export default { convertOptions };
 
 /**
@@ -43,7 +42,7 @@ export function convertOptions(parsedOptions, useOptions) {
 
 function convertUnaryOptions(parsedOptions) {
   const convertedUnaryOptions: JDLUnaryOption[] = [];
-  unaryOptions.forEach(unaryOptionName => {
+  UnaryOptions.forEach(unaryOptionName => {
     const parsedUnaryOption = parsedOptions[unaryOptionName];
     if (!parsedUnaryOption || !parsedUnaryOption.list || parsedUnaryOption.list.length === 0) {
       return;
@@ -61,7 +60,7 @@ function convertUnaryOptions(parsedOptions) {
 
 function convertBinaryOptions(parsedOptions) {
   const convertedBinaryOptions: JDLBinaryOption[] = [];
-  binaryOptions.forEach(binaryOptionName => {
+  BinaryOptions.forEach(binaryOptionName => {
     if (!parsedOptions[binaryOptionName]) {
       return;
     }

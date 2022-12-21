@@ -20,12 +20,11 @@
 
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import { applicationOptions, binaryOptions } from '../../../jdl/jhipster/index.mjs';
+import { OptionNames } from '../../../jdl/jhipster/application-options.js';
+import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
 import StringJDLApplicationConfigurationOption from '../../../jdl/models/string-jdl-application-configuration-option.js';
 import JDLApplication from '../../../jdl/models/jdl-application.js';
 import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
-
-const { OptionNames } = applicationOptions;
 
 describe('JDLApplication', () => {
   describe('hasConfigurationOption', () => {
@@ -333,8 +332,8 @@ Array [
       before(() => {
         const application = new JDLApplication();
         const option = new JDLBinaryOption({
-          name: binaryOptions.Options.PAGINATION,
-          value: binaryOptions.Values.pagination['INFINITE-SCROLL'],
+          name: BinaryOptions.Options.PAGINATION,
+          value: BinaryOptions.Values.pagination['INFINITE-SCROLL'],
           entityNames: ['*'],
           excludedNames: ['D'],
         });
@@ -365,15 +364,15 @@ Array [
       before(() => {
         application = new JDLApplication();
         const option1 = new JDLBinaryOption({
-          name: binaryOptions.Options.PAGINATION,
-          value: binaryOptions.Values.pagination['INFINITE-SCROLL'],
+          name: BinaryOptions.Options.PAGINATION,
+          value: BinaryOptions.Values.pagination['INFINITE-SCROLL'],
           entityNames: ['*'],
           excludedNames: ['D'],
         });
         application.addOption(option1);
         const option2 = new JDLBinaryOption({
-          name: binaryOptions.Options.DTO,
-          value: binaryOptions.Values.dto.MAPSTRUCT,
+          name: BinaryOptions.Options.DTO,
+          value: BinaryOptions.Values.dto.MAPSTRUCT,
           entityNames: ['*'],
           excludedNames: ['D'],
         });
@@ -594,14 +593,14 @@ Array [
           entityNames: ['A', 'B', 'C'],
         });
         const option1 = new JDLBinaryOption({
-          name: binaryOptions.Options.PAGINATION,
-          value: binaryOptions.Values.pagination['INFINITE-SCROLL'],
+          name: BinaryOptions.Options.PAGINATION,
+          value: BinaryOptions.Values.pagination['INFINITE-SCROLL'],
           entityNames: ['*'],
           excludedNames: ['D'],
         });
         const option2 = new JDLBinaryOption({
-          name: binaryOptions.Options.SERVICE,
-          value: binaryOptions.Values.service.SERVICE_CLASS,
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_CLASS,
           entityNames: ['A', 'B', 'C'],
         });
         application.addOption(option1);

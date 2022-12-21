@@ -17,12 +17,10 @@
  * limitations under the License.
  */
 
+import { merge } from '../utils/object-utils.js';
 import JDLEnumValue from './jdl-enum-value.js';
-import objectUtils from '../utils/object-utils.js';
 
-const { merge } = objectUtils;
-
-export class JDLEnum {
+export default class JDLEnum {
   comment: any;
   name: any;
   values: Map<any, any>;
@@ -78,5 +76,3 @@ function stringifyValues(jdlEnumValues) {
   });
   return values;
 }
-
-export default JDLEnum;

@@ -20,17 +20,17 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import JDLObject from '../../../../jdl/models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../../../../jdl/models/index.mjs';
+import JDLEntity from '../../../../jdl/models/jdl-entity.js';
 import JDLField from '../../../../jdl/models/jdl-field.js';
+import JDLEnum from '../../../../jdl/models/jdl-enum.js';
 import JDLValidation from '../../../../jdl/models/jdl-validation.js';
-import { fieldTypes, validations } from '../../../../jdl/jhipster/index.mjs';
+import FieldTypes from '../../../../jdl/jhipster/field-types.js';
+import Validations from '../../../../jdl/jhipster/validations.js';
 import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-to-json-field-converter.js';
 
-const { CommonDBTypes } = fieldTypes;
+const { CommonDBTypes } = FieldTypes;
 
-const {
-  Validations: { MINBYTES, PATTERN, MAXLENGTH, UNIQUE, REQUIRED, MAXBYTES, MINLENGTH, MIN, MAX },
-} = validations;
+const { MINBYTES, PATTERN, MAXLENGTH, UNIQUE, REQUIRED, MAXBYTES, MINLENGTH, MIN, MAX } = Validations;
 
 describe('JDLToJSONFieldConverter', () => {
   describe('convert', () => {

@@ -19,10 +19,10 @@
 import chalk from 'chalk';
 import generatorDefaults from '../generator-defaults.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { ANGULAR, REACT, VUE } from '../../jdl/jhipster/client-framework-types.js';
 
 const { clientDefaultConfig } = generatorDefaults;
 const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
-const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 
 export async function askForClient({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;

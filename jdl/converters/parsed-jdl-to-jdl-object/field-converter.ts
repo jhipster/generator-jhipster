@@ -19,9 +19,8 @@
 
 import JDLField from '../../models/jdl-field.js';
 import { formatComment } from '../../utils/format-utils.js';
-import stringUtils from '../../utils/string-utils.js';
+import { lowerFirst } from '../../utils/string-utils.js';
 
-const { lowerFirst } = stringUtils;
 export default { convertField };
 
 /**

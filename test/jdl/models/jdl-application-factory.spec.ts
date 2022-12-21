@@ -19,9 +19,7 @@
 
 import { expect } from 'chai';
 import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
-import { applicationTypes } from '../../../jdl/jhipster/index.mjs';
-
-const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
+import { MONOLITH, MICROSERVICE, GATEWAY } from '../../../jdl/jhipster/application-types.js';
 
 describe('JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {

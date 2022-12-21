@@ -17,11 +17,16 @@
  * limitations under the License.
  */
 
-const applicationTypes = {
+const ApplicationTypes: any = {
   MONOLITH: 'monolith',
   MICROSERVICE: 'microservice',
   GATEWAY: 'gateway',
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { applicationTypes };
+export const MONOLITH = ApplicationTypes.MONOLITH;
+export const MICROSERVICE = ApplicationTypes.MICROSERVICE;
+export const GATEWAY = ApplicationTypes.GATEWAY;
+
+ApplicationTypes.exists = applicationType => !!applicationType && !!ApplicationTypes[applicationType.toUpperCase()];
+
+export default ApplicationTypes;

@@ -17,9 +17,12 @@
  * limitations under the License.
  */
 
-const messageBrokerTypes = {
+const MessageBrokerTypes = {
   KAFKA: 'kafka',
   NO: false,
 };
-// eslint-disable-next-line import/prefer-default-export
-export { messageBrokerTypes };
+
+export const KAFKA = MessageBrokerTypes.KAFKA;
+export const NO = MessageBrokerTypes.NO;
+
+export default MessageBrokerTypes;

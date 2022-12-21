@@ -27,6 +27,13 @@ const Options: any = {
   EMBEDDED: 'embedded',
 };
 
+export const SKIP_CLIENT = Options.SKIP_CLIENT;
+export const SKIP_SERVER = Options.SKIP_SERVER;
+export const NO_FLUENT_METHOD = Options.NO_FLUENT_METHOD;
+export const READ_ONLY = Options.READ_ONLY;
+export const FILTER = Options.FILTER;
+export const EMBEDDED = Options.EMBEDDED;
+
 const optionNames = Object.values(Options);
 
 Options.forEach = passedFunction => {

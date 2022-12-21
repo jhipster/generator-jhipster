@@ -17,26 +17,23 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { deploymentOptions } from '../jhipster/index.mjs';
-
-import objectUtils from '../utils/object-utils.js';
+import DeploymentOptions from '../jhipster/deployment-options.js';
+import { merge as mergeObjects } from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';
 
-const { Options } = deploymentOptions;
 const { isEqual } = _;
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
-const { merge } = objectUtils;
 
 export default class JDLDeployment {
   constructor(args) {
     if (!args || !args.deploymentType) {
       throw new Error('The deploymentType is mandatory to create a deployment.');
     }
-    const merged = merge(defaults(args.deploymentType), args);
+    const merged = mergeObjects(defaults(args.deploymentType), args);
     Object.entries(merged).forEach(([key, option]) => {
       if (Array.isArray(option) && arrayTypes.includes(key)) {
         this[key] = new Set(option);
-      } else if (key === 'serviceDiscoveryType' && option === Options.serviceDiscoveryType.no) {
+      } else if (key === 'serviceDiscoveryType' && option === DeploymentOptions.Options.serviceDiscoveryType.no) {
         this[key] = false;
       } else {
         this[key] = option;
@@ -73,5 +70,5 @@ function stringifyOptionValue(name, value) {
 }
 
 function defaults(deploymentType) {
-  return (Options as any).defaults(deploymentType);
+  return (DeploymentOptions.Options as any).defaults(deploymentType);
 }

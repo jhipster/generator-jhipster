@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 
-import { clientFrameworkTypes } from '../jdl/jhipster/index.mjs';
+import { ANGULAR, REACT, VUE } from '../jdl/jhipster/client-framework-types.js';
 import constants from './generator-constants.cjs';
 import { languageSnakeCase, languageToJavaLanguage } from './languages/utils.mjs';
 
 export { cleanupOldServerFiles } from './server/cleanup.mjs';
 
-const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const { SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR } = constants;
 
 /**

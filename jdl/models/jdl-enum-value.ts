@@ -1,4 +1,4 @@
-class JDLEnumValue {
+export default class JDLEnumValue {
   name: any;
   value: any;
   comment: any;
@@ -17,5 +17,3 @@ class JDLEnumValue {
     return `${this.name}${value}`;
   }
 }
-
-export default JDLEnumValue;

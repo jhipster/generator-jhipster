@@ -22,7 +22,7 @@ import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import EnvironmentBuilder from '../../cli/environment-builder.cjs';
 import BaseGenerator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 

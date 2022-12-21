@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'chai';
-import { JDLEnum } from '../../../jdl/models/index.mjs';
+import JDLEnum from '../../../jdl/models/jdl-enum.js';
 import EnumValidator from '../../../jdl/validators/enum-validator.js';
 
 describe('EnumValidator', () => {
