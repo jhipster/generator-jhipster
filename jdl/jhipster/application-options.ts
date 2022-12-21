@@ -206,8 +206,6 @@ const optionValues: any = {
   [optionNames.SEARCH_ENGINE]: {
     [ELASTICSEARCH]: ELASTICSEARCH,
     [COUCHBASE_SEARCH_ENGINE]: COUCHBASE_SEARCH_ENGINE,
-    // TODO: Boolean as key, probably a bug.
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     [NO_SEARCH_ENGINE]: NO_SEARCH_ENGINE,
   },
   [optionNames.SERVER_PORT]: '8080',

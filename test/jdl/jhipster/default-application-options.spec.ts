@@ -174,7 +174,7 @@ describe('DefaultApplicationOptions', () => {
       });
 
       it('should set it to false', () => {
-        expect(serviceDiscoveryTypeOption).to.be.false;
+        expect(serviceDiscoveryTypeOption).to.be.equal('no');
       });
     });
     context('when passing a custom client theme and no variant', () => {
@@ -373,8 +373,8 @@ describe('DefaultApplicationOptions', () => {
       it('should set the languages option to an empty array', () => {
         expect(options.languages).to.be.eql([]);
       });
-      it('should set the message broker option to false', () => {
-        expect(options.messageBroker).to.be.false;
+      it('should set the message broker option to no', () => {
+        expect(options.messageBroker).to.be.equal('no');
       });
       it('should set the package folder to com/mycompany/myapp', () => {
         expect(options.packageFolder).to.equal('com/mycompany/myapp');
@@ -386,13 +386,13 @@ describe('DefaultApplicationOptions', () => {
         expect(options.prodDatabaseType).to.equal('postgresql');
       });
       it('should set the search engine option to false', () => {
-        expect(options.searchEngine).to.be.false;
+        expect(options.searchEngine).to.be.equal('no');
       });
       it('should set the test frameworks option to nothing', () => {
         expect(options.testFrameworks).to.have.lengthOf(0);
       });
       it('should set the websocket option to false', () => {
-        expect(options.websocket).to.be.false;
+        expect(options.websocket).to.be.equal('no');
       });
     });
     context('when there is no package name option but only a package folder', () => {

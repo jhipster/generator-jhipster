@@ -21,7 +21,6 @@ import fs from 'fs';
 import _ from 'lodash';
 import path from 'path';
 import pluralize from 'pluralize';
-import { createRequire } from 'module';
 import { fork as forkProcess } from 'child_process';
 import EnvironmentBuilder from './environment-builder.mjs';
 import { CLI_NAME, GENERATOR_NAME, logger, toStringJoinArgs, printSuccess, getOptionAsArgs } from './utils.mjs';
@@ -30,9 +29,7 @@ import statistics from '../generators/statistics.cjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
 import { writeConfigFile } from './export-utils.cjs';
 
-const require = createRequire(import.meta.url);
-
-const jhipsterCli = require('./cli.mjs');
+const jhipsterCli = import('./cli.mjs');
 
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 

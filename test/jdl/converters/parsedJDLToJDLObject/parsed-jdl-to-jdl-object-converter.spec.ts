@@ -56,7 +56,7 @@ const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
 const {
-  Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },
+  Validations: { REQUIRED, UNIQUE, MINLENGTH, MAXLENGTH },
 } = validations;
 
 describe('ParsedJDLToJDLObjectConverter', () => {
