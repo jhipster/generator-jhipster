@@ -616,7 +616,7 @@ JDLApplication {
       "messageBroker": StringJDLApplicationConfigurationOption {
         "name": "messageBroker",
         "quoted": false,
-        "value": false,
+        "value": "no",
       },
       "packageFolder": StringJDLApplicationConfigurationOption {
         "name": "packageFolder",
@@ -640,7 +640,7 @@ JDLApplication {
       "searchEngine": StringJDLApplicationConfigurationOption {
         "name": "searchEngine",
         "quoted": false,
-        "value": false,
+        "value": "no",
       },
       "serverPort": IntegerJDLApplicationConfigurationOption {
         "name": "serverPort",
@@ -662,7 +662,7 @@ JDLApplication {
       "websocket": StringJDLApplicationConfigurationOption {
         "name": "websocket",
         "quoted": false,
-        "value": false,
+        "value": undefined,
       },
       "withAdminUi": BooleanJDLApplicationConfigurationOption {
         "name": "withAdminUi",

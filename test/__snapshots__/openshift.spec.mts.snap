@@ -3261,7 +3261,7 @@ Object {
     \\"monitoring\\": \\"no\\",
     \\"openshiftNamespace\\": \\"default\\",
     \\"registryReplicas\\": 2,
-    \\"serviceDiscoveryType\\": false,
+    \\"serviceDiscoveryType\\": \\"no\\",
     \\"storageType\\": \\"ephemeral\\"
   }
 }

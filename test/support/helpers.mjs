@@ -1,8 +1,6 @@
-import yeomanHelpers from 'yeoman-test';
+import { createHelpers } from 'yeoman-test';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-
-const { createHelpers } = yeomanHelpers;
 
 const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };

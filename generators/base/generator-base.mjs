@@ -2421,21 +2421,21 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.javaPackageSrcDir = normalizePathEnd(`${dest.srcMainJava}${dest.packageFolder}`);
     dest.javaPackageTestDir = normalizePathEnd(`${dest.srcTestJava}${dest.packageFolder}`);
 
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     // Convert to false for templates.
-    if (dest.serviceDiscoveryType === NO_SERVICE_DISCOVERY || !dest.serviceDiscoveryType) {
-      dest.serviceDiscoveryType = false;
+    if (!dest.serviceDiscoveryType) {
+      dest.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
     }
-    if (dest.websocket === NO_WEBSOCKET || !dest.websocket) {
-      dest.websocket = false;
+    if (!dest.websocket) {
+      dest.websocket = NO_WEBSOCKET;
     }
-    if (dest.searchEngine === NO_SEARCH_ENGINE || !dest.searchEngine) {
-      dest.searchEngine = false;
+    if (!dest.searchEngine) {
+      dest.searchEngine = NO_SEARCH_ENGINE;
     }
-    if (dest.messageBroker === NO_MESSAGE_BROKER || !dest.messageBroker) {
-      dest.messageBroker = false;
+    if (!dest.messageBroker) {
+      dest.messageBroker = NO_MESSAGE_BROKER;
     }
 
+    dest.serviceDiscoveryAny = dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
     dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
@@ -2487,11 +2487,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
-    dest.searchEngineAny = ![undefined, false, 'no'].includes(dest.searchEngine);
+    dest.searchEngineAny = dest.searchEngine !== NO_SEARCH_ENGINE;
 
     dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
     dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-    dest.serviceDiscoveryAny = ![undefined, false, 'no'].includes(dest.serviceDiscoveryType);
+    dest.serviceDiscoveryAny = dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
 
     if (dest.databaseType === NO_DATABASE) {
       // User management requires a database.

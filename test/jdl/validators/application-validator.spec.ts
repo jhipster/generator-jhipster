@@ -26,7 +26,6 @@ chai.use(sinonChai);
 const { expect } = chai;
 
 import ApplicationValidator from '../../../jdl/validators/application-validator.js';
-
 import {
   applicationOptions,
   websocketTypes,
@@ -37,18 +36,18 @@ import {
   unaryOptions,
   binaryOptions,
 } from '../../../jdl/jhipster/index.mjs';
+import JDLApplication from '../../../jdl/models/jdl-application.js';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import logger from '../../../jdl/utils/objects/logger.js';
 
 const { OptionNames, OptionValues } = applicationOptions;
 const { SPRING_WEBSOCKET } = websocketTypes;
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
-const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } = databaseTypes;
+const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J, H2_DISK, H2_MEMORY } = databaseTypes;
 const { JWT } = authenticationTypes;
 const { READ_ONLY } = unaryOptions;
-import JDLApplication from '../../../jdl/models/jdl-application.js';
-import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
-import logger from '../../../jdl/utils/objects/logger.js';
 
 describe('ApplicationValidator', () => {
   let validator;
@@ -124,7 +123,7 @@ describe('ApplicationValidator', () => {
                   config: {
                     ...basicValidApplicationConfig,
                     databaseType: SQL,
-                    devDatabaseType: 'h2Disk',
+                    devDatabaseType: H2_DISK,
                     prodDatabaseType: POSTGRESQL,
                     applicationType: MONOLITH,
                   },
@@ -212,7 +211,7 @@ describe('ApplicationValidator', () => {
                     config: {
                       ...basicValidApplicationConfig,
                       databaseType: SQL,
-                      devDatabaseType: (OptionValues[OptionNames.DEV_DATABASE_TYPE] as any).h2Memory,
+                      devDatabaseType: H2_MEMORY,
                       prodDatabaseType: MONGODB,
                     },
                   })
@@ -359,7 +358,7 @@ describe('ApplicationValidator', () => {
             expect(() =>
               validator.validate(
                 new JDLApplication({
-                  config: { ...basicValidApplicationConfig, databaseType: 'sql', devDatabaseType: 'toto' },
+                  config: { ...basicValidApplicationConfig, databaseType: SQL, devDatabaseType: 'toto' },
                 })
               )
             ).to.throw(/^Unknown value 'toto' for option 'devDatabaseType'\.$/);
@@ -372,8 +371,8 @@ describe('ApplicationValidator', () => {
                 new JDLApplication({
                   config: {
                     ...basicValidApplicationConfig,
-                    databaseType: 'sql',
-                    devDatabaseType: 'mysql',
+                    databaseType: SQL,
+                    devDatabaseType: MYSQL,
                     prodDatabaseType: 'toto',
                   },
                 })

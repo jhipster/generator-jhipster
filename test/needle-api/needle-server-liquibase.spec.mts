@@ -6,9 +6,10 @@ import { fileURLToPath } from 'url';
 import ServerGenerator from '../../generators/server/index.mjs';
 import constants from '../../generators/generator-constants.cjs';
 import { getGenerator } from '../support/index.mjs';
+import { serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -104,7 +105,7 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
         baseName: 'jhipster',
         packageName: 'com.mycompany.myapp',
         packageFolder: 'com/mycompany/myapp',
-        serviceDiscoveryType: false,
+        serviceDiscoveryType: NO_SERVICE_DISCOVERY,
         authenticationType: 'jwt',
         cacheProvider: 'ehcache',
         enableHibernateCache: true,

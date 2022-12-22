@@ -16,7 +16,7 @@ Object {
     \\"kubernetesNamespace\\": \\"default\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": false
+    \\"serviceDiscoveryType\\": \\"no\\"
   }
 }
 ",
@@ -4448,7 +4448,7 @@ Object {
     \\"kubernetesNamespace\\": \\"default\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": false
+    \\"serviceDiscoveryType\\": \\"no\\"
   }
 }
 ",

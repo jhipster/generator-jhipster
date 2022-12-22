@@ -28,7 +28,7 @@ const { OptionNames, OptionValues, getTypeForOption, doesOptionExist, doesOption
 const { MICROSERVICE } = applicationTypes;
 const { COUCHBASE, NEO4J, CASSANDRA, MONGODB, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 const { Options } = BinaryOptions;
-
+const { APPLICATION_TYPE, AUTHENTICATION_TYPE, BASE_NAME, BUILD_TOOL } = OptionNames;
 export default class ApplicationValidator extends Validator {
   constructor() {
     super('application', []);
@@ -49,18 +49,18 @@ export default class ApplicationValidator extends Validator {
 
 function checkRequiredOptionsAreSet(jdlApplication) {
   if (
-    !jdlApplication.hasConfigurationOption('applicationType') ||
-    !jdlApplication.hasConfigurationOption('authenticationType') ||
-    !jdlApplication.hasConfigurationOption('baseName') ||
-    !jdlApplication.hasConfigurationOption('buildTool')
+    !jdlApplication.hasConfigurationOption(APPLICATION_TYPE) ||
+    !jdlApplication.hasConfigurationOption(AUTHENTICATION_TYPE) ||
+    !jdlApplication.hasConfigurationOption(BASE_NAME) ||
+    !jdlApplication.hasConfigurationOption(BUILD_TOOL)
   ) {
     throw new Error('The application applicationType, authenticationType, baseName and buildTool options are required.');
   }
 }
 
 function checkBaseNameAgainstApplicationType(jdlApplication) {
-  const applicationBaseName = jdlApplication.getConfigurationOptionValue('baseName');
-  const applicationType = jdlApplication.getConfigurationOptionValue('applicationType');
+  const applicationBaseName = jdlApplication.getConfigurationOptionValue(BASE_NAME);
+  const applicationType = jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE);
   if (applicationBaseName.includes('_') && applicationType === MICROSERVICE) {
     throw new Error("An application name can't contain underscores if the application is a microservice.");
   }
@@ -68,7 +68,7 @@ function checkBaseNameAgainstApplicationType(jdlApplication) {
 
 function checkForValidValues(jdlApplication) {
   const optionsToIgnore = [
-    'baseName',
+    BASE_NAME,
     'packageName',
     'packageFolder',
     'serverPort',

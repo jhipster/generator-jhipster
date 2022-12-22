@@ -186,7 +186,7 @@ const optionValues: any = {
   [optionNames.LANGUAGES]: [],
   [optionNames.MESSAGE_BROKER]: {
     kafka: KAFKA,
-    false: NO_MESSAGE_BROKER,
+    no: NO_MESSAGE_BROKER,
   },
   [optionNames.MICROFRONTEND]: false,
   [optionNames.MICROFRONTENDS]: [],

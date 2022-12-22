@@ -118,7 +118,7 @@ describe('jdl command test', () => {
       const env = { env: 'foo' };
       const fork = { fork: 'foo' };
       beforeEach(async () => {
-        const jdl = await mock('../../cli/jdl.cjs', { './import-jdl.cjs': importJdlStub });
+        const jdl = await mock('../../cli/jdl.mjs', { './import-jdl.mjs': importJdlStub });
         jdl([['foo.jdl', 'bar.jdl']], options, env, fork);
       });
       it('should not call https.get', () => {

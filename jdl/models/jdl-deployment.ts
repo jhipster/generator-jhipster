@@ -17,15 +17,17 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { deploymentOptions } from '../jhipster/index.mjs';
+import { deploymentOptions, applicationOptions } from '../jhipster/index.mjs';
 
 import objectUtils from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';
+import serviceDiscoveryTypes from '../jhipster/service-discovery-types.js';
 
 const { Options } = deploymentOptions;
 const { isEqual } = _;
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
 const { merge } = objectUtils;
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 export default class JDLDeployment {
   constructor(args) {
@@ -36,8 +38,8 @@ export default class JDLDeployment {
     Object.entries(merged).forEach(([key, option]) => {
       if (Array.isArray(option) && arrayTypes.includes(key)) {
         this[key] = new Set(option);
-      } else if (key === 'serviceDiscoveryType' && option === Options.serviceDiscoveryType.no) {
-        this[key] = false;
+      } else if (key === applicationOptions.OptionNames.SERVICE_DISCOVERY_TYPE && option === Options.serviceDiscoveryType.no) {
+        this[key] = NO_SERVICE_DISCOVERY;
       } else {
         this[key] = option;
       }

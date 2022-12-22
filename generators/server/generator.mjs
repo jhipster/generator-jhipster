@@ -57,6 +57,7 @@ import {
   entityOptions,
   validations,
   reservedKeywords,
+  searchEngineTypes,
   messageBrokerTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { stringify } from '../../utils/index.mjs';
@@ -70,11 +71,11 @@ const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { EUREKA } = serviceDiscoveryTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
-const { FALSE: NO_WEBSOCKET } = websocketTypes;
+const NO_WEBSOCKET = websocketTypes.NO;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
 const { KAFKA } = messageBrokerTypes;
-
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, MAIN_DIR, TEST_DIR } = constants;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { INSTANT } = CommonDBTypes;
@@ -365,7 +366,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (entityConfig.microserviceName && !(applicationTypeMicroservice && clientFrameworkAny)) {
           if (entityConfig.searchEngine === undefined) {
             // If a non-microfrontent microservice entity, should be disabled by default.
-            entityConfig.searchEngine = false;
+            entityConfig.searchEngine = NO_SEARCH_ENGINE;
           }
         }
         if (

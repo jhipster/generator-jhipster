@@ -151,19 +151,6 @@ describe('DefaultApplicationOptions', () => {
         expect(options.reactive).to.be.true;
       });
     });
-    context('when the service discovery type option is false', () => {
-      let serviceDiscoveryTypeOption;
-
-      before(() => {
-        serviceDiscoveryTypeOption = getConfigForGatewayApplication({
-          serviceDiscoveryType: false,
-        }).serviceDiscoveryType;
-      });
-
-      it('should set it to eureka', () => {
-        expect(serviceDiscoveryTypeOption).to.equal('eureka');
-      });
-    });
     context('when the service discovery type option is no', () => {
       let serviceDiscoveryTypeOption;
 
@@ -173,7 +160,7 @@ describe('DefaultApplicationOptions', () => {
         }).serviceDiscoveryType;
       });
 
-      it('should set it to false', () => {
+      it('should set it to no', () => {
         expect(serviceDiscoveryTypeOption).to.be.equal('no');
       });
     });
@@ -264,7 +251,7 @@ describe('DefaultApplicationOptions', () => {
 
       before(() => {
         serviceDiscoveryTypeOption = getConfigForMicroserviceApplication({
-          serviceDiscoveryType: false,
+          serviceDiscoveryType: 'no',
         }).serviceDiscoveryType;
       });
 
@@ -385,13 +372,13 @@ describe('DefaultApplicationOptions', () => {
       it('should set the production database type option to postgresql', () => {
         expect(options.prodDatabaseType).to.equal('postgresql');
       });
-      it('should set the search engine option to false', () => {
+      it('should set the search engine option to no', () => {
         expect(options.searchEngine).to.be.equal('no');
       });
       it('should set the test frameworks option to nothing', () => {
         expect(options.testFrameworks).to.have.lengthOf(0);
       });
-      it('should set the websocket option to false', () => {
+      it('should set the websocket option to no', () => {
         expect(options.websocket).to.be.equal('no');
       });
     });

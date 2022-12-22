@@ -18,7 +18,7 @@ Object {
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": false
+    \\"serviceDiscoveryType\\": \\"no\\"
   }
 }
 ",
@@ -5461,7 +5461,7 @@ Object {
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": false
+    \\"serviceDiscoveryType\\": \\"no\\"
   }
 }
 ",

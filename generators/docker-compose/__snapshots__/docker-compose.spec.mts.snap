@@ -5,15 +5,23 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"01-gateway\\", \\"10-couchbase\\"],
+    \\"appsFolders\\": [
+      \\"01-gateway\\",
+      \\"10-couchbase\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
-    \\"clusteredDbApps\\": [\\"10-couchbase\\"],
+    \\"clusteredDbApps\\": [
+      \\"10-couchbase\\"
+    ],
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"01-gateway\\", \\"10-couchbase\\"],
+    \\"packages\\": [
+      \\"01-gateway\\",
+      \\"10-couchbase\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -30,17 +38,18 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 - mscouchbase (microservice application)
 - mscouchbase's couchbase database
+- mscouchbase's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -59,6 +68,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -76,12 +87,12 @@ eureka:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -103,12 +114,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   mscouchbase:
     image: mscouchbase
     environment:
@@ -125,7 +136,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -151,7 +162,7 @@ eureka:
     environment:
       - TYPE=MASTER
       - BUCKET=mscouchbase
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -188,7 +199,10 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"01-gateway\\", \\"05-cassandra\\"],
+    \\"appsFolders\\": [
+      \\"01-gateway\\",
+      \\"05-cassandra\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
@@ -196,7 +210,10 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"01-gateway\\", \\"05-cassandra\\"],
+    \\"packages\\": [
+      \\"01-gateway\\",
+      \\"05-cassandra\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -213,17 +230,18 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 - mscassandra (microservice application)
 - mscassandra's cassandra database
+- mscassandra's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -242,6 +260,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -259,12 +279,12 @@ eureka:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -286,12 +306,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   mscassandra:
     image: mscassandra
     environment:
@@ -307,7 +327,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -335,11 +355,11 @@ eureka:
     healthcheck:
       test:
         - CMD-SHELL
-        - \\"[ $$(nodetool statusgossip) = running ]\\"
+        - '[ $$(nodetool statusgossip) = running ]'
       interval: 5s
       timeout: 25s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -390,7 +410,13 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"01-gateway\\", \\"02-mysql\\", \\"03-psql\\", \\"04-mongo\\", \\"07-mariadb\\"],
+    \\"packages\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\",
+      \\"03-psql\\",
+      \\"04-mongo\\",
+      \\"07-mariadb\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -407,24 +433,27 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
+- msmysql's no search engine
 - mspsql (microservice application)
 - mspsql's postgresql database
 - mspsql's elasticsearch search engine
 - msmongodb (microservice application)
 - msmongodb's mongodb database
+- msmongodb's no search engine
 - msmariadb (microservice application)
 - msmariadb's mariadb database
+- msmariadb's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -443,6 +472,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -460,12 +491,12 @@ eureka:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -487,12 +518,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmysql:
     image: msmysql
     environment:
@@ -508,7 +539,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -530,12 +561,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   mspsql:
     image: mspsql
     environment:
@@ -552,7 +583,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -587,12 +618,12 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s
       interval: 5s
       timeout: 10s
       retries: 10
-
+  
   msmongodb:
     image: msmongodb
     environment:
@@ -608,7 +639,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -625,14 +656,14 @@ eureka:
         - CMD
         - echo
         - '''db.runCommand(\\"ping\\").ok'''
-        - \\"|\\"
+        - '|'
         - mongo
         - localhost:27017/test
-        - \\"--quiet\\"
+        - '--quiet'
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmariadb:
     image: msmariadb
     environment:
@@ -648,7 +679,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -670,12 +701,12 @@ eureka:
       test:
         - CMD
         - /usr/local/bin/healthcheck.sh
-        - \\"--connect\\"
-        - \\"--innodb_initialized\\"
+        - '--connect'
+        - '--innodb_initialized'
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -749,22 +780,24 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
+- msmysql's no search engine
 - mspsql (microservice application)
 - mspsql's postgresql database
 - mspsql's elasticsearch search engine
 - mscouchbase (microservice application)
 - mscouchbase's couchbase database
+- mscouchbase's no search engine
 - msmariadb (microservice application)
 - msmariadb's mariadb database
+- msmariadb's no search engine
 
 ### Additional Services:
 
@@ -787,6 +820,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -807,12 +842,12 @@ eureka:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -836,12 +871,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmysql:
     image: msmysql
     environment:
@@ -860,7 +895,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -884,12 +919,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   mspsql:
     image: mspsql
     environment:
@@ -909,7 +944,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -946,12 +981,12 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s
       interval: 5s
       timeout: 10s
       retries: 10
-
+  
   mscouchbase:
     image: mscouchbase
     environment:
@@ -971,7 +1006,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -993,12 +1028,12 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8091/ui/index.html
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmariadb:
     image: msmariadb
     environment:
@@ -1017,7 +1052,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1041,12 +1076,12 @@ eureka:
       test:
         - CMD
         - /usr/local/bin/healthcheck.sh
-        - \\"--connect\\"
-        - \\"--innodb_initialized\\"
+        - '--connect'
+        - '--innodb_initialized'
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -1071,7 +1106,7 @@ eureka:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
     depends_on:
       keycloak:
-        condition: \\"service_healthy\\"
+        condition: 'service_healthy'
     ports:
       - 8761:8761
     healthcheck:
@@ -1081,7 +1116,7 @@ eureka:
       retries: 10
   keycloak:
     image: keycloak-placeholder
-    command: [\\"start-dev --import-realm\\"]
+    command: ['start-dev --import-realm']
     volumes:
       - ./realm-config:/opt/keycloak/data/import
     environment:
@@ -1114,15 +1149,27 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\", \\"03-psql\\", \\"04-mongo\\"],
+    \\"appsFolders\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\",
+      \\"03-psql\\",
+      \\"04-mongo\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
-    \\"clusteredDbApps\\": [\\"04-mongo\\"],
+    \\"clusteredDbApps\\": [
+      \\"04-mongo\\"
+    ],
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"01-gateway\\", \\"02-mysql\\", \\"03-psql\\", \\"04-mongo\\"],
+    \\"packages\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\",
+      \\"03-psql\\",
+      \\"04-mongo\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -1139,22 +1186,24 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
+- msmysql's no search engine
 - mspsql (microservice application)
 - mspsql's postgresql database
 - mspsql's elasticsearch search engine
 - msmongodb (microservice application)
 - msmongodb's mongodb database
+- msmongodb's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -1173,6 +1222,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -1190,12 +1241,12 @@ eureka:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -1217,12 +1268,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmysql:
     image: msmysql
     environment:
@@ -1238,7 +1289,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1260,12 +1311,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   mspsql:
     image: mspsql
     environment:
@@ -1282,7 +1333,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1317,12 +1368,12 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s
       interval: 5s
       timeout: 10s
       retries: 10
-
+  
   msmongodb:
     image: msmongodb
     environment:
@@ -1338,7 +1389,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1360,7 +1411,7 @@ eureka:
   msmongodb-mongodb:
     image: mongodb-placeholder
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -1434,24 +1485,27 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
+- msmysql's no search engine
 - mspsql (microservice application)
 - mspsql's postgresql database
 - mspsql's elasticsearch search engine
 - mscouchbase (microservice application)
 - mscouchbase's couchbase database
+- mscouchbase's no search engine
 - msmariadb (microservice application)
 - msmariadb's mariadb database
+- msmariadb's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -1470,6 +1524,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -1487,12 +1543,12 @@ eureka:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -1514,12 +1570,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmysql:
     image: msmysql
     environment:
@@ -1535,7 +1591,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1557,12 +1613,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   mspsql:
     image: mspsql
     environment:
@@ -1579,7 +1635,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1614,12 +1670,12 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s
       interval: 5s
       timeout: 10s
       retries: 10
-
+  
   mscouchbase:
     image: mscouchbase
     environment:
@@ -1636,7 +1692,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1656,12 +1712,12 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8091/ui/index.html
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmariadb:
     image: msmariadb
     environment:
@@ -1677,7 +1733,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1699,12 +1755,12 @@ eureka:
       test:
         - CMD
         - /usr/local/bin/healthcheck.sh
-        - \\"--connect\\"
-        - \\"--innodb_initialized\\"
+        - '--connect'
+        - '--innodb_initialized'
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -1741,7 +1797,10 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"appsFolders\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
@@ -1749,7 +1808,10 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"packages\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -1766,17 +1828,18 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
+- msmysql's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -1795,6 +1858,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -1812,12 +1877,12 @@ eureka:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -1839,12 +1904,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmysql:
     image: msmysql
     environment:
@@ -1860,7 +1925,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1882,12 +1947,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -1924,7 +1989,10 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"appsFolders\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
@@ -1932,7 +2000,10 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"packages\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -1949,17 +2020,18 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
+- msmysql's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -1978,6 +2050,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -1995,12 +2069,12 @@ eureka:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -2022,12 +2096,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmysql:
     image: msmysql
     environment:
@@ -2043,7 +2117,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -2065,12 +2139,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -2107,7 +2181,10 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"appsFolders\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
@@ -2115,7 +2192,10 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"prometheus\\",
-    \\"packages\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"packages\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -2132,15 +2212,15 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
+- msmysql's no search engine
 
 ### Additional Services:
 
@@ -2152,18 +2232,18 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   },
   "alertmanager-conf/config.yml": Object {
     "contents": "route:
-  receiver: \\"webhook\\"
-  group_by: [\\"alertname\\"]
-  group_wait: 10s
-  group_interval: 1m
+  receiver: 'webhook'
+  group_by: ['alertname']
+  group_wait:      10s
+  group_interval:  1m
   repeat_interval: 2h
 
 receivers:
-  - name: \\"webhook\\"
-    webhook_configs:
-      # For testing, create a sample alerting webhook at http://webhook.site/
-      - url: \\"http://webhook.site/<UUID>\\"
-        send_resolved: true
+- name: 'webhook'
+  webhook_configs:
+  # For testing, create a sample alerting webhook at http://webhook.site/
+  - url: 'http://webhook.site/<UUID>'
+    send_resolved: true
 ",
     "stateCleared": "modified",
   },
@@ -2187,6 +2267,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -2204,12 +2286,12 @@ eureka:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -2231,12 +2313,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmysql:
     image: msmysql
     environment:
@@ -2252,7 +2334,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -2274,12 +2356,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -2313,7 +2395,7 @@ eureka:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
     command:
-      - \\"--config.file=/etc/prometheus/prometheus.yml\\"
+      - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
       - 9090:9090
   alertmanager:
@@ -2323,8 +2405,8 @@ eureka:
     volumes:
       - ./alertmanager-conf/:/etc/alertmanager/
     command:
-      - \\"--config.file=/etc/alertmanager/config.yml\\"
-      - \\"--storage.path=/alertmanager\\"
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
 
   grafana:
     image: grafana-placeholder
@@ -2344,37 +2426,37 @@ volumes:
   },
   "prometheus-conf/alert_rules.yml": Object {
     "contents": "groups:
-  - name: example
-    rules:
-      - alert: InstanceDown
-        # Based on https://prometheus.io/docs/prometheus/latest/configuration/template_examples/
-        expr: up == 0
-        for: 10s
-        labels:
-          severity: page
-        annotations:
-          summary: \\"Instance {{$labels.instance}} down\\"
-          description: \\"{{$labels.instance}} of job {{$labels.job}} has been down for more than 10 seconds.\\"
+- name: example
+  rules:
+  - alert: InstanceDown
+    # Based on https://prometheus.io/docs/prometheus/latest/configuration/template_examples/
+    expr: up == 0
+    for: 10s
+    labels:
+      severity: page
+    annotations:
+      summary: \\"Instance {{$labels.instance}} down\\"
+      description: \\"{{$labels.instance}} of job {{$labels.job}} has been down for more than 10 seconds.\\"
 ",
     "stateCleared": "modified",
   },
   "prometheus-conf/prometheus.yml": Object {
     "contents": "global:
-  scrape_interval: 15s # By default, scrape targets every 15 seconds.
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
   evaluation_interval: 15s # By default, scrape targets every 15 seconds.
   # scrape_timeout is set to the global default (10s).
 
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
-    monitor: \\"my-project\\"
+      monitor: 'my-project'
 
 # Alertmanager configuration
 alerting:
   alertmanagers:
-    - static_configs:
-        - targets:
-            - alertmanager:9093
+  - static_configs:
+    - targets:
+      - alertmanager:9093
 
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
@@ -2384,7 +2466,7 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label \`job=<job_name>\` to any timeseries scraped from this config.
-  - job_name: \\"prometheus\\"
+  - job_name: 'prometheus'
 
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
@@ -2392,9 +2474,9 @@ scrape_configs:
     # scheme defaults to 'http'.
     metrics_path: /management/prometheus
     static_configs:
-      - targets:
-          - jhgate:8080
-          - msmysql:8081
+    - targets:
+        - jhgate:8080
+        - msmysql:8081
 ",
     "stateCleared": "modified",
   },
@@ -2406,7 +2488,10 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"appsFolders\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
@@ -2414,7 +2499,10 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"packages\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -2431,17 +2519,18 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 - msmysql (microservice application)
 - msmysql's mysql database
+- msmysql's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -2460,6 +2549,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -2477,12 +2568,12 @@ eureka:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -2504,12 +2595,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   msmysql:
     image: msmysql
     environment:
@@ -2525,7 +2616,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -2547,12 +2638,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -2589,7 +2680,9 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"08-monolith\\"],
+    \\"appsFolders\\": [
+      \\"08-monolith\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
@@ -2597,8 +2690,10 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"08-monolith\\"],
-    \\"serviceDiscoveryType\\": false
+    \\"packages\\": [
+      \\"08-monolith\\"
+    ],
+    \\"serviceDiscoveryType\\": \\"no\\"
   }
 }
 ",
@@ -2614,12 +2709,12 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Applications and dependencies:
-
 - sampleMysql (monolith application)
 - sampleMysql's mysql database
 - sampleMysql's elasticsearch search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -2635,12 +2730,12 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       - SPRING_LIQUIBASE_URL=jdbc:mysql://samplemysql-mysql:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_ELASTICSEARCH_URIS=http://samplemysql-elasticsearch:9200
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -2662,7 +2757,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -2677,11 +2772,12 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s
       interval: 5s
       timeout: 10s
       retries: 10
+  
 ",
     "stateCleared": "modified",
   },
@@ -2693,7 +2789,9 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"02-mysql\\"],
+    \\"appsFolders\\": [
+      \\"02-mysql\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
@@ -2701,7 +2799,9 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"02-mysql\\"],
+    \\"packages\\": [
+      \\"02-mysql\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -2718,15 +2818,15 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - msmysql (microservice application)
 - msmysql's mysql database
+- msmysql's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -2745,6 +2845,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -2765,7 +2867,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -2787,12 +2889,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -2829,7 +2931,9 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"01-gateway\\"],
+    \\"appsFolders\\": [
+      \\"01-gateway\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
@@ -2837,7 +2941,9 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"01-gateway\\"],
+    \\"packages\\": [
+      \\"01-gateway\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -2854,15 +2960,15 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - jhgate (gateway application)
 - jhgate's mysql database
+- jhgate's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -2881,6 +2987,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -2898,12 +3006,12 @@ eureka:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -2925,12 +3033,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -2967,7 +3075,9 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"02-mysql\\"],
+    \\"appsFolders\\": [
+      \\"02-mysql\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
@@ -2975,7 +3085,9 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"02-mysql\\"],
+    \\"packages\\": [
+      \\"02-mysql\\"
+    ],
     \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
@@ -2992,15 +3104,15 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Service registry and configuration server:
-
 - [JHipster Registry](http://localhost:8761)
 
 ### Applications and dependencies:
-
 - msmysql (microservice application)
 - msmysql's mysql database
+- msmysql's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -3019,6 +3131,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+
+
 ",
     "stateCleared": "modified",
   },
@@ -3039,7 +3153,7 @@ eureka:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -3061,12 +3175,12 @@ eureka:
       test:
         - CMD
         - mysql
-        - \\"-e\\"
+        - '-e'
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -3103,7 +3217,9 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"appsFolders\\": [\\"12-oracle\\"],
+    \\"appsFolders\\": [
+      \\"12-oracle\\"
+    ],
     \\"baseName\\": \\"workspaces\\",
     \\"clientPackageManager\\": \\"npm\\",
     \\"clusteredDbApps\\": {},
@@ -3111,8 +3227,10 @@ Object {
     \\"gatewayType\\": \\"SpringCloudGateway\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"packages\\": [\\"12-oracle\\"],
-    \\"serviceDiscoveryType\\": false
+    \\"packages\\": [
+      \\"12-oracle\\"
+    ],
+    \\"serviceDiscoveryType\\": \\"no\\"
   }
 }
 ",
@@ -3128,11 +3246,12 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
 ## Configured Docker services
 
 ### Applications and dependencies:
-
 - oracle-mono (monolith application)
 - oracle-mono's oracle database
+- oracle-mono's no search engine
 
 ### Additional Services:
+
 ",
     "stateCleared": "modified",
   },
@@ -3146,18 +3265,18 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
       - SPRING_LIQUIBASE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
-      - SERVER_PORT=80
     ports:
-      - \\"8080:8080\\"
+      - '8080:8080'
     healthcheck:
       test:
         - CMD
         - curl
-        - \\"-f\\"
+        - '-f'
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
       retries: 40
+  
 ",
     "stateCleared": "modified",
   },

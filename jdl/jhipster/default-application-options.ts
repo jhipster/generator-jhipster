@@ -105,7 +105,7 @@ function getConfigForMonolithApplication(customOptions: any = {}): any {
     [CACHE_PROVIDER]: EHCACHE,
     [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
-    [SERVICE_DISCOVERY_TYPE]: false,
+    [SERVICE_DISCOVERY_TYPE]: NO_SERVICE_DISCOVERY,
     [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
     [WITH_ADMIN_UI]: true,
     ...customOptions,
@@ -147,11 +147,8 @@ function getConfigForGatewayApplication(customOptions: any = {}): any {
   if (options[AUTHENTICATION_TYPE] === OAUTH2) {
     options[SKIP_USER_MANAGEMENT] = true;
   }
-  if (options[SERVICE_DISCOVERY_TYPE] === false) {
-    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
-  }
   if (options[SERVICE_DISCOVERY_TYPE] === NO_SERVICE_DISCOVERY) {
-    options[SERVICE_DISCOVERY_TYPE] = false;
+    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
   }
   options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   options[ENABLE_HIBERNATE_CACHE] = false;
@@ -185,11 +182,8 @@ function getConfigForMicroserviceApplication(customOptions: any = {}): any {
   if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
     options[SKIP_USER_MANAGEMENT] = true;
   }
-  if (options[SERVICE_DISCOVERY_TYPE] === false) {
-    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
-  }
   if (options[SERVICE_DISCOVERY_TYPE] === NO_SERVICE_DISCOVERY) {
-    options[SERVICE_DISCOVERY_TYPE] = false;
+    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
   }
   return {
     ...options,
@@ -209,11 +203,11 @@ function getDefaultConfigForNewApplication(customOptions: any = {}): any {
     [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
     [JHI_PREFIX]: OptionValues[JHI_PREFIX],
     [LANGUAGES]: OptionValues[LANGUAGES],
-    [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].false,
+    [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].no,
     [PROD_DATABASE_TYPE]: POSTGRESQL,
-    [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].false,
+    [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].no,
     [TEST_FRAMEWORKS]: [],
-    [WEBSOCKET]: OptionValues[WEBSOCKET].false,
+    [WEBSOCKET]: OptionValues[WEBSOCKET].no,
     [ENABLE_GRADLE_ENTERPRISE]: OptionValues[ENABLE_GRADLE_ENTERPRISE],
     [GRADLE_ENTERPRISE_HOST]: OptionValues[GRADLE_ENTERPRISE_HOST],
     ...customOptions,
