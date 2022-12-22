@@ -264,7 +264,7 @@ const buildJHipster = async ({
   printBlueprintLogo,
   env,
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
-  loadCommand = async (key) => {
+  loadCommand = async key => {
     const { default: command } = await import(`./${key}.mjs`);
     return command;
   },
