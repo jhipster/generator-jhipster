@@ -34,7 +34,7 @@ describe('DatabaseTypes', () => {
       [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL].forEach(databaseType => {
         context(`such as ${databaseType}`, () => {
           it('should return true', () => {
-            expect(databaseType.isSql()).to.be.true;
+            expect(databaseTypes.isSql(databaseType)).to.be.true;
           });
         });
       });
@@ -43,7 +43,7 @@ describe('DatabaseTypes', () => {
       [MONGODB, CASSANDRA, COUCHBASE, NO].forEach(databaseType => {
         context(`such as ${databaseType}`, () => {
           it('should return false', () => {
-            expect(databaseType.isSql()).to.be.false;
+            expect(databaseTypes.isSql(databaseType)).to.be.false;
           });
         });
       });

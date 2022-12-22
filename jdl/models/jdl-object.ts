@@ -21,7 +21,7 @@ import JDLEnums from './jdl-enums.js';
 import JDLRelationships from './jdl-relationships.js';
 import JDLOptions from './jdl-options.js';
 import { binaryOptions } from '../jhipster/index.mjs';
-import { JDLEntity } from './jdl-entity.js';
+import JDLEntity from './jdl-entity.js';
 
 /**
  * The JDL object class, containing applications, entities etc.

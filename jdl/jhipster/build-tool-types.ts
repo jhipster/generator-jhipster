@@ -21,5 +21,4 @@ const buildToolTypes = {
   MAVEN: 'maven',
   GRADLE: 'gradle',
 };
-// eslint-disable-next-line import/prefer-default-export
 export default buildToolTypes;

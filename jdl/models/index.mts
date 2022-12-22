@@ -17,5 +17,5 @@
  * limitations under the License.
  */
 // eslint-disable-next-line import/prefer-default-export
-export { JDLEntity } from './jdl-entity.js';
-export { JDLEnum } from './jdl-enum.js';
+export { default as JDLEntity } from './jdl-entity.js';
+export { default as JDLEnum } from './jdl-enum.js';

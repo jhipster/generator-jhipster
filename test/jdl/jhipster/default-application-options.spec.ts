@@ -281,8 +281,8 @@ describe('DefaultApplicationOptions', () => {
         }).serviceDiscoveryType;
       });
 
-      it('should set it to false', () => {
-        expect(serviceDiscoveryTypeOption).to.be.false;
+      it('should set it to no', () => {
+        expect(serviceDiscoveryTypeOption).to.equal('no');
       });
     });
     context('when the user management skipping option is not a boolean', () => {
