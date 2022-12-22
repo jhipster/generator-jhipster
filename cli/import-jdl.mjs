@@ -396,8 +396,8 @@ class JDLProcessor {
     statistics.sendSubGenEvent('generator', 'import-jdl');
   }
 
-  generateWorkspaces(options, generateJdl) {
-    return this.createEnvBuilder()
+  async generateWorkspaces(options, generateJdl) {
+    return (await this.createEnvBuilder())
       .getEnvironment()
       .run('jhipster:workspaces', { workspaces: false, ...options, importState: this.importState, generateJdl });
   }
