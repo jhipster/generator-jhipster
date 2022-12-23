@@ -62,11 +62,13 @@
     },
     {
       "name": "ng-webflux-mongodb",
+      "skip-backend-tests": "mongodb's reactive driver deadlocks with junit tests",
       "app-sample": "webflux-mongodb",
       "entity": "mongodb"
     },
     {
       "name": "ng-webflux-gradle-mongodb-oauth2",
+      "skip-backend-tests": "mongodb's reactive driver deadlocks with junit tests",
       "app-sample": "webflux-mongodb-oauth2",
       "entity": "mongodb"
     },

@@ -26,7 +26,7 @@ LABEL ALIAS=mongodb
 FROM couchbase/server:7.1.3
 LABEL ALIAS=couchbase
 
-FROM cassandra:3.11.14
+FROM cassandra:4.1.0
 
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
@@ -54,7 +54,7 @@ FROM consul:1.14.3
 FROM prom/prometheus:v2.41.0
 LABEL ALIAS=prometheus
 
-FROM prom/alertmanager:v0.24.0
+FROM prom/alertmanager:v0.25.0
 LABEL ALIAS=prometheus-alertmanager
 
 FROM quay.io/coreos/prometheus-operator:v0.42.1
