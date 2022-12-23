@@ -26,7 +26,7 @@ import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import { logo } from './logo.cjs';
+import logo from './logo.mjs';
 import EnvironmentBuilder from './environment-builder.mjs';
 import SUB_GENERATORS from './commands.mjs';
 import JHipsterCommand from './jhipster-command.mjs';
