@@ -30,8 +30,8 @@ writeFileSync(
                 .include.filter(sample => !sample.disabled)
                 .map(sample => ({
                   ...sample,
-                  'skip-backend-tests': Boolean(sample['skip-backend-tests']),
-                  'skip-frontend-tests': Boolean(sample['skip-frontend-tests']),
+                  'skip-backend-tests': sample['skip-backend-tests'] ? 'true' : 'false',
+                  'skip-frontend-tests': sample['skip-frontend-tests'] ? 'true' : 'false',
                 }));
             } catch (_) {
               console.log(`File ${file} not found`);
