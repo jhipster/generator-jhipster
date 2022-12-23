@@ -19,7 +19,9 @@
 import fs from 'fs';
 import { get } from 'https';
 import path from 'path';
-import { logger, toStringJoinArgs } from './utils.mjs';
+import { inspect } from 'util';
+
+import { logger } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
 
 const downloadFile = (url, filename) => {
@@ -50,7 +52,7 @@ const downloadFile = (url, filename) => {
  */
 const downloadJdl = ([jdlFiles = []], options = {}) => {
   logger.debug('cmd: download');
-  logger.debug(`jdlFiles: ${toStringJoinArgs(jdlFiles)}`);
+  logger.debug(`jdlFiles: ${inspect(jdlFiles)}`);
   if (!jdlFiles || jdlFiles.length === 0) {
     return Promise.reject(new Error('\nAt least one jdl file is required.\n'));
   }

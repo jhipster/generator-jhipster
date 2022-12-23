@@ -22,9 +22,11 @@ import _ from 'lodash';
 import path, { dirname, join } from 'path';
 import pluralize from 'pluralize';
 import { fileURLToPath } from 'url';
+import { inspect } from 'util';
 import { fork as forkProcess } from 'child_process';
+
 import EnvironmentBuilder from './environment-builder.mjs';
-import { CLI_NAME, GENERATOR_NAME, logger, toStringJoinArgs, printSuccess, getOptionAsArgs } from './utils.mjs';
+import { CLI_NAME, GENERATOR_NAME, logger, printSuccess, getOptionAsArgs } from './utils.mjs';
 import { packageJson as packagejs } from '../lib/index.mjs';
 import statistics from '../generators/statistics.cjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
@@ -349,7 +351,7 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
 class JDLProcessor {
   constructor(jdlFiles, jdlContent, options, createEnvBuilder) {
     logger.debug(
-      `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${toStringJoinArgs(options)}`
+      `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${inspect(options)}`
     );
     this.jdlFiles = jdlFiles;
     this.jdlContent = jdlContent;
@@ -525,7 +527,7 @@ class JDLProcessor {
  */
 const jdl = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
   logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
-  logger.debug(chalk.yellow(`Options: ${toStringJoinArgs({ ...options, inline: options.inline ? 'inline content' : '' })}`));
+  logger.debug(chalk.yellow(`Options: ${inspect({ ...options, inline: options.inline ? 'inline content' : '' })}`));
   try {
     const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options, createEnvBuilder);
     await jdlImporter.importJDL();

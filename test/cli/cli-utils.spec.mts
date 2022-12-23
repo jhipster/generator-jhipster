@@ -1,34 +1,7 @@
 import { expect } from 'chai';
-import { toStringJoinArgs, getOptionAsArgs, getCommand } from '../../cli/utils.mjs';
+import { getOptionAsArgs, getCommand } from '../../cli/utils.mjs';
 
 describe('jhipster cli utils test', () => {
-  describe('toString', () => {
-    describe('should convert primitives to string', () => {
-      it('returns a string', () => {
-        expect(toStringJoinArgs('test')).to.equal('test');
-        expect(toStringJoinArgs(10)).to.equal('10');
-        expect(toStringJoinArgs(true)).to.equal('true');
-      });
-    });
-    describe('should convert array to string', () => {
-      it('returns a string', () => {
-        expect(toStringJoinArgs(['test', 'foo'])).to.equal('test, foo');
-        expect(toStringJoinArgs([10, true, 'test'])).to.equal('10, true, test');
-      });
-    });
-    describe('should convert simple objects to string', () => {
-      it('returns a string', () => {
-        expect(toStringJoinArgs({ string: 'test', bool: true, int: 10 })).to.equal('string: test, bool: true, int: 10');
-      });
-    });
-    describe('should convert complex objects to string', () => {
-      it('returns a string', () => {
-        expect(toStringJoinArgs({ string: 'test', bool: true, int: 10, array: [1, 2], obj: { test: 1 } })).to.equal(
-          'string: test, bool: true, int: 10, array: Object, obj: Object'
-        );
-      });
-    });
-  });
   describe('getOptionAsArgs', () => {
     describe('when called with empty args', () => {
       it('returns a default string array', () => {

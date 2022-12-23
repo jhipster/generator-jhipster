@@ -77,18 +77,6 @@ export const logger = {
   fatal,
 };
 
-export const toStringJoinArgs = item => {
-  if (typeof item == 'object') {
-    if (Array.isArray(item)) {
-      return item.map(it => toStringJoinArgs(it)).join(', ');
-    }
-    return Object.keys(item)
-      .map(k => `${k}: ${typeof item[k] != 'function' && typeof item[k] != 'object' ? toStringJoinArgs(item[k]) : 'Object'}`)
-      .join(', ');
-  }
-  return item ? item.toString() : item;
-};
-
 /* Convert option objects to command line args */
 export const getOptionAsArgs = (options = {}) => {
   options = Object.fromEntries(
