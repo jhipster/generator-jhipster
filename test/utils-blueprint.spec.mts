@@ -1,34 +1,34 @@
 import assert from 'yeoman-assert';
-import utils from '../utils/blueprint.cjs';
+import { mergeBlueprints, normalizeBlueprintName, parseBluePrints, removeBlueprintDuplicates } from '../utils/blueprint.mjs';
 
 describe('JHipster Blueprint Utils', () => {
   describe('::parseBluePrints', () => {
     it('does nothing if an array', () => {
       const expected = [{ name: 'generator-jhipster-foo', version: 'latest' }];
-      const actual = utils.parseBluePrints(expected);
+      const actual = parseBluePrints(expected);
       assert.deepStrictEqual(actual, expected);
     });
     it('returns a array if empty string', () => {
       const expected = [];
-      const actual = utils.parseBluePrints('');
+      const actual = parseBluePrints('');
       assert.deepStrictEqual(actual, expected);
     });
     it('returns a array if not string', () => {
-      assert.deepStrictEqual(utils.parseBluePrints(), []);
+      assert.deepStrictEqual(parseBluePrints(), []);
     });
     it('adds generator-jhipster prefix if it is absent', () => {
       const expected = [{ name: 'generator-jhipster-foo' }];
-      const actual = utils.parseBluePrints('foo');
+      const actual = parseBluePrints('foo');
       assert.deepStrictEqual(actual, expected);
     });
     it('keeps generator-jhipster prefix if it is present', () => {
       const expected = [{ name: 'generator-jhipster-foo', version: '1.0.1' }];
-      const actual = utils.parseBluePrints('generator-jhipster-foo@1.0.1');
+      const actual = parseBluePrints('generator-jhipster-foo@1.0.1');
       assert.deepStrictEqual(actual, expected);
     });
     it('adds generator-jhipster prefix to scoped package and extracts version', () => {
       const expected = [{ name: '@corp/generator-jhipster-foo', version: '1.0.1' }];
-      const actual = utils.parseBluePrints('@corp/foo@1.0.1');
+      const actual = parseBluePrints('@corp/foo@1.0.1');
       assert.deepStrictEqual(actual, expected);
     });
     it('parses comma separated list', () => {
@@ -37,7 +37,7 @@ describe('JHipster Blueprint Utils', () => {
         { name: 'generator-jhipster-bar', version: '1.0.1' },
         { name: '@corp/generator-jhipster-foo' },
       ];
-      const actual = utils.parseBluePrints('foo,bar@1.0.1,@corp/foo');
+      const actual = parseBluePrints('foo,bar@1.0.1,@corp/foo');
       assert.deepStrictEqual(actual, expected);
     });
   });
@@ -45,7 +45,7 @@ describe('JHipster Blueprint Utils', () => {
     describe('not passing arguments', () => {
       it('returns a empty array', () => {
         const expected = [];
-        const actual = utils.mergeBlueprints();
+        const actual = mergeBlueprints();
         assert.deepStrictEqual(actual, expected);
       });
     });
@@ -53,7 +53,7 @@ describe('JHipster Blueprint Utils', () => {
       it('throws an error', done => {
         try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          utils.mergeBlueprints(undefined as any);
+          mergeBlueprints(undefined as any);
         } catch (error) {
           assert.equal(error.message, 'Only arrays are supported.');
           done();
@@ -65,7 +65,7 @@ describe('JHipster Blueprint Utils', () => {
       it('throws an error', done => {
         try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (utils.mergeBlueprints as any)(...argumentsToPass);
+          (mergeBlueprints as any)(...argumentsToPass);
         } catch (error) {
           assert.equal(error.message, 'Only arrays are supported.');
           done();
@@ -82,7 +82,7 @@ describe('JHipster Blueprint Utils', () => {
           { name: 'generator-jhipster-foo', version: 'latest' },
           { name: 'generator-jhipster-bar', version: '1.0.1' },
         ];
-        const actual = utils.mergeBlueprints(...argumentsToPass);
+        const actual = mergeBlueprints(...argumentsToPass);
         assert.deepStrictEqual(actual, expected);
       });
     });
@@ -99,7 +99,7 @@ describe('JHipster Blueprint Utils', () => {
           { name: 'generator-jhipster-foo', version: 'latest' },
           { name: 'generator-jhipster-bar', version: '1.0.1' },
         ];
-        const actual = utils.mergeBlueprints(...argumentsToPass);
+        const actual = mergeBlueprints(...argumentsToPass);
         assert.deepStrictEqual(actual, expected);
       });
       it('uses later version when prior version is not defined', () => {
@@ -111,7 +111,7 @@ describe('JHipster Blueprint Utils', () => {
           { name: 'generator-jhipster-foo', version: '1.0.1' },
           { name: 'generator-jhipster-bar', version: '1.0.1' },
         ];
-        const actual = utils.mergeBlueprints(...argumentsToPass);
+        const actual = mergeBlueprints(...argumentsToPass);
         assert.deepStrictEqual(actual, expected);
       });
     });
@@ -120,21 +120,21 @@ describe('JHipster Blueprint Utils', () => {
     it('keeps blueprints with undefined version', () => {
       const argumentsToPass = [{ name: 'generator-jhipster-foo' }];
       const expected = [{ name: 'generator-jhipster-foo' }];
-      const actual = utils.removeBlueprintDuplicates(argumentsToPass);
+      const actual = removeBlueprintDuplicates(argumentsToPass);
       assert.deepStrictEqual(actual, expected);
     });
   });
   describe('::normalizeBlueprintName', () => {
     it('adds generator-jhipster prefix if it is absent', () => {
-      const generatorName = utils.normalizeBlueprintName('foo');
+      const generatorName = normalizeBlueprintName('foo');
       assert.textEqual(generatorName, 'generator-jhipster-foo');
     });
     it('keeps generator-jhipster prefix if it is present', () => {
-      const generatorName = utils.normalizeBlueprintName('generator-jhipster-foo');
+      const generatorName = normalizeBlueprintName('generator-jhipster-foo');
       assert.textEqual(generatorName, 'generator-jhipster-foo');
     });
     it('adds generator-jhipster prefix for scoped package', () => {
-      const generatorName = utils.normalizeBlueprintName('@corp/foo');
+      const generatorName = normalizeBlueprintName('@corp/foo');
       assert.textEqual(generatorName, '@corp/generator-jhipster-foo');
     });
   });

@@ -82,7 +82,7 @@ export function mergeBlueprints(...blueprintsToMerge) {
  * @param {Blueprint[]} blueprints - Blueprint arrays to be merged.
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
-function removeBlueprintDuplicates(blueprints) {
+export function removeBlueprintDuplicates(blueprints) {
   const uniqueBlueprints = new Map();
   blueprints.forEach(blueprintToAdd => {
     if (uniqueBlueprints.get(blueprintToAdd.name) === undefined) {
