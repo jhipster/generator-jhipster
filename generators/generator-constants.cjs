@@ -28,7 +28,7 @@ const javaDependencies = {};
 Object.freeze(javaDependencies);
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-const ELATICSEARCH_TAG = '8.5.0';
+const ELATICSEARCH_TAG = '8.5.3';
 const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
@@ -48,9 +48,9 @@ const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '3.0.0';
+const SPRING_BOOT_VERSION = '3.0.1';
 const SPRING_CLOUD_VERSION = '2022.0.0';
-const HIBERNATE_VERSION = '6.1.5.Final';
+const HIBERNATE_VERSION = '6.1.6.Final';
 const JACOCO_VERSION = '0.8.8';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.4';
 
