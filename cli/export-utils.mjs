@@ -16,22 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import fs from 'fs';
 
-const fs = require('fs');
-
-const GENERATOR_NAME = 'generator-jhipster';
-
-module.exports = {
-  writeConfigFile,
-  GENERATOR_NAME,
-};
+export const GENERATOR_NAME = 'generator-jhipster';
 
 /**
  * This function writes a Yeoman config file in the current folder.
  * @param config the configuration.
  * @param yoRcPath the yeoman conf file path
  */
-function writeConfigFile(config, yoRcPath = '.yo-rc.json') {
+export function writeConfigFile(config, yoRcPath = '.yo-rc.json') {
   let newYoRc = { ...config };
   const stats = fs.statSync(yoRcPath, { throwIfNoEntry: false });
   if (stats && stats.isFile) {

@@ -28,7 +28,7 @@ import { CLI_NAME, GENERATOR_NAME, logger, toStringJoinArgs, printSuccess, getOp
 import { packageJson as packagejs } from '../lib/index.cjs';
 import statistics from '../generators/statistics.cjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
-import { writeConfigFile } from './export-utils.cjs';
+import { writeConfigFile } from './export-utils.mjs';
 
 const require = createRequire(import.meta.url);
 
