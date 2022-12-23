@@ -16,14 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const fs = require('fs');
-const path = require('path');
-const cliUtils = require('./utils.cjs');
-const importJdl = require('./import-jdl.cjs');
-const download = require('./download.cjs');
-
-const { logger } = cliUtils;
+import chalk from 'chalk';
+import fs from 'fs';
+import path from 'path';
+import { logger } from './utils.mjs';
+import importJdl from './import-jdl.mjs';
+import download from './download.mjs';
 
 /**
  * Add jdl extension to the file
@@ -44,7 +42,7 @@ const toJdlFile = file => {
  * @param {EnvironmentBuilder} envBuilder
  * @param {(string[], object) => EnvironmentBuilder} createEnvBuilder
  */
-module.exports = ([jdlFiles = []], options = {}, env, envBuilder, createEnvBuilder) => {
+const jdl = ([jdlFiles = []], options = {}, env, envBuilder, createEnvBuilder) => {
   logger.debug('cmd: import-jdl from ./import-jdl');
   logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
   if (options.inline) {
@@ -62,3 +60,5 @@ module.exports = ([jdlFiles = []], options = {}, env, envBuilder, createEnvBuild
   });
   return Promise.all(promises).then(jdlFiles => importJdl(jdlFiles.flat(), options, env, envBuilder, createEnvBuilder));
 };
+
+export default jdl;

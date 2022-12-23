@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-expressions, no-console */
 
-const path = require('path');
-const sinon = require('sinon');
+import sinon from 'sinon';
 
-const { prepareTempDir, getTemplatePath } = require('./utils/utils.cjs');
-const { runJHipster } = require('../../cli/program.cjs');
+import { prepareTempDir } from './utils/utils.cjs';
+import { runJHipster } from '../../cli/program.mjs';
+import { getTemplatePath } from '../support/index.mjs';
 
 describe('jhipster cli with jdl fork', () => {
   let cleanup;
@@ -91,7 +91,6 @@ describe('jhipster cli with jdl fork', () => {
     });
 
     it('should succeed', function () {
-      this.timeout(60000);
       return runJHipster();
     });
   });

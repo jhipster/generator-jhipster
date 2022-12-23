@@ -5,12 +5,11 @@ import { fileURLToPath } from 'url';
 
 import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 import constants from '../generator-constants.cjs';
-import { jdlImporter } from '../../jdl/index.mjs';
+import { createImporterFromContent } from '../../jdl/jdl-importer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const { createImporterFromContent } = jdlImporter;
 const { SERVER_MAIN_RES_DIR } = constants;
 
 const incrementalFiles = [

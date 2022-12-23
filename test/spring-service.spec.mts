@@ -10,8 +10,8 @@ const generator = getGenerator('spring-service');
 
 describe('JHipster generator service', () => {
   describe('creates service without interface', () => {
-    before(done => {
-      helpers
+    before(async () => {
+      await helpers
         .run(generator)
         .inTmpDir(dir => {
           fse.copySync(getTemplatePath('default'), dir);
@@ -19,8 +19,7 @@ describe('JHipster generator service', () => {
         .withArguments(['foo'])
         .withPrompts({
           useInterface: false,
-        })
-        .on('end', done);
+        });
     });
 
     it('creates service file', () => {
@@ -33,17 +32,17 @@ describe('JHipster generator service', () => {
   });
 
   describe('creates service with interface', () => {
-    before(done => {
-      helpers
+    before(async () => {
+      await helpers
         .run(generator)
-        .inTmpDir(dir => {
+        .onTargetDirectory(dir => {
+          console.log(dir);
           fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])
         .withPrompts({
           useInterface: true,
-        })
-        .on('end', done);
+        });
     });
 
     it('creates service file', () => {
@@ -55,15 +54,14 @@ describe('JHipster generator service', () => {
   });
 
   describe('creates service with --default flag', () => {
-    before(done => {
-      helpers
+    before(async () => {
+      await helpers
         .run(generator)
         .inTmpDir(dir => {
           fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])
-        .withOptions({ default: true })
-        .on('end', done);
+        .withOptions({ default: true });
     });
 
     it('creates service file', () => {

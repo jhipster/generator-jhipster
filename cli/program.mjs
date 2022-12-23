@@ -19,19 +19,24 @@
  * limitations under the License.
  */
 
-const chalk = require('chalk');
-const { Option } = require('commander');
-const didYouMean = require('didyoumean');
-const fs = require('fs');
-const path = require('path');
+import chalk from 'chalk';
+import { Option } from 'commander';
+import didYouMean from 'didyoumean';
+import fs from 'fs';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const EnvironmentBuilder = require('./environment-builder.cjs');
-const SUB_GENERATORS = require('./commands.cjs');
-const JHipsterCommand = require('./jhipster-command.cjs');
-const { CLI_NAME, logger, getCommand, done } = require('./utils.cjs');
-const { packageJson } = require('../lib/index.cjs');
-const { packageNameToNamespace } = require('../generators/utils.cjs');
-const { logo } = require('./logo.cjs');
+import logo from './logo.mjs';
+import EnvironmentBuilder from './environment-builder.mjs';
+import SUB_GENERATORS from './commands.mjs';
+import JHipsterCommand from './jhipster-command.mjs';
+import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
+import { packageJson } from '../lib/index.mjs';
+import generatorUtils from '../generators/utils.cjs';
+
+const { packageNameToNamespace } = generatorUtils;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const { version: JHIPSTER_VERSION } = packageJson;
 const JHIPSTER_NS = CLI_NAME;
@@ -95,7 +100,7 @@ const rejectExtraArgs = ({ program, command, extraArgs }) => {
   logger.fatal(message);
 };
 
-const buildCommands = ({
+const buildCommands = async ({
   program,
   commands = {},
   envBuilder,
@@ -228,7 +233,9 @@ const buildCommands = ({
 
         if (cliOnly) {
           logger.debug('Executing CLI only script');
-          return loadCommand(cmdName)(args, options, env, envBuilder, createEnvBuilder);
+          return Promise.resolve(loadCommand(cmdName)).then(module => {
+            return module instanceof Function ? module(args, options, env, envBuilder, createEnvBuilder) : undefined;
+          });
         }
         await env.composeWith('jhipster:bootstrap', options);
 
@@ -245,43 +252,43 @@ const buildCommands = ({
   });
 };
 
-const buildJHipster = ({
+const buildJHipster = async ({
   executableName,
   executableVersion,
   program = createProgram({ executableName, executableVersion }),
   blueprints,
   lookups,
-  createEnvBuilder = (args, options) => EnvironmentBuilder.create(args, options).prepare({ blueprints, lookups }),
-  envBuilder = createEnvBuilder(),
-  commands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() },
+  createEnvBuilder,
+  envBuilder,
+  commands,
   printLogo,
   printBlueprintLogo,
-  env = envBuilder.getEnvironment(),
+  env,
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
-  loadCommand = key => {
-    return require(`./${key}.cjs`);
+  loadCommand = async key => {
+    const { default: command } = await import(`./${key}.mjs`);
+    return command;
   },
   defaultCommand,
 } = {}) => {
+  // eslint-disable-next-line chai-friendly/no-unused-expressions
+  createEnvBuilder =
+    createEnvBuilder ?? (async (args, options) => EnvironmentBuilder.create(args, options).prepare({ blueprints, lookups }));
+  envBuilder = envBuilder ?? (await createEnvBuilder());
+  env = env ?? envBuilder.getEnvironment();
+  commands = commands ?? { ...SUB_GENERATORS, ...(await envBuilder.getBlueprintCommands()) };
   /* setup debugging */
   logger.init(program);
 
-  buildCommands({ program, commands, envBuilder, env, loadCommand, defaultCommand, printLogo, printBlueprintLogo, createEnvBuilder });
+  await buildCommands({ program, commands, envBuilder, env, loadCommand, defaultCommand, printLogo, printBlueprintLogo, createEnvBuilder });
 
   return program;
 };
 
-const runJHipster = (args = {}) => {
+const runJHipster = async (args = {}) => {
   const { argv = process.argv } = args;
-  return buildJHipster(args).parseAsync(argv);
+  const jhipsterProgram = await buildJHipster(args);
+  return jhipsterProgram.parseAsync(argv);
 };
 
-module.exports = {
-  createProgram,
-  buildCommands,
-  buildJHipster,
-  runJHipster,
-  printJHipsterLogo,
-  done,
-  logger,
-};
+export { createProgram, buildCommands, buildJHipster, runJHipster, printJHipsterLogo, done, logger };

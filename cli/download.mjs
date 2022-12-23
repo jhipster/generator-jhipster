@@ -16,33 +16,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const fs = require('fs');
-const https = require('https');
-const path = require('path');
-const cliUtils = require('./utils.cjs');
-const { packageJson } = require('../lib/index.cjs');
+import fs from 'fs';
+import { get } from 'https';
+import path from 'path';
+import { inspect } from 'util';
 
-const { logger, toString } = cliUtils;
+import { logger } from './utils.mjs';
+import { packageJson } from '../lib/index.mjs';
 
 const downloadFile = (url, filename) => {
   return new Promise((resolve, reject) => {
     logger.info(`Downloading file: ${url}`);
-    https
-      .get(url, response => {
-        if (response.statusCode !== 200) {
-          return reject(new Error(`Error downloading ${url}: ${response.statusCode} - ${response.statusMessage}`));
-        }
+    get(url, response => {
+      if (response.statusCode !== 200) {
+        return reject(new Error(`Error downloading ${url}: ${response.statusCode} - ${response.statusMessage}`));
+      }
 
-        logger.debug(`Creating file: ${path.join(filename)}`);
-        const fileStream = fs.createWriteStream(`${filename}`);
-        fileStream.on('finish', () => fileStream.close());
-        fileStream.on('close', () => resolve(filename));
-        response.pipe(fileStream);
-        return undefined;
-      })
-      .on('error', e => {
-        reject(e);
-      });
+      logger.debug(`Creating file: ${path.join(filename)}`);
+      const fileStream = fs.createWriteStream(`${filename}`);
+      fileStream.on('finish', () => fileStream.close());
+      fileStream.on('close', () => resolve(filename));
+      response.pipe(fileStream);
+      return undefined;
+    }).on('error', e => {
+      reject(e);
+    });
   });
 };
 
@@ -52,9 +50,9 @@ const downloadFile = (url, filename) => {
  * @param {string[]} args[0] jdl files
  * @param {any} options options passed from CLI
  */
-module.exports = ([jdlFiles = []], options = {}) => {
+const downloadJdl = ([jdlFiles = []], options = {}) => {
   logger.debug('cmd: download');
-  logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
+  logger.debug(`jdlFiles: ${inspect(jdlFiles)}`);
   if (!jdlFiles || jdlFiles.length === 0) {
     return Promise.reject(new Error('\nAt least one jdl file is required.\n'));
   }
@@ -80,3 +78,5 @@ module.exports = ([jdlFiles = []], options = {}) => {
     })
   );
 };
+
+export default downloadJdl;

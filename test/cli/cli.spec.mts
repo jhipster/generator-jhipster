@@ -1,21 +1,23 @@
 /* eslint-disable no-unused-expressions, no-console */
+import assert from 'assert';
+import { expect } from 'chai';
+import { jestExpect } from 'mocha-expect-snapshot';
+import { exec, fork } from 'child_process';
+import sinon from 'sinon';
+import Environment from 'yeoman-environment';
+import helpers from 'yeoman-test';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const assert = require('assert');
-const expect = require('chai').expect;
-const { exec, fork } = require('child_process');
-const path = require('path');
-const sinon = require('sinon');
-const Environment = require('yeoman-environment');
-const helpers = require('yeoman-test');
+import { createProgram, buildJHipster } from '../../cli/program.mjs';
+import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } from './utils/utils.cjs';
+import { logger } from '../../cli/utils.mjs';
+import { getTemplatePath } from '../support/index.mjs';
 
-const { createProgram, buildJHipster } = require('../../cli/program.cjs');
-const { getTemplatePath, getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('./utils/utils.cjs');
-const { logger } = require('../../cli/utils.cjs');
+const jhipsterCli = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'dist', 'cli', 'cli.mjs');
 
-const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.cjs'));
-
-const mockCli = (opts = {}) => {
-  const program = buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
+const mockCli = async (opts = {}) => {
+  const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
   return program.parseAsync(opts.argv);
 };
 
@@ -55,12 +57,10 @@ describe('jhipster cli', () => {
   });
 
   it('should return error on unknown command', function (done) {
-    this.timeout(10000);
-
     exec(`${cmd} junkcmd`, (error, stdout, stderr) => {
       expect(error).to.not.be.null;
       expect(error.code).to.equal(1);
-      expect(stderr.includes('is not a known command')).to.be.true;
+      jestExpect(stderr).toMatch('is not a known command');
       done();
     });
   });
@@ -383,7 +383,7 @@ describe('jhipster cli', () => {
         });
 
         it('should print sharedOptions info', () => {
-          expect(stdout.includes('Running foo')).to.be.true;
+          jestExpect(stdout).toMatch('Running foo');
           expect(stdout.includes('Running bar')).to.be.true;
           expect(stdout.includes('barValue')).to.be.true;
           expect(stdout.includes('fooValue')).to.be.false;

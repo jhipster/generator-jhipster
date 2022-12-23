@@ -16,22 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const fs = require('fs');
-const _ = require('lodash');
-const path = require('path');
-const pluralize = require('pluralize');
-const { fork: forkProcess } = require('child_process');
+import chalk from 'chalk';
+import fs from 'fs';
+import _ from 'lodash';
+import path, { dirname, join } from 'path';
+import pluralize from 'pluralize';
+import { fileURLToPath } from 'url';
+import { inspect } from 'util';
+import { fork as forkProcess } from 'child_process';
 
-const EnvironmentBuilder = require('./environment-builder.cjs');
-const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArgs } = require('./utils.cjs');
+import EnvironmentBuilder from './environment-builder.mjs';
+import { CLI_NAME, GENERATOR_NAME, logger, printSuccess, getOptionAsArgs } from './utils.mjs';
+import { packageJson as packagejs } from '../lib/index.mjs';
+import statistics from '../generators/statistics.cjs';
+import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
+import { writeConfigFile } from './export-utils.mjs';
 
-const { packageJson: packagejs } = require('../lib/index.cjs');
-const statistics = require('../generators/statistics.cjs');
-const { JHIPSTER_CONFIG_DIR } = require('../generators/generator-constants.cjs');
-
-const jhipsterCli = require.resolve('./cli.cjs');
-const { writeConfigFile } = require('./export-utils.cjs');
+const jhipsterCli = join(dirname(fileURLToPath(import.meta.url)), 'cli.mjs');
 
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 
@@ -144,7 +145,7 @@ function writeApplicationConfig(applicationWithEntities, basePath) {
  * @param {Environment} options.env
  * @param {Object} [generatorOptions]
  */
-function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOptions = {}) {
+async function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOptions = {}) {
   const { workspaces } = generatorOptions;
   generatorOptions = {
     ...generatorOptions,
@@ -173,7 +174,7 @@ function runGenerator(command, { cwd, fork, env, createEnvBuilder }, generatorOp
   if (!fork) {
     const oldCwd = process.cwd();
     process.chdir(cwd);
-    env = env || createEnvBuilder(undefined, { cwd }).getEnvironment();
+    env = env || (await createEnvBuilder(undefined, { cwd })).getEnvironment();
     return env
       .run(`${CLI_NAME}:${command}`, generatorOptions)
       .then(
@@ -260,7 +261,7 @@ const shouldGenerateDeployments = processor =>
  * @param {any} config
  * @returns Promise
  */
-const generateDeploymentFiles = ({ processor, deployment }) => {
+const generateDeploymentFiles = async ({ processor, deployment }) => {
   const deploymentType = getDeploymentType(deployment);
   logger.info(`Generating deployment ${deploymentType} in a new parallel process`);
   logger.debug(`Generating deployment: ${JSON.stringify(deployment[GENERATOR_NAME], null, 2)}`);
@@ -277,7 +278,7 @@ const generateDeploymentFiles = ({ processor, deployment }) => {
  * @param {any} config
  * @returns Promise
  */
-const generateApplicationFiles = ({ processor, applicationWithEntities }) => {
+const generateApplicationFiles = async ({ processor, applicationWithEntities }) => {
   logger.debug(`Generating application: ${JSON.stringify(applicationWithEntities.config, null, 2)}`);
   const { inFolder, fork, force, reproducible, createEnvBuilder } = processor;
   const baseName = applicationWithEntities.config.baseName;
@@ -295,7 +296,6 @@ const generateApplicationFiles = ({ processor, applicationWithEntities }) => {
   if (!fork) {
     generatorOptions.applicationWithEntities = applicationWithEntities;
   }
-
   return runGenerator('app', { cwd, fork, createEnvBuilder }, generatorOptions);
 };
 
@@ -351,7 +351,7 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
 class JDLProcessor {
   constructor(jdlFiles, jdlContent, options, createEnvBuilder) {
     logger.debug(
-      `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${toString(options)}`
+      `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${inspect(options)}`
     );
     this.jdlFiles = jdlFiles;
     this.jdlContent = jdlContent;
@@ -373,7 +373,7 @@ class JDLProcessor {
     };
 
     let importer;
-    // eslint-disable-next-line global-require, import/no-unresolved
+    // eslint-disable-next-line global-require
     const { createImporterFromContent, createImporterFromFiles } = await import('../jdl/jdl-importer.js');
     if (this.jdlContent) {
       importer = createImporterFromContent(this.jdlContent, configuration);
@@ -396,18 +396,18 @@ class JDLProcessor {
     statistics.sendSubGenEvent('generator', 'import-jdl');
   }
 
-  generateWorkspaces(options, generateJdl) {
-    return this.createEnvBuilder()
+  async generateWorkspaces(options, generateJdl) {
+    return (await this.createEnvBuilder())
       .getEnvironment()
       .run('jhipster:workspaces', { workspaces: false, ...options, importState: this.importState, generateJdl });
   }
 
-  generateApplications() {
+  async generateApplications() {
     if (this.options.ignoreApplication) {
       logger.debug('Applications not generated');
       return Promise.resolve();
     }
-    const callGenerator = applicationWithEntities => {
+    const callGenerator = async applicationWithEntities => {
       try {
         return generateApplicationFiles({
           processor: this,
@@ -471,7 +471,7 @@ class JDLProcessor {
     return Promise.all(applicationsWithEntities.map(applicationWithEntities => callGenerator(applicationWithEntities)));
   }
 
-  generateDeployments() {
+  async generateDeployments() {
     if (!shouldGenerateDeployments(this)) {
       logger.debug('Deployments not generated');
       return Promise.resolve();
@@ -481,8 +481,8 @@ class JDLProcessor {
         `${pluralize('deployment', this.importState.exportedDeployments.length)}.`
     );
 
-    const callDeploymentGenerator = () => {
-      const callGenerator = deployment => {
+    const callDeploymentGenerator = async () => {
+      const callGenerator = async deployment => {
         try {
           return generateDeploymentFiles({
             processor: this,
@@ -525,9 +525,9 @@ class JDLProcessor {
  * @param {any} [options] options passed from CLI
  * @param {any} [env] the yeoman environment
  */
-module.exports = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
+const jdl = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuilder = EnvironmentBuilder.createDefaultBuilder) => {
   logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
-  logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
+  logger.debug(chalk.yellow(`Options: ${inspect({ ...options, inline: options.inline ? 'inline content' : '' })}`));
   try {
     const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options, createEnvBuilder);
     await jdlImporter.importJDL();
@@ -558,3 +558,5 @@ module.exports = async (jdlFiles, options = {}, env, _envBuilder, createEnvBuild
     return Promise.reject(new Error(`Error during import-jdl: ${e.message}`));
   }
 };
+
+export default jdl;

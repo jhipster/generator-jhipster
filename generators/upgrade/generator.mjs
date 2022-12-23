@@ -30,10 +30,9 @@ import BaseGenerator from '../base/index.mjs';
 import { upgradeFiles } from '../cleanup.mjs';
 import constants from '../generator-constants.cjs';
 import statistics from '../statistics.cjs';
-import blueprintUtils from '../../utils/blueprint.cjs';
+import { parseBluePrints } from '../../utils/blueprint.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
 
-const { parseBluePrints } = blueprintUtils;
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 const UPGRADE_BRANCH = 'jhipster_upgrade';

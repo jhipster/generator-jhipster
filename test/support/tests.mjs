@@ -246,7 +246,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
         .run(generatorPath)
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
         .withOptions({ blueprint: 'foo', skipChecks: true, baseName: 'jhipster' })
-        .on('ready', generator => {
+        .onGenerator(generator => {
           spy = addSpies(generator);
         });
     });
@@ -297,7 +297,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
         .run(generatorPath)
         .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
         .withOptions(options)
-        .on('ready', generator => {
+        .onGenerator(generator => {
           spy = addSpies(generator);
         });
 

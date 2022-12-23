@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-const chalk = require('chalk');
-const { Command, Option } = require('commander');
+import chalk from 'chalk';
+import { Command, Option } from 'commander';
 
-class JHipsterCommand extends Command {
+export default class JHipsterCommand extends Command {
   createCommand(name) {
     return new JHipsterCommand(name);
   }
@@ -190,5 +190,3 @@ class JHipsterCommand extends Command {
     return this.addOption(option);
   }
 }
-
-module.exports = JHipsterCommand;

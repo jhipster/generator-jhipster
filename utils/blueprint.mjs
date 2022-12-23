@@ -16,16 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const YeomanNamespace = require('yeoman-environment/lib/util/namespace');
-
-module.exports = {
-  mergeBlueprints,
-  loadBlueprintsFromConfiguration,
-  parseBluePrints,
-  removeBlueprintDuplicates,
-  normalizeBlueprintName,
-  parseBlueprintInfo,
-};
+import YeomanNamespace from 'yeoman-environment/lib/util/namespace';
 
 /**
  * @private
@@ -33,7 +24,7 @@ module.exports = {
  * @param config - the generator's configuration object.
  * @returns {Array} an array that contains the info for each blueprint
  */
-function loadBlueprintsFromConfiguration(config) {
+export function loadBlueprintsFromConfiguration(config) {
   // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
   const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
   // load blueprints from config file
@@ -54,7 +45,7 @@ function loadBlueprintsFromConfiguration(config) {
  * no processing is performed and it is returned as is.
  * @returns {Array} an array that contains the info for each blueprint
  */
-function parseBluePrints(blueprints) {
+export function parseBluePrints(blueprints) {
   if (Array.isArray(blueprints)) {
     return blueprints;
   }
@@ -73,7 +64,7 @@ function parseBluePrints(blueprints) {
  * @param {...Blueprint[]} [blueprintsToMerge] - Blueprint arrays to be merged.
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
-function mergeBlueprints(...blueprintsToMerge) {
+export function mergeBlueprints(...blueprintsToMerge) {
   if (!blueprintsToMerge || blueprintsToMerge.length === 0) {
     return [];
   }
@@ -91,7 +82,7 @@ function mergeBlueprints(...blueprintsToMerge) {
  * @param {Blueprint[]} blueprints - Blueprint arrays to be merged.
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
-function removeBlueprintDuplicates(blueprints) {
+export function removeBlueprintDuplicates(blueprints) {
   const uniqueBlueprints = new Map();
   blueprints.forEach(blueprintToAdd => {
     if (uniqueBlueprints.get(blueprintToAdd.name) === undefined) {
@@ -111,7 +102,7 @@ function removeBlueprintDuplicates(blueprints) {
  * @param {string} blueprint - name of the blueprint and optionally a version, e.g kotlin[@0.8.1]
  * @returns {object} containing the name and version of the blueprint
  */
-function parseBlueprintInfo(blueprint) {
+export function parseBlueprintInfo(blueprint) {
   let bpName = normalizeBlueprintName(blueprint);
   const idx = bpName.lastIndexOf('@');
   if (idx > 0) {
@@ -134,7 +125,7 @@ function parseBlueprintInfo(blueprint) {
  * @param {string} blueprint - name of the blueprint
  * @returns {string} the normalized blueprint name
  */
-function normalizeBlueprintName(blueprint) {
+export function normalizeBlueprintName(blueprint) {
   try {
     const parsed = YeomanNamespace.parse(blueprint);
     if (parsed.unscoped.startsWith('generator-jhipster-')) {

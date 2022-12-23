@@ -1,6 +1,6 @@
 import helpers from 'yeoman-test';
 
-import EnvironmentBuilder from '../cli/environment-builder.cjs';
+import EnvironmentBuilder from '../cli/environment-builder.mjs';
 import constants from '../generators/generator-constants.cjs';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;

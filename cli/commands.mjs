@@ -202,4 +202,4 @@ const defaultCommands = {
   },
 };
 
-module.exports = defaultCommands;
+export default defaultCommands;
