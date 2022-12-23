@@ -19,20 +19,18 @@
 import chalk from 'chalk';
 import fs from 'fs';
 import _ from 'lodash';
-import path from 'path';
+import path, { dirname, join } from 'path';
 import pluralize from 'pluralize';
-import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
 import { fork as forkProcess } from 'child_process';
 import EnvironmentBuilder from './environment-builder.mjs';
 import { CLI_NAME, GENERATOR_NAME, logger, toStringJoinArgs, printSuccess, getOptionAsArgs } from './utils.mjs';
-import { packageJson as packagejs } from '../lib/index.cjs';
+import { packageJson as packagejs } from '../lib/index.mjs';
 import statistics from '../generators/statistics.cjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
 import { writeConfigFile } from './export-utils.mjs';
 
-const require = createRequire(import.meta.url);
-
-const jhipsterCli = require.resolve('./cli.mjs');
+const jhipsterCli = join(dirname(fileURLToPath(import.meta.url)), 'cli.mjs');
 
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 

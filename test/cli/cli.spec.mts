@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-expressions, no-console */
-
-import { createRequire } from 'module';
 import assert from 'assert';
 import { expect } from 'chai';
 import { jestExpect } from 'mocha-expect-snapshot';
@@ -8,7 +6,7 @@ import { exec, fork } from 'child_process';
 import sinon from 'sinon';
 import Environment from 'yeoman-environment';
 import helpers from 'yeoman-test';
-import path from 'path';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import { createProgram, buildJHipster } from '../../cli/program.mjs';
@@ -16,10 +14,7 @@ import { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeo
 import { logger } from '../../cli/utils.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const require = createRequire(import.meta.url);
-const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'dist', 'cli', 'cli.mjs'));
+const jhipsterCli = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'dist', 'cli', 'cli.mjs');
 
 const mockCli = async (opts = {}) => {
   const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
