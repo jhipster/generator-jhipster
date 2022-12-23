@@ -18,7 +18,7 @@
  */
 import memFsEditor from 'mem-fs-editor';
 import environmentTransfrom from 'yeoman-environment/transform';
-import pTransform from 'p-transform';
+import { transform } from 'p-transform';
 import { stat } from 'fs/promises';
 import { isBinaryFile } from 'isbinaryfile';
 
@@ -44,7 +44,6 @@ const {
   patternFilter,
   patternSpy,
 } = environmentTransfrom;
-const { transform } = pTransform;
 
 const { State } = memFsEditor as any;
 const { hasState, setModifiedFileState } = State;
