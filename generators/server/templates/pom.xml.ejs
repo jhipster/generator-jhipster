@@ -144,6 +144,9 @@
 <%_ if (cacheProviderCaffeine) { _%>
         <typesafe.version>1.4.2</typesafe.version>
 <%_ } _%>
+<%_ if (gatlingTests) { _%>
+        <gatling.version>3.9.0</gatling.version>
+<%_ } _%>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
         <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
@@ -185,6 +188,9 @@
   <%_ if (enableHibernateCache) { _%>
         <hazelcast-hibernate53.version><%- javaDependencies['hazelcast-hibernate53'] %></hazelcast-hibernate53.version>
   <%_ } _%>
+<%_ } _%>
+<%_ if (gatlingTests) { _%>
+        <gatling-maven-plugin.version>4.2.9</gatling-maven-plugin.version>
 <%_ } _%>
         <!-- jhipster-needle-maven-property -->
     </properties>
@@ -865,6 +871,15 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
+<%_ if (gatlingTests) { _%>
+        <!-- Gatling -->
+        <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+            <version>${gatling.version}</version>
+            <scope>test</scope>
+        </dependency>
+<%_ } _%>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
 
@@ -875,6 +890,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+<%_ } _%>
+<%_ if (gatlingTests) { _%>
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
             </plugin>
 <%_ } _%>
             <plugin>
@@ -982,6 +1003,17 @@
                         </execution>
                     </executions>
                 </plugin>
+<%_ } _%>
+<%_ if (gatlingTests) { _%>
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
+                <version>${gatling-maven-plugin.version}</version>
+                <configuration>
+                    <runMultipleSimulations>true</runMultipleSimulations>
+                    <resourcesFolder>${project.basedir}/src/test/gatling/conf</resourcesFolder>
+                </configuration>
+            </plugin>
 <%_ } _%>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
