@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-  const notSortableFieldsAfterSearchArray = !searchEngine ? [] : fields
+  const notSortableFieldsAfterSearchArray = searchEngineNo ? [] : fields
       .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal);
 
   const notSortableFieldsAfterSearchFieldNames = notSortableFieldsAfterSearchArray
@@ -92,7 +92,7 @@ export class <%= componentName %> implements OnInit {
 
     predicate = '<%- primaryKey.name %>';
     ascending = true;
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
     currentSearch = '';
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
@@ -139,7 +139,7 @@ export class <%= componentName %> implements OnInit {
     track<%= primaryKey.nameCapitalized %> = (_index: number, item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
 
 <%_ } _%>
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
     search(query: string): void {
   <%_ if (notSortableFieldsAfterSearch) { _%>
       if (query && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
@@ -203,12 +203,12 @@ export class <%= componentName %> implements OnInit {
     }
 
     navigateToWithComponentValues(): void {
-      this.handleNavigation(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>);
+      this.handleNavigation(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>);
     }
 
 <%_ if (!paginationNo) { _%>
     navigateToPage(page = this.page): void {
-      this.handleNavigation(page, this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>);
+      this.handleNavigation(page, this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>);
     }
 
 <%_ } _%>
@@ -217,7 +217,7 @@ export class <%= componentName %> implements OnInit {
         .pipe(
           tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
           switchMap(() =>
-            this.queryBackend(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngine) { %>, this.currentSearch<% } %>)
+            this.queryBackend(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>)
           )
         );
     }
@@ -233,7 +233,7 @@ export class <%= componentName %> implements OnInit {
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
       this.filters.initializeFromParams(params);
 <%_ } _%>
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
       if (params.has('search') && params.get('search') !== '') {
         this.currentSearch = params.get('search') as string;
   <%_ if (notSortableFieldsAfterSearch) { _%>
@@ -300,7 +300,7 @@ export class <%= componentName %> implements OnInit {
     }
 
 <%_ } _%>
-    protected queryBackend(<% if (!paginationNo) { %>page?: number, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngine) { %>, currentSearch?: string<% } %>): Observable<EntityArrayResponseType> {
+    protected queryBackend(<% if (!paginationNo) { %>page?: number, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngineAny) { %>, currentSearch?: string<% } %>): Observable<EntityArrayResponseType> {
       this.isLoading = true;
 <%_ if (!paginationNo) { _%>
       const pageToLoad: number = page ?? 1;
@@ -313,7 +313,7 @@ export class <%= componentName %> implements OnInit {
 <%_ if(implementsEagerLoadApis || containsBagRelationships) { _%>
         eagerload: true,
 <%_ } _%>
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
         query: currentSearch,
 <%_ } _%>
         sort: this.getSortQueryParam(predicate, ascending),
@@ -323,7 +323,7 @@ export class <%= componentName %> implements OnInit {
         queryObject[filterOption.name] = filterOption.values;
       });
 <%_ } _%>
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
       if (this.currentSearch && this.currentSearch !== '') {
         return this.<%= entityInstance %>Service.search(queryObject)
           .pipe(
@@ -335,14 +335,14 @@ export class <%= componentName %> implements OnInit {
           .pipe(
             tap(() => this.isLoading = false)
           );
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
       }
 <%_ } _%>
     }
 
-    protected handleNavigation(<% if (!paginationNo) { %>page = this.page, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngine) { %>, currentSearch?: string<% } %>): void {
+    protected handleNavigation(<% if (!paginationNo) { %>page = this.page, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngineAny) { %>, currentSearch?: string<% } %>): void {
       const queryParamsObj<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>: any<%_ } _%> = {
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
         search: currentSearch,
 <%_ } _%>
 <%_ if (!paginationNo) { _%>

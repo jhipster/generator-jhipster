@@ -17,16 +17,12 @@
  * limitations under the License.
  */
 
-const ApplicationTypes: any = {
+const applicationTypes: any = {
   MONOLITH: 'monolith',
   MICROSERVICE: 'microservice',
   GATEWAY: 'gateway',
 };
 
-export const MONOLITH = ApplicationTypes.MONOLITH;
-export const MICROSERVICE = ApplicationTypes.MICROSERVICE;
-export const GATEWAY = ApplicationTypes.GATEWAY;
+applicationTypes.exists = applicationType => !!applicationType && !!applicationTypes[applicationType.toUpperCase()];
 
-ApplicationTypes.exists = applicationType => !!applicationType && !!ApplicationTypes[applicationType.toUpperCase()];
-
-export default ApplicationTypes;
+export default applicationTypes;

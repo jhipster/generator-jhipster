@@ -32,10 +32,9 @@ const { JWT } = authenticationTypes;
 const { PROMETHEUS } = monitoringTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { COUCHBASE } = databaseTypes;
-const databaseType = databaseTypes;
+const NO_DATABASE_TYPE = databaseTypes.NO;
 const { GeneratorTypes } = kubernetesPlatformTypes;
 
-const NO_DATABASE_TYPE = databaseType.NO;
 const { K8S } = GeneratorTypes;
 
 // eslint-disable-next-line import/prefer-default-export

@@ -107,7 +107,7 @@ public class PublicUserResource {
         this.userService = userService;
 <%_ if (searchEngineElasticsearch) { _%>
         this.userSearchRepository = userSearchRepository;
-<%_ } else if (searchEngine != false) { _%>
+<%_ } else if (searchEngineAny) { _%>
         this.userRepository = userRepository;
 <%_ } _%>
     }
@@ -173,7 +173,7 @@ public class PublicUserResource {
 
 <%_ } _%>
 
-<%_ if (!!searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
 
     /**
      * {@code SEARCH /_search/users/:query} : search for the User corresponding to the query.

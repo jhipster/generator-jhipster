@@ -203,7 +203,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
         return <%= entityInstance %>Repository.findByCriteria(criteria, pageable);
     <%_ } _%>
     }
-    
+
     /**
     * Find the count of <%= entityInstancePlural %> by criteria.
     * @param criteria filtering criteria
@@ -290,7 +290,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
         log.debug("Request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: false, fromResource: false}); -%>
     }
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
 
   <%_ if (!serviceImpl) { _%>
     /**

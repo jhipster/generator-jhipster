@@ -22,7 +22,7 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import { logger } from './utils.mjs';
-import { packageJson } from '../lib/index.mjs';
+import packageJson from '../lib/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

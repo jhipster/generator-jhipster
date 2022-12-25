@@ -36,7 +36,7 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
 import { <%= searchType %> } from 'app/core/request/request.model';
 <%_ } _%>
 import { I<%= entityAngularName %>, New<%= entityAngularName %> } from '../<%= entityFileName %>.model';
@@ -66,7 +66,7 @@ export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Service {
     protected resourceUrl = this.applicationConfigService.getEndpointFor('api/<%= entityApiUrl %>'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
     protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/<%= entityApiUrl %>'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
 <%_ } _%>
 
@@ -121,7 +121,7 @@ export class <%= entityAngularName %>Service {
     }
 <%_ } _%>
 
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
     search(req: <%= searchType %>): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<<%= entityRestName %>[]>(this.resourceSearchUrl, { params: options, observe: 'response' })

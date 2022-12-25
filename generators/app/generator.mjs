@@ -25,7 +25,7 @@ import gitOptions from '../git/options.mjs';
 import serverOptions from '../server/options.mjs';
 import { cleanupOldFiles, upgradeFiles } from '../cleanup.mjs';
 import prompts from './prompts.mjs';
-import { packageJson as packagejs } from '../../lib/index.mjs';
+import packageJson from '../../lib/index.mjs';
 import statistics from '../statistics.cjs';
 import generatorDefaults from '../generator-defaults.mjs';
 import {
@@ -380,7 +380,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     return {
       setup() {
         // Update jhipsterVersion.
-        this.jhipsterConfig.jhipsterVersion = packagejs.version;
+        this.jhipsterConfig.jhipsterVersion = packageJson.version;
 
         this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {

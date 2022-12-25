@@ -25,14 +25,12 @@ import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { convertEntitiesToJDL } from '../../../jdl/converters/json-to-jdl-entity-converter.js';
-import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
-import RelationshipOptions from '../../../jdl/jhipster/relationship-options.js';
-import BinaryOptions from '../../../jdl/jhipster/binary-options.js';
+import { unaryOptions, relationshipOptions, binaryOptions } from '../../../jdl/jhipster/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
+const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
 
 const {
   Options: { DTO, SEARCH, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
@@ -42,7 +40,7 @@ const {
     service: { SERVICE_CLASS },
     search: { ELASTICSEARCH },
   },
-} = BinaryOptions;
+} = binaryOptions;
 
 describe('JSONToJDLEntityConverter', () => {
   describe('convertEntitiesToJDL', () => {
@@ -133,17 +131,17 @@ describe('JSONToJDLEntityConverter', () => {
               .length
           ).to.equal(1);
           expect(
-            jdlObject.getOptions().filter(option => option.name === UnaryOptions.NO_FLUENT_METHOD && option.entityNames.has('Employee'))
+            jdlObject.getOptions().filter(option => option.name === unaryOptions.NO_FLUENT_METHOD && option.entityNames.has('Employee'))
               .length
           ).to.equal(1);
           expect(
-            jdlObject.getOptions().filter(option => option.name === UnaryOptions.FILTER && option.entityNames.has('Employee')).length
+            jdlObject.getOptions().filter(option => option.name === unaryOptions.FILTER && option.entityNames.has('Employee')).length
           ).to.equal(1);
           expect(
-            jdlObject.getOptions().filter(option => option.name === UnaryOptions.READ_ONLY && option.entityNames.has('Employee')).length
+            jdlObject.getOptions().filter(option => option.name === unaryOptions.READ_ONLY && option.entityNames.has('Employee')).length
           ).to.equal(1);
           expect(
-            jdlObject.getOptions().filter(option => option.name === UnaryOptions.EMBEDDED && option.entityNames.has('Employee')).length
+            jdlObject.getOptions().filter(option => option.name === unaryOptions.EMBEDDED && option.entityNames.has('Employee')).length
           ).to.equal(1);
         });
       });

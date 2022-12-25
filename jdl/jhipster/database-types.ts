@@ -17,35 +17,30 @@
  * limitations under the License.
  */
 
-export const SQL = 'sql';
-export const MYSQL = 'mysql';
-export const MARIADB = 'mariadb';
-export const POSTGRESQL = 'postgresql';
-export const MSSQL = 'mssql';
-export const ORACLE = 'oracle';
-export const MONGODB = 'mongodb';
-export const CASSANDRA = 'cassandra';
-export const COUCHBASE = 'couchbase';
-export const NEO4J = 'neo4j';
-export const H2_DISK = 'h2Disk';
-export const H2_MEMORY = 'h2Memory';
-export const NO = 'no';
+const SQL = 'sql';
+const MYSQL = 'mysql';
+const MARIADB = 'mariadb';
+const POSTGRESQL = 'postgresql';
+const MSSQL = 'mssql';
+const ORACLE = 'oracle';
+const H2_DISK = 'h2Disk';
+const H2_MEMORY = 'h2Memory';
 
-const isSql = type => [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL, H2_DISK, H2_MEMORY].includes(type);
-
-export default {
+const databaseTypes: any = {
   SQL,
   MYSQL,
   MARIADB,
   POSTGRESQL,
   MSSQL,
   ORACLE,
-  MONGODB,
-  CASSANDRA,
-  COUCHBASE,
-  NEO4J,
+  MONGODB: 'mongodb',
+  CASSANDRA: 'cassandra',
+  COUCHBASE: 'couchbase',
+  NEO4J: 'neo4j',
   H2_DISK,
   H2_MEMORY,
-  NO,
-  isSql,
+  NO: 'no',
 };
+databaseTypes.isSql = type => [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL, H2_DISK, H2_MEMORY].includes(type);
+
+export default databaseTypes;

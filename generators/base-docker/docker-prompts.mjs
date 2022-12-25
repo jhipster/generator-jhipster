@@ -29,6 +29,7 @@ const monitoring = monitoringTypes;
 const NO_MONITORING = monitoring.NO;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 export default {
   askForApplicationType,
   askForGatewayType,
@@ -283,7 +284,7 @@ async function askForServiceDiscovery() {
             name: 'Consul',
           },
           {
-            value: false,
+            value: NO_SERVICE_DISCOVERY,
             name: 'No Service Discovery and Configuration',
           },
         ],

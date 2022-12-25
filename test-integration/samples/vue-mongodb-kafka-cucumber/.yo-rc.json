@@ -28,16 +28,16 @@
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mongodb",
     "reactive": false,
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
     "serverSideOptions": [],
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "no",
     "skipCheckLengthOfIdentifier": false,
     "skipClient": false,
     "skipFakeData": false,
     "skipServer": false,
     "skipUserManagement": false,
     "testFrameworks": ["gatling", "cucumber", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

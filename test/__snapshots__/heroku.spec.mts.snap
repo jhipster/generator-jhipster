@@ -22,20 +22,20 @@ Object {
     \\"jhiPrefix\\": \\"jhi\\",
     \\"jhipsterVersion\\": \\"4.14.0\\",
     \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"messageBroker\\": false,
+    \\"messageBroker\\": \\"no\\",
     \\"packageFolder\\": \\"com/mycompany/myapp\\",
     \\"packageName\\": \\"com.mycompany.myapp\\",
     \\"prodDatabaseType\\": \\"mysql\\",
     \\"promptValues\\": {
       \\"packageName\\": \\"com.mycompany.myapp\\"
     },
-    \\"searchEngine\\": false,
+    \\"searchEngine\\": \\"no\\",
     \\"serverPort\\": \\"8081\\",
     \\"serviceDiscoveryType\\": \\"eureka\\",
     \\"skipClient\\": true,
     \\"skipUserManagement\\": true,
     \\"testFrameworks\\": [],
-    \\"websocket\\": false
+    \\"websocket\\": \\"no\\"
   }
 }
 ",

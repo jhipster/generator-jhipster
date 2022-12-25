@@ -22,7 +22,7 @@ import BaseGenerator from '../base/index.mjs';
 
 import statistics from '../statistics.cjs';
 import { GENERATOR_EXPORT_JDL } from '../generator-list.mjs';
-import applicationOptions from '../../jdl/jhipster/application-options.js';
+import { applicationOptions } from '../../jdl/jhipster/index.mjs';
 import JSONToJDLConverter from '../../jdl/converters/json-to-jdl-converter.js';
 import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures } from '../base/api.mjs';
 

@@ -18,14 +18,9 @@
  */
 
 import JDLObject from '../models/jdl-object.js';
-import { createJDLApplication } from '../models/jdl-application-factory.js';
+import createJDLApplication from '../models/jdl-application-factory.js';
 
 const GENERATOR_NAME = 'generator-jhipster';
-
-export default {
-  convertApplicationToJDL,
-  convertApplicationsToJDL,
-};
 
 export function convertApplicationsToJDL({ applications, jdl }: any = {}) {
   const jsonApplications = applications || [];

@@ -28,7 +28,7 @@ import { DOCKER_DIR } from '../generator-constants.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { addFakerToEntity } from './faker.mjs';
-import { packageJson } from '../../lib/index.mjs';
+import packageJson from '../../lib/index.mjs';
 
 const { upperFirst } = _;
 

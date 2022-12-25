@@ -29,7 +29,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import jhipster7Proxy from './jhipster7-proxy.mjs';
-import { packageJson as packagejs } from '../../lib/index.mjs';
+import packageJson from '../../lib/index.mjs';
 import jhipsterUtils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
 import PrivateBase from './generator-base-private.mjs';
@@ -95,9 +95,9 @@ const { ELASTICSEARCH } = searchEngineTypes;
 
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
-const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
-const NO_WEBSOCKET = websocketTypes.FALSE;
+const NO_WEBSOCKET = websocketTypes.NO;
 
 const isWin32 = os.platform() === 'win32';
 
@@ -204,10 +204,12 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     try {
       this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
     } catch (error) {
-      const split = this.options.namespace.split(':', 2);
-      this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
+      if (this.options.namespace) {
+        const split = this.options.namespace.split(':', 2);
+        this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
+      }
     }
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
+    return this.fetchFromInstalledJHipster(this._jhipsterGenerator ?? '', 'templates', ...args);
   }
 
   /**
@@ -1548,13 +1550,13 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         `npm show ${GENERATOR_JHIPSTER} version --fetch-retries 1 --fetch-retry-mintimeout 500 --fetch-retry-maxtimeout 500`,
         { silent: true },
         (code, stdout, stderr) => {
-          if (!stderr && semver.lt(packagejs.version, stdout)) {
+          if (!stderr && semver.lt(packageJson.version, stdout)) {
             this.log(
               `${
                 chalk.yellow(' ______________________________________________________________________________\n\n') +
                 chalk.yellow('  JHipster update available: ') +
                 chalk.green.bold(stdout.replace('\n', '')) +
-                chalk.gray(` (current: ${packagejs.version})`)
+                chalk.gray(` (current: ${packageJson.version})`)
               }\n`
             );
             this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
@@ -2171,9 +2173,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.backendName = config.backendName;
 
     config.nodeDependencies = config.nodeDependencies || {
-      prettier: packagejs.dependencies.prettier,
-      'prettier-plugin-java': packagejs.dependencies['prettier-plugin-java'],
-      'prettier-plugin-packagejson': packagejs.dependencies['prettier-plugin-packagejson'],
+      prettier: packageJson.dependencies.prettier,
+      'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
+      'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
     };
     dest.nodeDependencies = config.nodeDependencies;
 
@@ -2418,21 +2420,20 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.javaPackageSrcDir = normalizePathEnd(`${dest.srcMainJava}${dest.packageFolder}`);
     dest.javaPackageTestDir = normalizePathEnd(`${dest.srcTestJava}${dest.packageFolder}`);
 
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
-    // Convert to false for templates.
-    if (dest.serviceDiscoveryType === NO_SERVICE_DISCOVERY || !dest.serviceDiscoveryType) {
-      dest.serviceDiscoveryType = false;
+    if (!dest.serviceDiscoveryType) {
+      dest.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
     }
-    if (dest.websocket === NO_WEBSOCKET || !dest.websocket) {
-      dest.websocket = false;
+    if (!dest.websocket) {
+      dest.websocket = NO_WEBSOCKET;
     }
-    if (dest.searchEngine === NO_SEARCH_ENGINE || !dest.searchEngine) {
-      dest.searchEngine = false;
+    if (!dest.searchEngine) {
+      dest.searchEngine = NO_SEARCH_ENGINE;
     }
-    if (dest.messageBroker === NO_MESSAGE_BROKER || !dest.messageBroker) {
-      dest.messageBroker = false;
+    if (!dest.messageBroker) {
+      dest.messageBroker = NO_MESSAGE_BROKER;
     }
 
+    dest.serviceDiscoveryAny = dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
     dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
@@ -2484,11 +2485,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
-    dest.searchEngineAny = ![undefined, false, 'no'].includes(dest.searchEngine);
+    dest.searchEngineAny = dest.searchEngine !== NO_SEARCH_ENGINE;
+    dest.searchEngineNo = !dest.searchEngine || dest.searchEngine === NO_SEARCH_ENGINE;
 
     dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
     dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-    dest.serviceDiscoveryAny = ![undefined, false, 'no'].includes(dest.serviceDiscoveryType);
+    dest.serviceDiscoveryAny = dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
 
     if (dest.databaseType === NO_DATABASE) {
       // User management requires a database.
@@ -2592,7 +2594,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {
-    const jhipsterVersion = packagejs.version;
+    const jhipsterVersion = packageJson.version;
     const baseName = this.getDefaultAppName();
     const creationTimestamp = new Date().getTime();
 

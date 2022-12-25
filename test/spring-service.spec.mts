@@ -36,7 +36,6 @@ describe('JHipster generator service', () => {
       await helpers
         .run(generator)
         .onTargetDirectory(dir => {
-          console.log(dir);
           fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])

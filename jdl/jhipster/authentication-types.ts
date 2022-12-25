@@ -17,14 +17,10 @@
  * limitations under the License.
  */
 
-const Types = {
+const authenticationTypes = {
   JWT: 'jwt',
   OAUTH2: 'oauth2',
   SESSION: 'session',
 };
 
-export const JWT = Types.JWT;
-export const OAUTH2 = Types.OAUTH2;
-export const SESSION = Types.SESSION;
-
-export default Types;
+export default authenticationTypes;

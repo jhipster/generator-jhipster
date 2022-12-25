@@ -164,7 +164,7 @@ public interface <%= entityClass %>Service {
 <%_ } _%>
      */
     <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKey.type %> id);
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.

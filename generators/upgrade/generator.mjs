@@ -31,7 +31,7 @@ import { upgradeFiles } from '../cleanup.mjs';
 import constants from '../generator-constants.cjs';
 import statistics from '../statistics.cjs';
 import { parseBluePrints } from '../../utils/blueprint.mjs';
-import { packageJson as packagejs } from '../../lib/index.mjs';
+import packageJson from '../../lib/index.mjs';
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -318,7 +318,7 @@ export default class UpgradeGenerator extends BaseGenerator {
         if (this.targetJhipsterVersion) {
           if (this.targetJhipsterVersion === GLOBAL_VERSION) {
             this.originalTargetJhipsterVersion = this.targetJhipsterVersion;
-            this.targetJhipsterVersion = packagejs.version;
+            this.targetJhipsterVersion = packageJson.version;
           }
           this.log(`Upgrading to the target JHipster version: ${this.targetJhipsterVersion}`);
           return;

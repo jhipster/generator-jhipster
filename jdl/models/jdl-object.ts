@@ -20,7 +20,7 @@
 import JDLEnums from './jdl-enums.js';
 import JDLRelationships from './jdl-relationships.js';
 import JDLOptions from './jdl-options.js';
-import BinaryOptions from '../jhipster/binary-options.js';
+import { binaryOptions } from '../jhipster/index.mjs';
 import JDLEntity from './jdl-entity.js';
 
 /**
@@ -241,7 +241,7 @@ export default class JDLObject {
   }
 
   isEntityInMicroservice(entityName) {
-    const options = this.getOptionsForName(BinaryOptions.Options.MICROSERVICE);
+    const options = this.getOptionsForName(binaryOptions.Options.MICROSERVICE);
     return options.some(option => option.entityNames.has('*') || option.entityNames.has(entityName));
   }
 
