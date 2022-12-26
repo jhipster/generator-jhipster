@@ -41,8 +41,8 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
 import { writeFiles as writeEntityFiles, customizeFiles } from './entity-files.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
-import constants from '../generator-constants.cjs';
-import statistics from '../statistics.cjs';
+import constants from '../generator-constants.mjs';
+import statistics from '../statistics.mjs';
 import generatorDefaults from '../generator-defaults.mjs';
 
 import {

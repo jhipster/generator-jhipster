@@ -20,8 +20,8 @@ import _ from 'lodash';
 import chalk from 'chalk';
 import fs from 'fs';
 import { cleanupOldFiles } from './entity-cleanup.mjs';
-import utils from '../utils.cjs';
-import constants from '../generator-constants.cjs';
+import utils from '../utils.mjs';
+import constants from '../generator-constants.mjs';
 import { databaseTypes, searchEngineTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
 
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;

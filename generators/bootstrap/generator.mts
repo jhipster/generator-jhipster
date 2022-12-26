@@ -28,7 +28,7 @@ import type Environment from 'yeoman-environment';
 import BaseGenerator from '../base/index.mjs';
 import MultiStepTransform from './multi-step-transform/index.mjs';
 import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
 import type { PreConflictsTaskGroup } from '../base/tasks.mjs';

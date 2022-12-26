@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const needleServer = require('./needle-server.cjs');
-const constants = require('../../generator-constants.cjs');
+import chalk from 'chalk';
+import needleServer from './needle-server.cjs';
+import constants from '../../generator-constants.mjs';
 // const { CAFFEINE, EHCACHE, REDIS } = require('../../../jdl/jhipster/cache-types');
 const CAFFEINE = 'caffeine';
 const EHCACHE = 'ehcache';
@@ -26,7 +26,7 @@ const REDIS = 'redis';
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-module.exports = class extends needleServer {
+export default class extends needleServer {
   addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider) {
     const entityAbsoluteClass = entityClass.includes('.') ? entityClass : `${packageName}.domain.${entityClass}`;
     const entityClassNameGetter = `${entityAbsoluteClass}.class.getName()`;
@@ -61,4 +61,4 @@ module.exports = class extends needleServer {
     const rewriteFileModel = this.generateFileModel(cachePath, needle, content);
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
-};
+}

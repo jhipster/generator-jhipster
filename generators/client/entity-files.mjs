@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import utils from '../utils.cjs';
-import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
+import utils from '../utils.mjs';
+import constants from '../generator-constants.mjs';
 
+const { CLIENT_MAIN_SRC_DIR } = constants;
 const CLIENT_COMMON_TEMPLATES_DIR = 'entity/common';
 
 async function addEnumerationFiles({ application, entity }) {

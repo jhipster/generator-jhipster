@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import chalk from 'chalk';
 
-import * as oldConstants from '../generator-constants.cjs';
+import * as oldConstants from '../generator-constants.mjs';
 import * as newConstants from '../generator-constants.mjs';
 
 const deprecatedProperties = {

@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
-import utils from '../utils.cjs';
+import constants from '../generator-constants.mjs';
+import utils from '../utils.mjs';
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;

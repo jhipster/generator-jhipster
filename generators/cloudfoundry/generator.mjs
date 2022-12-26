@@ -24,8 +24,8 @@ import glob from 'glob';
 import BaseGenerator from '../base/index.mjs';
 
 import prompts from './prompts.mjs';
-import statistics from '../statistics.cjs';
-import constants from '../generator-constants.cjs';
+import statistics from '../statistics.mjs';
+import constants from '../generator-constants.mjs';
 import { GENERATOR_CLOUDFOUNDRY } from '../generator-list.mjs';
 import { cacheTypes, buildToolTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 

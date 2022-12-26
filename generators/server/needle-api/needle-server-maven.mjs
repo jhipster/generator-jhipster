@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const needleServer = require('./needle-server.cjs');
+import chalk from 'chalk';
+import needleServer from './needle-server.mjs';
 
 const pomPath = 'pom.xml';
 
-module.exports = class extends needleServer {
+export default class extends needleServer {
   addDependencyManagement(groupId, artifactId, version, type, scope, other) {
     const errorMessage = `${chalk.yellow('Reference to maven dependency ')}
             (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`;
@@ -199,4 +199,4 @@ module.exports = class extends needleServer {
 
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
-};
+}

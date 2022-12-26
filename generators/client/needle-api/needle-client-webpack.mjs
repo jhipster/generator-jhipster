@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const needleClient = require('./needle-client.cjs');
-const constants = require('../../generator-constants.cjs');
+import needleClient from './needle-client.mjs';
+import constants from '../../generator-constants.mjs';
 
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const SUPPORTED_CLIENT_FRAMEWORKS = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
-module.exports = class extends needleClient {
+export default class extends needleClient {
   _getWebpackFile(clientFramework = this.clientFramework) {
     return this.clientFramework === SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR
       ? `${CLIENT_WEBPACK_DIR}/webpack.custom.js`
@@ -50,4 +50,4 @@ module.exports = class extends needleClient {
     rewriteFileModel.prettierAware = true;
     this.addBlockContentToFile(rewriteFileModel, 'Webpack config not added to JHipster app.\n');
   }
-};
+}

@@ -25,10 +25,10 @@ const AWS_SERVICE_ARN = suffix => `arn:aws:iam::aws:policy/service-role/${suffix
 let aws;
 let log;
 
-const Iam = (module.exports = function Iam(Aws, generator) {
+const Iam = function Iam(Aws, generator) {
   aws = Aws;
   log = generator.log;
-});
+};
 
 const createRole = (RoleName, Description, AssumeRolePolicyDocument) => {
   const iam = new aws.IAM();
@@ -219,3 +219,4 @@ Iam.prototype.verifyRoles = function verifyRoles(params, callback) {
       );
     });
 };
+export default Iam;

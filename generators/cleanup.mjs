@@ -18,7 +18,7 @@
  */
 
 import { ANGULAR, REACT, VUE } from '../jdl/jhipster/client-framework-types.js';
-import constants from './generator-constants.cjs';
+import constants from './generator-constants.mjs';
 import { languageSnakeCase, languageToJavaLanguage } from './languages/utils.mjs';
 
 export { cleanupOldServerFiles } from './server/cleanup.mjs';

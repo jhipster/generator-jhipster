@@ -9,7 +9,7 @@ import Generator from './index.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 
 const { snakeCase } = lodash;
 

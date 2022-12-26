@@ -1,7 +1,7 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import ServerGenerator from '../../generators/server/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import constants from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;

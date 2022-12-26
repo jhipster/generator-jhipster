@@ -2,7 +2,7 @@ import type { RunResult } from 'yeoman-test';
 import type BaseApplicationGenerator from '../../base-application/index.mjs';
 import type { SpringBootApplication } from '../../server/types.mjs';
 
-import constants from '../../generator-constants.cjs';
+import constants from '../../generator-constants.mjs';
 import { matchWrittenConfig, matchWrittenFiles } from '../../../test/support/matcher.mjs';
 
 const { SERVER_MAIN_SRC_DIR, DOCKER_DIR } = constants;

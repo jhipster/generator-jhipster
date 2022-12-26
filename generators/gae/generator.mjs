@@ -26,9 +26,9 @@ import _ from 'lodash';
 import BaseGenerator from '../base/index.mjs';
 
 import { GENERATOR_GAE } from '../generator-list.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import dockerPrompts from '../base-docker/docker-prompts.mjs';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 import { applicationTypes, buildToolTypes, cacheTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 
 const cacheProviders = cacheTypes;

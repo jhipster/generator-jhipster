@@ -20,8 +20,8 @@ import chalk from 'chalk';
 import BaseGenerator from '../base/index.mjs';
 
 import prompts from './prompts.mjs';
-import AwsFactory from './lib/aws.cjs';
-import statistics from '../statistics.cjs';
+import AwsFactory from './lib/aws.mjs';
+import statistics from '../statistics.mjs';
 import { GENERATOR_AWS } from '../generator-list.mjs';
 import { applicationOptions, databaseTypes } from '../../jdl/jhipster/index.mjs';
 

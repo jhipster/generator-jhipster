@@ -4,9 +4,10 @@ import assert from 'yeoman-assert';
 import Environment from 'yeoman-environment';
 
 import { dryRunHelpers as helpers } from '../support/helpers.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.mjs';
+import constants from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
 
+const { JHIPSTER_CONFIG_DIR } = constants;
 const { createEnv } = Environment;
 
 helpers.createEnv = createEnv;

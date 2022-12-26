@@ -21,8 +21,8 @@ import _ from 'lodash';
 
 import BaseGenerator from '../base/index.mjs';
 
-import constants from '../generator-constants.cjs';
-import statistics from '../statistics.cjs';
+import constants from '../generator-constants.mjs';
+import statistics from '../statistics.mjs';
 import { GENERATOR_SPRING_SERVICE } from '../generator-list.mjs';
 import { applicationOptions } from '../../jdl/jhipster/index.mjs';
 

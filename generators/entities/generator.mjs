@@ -18,9 +18,10 @@
  */
 import BaseGenerator from '../base/index.mjs';
 
-import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
+import constants from '../generator-constants.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_APP } from '../generator-list.mjs';
 
+const { JHIPSTER_CONFIG_DIR } = constants;
 export default class EntitiesGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });

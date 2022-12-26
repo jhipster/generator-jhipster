@@ -20,8 +20,9 @@ import _ from 'lodash';
 
 import BaseGenerator from '../base/index.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
+import constants from '../generator-constants.mjs';
 
+const { JHIPSTER_CONFIG_DIR } = constants;
 const {
   LOADING,
   PREPARING,

@@ -4,7 +4,7 @@ import helpers from 'yeoman-test';
 import fse from 'fs-extra';
 import { fileURLToPath } from 'url';
 import ServerGenerator from '../../generators/server/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import constants from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;

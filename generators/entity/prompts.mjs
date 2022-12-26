@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import fs from 'fs';
 import _ from 'lodash';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 import { reservedKeywords, databaseTypes, applicationTypes, entityOptions, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;

@@ -21,7 +21,7 @@ import fs from 'fs';
 import BaseApplication from '../base-application/index.mjs';
 import type { DefaultTaskGroup } from '../base-application/tasks.mjs';
 import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
 

@@ -22,9 +22,10 @@ import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
-import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
+import constants from '../generator-constants.mjs';
 import { GENERATOR_MAVEN } from '../generator-list.mjs';
 
+const { GENERATOR_JHIPSTER } = constants;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 

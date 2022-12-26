@@ -23,11 +23,11 @@ import { exec } from 'child_process';
 import chalk from 'chalk';
 import BaseGenerator from '../base/index.mjs';
 
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import generatorDefaults from '../generator-defaults.mjs';
 
 // Global constants
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 
 import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';

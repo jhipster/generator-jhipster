@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
 
-import utils from '../generators/utils.cjs';
+import utils from '../generators/utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

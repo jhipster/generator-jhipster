@@ -2,7 +2,7 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 
 import ClientGenerator from '../../generators/client/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import constants from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
 
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;

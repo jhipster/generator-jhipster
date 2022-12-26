@@ -22,7 +22,7 @@ import path from 'path';
 import semver from 'semver';
 
 import { packageJson as packagejs } from '../../lib/index.mjs';
-import generatorUtils from '../utils.cjs';
+import generatorUtils from '../utils.mjs';
 import JHipsterBaseGenerator from './generator-base.mjs';
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from '../../utils/blueprint.mjs';
 

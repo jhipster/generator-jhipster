@@ -32,7 +32,7 @@ import SUB_GENERATORS from './commands.mjs';
 import JHipsterCommand from './jhipster-command.mjs';
 import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
 import { packageJson } from '../lib/index.mjs';
-import generatorUtils from '../generators/utils.cjs';
+import generatorUtils from '../generators/utils.mjs';
 
 const { packageNameToNamespace } = generatorUtils;
 const __filename = fileURLToPath(import.meta.url);

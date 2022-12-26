@@ -4,11 +4,11 @@ import sinon from 'sinon';
 import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 
-import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
+import constants from '../../generators/generator-constants.mjs';
 import { skipPrettierHelpers as helpers } from './helpers.mjs';
-import priorities from '../../generators/base-application/priorities.cjs';
+import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.mjs';
 
-const { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } = priorities;
+const { GENERATOR_JHIPSTER } = constants;
 
 const {
   CONFIGURING_EACH_ENTITY,

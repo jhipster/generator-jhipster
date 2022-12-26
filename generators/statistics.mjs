@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { v4: uuid } = require('uuid');
-const Config = require('conf');
-const osLocale = require('os-locale');
-const axios = require('axios');
-const os = require('os');
-const Insight = require('insight');
-const { packageJson: packagejs } = require('../lib/index.cjs');
+import { v4 as uuid } from 'uuid';
+import Config from 'conf';
+import osLocale from 'os-locale';
+import axios from 'axios';
+import os from 'os';
+import Insight from 'insight';
+import { packageJson as packagejs } from '../lib/index.cjs';
 
 const DO_NOT_ASK_LIMIT = 100;
 
@@ -243,4 +243,4 @@ function get() {
   return currentInstance;
 }
 
-module.exports = get();
+export default get();

@@ -36,8 +36,9 @@ import {
   searchEngineTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
-import { stringHashCode } from '../utils.cjs';
+import utils from '../utils.mjs';
 
+const { stringHashCode } = utils;
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
 const { EUREKA } = serviceDiscoveryTypes;

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 
 const { CLIENT_MAIN_SRC_DIR } = constants;
 

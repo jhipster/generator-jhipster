@@ -30,10 +30,9 @@ import { fileURLToPath } from 'url';
 
 import jhipster7Proxy from './jhipster7-proxy.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
-import jhipsterUtils from '../utils.cjs';
-import constants from '../generator-constants.cjs';
+import jhipsterUtils from '../utils.mjs';
 import PrivateBase from './generator-base-private.mjs';
-import NeedleApi from '../needle-api.cjs';
+import NeedleApi from '../needle-api.mjs';
 import generatorDefaults from '../generator-defaults.mjs';
 import commonOptions from './options.mjs';
 import detectLanguage from '../languages/detect-language.mjs';
@@ -58,7 +57,7 @@ import {
 import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
-import { NODE_VERSION } from '../generator-constants.mjs';
+import constants from '../generator-constants.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -74,6 +73,7 @@ const {
   SERVER_TEST_RES_DIR,
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
+  NODE_VERSION,
 } = constants;
 
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;

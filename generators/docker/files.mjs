@@ -1,4 +1,6 @@
-import { DOCKER_DIR } from '../generator-constants.mjs';
+import constants from '../generator-constants.mjs';
+
+const { DOCKER_DIR } = constants;
 
 // eslint-disable-next-line import/prefer-default-export
 export const dockerFiles = {

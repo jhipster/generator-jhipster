@@ -1,7 +1,7 @@
 import helpers from 'yeoman-test';
 
 import EnvironmentBuilder from '../cli/environment-builder.mjs';
-import constants from '../generators/generator-constants.cjs';
+import constants from '../generators/generator-constants.mjs';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;

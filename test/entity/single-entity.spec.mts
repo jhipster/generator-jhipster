@@ -2,11 +2,12 @@ import path from 'path';
 import fse from 'fs-extra';
 
 import { skipPrettierHelpers as helpers } from '../support/helpers.mjs';
-import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
+import constants from '../../generators/generator-constants.mjs';
 import createMockedConfig from '../support/mock-config.mjs';
 import { getTemplatePath, getEntityTemplatePath, getGenerator } from '../support/index.mjs';
 import BaseApplicationGenerator from '../../generators/base-application/generator.mjs';
 
+const { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
 const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
 
 class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {

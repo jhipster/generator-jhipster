@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const needleServer = require('./needle-server.cjs');
-const constants = require('../../generator-constants.cjs');
+import chalk from 'chalk';
+import needleServer from './needle-server.mjs';
+import constants from '../../generator-constants.mjs';
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
-module.exports = class extends needleServer {
+export default class extends needleServer {
   addlog(logName, level) {
     this.addlogToMaster(logName, level, 'jhipster-needle-logback-add-log');
   }
@@ -36,4 +36,4 @@ module.exports = class extends needleServer {
 
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
-};
+}

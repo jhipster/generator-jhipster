@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import ChildProcess from 'child_process';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import constants from '../generators/generator-constants.cjs';
+import constants from '../generators/generator-constants.mjs';
 import { getTemplatePath, getGenerator } from './support/index.mjs';
 
 const expectedFiles = {

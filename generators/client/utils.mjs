@@ -1,4 +1,6 @@
-import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
+import constants from '../generator-constants.mjs';
+
+const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } = constants;
 
 export const replaceEntityFilePath = (data, filepath) =>
   filepath

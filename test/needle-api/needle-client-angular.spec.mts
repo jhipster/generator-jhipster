@@ -3,7 +3,7 @@ import helpers from 'yeoman-test';
 import { getGenerator } from '../support/index.mjs';
 
 import ClientGenerator from '../../generators/client/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import constants from '../../generators/generator-constants.mjs';
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;

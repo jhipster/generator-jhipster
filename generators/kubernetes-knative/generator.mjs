@@ -36,7 +36,7 @@ import {
   setupHelmConstants,
   derivedKubernetesPlatformProperties,
 } from '../kubernetes/kubernetes-base.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 import { kubernetesPlatformTypes, buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;

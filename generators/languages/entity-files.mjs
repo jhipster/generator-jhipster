@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import utils from '../utils.cjs';
+import utils from '../utils.mjs';
 
 const { startCase } = _;
 

@@ -3,7 +3,7 @@ import helpers from 'yeoman-test';
 import fse from 'fs-extra';
 
 import LanguagesGenerator from '../../generators/languages/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import constants from '../../generators/generator-constants.mjs';
 import { getGenerator, getTemplatePath } from '../support/index.mjs';
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;

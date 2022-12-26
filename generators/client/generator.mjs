@@ -27,8 +27,8 @@ import { writeFiles as writeCommonFiles } from './files-common.mjs';
 
 import { writeEnumerationFiles } from './entity-files.mjs';
 
-import constants from '../generator-constants.cjs';
-import statistics from '../statistics.cjs';
+import constants from '../generator-constants.mjs';
+import statistics from '../statistics.mjs';
 import generatorDefaults from '../generator-defaults.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 

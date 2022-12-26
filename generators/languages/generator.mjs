@@ -21,19 +21,19 @@ import chalk from 'chalk';
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-
+import constants from '../generator-constants.mjs';
 import { askForLanguages, askI18n } from './prompts.mjs';
-import statistics from '../statistics.cjs';
-import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
+import statistics from '../statistics.mjs';
 
 import generatorDefaults from '../generator-defaults.mjs';
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import { clientI18nFiles } from './files.mjs';
 import { writeEntityFiles } from './entity-files.mjs';
 import { languageToJavaLanguage } from './utils.mjs';
-import jhipsterUtils from '../utils.cjs';
+import jhipsterUtils from '../utils.mjs';
 import TranslationData from './translation-data.mjs';
 
+const { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } = constants;
 const { translationDefaultConfig } = generatorDefaults;
 
 /**

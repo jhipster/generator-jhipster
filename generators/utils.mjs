@@ -18,32 +18,10 @@
  */
 /* eslint-disable no-console */
 
-const path = require('path');
-const ejs = require('ejs');
-const _ = require('lodash');
-const os = require('os');
-
-const constants = require('./generator-constants.cjs');
-
-module.exports = {
-  rewrite,
-  rewriteFile,
-  replaceContent,
-  renderContent,
-  deepFind,
-  escapeRegExp,
-  getJavadoc,
-  buildEnumInfo,
-  getEnumInfo,
-  checkStringInFile,
-  checkRegexInFile,
-  packageNameToNamespace,
-  stringHashCode,
-  vueAddPageToRouterImport,
-  vueAddPageToRouter,
-  vueAddPageServiceToMainImport,
-  vueAddPageServiceToMain,
-};
+import path from 'path';
+import ejs from 'ejs';
+import _ from 'lodash';
+import os from 'os';
 
 /**
  * Rewrite file with passed arguments
@@ -508,3 +486,24 @@ function vueAddPageServiceToMain(generator, { clientSrcDir, pageName, pageInstan
     generator
   );
 }
+
+const utils = {
+  rewrite,
+  rewriteFile,
+  replaceContent,
+  renderContent,
+  deepFind,
+  escapeRegExp,
+  getJavadoc,
+  buildEnumInfo,
+  getEnumInfo,
+  checkStringInFile,
+  checkRegexInFile,
+  packageNameToNamespace,
+  stringHashCode,
+  vueAddPageToRouterImport,
+  vueAddPageToRouter,
+  vueAddPageServiceToMainImport,
+  vueAddPageServiceToMain,
+};
+export default utils;

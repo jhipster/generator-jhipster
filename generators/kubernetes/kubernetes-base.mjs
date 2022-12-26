@@ -23,7 +23,7 @@ import chalk from 'chalk';
 import crypto from 'crypto';
 import { defaultKubernetesConfig } from './kubernetes-constants.mjs';
 import { loadFromYoRc } from '../base-docker/docker-base.mjs';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 import { applicationTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.mjs';
 
 const { MICROSERVICE } = applicationTypes;

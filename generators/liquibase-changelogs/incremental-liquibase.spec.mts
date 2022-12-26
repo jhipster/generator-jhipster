@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
 import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 import { createImporterFromContent } from '../../jdl/jdl-importer.js';
 
 const __filename = fileURLToPath(import.meta.url);

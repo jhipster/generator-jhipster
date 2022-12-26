@@ -22,7 +22,7 @@ import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { writeFiles, prettierConfigFiles } from './files.mjs';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.mjs';
 

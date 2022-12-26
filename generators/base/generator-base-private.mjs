@@ -28,8 +28,8 @@ import https from 'https';
 import { databaseTypes, buildToolTypes, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
 
 import { packageJson as packagejs } from '../../lib/index.mjs';
-import jhipsterUtils from '../utils.cjs';
-import generatorConstants from '../generator-constants.cjs';
+import jhipsterUtils from '../utils.mjs';
+import generatorConstants from '../generator-constants.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';

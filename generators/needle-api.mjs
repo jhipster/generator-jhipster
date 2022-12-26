@@ -16,20 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const Base = require('./needle-base.cjs');
-const Client = require('./client/needle-api/needle-client.cjs');
-const ClientAngular = require('./client/needle-api/needle-client-angular.cjs');
-const ClientReact = require('./client/needle-api/needle-client-react.cjs');
-const ClientVue = require('./client/needle-api/needle-client-vue.cjs');
-const ClientWebpack = require('./client/needle-api/needle-client-webpack.cjs');
-const ClientI18n = require('./client/needle-api/needle-client-i18n.cjs');
-const ServerMaven = require('./server/needle-api/needle-server-maven.cjs');
-const ServerGradle = require('./server/needle-api/needle-server-gradle.cjs');
-const ServerCache = require('./server/needle-api/needle-server-cache.cjs');
-const ServerLiquibase = require('./server/needle-api/needle-server-liquibase.cjs');
-const ServerLog = require('./server/needle-api/needle-server-logback-spring.cjs');
+import Base from './needle-base.mjs';
+import Client from './client/needle-api/needle-client.mjs';
+import ClientAngular from './client/needle-api/needle-client-angular.mjs';
+import ClientReact from './client/needle-api/needle-client-react.mjs';
+import ClientVue from './client/needle-api/needle-client-vue.mjs';
+import ClientWebpack from './client/needle-api/needle-client-webpack.mjs';
+import ClientI18n from './client/needle-api/needle-client-i18n.mjs';
+import ServerMaven from './server/needle-api/needle-server-maven.mjs';
+import ServerGradle from './server/needle-api/needle-server-gradle.mjs';
+import ServerCache from './server/needle-api/needle-server-cache.mjs';
+import ServerLiquibase from './server/needle-api/needle-server-liquibase.mjs';
+import ServerLog from './server/needle-api/needle-server-logback-spring.mjs';
 
-module.exports = class NeedleApi {
+export default class NeedleApi {
   constructor(generator) {
     this.base = new Base(generator);
     this.client = new Client(generator);
@@ -44,4 +44,4 @@ module.exports = class NeedleApi {
     this.serverGradle = new ServerGradle(generator);
     this.serverLog = new ServerLog(generator);
   }
-};
+}

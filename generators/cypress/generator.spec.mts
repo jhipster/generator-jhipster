@@ -27,7 +27,7 @@ import { fromMatrix, extendMatrix, AuthenticationTypeMatrix } from '../../test/s
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './generator.mjs';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 
 const { CYPRESS } = TestFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;

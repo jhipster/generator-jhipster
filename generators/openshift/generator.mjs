@@ -26,7 +26,7 @@ import prompts from './prompts.mjs';
 import { GENERATOR_OPENSHIFT } from '../generator-list.mjs';
 import { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } from '../base-docker/docker-base.mjs';
 import { setupKubernetesConstants } from '../kubernetes/kubernetes-base.mjs';
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 
 import {
   applicationTypes,

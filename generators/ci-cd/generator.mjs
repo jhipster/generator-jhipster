@@ -24,8 +24,8 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import generatorDefaults from '../generator-defaults.mjs';
 import prompts from './prompts.mjs';
-import statistics from '../statistics.cjs';
-import constants from '../generator-constants.cjs';
+import statistics from '../statistics.mjs';
+import constants from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { REACT } from '../../jdl/jhipster/client-framework-types.js';

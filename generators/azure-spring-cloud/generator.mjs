@@ -21,9 +21,9 @@ import { exec } from 'child_process';
 import chalk from 'chalk';
 import BaseGenerator from '../base/index.mjs';
 
-import statistics from '../statistics.cjs';
+import statistics from '../statistics.mjs';
 
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 
 import { cacheTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_AZURE_SPRING_CLOUD } from '../generator-list.mjs';

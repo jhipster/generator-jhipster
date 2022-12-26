@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { cleanupOldServerFiles } from './cleanup.mjs';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 import { addSectionsCondition, mergeSections } from './utils.mjs';
 import { writeSqlFiles } from './files-sql.mjs';
 
@@ -1521,7 +1521,7 @@ export const serverFiles = mergeSections(
 );
 
 /**
- * @this {import('./index.cjs')}
+ * @this {import('./index.mjs')}
  */
 export function writeFiles() {
   return this.asWritingTaskGroup({

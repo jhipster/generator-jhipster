@@ -18,9 +18,9 @@
  */
 let aws;
 
-const Rds = (module.exports = function Rds(Aws) {
+const Rds = function Rds(Aws) {
   aws = Aws;
-});
+};
 
 Rds.prototype.createDatabase = function createDatabase(params, callback) {
   const dbInstanceClass = params.dbInstanceClass;
@@ -148,3 +148,4 @@ function createDbInstance(params, callback) {
     }
   });
 }
+export default Rds;

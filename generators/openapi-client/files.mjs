@@ -20,7 +20,7 @@
 import path from 'path';
 import _ from 'lodash';
 import chalk from 'chalk';
-import constants from '../generator-constants.cjs';
+import constants from '../generator-constants.mjs';
 import { applicationOptions, buildToolTypes, applicationTypes, authenticationTypes } from '../../jdl/jhipster/index.mjs';
 
 const { OptionNames } = applicationOptions;
