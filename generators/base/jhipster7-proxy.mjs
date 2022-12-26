@@ -90,9 +90,6 @@ const getProperty = (context, prop) => {
       )}.`
     );
   }
-  if (prop in oldConstants && !(prop in newConstants)) {
-    console.log(`Template data ${chalk.yellow(String(prop))} is deprecated but a replacement is not yet added.`);
-  }
   const { generator, data } = context;
   if (prop in data) {
     return data[prop];
