@@ -147,9 +147,6 @@ export function getConfigForGatewayApplication(customOptions: any = {}): any {
   if (options[AUTHENTICATION_TYPE] === OAUTH2) {
     options[SKIP_USER_MANAGEMENT] = true;
   }
-  if (options[SERVICE_DISCOVERY_TYPE] === NO_SERVICE_DISCOVERY) {
-    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
-  }
   options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   options[ENABLE_HIBERNATE_CACHE] = false;
   return {
@@ -181,9 +178,6 @@ export function getConfigForMicroserviceApplication(customOptions: any = {}): an
   delete options[WITH_ADMIN_UI];
   if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
     options[SKIP_USER_MANAGEMENT] = true;
-  }
-  if (options[SERVICE_DISCOVERY_TYPE] === NO_SERVICE_DISCOVERY) {
-    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
   }
   return {
     ...options,

@@ -160,8 +160,8 @@ describe('DefaultApplicationOptions', () => {
         }).serviceDiscoveryType;
       });
 
-      it('should set it to eureka', () => {
-        expect(serviceDiscoveryTypeOption).to.be.equal('eureka');
+      it('should set it to no', () => {
+        expect(serviceDiscoveryTypeOption).to.be.equal('no');
       });
     });
     context('when passing a custom client theme and no variant', () => {
@@ -255,8 +255,8 @@ describe('DefaultApplicationOptions', () => {
         }).serviceDiscoveryType;
       });
 
-      it('should set it to eureka', () => {
-        expect(serviceDiscoveryTypeOption).to.equal('eureka');
+      it('should set it to no', () => {
+        expect(serviceDiscoveryTypeOption).to.equal('no');
       });
     });
     context('when the user management skipping option is not a boolean', () => {

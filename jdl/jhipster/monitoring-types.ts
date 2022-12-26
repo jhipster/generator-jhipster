@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const MonitoringTypes = {
+const monitoringTypes = {
   PROMETHEUS: 'prometheus',
   ELK: 'elk',
   NO: 'no',

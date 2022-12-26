@@ -193,7 +193,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${this.adminPassword}`);
           }
 
-          let hasNoServiceDiscovery = !this.serviceDiscoveryType && this.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
+          const hasNoServiceDiscovery = !this.serviceDiscoveryType && this.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
           if (hasNoServiceDiscovery && appConfig.skipClient) {
             yamlConfig.environment.push('SERVER_PORT=80'); // to simplify service resolution in docker/k8s
           }
