@@ -2409,6 +2409,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
   }
 
+  loadServerAndPlatformConfig(dest = this) {
+    if (!dest.serviceDiscoveryType) {
+      dest.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
+    }
+    dest.serviceDiscoveryAny = dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
+    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
+    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
+  }
+
   /**
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
@@ -2420,20 +2429,24 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.javaPackageSrcDir = normalizePathEnd(`${dest.srcMainJava}${dest.packageFolder}`);
     dest.javaPackageTestDir = normalizePathEnd(`${dest.srcTestJava}${dest.packageFolder}`);
 
-    if (!dest.serviceDiscoveryType) {
-      dest.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
-    }
     if (!dest.websocket) {
       dest.websocket = NO_WEBSOCKET;
     }
+    dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
+
     if (!dest.searchEngine) {
       dest.searchEngine = NO_SEARCH_ENGINE;
     }
+    dest.searchEngineNo = dest.searchEngine === NO_SEARCH_ENGINE;
+    dest.searchEngineAny = !dest.searchEngineNo;
+    dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
+    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
+
     if (!dest.messageBroker) {
       dest.messageBroker = NO_MESSAGE_BROKER;
     }
+    dest.messageBrokerKafka = dest.messageBroker === KAFKA;
 
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
     dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
@@ -2479,19 +2492,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.enableLiquibase = dest.databaseTypeSql;
 
-    dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
-
-    dest.messageBrokerKafka = dest.messageBroker === KAFKA;
-
-    dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
-    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
-    dest.searchEngineAny = dest.searchEngine !== NO_SEARCH_ENGINE;
-    dest.searchEngineNo = !dest.searchEngine || dest.searchEngine === NO_SEARCH_ENGINE;
-
-    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
-
     if (dest.databaseType === NO_DATABASE) {
       // User management requires a database.
       dest.generateUserManagement = false;
@@ -2504,6 +2504,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
 
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
+    this.loadServerAndPlatformConfig(dest);
   }
 
   /**
@@ -2521,11 +2522,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
   loadDerivedPlatformConfig(dest = this) {
-    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     dest.monitoringELK = dest.monitoring === ELK;
     dest.monitoringPrometheus = dest.monitoring === PROMETHEUS;
+    this.loadServerAndPlatformConfig(dest);
   }
 
   /**
