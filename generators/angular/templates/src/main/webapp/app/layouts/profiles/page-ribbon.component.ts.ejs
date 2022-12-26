@@ -20,9 +20,11 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import SharedModule from 'app/shared/shared.module';
 import { ProfileService } from './profile.service';
 
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-page-ribbon',
   template: `
     <div class="ribbon" *ngIf="ribbonEnv$ | async as ribbonEnv">
@@ -30,8 +32,9 @@ import { ProfileService } from './profile.service';
     </div>
   `,
   styleUrls: ['./page-ribbon.component.scss'],
+  imports: [SharedModule],
 })
-export class PageRibbonComponent implements OnInit {
+export default class PageRibbonComponent implements OnInit {
   ribbonEnv$?: Observable<string | undefined>;
 
   constructor(private profileService: ProfileService) {}

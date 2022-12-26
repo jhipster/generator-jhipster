@@ -33,12 +33,21 @@ import { Component, OnInit } from '@angular/core';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
-import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, switchMap, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 
+import SharedModule from 'app/shared/shared.module';
+import { SortDirective, SortByDirective } from 'app/shared/sort';
+import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+<%_ if (paginationPagination) { _%>
+import { ItemCountComponent } from 'app/shared/pagination';
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+import { FormsModule } from '@angular/forms';
+<%_ } _%>
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (!paginationNo) { %>
 import {
@@ -71,15 +80,40 @@ import { DataUtils } from 'app/core/util/data-util.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-import { FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter/filter.model';
+import { FilterComponent, FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter';
 <%_ } _%>
 <%_ if (paginationNo) { _%>
 import { SortService } from 'app/shared/sort/sort.service';
 <%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+<%_ } _%>
 
 @Component({
+    standalone: true,
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
-    templateUrl: './<%= entityFileName %>.component.html'
+    templateUrl: './<%= entityFileName %>.component.html',
+    imports: [
+      RouterModule,
+<%_ if (searchEngine) { _%>
+      FormsModule,
+<%_ } _%>
+      SharedModule,
+      SortDirective,
+      SortByDirective,
+      DurationPipe,
+      FormatMediumDatetimePipe,
+      FormatMediumDatePipe,
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      FilterComponent,
+<%_ } _%>
+<%_ if (paginationPagination) { _%>
+      ItemCountComponent,
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+      InfiniteScrollModule,
+<%_ } _%>
+    ],
 })
 export class <%= componentName %> implements OnInit {
 

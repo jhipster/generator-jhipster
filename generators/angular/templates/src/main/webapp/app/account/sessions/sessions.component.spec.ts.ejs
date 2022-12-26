@@ -26,7 +26,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 
 import { Session } from './session.model';
-import { SessionsComponent } from './sessions.component';
+import SessionsComponent from './sessions.component';
 import { SessionsService } from './sessions.service';
 
 describe('SessionsComponent', () => {
@@ -46,8 +46,7 @@ describe('SessionsComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [SessionsComponent],
+      imports: [HttpClientTestingModule, SessionsComponent],
       providers: [AccountService],
     })
       .overrideTemplate(SessionsComponent, '')

@@ -33,7 +33,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginService } from 'app/login/login.service';
 
-import { NavbarComponent } from './navbar.component';
+import NavbarComponent from './navbar.component';
 
 describe('Navbar Component', () => {
   let comp: NavbarComponent;
@@ -55,14 +55,14 @@ describe('Navbar Component', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         imports: [
+          NavbarComponent,
           HttpClientTestingModule,
           RouterTestingModule.withRoutes([]),
 <%_ if (enableTranslation) { _%>
           TranslateModule.forRoot(),
 <%_ } _%>
-          NgxWebstorageModule.forRoot()
+          NgxWebstorageModule.forRoot(),
         ],
-        declarations: [NavbarComponent],
         providers: [LoginService],
       })
         .overrideTemplate(NavbarComponent, '')
@@ -73,6 +73,9 @@ describe('Navbar Component', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NavbarComponent);
     comp = fixture.componentInstance;
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+    comp.loadMicrofrontendsEntities = jest.fn();
+<%_ } _%>
     accountService = TestBed.inject(AccountService);
     profileService = TestBed.inject(ProfileService);
   });

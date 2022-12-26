@@ -29,7 +29,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 
-import { SettingsComponent } from './settings.component';
+import SettingsComponent from './settings.component';
 
 describe('SettingsComponent', () => {
   let comp: SettingsComponent;
@@ -53,9 +53,9 @@ describe('SettingsComponent', () => {
 <%_ if (enableTranslation) { _%>
           TranslateModule.forRoot(),
 <%_ } _%>
-          HttpClientTestingModule
+          HttpClientTestingModule,
+          SettingsComponent,
         ],
-        declarations: [SettingsComponent],
         providers: [FormBuilder, AccountService],
       })
         .overrideTemplate(SettingsComponent, '')

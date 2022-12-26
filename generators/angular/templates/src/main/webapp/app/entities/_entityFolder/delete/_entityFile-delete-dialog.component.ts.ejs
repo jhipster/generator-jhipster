@@ -17,14 +17,18 @@
  limitations under the License.
 -%>
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+import SharedModule from 'app/shared/shared.module';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
-    templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
+    standalone: true,
+    templateUrl: './<%= entityFileName %>-delete-dialog.component.html',
+    imports: [SharedModule, FormsModule],
 })
 export class <%= entityAngularName %>DeleteDialogComponent {
     <%= entityInstance %>?: I<%= entityAngularName %>;

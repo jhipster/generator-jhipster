@@ -221,7 +221,7 @@ module.exports = class extends needleClientBase {
     const routingEntry = this.generator.stripMargin(
       `{
             |        path: '${route}',${pageTitleTemplate}
-            |        loadChildren: () => import('${modulePath}').then(m => m.${moduleName}),
+            |        loadChildren: () => import('${modulePath}')${moduleName ? `.then(m => m.${moduleName})` : ''},
             |      },`
     );
     const rewriteFileModel = this.generateFileModel(filePath, needleName, routingEntry);
@@ -235,12 +235,9 @@ module.exports = class extends needleClientBase {
       const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, `path: '${entityUrl}'`, this.generator);
 
       if (!isSpecificEntityAlreadyGenerated) {
-        const modulePath = `./${entityFolderName}/${entityFileName}.module`;
-        const moduleName = microserviceName
-          ? `${this.generator.upperFirstCamelCase(microserviceName)}${entityAngularName}Module`
-          : `${entityAngularName}Module`;
+        const modulePath = `./${entityFolderName}/${entityFileName}.routes`;
 
-        this._addRoute(entityUrl, modulePath, moduleName, 'jhipster-needle-add-entity-route', entityModulePath, pageTitle);
+        this._addRoute(entityUrl, modulePath, undefined, 'jhipster-needle-add-entity-route', entityModulePath, pageTitle);
       }
     } catch (e) {
       this.generator.debug('Error:', e);

@@ -16,12 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Route } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
-import { LogsComponent } from './logs.component';
+import SharedModule from 'app/shared/shared.module';
+import MainComponent from './main.component';
+import FooterComponent from '../footer/footer.component';
+import PageRibbonComponent from '../profiles/page-ribbon.component';
 
-export const logsRoute: Route = {
-  path: '',
-  component: LogsComponent,
-  title: 'logs.title',
-};
+@NgModule({
+  imports: [
+    SharedModule,
+    RouterModule,
+    FooterComponent,
+    PageRibbonComponent,
+  ],
+  declarations: [MainComponent],
+})
+export default class MainModule {}

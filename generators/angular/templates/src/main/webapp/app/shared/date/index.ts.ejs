@@ -16,12 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Route } from '@angular/router';
-
-import { NavbarComponent } from './navbar.component';
-
-export const navbarRoute: Route = {
-  path: '',
-  component: NavbarComponent,
-  outlet: 'navbar',
-};
+export { default as DurationPipe } from './duration.pipe';
+export { default as FormatMediumDatePipe } from './format-medium-date.pipe';
+export { default as FormatMediumDatetimePipe } from './format-medium-datetime.pipe';

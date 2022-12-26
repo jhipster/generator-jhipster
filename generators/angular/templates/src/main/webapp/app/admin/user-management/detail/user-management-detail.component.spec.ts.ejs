@@ -26,7 +26,7 @@ import { of } from 'rxjs';
 import { Authority } from 'app/config/authority.constants';
 import { User } from '../user-management.model';
 
-import { UserManagementDetailComponent } from './user-management-detail.component';
+import UserManagementDetailComponent from './user-management-detail.component';
 
 describe('User Management Detail Component', () => {
   let comp: UserManagementDetailComponent;
@@ -35,7 +35,7 @@ describe('User Management Detail Component', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [UserManagementDetailComponent],
+        imports: [UserManagementDetailComponent],
         providers: [
           {
             provide: ActivatedRoute,

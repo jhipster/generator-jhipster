@@ -2,9 +2,6 @@
 
 exports[`JHipster application generator with scoped blueprint generate monolith application with scoped blueprint creates expected default files for server and angular 1`] = `
 Object {
-  ".browserslistrc": Object {
-    "stateCleared": "modified",
-  },
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
   },
@@ -377,9 +374,6 @@ Object {
   "src/main/webapp/WEB-INF/web.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/account/account.module.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/account/account.route.ts": Object {
     "stateCleared": "modified",
   },
@@ -515,12 +509,6 @@ Object {
   "src/main/webapp/app/admin/configuration/configuration.model.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/configuration/configuration.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/configuration/configuration.route.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/configuration/configuration.service.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -536,12 +524,6 @@ Object {
   "src/main/webapp/app/admin/docs/docs.component.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/docs/docs.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/docs/docs.route.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/health/health.component.html": Object {
     "stateCleared": "modified",
   },
@@ -552,12 +534,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/health/health.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/health/health.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/health/health.route.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/health/health.service.spec.ts": Object {
@@ -585,12 +561,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/logs/logs.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/logs/logs.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/logs/logs.route.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/logs/logs.service.spec.ts": Object {
@@ -665,12 +635,6 @@ Object {
   "src/main/webapp/app/admin/metrics/metrics.model.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/metrics.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/metrics.route.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/metrics/metrics.service.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -720,9 +684,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/user-management/user-management.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/user-management/user-management.route.ts": Object {
@@ -878,12 +839,6 @@ Object {
   "src/main/webapp/app/home/home.component.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/home/home.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/home/home.route.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/layouts/error/error.component.html": Object {
     "stateCleared": "modified",
   },
@@ -908,7 +863,13 @@ Object {
   "src/main/webapp/app/layouts/main/main.component.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/layouts/main/main.module.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/layouts/navbar/active-menu.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/navbar/navbar-item.model.d.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/navbar/navbar.component.html": Object {
@@ -921,9 +882,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/navbar/navbar.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/layouts/navbar/navbar.route.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/profiles/page-ribbon.component.scss": Object {
@@ -951,12 +909,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/login/login.model.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/login/login.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/login/login.route.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/login/login.service.ts": Object {
@@ -1004,6 +956,9 @@ Object {
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/date/index.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/filter/filter.component.html": Object {
     "stateCleared": "modified",
   },
@@ -1016,7 +971,13 @@ Object {
   "src/main/webapp/app/shared/filter/filter.model.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/index.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/index.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.spec.ts": Object {
@@ -1028,16 +989,19 @@ Object {
   "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/pagination/index.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/shared-libs.module.ts": Object {
+  "src/main/webapp/app/shared/shared.module.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/shared.module.ts": Object {
+  "src/main/webapp/app/shared/sort/index.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sort-by.directive.spec.ts": Object {
@@ -1191,9 +1155,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/manifest.webapp": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/polyfills.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/robots.txt": Object {

@@ -44,7 +44,16 @@
             "outputPath": "<%= clientDistDir %>",
             "index": "<%= clientSrcDir %>index.html",
             "main": "<%= clientSrcDir %>main.ts",
-            "polyfills": "<%= clientSrcDir %>polyfills.ts",
+            "polyfills": [
+<%_ if (communicationSpringWebsocket) { _%>
+              "./<%= clientSrcDir %>sockjs-client.polyfill",
+<%_ } _%>
+<%_ if (microfrontend) { _%>
+              "zone.js/dist/zone"
+<%_ } else { _%>
+              "zone.js"
+<%_ } _%>
+            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [

@@ -62,7 +62,7 @@ Object {
   "src/main/webapp/app/entities/bar/bar.model.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/bar.module.ts": Object {
+  "src/main/webapp/app/entities/bar/bar.routes.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/bar.test-samples.ts": Object {
@@ -99,9 +99,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/bar/route/bar-routing.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/service/bar.service.spec.ts": Object {
@@ -146,7 +143,7 @@ Object {
   "src/main/webapp/app/entities/foo/foo.model.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/foo.module.ts": Object {
+  "src/main/webapp/app/entities/foo/foo.routes.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/foo.test-samples.ts": Object {
@@ -165,9 +162,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/foo/route/foo-routing.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/service/foo.service.spec.ts": Object {
@@ -224,9 +218,6 @@ Object {
   "src/main/webapp/app/entities/skip/route/skip-routing-resolve.service.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/route/skip-routing.module.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/skip/service/skip.service.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -236,7 +227,7 @@ Object {
   "src/main/webapp/app/entities/skip/skip.model.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/skip.module.ts": Object {
+  "src/main/webapp/app/entities/skip/skip.routes.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/skip/skip.test-samples.ts": Object {
@@ -349,7 +340,7 @@ Object {
   "src/main/webapp/app/entities/bar/bar.model.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/bar.module.ts": Object {
+  "src/main/webapp/app/entities/bar/bar.routes.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/bar.test-samples.ts": Object {
@@ -386,9 +377,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/bar/route/bar-routing.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/service/bar.service.spec.ts": Object {
@@ -433,7 +421,7 @@ Object {
   "src/main/webapp/app/entities/foo/foo.model.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/foo.module.ts": Object {
+  "src/main/webapp/app/entities/foo/foo.routes.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/foo.test-samples.ts": Object {
@@ -452,9 +440,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/foo/route/foo-routing.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/service/foo.service.spec.ts": Object {
@@ -511,9 +496,6 @@ Object {
   "src/main/webapp/app/entities/skip/route/skip-routing-resolve.service.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/route/skip-routing.module.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/skip/service/skip.service.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -523,7 +505,7 @@ Object {
   "src/main/webapp/app/entities/skip/skip.model.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/skip.module.ts": Object {
+  "src/main/webapp/app/entities/skip/skip.routes.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/skip/skip.test-samples.ts": Object {
@@ -621,7 +603,7 @@ Object {
   "src/main/webapp/app/entities/bar/bar.model.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/bar.module.ts": Object {
+  "src/main/webapp/app/entities/bar/bar.routes.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/bar.test-samples.ts": Object {
@@ -658,9 +640,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/bar/route/bar-routing.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/service/bar.service.spec.ts": Object {
@@ -705,7 +684,7 @@ Object {
   "src/main/webapp/app/entities/foo/foo.model.ts": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/foo.module.ts": Object {
+  "src/main/webapp/app/entities/foo/foo.routes.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/foo.test-samples.ts": Object {
@@ -724,9 +703,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/foo/route/foo-routing.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/service/foo.service.spec.ts": Object {

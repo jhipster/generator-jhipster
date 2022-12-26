@@ -32,7 +32,7 @@ import { UserManagementService } from '../service/user-management.service';
 import { User } from '../user-management.model';
 import { AccountService } from 'app/core/auth/account.service';
 
-import { UserManagementComponent } from './user-management.component';
+import UserManagementComponent from './user-management.component';
 
 describe('User Management Component', () => {
   let comp: UserManagementComponent;
@@ -53,8 +53,7 @@ describe('User Management Component', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-        declarations: [UserManagementComponent],
+        imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), UserManagementComponent],
         providers: [{ provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
       })
         .overrideTemplate(UserManagementComponent, '')

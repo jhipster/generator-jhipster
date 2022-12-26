@@ -16,12 +16,5 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Route } from '@angular/router';
-
-import { MetricsComponent } from './metrics.component';
-
-export const metricsRoute: Route = {
-  path: '',
-  component: MetricsComponent,
-  title: 'metrics.title',
-};
+export { default as SortDirective } from './sort.directive';
+export { default as SortByDirective } from './sort-by.directive';

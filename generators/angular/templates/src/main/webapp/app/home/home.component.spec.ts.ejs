@@ -34,7 +34,7 @@ import { Account } from 'app/core/auth/account.model';
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 
-import { HomeComponent } from './home.component';
+import HomeComponent from './home.component';
 
 describe('Home Component', () => {
   let comp: HomeComponent;
@@ -59,10 +59,12 @@ describe('Home Component', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
+        imports: [
+          HomeComponent,
 <%_ if (!authenticationTypeOauth2) { _%>
-        imports: [RouterTestingModule.withRoutes([])],
+          RouterTestingModule.withRoutes([]),
 <%_ } _%>
-        declarations: [HomeComponent],
+        ],
         providers: [
           AccountService,
 <%_ if (authenticationTypeOauth2) { _%>
