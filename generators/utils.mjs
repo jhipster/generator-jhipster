@@ -22,8 +22,9 @@ import path from 'path';
 import ejs from 'ejs';
 import _ from 'lodash';
 import os from 'os';
+import { javadoc } from 'server/support/index.mjs';
+import { databaseTypes } from '../jdl/jhipster/index.mjs';
 
-import { databaseTypes } from '../jdl/jhipster/index.mjs;
 const SQL = databaseTypes.SQL;
 
 /**
@@ -215,9 +216,6 @@ export function renderContent(source, generator, context, options, cb) {
 }
 
 /**
-=======
->>>>>>> bb43e7ed15 (templates methods extracted):generators/utils.cjs
->>>>>>> b1d671ccdd (templates methods extracted)
  *
  * @param obj object to find in
  * @param path path to traverse
@@ -254,7 +252,7 @@ export function getEnumInfo(field, clientRootFolder) {
   const customValuesState = getCustomValuesState(enums);
   return {
     enumName: fieldType,
-    javadoc: field.fieldTypeJavadoc && getJavadoc(field.fieldTypeJavadoc),
+    javadoc: field.fieldTypeJavadoc && javadoc(field.fieldTypeJavadoc),
     enumInstance: field.enumInstance,
     enums,
     ...customValuesState,
@@ -332,7 +330,7 @@ export function getEnums(enums, customValuesState, comments) {
     return enums.map(enumValue => ({
       name: enumValue,
       value: enumValue,
-      comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 4),
+      comment: comments && comments[enumValue] && javadoc(comments[enumValue], 4),
     }));
   }
   return enums.map(enumValue => {
@@ -340,7 +338,7 @@ export function getEnums(enums, customValuesState, comments) {
       return {
         name: enumValue.trim(),
         value: enumValue.trim(),
-        comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 4),
+        comment: comments && comments[enumValue] && javadoc(comments[enumValue], 4),
       };
     }
     // eslint-disable-next-line no-unused-vars
@@ -348,14 +346,16 @@ export function getEnums(enums, customValuesState, comments) {
     return {
       name: matched[1],
       value: matched[2],
-      comment: comments && comments[matched[1]] && getJavadoc(comments[matched[1]], 4),
+      comment: comments && comments[matched[1]] && javadoc(comments[matched[1]], 4),
     };
   });
 }
 
 export function doesTheEnumValueHaveACustomValue(enumValue) {
   return enumValue.includes('(');
-=======
+}
+
+/**
  * Get DB type from DB value
  * @param {string} db - db
  */
@@ -364,7 +364,6 @@ function getDBTypeFromDBValue(db) {
     return SQL;
   }
   return db;
->>>>>>> 3da36b5af1 (move some methods from utils to logic folder)
 }
 
 /**

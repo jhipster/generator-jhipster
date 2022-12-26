@@ -74,7 +74,7 @@ export async function writeEntityFiles({ application, entities }) {
 export async function postWriteEntityFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
     if (!entity.embedded) {
-      const { clientFramework, enableTranslation } = application;
+      const { enableTranslation } = application;
       const {
         entityInstance,
         entityClass,

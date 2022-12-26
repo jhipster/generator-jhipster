@@ -24,7 +24,6 @@ import chalk from 'chalk';
 import semver from 'semver';
 
 import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-
 import { packageJson } from '../../lib/index.mjs';
 import { databaseData } from '../sql/support/index.mjs';
 import { stringify } from '../../utils/index.mjs';
@@ -209,7 +208,7 @@ export default class PrivateBase extends Generator {
   render(source, callback, generator, options = {}, context) {
     const _this = generator || this;
     const _context = context || _this;
-    renderContent(source, _this, _context, options, res => {
+    jhipsterUtils.renderContent(source, _this, _context, options, res => {
       callback(res);
     });
   }
@@ -439,7 +438,7 @@ export default class PrivateBase extends Generator {
    * @param {string} db - db
    */
   getDBTypeFromDBValue(db) {
-    return getDBTypeFromDBValue(db);
+    return jhipsterUtils.getDBTypeFromDBValue(db);
   }
 
   /**

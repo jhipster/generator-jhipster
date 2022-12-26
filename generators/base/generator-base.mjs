@@ -1274,15 +1274,15 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       shelljs.exec(
         // prettier-ignore
         `"${keytoolPath}keytool" -genkey -noprompt `
-        + '-storetype PKCS12 '
-        + '-keyalg RSA '
-        + '-alias selfsigned '
-        + `-keystore "${keyStoreFile}" `
-        + '-storepass password '
-        + '-keypass password '
-        + '-keysize 2048 '
-        + '-validity 99999 '
-        + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
+                + '-storetype PKCS12 '
+                + '-keyalg RSA '
+                + '-alias selfsigned '
+                + `-keystore "${keyStoreFile}" `
+                + '-storepass password '
+                + '-keypass password '
+                + '-keysize 2048 '
+                + '-validity 99999 '
+                + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
         code => {
           if (code !== 0) {
             this.warning("\nFailed to create a KeyStore with 'keytool'", code);
