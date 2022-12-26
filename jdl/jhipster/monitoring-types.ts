@@ -23,4 +23,4 @@ const MonitoringTypes = {
   NO: 'no',
 };
 
-export default MonitoringTypes;
+export default monitoringTypes;
