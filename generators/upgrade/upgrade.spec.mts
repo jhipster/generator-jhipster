@@ -5,7 +5,7 @@ import fse from 'fs-extra';
 import { fileURLToPath } from 'url';
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import packageJson from '../../lib/index.mjs';
+import { packageJson } from '../../lib/index.mjs';
 import { prepareTempDir } from '../../test/support/temp-dir.mjs';
 import generatorUtils from '../utils.cjs';
 

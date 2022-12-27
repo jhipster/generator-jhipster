@@ -25,7 +25,7 @@ import gitOptions from '../git/options.mjs';
 import serverOptions from '../server/options.mjs';
 import { cleanupOldFiles, upgradeFiles } from '../cleanup.mjs';
 import prompts from './prompts.mjs';
-import packageJson from '../../lib/index.mjs';
+import { packageJson } from '../../lib/index.mjs';
 import statistics from '../statistics.cjs';
 import generatorDefaults from '../generator-defaults.mjs';
 import {

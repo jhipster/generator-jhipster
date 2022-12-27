@@ -44,7 +44,7 @@ import {
 
 import * as GENERATOR_LIST from '../generator-list.mjs';
 import { files, generatorFiles } from './files.mjs';
-import packageJson from '../../lib/index.mjs';
+import { packageJson } from '../../lib/index.mjs';
 import { SKIP_COMMIT_HOOK } from '../init/constants.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;

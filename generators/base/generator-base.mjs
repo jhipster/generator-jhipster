@@ -29,7 +29,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import jhipster7Proxy from './jhipster7-proxy.mjs';
-import packageJson from '../../lib/index.mjs';
+import { packageJson } from '../../lib/index.mjs';
 import jhipsterUtils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
 import PrivateBase from './generator-base-private.mjs';
@@ -204,12 +204,10 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     try {
       this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
     } catch (error) {
-      if (this.options.namespace) {
-        const split = this.options.namespace.split(':', 2);
-        this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
-      }
+      const split = this.options.namespace.split(':', 2);
+      this._jhipsterGenerator = split.length === 1 ? split[0] : split[1];
     }
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator ?? '', 'templates', ...args);
+    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
   }
 
   /**

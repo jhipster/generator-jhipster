@@ -17,6 +17,5 @@
       "relationshipType": "one-to-one"
     }
   ],
-  "searchEngine": "no",
   "service": "serviceImpl"
 }
