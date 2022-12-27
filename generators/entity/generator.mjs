@@ -23,7 +23,6 @@ import _ from 'lodash';
 import path from 'path';
 
 import BaseGenerator from '../base/index.mjs';
-
 import prompts from './prompts.mjs';
 import generatorDefaults from '../generator-defaults.mjs';
 import constants from '../generator-constants.mjs';
