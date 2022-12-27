@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import needleServer from './needle-server.cjs';
+import needleServer from './needle-server.mjs';
 
 const buildGradlePath = 'build.gradle';
 const gradleSettingsPath = 'settings.gradle';

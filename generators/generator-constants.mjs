@@ -17,24 +17,24 @@
  * limitations under the License.
  */
 // Version of Java
-const JAVA_VERSION = '17';
-const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19'];
+export const JAVA_VERSION = '17';
+export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19'];
 
 /**
  * Manually updated java dependencies
  * @type {Record<string,string>}
  */
-const javaDependencies = {};
+export const javaDependencies = {};
 Object.freeze(javaDependencies);
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-const ELATICSEARCH_TAG = '8.5.3';
-const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
+export const ELATICSEARCH_TAG = '8.5.3';
+export const ELATICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
  * Manually updated docker containers
  */
-const dockerContainers = {
+export const dockerContainers = {
   elasticsearchTag: ELATICSEARCH_TAG,
   elasticsearchImage: ELATICSEARCH_IMAGE,
   elasticsearch: `${ELATICSEARCH_IMAGE}:${ELATICSEARCH_TAG}`,
@@ -42,55 +42,49 @@ const dockerContainers = {
 Object.freeze(dockerContainers);
 
 // Version of Node, NPM
-const NODE_VERSION = '16.17.0';
-const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
+export const NODE_VERSION = '16.17.0';
+export const OPENAPI_GENERATOR_CLI_VERSION = '2.5.1';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
+export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '3.0.1';
-const SPRING_CLOUD_VERSION = '2022.0.0';
-const HIBERNATE_VERSION = '6.1.6.Final';
-const JACOCO_VERSION = '0.8.8';
-const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.4';
+export const SPRING_BOOT_VERSION = '3.0.1';
+export const SPRING_CLOUD_VERSION = '2022.0.0';
+export const HIBERNATE_VERSION = '6.1.6.Final';
+export const JACOCO_VERSION = '0.8.8';
+export const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.4';
 
 // Kubernetes versions
-const KUBERNETES_CORE_API_VERSION = 'v1';
-const KUBERNETES_BATCH_API_VERSION = 'batch/v1';
-const KUBERNETES_DEPLOYMENT_API_VERSION = 'apps/v1';
-const KUBERNETES_STATEFULSET_API_VERSION = 'apps/v1';
-const KUBERNETES_INGRESS_API_VERSION = 'networking.k8s.io/v1';
-const KUBERNETES_ISTIO_NETWORKING_API_VERSION = 'networking.istio.io/v1beta1';
-const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
+export const KUBERNETES_CORE_API_VERSION = 'v1';
+export const KUBERNETES_BATCH_API_VERSION = 'batch/v1';
+export const KUBERNETES_DEPLOYMENT_API_VERSION = 'apps/v1';
+export const KUBERNETES_STATEFULSET_API_VERSION = 'apps/v1';
+export const KUBERNETES_INGRESS_API_VERSION = 'networking.k8s.io/v1';
+export const KUBERNETES_ISTIO_NETWORKING_API_VERSION = 'networking.istio.io/v1beta1';
+export const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
 
 // Helm versions
-const HELM_KAFKA = '^0.20.1';
-const HELM_ELASTICSEARCH = '^1.32.0';
-const HELM_PROMETHEUS = '^9.2.0';
-const HELM_GRAFANA = '^4.0.0';
-const HELM_MYSQL = '^1.4.0';
-const HELM_MARIADB = '^6.12.2';
-const HELM_POSTGRESQL = '^6.5.3';
-const HELM_MOGODB_REPLICASET = '^3.10.1';
-const HELM_COUCHBASE_OPERATOR = '^2.2.1';
+export const HELM_KAFKA = '^0.20.1';
+export const HELM_ELASTICSEARCH = '^1.32.0';
+export const HELM_PROMETHEUS = '^9.2.0';
+export const HELM_GRAFANA = '^4.0.0';
+export const HELM_MYSQL = '^1.4.0';
+export const HELM_MARIADB = '^6.12.2';
+export const HELM_POSTGRESQL = '^6.5.3';
+export const HELM_MOGODB_REPLICASET = '^3.10.1';
+export const HELM_COUCHBASE_OPERATOR = '^2.2.1';
 
 // all constants used throughout all generators
 
-const LOGIN_REGEX = '^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$';
+export const LOGIN_REGEX = '^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$';
 // JS does not support atomic groups
-const LOGIN_REGEX_JS = '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$';
-
-const MAIN_DIR = 'src/main/';
-const TEST_DIR = 'src/test/';
-
-// Note: this will be prepended with 'target/classes' for Maven, or with 'build/resources/main' for Gradle.
-const CLIENT_DIST_DIR = 'static/';
+export const LOGIN_REGEX_JS = '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$';
 
 // documentation constants
-const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
-const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
+export const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
+export const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
-const LANGUAGES = [
+export const LANGUAGES = [
   {
     name: 'Albanian',
     dispName: 'Shqip',
@@ -222,75 +216,25 @@ const LANGUAGES = [
   },
   { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' },
 ];
+export const MAIN_DIR = 'src/main/';
+export const TEST_DIR = 'src/test/';
 
-const constants = {
-  GENERATOR_JHIPSTER: 'generator-jhipster',
-  JHIPSTER_CONFIG_DIR: '.jhipster',
-  DOCKER_DIR: `${MAIN_DIR}docker/`,
-  LINE_LENGTH: 180,
-  LANGUAGES,
+// Note: this will be prepended with 'target/classes' for Maven, or with 'build/resources/main' for Gradle.
+export const CLIENT_DIST_DIR = 'static/';
 
-  MAIN_DIR,
-  TEST_DIR,
+export const GENERATOR_JHIPSTER = 'generator-jhipster';
 
-  LOGIN_REGEX,
-  LOGIN_REGEX_JS,
-  // supported client frameworks
-  SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR: 'angular', REACT: 'react', VUE: 'vue' },
-
-  CLIENT_MAIN_SRC_DIR: `${MAIN_DIR}webapp/`,
-  CLIENT_TEST_SRC_DIR: `${TEST_DIR}javascript/`,
-  CLIENT_WEBPACK_DIR: 'webpack/',
-  CLIENT_DIST_DIR,
-  ANGULAR_DIR: `${MAIN_DIR}webapp/app/`,
-  REACT_DIR: `${MAIN_DIR}webapp/app/`,
-  VUE_DIR: `${MAIN_DIR}webapp/app/`,
-
-  SERVER_MAIN_SRC_DIR: `${MAIN_DIR}java/`,
-  SERVER_MAIN_RES_DIR: `${MAIN_DIR}resources/`,
-  SERVER_TEST_SRC_DIR: `${TEST_DIR}java/`,
-  SERVER_TEST_RES_DIR: `${TEST_DIR}resources/`,
-  PRETTIER_EXTENSIONS: 'md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,vue,svelte,java',
-
-  JHIPSTER_DOCUMENTATION_URL,
-  JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
-
-  JAVA_VERSION,
-  JAVA_COMPATIBLE_VERSIONS,
-
-  // NPM
-  NODE_VERSION,
-  OPENAPI_GENERATOR_CLI_VERSION,
-
-  // Libraries
-  JHIPSTER_DEPENDENCIES_VERSION,
-  SPRING_BOOT_VERSION,
-  SPRING_CLOUD_VERSION,
-  HIBERNATE_VERSION,
-  JACOCO_VERSION,
-  JACKSON_DATABIND_NULLABLE_VERSION,
-
-  // Kubernetes
-  KUBERNETES_CORE_API_VERSION,
-  KUBERNETES_BATCH_API_VERSION,
-  KUBERNETES_DEPLOYMENT_API_VERSION,
-  KUBERNETES_STATEFULSET_API_VERSION,
-  KUBERNETES_INGRESS_API_VERSION,
-  KUBERNETES_ISTIO_NETWORKING_API_VERSION,
-  KUBERNETES_RBAC_API_VERSION,
-
-  // Helm
-  HELM_KAFKA,
-  HELM_ELASTICSEARCH,
-  HELM_PROMETHEUS,
-  HELM_GRAFANA,
-  HELM_MYSQL,
-  HELM_MARIADB,
-  HELM_POSTGRESQL,
-  HELM_MOGODB_REPLICASET,
-  HELM_COUCHBASE_OPERATOR,
-
-  javaDependencies,
-  dockerContainers,
-};
-export default constants;
+export const JHIPSTER_CONFIG_DIR = '.jhipster';
+export const DOCKER_DIR = `${MAIN_DIR}docker/`;
+export const LINE_LENGTH = 180;
+export const CLIENT_MAIN_SRC_DIR = `${MAIN_DIR}webapp/`;
+export const CLIENT_TEST_SRC_DIR = `${TEST_DIR}javascript/`;
+export const CLIENT_WEBPACK_DIR = 'webpack/';
+export const ANGULAR_DIR = `${MAIN_DIR}webapp/app/`;
+export const REACT_DIR = `${MAIN_DIR}webapp/app/`;
+export const VUE_DIR = `${MAIN_DIR}webapp/app/`;
+export const SERVER_MAIN_SRC_DIR = `${MAIN_DIR}java/`;
+export const SERVER_MAIN_RES_DIR = `${MAIN_DIR}resources/`;
+export const SERVER_TEST_SRC_DIR = `${TEST_DIR}java/`;
+export const SERVER_TEST_RES_DIR = `${TEST_DIR}resources/`;
+export const PRETTIER_EXTENSIONS = 'md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,vue,svelte,java';

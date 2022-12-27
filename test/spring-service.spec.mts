@@ -1,10 +1,8 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import fse from 'fs-extra';
-import constants from '../generators/generator-constants.mjs';
+import { SERVER_MAIN_SRC_DIR } from '../generators/generator-constants.mjs';
 import { getGenerator, getTemplatePath } from './support/index.mjs';
-
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 const generator = getGenerator('spring-service');
 

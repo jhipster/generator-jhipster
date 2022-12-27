@@ -20,7 +20,7 @@ import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.mjs';
 
-import statistics from '../statistics.mjs';
+import statistics from '../statistics.cjs';
 import { GENERATOR_EXPORT_JDL } from '../generator-list.mjs';
 import applicationOptions from '../../jdl/jhipster/application-options.js';
 import JSONToJDLConverter from '../../jdl/converters/json-to-jdl-converter.js';

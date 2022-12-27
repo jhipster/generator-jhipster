@@ -28,15 +28,14 @@ import https from 'https';
 import { databaseTypes, buildToolTypes, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
 
 import { packageJson as packagejs } from '../../lib/index.mjs';
-import jhipsterUtils from '../utils.mjs';
-import generatorConstants from '../generator-constants.mjs';
+import { getJavadoc, renderContent } from '../utils.mjs';
+import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
 import { ANGULAR, REACT, VUE } from '../../jdl/jhipster/client-framework-types.js';
 import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
-const { JAVA_COMPATIBLE_VERSIONS } = generatorConstants;
 const dbTypes = fieldTypes;
 const { REQUIRED } = validations;
 
@@ -208,7 +207,7 @@ export default class PrivateBase extends Generator {
    * @returns class javadoc
    */
   formatAsClassJavadoc(text) {
-    return jhipsterUtils.getJavadoc(text, 0);
+    return getJavadoc(text, 0);
   }
 
   /**
@@ -219,7 +218,7 @@ export default class PrivateBase extends Generator {
    * @returns field javadoc
    */
   formatAsFieldJavadoc(text) {
-    return jhipsterUtils.getJavadoc(text, 4);
+    return getJavadoc(text, 4);
   }
 
   /**
@@ -429,8 +428,7 @@ export default class PrivateBase extends Generator {
       this.debug(`File ${destination} ignored`);
       return Promise.resolved();
     }
-    return jhipsterUtils
-      .renderContent(source, _this, _context, options)
+    return renderContent(source, _this, _context, options)
       .then(res => {
         _this.fs.write(customDestination, res);
         return customDestination;
@@ -454,7 +452,7 @@ export default class PrivateBase extends Generator {
   render(source, callback, generator, options = {}, context) {
     const _this = generator || this;
     const _context = context || _this;
-    jhipsterUtils.renderContent(source, _this, _context, options, res => {
+    renderContent(source, _this, _context, options, res => {
       callback(res);
     });
   }

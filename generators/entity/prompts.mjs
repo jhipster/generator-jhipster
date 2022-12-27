@@ -19,14 +19,21 @@
 import chalk from 'chalk';
 import fs from 'fs';
 import _ from 'lodash';
-import constants from '../generator-constants.mjs';
-import { reservedKeywords, databaseTypes, applicationTypes, entityOptions, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
+import {
+  reservedKeywords,
+  databaseTypes,
+  applicationTypes,
+  entityOptions,
+  fieldTypes,
+  validations,
+  clientFrameworkTypes,
+} from '../../jdl/jhipster/index.mjs';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
 const { CASSANDRA, SQL } = databaseTypes;
 const { GATEWAY } = applicationTypes;
 const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
-
+const { ANGULAR, REACT } = clientFrameworkTypes;
 const { JPA_METAMODEL } = FilteringTypes;
 const NO_FILTERING = FilteringTypes.NO;
 const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
@@ -37,9 +44,6 @@ const { MAPSTRUCT } = MapperTypes;
 const NO_MAPPER = MapperTypes.NO;
 
 const NO_DATABASE = databaseTypes.NO;
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
 
 const { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, ENUM, FLOAT, INTEGER, INSTANT, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME } =

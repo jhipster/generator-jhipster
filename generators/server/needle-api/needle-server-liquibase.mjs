@@ -18,9 +18,7 @@
  */
 import chalk from 'chalk';
 import needleServer from './needle-server.mjs';
-import constants from '../../generator-constants.mjs';
-
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+import { SERVER_MAIN_RES_DIR } from '../../generator-constants.mjs';
 
 export default class extends needleServer {
   addChangelog(changelogName) {

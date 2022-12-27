@@ -17,14 +17,12 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import needleServer from './needle-server.cjs';
-import constants from '../../generator-constants.mjs';
+import needleServer from './needle-server.mjs';
+import { SERVER_MAIN_SRC_DIR } from '../../generator-constants.mjs';
 // const { CAFFEINE, EHCACHE, REDIS } = require('../../../jdl/jhipster/cache-types');
 const CAFFEINE = 'caffeine';
 const EHCACHE = 'ehcache';
 const REDIS = 'redis';
-
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 export default class extends needleServer {
   addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider) {

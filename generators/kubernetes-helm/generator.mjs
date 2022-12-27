@@ -35,7 +35,7 @@ import {
   setupHelmConstants,
   derivedKubernetesPlatformProperties,
 } from '../kubernetes/kubernetes-base.mjs';
-import statistics from '../statistics.mjs';
+import statistics from '../statistics.cjs';
 import { messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
 
 const { KAFKA } = messageBrokerTypes;

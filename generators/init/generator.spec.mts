@@ -23,10 +23,9 @@ import { fileURLToPath } from 'url';
 import { basicTests, testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { defaultConfig, requiredConfig } from './config.mjs';
-import constants from '../generator-constants.mjs';
+import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import { GENERATOR_INIT } from '../generator-list.mjs';
 
-const { GENERATOR_JHIPSTER } = constants;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 

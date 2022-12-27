@@ -28,7 +28,7 @@ import os from 'os';
  * @param {object} args argument object (containing path, file, haystack, etc properties)
  * @param {object} generator reference to the generator
  */
-function rewriteFile(args, generator) {
+export function rewriteFile(args, generator) {
   const { path: rewritePath, file } = args;
   let fullPath;
   if (rewritePath) {
@@ -51,7 +51,7 @@ function rewriteFile(args, generator) {
  * @param {object} args argument object
  * @param {object} generator reference to the generator
  */
-function replaceContent(args, generator) {
+export function replaceContent(args, generator) {
   let fullPath = generator.destinationPath(args.file);
   if (!generator.env.sharedFs.existsInMemory(fullPath) && generator.env.sharedFs.existsInMemory(`${fullPath}.jhi`)) {
     fullPath = `${fullPath}.jhi`;
@@ -71,7 +71,7 @@ function replaceContent(args, generator) {
  * @param {string} str string
  * @returns {string} string with regular expressions escaped
  */
-function escapeRegExp(str) {
+export function escapeRegExp(str) {
   return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'); // eslint-disable-line
 }
 
@@ -83,7 +83,7 @@ function escapeRegExp(str) {
  * @param {string} str string
  * @returns {string} string where CRLF is replaced with LF in Windows
  */
-function normalizeWindowsLineEndings(str) {
+export function normalizeWindowsLineEndings(str) {
   const isWin32 = os.platform() === 'win32';
   return isWin32 ? str.replace(/\r\n/g, '\n') : str;
 }
@@ -94,7 +94,7 @@ function normalizeWindowsLineEndings(str) {
  * @param {string} str string
  * @returns {string} string where CRLF is replaced with LF in Windows
  */
-function convertToPrettierExpressions(str) {
+export function convertToPrettierExpressions(str) {
   return str.replace(/\s+/g, '([\\s\n]*)').replace(/>+/g, '(\n?[\\s]*)>');
 }
 
@@ -110,7 +110,7 @@ function convertToPrettierExpressions(str) {
  * @param {string} [args.file]            - file path for logging purposes
  * @returns {string} re-written content
  */
-function rewrite(args) {
+export function rewrite(args) {
   // check if splicable is already in the body text
   let re;
   if (args.regexp) {
@@ -173,7 +173,7 @@ function rewrite(args) {
  * @param {function} [cb] callback function
  * @return {Promise<String>} Promise rendered content
  */
-function renderContent(source, generator, context, options, cb) {
+export function renderContent(source, generator, context, options, cb) {
   options = {
     root: options.root || generator.jhipsterTemplatesFolders || generator.templatePath(),
     context: generator,
@@ -207,7 +207,7 @@ function renderContent(source, generator, context, options, cb) {
  * @param path path to traverse
  * @param placeholder placeholder
  */
-function deepFind(obj, path, placeholder) {
+export function deepFind(obj, path, placeholder) {
   const paths = path.split('.');
   let current = obj;
   if (placeholder) {
@@ -231,7 +231,7 @@ function deepFind(obj, path, placeholder) {
  * @param {number} indentSize indent size (default 0)
  * @returns javadoc formatted string
  */
-function getJavadoc(text, indentSize = 0) {
+export function getJavadoc(text, indentSize = 0) {
   if (!text) {
     text = '';
   }
@@ -253,7 +253,7 @@ function getJavadoc(text, indentSize = 0) {
  * @param {String} clientRootFolder - the client's root folder
  * @return {Object} the enum info.
  */
-function getEnumInfo(field, clientRootFolder) {
+export function getEnumInfo(field, clientRootFolder) {
   const fieldType = field.fieldType;
   // Todo: check if the next line does a side-effect and refactor it.
   field.enumInstance = _.lowerFirst(fieldType);
@@ -278,7 +278,7 @@ function getEnumInfo(field, clientRootFolder) {
  * @param {string} packageName
  * @param {string} clientRootFolder
  */
-function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
+export function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
   const fieldType = field.fieldType;
   field.enumInstance = _.lowerFirst(fieldType);
   const enums = field.fieldValues.replace(/\s/g, '').split(',');
@@ -301,7 +301,7 @@ function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
  * @param enums
  * @return {*}
  */
-function getEnumsWithCustomValue(enums) {
+export function getEnumsWithCustomValue(enums) {
   return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
     if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
       const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
@@ -315,7 +315,7 @@ function getEnumsWithCustomValue(enums) {
   }, []);
 }
 
-function getCustomValuesState(enumValues) {
+export function getCustomValuesState(enumValues) {
   const state = {
     withoutCustomValue: 0,
     withCustomValue: 0,
@@ -334,7 +334,7 @@ function getCustomValuesState(enumValues) {
   };
 }
 
-function getEnums(enums, customValuesState, comments) {
+export function getEnums(enums, customValuesState, comments) {
   if (customValuesState.withoutCustomValues) {
     return enums.map(enumValue => ({
       name: enumValue,
@@ -360,7 +360,7 @@ function getEnums(enums, customValuesState, comments) {
   });
 }
 
-function doesTheEnumValueHaveACustomValue(enumValue) {
+export function doesTheEnumValueHaveACustomValue(enumValue) {
   return enumValue.includes('(');
 }
 
@@ -371,7 +371,7 @@ function doesTheEnumValueHaveACustomValue(enumValue) {
  * @param {object} generator reference to generator
  * @returns {boolean} true if string is in file, false otherwise
  */
-function checkStringInFile(path, search, generator) {
+export function checkStringInFile(path, search, generator) {
   const fileContent = generator.fs.read(generator.destinationPath(path));
   return fileContent.includes(search);
 }
@@ -383,7 +383,7 @@ function checkStringInFile(path, search, generator) {
  * @param {object} generator reference to generator
  * @returns {boolean} true if regex is matched in file, false otherwise
  */
-function checkRegexInFile(path, regex, generator) {
+export function checkRegexInFile(path, regex, generator) {
   const fileContent = generator.fs.read(generator.destinationPath(path));
   return fileContent.match(regex);
 }
@@ -393,7 +393,7 @@ function checkRegexInFile(path, regex, generator) {
  * @param {string} packageName - name of the blueprint's package name
  * @returns {string} namespace of the blueprint
  */
-function packageNameToNamespace(packageName) {
+export function packageNameToNamespace(packageName) {
   return packageName.replace('generator-', '');
 }
 
@@ -402,7 +402,7 @@ function packageNameToNamespace(packageName) {
  * @param {string} str - any string
  * @returns {number} returns the calculated hash code.
  */
-function stringHashCode(str) {
+export function stringHashCode(str) {
   let hash = 0;
 
   for (let i = 0; i < str.length; i++) {
@@ -417,7 +417,7 @@ function stringHashCode(str) {
   return hash;
 }
 
-function vueAddPageToRouterImport(generator, { clientSrcDir, pageName, pageFolderName, pageFilename = pageFolderName }) {
+export function vueAddPageToRouterImport(generator, { clientSrcDir, pageName, pageFolderName, pageFilename = pageFolderName }) {
   rewriteFile(
     {
       file: `${clientSrcDir}/app/router/pages.ts`,
@@ -434,7 +434,7 @@ function vueAddPageToRouterImport(generator, { clientSrcDir, pageName, pageFolde
   );
 }
 
-function vueAddPageToRouter(generator, { clientSrcDir, pageName, pageFilename }) {
+export function vueAddPageToRouter(generator, { clientSrcDir, pageName, pageFilename }) {
   rewriteFile(
     {
       file: `${clientSrcDir}/app/router/pages.ts`,
@@ -455,7 +455,7 @@ function vueAddPageToRouter(generator, { clientSrcDir, pageName, pageFilename })
   );
 }
 
-function vueAddPageServiceToMainImport(generator, { clientSrcDir, pageName, pageFolderName, pageFilename = pageFolderName }) {
+export function vueAddPageServiceToMainImport(generator, { clientSrcDir, pageName, pageFolderName, pageFilename = pageFolderName }) {
   rewriteFile(
     {
       file: `${clientSrcDir}/app/main.ts`,
@@ -471,7 +471,7 @@ function vueAddPageServiceToMainImport(generator, { clientSrcDir, pageName, page
   );
 }
 
-function vueAddPageServiceToMain(generator, { clientSrcDir, pageName, pageInstance }) {
+export function vueAddPageServiceToMain(generator, { clientSrcDir, pageName, pageInstance }) {
   rewriteFile(
     {
       file: `${clientSrcDir}/app/main.ts`,
@@ -486,24 +486,3 @@ function vueAddPageServiceToMain(generator, { clientSrcDir, pageName, pageInstan
     generator
   );
 }
-
-const utils = {
-  rewrite,
-  rewriteFile,
-  replaceContent,
-  renderContent,
-  deepFind,
-  escapeRegExp,
-  getJavadoc,
-  buildEnumInfo,
-  getEnumInfo,
-  checkStringInFile,
-  checkRegexInFile,
-  packageNameToNamespace,
-  stringHashCode,
-  vueAddPageToRouterImport,
-  vueAddPageToRouter,
-  vueAddPageServiceToMainImport,
-  vueAddPageServiceToMain,
-};
-export default utils;

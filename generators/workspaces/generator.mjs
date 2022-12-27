@@ -22,14 +22,13 @@ import path from 'path';
 
 import { GENERATOR_ANGULAR, GENERATOR_APP, GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.mjs';
 
-import constants from '../generator-constants.mjs';
+import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import BaseGenerator from '../base/index.mjs';
 import { deploymentOptions } from '../../jdl/jhipster/index.mjs';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE },
 } = deploymentOptions;
-const { GENERATOR_JHIPSTER } = constants;
 /**
  * Base class for a generator that can be extended through a blueprint.
  *

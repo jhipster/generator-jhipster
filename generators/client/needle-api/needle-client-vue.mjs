@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import _ from 'lodash';
-import jhipsterUtils from '../../utils.mjs';
+import { checkStringInFile } from '../../utils.mjs';
 import needleClientBase from './needle-client.mjs';
 
 export default class extends needleClientBase {
@@ -26,11 +26,7 @@ export default class extends needleClientBase {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
     const filePath = `${this.clientSrcDir}/app/entities/entities-menu.vue`;
 
-    const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
-      filePath,
-      `<b-dropdown-item to="/${routerName}">`,
-      this.generator
-    );
+    const isSpecificEntityAlreadyGenerated = checkStringInFile(filePath, `<b-dropdown-item to="/${routerName}">`, this.generator);
     if (isSpecificEntityAlreadyGenerated) {
       return;
     }
@@ -52,7 +48,7 @@ export default class extends needleClientBase {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities import.\n')}`;
     const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
 
-    const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
+    const isSpecificEntityAlreadyGenerated = checkStringInFile(
       filePath,
       `import('@/entities/${folderName}/${fileName}.vue');`,
       this.generator
@@ -90,7 +86,7 @@ export default class extends needleClientBase {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;
     const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
 
-    const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(filePath, `path: '${entityFileName}'`, this.generator);
+    const isSpecificEntityAlreadyGenerated = checkStringInFile(filePath, `path: '${entityFileName}'`, this.generator);
     if (isSpecificEntityAlreadyGenerated) {
       return;
     }

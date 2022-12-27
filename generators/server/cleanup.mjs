@@ -27,9 +27,7 @@ import cleanupOauth2 from './cleanup-oauth2.mjs';
 import cleanupReactive from './cleanup-reactive.mjs';
 import cleanupCucumber from './cleanup-cucumber.mjs';
 import cleanupMaven from './cleanup-maven.mjs';
-import constants from '../generator-constants.mjs';
-
-const { DOCKER_DIR } = constants;
+import { DOCKER_DIR } from '../generator-constants.mjs';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore

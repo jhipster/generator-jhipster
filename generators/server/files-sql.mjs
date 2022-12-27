@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 import { mergeSections, addSectionsCondition } from './utils.mjs';
-import constants from '../generator-constants.mjs';
-
-const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } = constants;
+import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 
 export const sqlFiles = {
   reactiveJavaUserManagement: [

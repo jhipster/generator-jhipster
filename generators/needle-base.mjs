@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import jhipsterUtils from './utils.mjs';
+import { rewriteFile } from './utils.mjs';
 
 export default class {
   constructor(generator) {
@@ -34,7 +34,7 @@ export default class {
 
   addBlockContentToFile(rewriteFileModel, errorMessage) {
     try {
-      return jhipsterUtils.rewriteFile(rewriteFileModel, this.generator);
+      return rewriteFile(rewriteFileModel, this.generator);
     } catch (e) {
       this.logNeedleNotFound(e, errorMessage, rewriteFileModel.file);
       return false;

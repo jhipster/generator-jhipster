@@ -17,16 +17,14 @@
  * limitations under the License.
  */
 import needleClient from './needle-client.mjs';
-import constants from '../../generator-constants.mjs';
+import { CLIENT_WEBPACK_DIR } from '../../generator-constants.mjs';
+import { clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
 
-const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
-const SUPPORTED_CLIENT_FRAMEWORKS = constants.SUPPORTED_CLIENT_FRAMEWORKS;
+const { ANGULAR } = clientFrameworkTypes;
 
 export default class extends needleClient {
   _getWebpackFile(clientFramework = this.clientFramework) {
-    return this.clientFramework === SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR
-      ? `${CLIENT_WEBPACK_DIR}/webpack.custom.js`
-      : `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
+    return this.clientFramework === ANGULAR ? `${CLIENT_WEBPACK_DIR}/webpack.custom.js` : `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
   }
 
   copyExternalAssets(source, target, clientFramework) {

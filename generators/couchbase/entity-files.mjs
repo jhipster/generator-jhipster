@@ -16,10 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.mjs';
+import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { moveToJavaEntityPackageSrcDir } from '../server/utils.mjs';
 
-const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } = constants;
 export const entityFiles = {
   dbChangelog: [
     {

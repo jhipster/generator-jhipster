@@ -21,15 +21,13 @@ import _ from 'lodash';
 
 import BaseGenerator from '../base/index.mjs';
 
-import constants from '../generator-constants.mjs';
-import statistics from '../statistics.mjs';
+import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
+import statistics from '../statistics.cjs';
 import { GENERATOR_SPRING_SERVICE } from '../generator-list.mjs';
 import { applicationOptions } from '../../jdl/jhipster/index.mjs';
 
 const { OptionNames } = applicationOptions;
 const { BASE_NAME, PACKAGE_NAME, PACKAGE_FOLDER, DATABASE_TYPE } = OptionNames;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-
 export default class SpringServiceGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);

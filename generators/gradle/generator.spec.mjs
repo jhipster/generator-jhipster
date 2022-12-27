@@ -22,13 +22,11 @@ import { fileURLToPath } from 'url';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
-import constants from '../generator-constants.mjs';
+import { GENERATOR_JHIPSTER } from '../generator-constants.mjs';
 import { GENERATOR_GRADLE } from '../generator-list.mjs';
 
-const { GENERATOR_JHIPSTER } = constants;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
 const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mjs');
 

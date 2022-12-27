@@ -28,8 +28,8 @@ import childProcess from 'child_process';
 import BaseGenerator from '../base/index.mjs';
 
 import { upgradeFiles } from '../cleanup.mjs';
-import constants from '../generator-constants.mjs';
-import statistics from '../statistics.mjs';
+import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
+import statistics from '../statistics.cjs';
 import { parseBluePrints } from '../../utils/blueprint.mjs';
 import { packageJson as packagejs } from '../../lib/index.mjs';
 
@@ -39,7 +39,6 @@ const UPGRADE_BRANCH = 'jhipster_upgrade';
 const GLOBAL_VERSION = 'global';
 const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
 const FIRST_CLI_SUPPORTED_VERSION = '4.5.1'; // The first version in which CLI support was added
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 /**
  * Executes a Git command using shellJS

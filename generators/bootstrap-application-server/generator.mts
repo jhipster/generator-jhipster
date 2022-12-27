@@ -20,7 +20,7 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
-import constants from '../generator-constants.mjs';
+import { dockerContainers, javaDependencies, CLIENT_DIST_DIR } from '../generator-constants.mjs';
 import {
   loadRequiredConfigIntoEntity,
   loadRequiredConfigDerivedProperties,
@@ -37,8 +37,6 @@ import { GRADLE_VERSION } from '../gradle/constants.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
-const { dockerContainers, javaDependencies } = constants;
-
 const { LONG: TYPE_LONG } = CommonDBTypes;
 
 /**
@@ -63,7 +61,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         application.backendType = 'Java';
         application.temporaryDir = application.buildTool === 'gradle' ? 'build/' : 'target/';
         application.buildDir = `${application.temporaryDir}${application.buildTool === 'gradle' ? 'resources/main/' : 'classes/'}`;
-        application.clientDistDir = `${application.buildDir}${constants.CLIENT_DIST_DIR}`;
+        application.clientDistDir = `${application.buildDir}${CLIENT_DIST_DIR}`;
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
         application.javaDependencies = this.prepareDependencies(

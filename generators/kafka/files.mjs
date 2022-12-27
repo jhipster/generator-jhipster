@@ -16,10 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.mjs';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/utils.mjs';
 
-const { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } = constants;
 /**
  * @type {import('../base/api.mjs').WriteFileSection}
  * The default is to use a file path string. It implies use of the template method.

@@ -27,8 +27,8 @@ import { writeFiles as writeCommonFiles } from './files-common.mjs';
 
 import { writeEnumerationFiles } from './entity-files.mjs';
 
-import constants from '../generator-constants.mjs';
-import statistics from '../statistics.mjs';
+import { LOGIN_REGEX_JS } from '../generator-constants.mjs';
+import statistics from '../statistics.cjs';
 import generatorDefaults from '../generator-defaults.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 
@@ -200,7 +200,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       prepareForTemplates({ application }) {
-        application.webappLoginRegExp = constants.LOGIN_REGEX_JS;
+        application.webappLoginRegExp = LOGIN_REGEX_JS;
       },
     });
   }

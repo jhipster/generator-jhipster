@@ -16,9 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.mjs';
-
-const { SERVER_MAIN_RES_DIR } = constants;
+import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 
 export const addEntityFiles = {
   dbChangelog: [

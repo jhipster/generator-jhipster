@@ -3,10 +3,8 @@ import fse from 'fs-extra';
 import helpers from 'yeoman-test';
 import createMockedConfig from '../support/mock-config.mjs';
 
-import constants from '../../generators/generator-constants.mjs';
+import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
 import { getEntityTemplatePath, getGenerator } from '../support/index.mjs';
-
-const { SERVER_MAIN_RES_DIR } = constants;
 
 describe('jhipster:app database changelogs', () => {
   context('when regenerating the application', () => {

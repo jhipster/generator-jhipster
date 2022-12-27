@@ -29,8 +29,8 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import jhipster7Proxy from './jhipster7-proxy.mjs';
-import { packageJson as packagejs } from '../../lib/index.mjs';
-import jhipsterUtils from '../utils.mjs';
+import { packageJson } from '../../lib/index.mjs';
+import { stringHashCode } from '../utils.mjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
 import generatorDefaults from '../generator-defaults.mjs';
@@ -57,15 +57,7 @@ import {
 import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
-import constants from '../generator-constants.mjs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const { defaultConfig, defaultConfigMicroservice } = generatorDefaults;
-const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
-
-const {
+import {
   JHIPSTER_CONFIG_DIR,
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_SRC_DIR,
@@ -74,9 +66,15 @@ const {
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
   NODE_VERSION,
-} = constants;
+  LANGUAGES,
+} from '../generator-constants.mjs';
 
-const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const { defaultConfig, defaultConfigMicroservice } = generatorDefaults;
+const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
+
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
@@ -552,7 +550,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * get all the languages options supported by JHipster
    */
   getAllSupportedLanguageOptions() {
-    return constants.LANGUAGES;
+    return LANGUAGES;
   }
 
   /**
@@ -1548,13 +1546,13 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         `npm show ${GENERATOR_JHIPSTER} version --fetch-retries 1 --fetch-retry-mintimeout 500 --fetch-retry-maxtimeout 500`,
         { silent: true },
         (code, stdout, stderr) => {
-          if (!stderr && semver.lt(packagejs.version, stdout)) {
+          if (!stderr && semver.lt(packageJson.version, stdout)) {
             this.log(
               `${
                 chalk.yellow(' ______________________________________________________________________________\n\n') +
                 chalk.yellow('  JHipster update available: ') +
                 chalk.green.bold(stdout.replace('\n', '')) +
-                chalk.gray(` (current: ${packagejs.version})`)
+                chalk.gray(` (current: ${packageJson.version})`)
               }\n`
             );
             this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
@@ -1605,7 +1603,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} baseName of application
    */
   getHipster(baseName = this.baseName) {
-    const hash = jhipsterUtils.stringHashCode(baseName);
+    const hash = stringHashCode(baseName);
 
     switch (hash % 4) {
       case 0:
@@ -2171,9 +2169,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.backendName = config.backendName;
 
     config.nodeDependencies = config.nodeDependencies || {
-      prettier: packagejs.dependencies.prettier,
-      'prettier-plugin-java': packagejs.dependencies['prettier-plugin-java'],
-      'prettier-plugin-packagejson': packagejs.dependencies['prettier-plugin-packagejson'],
+      prettier: packageJson.dependencies.prettier,
+      'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
+      'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
     };
     dest.nodeDependencies = config.nodeDependencies;
 
@@ -2592,7 +2590,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {
-    const jhipsterVersion = packagejs.version;
+    const jhipsterVersion = packageJson.version;
     const baseName = this.getDefaultAppName();
     const creationTimestamp = new Date().getTime();
 

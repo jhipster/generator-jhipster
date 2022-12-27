@@ -16,10 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import utils from '../utils.mjs';
-import constants from '../generator-constants.mjs';
+import { getEnumInfo } from '../utils.mjs';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 
-const { CLIENT_MAIN_SRC_DIR } = constants;
 const CLIENT_COMMON_TEMPLATES_DIR = 'entity/common';
 
 async function addEnumerationFiles({ application, entity }) {
@@ -27,7 +26,7 @@ async function addEnumerationFiles({ application, entity }) {
     if (field.fieldIsEnum === true) {
       const { enumFileName } = field;
       const enumInfo = {
-        ...utils.getEnumInfo(field, entity.clientRootFolder),
+        ...getEnumInfo(field, entity.clientRootFolder),
         frontendAppName: application.frontendAppName,
         packageName: application.packageName,
         webappEnumerationsDir: application.webappEnumerationsDir,
