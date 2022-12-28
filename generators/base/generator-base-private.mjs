@@ -27,7 +27,7 @@ import https from 'https';
 
 import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-import { packageJson as packagejs } from '../../lib/index.mjs';
+import { packageJson } from '../../lib/index.mjs';
 import { getJavadoc, renderContent } from '../utils.mjs';
 import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.mjs';
 import { stringify } from '../../utils/index.mjs';
