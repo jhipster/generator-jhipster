@@ -40,7 +40,8 @@ import {
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
 import { writeFiles as writeEntityFiles, customizeFiles } from './entity-files.mjs';
-import { packageJson as packagejs } from '../../lib/index.mjs';
+
+import { packageJson } from '../../lib/index.mjs';
 import {
   SERVER_MAIN_SRC_DIR,
   SERVER_MAIN_RES_DIR,
@@ -74,15 +75,15 @@ import {
   entityOptions,
   validations,
   reservedKeywords,
+  searchEngineTypes,
   messageBrokerTypes,
   clientFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
-
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
-import { SUPPORTED_VALIDATION_RULES } from '../../jdl/jhipster/validations.js';
 
+const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const { defaultConfig } = generatorDefaults;
@@ -90,16 +91,20 @@ const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { EUREKA } = serviceDiscoveryTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
-const { FALSE: NO_WEBSOCKET } = websocketTypes;
+const NO_WEBSOCKET = websocketTypes.NO;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
 const { KAFKA } = messageBrokerTypes;
 
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
+const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, MAIN_DIR, TEST_DIR } = constants;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { INSTANT } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { PaginationTypes, ServiceTypes } = entityOptions;
-const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations;
+const {
+  Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
+} = validations;
 
 const WAIT_TIMEOUT = 3 * 60000;
 const { NO: NO_PAGINATION } = PaginationTypes;
@@ -319,8 +324,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.VUE = VUE;
         application.REACT = REACT;
 
-        this.packagejs = packagejs;
-        application.jhipsterPackageJson = packagejs;
+        this.packagejs = packageJson;
+        application.jhipsterPackageJson = packageJson;
       },
 
       prepareForTemplates({ application }) {
@@ -380,19 +385,19 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       configureEntitySearchEngine({ application, entityConfig }) {
         const { applicationTypeMicroservice, applicationTypeGateway, clientFrameworkAny } = application;
         if (entityConfig.microserviceName && !(applicationTypeMicroservice && clientFrameworkAny)) {
-          if (entityConfig.searchEngine === undefined) {
+          if (!entityConfig.searchEngine) {
             // If a non-microfrontent microservice entity, should be disabled by default.
-            entityConfig.searchEngine = false;
+            entityConfig.searchEngine = NO_SEARCH_ENGINE;
           }
         }
         if (
           // Don't touch the configuration for microservice entities published at gateways
           !(applicationTypeGateway && entityConfig.microserviceName) &&
           !application.searchEngineAny &&
-          ![undefined, false, 'no'].includes(entityConfig.searchEngine)
+          !entityConfig.searchEngine
         ) {
           // Search engine can only be enabled at entity level and disabled at application level for gateways publishing a microservice entity
-          entityConfig.searchEngine = false;
+          entityConfig.searchEngine = NO_SEARCH_ENGINE;
           this.warning('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
         }
       },
@@ -765,7 +770,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     if (config.applicationType === MICROSERVICE) {
       config.websocket = NO_WEBSOCKET;
     }
-
     const databaseType = config.databaseType;
     if (databaseType === NO_DATABASE) {
       config.devDatabaseType = NO_DATABASE;

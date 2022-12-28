@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import JDLEnum from '../../models/jdl-enum.js';
+import { JDLEnum } from '../../models/index.mjs';
 import { formatComment } from '../../utils/format-utils.js';
 
 export default { convertEnums };

@@ -20,16 +20,14 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import lodash from 'lodash';
 import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import clientFrameworkTypes from '../../jdl/jhipster/client-framework-types.js';
-import TestFrameworkTypes from '../../jdl/jhipster/test-framework-types.js';
-
+import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { fromMatrix, extendMatrix, AuthenticationTypeMatrix } from '../../test/support/index.mjs';
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './generator.mjs';
 import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 
-const { CYPRESS } = TestFrameworkTypes;
+const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const { snakeCase } = lodash;
 

@@ -93,9 +93,9 @@ const { ELASTICSEARCH } = searchEngineTypes;
 
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
-const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
-const NO_WEBSOCKET = websocketTypes.FALSE;
+const NO_WEBSOCKET = websocketTypes.NO;
 
 const isWin32 = os.platform() === 'win32';
 
@@ -2405,6 +2405,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
   }
 
+  loadServerAndPlatformConfig(dest = this) {
+    if (!dest.serviceDiscoveryType) {
+      dest.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
+    }
+    dest.serviceDiscoveryAny = dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
+    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
+    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
+  }
+
   /**
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
@@ -2416,20 +2425,23 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.javaPackageSrcDir = normalizePathEnd(`${dest.srcMainJava}${dest.packageFolder}`);
     dest.javaPackageTestDir = normalizePathEnd(`${dest.srcTestJava}${dest.packageFolder}`);
 
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
-    // Convert to false for templates.
-    if (dest.serviceDiscoveryType === NO_SERVICE_DISCOVERY || !dest.serviceDiscoveryType) {
-      dest.serviceDiscoveryType = false;
+    if (!dest.websocket) {
+      dest.websocket = NO_WEBSOCKET;
     }
-    if (dest.websocket === NO_WEBSOCKET || !dest.websocket) {
-      dest.websocket = false;
+    dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
+
+    if (!dest.searchEngine) {
+      dest.searchEngine = NO_SEARCH_ENGINE;
     }
-    if (dest.searchEngine === NO_SEARCH_ENGINE || !dest.searchEngine) {
-      dest.searchEngine = false;
+    dest.searchEngineNo = dest.searchEngine === NO_SEARCH_ENGINE;
+    dest.searchEngineAny = !dest.searchEngineNo;
+    dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
+    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
+
+    if (!dest.messageBroker) {
+      dest.messageBroker = NO_MESSAGE_BROKER;
     }
-    if (dest.messageBroker === NO_MESSAGE_BROKER || !dest.messageBroker) {
-      dest.messageBroker = false;
-    }
+    dest.messageBrokerKafka = dest.messageBroker === KAFKA;
 
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
@@ -2476,18 +2488,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.enableLiquibase = dest.databaseTypeSql;
 
-    dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
-
-    dest.messageBrokerKafka = dest.messageBroker === KAFKA;
-
-    dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
-    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
-    dest.searchEngineAny = ![undefined, false, 'no'].includes(dest.searchEngine);
-
-    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-    dest.serviceDiscoveryAny = ![undefined, false, 'no'].includes(dest.serviceDiscoveryType);
-
     if (dest.databaseType === NO_DATABASE) {
       // User management requires a database.
       dest.generateUserManagement = false;
@@ -2500,6 +2500,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
 
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
+    this.loadServerAndPlatformConfig(dest);
   }
 
   /**
@@ -2517,11 +2518,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
   loadDerivedPlatformConfig(dest = this) {
-    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     dest.monitoringELK = dest.monitoring === ELK;
     dest.monitoringPrometheus = dest.monitoring === PROMETHEUS;
+    this.loadServerAndPlatformConfig(dest);
   }
 
   /**

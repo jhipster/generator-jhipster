@@ -22,7 +22,9 @@ import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations
 
 const { isReservedTableName } = reservedKeywords;
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
-const { MIN, MINLENGTH, MINBYTES, MAX, MAXBYTES, MAXLENGTH, PATTERN, REQUIRED, UNIQUE } = validations;
+const {
+  Validations: { MIN, MINLENGTH, MINBYTES, MAX, MAXBYTES, MAXLENGTH, PATTERN, REQUIRED, UNIQUE },
+} = validations;
 const { MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
 

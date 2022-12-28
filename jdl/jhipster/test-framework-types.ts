@@ -17,16 +17,10 @@
  * limitations under the License.
  */
 
-const Types = {
+const testFrameworkTypes = {
   CYPRESS: 'cypress',
   CUCUMBER: 'cucumber',
   GATLING: 'gatling',
   NO: 'no',
 };
-
-export const CYPRESS = Types.CYPRESS;
-export const CUCUMBER = Types.CUCUMBER;
-export const GATLING = Types.GATLING;
-export const NO = Types.NO;
-
-export default Types;
+export default testFrameworkTypes;

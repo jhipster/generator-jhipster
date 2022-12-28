@@ -5,7 +5,10 @@ import { fileURLToPath } from 'url';
 
 import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import { createImporterFromContent } from '../../jdl/jdl-importer.js';
+import constants from '../generator-constants.cjs';
+import jdlImporter from '../../jdl/index.mjs';
+
+const { createImporterFromContent } = jdlImporter;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

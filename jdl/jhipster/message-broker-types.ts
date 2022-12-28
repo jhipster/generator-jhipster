@@ -17,12 +17,8 @@
  * limitations under the License.
  */
 
-const MessageBrokerTypes = {
+const messageBrokerTypes = {
   KAFKA: 'kafka',
-  NO: false,
+  NO: 'no',
 };
-
-export const KAFKA = MessageBrokerTypes.KAFKA;
-export const NO = MessageBrokerTypes.NO;
-
-export default MessageBrokerTypes;
+export default messageBrokerTypes;

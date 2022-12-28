@@ -27,11 +27,11 @@ import prompts from './prompts.mjs';
 import statistics from '../statistics.cjs';
 import { NODE_VERSION, SERVER_MAIN_RES_DIR, JAVA_VERSION } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
-import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
-import { REACT } from '../../jdl/jhipster/client-framework-types.js';
+import { buildToolTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { defaultConfig } = generatorDefaults;
 const { MAVEN, GRADLE } = buildToolTypes;
+const { REACT } = clientFrameworkTypes;
 
 /**
  * @class

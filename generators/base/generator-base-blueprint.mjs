@@ -609,7 +609,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
       this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
       return;
     }
-    const mainGeneratorJhipsterVersion = packagejs.version;
+    const mainGeneratorJhipsterVersion = packageJson.version;
     const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
     if (blueprintJhipsterVersion) {
       if (!semver.valid(blueprintJhipsterVersion) && !semver.validRange(blueprintJhipsterVersion)) {

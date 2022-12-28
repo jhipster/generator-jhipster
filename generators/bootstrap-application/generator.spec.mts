@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 
 import Generator from './index.mjs';
 import { dryRunHelpers as helpers } from '../../test/support/helpers.mjs';
-import fieldTypes from '../../jdl/jhipster/field-types.js';
+import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 
 const {
   CommonDBTypes: { UUID },
@@ -623,7 +623,7 @@ Object {
   "restClass": "UserDTO",
   "restInstance": "userDTO",
   "saveUserSnapshot": false,
-  "searchEngine": false,
+  "searchEngine": "no",
   "service": "no",
   "serviceImpl": false,
   "serviceNo": true,
@@ -886,10 +886,11 @@ Object {
   "restClass": "EntityA",
   "restInstance": "entityA",
   "saveUserSnapshot": false,
-  "searchEngine": false,
+  "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,
   "searchEngineElasticsearch": false,
+  "searchEngineNo": true,
   "service": "no",
   "serviceImpl": false,
   "serviceNo": true,
@@ -1208,10 +1209,11 @@ Object {
   "restClass": "EntityA",
   "restInstance": "entityA",
   "saveUserSnapshot": false,
-  "searchEngine": false,
+  "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,
   "searchEngineElasticsearch": false,
+  "searchEngineNo": true,
   "service": "no",
   "serviceImpl": false,
   "serviceNo": true,

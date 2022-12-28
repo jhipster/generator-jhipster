@@ -37,6 +37,7 @@ import { OFFICIAL_DATABASE_TYPE_NAMES } from '../generators/server/support/datab
 
 const { entityDefaultConfig } = generatorDefaults;
 const { ELASTICSEARCH } = searchEngineTypes;
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -75,7 +76,7 @@ const BASE_TEMPLATE_DATA = {
   skipUiGrouping: false,
   haveFieldWithJavadoc: false,
   existingEnum: false,
-  searchEngine: false,
+  searchEngine: NO_SEARCH_ENGINE,
   microserviceName: undefined,
 
   requiresPersistableImplementation: false,
@@ -534,7 +535,8 @@ export function loadRequiredConfigDerivedProperties(entity) {
   entity.jhiTablePrefix = hibernateSnakeCase(entity.jhiPrefix);
   entity.searchEngineCouchbase = entity.searchEngine === COUCHBASE;
   entity.searchEngineElasticsearch = entity.searchEngine === ELASTICSEARCH;
-  entity.searchEngineAny = ![undefined, false, 'no'].includes(entity.searchEngine);
+  entity.searchEngineAny = ![undefined, NO_SEARCH_ENGINE].includes(entity.searchEngine);
+  entity.searchEngineNo = [undefined, NO_SEARCH_ENGINE].includes(entity.searchEngine);
 }
 
 export function preparePostEntityCommonDerivedProperties(entity) {

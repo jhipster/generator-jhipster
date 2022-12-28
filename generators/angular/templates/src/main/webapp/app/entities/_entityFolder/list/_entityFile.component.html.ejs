@@ -29,7 +29,7 @@
 
             <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityPage %>/new']">
                 <fa-icon icon="plus"></fa-icon>
-                <span <% if (searchEngine) { %>class="hidden-sm-down" <% } %> <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createLabel">
+                <span <% if (searchEngineAny) { %>class="hidden-sm-down" <% } %> <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createLabel">
                 <%- getWebappTranslation(i18nKeyPrefix + '.home.createLabel') %>
                 </span>
             </button>
@@ -40,7 +40,7 @@
     <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
     <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
 
     <form name="searchForm" class="row row-cols-sm-auto align-items-center">
         <div class="col-sm-12">
@@ -77,7 +77,7 @@
                         <div class="d-flex">
                             <span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%- getWebappTranslation(field.fieldTranslationKey) %></span>
   <%_ if (!field.transient) { _%>
-                            <fa-icon class="p-1" <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon>
+                            <fa-icon class="p-1" <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon>
   <%_ } _%>
                         </div>
                     </th>

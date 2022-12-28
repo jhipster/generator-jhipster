@@ -1,2 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-export * from './jdl-importer.js';
+import * as importerDefault from './jdl-importer.js';
+
+export default importerDefault;

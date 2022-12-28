@@ -18,7 +18,11 @@
  */
 
 import { merge } from '../utils/object-utils.js';
-import Validations from '../jhipster/validations.js';
+import { validations } from '../jhipster/index.mjs';
+
+const {
+  Validations: { REQUIRED, PATTERN },
+} = validations;
 
 export default class JDLValidation {
   name: any;
@@ -41,13 +45,13 @@ export default class JDLValidation {
 
 function defaults() {
   return {
-    name: Validations.REQUIRED,
+    name: REQUIRED,
     value: '',
   };
 }
 
 function formatValidationValue(name, value) {
-  if (name === Validations.PATTERN) {
+  if (name === PATTERN) {
     return getPatternValidationValue(value);
   }
   return value;

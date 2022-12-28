@@ -3234,7 +3234,6 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
       - SPRING_LIQUIBASE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
-      - SERVER_PORT=80
     ports:
       - '8080:8080'
     healthcheck:
