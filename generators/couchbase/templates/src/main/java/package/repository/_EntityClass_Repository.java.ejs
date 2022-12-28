@@ -57,7 +57,7 @@ import static <%= packageName %>.domain.<%= persistClass %>.TYPE_NAME;
     let pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @Repository
-public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngine) { %>, CouchbaseSearchRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
+public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngineAny) { %>, CouchbaseSearchRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
   <%_
   var notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntityIsEmbedded)
   if (notEmbeddedRelationships.length !== 0) { %>
@@ -106,7 +106,7 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
     <%= optionalOrMono %><<%= persistClass %>> findById(String id);<%
     } _%>
 
-<%_ if (searchEngine && notEmbeddedRelationships.length !== 0) { _%>
+<%_ if (searchEngineAny && notEmbeddedRelationships.length !== 0) { _%>
     @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
     <%= listOrFlux %><<%= persistClass %>> search(String queryString);
 

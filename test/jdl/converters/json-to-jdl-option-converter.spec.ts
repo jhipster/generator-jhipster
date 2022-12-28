@@ -23,9 +23,9 @@ import { expect } from 'chai';
 import { convertServerOptionsToJDL } from '../../../jdl/converters/json-to-jdl-option-converter.js';
 import JDLObject from '../../../jdl/models/jdl-object.js';
 import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
-import UnaryOptions from '../../../jdl/jhipster/unary-options.js';
+import { unaryOptions } from '../../../jdl/jhipster/index.mjs';
 
-const { SKIP_CLIENT } = UnaryOptions;
+const { SKIP_CLIENT } = unaryOptions;
 
 describe('JSONToJDLOptionConverter', () => {
   describe('convertToServerOptions', () => {

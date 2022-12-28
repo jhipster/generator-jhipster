@@ -2,6 +2,9 @@ import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import ServerGenerator from '../../generators/server/index.mjs';
 import { getGenerator } from '../support/index.mjs';
+import { serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
+
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ServerGenerator {

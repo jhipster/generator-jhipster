@@ -20,10 +20,10 @@
     "packageName": "tech.jhipster.gateway",
     "prodDatabaseType": "mongodb",
     "reactive": true,
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "eureka",
     "testFrameworks": ["gatling", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

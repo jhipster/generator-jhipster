@@ -428,7 +428,7 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 
     private static final String ENTITY_API_URL = "/api/<%= entityApiUrl %>";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{<%= primaryKey.name %>}";
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/<%= entityApiUrl %>";
 <%_ } _%>
 <%_ if (!embedded && primaryKey.hasLong) { _%>
@@ -1784,7 +1784,7 @@ _%>
 
     }
 <%_ } _%>
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
 
   <%_ if (searchEngineCouchbase) { _%>
     @Timeout(value = 15, unit = TimeUnit.MINUTES)

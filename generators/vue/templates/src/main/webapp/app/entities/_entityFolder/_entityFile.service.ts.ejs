@@ -5,12 +5,12 @@ import buildPaginationQueryOpts from '@/shared/sort/sorts';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 
 const baseApiUrl = '<%= entityApi %>api/<%= entityApiUrl %>';
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
 const baseSearchApiUrl = '<%= entityApi %>api/_search/<%= entityApiUrl %>?query=';
 <%_ } _%>
 
 export default class <%= entityAngularName %>Service {
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
   public search(query<% if (!paginationNo) { %>, paginationQuery<% } %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios.get(`${baseSearchApiUrl}${query}<% if (!paginationNo) { %>&${buildPaginationQueryOpts(paginationQuery)}<% } %>`).then(res => {

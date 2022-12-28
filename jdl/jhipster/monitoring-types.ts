@@ -17,14 +17,10 @@
  * limitations under the License.
  */
 
-const MonitoringTypes = {
+const monitoringTypes = {
   PROMETHEUS: 'prometheus',
   ELK: 'elk',
   NO: 'no',
 };
 
-export const PROMETHEUS = MonitoringTypes.PROMETHEUS;
-export const ELK = MonitoringTypes.ELK;
-export const NO = MonitoringTypes.NO;
-
-export default MonitoringTypes;
+export default monitoringTypes;

@@ -21,7 +21,7 @@
     "jhiPrefix": "",
     "jwtSecretKey": "NGJiOTZiMWFlMmQ5NmVkNzhmNzA1NjgxYmNlYjI2MzgwZGE3MzAwY2VkZDc0MThmMzM4MjRiODg0ZWVkYTVkNzU1MDNiODM1YjJmMjBhMDJhYzQwZTViNDUwMzA4YjJlOGYxZjhkYzQ1M2RlMGY1ZGQyYmFlOWVmZGYxMjEyODQ=",
     "languages": ["fr"],
-    "messageBroker": false,
+    "messageBroker": "no",
     "nativeLanguage": "en",
     "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
@@ -32,13 +32,13 @@
     "searchEngine": false,
     "serverPort": "8080",
     "serverSideOptions": [],
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "no",
     "skipCheckLengthOfIdentifier": false,
     "skipClient": false,
     "skipFakeData": false,
     "skipServer": false,
     "skipUserManagement": false,
     "testFrameworks": ["gatling", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

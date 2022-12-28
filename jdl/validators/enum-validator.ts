@@ -18,8 +18,9 @@
  */
 
 import Validator from './validator.js';
-import { isReservedClassName } from '../jhipster/reserved-keywords.js';
+import { reservedKeywords } from '../jhipster/index.mjs';
 
+const { isReservedClassName } = reservedKeywords;
 export default class EnumValidator extends Validator {
   constructor() {
     super('enum', ['name']);

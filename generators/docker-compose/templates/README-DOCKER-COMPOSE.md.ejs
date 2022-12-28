@@ -20,7 +20,7 @@ Launch all your infrastructure by running: `docker compose up -d`.
 <%_ for(let i = 0; i < appConfigs.length; i++) { _%>
 - <%= appConfigs[i].baseName %> (<%= appConfigs[i].applicationType %> application)
 - <%= appConfigs[i].baseName %>'s <%= appConfigs[i].databaseTypeSql ? appConfigs[i].prodDatabaseType : appConfigs[i].databaseType %> database
-<%_ if (appConfigs[i].searchEngine && !appConfigs[i].searchEngineCouchbase) { _%>
+<%_ if (appConfigs[i].searchEngineAny && !appConfigs[i].searchEngineCouchbase) { _%>
 - <%= appConfigs[i].baseName %>'s <%= appConfigs[i].searchEngine %> search engine
 <%_ } _%>
 <%_ } _%>

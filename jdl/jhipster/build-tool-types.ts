@@ -17,12 +17,8 @@
  * limitations under the License.
  */
 
-const Types = {
+const buildToolTypes = {
   MAVEN: 'maven',
   GRADLE: 'gradle',
 };
-
-export const MAVEN = Types.MAVEN;
-export const GRADLE = Types.GRADLE;
-
-export default Types;
+export default buildToolTypes;

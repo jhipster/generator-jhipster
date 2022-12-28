@@ -20,15 +20,15 @@
     "entitySuffix": "",
     "jhiPrefix": "jhi",
     "jwtSecretKey": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
-    "messageBroker": false,
+    "messageBroker": "no",
     "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mysql",
     "searchEngine": "elasticsearch",
     "serverPort": "8080",
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "no",
     "testFrameworks": ["gatling", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

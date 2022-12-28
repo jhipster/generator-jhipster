@@ -29,7 +29,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import jhipster7Proxy from './jhipster7-proxy.mjs';
-import { packageJson as packagejs } from '../../lib/index.mjs';
+import { packageJson } from '../../lib/index.mjs';
 import jhipsterUtils from '../utils.cjs';
 import constants from '../generator-constants.cjs';
 import PrivateBase from './generator-base-private.mjs';
@@ -95,9 +95,9 @@ const { ELASTICSEARCH } = searchEngineTypes;
 
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
-const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
-const NO_WEBSOCKET = websocketTypes.FALSE;
+const NO_WEBSOCKET = websocketTypes.NO;
 
 const isWin32 = os.platform() === 'win32';
 
@@ -1548,13 +1548,13 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         `npm show ${GENERATOR_JHIPSTER} version --fetch-retries 1 --fetch-retry-mintimeout 500 --fetch-retry-maxtimeout 500`,
         { silent: true },
         (code, stdout, stderr) => {
-          if (!stderr && semver.lt(packagejs.version, stdout)) {
+          if (!stderr && semver.lt(packageJson.version, stdout)) {
             this.log(
               `${
                 chalk.yellow(' ______________________________________________________________________________\n\n') +
                 chalk.yellow('  JHipster update available: ') +
                 chalk.green.bold(stdout.replace('\n', '')) +
-                chalk.gray(` (current: ${packagejs.version})`)
+                chalk.gray(` (current: ${packageJson.version})`)
               }\n`
             );
             this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
@@ -2171,9 +2171,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.backendName = config.backendName;
 
     config.nodeDependencies = config.nodeDependencies || {
-      prettier: packagejs.dependencies.prettier,
-      'prettier-plugin-java': packagejs.dependencies['prettier-plugin-java'],
-      'prettier-plugin-packagejson': packagejs.dependencies['prettier-plugin-packagejson'],
+      prettier: packageJson.dependencies.prettier,
+      'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
+      'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
     };
     dest.nodeDependencies = config.nodeDependencies;
 
@@ -2407,6 +2407,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
   }
 
+  loadServerAndPlatformConfig(dest = this) {
+    if (!dest.serviceDiscoveryType) {
+      dest.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
+    }
+    dest.serviceDiscoveryAny = dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
+    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
+    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
+  }
+
   /**
    * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
    */
@@ -2418,20 +2427,23 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.javaPackageSrcDir = normalizePathEnd(`${dest.srcMainJava}${dest.packageFolder}`);
     dest.javaPackageTestDir = normalizePathEnd(`${dest.srcTestJava}${dest.packageFolder}`);
 
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
-    // Convert to false for templates.
-    if (dest.serviceDiscoveryType === NO_SERVICE_DISCOVERY || !dest.serviceDiscoveryType) {
-      dest.serviceDiscoveryType = false;
+    if (!dest.websocket) {
+      dest.websocket = NO_WEBSOCKET;
     }
-    if (dest.websocket === NO_WEBSOCKET || !dest.websocket) {
-      dest.websocket = false;
+    dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
+
+    if (!dest.searchEngine) {
+      dest.searchEngine = NO_SEARCH_ENGINE;
     }
-    if (dest.searchEngine === NO_SEARCH_ENGINE || !dest.searchEngine) {
-      dest.searchEngine = false;
+    dest.searchEngineNo = dest.searchEngine === NO_SEARCH_ENGINE;
+    dest.searchEngineAny = !dest.searchEngineNo;
+    dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
+    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
+
+    if (!dest.messageBroker) {
+      dest.messageBroker = NO_MESSAGE_BROKER;
     }
-    if (dest.messageBroker === NO_MESSAGE_BROKER || !dest.messageBroker) {
-      dest.messageBroker = false;
-    }
+    dest.messageBrokerKafka = dest.messageBroker === KAFKA;
 
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
@@ -2478,18 +2490,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.enableLiquibase = dest.databaseTypeSql;
 
-    dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
-
-    dest.messageBrokerKafka = dest.messageBroker === KAFKA;
-
-    dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
-    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
-    dest.searchEngineAny = ![undefined, false, 'no'].includes(dest.searchEngine);
-
-    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-    dest.serviceDiscoveryAny = ![undefined, false, 'no'].includes(dest.serviceDiscoveryType);
-
     if (dest.databaseType === NO_DATABASE) {
       // User management requires a database.
       dest.generateUserManagement = false;
@@ -2502,6 +2502,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
 
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
+    this.loadServerAndPlatformConfig(dest);
   }
 
   /**
@@ -2519,11 +2520,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
    */
   loadDerivedPlatformConfig(dest = this) {
-    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-    dest.serviceDiscoveryAny = dest.serviceDiscoveryType && dest.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
     dest.monitoringELK = dest.monitoring === ELK;
     dest.monitoringPrometheus = dest.monitoring === PROMETHEUS;
+    this.loadServerAndPlatformConfig(dest);
   }
 
   /**
@@ -2592,7 +2591,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {
-    const jhipsterVersion = packagejs.version;
+    const jhipsterVersion = packageJson.version;
     const baseName = this.getDefaultAppName();
     const creationTimestamp = new Date().getTime();
 
