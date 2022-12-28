@@ -30,10 +30,9 @@ import { fileURLToPath } from 'url';
 
 import jhipster7Proxy from './jhipster7-proxy.mjs';
 import { packageJson } from '../../lib/index.mjs';
-import jhipsterUtils from '../utils.cjs';
-import constants from '../generator-constants.cjs';
+import { stringHashCode } from '../utils.mjs';
 import PrivateBase from './generator-base-private.mjs';
-import NeedleApi from '../needle-api.cjs';
+import NeedleApi from '../needle-api.mjs';
 import generatorDefaults from '../generator-defaults.mjs';
 import commonOptions from './options.mjs';
 import detectLanguage from '../languages/detect-language.mjs';
@@ -58,15 +57,7 @@ import {
 import databaseData from '../sql-constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
-import { NODE_VERSION } from '../generator-constants.mjs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const { defaultConfig, defaultConfigMicroservice } = generatorDefaults;
-const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
-
-const {
+import {
   JHIPSTER_CONFIG_DIR,
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_SRC_DIR,
@@ -74,9 +65,16 @@ const {
   SERVER_TEST_RES_DIR,
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
-} = constants;
+  NODE_VERSION,
+  LANGUAGES,
+} from '../generator-constants.mjs';
 
-const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const { defaultConfig, defaultConfigMicroservice } = generatorDefaults;
+const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
+
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
@@ -552,7 +550,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * get all the languages options supported by JHipster
    */
   getAllSupportedLanguageOptions() {
-    return constants.LANGUAGES;
+    return LANGUAGES;
   }
 
   /**
@@ -1605,7 +1603,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} baseName of application
    */
   getHipster(baseName = this.baseName) {
-    const hash = jhipsterUtils.stringHashCode(baseName);
+    const hash = stringHashCode(baseName);
 
     switch (hash % 4) {
       case 0:

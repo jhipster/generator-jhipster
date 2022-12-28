@@ -16,21 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const _ = require('lodash');
-const jhipsterUtils = require('../../utils.cjs');
-const needleClientBase = require('./needle-client.cjs');
+import chalk from 'chalk';
+import _ from 'lodash';
+import { checkStringInFile } from '../../utils.mjs';
+import needleClientBase from './needle-client.mjs';
 
-module.exports = class extends needleClientBase {
+export default class extends needleClientBase {
   addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
     const filePath = `${this.clientSrcDir}/app/entities/entities-menu.vue`;
 
-    const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
-      filePath,
-      `<b-dropdown-item to="/${routerName}">`,
-      this.generator
-    );
+    const isSpecificEntityAlreadyGenerated = checkStringInFile(filePath, `<b-dropdown-item to="/${routerName}">`, this.generator);
     if (isSpecificEntityAlreadyGenerated) {
       return;
     }
@@ -52,7 +48,7 @@ module.exports = class extends needleClientBase {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities import.\n')}`;
     const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
 
-    const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
+    const isSpecificEntityAlreadyGenerated = checkStringInFile(
       filePath,
       `import('@/entities/${folderName}/${fileName}.vue');`,
       this.generator
@@ -90,7 +86,7 @@ module.exports = class extends needleClientBase {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;
     const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
 
-    const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(filePath, `path: '${entityFileName}'`, this.generator);
+    const isSpecificEntityAlreadyGenerated = checkStringInFile(filePath, `path: '${entityFileName}'`, this.generator);
     if (isSpecificEntityAlreadyGenerated) {
       return;
     }
@@ -202,4 +198,4 @@ module.exports = class extends needleClientBase {
     const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-entities-component', entityEntry);
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
-};
+}

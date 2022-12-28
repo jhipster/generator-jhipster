@@ -27,7 +27,6 @@ import { GENERATOR_MAVEN } from '../generator-list.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
 const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mjs');
 

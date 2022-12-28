@@ -16,9 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
-
-const { CLIENT_MAIN_SRC_DIR } = constants;
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 
 // eslint-disable-next-line import/prefer-default-export
 export const clientI18nFiles = {

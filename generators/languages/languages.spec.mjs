@@ -3,12 +3,8 @@ import helpers from 'yeoman-test';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-import constants from '../generator-constants.cjs';
+import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, CLIENT_WEBPACK_DIR, LANGUAGES } from '../generator-constants.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -103,7 +99,7 @@ const containsLanguageInVueStore = languageValue => {
 
 describe('JHipster generator languages', () => {
   context('Creates default i18n files', () => {
-    constants.LANGUAGES.forEach(language => {
+    LANGUAGES.forEach(language => {
       describe(`with prompts for ${language.name}`, () => {
         before(() =>
           helpers

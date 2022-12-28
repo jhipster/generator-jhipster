@@ -17,16 +17,9 @@
  * limitations under the License.
  */
 import { cleanupOldServerFiles } from './cleanup.mjs';
-import constants from '../generator-constants.cjs';
+import { TEST_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 import { addSectionsCondition, mergeSections } from './utils.mjs';
 import { writeSqlFiles } from './files-sql.mjs';
-
-/* Constants use throughout */
-const TEST_DIR = constants.TEST_DIR;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
-const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
 /**
  * Move the template to `javaPackageSrcDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).
@@ -1521,7 +1514,7 @@ export const serverFiles = mergeSections(
 );
 
 /**
- * @this {import('./index.cjs')}
+ * @this {import('./index.mjs')}
  */
 export function writeFiles() {
   return this.asWritingTaskGroup({

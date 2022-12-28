@@ -22,10 +22,18 @@ import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { writeFiles, prettierConfigFiles } from './files.mjs';
-import constants from '../generator-constants.cjs';
+import {
+  MAIN_DIR,
+  TEST_DIR,
+  SERVER_MAIN_RES_DIR,
+  JHIPSTER_DOCUMENTATION_URL,
+  JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
+} from '../generator-constants.mjs';
+import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.mjs';
 
+const { REACT, ANGULAR, VUE } = clientFrameworkTypes;
 /**
  * @class
  * @extends {BaseApplicationGenerator<import('../bootstrap-application-base/types.js').CommonClientServerApplication>}
@@ -124,15 +132,15 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     return {
       setupConstants({ application }) {
         // Make constants available in templates
-        application.MAIN_DIR = constants.MAIN_DIR;
-        application.TEST_DIR = constants.TEST_DIR;
-        application.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-        application.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-        application.REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+        application.MAIN_DIR = MAIN_DIR;
+        application.TEST_DIR = TEST_DIR;
+        application.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
+        application.ANGULAR = ANGULAR;
+        application.REACT = REACT;
 
         // Make documentation URL available in templates
-        application.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-        application.DOCUMENTATION_ARCHIVE_PATH = constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
+        application.DOCUMENTATION_URL = JHIPSTER_DOCUMENTATION_URL;
+        application.DOCUMENTATION_ARCHIVE_PATH = JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
       },
     };
   }

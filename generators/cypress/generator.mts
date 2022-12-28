@@ -19,10 +19,11 @@
 import { faker } from '@faker-js/faker/locale/en';
 import _ from 'lodash';
 
-import utils from '../utils.cjs';
+import { stringHashCode } from '../utils.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { cypressFiles, cypressEntityFiles } from './files.mjs';
-import constants from '../generator-constants.cjs';
+import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { GENERATOR_CYPRESS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 
 import type { CypressApplication } from './types.mjs';
@@ -36,7 +37,7 @@ import type {
   WritingTaskGroup,
 } from '../base-application/tasks.mjs';
 
-const { stringHashCode } = utils;
+const { ANGULAR } = clientFrameworkTypes;
 
 /**
  * @class
@@ -68,7 +69,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
         await (this.prompt as any)(
           [
             {
-              when: this.jhipsterConfig?.clientFramework === constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR,
+              when: this.jhipsterConfig?.clientFramework === ANGULAR,
               type: 'confirm',
               name: 'cypressCoverage',
               message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
@@ -267,7 +268,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
                   }
                 ],
                 enforce: 'post',
-                include: path.resolve(__dirname, '../${constants.CLIENT_MAIN_SRC_DIR}'),
+                include: path.resolve(__dirname, '../${CLIENT_MAIN_SRC_DIR}'),
                 exclude: [/\\.(e2e|spec)\\.ts$/, /node_modules/, /(ngfactory|ngstyle)\\.js/],
               },
             ],

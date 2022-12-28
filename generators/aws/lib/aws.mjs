@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const S3 = require('./s3.cjs');
-const Rds = require('./rds.cjs');
-const Eb = require('./eb.cjs');
-const Iam = require('./iam.cjs');
+import S3 from './s3.mjs';
+import Rds from './rds.mjs';
+import Eb from './eb.mjs';
+import Iam from './iam.mjs';
 
 let Aws;
 let generator;
 
-const AwsFactory = (module.exports = function AwsFactory(generatorRef, cb) {
+const AwsFactory = function AwsFactory(generatorRef, cb) {
   generator = generatorRef;
   try {
     Aws = require('aws-sdk'); // eslint-disable-line
@@ -32,7 +32,7 @@ const AwsFactory = (module.exports = function AwsFactory(generatorRef, cb) {
   } catch (e) {
     generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
   }
-});
+};
 
 AwsFactory.prototype.init = function initAws(options) {
   Aws.config.region = options.region;
@@ -53,3 +53,5 @@ AwsFactory.prototype.getEb = function getEb() {
 AwsFactory.prototype.getIam = function getIa() {
   return new Iam(Aws, generator);
 };
+
+export default AwsFactory;

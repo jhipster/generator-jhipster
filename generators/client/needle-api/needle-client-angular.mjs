@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const _ = require('lodash');
-const needleClientBase = require('./needle-client.cjs');
-const constants = require('../../generator-constants.cjs');
-const jhipsterUtils = require('../../utils.cjs');
+import chalk from 'chalk';
+import _ from 'lodash';
+import needleClientBase from './needle-client.mjs';
+import { LINE_LENGTH } from '../../generator-constants.mjs';
+import { checkStringInFile, replaceContent, checkRegexInFile } from '../../utils.mjs';
 
-module.exports = class extends needleClientBase {
+export default class extends needleClientBase {
   addGlobalSCSSStyle(style, comment) {
     const filePath = `${this.clientSrcDir}content/scss/global.scss`;
     this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
@@ -107,7 +107,7 @@ module.exports = class extends needleClientBase {
 
   _generateImportStatement(appName, angularName, folderName, fileName) {
     let importStatement = `|import { ${appName}${angularName}Module } from './${folderName}/${fileName}.module';`;
-    if (importStatement.length > constants.LINE_LENGTH) {
+    if (importStatement.length > LINE_LENGTH) {
       // prettier-ignore
       importStatement = `|import {
                         |    ${appName}${angularName}Module
@@ -124,9 +124,9 @@ module.exports = class extends needleClientBase {
   addIcon(iconName) {
     const iconsPath = `${this.clientSrcDir}app/config/font-awesome-icons.ts`;
     const iconImport = `fa${this.generator.upperFirstCamelCase(iconName)}`;
-    if (!jhipsterUtils.checkRegexInFile(iconsPath, new RegExp(`\\b${iconImport}\\b`), this.generator)) {
+    if (!checkRegexInFile(iconsPath, new RegExp(`\\b${iconImport}\\b`), this.generator)) {
       try {
-        jhipsterUtils.replaceContent(
+        replaceContent(
           {
             file: iconsPath,
             pattern: /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
@@ -208,7 +208,7 @@ module.exports = class extends needleClientBase {
   }
 
   _addRoute(route, modulePath, moduleName, needleName, filePath, pageTitle) {
-    const isRouteAlreadyAdded = jhipsterUtils.checkStringInFile(filePath, `path: '${route}'`, this.generator);
+    const isRouteAlreadyAdded = checkStringInFile(filePath, `path: '${route}'`, this.generator);
     if (isRouteAlreadyAdded) {
       return;
     }
@@ -232,7 +232,7 @@ module.exports = class extends needleClientBase {
   addEntityToModule(entityAngularName, entityFolderName, entityFileName, entityUrl, microserviceName, pageTitle) {
     const entityModulePath = `${this.clientSrcDir}app/entities/entity-routing.module.ts`;
     try {
-      const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, `path: '${entityUrl}'`, this.generator);
+      const isSpecificEntityAlreadyGenerated = checkStringInFile(entityModulePath, `path: '${entityUrl}'`, this.generator);
 
       if (!isSpecificEntityAlreadyGenerated) {
         const modulePath = `./${entityFolderName}/${entityFileName}.routes`;
@@ -248,4 +248,4 @@ module.exports = class extends needleClientBase {
     const adminModulePath = `${this.clientSrcDir}app/admin/admin-routing.module.ts`;
     this._addRoute(route, modulePath, moduleName, 'jhipster-needle-add-admin-route', adminModulePath, pageTitle);
   }
-};
+}

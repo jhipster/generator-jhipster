@@ -26,10 +26,9 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import { CLI_NAME, logger } from './utils.mjs';
-import generatorUtils from '../generators/utils.cjs';
+import { packageNameToNamespace } from '../generators/utils.mjs';
 import { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } from '../utils/blueprint.mjs';
 
-const { packageNameToNamespace } = generatorUtils;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 

@@ -183,7 +183,7 @@ export const serverFiles = mergeSections(
 );
 
 /**
- * @this {import('./index.cjs')}
+ * @this {import('./index.mjs')}
  */
 export function writeSqlFiles() {
   return this.asWritingTaskGroup({

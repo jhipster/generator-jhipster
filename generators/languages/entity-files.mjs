@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import utils from '../utils.cjs';
+import { getEnumInfo } from '../utils.mjs';
 
 const { startCase } = _;
 
@@ -69,7 +69,7 @@ export function writeEntityFiles() {
                   this.writeFiles({
                     sections: enumClientI18nFiles,
                     context: {
-                      ...utils.getEnumInfo(field, entity.clientRootFolder),
+                      ...getEnumInfo(field, entity.clientRootFolder),
                       lang,
                       frontendAppName,
                       packageName,

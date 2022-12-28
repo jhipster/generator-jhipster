@@ -22,13 +22,10 @@ import path from 'path';
 import semver from 'semver';
 
 import { packageJson } from '../../lib/index.mjs';
-import generatorUtils from '../utils.cjs';
+import { packageNameToNamespace } from '../utils.mjs';
 import JHipsterBaseGenerator from './generator-base.mjs';
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from '../../utils/blueprint.mjs';
-
 import { PRIORITY_NAMES } from './priorities.mjs';
-
-const { packageNameToNamespace } = generatorUtils;
 
 /**
  * Base class for a generator that can be extended through a blueprint.

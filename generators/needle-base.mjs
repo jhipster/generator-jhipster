@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const jhipsterUtils = require('./utils.cjs');
+import chalk from 'chalk';
+import { rewriteFile } from './utils.mjs';
 
-module.exports = class {
+export default class {
   constructor(generator) {
     this.generator = generator;
   }
@@ -34,7 +34,7 @@ module.exports = class {
 
   addBlockContentToFile(rewriteFileModel, errorMessage) {
     try {
-      return jhipsterUtils.rewriteFile(rewriteFileModel, this.generator);
+      return rewriteFile(rewriteFileModel, this.generator);
     } catch (e) {
       this.logNeedleNotFound(e, errorMessage, rewriteFileModel.file);
       return false;
@@ -60,4 +60,4 @@ module.exports = class {
       splicable: content,
     };
   }
-};
+}

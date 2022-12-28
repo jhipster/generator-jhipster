@@ -16,23 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const fs = require('fs');
+import fs from 'fs';
+import { buildToolTypes } from '../../../jdl/jhipster/index.mjs';
 
-const { GRADLE } = require('../../../jdl/jhipster/build-tool-types');
-
+const { GRADLE } = buildToolTypes;
 const FILE_EXTENSION = '.war';
 const S3_STANDARD_REGION = 'us-east-1';
 
 let Progressbar;
 
-const S3 = (module.exports = function S3(Aws, generator) {
+const S3 = function S3(Aws, generator) {
   this.Aws = Aws;
   try {
     Progressbar = require('progress'); // eslint-disable-line
   } catch (e) {
     generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
   }
-});
+};
 
 S3.prototype.createBucket = function createBucket(params, callback) {
   const bucket = params.bucket;
@@ -161,3 +161,5 @@ function success(message, callback) {
 function error(message, callback) {
   callback({ message }, null);
 }
+
+export default S3;

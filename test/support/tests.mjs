@@ -6,9 +6,7 @@ import { fileURLToPath } from 'url';
 
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
 import { skipPrettierHelpers as helpers } from './helpers.mjs';
-import priorities from '../../generators/base-application/priorities.cjs';
-
-const { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } = priorities;
+import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.mjs';
 
 const {
   CONFIGURING_EACH_ENTITY,

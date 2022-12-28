@@ -25,12 +25,10 @@ import { fromMatrix, extendMatrix, AuthenticationTypeMatrix } from '../../test/s
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
 import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './generator.mjs';
-import constants from '../generator-constants.cjs';
+import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 
 const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
-const { CLIENT_TEST_SRC_DIR } = constants;
-
 const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);

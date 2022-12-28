@@ -25,7 +25,7 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import generatorDefaults from '../generator-defaults.mjs';
 import prompts from './prompts.mjs';
 import statistics from '../statistics.cjs';
-import constants from '../generator-constants.cjs';
+import { NODE_VERSION, SERVER_MAIN_RES_DIR, JAVA_VERSION } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
 import { buildToolTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
@@ -123,12 +123,12 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
       },
 
       initConstants() {
-        this.NODE_VERSION = constants.NODE_VERSION;
+        this.NODE_VERSION = NODE_VERSION;
       },
 
       getConstants() {
-        this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-        this.JAVA_VERSION = constants.JAVA_VERSION;
+        this.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
+        this.JAVA_VERSION = JAVA_VERSION;
       },
     };
   }

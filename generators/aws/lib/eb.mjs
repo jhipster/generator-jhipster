@@ -19,7 +19,7 @@
 let aws;
 let uuidV4;
 
-const Eb = (module.exports = function Eb(Aws, generator) {
+const Eb = function Eb(Aws, generator) {
   aws = Aws;
   try {
     const { v4 } = require('uuid'); // eslint-disable-line
@@ -27,7 +27,7 @@ const Eb = (module.exports = function Eb(Aws, generator) {
   } catch (e) {
     generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
   }
-});
+};
 
 Eb.prototype.createApplication = function createApplication(params, callback) {
   const applicationName = params.applicationName;
@@ -245,3 +245,4 @@ function updateEnvironment(params, callback) {
     }
   });
 }
+export default Eb;

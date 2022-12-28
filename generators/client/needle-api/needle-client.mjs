@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const needleBase = require('../../needle-base.cjs');
+import needleBase from '../../needle-base.mjs';
 
-module.exports = class extends needleBase {
+export default class extends needleBase {
   addStyle(style, comment, filePath, needle) {
     const styleBlock = this._mergeStyleAndComment(style, comment);
     const rewriteFileModel = this.generateFileModel(filePath, needle, styleBlock);
@@ -53,4 +53,4 @@ module.exports = class extends needleBase {
 
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
-};
+}

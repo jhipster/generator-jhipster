@@ -23,7 +23,7 @@ import BaseGenerator from '../base/index.mjs';
 
 import statistics from '../statistics.cjs';
 
-import constants from '../generator-constants.cjs';
+import { JAVA_VERSION, CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 
 import { cacheTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_AZURE_SPRING_CLOUD } from '../generator-list.mjs';
@@ -75,7 +75,7 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
         this.loadDerivedPlatformConfig();
       },
       getConfig() {
-        this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+        this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
         this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
         this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
         this.frontendAppName = this.getFrontendAppName();
@@ -85,7 +85,7 @@ export default class AzureSpringCloudGenerator extends BaseGenerator {
         this.azureSpringCloudDeploymentType = this.config.get('azureSpringCloudDeploymentType');
       },
       loadConstants() {
-        this.JAVA_VERSION = constants.JAVA_VERSION;
+        this.JAVA_VERSION = JAVA_VERSION;
       },
     };
   }
@@ -337,8 +337,8 @@ ${chalk.red('az extension add --name spring-cloud')}`
       copyAzureSpringCloudFiles() {
         if (this.abort) return;
         this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
-        this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
-        this.template('bootstrap-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
+        this.template('application-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
+        this.template('bootstrap-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
         if (this.azureSpringCloudDeploymentType === 'github-action') {
           this.template('github/workflows/azure-spring-cloud.yml.ejs', '.github/workflows/azure-spring-cloud.yml');
         }

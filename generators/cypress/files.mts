@@ -16,13 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
+import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 
 import type { WriteFileSection } from '../base/api.mjs';
 import type CypressGenerator from './generator.mjs';
 import type { CypressApplication } from './types.mjs';
 
-const { CLIENT_TEST_SRC_DIR } = constants;
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 
 export const cypressFiles: WriteFileSection<CypressGenerator, CypressApplication> = {

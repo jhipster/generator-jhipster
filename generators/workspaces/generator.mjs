@@ -29,7 +29,6 @@ import { deploymentOptions } from '../../jdl/jhipster/index.mjs';
 const {
   DeploymentTypes: { DOCKERCOMPOSE },
 } = deploymentOptions;
-
 /**
  * Base class for a generator that can be extended through a blueprint.
  *
