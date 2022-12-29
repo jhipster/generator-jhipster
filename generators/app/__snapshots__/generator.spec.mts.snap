@@ -244,6 +244,7 @@ Object {
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
+    "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
     "commons-beanutils": "'COMMONS-BEANUTILS-VERSION'",
     "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
     "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",
@@ -590,6 +591,7 @@ Object {
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
+    "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
     "commons-beanutils": "'COMMONS-BEANUTILS-VERSION'",
     "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
     "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",
@@ -937,6 +939,7 @@ Object {
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
+    "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
     "commons-beanutils": "'COMMONS-BEANUTILS-VERSION'",
     "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
     "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",

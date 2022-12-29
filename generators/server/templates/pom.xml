@@ -7,6 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
+        <blockhound-junit-platform.version>1.0.6.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.2.1</hazelcast-spring.version>
@@ -33,14 +34,19 @@
               <version>${hazelcast-spring.version}</version>
             </dependency>
             <dependency>
+              <groupId>com.google.cloud.tools</groupId>
+              <artifactId>jib-maven-plugin</artifactId>
+              <version>${jib-maven-plugin.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>io.projectreactor.tools</groupId>
+              <artifactId>blockhound-junit-platform</artifactId>
+              <version>${blockhound-junit-platform.version}</version>
+            </dependency>
+            <dependency>
               <groupId>jakarta.validation</groupId>
               <artifactId>jakarta.validation-api</artifactId>
               <version>${validation-api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>${jib-maven-plugin.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.liquibase</groupId>
