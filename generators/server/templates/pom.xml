@@ -25,6 +25,7 @@
         <!-- Plugin versions -->
         <checkstyle.version>10.4</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
+        <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
@@ -114,6 +115,11 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                  <groupId>com.github.eirslett</groupId>
+                  <artifactId>frontend-maven-plugin</artifactId>
+                  <version>${frontend-maven-plugin.version}</version>
+                </plugin>
                 <plugin>
                   <groupId>com.google.cloud.tools</groupId>
                   <artifactId>jib-maven-plugin</artifactId>
