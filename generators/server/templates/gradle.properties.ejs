@@ -36,7 +36,7 @@ jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 caffeineVersion=<%- javaDependencies.caffeine %>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
-typesafeConfigVersion=1.4.2
+typesafeConfigVersion=<%- javaDependencies.typesafe %>
 <%_ } _%>
 <%_ if (enableLiquibase && databaseTypeSql && !reactive) { _%>
 liquibaseHibernate6Version=<%- javaDependencies.liquibase %>
