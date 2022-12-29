@@ -38,6 +38,7 @@
         <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
+        <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
     </properties>
 
     <dependencyManagement>
@@ -121,6 +122,11 @@
                   <groupId>com.puppycrawl.tools</groupId>
                   <artifactId>checkstyle</artifactId>
                   <version>${checkstyle.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>io.spring.nohttp</groupId>
+                  <artifactId>nohttp-checkstyle</artifactId>
+                  <version>${nohttp-checkstyle.version}</version>
                 </plugin>
                 <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
