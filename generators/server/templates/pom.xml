@@ -7,6 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
+        <archunit-junit5.version>1.0.1</archunit-junit5.version>
         <blockhound-junit-platform.version>1.0.6.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
@@ -38,6 +39,11 @@
               <groupId>com.google.cloud.tools</groupId>
               <artifactId>jib-maven-plugin</artifactId>
               <version>${jib-maven-plugin.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.tngtech.archunit</groupId>
+              <artifactId>archunit-junit5-api</artifactId>
+              <version>${archunit-junit5.version}</version>
             </dependency>
             <dependency>
               <groupId>io.projectreactor.tools</groupId>
