@@ -59,7 +59,6 @@ import {
   HIBERNATE_VERSION,
   JACKSON_DATABIND_NULLABLE_VERSION,
   JACOCO_VERSION,
-  JAVA_COMPATIBLE_VERSIONS,
 } from '../generator-constants.mjs';
 import statistics from '../statistics.cjs';
 import generatorDefaults from '../generator-defaults.mjs';
@@ -82,6 +81,7 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
+import checkJava from './support/checks/check-java.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
@@ -181,9 +181,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
 
-      async validateJava() {
+      validateJava() {
         if (!this.options.skipChecks) {
-          await this.checkJava();
+          this.checkJava();
         }
       },
     });
@@ -785,26 +785,19 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   /**
    * Check if a supported Java is installed
+   *
+   * Blueprints can customize or disable java checks versions by overriding this method.
+   * @example
+   * // disable checks
+   * checkJava() {}
+   * @examples
+   * // enforce java lts versions
+   * checkJava() {
+   *   super.checkJava(['8', '11', '17'], { throwOnError: true });
+   * }
    */
-  async checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS) {
-    try {
-      const { exitCode, stderr } = await this.spawnCommand('java', ['-version'], { stdio: 'pipe' });
-      if (exitCode === 0 && stderr) {
-        const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-        if (!javaVersion.match(new RegExp(`(${javaCompatibleVersions.map(ver => `^${ver}`).join('|')})`))) {
-          const [latest, ...others] = javaCompatibleVersions.concat().reverse();
-          this.warning(
-            `Java ${others.reverse().join(', ')} or ${latest} are not found on your computer. Your Java version is: ${chalk.yellow(
-              javaVersion
-            )}`
-          );
-        }
-      } else {
-        this.warning('Error parsing Java version.');
-      }
-    } catch (error) {
-      this.warning('Java is not found on your computer.');
-    }
+  checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation) {
+    this.validateCheckResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
   }
 
   _generateSqlSafeName(name) {
