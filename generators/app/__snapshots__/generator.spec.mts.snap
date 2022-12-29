@@ -247,6 +247,7 @@ Object {
   "javaDependencies": Object {
     "archunit-junit5": "'ARCHUNIT-JUNIT5-VERSION'",
     "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
+    "caffeine": "'CAFFEINE-VERSION'",
     "commons-beanutils": "'COMMONS-BEANUTILS-VERSION'",
     "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
     "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",
@@ -598,6 +599,7 @@ Object {
   "javaDependencies": Object {
     "archunit-junit5": "'ARCHUNIT-JUNIT5-VERSION'",
     "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
+    "caffeine": "'CAFFEINE-VERSION'",
     "commons-beanutils": "'COMMONS-BEANUTILS-VERSION'",
     "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
     "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",
@@ -950,6 +952,7 @@ Object {
   "javaDependencies": Object {
     "archunit-junit5": "'ARCHUNIT-JUNIT5-VERSION'",
     "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
+    "caffeine": "'CAFFEINE-VERSION'",
     "commons-beanutils": "'COMMONS-BEANUTILS-VERSION'",
     "hazelcast-hibernate53": "'HAZELCAST-HIBERNATE-53-VERSION'",
     "hazelcast-spring": "'HAZELCAST-SPRING-VERSION'",

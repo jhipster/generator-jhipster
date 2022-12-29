@@ -33,7 +33,7 @@ archunitJunit5Version=<%- javaDependencies['archunit-junit5'] %>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine || (authenticationTypeOauth2 && !cacheProviderInfinispan)) { _%>
-caffeineVersion=3.1.2
+caffeineVersion=<%- javaDependencies.caffeine %>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
 typesafeConfigVersion=1.4.2
