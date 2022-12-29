@@ -149,6 +149,11 @@
 <%_ } _%>
         <!-- Plugin versions -->
         <checkstyle.version><%- javaDependencies['checkstyle'] %></checkstyle.version>
+<%_ if (!skipClient) { _%>
+        <checksum-maven-plugin.version><%- javaDependencies['checksum-maven-plugin'] %></checksum-maven-plugin.version>
+        <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
+        <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
+<%_ } _%>
         <maven-checkstyle-plugin.version><%- javaDependencies['maven-checkstyle-plugin'] %></maven-checkstyle-plugin.version>
         <maven-clean-plugin.version><%- javaDependencies['maven-clean-plugin'] %></maven-clean-plugin.version>
         <maven-compiler-plugin.version><%- javaDependencies['maven-compiler-plugin'] %></maven-compiler-plugin.version>
@@ -163,11 +168,6 @@
         <maven-surefire-plugin.version><%- javaDependencies['maven-surefire-plugin'] %></maven-surefire-plugin.version>
         <maven-war-plugin.version><%- javaDependencies['maven-war-plugin'] %></maven-war-plugin.version>
         <nohttp-checkstyle.version><%- javaDependencies['nohttp-checkstyle'] %></nohttp-checkstyle.version>
-<%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
-        <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
-        <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-<%_ } _%>
         <git-commit-id-plugin.version>5.0.0</git-commit-id-plugin.version>
         <modernizer-maven-plugin.version>2.5.0</modernizer-maven-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>

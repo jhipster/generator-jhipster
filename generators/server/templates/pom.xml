@@ -24,6 +24,7 @@
 
         <!-- Plugin versions -->
         <checkstyle.version>10.4</checkstyle.version>
+        <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
@@ -127,6 +128,11 @@
                   <groupId>io.spring.nohttp</groupId>
                   <artifactId>nohttp-checkstyle</artifactId>
                   <version>${nohttp-checkstyle.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>net.nicoulaj.maven.plugins</groupId>
+                  <artifactId>checksum-maven-plugin</artifactId>
+                  <version>${checksum-maven-plugin.version}</version>
                 </plugin>
                 <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
