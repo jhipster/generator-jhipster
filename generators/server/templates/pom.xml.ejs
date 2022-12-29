@@ -148,6 +148,7 @@
         <gatling.version><%- javaDependencies.gatling %></gatling.version>
 <%_ } _%>
         <!-- Plugin versions -->
+        <maven-checkstyle-plugin.version><%- javaDependencies['maven-checkstyle-plugin'] %></maven-checkstyle-plugin.version>
         <maven-clean-plugin.version><%- javaDependencies['maven-clean-plugin'] %></maven-clean-plugin.version>
         <maven-compiler-plugin.version><%- javaDependencies['maven-compiler-plugin'] %></maven-compiler-plugin.version>
         <maven-eclipse-plugin.version><%- javaDependencies['maven-eclipse-plugin'] %></maven-eclipse-plugin.version>
@@ -160,7 +161,6 @@
         <maven-site-plugin.version><%- javaDependencies['maven-site-plugin'] %></maven-site-plugin.version>
         <maven-surefire-plugin.version><%- javaDependencies['maven-surefire-plugin'] %></maven-surefire-plugin.version>
         <maven-war-plugin.version><%- javaDependencies['maven-war-plugin'] %></maven-war-plugin.version>
-        <maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
         <checkstyle.version>10.4</checkstyle.version>
         <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
@@ -1005,15 +1005,15 @@
                 </plugin>
 <%_ } _%>
 <%_ if (gatlingTests) { _%>
-            <plugin>
-                <groupId>io.gatling</groupId>
-                <artifactId>gatling-maven-plugin</artifactId>
-                <version>${gatling-maven-plugin.version}</version>
-                <configuration>
-                    <runMultipleSimulations>true</runMultipleSimulations>
-                    <resourcesFolder>${project.basedir}/src/test/gatling/conf</resourcesFolder>
-                </configuration>
-            </plugin>
+                <plugin>
+                    <groupId>io.gatling</groupId>
+                    <artifactId>gatling-maven-plugin</artifactId>
+                    <version>${gatling-maven-plugin.version}</version>
+                    <configuration>
+                        <runMultipleSimulations>true</runMultipleSimulations>
+                        <resourcesFolder>${project.basedir}/src/test/gatling/conf</resourcesFolder>
+                    </configuration>
+                </plugin>
 <%_ } _%>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

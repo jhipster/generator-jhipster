@@ -24,6 +24,7 @@
 
         <!-- Plugin versions -->
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
+        <maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
@@ -114,6 +115,11 @@
                   <groupId>com.google.cloud.tools</groupId>
                   <artifactId>jib-maven-plugin</artifactId>
                   <version>${jib-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-checkstyle-plugin</artifactId>
+                  <version>${maven-checkstyle-plugin.version}</version>
                 </plugin>
                 <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
