@@ -25,6 +25,7 @@
         <!-- Plugin versions -->
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
+        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
     </properties>
 
@@ -109,6 +110,11 @@
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-clean-plugin</artifactId>
                   <version>${maven-clean-plugin.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-compiler-plugin</artifactId>
+                  <version>${maven-compiler-plugin.version}</version>
                 </plugin>
                 <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
