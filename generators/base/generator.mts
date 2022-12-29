@@ -22,6 +22,9 @@ import { createHash } from 'crypto';
 import _ from 'lodash';
 import { simpleGit } from 'simple-git';
 
+import type { CopyOptions } from 'mem-fs-editor';
+import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
+
 import SharedData from './shared-data.mjs';
 
 import JHipsterBaseBlueprintGenerator from './generator-base-blueprint.mjs';
@@ -111,8 +114,8 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
   /**
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
-   * @param {import('./api.mjs').JHipsterOptions} options - Object containing options.
-   * @param {boolean} [common=false] - skip generator scoped options.
+   * @param options - Object containing options.
+   * @param common - skip generator scoped options.
    */
   jhipsterOptions(options: JHipsterOptions, common = false) {
     options = _.cloneDeep(options);
@@ -145,6 +148,22 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
         }
       }
     });
+  }
+
+  /**
+   * Utility function to write file.
+   *
+   * @param source
+   * @param destination - destination
+   * @param data - template data
+   * @param options - options passed to ejs render
+   * @param copyOptions
+   */
+  writeFile(source: string, destination: string, data: TemplateData = this, options?: TemplateOptions, copyOptions?: CopyOptions) {
+    // Convert to any because ejs types doesn't support string[] https://github.com/DefinitelyTyped/DefinitelyTyped/pull/63315
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
+    return this.renderTemplate(source, destination, data, { root, ...options }, copyOptions);
   }
 
   /**

@@ -164,44 +164,6 @@ export function rewrite(args) {
 }
 
 /**
- * Render content
- *
- * @param {string} source source
- * @param {object} generator reference to the generator
- * @param {any} context context
- * @param {object} options options
- * @param {function} [cb] callback function
- * @return {Promise<String>} Promise rendered content
- */
-export function renderContent(source, generator, context, options, cb) {
-  options = {
-    root: options.root || generator.jhipsterTemplatesFolders || generator.templatePath(),
-    context: generator,
-    ...options,
-  };
-  if (context.entityClass) {
-    const basename = path.basename(source);
-    if (context.configOptions && context.configOptions.sharedEntities) {
-      Object.values(context.configOptions.sharedEntities).forEach(entity => {
-        entity.resetFakerSeed(`${context.entityClass}-${basename}`);
-      });
-    } else if (context.resetFakerSeed) {
-      context.resetFakerSeed(basename);
-    }
-  }
-  const promise = ejs.renderFile(generator.templatePath(source), context, options);
-  if (cb) {
-    return promise
-      .then(res => cb(res))
-      .catch(err => {
-        generator.warning(`Copying template ${source} failed. [${err}]`);
-        throw err;
-      });
-  }
-  return promise;
-}
-
-/**
  *
  * @param obj object to find in
  * @param path path to traverse
