@@ -66,7 +66,7 @@ jaxbRuntimeVersion=<%- javaDependencies['jaxb-runtime'] %>
 <%_ if (databaseTypeCassandra) { _%>
 # The cassandra driver version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %>
-cassandraDriverVersion=4.15.0
+cassandraDriverVersion=<%= CASSANDRA_DRIVER_VERSION %>
 <%_ } _%>
 
 # gradle plugin version
