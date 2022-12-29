@@ -103,7 +103,6 @@ export default class EntitiesGenerator extends BaseGenerator {
       if (!this.jhipsterConfig.baseName) {
         this.jhipsterConfig.baseName = this.getDefaultAppName();
       }
-      this.setConfigDefaults(this.getDefaultConfigForApplicationType());
     }
 
     if (!this.options.entities || this.options.entities.length === 0 || this.options.writeEveryEntity) {

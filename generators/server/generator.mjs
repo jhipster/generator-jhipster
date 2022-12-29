@@ -62,7 +62,6 @@ import {
   JACOCO_VERSION,
 } from '../generator-constants.mjs';
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.mjs';
 
 import {
   applicationTypes,
@@ -88,7 +87,6 @@ import { normalizePathEnd } from '../base/utils.mjs';
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
-const { defaultConfig } = generatorDefaults;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { EUREKA } = serviceDiscoveryTypes;
@@ -185,6 +183,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       validateJava() {
         if (!this.options.skipChecks) {
           this.checkJava();
+        }
+      },
+
+      setupRequiredConfig() {
+        if (!this.jhipsterConfig.applicationType) {
+          this.jhipsterConfig.applicationType = 'monolith';
         }
       },
     });

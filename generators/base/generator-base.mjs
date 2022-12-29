@@ -33,13 +33,11 @@ import { packageJson } from '../../lib/index.mjs';
 import { stringHashCode } from '../utils.mjs';
 import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
-import generatorDefaults from '../generator-defaults.mjs';
 import commonOptions from './options.mjs';
 import detectLanguage from '../languages/detect-language.mjs';
 import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
 import {
-  defaultApplicationOptions,
   databaseTypes,
   monitoringTypes,
   authenticationTypes,
@@ -52,6 +50,7 @@ import {
   serviceDiscoveryTypes,
   searchEngineTypes,
   clientFrameworkTypes,
+  getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 
 import databaseData from '../sql-constants.mjs';
@@ -72,7 +71,6 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const { defaultConfig, defaultConfigMicroservice } = generatorDefaults;
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -2398,10 +2396,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.enableGradleEnterprise = config.enableGradleEnterprise;
 
-    if (config.gradleEnterpriseHost && !config.gradleEnterpriseHost.startsWith('https://')) {
-      dest.gradleEnterpriseHost = `https://${config.gradleEnterpriseHost}`;
-    } else {
-      dest.gradleEnterpriseHost = config.gradleEnterpriseHost;
+    if (config.gradleEnterpriseHost) {
+      if (config.gradleEnterpriseHost.startsWith('https://')) {
+        dest.gradleEnterpriseHost = config.gradleEnterpriseHost;
+      } else {
+        dest.gradleEnterpriseHost = `https://${config.gradleEnterpriseHost}`;
+      }
     }
   }
 
@@ -2568,24 +2568,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Default config based on current applicationType
-   */
-  get jhipsterDefaults() {
-    return this.getDefaultConfigForApplicationType();
-  }
-
-  /**
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults() {
-    return _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
-  }
-
-  getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
-    return {
-      ...(applicationType === MICROSERVICE ? defaultConfigMicroservice : defaultConfig),
-      ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
-    };
+    const configWithDefaults = getConfigWithDefaults(this.config.getAll());
+    _.defaults(configWithDefaults, {
+      skipFakeData: false,
+      skipCheckLengthOfIdentifier: false,
+      enableGradleEnterprise: false,
+      pages: [],
+      gatewayServerPort: 8080,
+    });
+    return configWithDefaults;
   }
 
   setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {

@@ -353,6 +353,9 @@ Object {
   "src/main/resources/i18n/messages_en.properties": Object {
     "stateCleared": "modified",
   },
+  "src/main/resources/i18n/messages_fr.properties": Object {
+    "stateCleared": "modified",
+  },
   "src/main/resources/logback-spring.xml": Object {
     "stateCleared": "modified",
   },
@@ -1148,6 +1151,51 @@ Object {
   "src/main/webapp/i18n/en/user-management.json": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/i18n/fr/activate.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/configuration.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/error.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/global.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/health.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/home.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/login.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/logs.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/metrics.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/password.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/register.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/reset.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/sessions.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/settings.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/user-management.json": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/index.html": Object {
     "stateCleared": "modified",
   },
@@ -1278,6 +1326,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_en.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_fr.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/junit-platform.properties": Object {

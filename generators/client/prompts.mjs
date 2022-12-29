@@ -17,16 +17,15 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import generatorDefaults from '../generator-defaults.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-const { clientDefaultConfig } = generatorDefaults;
 const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 
 export async function askForClient({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
+  const config = this.jhipsterConfigWithDefaults;
   const choices = [
     {
       value: ANGULAR,
@@ -53,7 +52,7 @@ export async function askForClient({ control }) {
       when: () => this.jhipsterConfig.applicationType !== 'microservice',
       message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
       choices,
-      default: clientDefaultConfig.clientFramework,
+      default: config.clientFramework,
     },
     this.config
   );
@@ -67,7 +66,8 @@ export async function askForClient({ control }) {
 export async function askForClientTheme({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const answers = await this.prompt(
+  const config = this.jhipsterConfigWithDefaults;
+  await this.prompt(
     {
       type: 'list',
       name: 'clientTheme',
@@ -86,7 +86,7 @@ export async function askForClientTheme({ control }) {
           ...bootswatchChoices,
         ];
       },
-      default: clientDefaultConfig.clientTheme,
+      default: config.clientTheme,
     },
     this.config
   );
@@ -98,7 +98,8 @@ export async function askForClientThemeVariant({ control }) {
     return;
   }
 
-  const answers = await this.prompt(
+  const config = this.jhipsterConfigWithDefaults;
+  await this.prompt(
     {
       type: 'list',
       name: 'clientThemeVariant',
@@ -109,7 +110,7 @@ export async function askForClientThemeVariant({ control }) {
         { value: 'dark', name: 'Dark' },
         { value: 'light', name: 'Light' },
       ],
-      default: clientDefaultConfig.clientThemeVariant,
+      default: config.clientThemeVariant,
     },
     this.config
   );
@@ -118,13 +119,14 @@ export async function askForClientThemeVariant({ control }) {
 export async function askForAdminUi({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const answers = await this.prompt(
+  const config = this.jhipsterConfigWithDefaults;
+  await this.prompt(
     {
       type: 'confirm',
       name: 'withAdminUi',
       when: () => !this.jhipsterConfig.skipClient,
       message: 'Do you want to generate the admin UI?',
-      default: clientDefaultConfig.withAdminUi,
+      default: config.withAdminUi,
     },
     this.config
   );

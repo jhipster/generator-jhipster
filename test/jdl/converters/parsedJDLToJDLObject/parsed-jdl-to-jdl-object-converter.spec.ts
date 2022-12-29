@@ -644,7 +644,7 @@ JDLApplication {
       },
       "serverPort": IntegerJDLApplicationConfigurationOption {
         "name": "serverPort",
-        "value": "8080",
+        "value": 8080,
       },
       "serviceDiscoveryType": StringJDLApplicationConfigurationOption {
         "name": "serviceDiscoveryType",

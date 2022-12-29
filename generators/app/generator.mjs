@@ -27,7 +27,6 @@ import { cleanupOldFiles, upgradeFiles } from '../cleanup.mjs';
 import prompts from './prompts.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.mjs';
 import {
   GENERATOR_APP,
   GENERATOR_COMMON,
@@ -40,7 +39,6 @@ import {
 
 import { applicationTypes, applicationOptions, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-const { appDefaultConfig } = generatorDefaults;
 const { MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = applicationOptions.OptionNames;
@@ -308,11 +306,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
     this.loadStoredAppOptions();
     this.loadRuntimeOptions();
 
-    // Use jhipster defaults
-    if (this.options.defaults || this.options.withEntities) {
-      this.setConfigDefaults(this.getDefaultConfigForApplicationType());
-    }
-
     // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
   }
@@ -393,12 +386,11 @@ export default class JHipsterAppGenerator extends BaseGenerator {
         if (this.jhipsterConfig.skipClient) {
           this.jhipsterConfig.clientFramework = CLIENT_FRAMEWORK_NO;
         }
-
-        // Set app defaults
-        this.setConfigDefaults(appDefaultConfig);
       },
       fixConfig() {
-        this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
+        if (this.jhipsterConfig.jhiPrefix) {
+          this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
+        }
       },
     };
   }

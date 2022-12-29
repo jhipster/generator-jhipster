@@ -20,11 +20,11 @@
 import { expect } from 'chai';
 import { prepareEntityForTemplates, loadRequiredConfigIntoEntity } from '../utils/entity.mjs';
 import { formatDateForChangelog } from '../generators/base/utils.mjs';
-import generatorDefaults from '../generators/generator-defaults.mjs';
 import BaseGenerator from '../generators/base/index.mjs';
 import { prepareFieldForTemplates, getEnumValuesWithCustomValues } from '../utils/field.mjs';
+import { getConfigWithDefaults } from '../jdl/jhipster/index.mjs';
 
-const { defaultConfig } = generatorDefaults;
+const defaultConfig = getConfigWithDefaults();
 
 describe('main utilities', () => {
   const defaultGenerator = { jhipsterConfig: defaultConfig };

@@ -1442,9 +1442,6 @@ Object {
   "src/main/java/com/package/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/CacheConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/Constants.java": Object {
     "stateCleared": "modified",
   },
@@ -2263,9 +2260,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/CRLFLogConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/CacheConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/Constants.java": Object {
@@ -3235,9 +3229,6 @@ Object {
   "src/main/java/com/package/config/CRLFLogConverter.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/CacheConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/Constants.java": Object {
     "stateCleared": "modified",
   },
@@ -4107,9 +4098,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/CRLFLogConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/CacheConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/Constants.java": Object {
@@ -5110,9 +5098,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/CRLFLogConverter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/CacheConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/Constants.java": Object {

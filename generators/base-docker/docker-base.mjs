@@ -21,7 +21,7 @@ import chalk from 'chalk';
 import _ from 'lodash';
 
 import { createBase64Secret } from '../../lib/utils/secret-utils.mjs';
-import { applicationTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
+import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
@@ -111,9 +111,8 @@ export function loadConfigs() {
   this.appsFolders.forEach((appFolder, index) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
-      const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
+      const config = getConfigWithDefaults(this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll());
       config.composePort = serverPort + index;
-      _.defaults(config, this.getDefaultConfigForApplicationType(config.applicationType));
       this.loadAppConfig(config, config);
       this.loadServerConfig(config, config);
       this.loadPlatformConfig(config, config);
