@@ -27,6 +27,7 @@ import { JAVA_VERSION, CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../gener
 
 import { cacheTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_AZURE_SPRING_CLOUD } from '../generator-list.mjs';
+import { mavenProfile } from './templates.mjs';
 
 const { MEMCACHED } = cacheTypes;
 
@@ -337,19 +338,17 @@ ${chalk.red('az extension add --name spring-cloud')}`
       copyAzureSpringCloudFiles() {
         if (this.abort) return;
         this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
-        this.template('application-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
-        this.template('bootstrap-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
+        this.writeFile('application-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
+        this.writeFile('bootstrap-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
         if (this.azureSpringCloudDeploymentType === 'github-action') {
-          this.template('github/workflows/azure-spring-cloud.yml.ejs', '.github/workflows/azure-spring-cloud.yml');
+          this.writeFile('github/workflows/azure-spring-cloud.yml.ejs', '.github/workflows/azure-spring-cloud.yml');
         }
       },
 
       addAzureSpringCloudMavenProfile() {
         if (this.abort) return;
         if (this.buildTool === MAVEN) {
-          this.render('pom-profile.xml.ejs', profile => {
-            this.addMavenProfile('azure', `            ${profile.toString().trim()}`);
-          });
+          this.addMavenProfile('azure', mavenProfile());
         }
       },
     };

@@ -22,13 +22,12 @@ import Generator from 'yeoman-generator';
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 import semver from 'semver';
-import { exec } from 'child_process';
 import https from 'https';
 
 import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 import { packageJson } from '../../lib/index.mjs';
-import { getJavadoc, renderContent } from '../utils.mjs';
+import { getJavadoc } from '../utils.mjs';
 import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
@@ -413,53 +412,6 @@ export default class PrivateBase extends Generator {
   }
 
   /**
-   * @private
-   * Utility function to copy and process templates.
-   *
-   * @param {string} source - source
-   * @param {string} destination - destination
-   * @param {*} generator - reference to the generator
-   * @param {*} options - options object
-   * @param {*} context - context
-   */
-  template(source, destination, generator, options = {}, context) {
-    const _this = generator || this;
-    const _context = context || _this;
-    const customDestination = _this.destinationPath(destination);
-    if (!customDestination) {
-      this.debug(`File ${destination} ignored`);
-      return Promise.resolved();
-    }
-    return renderContent(source, _this, _context, options)
-      .then(res => {
-        _this.fs.write(customDestination, res);
-        return customDestination;
-      })
-      .catch(error => {
-        this.warning(source);
-        throw error;
-      });
-  }
-
-  /**
-   * @private
-   * Utility function to render a template into a string
-   *
-   * @param {string} source - source
-   * @param {function} callback - callback to take the rendered template as a string
-   * @param {*} generator - reference to the generator
-   * @param {*} options - options object
-   * @param {*} context - context
-   */
-  render(source, callback, generator, options = {}, context) {
-    const _this = generator || this;
-    const _context = context || _this;
-    renderContent(source, _this, _context, options, res => {
-      callback(res);
-    });
-  }
-
-  /**
    * Print a debug message.
    *
    * @param {string} msg - message to print
@@ -475,31 +427,6 @@ export default class PrivateBase extends Generator {
       this._debug(formattedMsg);
       args.forEach(arg => this._debug(arg));
     }
-  }
-
-  /**
-   * @private
-   * Check if Java is installed
-   */
-  checkJava() {
-    if (this.skipChecks || this.skipServer) return;
-    const done = this.async();
-    exec('java -version', (err, stdout, stderr) => {
-      if (err) {
-        this.warning('Java is not found on your computer.');
-      } else {
-        const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-        if (!javaVersion.match(new RegExp(`(${JAVA_COMPATIBLE_VERSIONS.map(ver => `^${ver}`).join('|')})`))) {
-          const [latest, ...others] = JAVA_COMPATIBLE_VERSIONS.concat().reverse();
-          this.warning(
-            `Java ${others.reverse().join(', ')} or ${latest} are not found on your computer. Your Java version is: ${chalk.yellow(
-              javaVersion
-            )}`
-          );
-        }
-      }
-      done();
-    });
   }
 
   /**

@@ -339,10 +339,6 @@ export default class JHipsterAppGenerator extends BaseGenerator {
         }
       },
 
-      validateJava() {
-        this.checkJava();
-      },
-
       validateNode() {
         this.checkNode();
       },

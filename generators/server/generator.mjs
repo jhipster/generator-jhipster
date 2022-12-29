@@ -82,6 +82,7 @@ import {
 } from '../../jdl/jhipster/index.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
+import checkJava from './support/checks/check-java.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
@@ -181,9 +182,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
 
-      setupRequiredConfig() {
-        if (!this.jhipsterConfig.applicationType) {
-          this.jhipsterConfig.applicationType = defaultConfig.applicationType;
+      validateJava() {
+        if (!this.options.skipChecks) {
+          this.checkJava();
         }
       },
     });
@@ -784,6 +785,23 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       config.prodDatabaseType = databaseType;
       config.enableHibernateCache = false;
     }
+  }
+
+  /**
+   * Check if a supported Java is installed
+   *
+   * Blueprints can customize or disable java checks versions by overriding this method.
+   * @example
+   * // disable checks
+   * checkJava() {}
+   * @examples
+   * // enforce java lts versions
+   * checkJava() {
+   *   super.checkJava(['8', '11', '17'], { throwOnError: true });
+   * }
+   */
+  checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation) {
+    this.validateCheckResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
   }
 
   _generateSqlSafeName(name) {

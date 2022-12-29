@@ -1,9 +1,8 @@
 import { fileURLToPath } from 'url';
-
 import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
 
-import { getEnumInfo, getJavadoc, deepFind, stringHashCode, renderContent } from '../generators/utils.mjs';
+import { getEnumInfo, getJavadoc, deepFind, stringHashCode } from '../generators/utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -233,45 +232,6 @@ describe('JHipster Utils', () => {
   describe('::stringHashCode', () => {
     it('calculates hash', () => {
       assert.equal(stringHashCode('some text'), 642107175);
-    });
-  });
-  describe('::renderContent', () => {
-    const fixturesPath = path.join(__dirname, 'fixtures', 'renderContent');
-    it('should render the included content', done => {
-      renderContent(
-        path.join(fixturesPath, 'include.ejs'),
-        { templatePath: tmpl => tmpl },
-        {},
-        { root: [path.join(fixturesPath, 'common')] },
-        res => {
-          assert.equal(res, 'common');
-          done();
-        }
-      );
-    });
-    it('when 2 roots are provided, first should have precedence', done => {
-      renderContent(
-        path.join(fixturesPath, 'include.ejs'),
-        { templatePath: tmpl => tmpl },
-        {},
-        { root: [path.join(fixturesPath, 'specific'), path.join(fixturesPath, 'common')] },
-        res => {
-          assert.equal(res, 'specific');
-          done();
-        }
-      );
-    });
-    it('when 2 roots are provided, should find the template in the second folder if does not exists in the first', done => {
-      renderContent(
-        path.join(fixturesPath, 'include_common.ejs'),
-        { templatePath: tmpl => tmpl },
-        {},
-        { root: [path.join(fixturesPath, 'specific'), path.join(fixturesPath, 'common')] },
-        res => {
-          assert.equal(res, 'common');
-          done();
-        }
-      );
     });
   });
 });

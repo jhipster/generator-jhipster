@@ -230,19 +230,19 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
           });
         }
         if (this.pipeline === 'gitlab') {
-          this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
+          this.writeFile('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
         }
         if (this.pipeline === 'circle') {
-          this.template('circle.yml.ejs', '.circleci/config.yml');
+          this.writeFile('circle.yml.ejs', '.circleci/config.yml');
         }
         if (this.pipeline === 'travis') {
-          this.template('travis.yml.ejs', '.travis.yml');
+          this.writeFile('travis.yml.ejs', '.travis.yml');
         }
         if (this.pipeline === 'azure') {
-          this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
+          this.writeFile('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
         }
         if (this.pipeline === 'github') {
-          this.template('github-actions.yml.ejs', '.github/workflows/main.yml');
+          this.writeFile('github-actions.yml.ejs', '.github/workflows/main.yml');
         }
 
         if (this.cicdIntegrations.includes('deploy')) {
@@ -261,7 +261,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
         }
 
         if (this.cicdIntegrations.includes('publishDocker')) {
-          this.template('docker-registry.yml.ejs', `${application.dockerServicesDir}docker-registry.yml`);
+          this.writeFile('docker-registry.yml.ejs', `${application.dockerServicesDir}docker-registry.yml`);
         }
       },
     });

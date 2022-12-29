@@ -38,6 +38,7 @@ import {
   searchEngineTypes,
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
+import { mavenProfileContent } from './templates.mjs';
 
 const cacheProviderOptions = cacheTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
@@ -576,15 +577,15 @@ export default class HerokuGenerator extends BaseGenerator {
 
         this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-        this.template('bootstrap-heroku.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
-        this.renderTemplate('application-heroku.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, this);
-        this.template('Procfile.ejs', 'Procfile');
-        this.template('system.properties.ejs', 'system.properties');
+        this.writeFile('bootstrap-heroku.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
+        this.writeFile('application-heroku.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
+        this.writeFile('Procfile.ejs', 'Procfile');
+        this.writeFile('system.properties.ejs', 'system.properties');
         if (this.buildTool === GRADLE) {
-          this.template('heroku.gradle.ejs', 'gradle/heroku.gradle');
+          this.writeFile('heroku.gradle.ejs', 'gradle/heroku.gradle');
         }
         if (this.useOkta) {
-          this.template('provision-okta-addon.sh.ejs', 'provision-okta-addon.sh');
+          this.writeFile('provision-okta-addon.sh.ejs', 'provision-okta-addon.sh');
           fs.appendFile('.gitignore', 'provision-okta-addon.sh', 'utf8', (err, data) => {
             if (err) {
               this.log(`${chalk.yellow.bold('WARNING!')} Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
@@ -603,9 +604,7 @@ export default class HerokuGenerator extends BaseGenerator {
       addHerokuMavenProfile() {
         if (this.abort) return;
         if (this.buildTool === MAVEN) {
-          this.render('pom-profile.xml.ejs', profile => {
-            this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
-          });
+          this.addMavenProfile('heroku', mavenProfileContent(this));
         }
       },
     });

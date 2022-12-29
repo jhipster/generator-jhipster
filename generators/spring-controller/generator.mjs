@@ -179,11 +179,11 @@ export default class SpringControllerGenerator extends BaseGenerator {
           );
         });
 
-        this.template(
+        this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-controller/templates')}/${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
           `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}.java`
         );
-        this.template(
+        this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-controller/templates')}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIT.java.ejs`,
           `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IT.java`
         );

@@ -129,13 +129,13 @@ export default class SpringServiceGenerator extends BaseGenerator {
         this.serviceClass = _.upperFirst(this.name) + (this.name.endsWith('Service') ? '' : 'Service');
         this.serviceInstance = _.lowerCase(this.serviceClass);
 
-        this.template(
+        this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-service/templates')}/${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
           `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`
         );
 
         if (this.useInterface) {
-          this.template(
+          this.writeFile(
             `${this.fetchFromInstalledJHipster(
               'spring-service/templates'
             )}/${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,

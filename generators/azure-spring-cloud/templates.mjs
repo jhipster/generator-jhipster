@@ -1,4 +1,5 @@
-        <dependencies>
+// eslint-disable-next-line import/prefer-default-export
+export const mavenProfile = () => `            <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-undertow</artifactId>
@@ -22,5 +23,5 @@
         </dependencies>
         <properties>
             <!-- default Spring profiles -->
-            <spring.profiles.active>prod,azure${profile.api-docs}</spring.profiles.active>
-        </properties>
+            <spring.profiles.active>prod,azure\${profile.api-docs}</spring.profiles.active>
+        </properties>`;
