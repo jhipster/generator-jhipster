@@ -115,7 +115,7 @@
 <%_ } _%>
 <%_ if (enableLiquibase && databaseTypeSql) { _%>
   <%_ if (!reactive) { _%>
-        <liquibase-hibernate5.version><%- javaDependencies.liquibase %></liquibase-hibernate5.version>
+        <liquibase-hibernate6.version><%- javaDependencies.liquibase %></liquibase-hibernate6.version>
   <%_ } _%>
         <validation-api.version>3.0.2.Final</validation-api.version>
   <%_ if (reactive) { _%>
@@ -1809,8 +1809,8 @@
                                 </dependency>
                                 <dependency>
                                     <groupId>org.liquibase.ext</groupId>
-                                    <artifactId>liquibase-hibernate5</artifactId>
-                                    <version>${liquibase-hibernate5.version}</version>
+                                    <artifactId>liquibase-hibernate6</artifactId>
+                                    <version>${liquibase-hibernate6.version}</version>
                                 </dependency>
                                 <dependency>
                                     <groupId>org.springframework.boot</groupId>
@@ -1994,8 +1994,8 @@
                                 </dependency>
                                 <dependency>
                                     <groupId>org.liquibase.ext</groupId>
-                                    <artifactId>liquibase-hibernate5</artifactId>
-                                    <version>${liquibase-hibernate5.version}</version>
+                                    <artifactId>liquibase-hibernate6</artifactId>
+                                    <version>${liquibase-hibernate6.version}</version>
                                 </dependency>
                                 <dependency>
                                     <groupId>org.springframework.boot</groupId>
