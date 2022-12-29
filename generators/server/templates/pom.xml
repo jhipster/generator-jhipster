@@ -23,6 +23,7 @@
         <validation-api.version>3.0.2.Final</validation-api.version>
 
         <!-- Plugin versions -->
+        <checkstyle.version>10.4</checkstyle.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
@@ -115,6 +116,11 @@
                   <groupId>com.google.cloud.tools</groupId>
                   <artifactId>jib-maven-plugin</artifactId>
                   <version>${jib-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>com.puppycrawl.tools</groupId>
+                  <artifactId>checkstyle</artifactId>
+                  <version>${checkstyle.version}</version>
                 </plugin>
                 <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
