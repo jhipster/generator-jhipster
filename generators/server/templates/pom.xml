@@ -47,6 +47,7 @@
         <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
         <openapi-generator-maven-plugin.version>6.2.1</openapi-generator-maven-plugin.version>
         <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
+        <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -240,6 +241,11 @@
                   <groupId>org.openapitools</groupId>
                   <artifactId>openapi-generator-maven-plugin</artifactId>
                   <version>${openapi-generator-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>org.sonarsource.scanner.maven</groupId>
+                  <artifactId>sonar-maven-plugin</artifactId>
+                  <version>${sonar-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
