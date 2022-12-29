@@ -180,7 +180,7 @@
 <%_ if (enableSwaggerCodegen) { _%>
         <openapi-generator-maven-plugin.version><%- javaDependencies['openapi-generator-maven-plugin'] %></openapi-generator-maven-plugin.version>
 <%_ } _%>
-        <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
+        <properties-maven-plugin.version><%- javaDependencies['properties-maven-plugin'] %></properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
 <%_ if (searchEngineElasticsearch) { _%>
         <awaitility.version>4.2.0</awaitility.version>
