@@ -117,7 +117,7 @@
   <%_ if (!reactive) { _%>
         <liquibase-hibernate6.version><%- javaDependencies.liquibase %></liquibase-hibernate6.version>
   <%_ } _%>
-        <validation-api.version>3.0.2.Final</validation-api.version>
+        <validation-api.version><%- javaDependencies['validation-api'] %></validation-api.version>
   <%_ if (reactive) { _%>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
   <%_ } _%>
