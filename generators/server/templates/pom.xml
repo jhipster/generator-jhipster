@@ -7,6 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.2.1</hazelcast-spring.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
@@ -16,6 +17,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+              <groupId>commons-beanutils</groupId>
+              <artifactId>commons-beanutils</artifactId>
+              <version>${commons-beanutils.version}</version>
+            </dependency>
             <dependency>
               <groupId>com.hazelcast</groupId>
               <artifactId>hazelcast-hibernate53</artifactId>
@@ -29,7 +35,7 @@
             <dependency>
               <groupId>jakarta.validation</groupId>
               <artifactId>jakarta.validation-api</artifactId>
-              <version>${jakarta.validation-api.version}</version>
+              <version>${validation-api.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.cloud.tools</groupId>
