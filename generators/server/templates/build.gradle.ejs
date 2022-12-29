@@ -242,6 +242,9 @@ liquibase {
 
     runList = project.ext.runList
 }
+
+liquibaseDiff.dependsOn compileJava
+liquibaseDiffChangeLog.dependsOn compileJava
 <%_ } _%>
 
 gitProperties {
