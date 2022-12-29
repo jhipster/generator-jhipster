@@ -80,7 +80,7 @@ liquibasePluginVersion=2.1.1
 <%_ } _%>
 sonarqubePluginVersion=3.5.0.2730
 <%_ if (enableSwaggerCodegen) { _%>
-openapiPluginVersion=6.2.1
+openapiPluginVersion=<%- javaDependencies['openapi-generator-maven-plugin'] %>
 <%_ } _%>
 noHttpCheckstyleVersion=<%- javaDependencies['nohttp-checkstyle'] %>
 checkstyleVersion=<%- javaDependencies['checkstyle'] %>

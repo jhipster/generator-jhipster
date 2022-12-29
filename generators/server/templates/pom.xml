@@ -45,6 +45,7 @@
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
         <modernizer-maven-plugin.version>2.5.0</modernizer-maven-plugin.version>
         <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
+        <openapi-generator-maven-plugin.version>6.2.1</openapi-generator-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -228,6 +229,11 @@
                   <groupId>org.gaul</groupId>
                   <artifactId>modernizer-maven-plugin</artifactId>
                   <version>${modernizer-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>org.openapitools</groupId>
+                  <artifactId>openapi-generator-maven-plugin</artifactId>
+                  <version>${openapi-generator-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
