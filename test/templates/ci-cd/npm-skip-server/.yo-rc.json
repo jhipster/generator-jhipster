@@ -12,8 +12,6 @@
     "authenticationType": "jwt",
     "cacheProvider": "no",
     "databaseType": "sql",
-    "devDatabaseType": "sql",
-    "prodDatabaseType": "sql",
     "creationTimestamp": 1583434912169,
     "testFrameworks": [],
     "jhiPrefix": "jhi",

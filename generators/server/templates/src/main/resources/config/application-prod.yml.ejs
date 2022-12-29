@@ -144,10 +144,6 @@ spring:
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
   <%_ } _%>
-  jpa:
-  <%_ if (prodDatabaseTypePostgres) { _%>
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
   data:

@@ -31,7 +31,7 @@ import { getJavadoc } from '../utils.mjs';
 import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
-import databaseData from '../sql-constants.mjs';
+import databaseData from '../sql/support/constants.mjs';
 import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;

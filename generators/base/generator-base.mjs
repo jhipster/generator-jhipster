@@ -53,7 +53,7 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 
-import databaseData from '../sql-constants.mjs';
+import databaseData from '../sql/support/constants.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
@@ -67,6 +67,7 @@ import {
   NODE_VERSION,
   LANGUAGES,
 } from '../generator-constants.mjs';
+import { getApplicationDialect } from '../sql/support/hibernate.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -2500,6 +2501,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
 
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
+
+    if (dest.databaseTypeSql) {
+      dest.devHibernateDialect = getApplicationDialect(dest.devDatabaseType);
+      dest.prodHibernateDialect = getApplicationDialect(dest.prodDatabaseType);
+    }
+
     this.loadServerAndPlatformConfig(dest);
   }
 

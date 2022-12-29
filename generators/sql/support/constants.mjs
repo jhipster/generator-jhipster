@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { databaseTypes } from '../jdl/jhipster/index.mjs';
+import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
 
 const { H2_DISK, H2_MEMORY, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 
