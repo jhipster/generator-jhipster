@@ -36,6 +36,7 @@ import type {
   EditFileCallback,
   CascatedEditFileCallback,
   JHipsterOptions,
+  CheckResult,
 } from './api.mjs';
 import type { BaseTaskGroup } from './tasks.mjs';
 
@@ -222,6 +223,26 @@ export default class BaseGenerator extends JHipsterBaseBlueprintGenerator {
     return {
       ...map,
     };
+  }
+
+  /**
+   * Print CheckResult info/warnings or throw result Error.
+   */
+  validateCheckResult(result: CheckResult, { printInfo = false, throwOnError = true } = {}) {
+    // Don't print check info by default for cleaner outputs.
+    if (printInfo && result.info) {
+      this.info(result.info);
+    }
+    if (result.warning) {
+      this.warning(result.warning);
+    }
+    if (result.error) {
+      if (throwOnError) {
+        throw new Error(result.error);
+      } else {
+        this.warning(result.error);
+      }
+    }
   }
 
   /**

@@ -22,7 +22,6 @@ import Generator from 'yeoman-generator';
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 import semver from 'semver';
-import { exec } from 'child_process';
 import https from 'https';
 
 import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -475,31 +474,6 @@ export default class PrivateBase extends Generator {
       this._debug(formattedMsg);
       args.forEach(arg => this._debug(arg));
     }
-  }
-
-  /**
-   * @private
-   * Check if Java is installed
-   */
-  checkJava() {
-    if (this.skipChecks || this.skipServer) return;
-    const done = this.async();
-    exec('java -version', (err, stdout, stderr) => {
-      if (err) {
-        this.warning('Java is not found on your computer.');
-      } else {
-        const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-        if (!javaVersion.match(new RegExp(`(${JAVA_COMPATIBLE_VERSIONS.map(ver => `^${ver}`).join('|')})`))) {
-          const [latest, ...others] = JAVA_COMPATIBLE_VERSIONS.concat().reverse();
-          this.warning(
-            `Java ${others.reverse().join(', ')} or ${latest} are not found on your computer. Your Java version is: ${chalk.yellow(
-              javaVersion
-            )}`
-          );
-        }
-      }
-      done();
-    });
   }
 
   /**
