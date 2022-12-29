@@ -24,6 +24,7 @@
 
         <!-- Plugin versions -->
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
+        <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -102,6 +103,11 @@
                   <groupId>com.google.cloud.tools</groupId>
                   <artifactId>jib-maven-plugin</artifactId>
                   <version>${jib-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-clean-plugin</artifactId>
+                  <version>${maven-clean-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
