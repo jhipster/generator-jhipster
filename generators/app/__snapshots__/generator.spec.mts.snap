@@ -245,7 +245,7 @@ Object {
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
-    "archunit-junit5": "'ARCHUNIT-JUNIT5-VERSION'",
+    "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
     "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
     "caffeine": "'CAFFEINE-VERSION'",
     "commons-beanutils": "'COMMONS-BEANUTILS-VERSION'",
@@ -600,7 +600,7 @@ Object {
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
-    "archunit-junit5": "'ARCHUNIT-JUNIT5-VERSION'",
+    "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
     "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
     "caffeine": "'CAFFEINE-VERSION'",
     "commons-beanutils": "'COMMONS-BEANUTILS-VERSION'",
@@ -956,7 +956,7 @@ Object {
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
-    "archunit-junit5": "'ARCHUNIT-JUNIT5-VERSION'",
+    "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
     "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
     "caffeine": "'CAFFEINE-VERSION'",
     "commons-beanutils": "'COMMONS-BEANUTILS-VERSION'",
