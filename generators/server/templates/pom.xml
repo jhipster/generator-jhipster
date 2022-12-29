@@ -11,6 +11,7 @@
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.2.1</hazelcast-spring.version>
+        <jaxb-runtime.version>4.0.1</jaxb-runtime.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <liquibase.version>4.18.0</liquibase.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
@@ -47,6 +48,11 @@
               <groupId>jakarta.validation</groupId>
               <artifactId>jakarta.validation-api</artifactId>
               <version>${validation-api.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.glassfish.jaxb</groupId>
+              <artifactId>jaxb-runtime</artifactId>
+              <version>${jaxb-runtime.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.liquibase</groupId>
