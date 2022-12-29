@@ -26,6 +26,7 @@
         <checkstyle.version>10.4</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
+        <git-commit-id-plugin.version>5.0.0</git-commit-id-plugin.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
@@ -130,6 +131,11 @@
                   <groupId>com.puppycrawl.tools</groupId>
                   <artifactId>checkstyle</artifactId>
                   <version>${checkstyle.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>io.github.git-commit-id</groupId>
+                  <artifactId>git-commit-id-maven-plugin</artifactId>
+                  <version>${git-commit-id-plugin.version}</version>
                 </plugin>
                 <plugin>
                   <groupId>io.spring.nohttp</groupId>
