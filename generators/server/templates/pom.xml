@@ -35,6 +35,7 @@
         <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
         <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
+        <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -168,6 +169,11 @@
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-surefire-plugin</artifactId>
                   <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-war-plugin</artifactId>
+                  <version>${maven-war-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
