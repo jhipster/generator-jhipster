@@ -6,7 +6,7 @@ export const mavenProfileContent = data => {
   } else if (data.prodDatabaseTypeMariadb) {
     dialect = 'org.hibernate.dialect.MariaDB103Dialect';
   } else if (data.prodDatabaseTypePostgres) {
-    dialect = 'tech.jhipster.domain.util.FixedPostgreSQL10Dialect';
+    dialect = 'org.hibernate.dialect.PostgreSQLDialect';
   } else if (data.prodDatabaseTypeH2Disk) {
     dialect = 'org.hibernate.dialect.H2Dialect';
   } else if (data.prodDatabaseTypeOracle) {
