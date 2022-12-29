@@ -42,6 +42,7 @@
         <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
+        <modernizer-maven-plugin.version>2.5.0</modernizer-maven-plugin.version>
         <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
     </properties>
 
@@ -216,6 +217,11 @@
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-war-plugin</artifactId>
                   <version>${maven-war-plugin.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>org.gaul</groupId>
+                  <artifactId>modernizer-maven-plugin</artifactId>
+                  <version>${modernizer-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
