@@ -28,8 +28,8 @@ import { packageJson } from '../../lib/index.mjs';
 import { databaseData } from '../sql/support/index.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
-import { getDBTypeFromDBValue } from '../server/support/database.mjs';
-import { deleteFile, deleteFolder, generatorOrContext, renderContent } from './logic/index.mjs';
+import { deleteFile, deleteFolder, generatorOrContext, logDebug, renderContent } from './support/index.mjs';
+import { checkJavaCompliant, getDBTypeFromDBValue } from '../server/support/index.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
