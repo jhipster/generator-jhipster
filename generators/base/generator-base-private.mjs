@@ -179,6 +179,7 @@ export default class PrivateBase extends Generator {
    */
   template(source, destination, generator, options = {}, context) {
     const _this = generatorOrContext(generator, this);
+    const _context = context || _this;
     const customDestination = _this.destinationPath(destination);
     if (!customDestination) {
       this.debug(`File ${destination} ignored`);
@@ -208,7 +209,7 @@ export default class PrivateBase extends Generator {
   render(source, callback, generator, options = {}, context) {
     const _this = generator || this;
     const _context = context || _this;
-    jhipsterUtils.renderContent(source, _this, _context, options, res => {
+    renderContent(source, _this, _context, options, res => {
       callback(res);
     });
   }
@@ -438,7 +439,7 @@ export default class PrivateBase extends Generator {
    * @param {string} db - db
    */
   getDBTypeFromDBValue(db) {
-    return jhipsterUtils.getDBTypeFromDBValue(db);
+    return getDBTypeFromDBValue(db);
   }
 
   /**

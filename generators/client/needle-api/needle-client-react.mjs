@@ -20,7 +20,7 @@ import chalk from 'chalk';
 import _ from 'lodash';
 
 import needleClientBase from './needle-client.mjs';
-import { stripMargin } from '../../base/logic/index.mjs';
+import { stripMargin } from '../../base/support/index.mjs';
 
 export default class extends needleClientBase {
   addAppSCSSStyle(style, comment) {

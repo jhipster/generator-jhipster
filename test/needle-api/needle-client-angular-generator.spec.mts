@@ -3,10 +3,10 @@ import helpers from 'yeoman-test';
 import { getGenerator } from '../support/index.mjs';
 
 import AngularGenerator from '../../generators/angular/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
+
 import BaseApplicationGenerator from '../../generators/base-application/index.mjs';
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const mockAngularBlueprintSubGen = class extends AngularGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);

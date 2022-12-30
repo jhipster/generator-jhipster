@@ -20,7 +20,7 @@ import chalk from 'chalk';
 import _ from 'lodash';
 import { checkStringInFile } from '../../utils.mjs';
 import needleClientBase from './needle-client.mjs';
-import { stripMargin } from '../../base/logic/index.mjs';
+import { stripMargin } from '../../base/support/index.mjs';
 
 export default class extends needleClientBase {
   addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {

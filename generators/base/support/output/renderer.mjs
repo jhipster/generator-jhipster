@@ -45,9 +45,15 @@ const appendCallBackToTemplate = (generator, cb, promise, source) => {
  */
 const renderContent = (source, generator, context, options, cb) => {
   const optionsWithYeoman = appendYeomanOptionsFromGeneratorOptions(generator, options);
-  if (source) {
+  if (context.entityClass) {
     const basename = path.basename(source);
-    resetFakerSeed(context, basename);
+    if (context.configOptions && context.configOptions.sharedEntities) {
+      Object.values(context.configOptions.sharedEntities).forEach(entity => {
+        entity.resetFakerSeed(`${context.entityClass}-${basename}`);
+      });
+    } else if (context.resetFakerSeed) {
+      resetFakerSeed(context, basename);
+    }
   }
   const promise = ejs.renderFile(generator.templatePath(source), context, optionsWithYeoman);
   return appendCallBackToTemplate(generator, cb, promise, source);

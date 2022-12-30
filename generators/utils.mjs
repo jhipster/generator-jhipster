@@ -19,7 +19,6 @@
 /* eslint-disable no-console */
 
 import path from 'path';
-import ejs from 'ejs';
 import _ from 'lodash';
 import os from 'os';
 import { javadoc } from 'server/support/index.mjs';
@@ -178,6 +177,7 @@ export function rewrite(args) {
 }
 
 /**
+<<<<<<< HEAD
  * Render content
  *
  * @param {string} source source
@@ -216,6 +216,8 @@ export function renderContent(source, generator, context, options, cb) {
 }
 
 /**
+=======
+>>>>>>> 73f9a2fb87 (rebased code)
  *
  * @param obj object to find in
  * @param path path to traverse
@@ -353,17 +355,6 @@ export function getEnums(enums, customValuesState, comments) {
 
 export function doesTheEnumValueHaveACustomValue(enumValue) {
   return enumValue.includes('(');
-}
-
-/**
- * Get DB type from DB value
- * @param {string} db - db
- */
-function getDBTypeFromDBValue(db) {
-  if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
-    return SQL;
-  }
-  return db;
 }
 
 /**

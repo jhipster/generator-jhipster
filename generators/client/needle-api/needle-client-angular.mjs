@@ -21,7 +21,8 @@ import _ from 'lodash';
 import needleClientBase from './needle-client.mjs';
 import { LINE_LENGTH } from '../../generator-constants.mjs';
 import { checkStringInFile, replaceContent, checkRegexInFile } from '../../utils.mjs';
-const { stripMargin } = require('../../base/logic/index.mjs');
+
+import { stripMargin } from '../../base/support/index.mjs';
 
 export default class extends needleClientBase {
   addGlobalSCSSStyle(style, comment) {
