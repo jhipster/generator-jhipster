@@ -162,6 +162,9 @@
         <checksum-maven-plugin.version><%- javaDependencies['checksum-maven-plugin'] %></checksum-maven-plugin.version>
         <frontend-maven-plugin.version><%- javaDependencies['frontend-maven-plugin'] %></frontend-maven-plugin.version>
 <%_ } _%>
+<%_ if (gatlingTests) { _%>
+        <gatling-maven-plugin.version><%- javaDependencies['gatling-maven-plugin'] %></gatling-maven-plugin.version>
+<%_ } _%>
         <git-commit-id-plugin.version><%- javaDependencies['git-commit-id-plugin'] %></git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%- javaDependencies['jib-maven-plugin'] %></jib-maven-plugin.version>
@@ -191,9 +194,6 @@
 <%_ } _%>
         <properties-maven-plugin.version><%- javaDependencies['properties-maven-plugin'] %></properties-maven-plugin.version>
         <sonar-maven-plugin.version><%- javaDependencies['sonar-maven-plugin'] %></sonar-maven-plugin.version>
-<%_ if (gatlingTests) { _%>
-        <gatling-maven-plugin.version>4.2.9</gatling-maven-plugin.version>
-<%_ } _%>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -376,7 +376,8 @@
             <artifactId>jackson-databind-nullable</artifactId>
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
-        <!-- Openapi generator uses javax namespace for now https://github.com/OpenAPITools/openapi-generator/pull/13593 -->
+        <!-- TODO: to be removed
+        Openapi generator uses javax namespace for now https://github.com/OpenAPITools/openapi-generator/pull/13593 -->
         <dependency>
              <groupId>javax.annotation</groupId>
              <artifactId>javax.annotation-api</artifactId>
@@ -2025,6 +2026,7 @@
                 </pluginManagement>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
                         <configuration>
                             <filesets>
