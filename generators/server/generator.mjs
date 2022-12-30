@@ -57,6 +57,7 @@ import {
   JAVA_COMPATIBLE_VERSIONS,
   SPRING_CLOUD_VERSION,
   HIBERNATE_VERSION,
+  CASSANDRA_DRIVER_VERSION,
   JACKSON_DATABIND_NULLABLE_VERSION,
   JACOCO_VERSION,
 } from '../generator-constants.mjs';
@@ -315,6 +316,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SPRING_BOOT_VERSION = control.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : SPRING_BOOT_VERSION;
         application.SPRING_CLOUD_VERSION = control.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : SPRING_CLOUD_VERSION;
         application.HIBERNATE_VERSION = control.useVersionPlaceholders ? 'HIBERNATE_VERSION' : HIBERNATE_VERSION;
+        application.CASSANDRA_DRIVER_VERSION = control.useVersionPlaceholders ? 'CASSANDRA_DRIVER_VERSION' : CASSANDRA_DRIVER_VERSION;
         application.JACKSON_DATABIND_NULLABLE_VERSION = control.useVersionPlaceholders
           ? 'JACKSON_DATABIND_NULLABLE_VERSION'
           : JACKSON_DATABIND_NULLABLE_VERSION;
