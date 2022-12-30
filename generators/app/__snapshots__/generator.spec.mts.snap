@@ -246,6 +246,7 @@ Object {
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
+    "awaitility": "'AWAITILITY-VERSION'",
     "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
     "caffeine": "'CAFFEINE-VERSION'",
     "checkstyle": "'CHECKSTYLE-VERSION'",
@@ -625,6 +626,7 @@ Object {
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
+    "awaitility": "'AWAITILITY-VERSION'",
     "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
     "caffeine": "'CAFFEINE-VERSION'",
     "checkstyle": "'CHECKSTYLE-VERSION'",
@@ -1005,6 +1007,7 @@ Object {
   "incrementalChangelog": undefined,
   "javaDependencies": Object {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
+    "awaitility": "'AWAITILITY-VERSION'",
     "blockhound-junit-platform": "'BLOCKHOUND-JUNIT-PLATFORM-VERSION'",
     "caffeine": "'CAFFEINE-VERSION'",
     "checkstyle": "'CHECKSTYLE-VERSION'",

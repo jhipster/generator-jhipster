@@ -83,14 +83,14 @@ sonarqubePluginVersion=3.5.0.2730
 openapiPluginVersion=<%- javaDependencies['openapi-generator-maven-plugin'] %>
 <%_ } _%>
 noHttpCheckstyleVersion=<%- javaDependencies['nohttp-checkstyle'] %>
-checkstyleVersion=<%- javaDependencies['checkstyle'] %>
+checkstyleVersion=<%- javaDependencies.checkstyle %>
 modernizerPluginVersion=1.6.2
 <%_ if (enableGradleEnterprise) { _%>
 gradleEnterprisePluginVersion=3.11.4
 gradleCommonCustomUserDataPluginVersion=1.8.2
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-awaitilityVersion=4.2.0
+awaitilityVersion=<%- javaDependencies.awaitility %>
 <%_ } _%>
 <%_ if (gatlingTests) { _%>
 gatlingVersion=<%- javaDependencies.gatling %>

@@ -144,11 +144,20 @@
 <%_ if (cacheProviderCaffeine) { _%>
         <typesafe.version><%- javaDependencies.typesafe %></typesafe.version>
 <%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
+  <%_ if (enableHibernateCache) { _%>
+        <hazelcast-hibernate53.version><%- javaDependencies['hazelcast-hibernate53'] %></hazelcast-hibernate53.version>
+  <%_ } _%>
+        <hazelcast-spring.version><%- javaDependencies['hazelcast-spring'] %></hazelcast-spring.version>
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+        <awaitility.version><%- javaDependencies.awaitility %></awaitility.version>
+<%_ } _%>
 <%_ if (gatlingTests) { _%>
         <gatling.version><%- javaDependencies.gatling %></gatling.version>
 <%_ } _%>
         <!-- Plugin versions -->
-        <checkstyle.version><%- javaDependencies['checkstyle'] %></checkstyle.version>
+        <checkstyle.version><%- javaDependencies.checkstyle %></checkstyle.version>
 <%_ if (!skipClient) { _%>
         <checksum-maven-plugin.version><%- javaDependencies['checksum-maven-plugin'] %></checksum-maven-plugin.version>
         <frontend-maven-plugin.version><%- javaDependencies['frontend-maven-plugin'] %></frontend-maven-plugin.version>
@@ -182,15 +191,6 @@
 <%_ } _%>
         <properties-maven-plugin.version><%- javaDependencies['properties-maven-plugin'] %></properties-maven-plugin.version>
         <sonar-maven-plugin.version><%- javaDependencies['sonar-maven-plugin'] %></sonar-maven-plugin.version>
-<%_ if (searchEngineElasticsearch) { _%>
-        <awaitility.version>4.2.0</awaitility.version>
-<%_ } _%>
-<%_ if (cacheProviderHazelcast) { _%>
-        <hazelcast-spring.version><%- javaDependencies['hazelcast-spring'] %></hazelcast-spring.version>
-  <%_ if (enableHibernateCache) { _%>
-        <hazelcast-hibernate53.version><%- javaDependencies['hazelcast-hibernate53'] %></hazelcast-hibernate53.version>
-  <%_ } _%>
-<%_ } _%>
 <%_ if (gatlingTests) { _%>
         <gatling-maven-plugin.version>4.2.9</gatling-maven-plugin.version>
 <%_ } _%>
