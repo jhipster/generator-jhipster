@@ -24,6 +24,7 @@ import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generat
 import { writeEntityFiles, postWriteEntityFiles } from './entity-files-vue.mjs';
 import { writeFiles, writeEntitiesFiles, cleanup } from './files-vue.mjs';
 import { addEntityMenuEntry as addVueEntityMenuEntry } from './support/index.mjs';
+import { getTypescriptKeyType as getTSKeyType } from '../client/support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_LONG = CommonDBTypes.LONG;
@@ -179,5 +180,9 @@ export default class VueGenerator extends BaseApplicationGenerator {
       }
     });
     return defaultVariablesValues;
+  }
+
+  getTypescriptKeyType(primaryKey) {
+    return getTSKeyType(primaryKey);
   }
 }

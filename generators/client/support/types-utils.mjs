@@ -16,5 +16,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { addMenuEntry, addExternalResourcesToIndexHtml } from './needles.mjs';
-export { default as getTypescriptKeyType } from './types-utils.mjs';
+import { fieldTypes } from '../../../jdl/jhipster/index.mjs';
+
+const {
+  INTEGER: TYPE_INTEGER,
+  LONG: TYPE_LONG,
+  BIG_DECIMAL: TYPE_BIG_DECIMAL,
+  FLOAT: TYPE_FLOAT,
+  DOUBLE: TYPE_DOUBLE,
+} = fieldTypes.CommonDBTypes;
+/**
+ * @private
+ * Find key type for Typescript
+ *
+ * @param {string | object} primaryKey - primary key definition
+ * @returns {string} primary key type in Typescript
+ */
+const getTypescriptKeyType = primaryKey => {
+  if (typeof primaryKey === 'object') {
+    primaryKey = primaryKey.type;
+  }
+  if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(primaryKey)) {
+    return 'number';
+  }
+  return 'string';
+};
+
+export default getTypescriptKeyType;

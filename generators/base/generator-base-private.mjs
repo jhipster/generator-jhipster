@@ -21,7 +21,6 @@ import path from 'path';
 import _ from 'lodash';
 import Generator from 'yeoman-generator';
 import chalk from 'chalk';
-import semver from 'semver';
 
 import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { databaseData } from '../sql/support/index.mjs';
@@ -29,6 +28,7 @@ import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import { deleteFile, deleteFolder, renderContent } from './support/index.mjs';
 import { getDBTypeFromDBValue } from '../server/support/database.mjs';
+import { getTypescriptKeyType } from '../client/support/index.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
@@ -174,23 +174,6 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * Find key type for Typescript
-   *
-   * @param {string | object} primaryKey - primary key definition
-   * @returns {string} primary key type in Typescript
-   */
-  getTypescriptKeyType(primaryKey) {
-    if (typeof primaryKey === 'object') {
-      primaryKey = primaryKey.type;
-    }
-    if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(primaryKey)) {
-      return 'number';
-    }
-    return 'string';
-  }
-
-  /**
-   * @private
    * Find type for Typescript
    *
    * @param {string} fieldType - field type
@@ -227,7 +210,7 @@ export default class PrivateBase extends Generator {
   generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
     const variablesWithTypes = [];
     if (!embedded && primaryKey) {
-      const tsKeyType = this.getTypescriptKeyType(primaryKey);
+      const tsKeyType = getTypescriptKeyType(primaryKey);
       if (this.jhipsterConfig.clientFramework === VUE) {
         variablesWithTypes.push(`id?: ${tsKeyType}`);
       }

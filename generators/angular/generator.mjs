@@ -24,6 +24,7 @@ import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from
 import { writeFiles, cleanup } from './files-angular.mjs';
 import { addAdminMenuEntry, addEntityMenuEntry as addAngularEntityMenuEntry } from './support/index.mjs';
 import { addIconInImport } from './support/index.mjs';
+import { getTypescriptKeyType as getTSKeyType } from '../client/support/index.mjs';
 
 /**
  * @class
@@ -189,5 +190,9 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    */
   addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = _.camelCase(routerName)) {
     addAdminMenuEntry(this, routerName, iconName, enableTranslation, translationKeyMenu);
+  }
+
+  getTypescriptKeyType(primaryKey) {
+    return getTSKeyType(primaryKey);
   }
 }

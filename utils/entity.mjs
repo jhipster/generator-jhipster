@@ -24,6 +24,7 @@ import { hibernateSnakeCase } from './db.mjs';
 import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
 import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
 import { fieldToReference } from './field.mjs';
+import { getTypescriptKeyType } from '../generators/client/support/index.mjs';
 import {
   applicationTypes,
   authenticationTypes,
@@ -436,7 +437,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       name: primaryKeyName,
       nameCapitalized: _.upperFirst(primaryKeyName),
       type: primaryKeyType,
-      tsType: generator.getTypescriptKeyType(primaryKeyType),
+      tsType: getTypescriptKeyType(primaryKeyType),
       composite,
       relationships: idRelationships,
       // Fields declared in this entity
@@ -768,22 +769,6 @@ export function preparePostEntityServerDerivedProperties(entity) {
       }
     }
   }
-}
-
-/**
- * Find key type for Typescript
- *
- * @param {string | object} primaryKey - primary key definition
- * @returns {string} primary key type in Typescript
- */
-export function getTypescriptKeyType(primaryKey) {
-  if (typeof primaryKey === 'object') {
-    primaryKey = primaryKey.type;
-  }
-  if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(primaryKey)) {
-    return 'number';
-  }
-  return 'string';
 }
 
 export function preparePostEntityClientDerivedProperties(entity) {
