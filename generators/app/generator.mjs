@@ -21,6 +21,7 @@ import chalk from 'chalk';
 import _ from 'lodash';
 import BaseGenerator from '../base-application/index.mjs';
 
+import { checkNode } from './support/index.mjs';
 import gitOptions from '../git/options.mjs';
 import serverOptions from '../server/options.mjs';
 import { cleanupOldFiles, upgradeFiles } from '../cleanup.mjs';
@@ -333,7 +334,7 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       },
 
       validateNode() {
-        this.checkNode();
+        checkNode(this);
       },
 
       checkForNewJHVersion() {

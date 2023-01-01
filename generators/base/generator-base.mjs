@@ -28,6 +28,7 @@ import os from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
+import { logDebug } from './support/index.mjs';
 import jhipster7Proxy from './jhipster7-proxy.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { stringHashCode } from '../utils.mjs';
@@ -71,6 +72,7 @@ import {
 } from '../generator-constants.mjs';
 import { removeFieldsWithUnsetValues } from './support/index.mjs';
 import { locateGenerator, parseCreationTimestamp } from './support/index.mjs';
+import { getDefaultAppName } from '../project-name/support/index.mjs';
 import { addExternalResourcesToIndexHtml, addMenuEntry } from '../client/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -345,7 +347,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           languages.push(language);
         }
       } catch (e) {
-        this.debug('Error:', e);
+        logDebug(this, 'Error:', e);
         // An exception is thrown if the folder doesn't exist
         // do nothing as the language might not be installed
       }
@@ -1040,7 +1042,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
       return this.fs.readJSON(file);
     } catch (error) {
       this.warning(`Unable to parse ${file}, is the entity file malformed or invalid?`);
-      this.debug('Error:', error);
+      logDebug(this, 'Error:', error);
       return undefined;
     }
   }
@@ -1356,7 +1358,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
         }
       );
     } catch (err) {
-      this.debug('Error:', err);
+      logDebug(this, 'Error:', err);
       // fail silently as this function doesn't affect normal generator flow
     }
   }
@@ -1555,7 +1557,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           if (existingTemplates.length > 2) {
             this.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
           } else {
-            this.debug(moreThanOneMessage);
+            logDebug(this, moreThanOneMessage);
           }
         }
         sourceFileFrom = existingTemplates.shift();
@@ -1697,7 +1699,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
             const override = resolveCallback(fileSpec.override);
             if (override !== undefined && !override && this.fs.exists(destinationFile)) {
-              this.debug(`skipping file ${destinationFile}`);
+              logDebug(this, `skipping file ${destinationFile}`);
               return undefined;
             }
 
@@ -1731,7 +1733,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
-    this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
+    logDebug(this, `Time taken to write files: ${new Date() - startTime}ms`);
     return files.filter(file => file);
   }
 
@@ -2388,7 +2390,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   setConfigDefaults(defaults = this.jhipsterConfigWithDefaults) {
     const jhipsterVersion = packageJson.version;
-    const baseName = this.getDefaultAppName();
+    const baseName = getDefaultAppName(this);
     const creationTimestamp = new Date().getTime();
 
     this.config.defaults({

@@ -22,7 +22,7 @@ import chalk from 'chalk';
 import { createBase64Secret } from '../../lib/utils/secret-utils.mjs';
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../jdl/jhipster/index.mjs';
 import { removeFieldsWithUnsetValues } from '../base/support/index.mjs';
-
+import { handleError, removeFieldsWithUnsetValues } from '../base/support/index.mjs';
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 
@@ -42,7 +42,7 @@ export default {
  * Check Images
  */
 export function checkImages() {
-  this.log('\nChecking Docker images in applications directories...');
+  this.logguer.info('\nChecking Docker images in applications directories...');
 
   let imagePath = '';
   let runCommand = '';
@@ -107,7 +107,7 @@ export function loadConfigs() {
   const serverPort = 8080;
 
   // Loading configs
-  this.debug(`Apps folders: ${this.appsFolders}`);
+  logDebug(this, `Apps folders: ${this.appsFolders}`);
   this.appsFolders.forEach((appFolder, index) => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {

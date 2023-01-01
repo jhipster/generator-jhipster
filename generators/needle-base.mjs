@@ -18,6 +18,7 @@
  */
 import chalk from 'chalk';
 import { rewriteFile } from './utils.mjs';
+import { logDebug } from './base/support/index.mjs';
 
 export default class {
   constructor(generator) {
@@ -46,7 +47,7 @@ export default class {
       message = 'File rewrite failed.';
     }
     this.generator.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(` or missing required jhipster-needle. ${message}\n`));
-    this.generator.debug('Error:', exception);
+    logDebug(this.generator, 'Error:', exception);
   }
 
   generateFileModelWithPath(aPath, aFile, needleTag, ...content) {

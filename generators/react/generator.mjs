@@ -20,12 +20,14 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.mjs';
-
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-react.mjs';
 import { writeFiles, cleanupFiles } from './files-react.mjs';
 import { prepareEntity } from './application/entities/index.mjs';
 import { addEntityMenuEntry as addReactEntityMenuEntry } from './support/index.mjs';
+import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 
+const { CommonDBTypes } = fieldTypes;
+const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 /**
  * @class
  * @extends {BaseApplicationGenerator<import('../client/types.mjs').ClientApplication>}
@@ -169,5 +171,24 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
   ) {
     this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
+  }
+
+  /**
+   * @private
+   * Generate Entity Client Field Default Values
+   *
+   * @param {Array|Object} fields - array of fields
+   * @returns {Array} defaultVariablesValues
+   */
+  generateEntityClientFieldDefaultValues(fields) {
+    const defaultVariablesValues = {};
+    fields.forEach(field => {
+      const fieldType = field.fieldType;
+      const fieldName = field.fieldName;
+      if (fieldType === TYPE_BOOLEAN) {
+        defaultVariablesValues[fieldName] = `${fieldName}: false,`;
+      }
+    });
+    return defaultVariablesValues;
   }
 }

@@ -27,6 +27,7 @@ import { addEntityMenuEntry as addVueEntityMenuEntry } from './support/index.mjs
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_LONG = CommonDBTypes.LONG;
+const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
 /**
  * @class
@@ -159,5 +160,24 @@ export default class VueGenerator extends BaseApplicationGenerator {
     this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
     this.needleApi.clientVue.addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName);
     this.needleApi.clientVue.addEntityServiceToEntitiesComponent(entityInstance, entityName);
+  }
+
+  /**
+   * @private
+   * Generate Entity Client Field Default Values
+   *
+   * @param {Array|Object} fields - array of fields
+   * @returns {Array} defaultVariablesValues
+   */
+  generateEntityClientFieldDefaultValues(fields) {
+    const defaultVariablesValues = {};
+    fields.forEach(field => {
+      const fieldType = field.fieldType;
+      const fieldName = field.fieldName;
+      if (fieldType === TYPE_BOOLEAN) {
+        defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? false;`;
+      }
+    });
+    return defaultVariablesValues;
   }
 }

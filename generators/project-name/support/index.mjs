@@ -17,26 +17,5 @@
  * limitations under the License.
  */
 
-/**
- * Render content
- *
- * @param {object} generator reference to the generator
- * @param {object} options options
- */
-const appendYeomanOptionsFromGeneratorOptions = (generator, options) => {
-  return {
-    root: options.root || generator.jhipsterTemplatesFolders || generator.templatePath(),
-    context: generator,
-    ...options,
-  };
-};
-
-const generatorSkipChecks = generator => {
-  return generator.skipChecks;
-};
-
-const isReproducible = generator => {
-  return generator.options.reproducible;
-};
-
-export { generatorSkipChecks, appendYeomanOptionsFromGeneratorOptions, isReproducible };
+// eslint-disable-next-line import/prefer-default-export
+export { default as getDefaultAppName } from './name-resolver.mjs';

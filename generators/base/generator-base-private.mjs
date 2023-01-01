@@ -24,12 +24,11 @@ import chalk from 'chalk';
 import semver from 'semver';
 
 import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { packageJson } from '../../lib/index.mjs';
 import { databaseData } from '../sql/support/index.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
-import { deleteFile, deleteFolder, generatorOrContext, logDebug, renderContent } from './support/index.mjs';
-import { checkJavaCompliant, getDBTypeFromDBValue } from '../server/support/index.mjs';
+import { deleteFile, deleteFolder, renderContent } from './support/index.mjs';
+import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
@@ -156,47 +155,6 @@ export default class PrivateBase extends Generator {
   }
 
   /**
-   * @returns default app name
-   */
-  getDefaultAppName() {
-    if (this.options.reproducible) {
-      return 'jhipster';
-    }
-    return /^[a-zA-Z0-9_-]+$/.test(path.basename(process.cwd()))
-      ? path.basename(process.cwd()).replace('generator-jhipster-', '')
-      : 'jhipster';
-  }
-
-  /**
-   * @private
-   * Utility function to copy and process templates.
-   *
-   * @param {string} source - source
-   * @param {string} destination - destination
-   * @param {*} generator - reference to the generator
-   * @param {*} options - options object
-   * @param {*} context - context
-   */
-  template(source, destination, generator, options = {}, context) {
-    const _this = generatorOrContext(generator, this);
-    const _context = context || _this;
-    const customDestination = _this.destinationPath(destination);
-    if (!customDestination) {
-      this.debug(`File ${destination} ignored`);
-      return Promise.resolved();
-    }
-    return renderContent(source, _this, _context, options)
-      .then(res => {
-        _this.fs.write(customDestination, res);
-        return customDestination;
-      })
-      .catch(error => {
-        this.warning(source);
-        throw error;
-      });
-  }
-
-  /**
    * @private
    * Utility function to render a template into a string
    *
@@ -206,73 +164,12 @@ export default class PrivateBase extends Generator {
    * @param {*} options - options object
    * @param {*} context - context
    */
-  render(source, callback, generator, options = {}, context) {
+  async render(source, callback, generator, options = {}, context) {
     const _this = generator || this;
     const _context = context || _this;
-    renderContent(source, _this, _context, options, res => {
+    await renderContent(source, _this, _context, options, res => {
       callback(res);
     });
-  }
-
-  /**
-   * Print a debug message.
-   *
-   * @param {string} msg - message to print
-   * @param {string[]} args - arguments to print
-   */
-  debug(msg, ...args) {
-    logDebug(this, msg, ...args);
-  }
-
-  /**
-   * @private
-   * Check if Java is installed
-   */
-  checkJava() {
-    checkJavaCompliant(this);
-  }
-
-  /**
-   * @private
-   * Check if Node is installed
-   */
-  checkNode() {
-    if (this.skipChecks) return;
-    const nodeFromPackageJson = packageJson.engines.node;
-    if (!semver.satisfies(process.version, nodeFromPackageJson)) {
-      this.warning(
-        `Your NodeJS version is too old (${process.version}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`
-      );
-    }
-    if (!(process.release || {}).lts) {
-      this.warning(
-        'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
-      );
-    }
-  }
-
-  /**
-   * @private
-   * Generate Entity Client Field Default Values
-   *
-   * @param {Array|Object} fields - array of fields
-   * @param [clientFramework]
-   * @returns {Array} defaultVariablesValues
-   */
-  generateEntityClientFieldDefaultValues(fields, clientFramework = ANGULAR) {
-    const defaultVariablesValues = {};
-    fields.forEach(field => {
-      const fieldType = field.fieldType;
-      const fieldName = field.fieldName;
-      if (fieldType === TYPE_BOOLEAN) {
-        if (clientFramework === REACT) {
-          defaultVariablesValues[fieldName] = `${fieldName}: false,`;
-        } else {
-          defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? false;`;
-        }
-      }
-    });
-    return defaultVariablesValues;
   }
 
   /**

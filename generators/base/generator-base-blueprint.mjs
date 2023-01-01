@@ -24,6 +24,7 @@ import semver from 'semver';
 import { packageJson } from '../../lib/index.mjs';
 import { packageNameToNamespace } from '../utils.mjs';
 import JHipsterBaseGenerator from './generator-base.mjs';
+import { logDebug } from './support/index.mjs';
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from '../../utils/blueprint.mjs';
 import { PRIORITY_NAMES } from './priorities.mjs';
 
@@ -459,7 +460,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
       if (baseGeneratorPriorityName in this) {
         const blueprintPriorityName = `${blueprintTaskPrefix}${priorityName}`;
         if (!Object.hasOwn(Object.getPrototypeOf(blueprintGenerator), blueprintPriorityName)) {
-          this.debug(`Priority ${blueprintPriorityName} not implemented at ${blueprintGenerator.options.namespace}.`);
+          logDebug(this, `Priority ${blueprintPriorityName} not implemented at ${blueprintGenerator.options.namespace}.`);
         }
       }
     }
@@ -527,14 +528,18 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
       await this.env.lookup({ filterPaths: true, packagePatterns: blueprint });
     }
     if (!(await this.env.get(generatorNamespace))) {
-      this.debug(
+      logDebug(
+        this,
         `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(
           generatorNamespace
         )} subgenerator: falling back to default generator`
       );
       return undefined;
     }
-    this.debug(`Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`);
+    logDebug(
+      this,
+      `Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`
+    );
 
     const finalOptions = {
       ...this.options,

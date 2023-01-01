@@ -16,12 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const firstOrSecond = (first, second) => {
-  return first || second;
-};
-
 const generatorOrContext = (generator, context) => {
-  return firstOrSecond(generator || context);
+  return generator || context;
 };
 
 export default generatorOrContext;

@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { packageJson } from '../../lib/index.mjs';
 import { prepareTempDir } from '../../test/support/temp-dir.mjs';
-import { escapeRegExp } from '../utils.mjs';
+import { escapeRegExp } from '../base/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

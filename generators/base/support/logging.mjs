@@ -58,19 +58,19 @@ const generatorDebugOptionChecker = context => {
  * Print message using then internal yeoman debugger.
  * @param context the generator context.
  */
-const printUsingInternalDebugger = (context, message, ...args) => {
+const printMessageAndArgumentsUsingInternalDebugger = (context, message, ...args) => {
   context._debug(message);
   args.forEach(arg => context._debug(arg));
 };
 
-const logging = (context, message, ...args) => {
+const debug = (context, message, ...args) => {
   const formattedMsg = formatDebugMessageHeader(message);
   if (jhipsterDebugOptionsChecker(context)) {
     printMessageUsingGeneratorLogger(context, formattedMsg, ...args);
   }
   if (generatorDebugOptionChecker(context)) {
-    printUsingInternalDebugger(context, formattedMsg, ...args);
+    printMessageAndArgumentsUsingInternalDebugger(context, formattedMsg, ...args);
   }
 };
 
-export default logging;
+export default debug;

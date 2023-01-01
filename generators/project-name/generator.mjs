@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 import _ from 'lodash';
-
+import { getDefaultAppName } from './support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
@@ -48,7 +48,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
       await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
     }
     if (this.sharedData.getControl().existingProject && !this.jhipsterConfig.baseName) {
-      this.jhipsterConfig.baseName = this.getDefaultAppName();
+      this.jhipsterConfig.baseName = getDefaultAppName(this);
     }
   }
 
@@ -62,7 +62,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
               type: 'input',
               validate: input => this.validateBaseName(input),
               message: 'What is the base name of your application?',
-              default: () => this.getDefaultAppName(),
+              default: () => getDefaultAppName(this),
             },
           ],
           this.config

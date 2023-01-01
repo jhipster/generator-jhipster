@@ -45,6 +45,16 @@ const htmlEncode = text => {
 };
 
 /**
+ * Escape regular expressions.
+ *
+ * @param {string} str string
+ * @returns {string} string with regular expressions escaped
+ */
+export function escapeRegExp(str) {
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'); // eslint-disable-line
+}
+
+/**
  * @private
  * Strip margin indicated by pipe `|` from a string literal
  *

@@ -22,19 +22,10 @@ import path from 'path';
 import _ from 'lodash';
 import os from 'os';
 import { javadoc } from './server/support/index.mjs';
+import { stripMargin, escapeRegExp } from './base/support/index.mjs';
 import { databaseTypes } from '../jdl/jhipster/index.mjs';
 
 const SQL = databaseTypes.SQL;
-
-/**
- * @private
- * Strip margin indicated by pipe `|` from a string literal
- *
- *  @param {string} content - the string to process
- */
-function stripMargin(content) {
-  return content.replace(/^[ ]*\|/gm, '');
-}
 
 /**
  * Rewrite file with passed arguments
@@ -76,16 +67,6 @@ export function replaceContent(args, generator) {
   const newBody = currentBody.replace(re, args.content);
   generator.fs.write(fullPath, newBody);
   return newBody !== currentBody;
-}
-
-/**
- * Escape regular expressions.
- *
- * @param {string} str string
- * @returns {string} string with regular expressions escaped
- */
-export function escapeRegExp(str) {
-  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'); // eslint-disable-line
 }
 
 /**

@@ -34,6 +34,7 @@ import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
 import type { PreConflictsTaskGroup } from '../base/tasks.mjs';
 import { detectCrLf } from './utils.mjs';
 import { normalizeLineEndings } from '../base/utils.mjs';
+import { logDebug } from '../base/support/index.mjs';
 
 const { TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const {
@@ -158,11 +159,11 @@ export default class BootstrapGenerator extends BaseGenerator {
    * Queue environment's commit task.
    */
   queueCommit() {
-    this.debug('Queueing conflicts task');
+    logDebug(this, 'Queueing conflicts task');
     (this as any).queueTask(
       {
         method: async () => {
-          this.debug('Adding queueCommit event listener');
+          logDebug(this, 'Adding queueCommit event listener');
           this.env.sharedFs.once('change', () => {
             this.queueCommit();
           });

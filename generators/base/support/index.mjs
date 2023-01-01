@@ -18,12 +18,12 @@
  */
 export { default as locateGenerator } from './generator/locator.mjs';
 export { deleteFile, deleteFolder, moveWithGit } from './output/file-operations.mjs';
-export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin } from './formatter.mjs';
+export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin, escapeRegExp } from './formatter.mjs';
 export { parseCreationTimestamp, resetFakerSeed } from './sequences.mjs';
 export { default as getOptionFromArray } from './converter.mjs';
 export { default as httpsGet } from './connect.mjs';
 export { renderContent, writeContent } from './output/renderer.mjs';
 export { default as generatorOrContext } from './context.mjs';
 export { default as logDebug } from './logging.mjs';
-export { appendYeomanOptionsFromGeneratorOptions, generatorSkipChecks } from './options.mjs';
+export { appendYeomanOptionsFromGeneratorOptions, generatorSkipChecks, isReproducible } from './options.mjs';
 export { default as getEnumInfo } from './generator/enum.mjs';

@@ -31,6 +31,7 @@ import dockerPrompts from '../base-docker/docker-prompts.mjs';
 import { CLIENT_MAIN_SRC_DIR, MAIN_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { applicationTypes, buildToolTypes, cacheTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { mavenProdProfileContent, mavenPluginConfiguration, mavenProfileContent } from './templates.mjs';
+import { logDebug } from '../base/support/index.mjs';
 
 const cacheProviders = cacheTypes;
 const { MEMCACHED } = cacheTypes;
@@ -914,7 +915,7 @@ export default class GaeGenerator extends BaseGenerator {
             }
           } catch (err) {
             this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
-            this.debug('Error:', err);
+            logDebug(this, 'Error:', err);
           }
         }
       }
