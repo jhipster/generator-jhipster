@@ -121,7 +121,7 @@
     "then-request": "6.0.2",
     "uuid": "9.0.0",
     "winston": "3.8.2",
-    "yaml": "2.2.0",
+    "yaml": "2.2.1",
     "yeoman-environment": "3.13.0",
     "yeoman-generator": "5.7.0"
   },
