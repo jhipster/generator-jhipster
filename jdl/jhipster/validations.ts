@@ -29,16 +29,6 @@ const Validations: any = {
   MAXBYTES: 'maxbytes',
 };
 
-export const REQUIRED = Validations.REQUIRED;
-export const UNIQUE = Validations.UNIQUE;
-export const MIN = Validations.MIN;
-export const MAX = Validations.MAX;
-export const MINLENGTH = Validations.MINLENGTH;
-export const MAXLENGTH = Validations.MAXLENGTH;
-export const PATTERN = Validations.PATTERN;
-export const MINBYTES = Validations.MINBYTES;
-export const MAXBYTES = Validations.MAXBYTES;
-
 Validations.exists = validation =>
   Object.keys(Validations)
     .map(key => Validations[key])
@@ -59,4 +49,7 @@ Validations.needsValue = validation => {
   return valuedMap[validation];
 };
 
-export default Validations;
+const SUPPORTED_VALIDATION_RULES = Object.keys(Validations)
+  .map(key => Validations[key])
+  .filter(e => typeof e === 'string');
+export default { Validations, SUPPORTED_VALIDATION_RULES };

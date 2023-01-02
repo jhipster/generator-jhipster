@@ -22,7 +22,12 @@ import fs from 'fs';
 import path from 'path';
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import { convertToJDL, convertSingleContentToJDL } from '../../../jdl/converters/json-to-jdl-converter';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { convertToJDL, convertSingleContentToJDL } from '../../../jdl/converters/json-to-jdl-converter.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 describe('JSONToJDLConverter', () => {
   describe('convertToJDL', () => {
@@ -66,18 +71,18 @@ describe('JSONToJDLConverter', () => {
     jhipsterVersion \\"6.0.1\\"
     jwtSecretKey \\"HIDDEN\\"
     languages []
-    messageBroker false
+    messageBroker no
     nativeLanguage en
     packageName com.mycompany.myapp
     prodDatabaseType mysql
     reactive false
-    searchEngine false
+    searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
     skipClient true
     skipUserManagement true
     testFrameworks []
-    websocket false
+    websocket no
   }
 }
 
@@ -119,18 +124,18 @@ describe('JSONToJDLConverter', () => {
     jhipsterVersion \\"6.0.1\\"
     jwtSecretKey \\"HIDDEN\\"
     languages []
-    messageBroker false
+    messageBroker no
     nativeLanguage en
     packageName com.mycompany.myapp
     prodDatabaseType mysql
     reactive false
-    searchEngine false
+    searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
     skipClient true
     skipUserManagement true
     testFrameworks []
-    websocket false
+    websocket no
   }
 
   entities Country, Department, Employee, Job, JobHistory, Location, Region, Task
@@ -253,18 +258,18 @@ paginate Country with pager
     jhipsterVersion \\"6.0.1\\"
     jwtSecretKey \\"HIDDEN\\"
     languages []
-    messageBroker false
+    messageBroker no
     nativeLanguage en
     packageName com.mycompany.app1
     prodDatabaseType mysql
     reactive false
-    searchEngine false
+    searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
     skipClient true
     skipUserManagement true
     testFrameworks []
-    websocket false
+    websocket no
   }
 
   entities Region
@@ -290,18 +295,18 @@ application {
     jhipsterVersion \\"6.0.1\\"
     jwtSecretKey \\"HIDDEN\\"
     languages []
-    messageBroker false
+    messageBroker no
     nativeLanguage en
     packageName com.mycompany.app2
     prodDatabaseType mysql
     reactive false
-    searchEngine false
+    searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
     skipClient true
     skipUserManagement true
     testFrameworks []
-    websocket false
+    websocket no
   }
 
   entities Country, Location
@@ -327,18 +332,18 @@ application {
     jhipsterVersion \\"6.0.1\\"
     jwtSecretKey \\"HIDDEN\\"
     languages []
-    messageBroker false
+    messageBroker no
     nativeLanguage en
     packageName com.mycompany.app3
     prodDatabaseType mysql
     reactive false
-    searchEngine false
+    searchEngine no
     serverPort 8081
     serviceDiscoveryType eureka
     skipClient true
     skipUserManagement true
     testFrameworks []
-    websocket false
+    websocket no
   }
 }
 

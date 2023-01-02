@@ -17,16 +17,15 @@
  * limitations under the License.
  */
 
-import Validator from './validator';
-import ApplicationTypes from '../jhipster/application-types';
-import DatabaseTypes from '../jhipster/database-types';
-import SearchEngineTypes from '../jhipster/search-engine-types';
-import DeploymentOptions from '../jhipster/deployment-options';
+import Validator from './validator.js';
+import { applicationTypes, databaseTypes, searchEngineTypes, deploymentOptions, applicationOptions } from '../jhipster/index.mjs';
 
-const { MICROSERVICE } = ApplicationTypes;
-const { NO } = DatabaseTypes;
-const { ELASTICSEARCH } = SearchEngineTypes;
-const { Options } = DeploymentOptions;
+const { Options } = deploymentOptions;
+const { MICROSERVICE } = applicationTypes;
+const { NO } = databaseTypes;
+const { ELASTICSEARCH } = searchEngineTypes;
+const { OptionNames } = applicationOptions;
+const { PROD_DATABASE_TYPE } = OptionNames;
 
 export default class DeploymentValidator extends Validator {
   constructor() {
@@ -75,7 +74,7 @@ function validateKubernetesRelatedDeployment(jdlDeployment) {
 function validateOpenshiftRelatedDeployment(jdlDeployment, options) {
   if (jdlDeployment.storageType) {
     if (options.prodDatabaseType === NO) {
-      throw new Error("Can't have the storageType option set when there is no prodDatabaseType.");
+      throw new Error(`Can't have the storageType option set when there is no ${PROD_DATABASE_TYPE}.`);
     }
 
     if (options.searchEngine === ELASTICSEARCH) {

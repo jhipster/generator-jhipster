@@ -23,12 +23,16 @@ import fse from 'fs-extra';
 import path from 'path';
 import { expect } from 'chai';
 
-import ApplicationTypes from '../../jdl/jhipster/application-types';
-import ClientFrameworkTypes from '../../jdl/jhipster/client-framework-types';
-import DatabaseTypes from '../../jdl/jhipster/database-types';
-import { createImporterFromFiles, createImporterFromContent } from '../../jdl/jdl-importer';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { applicationTypes, clientFrameworkTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
+import { createImporterFromFiles, createImporterFromContent } from '../../jdl/jdl-importer.js';
 
-const { NO: NO_CLIENT_FRAMEWORK } = ClientFrameworkTypes;
+const { MONOLITH } = applicationTypes;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 
 describe('JDLImporter', () => {
   describe('createImporterFromFiles', () => {
@@ -56,8 +60,8 @@ describe('JDLImporter', () => {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'big_sample.jdl')], {
           applicationName: 'MyApp',
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
         returned.exportedEntities = returned.exportedEntities
@@ -388,8 +392,8 @@ relationship OneToOne {
       before("importing a JDL file with the 'no' database type", () => {
         importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'simple.jdl')], {
           applicationName: 'MyApp',
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.NO,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.NO,
         });
       });
 
@@ -407,7 +411,7 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'annotations.jdl')], {
           applicationName: 'toto',
-          databaseType: DatabaseTypes.SQL,
+          databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
       });
@@ -440,8 +444,8 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'regex_validation.jdl')], {
           applicationName: 'MyApp',
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
         entityContent = JSON.parse(fse.readFileSync(path.join('.jhipster', 'Customer.json'), { encoding: 'utf8' }));
@@ -464,8 +468,8 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'pattern_validation_with_quote.jdl')], {
           applicationName: 'MyApp',
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
       });
@@ -943,17 +947,17 @@ ${entities}`,
               gradleEnterpriseHost: '',
               jhiPrefix: 'jhi',
               languages: [],
-              messageBroker: false,
+              messageBroker: 'no',
               packageFolder: 'com/mycompany/myapp',
               packageName: 'com.mycompany.myapp',
               prodDatabaseType: 'postgresql',
-              searchEngine: false,
+              searchEngine: 'no',
               reactive: false,
               serverPort: '8080',
-              serviceDiscoveryType: false,
+              serviceDiscoveryType: 'no',
               skipUserManagement: false,
               testFrameworks: [],
-              websocket: false,
+              websocket: 'no',
               withAdminUi: true,
             },
           },

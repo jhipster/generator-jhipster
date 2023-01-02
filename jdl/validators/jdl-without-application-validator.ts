@@ -17,22 +17,21 @@
  * limitations under the License.
  */
 
-import EntityValidator from './entity-validator';
-import FieldValidator from './field-validator';
-import FieldTypes from '../jhipster/field-types';
-import ApplicationTypes from '../jhipster/application-types';
-import ValidationValidator from './validation-validator';
-import RelationshipValidator from './relationship-validator';
-import EnumValidator from './enum-validator';
-import DeploymentValidator from './deployment-validator';
-import UnaryOptionValidator from './unary-option-validator';
-import BinaryOptionValidator from './binary-option-validator';
-import { OptionNames } from '../jhipster/application-options';
-import DatabaseTypes from '../jhipster/database-types';
-import BinaryOptions from '../jhipster/binary-options';
+import EntityValidator from './entity-validator.js';
+import FieldValidator from './field-validator.js';
+import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, applicationOptions, reservedKeywords } from '../jhipster/index.mjs';
+import ValidationValidator from './validation-validator.js';
+import RelationshipValidator from './relationship-validator.js';
+import EnumValidator from './enum-validator.js';
+import DeploymentValidator from './deployment-validator.js';
+import UnaryOptionValidator from './unary-option-validator.js';
+import BinaryOptionValidator from './binary-option-validator.js';
 
-import { isReservedFieldName, isReservedTableName, isReservedPaginationWords } from '../jhipster/reserved-keywords';
-import JDLObject from '../models/jdl-object';
+import JDLObject from '../models/jdl-object.js';
+
+const { isReservedFieldName, isReservedTableName, isReservedPaginationWords } = reservedKeywords;
+const { OptionNames } = applicationOptions;
+const { SQL } = databaseTypes;
 
 /**
  * Constructor taking the jdl object to check against application settings.
@@ -89,7 +88,7 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
 
   function checkForFieldErrors(entityName, jdlFields) {
     const validator = new FieldValidator();
-    const filtering = applicationSettings.databaseType === 'sql';
+    const filtering = applicationSettings.databaseType === SQL;
 
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
@@ -115,7 +114,7 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
     const validator = new ValidationValidator();
     jdlField.forEachValidation(jdlValidation => {
       validator.validate(jdlValidation);
-      if (!FieldTypes.hasValidation(jdlField.type, jdlValidation.name, isAnEnum)) {
+      if (!fieldTypes.hasValidation(jdlField.type, jdlValidation.name, isAnEnum)) {
         throw new Error(`The validation '${jdlValidation.name}' isn't supported for the type '${jdlField.type}'.`);
       }
     });
@@ -177,10 +176,10 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
 }
 
 function getTypeCheckingFunction(entityName, applicationSettings) {
-  if (applicationSettings.applicationType === ApplicationTypes.GATEWAY) {
+  if (applicationSettings.applicationType === applicationTypes.GATEWAY) {
     return () => true;
   }
-  return FieldTypes.getIsType(applicationSettings.databaseType);
+  return fieldTypes.getIsType(applicationSettings.databaseType);
 }
 
 function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserManagementOption }) {
@@ -202,7 +201,7 @@ function isUserManagementEntity(entityName) {
   return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
 }
 function checkForPaginationInAppWithCassandra(jdlOption, applicationSettings) {
-  if (applicationSettings.databaseType === DatabaseTypes.CASSANDRA && jdlOption.name === BinaryOptions.Options.PAGINATION) {
+  if (applicationSettings.databaseType === databaseTypes.CASSANDRA && jdlOption.name === binaryOptions.Options.PAGINATION) {
     throw new Error("Pagination isn't allowed when the application uses Cassandra.");
   }
 }

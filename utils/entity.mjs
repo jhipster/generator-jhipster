@@ -22,9 +22,8 @@ import path from 'path';
 
 import { hibernateSnakeCase } from './db.mjs';
 import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
-import generatorDefaults from '../generators/generator-defaults.cjs';
+import generatorDefaults from '../generators/generator-defaults.mjs';
 import { fieldToReference } from './field.mjs';
-import constants from '../generators/generator-constants.cjs';
 import {
   applicationTypes,
   authenticationTypes,
@@ -34,9 +33,11 @@ import {
   reservedKeywords,
   searchEngineTypes,
 } from '../jdl/jhipster/index.mjs';
+import { OFFICIAL_DATABASE_TYPE_NAMES } from '../generators/server/support/database.mjs';
 
 const { entityDefaultConfig } = generatorDefaults;
 const { ELASTICSEARCH } = searchEngineTypes;
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -75,7 +76,7 @@ const BASE_TEMPLATE_DATA = {
   skipUiGrouping: false,
   haveFieldWithJavadoc: false,
   existingEnum: false,
-  searchEngine: false,
+  searchEngine: NO_SEARCH_ENGINE,
   microserviceName: undefined,
 
   requiresPersistableImplementation: false,
@@ -534,7 +535,8 @@ export function loadRequiredConfigDerivedProperties(entity) {
   entity.jhiTablePrefix = hibernateSnakeCase(entity.jhiPrefix);
   entity.searchEngineCouchbase = entity.searchEngine === COUCHBASE;
   entity.searchEngineElasticsearch = entity.searchEngine === ELASTICSEARCH;
-  entity.searchEngineAny = ![undefined, false, 'no'].includes(entity.searchEngine);
+  entity.searchEngineAny = ![undefined, NO_SEARCH_ENGINE].includes(entity.searchEngine);
+  entity.searchEngineNo = [undefined, NO_SEARCH_ENGINE].includes(entity.searchEngine);
 }
 
 export function preparePostEntityCommonDerivedProperties(entity) {
@@ -707,7 +709,7 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
 
 export function preparePostEntityServerDerivedProperties(entity) {
   const { databaseType, reactive } = entity;
-  entity.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[databaseType];
+  entity.officialDatabaseType = OFFICIAL_DATABASE_TYPE_NAMES[databaseType];
   let springDataDatabase;
   if (entity.databaseType !== SQL) {
     springDataDatabase = entity.officialDatabaseType;

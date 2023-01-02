@@ -14,16 +14,16 @@
     "enableTranslation": true,
     "jhiPrefix": "jhi",
     "languages": ["en", "fr"],
-    "messageBroker": false,
+    "messageBroker": "no",
     "nativeLanguage": "fr",
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "cassandra",
     "rememberMeKey": "a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe",
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "no",
     "testFrameworks": ["gatling"],
-    "websocket": false
+    "websocket": "no"
   }
 }

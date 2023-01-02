@@ -18,19 +18,26 @@
  */
 
 import { expect } from 'chai';
-import JDLObject from '../../../jdl/models/jdl-object';
-import JDLEntity from '../../../jdl/models/jdl-entity';
-import JDLField from '../../../jdl/models/jdl-field';
-import JDLValidation from '../../../jdl/models/jdl-validation';
-import JDLRelationship from '../../../jdl/models/jdl-relationship';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
-import DatabaseTypes from '../../../jdl/jhipster/database-types';
-import FieldTypes from '../../../jdl/jhipster/field-types';
-import Validations from '../../../jdl/jhipster/validations';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
-import createValidator from '../../../jdl/validators/jdl-without-application-validator';
+import JDLObject from '../../../jdl/models/jdl-object.js';
+import { JDLEntity } from '../../../jdl/models/index.mjs';
+import JDLField from '../../../jdl/models/jdl-field.js';
+import JDLValidation from '../../../jdl/models/jdl-validation.js';
+import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import {
+  applicationTypes,
+  databaseTypes,
+  fieldTypes,
+  validations,
+  relationshipTypes,
+  binaryOptions,
+} from '../../../jdl/jhipster/index.mjs';
+import createValidator from '../../../jdl/validators/jdl-without-application-validator.js';
+
+const { GATEWAY } = applicationTypes;
+const {
+  Validations: { MIN },
+} = validations;
 
 describe('JDLWithoutApplicationValidator', () => {
   describe('createValidator', () => {
@@ -52,7 +59,7 @@ describe('JDLWithoutApplicationValidator', () => {
             name: 'Continue',
           })
         );
-        validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL });
+        validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
       });
 
       it('should fail', () => {
@@ -80,7 +87,7 @@ describe('JDLWithoutApplicationValidator', () => {
         const validator = createValidator(
           jdlObject,
           {
-            databaseType: DatabaseTypes.SQL,
+            databaseType: databaseTypes.SQL,
           },
           logger
         );
@@ -104,7 +111,7 @@ describe('JDLWithoutApplicationValidator', () => {
         entity.addField(
           new JDLField({
             name: 'catch',
-            type: FieldTypes.CommonDBTypes.STRING,
+            type: fieldTypes.CommonDBTypes.STRING,
           })
         );
         jdlObject.addEntity(entity);
@@ -116,7 +123,7 @@ describe('JDLWithoutApplicationValidator', () => {
         const validator = createValidator(
           jdlObject,
           {
-            databaseType: DatabaseTypes.SQL,
+            databaseType: databaseTypes.SQL,
           },
           logger
         );
@@ -144,8 +151,8 @@ describe('JDLWithoutApplicationValidator', () => {
           const jdlObject = new JDLObject();
           jdlObject.addEntity(validEntity);
           validator = createValidator(jdlObject, {
-            databaseType: DatabaseTypes.SQL,
-            applicationType: ApplicationTypes.GATEWAY,
+            databaseType: databaseTypes.SQL,
+            applicationType: GATEWAY,
           });
         });
 
@@ -172,7 +179,7 @@ describe('JDLWithoutApplicationValidator', () => {
         const jdlObject = new JDLObject();
         jdlObject.addEntity(validEntity);
         validator = createValidator(jdlObject, {
-          databaseType: DatabaseTypes.SQL,
+          databaseType: databaseTypes.SQL,
         });
       });
 
@@ -191,11 +198,11 @@ describe('JDLWithoutApplicationValidator', () => {
         });
         const field = new JDLField({
           name: 'validField',
-          type: FieldTypes.CommonDBTypes.STRING,
+          type: fieldTypes.CommonDBTypes.STRING,
         });
         field.addValidation(
           new JDLValidation({
-            name: Validations.MIN,
+            name: MIN,
             value: 42,
           })
         );
@@ -203,7 +210,7 @@ describe('JDLWithoutApplicationValidator', () => {
         const jdlObject = new JDLObject();
         jdlObject.addEntity(entity);
         validator = createValidator(jdlObject, {
-          databaseType: DatabaseTypes.SQL,
+          databaseType: databaseTypes.SQL,
         });
       });
 
@@ -223,14 +230,14 @@ describe('JDLWithoutApplicationValidator', () => {
         const relationship = new JDLRelationship({
           from: 'Source',
           to: otherEntity.name,
-          type: RelationshipTypes.ONE_TO_ONE,
+          type: relationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'other',
         });
         const jdlObject = new JDLObject();
         jdlObject.addEntity(otherEntity);
         jdlObject.addRelationship(relationship);
         validator = createValidator(jdlObject, {
-          databaseType: DatabaseTypes.SQL,
+          databaseType: databaseTypes.SQL,
         });
       });
 
@@ -252,14 +259,14 @@ describe('JDLWithoutApplicationValidator', () => {
             const relationship = new JDLRelationship({
               from: sourceEntity.name,
               to: 'User',
-              type: RelationshipTypes.ONE_TO_ONE,
+              type: relationshipTypes.ONE_TO_ONE,
               injectedFieldInFrom: 'other',
             });
             const jdlObject = new JDLObject();
             jdlObject.addEntity(sourceEntity);
             jdlObject.addRelationship(relationship);
             validator = createValidator(jdlObject, {
-              databaseType: DatabaseTypes.SQL,
+              databaseType: databaseTypes.SQL,
             });
           });
 
@@ -279,14 +286,14 @@ describe('JDLWithoutApplicationValidator', () => {
             const relationship = new JDLRelationship({
               from: sourceEntity.name,
               to: 'User',
-              type: RelationshipTypes.ONE_TO_ONE,
+              type: relationshipTypes.ONE_TO_ONE,
               injectedFieldInFrom: 'other',
             });
             const jdlObject = new JDLObject();
             jdlObject.addEntity(sourceEntity);
             jdlObject.addRelationship(relationship);
             checker = createValidator(jdlObject, {
-              databaseType: DatabaseTypes.SQL,
+              databaseType: databaseTypes.SQL,
               skippedUserManagement: true,
             });
           });
@@ -308,14 +315,14 @@ describe('JDLWithoutApplicationValidator', () => {
           const relationship = new JDLRelationship({
             from: sourceEntity.name,
             to: 'Other',
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other',
           });
           const jdlObject = new JDLObject();
           jdlObject.addEntity(sourceEntity);
           jdlObject.addRelationship(relationship);
           checker = createValidator(jdlObject, {
-            databaseType: DatabaseTypes.SQL,
+            databaseType: databaseTypes.SQL,
           });
         });
 
@@ -333,11 +340,11 @@ describe('JDLWithoutApplicationValidator', () => {
         const jdlObject = new JDLObject();
         jdlObject.addOption(
           new JDLBinaryOption({
-            name: BinaryOptions.Options.PAGINATION,
-            value: BinaryOptions.Values.pagination.PAGINATION,
+            name: binaryOptions.Options.PAGINATION,
+            value: binaryOptions.Values.pagination.PAGINATION,
           })
         );
-        validator = createValidator(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });
+        validator = createValidator(jdlObject, { databaseType: databaseTypes.CASSANDRA });
       });
 
       it('should fail', () => {
@@ -353,19 +360,19 @@ describe('JDLWithoutApplicationValidator', () => {
         const jdlObject = new JDLObject();
         jdlObject.addOption(
           new JDLBinaryOption({
-            name: BinaryOptions.Options.DTO,
-            value: BinaryOptions.Values.dto.MAPSTRUCT,
+            name: binaryOptions.Options.DTO,
+            value: binaryOptions.Values.dto.MAPSTRUCT,
             entityNames: ['A', 'B', 'C'],
           })
         );
         jdlObject.addOption(
           new JDLBinaryOption({
-            name: BinaryOptions.Options.SERVICE,
-            value: BinaryOptions.Values.service.SERVICE_CLASS,
+            name: binaryOptions.Options.SERVICE,
+            value: binaryOptions.Values.service.SERVICE_CLASS,
             entityNames: ['B'],
           })
         );
-        validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL });
+        validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
       });
 
       it('should not fail', () => {
@@ -396,19 +403,19 @@ describe('JDLWithoutApplicationValidator', () => {
         );
         jdlObject.addOption(
           new JDLBinaryOption({
-            name: BinaryOptions.Options.DTO,
-            value: BinaryOptions.Values.dto.MAPSTRUCT,
+            name: binaryOptions.Options.DTO,
+            value: binaryOptions.Values.dto.MAPSTRUCT,
             entityNames: ['A', 'B'],
           })
         );
         jdlObject.addOption(
           new JDLBinaryOption({
-            name: BinaryOptions.Options.SERVICE,
-            value: BinaryOptions.Values.service.SERVICE_CLASS,
+            name: binaryOptions.Options.SERVICE,
+            value: binaryOptions.Values.service.SERVICE_CLASS,
             excludedNames: ['C'],
           })
         );
-        validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL });
+        validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
       });
       it('should not fail', () => {
         expect(() => {
@@ -430,14 +437,14 @@ describe('JDLWithoutApplicationValidator', () => {
           const relationship = new JDLRelationship({
             from: sourceEntity.name,
             to: destinationEntity.name,
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other',
           });
           const jdlObject = new JDLObject();
           jdlObject.addEntity(sourceEntity);
           jdlObject.addEntity(destinationEntity);
           jdlObject.addRelationship(relationship);
-          validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL, skippedUserManagement: true });
+          validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL, skippedUserManagement: true });
         });
 
         it('should not fail', () => {
@@ -454,13 +461,13 @@ describe('JDLWithoutApplicationValidator', () => {
           const relationship = new JDLRelationship({
             from: 'User',
             to: destinationEntity.name,
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other',
           });
           const jdlObject = new JDLObject();
           jdlObject.addEntity(destinationEntity);
           jdlObject.addRelationship(relationship);
-          validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL, skippedUserManagement: false });
+          validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL, skippedUserManagement: false });
         });
 
         it('should fail', () => {
@@ -484,14 +491,14 @@ describe('JDLWithoutApplicationValidator', () => {
           const relationship = new JDLRelationship({
             from: sourceEntity.name,
             to: destinationEntity.name,
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other',
           });
           const jdlObject = new JDLObject();
           jdlObject.addEntity(sourceEntity);
           jdlObject.addEntity(destinationEntity);
           jdlObject.addRelationship(relationship);
-          validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL, skippedUserManagement: true });
+          validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL, skippedUserManagement: true });
         });
 
         it('should not fail', () => {
@@ -508,13 +515,13 @@ describe('JDLWithoutApplicationValidator', () => {
           const relationship = new JDLRelationship({
             from: sourceEntity.name,
             to: 'User',
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other',
           });
           const jdlObject = new JDLObject();
           jdlObject.addEntity(sourceEntity);
           jdlObject.addRelationship(relationship);
-          validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL, skippedUserManagement: false });
+          validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL, skippedUserManagement: false });
         });
 
         it('should not fail', () => {

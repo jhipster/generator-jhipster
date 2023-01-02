@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import JDLObject from '../models/jdl-object';
-import JDLUnaryOption from '../models/jdl-unary-option';
-import UnaryOptions from '../jhipster/unary-options';
+import JDLObject from '../models/jdl-object.js';
+import JDLUnaryOption from '../models/jdl-unary-option.js';
+import { unaryOptions } from '../jhipster/index.mjs';
 
-const { SKIP_CLIENT, SKIP_SERVER } = UnaryOptions;
+const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
 export default {
   convertServerOptionsToJDL,

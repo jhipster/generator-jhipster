@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'chai';
-import EntityIssue from '../../../../jdl/linters/issues/entity-issue';
+import EntityIssue from '../../../../jdl/linters/issues/entity-issue.js';
 
 describe('EntityIssue', () => {
   describe('new', () => {

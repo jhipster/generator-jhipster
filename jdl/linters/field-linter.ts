@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { rulesNames } from './rules';
-import FieldIssue from './issues/field-issue';
+import { rulesNames } from './rules.js';
+import FieldIssue from './issues/field-issue.js';
 
 export type FieldDeclaration = {
   children: {

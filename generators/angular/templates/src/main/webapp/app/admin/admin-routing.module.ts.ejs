@@ -27,42 +27,49 @@ import { RouterModule } from '@angular/router';
       <%_ if (generateUserManagement) { _%>
       {
         path: 'user-management',
-        loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule),
+        loadChildren: () => import('./user-management/user-management.route'),
         title: 'userManagement.home.title',
       },
       <%_ } _%>
       {
         path: 'docs',
-        loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule),
+        loadComponent: () => import('./docs/docs.component'),
+        title: 'global.menu.admin.apidocs',
       },
       <%_ if (withAdminUi) { _%>
       {
         path: 'configuration',
-        loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
+        loadComponent: () => import('./configuration/configuration.component'),
+        title: 'configuration.title',
       },
       {
         path: 'health',
-        loadChildren: () => import('./health/health.module').then(m => m.HealthModule),
+        loadComponent: () => import('./health/health.component'),
+        title: 'health.title',
       },
       {
         path: 'logs',
-        loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule),
+        loadComponent: () => import('./logs/logs.component'),
+        title: 'logs.title',
       },
       {
         path: 'metrics',
-        loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule),
+        loadComponent: () => import('./metrics/metrics.component'),
+        title: 'metrics.title',
       },
       <%_ } _%>
       <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
       {
         path: 'gateway',
-        loadChildren: () => import('./gateway/gateway.module').then(m => m.GatewayModule),
+        loadComponent: () => import('./gateway/gateway.component'),
+        title: 'gateway.title',
       },
       <%_ } _%>
       <%_ if (communicationSpringWebsocket) { _%>
       {
         path: 'tracker',
-        loadChildren: () => import('./tracker/tracker.module').then(m => m.TrackerModule),
+        loadComponent: () => import('./tracker/tracker.component'),
+        title: 'tracker.title',
       },
       <%_ } _%>
       /* jhipster-needle-add-admin-route - JHipster will add admin routes here */

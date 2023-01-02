@@ -20,9 +20,17 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { errorRoute } from './layouts/error/error.route';
-import { navbarRoute } from './layouts/navbar/navbar.route';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
 import { Authority } from 'app/config/authority.constants';
+
+import HomeComponent from './home/home.component';
+import NavbarComponent from './layouts/navbar/navbar.component';
+<%_ if (!authenticationTypeOauth2) { _%>
+import LoginComponent from './login/login.component';
+<%_ } _%>
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+import { loadEntityModule } from './core/microfrontend';
+<%_ } _%>
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
@@ -30,6 +38,16 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
   imports: [
     RouterModule.forRoot(
       [
+        {
+          path: '',
+          component: HomeComponent,
+          title: 'home.title',
+        },
+        {
+          path: '',
+          component: NavbarComponent,
+          outlet: 'navbar',
+        },
 <%_ if (!applicationTypeMicroservice) { _%>
         {
           path: 'admin',
@@ -43,13 +61,14 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 <%_ if (generateUserManagement) { _%>
         {
           path: 'account',
-          loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
+          loadChildren: () => import('./account/account.route'),
         },
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
         {
           path: 'login',
-          loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
+          component: LoginComponent,
+          title: 'login.title',
         },
 <%_ } _%>
         {
@@ -60,11 +79,10 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
   <%_ for (const remote of microfrontends) { _%>
         {
           path: '<%= remote.lowercaseBaseName %>',
-          loadChildren: () => import(`<%= remote.lowercaseBaseName %>/entity-routing`).then(m => m.EntityRoutingModule),
+          loadChildren: () => loadEntityModule('<%= remote.lowercaseBaseName %>'),
         },
   <%_ } _%>
 <%_ } _%>
-        navbarRoute,
         ...errorRoute,
       ],
       { enableTracing: DEBUG_INFO_ENABLED }

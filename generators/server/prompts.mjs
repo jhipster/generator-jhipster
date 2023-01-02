@@ -19,8 +19,7 @@
 
 import chalk from 'chalk';
 
-import constants from '../generator-constants.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 
 import {
   applicationOptions,
@@ -31,6 +30,7 @@ import {
   cacheTypes,
   serviceDiscoveryTypes,
 } from '../../jdl/jhipster/index.mjs';
+import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
 
 const { OptionNames } = applicationOptions;
 const { serverDefaultConfig } = generatorDefaults;
@@ -59,8 +59,7 @@ const NO_CACHE_PROVIDER = cacheTypes.NO;
 export async function askForServerSideOpts({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const applicationType = this.jhipsterConfig.applicationType;
-  const defaultPort = applicationType === GATEWAY ? '8080' : '8081';
+  const { applicationType, serverPort: defaultServerPort } = this.jhipsterConfigWithDefaults;
   const prompts = [
     {
       when: () => [MONOLITH, MICROSERVICE].includes(applicationType),
@@ -76,7 +75,7 @@ export async function askForServerSideOpts({ control }) {
       validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
       message:
         'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
-      default: defaultPort,
+      default: defaultServerPort,
     },
     {
       type: 'input',
@@ -185,7 +184,7 @@ export async function askForServerSideOpts({ control }) {
       type: 'list',
       name: PROD_DATABASE_TYPE,
       message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
-      choices: answers => (answers.reactive ? constants.R2DBC_DB_OPTIONS : constants.SQL_DB_OPTIONS),
+      choices: answers => (answers.reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS),
       default: serverDefaultConfig.prodDatabaseType,
     },
     {
@@ -203,7 +202,7 @@ export async function askForServerSideOpts({ control }) {
             value: H2_MEMORY,
             name: 'H2 with in-memory persistence',
           },
-        ].concat(constants.SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
+        ].concat(SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
       default: serverDefaultConfig.devDatabaseType,
     },
     {
@@ -308,9 +307,7 @@ export async function askForServerSideOpts({ control }) {
 export async function askForOptionalItems({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const applicationType = this.jhipsterConfig.applicationType;
-  const reactive = this.jhipsterConfig.reactive;
-  const databaseType = this.jhipsterConfig.databaseType;
+  const { applicationType, reactive, databaseType } = this.jhipsterConfigWithDefaults;
 
   const choices = [];
   const defaultChoice = [];

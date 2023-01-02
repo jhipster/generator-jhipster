@@ -1,9 +1,6 @@
 /* eslint-disable no-console */
 import chalk from 'chalk';
 
-import * as oldConstants from '../generator-constants.cjs';
-import * as newConstants from '../generator-constants.mjs';
-
 const deprecatedProperties = {
   GRADLE_VERSION: {
     replacement: 'gradleVersion',
@@ -89,9 +86,6 @@ const getProperty = (context, prop) => {
         'dockerContainers.${dockerImage}'
       )}.`
     );
-  }
-  if (prop in oldConstants && !(prop in newConstants)) {
-    console.log(`Template data ${chalk.yellow(String(prop))} is deprecated but a replacement is not yet added.`);
   }
   const { generator, data } = context;
   if (prop in data) {

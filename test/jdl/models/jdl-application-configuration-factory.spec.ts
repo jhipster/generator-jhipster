@@ -18,8 +18,10 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { OptionNames } from '../../../jdl/jhipster/application-options';
-import createApplicationConfigurationFromObject from '../../../jdl/models/jdl-application-configuration-factory';
+import createApplicationConfigurationFromObject from '../../../jdl/models/jdl-application-configuration-factory.js';
+import { applicationOptions } from '../../../jdl/jhipster/index.mjs';
+
+const { OptionNames } = applicationOptions;
 
 describe('JDLApplicationConfigurationFactory', () => {
   describe('createApplicationConfigurationFromObject', () => {

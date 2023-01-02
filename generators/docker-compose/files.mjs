@@ -30,19 +30,19 @@ export function writeFiles() {
     },
 
     writeDockerCompose() {
-      this.template('docker-compose.yml.ejs', 'docker-compose.yml');
-      this.template('README-DOCKER-COMPOSE.md.ejs', 'README-DOCKER-COMPOSE.md');
+      this.writeFile('docker-compose.yml.ejs', 'docker-compose.yml');
+      this.writeFile('README-DOCKER-COMPOSE.md.ejs', 'README-DOCKER-COMPOSE.md');
     },
 
     writeRegistryFiles() {
       if (this.serviceDiscoveryAny) {
-        this.template('central-server-config/application.yml.ejs', 'central-server-config/application.yml');
+        this.writeFile('central-server-config/application.yml.ejs', 'central-server-config/application.yml');
       }
     },
 
     writeKeycloakFiles() {
       if (this.authenticationType === OAUTH2 && this.applicationType !== MICROSERVICE) {
-        this.template('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
+        this.writeFile('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
       }
     },
 
@@ -58,9 +58,9 @@ export function writeFiles() {
       // Format the application target list as a YAML array
       this.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
 
-      this.template('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
-      this.template('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml');
-      this.template('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');
+      this.writeFile('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
+      this.writeFile('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml');
+      this.writeFile('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');
     },
   };
 }

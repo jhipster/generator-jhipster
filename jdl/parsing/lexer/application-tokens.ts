@@ -18,12 +18,12 @@
  */
 
 import { Lexer } from 'chevrotain';
-import createTokenFromConfig from './token-creator';
-import { UNARY_OPTION, KEYWORD } from './shared-tokens';
+import createTokenFromConfig from './token-creator.js';
+import { UNARY_OPTION, KEYWORD } from './shared-tokens.js';
 
-import ApplicationOptions from '../../jhipster/application-options';
+import { applicationOptions } from '../../jhipster/index.mjs';
 
-const { OptionNames } = ApplicationOptions;
+const { OptionNames } = applicationOptions;
 
 const {
   APPLICATION_TYPE,

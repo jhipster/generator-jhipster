@@ -2,18 +2,15 @@ import path from 'path';
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import fse from 'fs-extra';
-import constants from '../generators/generator-constants.cjs';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR, GENERATOR_JHIPSTER } from '../generators/generator-constants.mjs';
 import { getGenerator, getTemplatePath } from './support/index.mjs';
-
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 const generator = getGenerator('spring-controller');
 
 describe('JHipster generator spring-controller', () => {
   describe('creates spring controller', () => {
-    before(done => {
-      helpers
+    before(async () => {
+      await helpers
         .run(generator)
         .inTmpDir(dir => {
           fse.copySync(getTemplatePath('default'), dir);
@@ -21,8 +18,7 @@ describe('JHipster generator spring-controller', () => {
         .withArguments(['foo'])
         .withPrompts({
           actionAdd: false,
-        })
-        .on('end', done);
+        });
     });
 
     it('creates controller files', () => {
@@ -33,15 +29,14 @@ describe('JHipster generator spring-controller', () => {
   });
 
   describe('creates spring controller with --default flag', () => {
-    before(done => {
-      helpers
+    before(async () => {
+      await helpers
         .run(generator)
         .inTmpDir(dir => {
           fse.copySync(getTemplatePath('default'), dir);
         })
         .withArguments(['foo'])
-        .withOptions({ default: true })
-        .on('end', done);
+        .withOptions({ default: true });
     });
 
     it('creates controller files', () => {
@@ -58,11 +53,11 @@ describe('JHipster generator spring-controller', () => {
         .run(generator)
         .inTmpDir(dir => {
           const config = {
-            ...fse.readJSONSync(getTemplatePath('default/.yo-rc.json'))[constants.GENERATOR_JHIPSTER],
+            ...fse.readJSONSync(getTemplatePath('default/.yo-rc.json'))[GENERATOR_JHIPSTER],
             packageFolder: undefined,
             packageName: 'com.test',
           };
-          fse.writeJsonSync(path.join(dir, '.yo-rc.json'), { [constants.GENERATOR_JHIPSTER]: config });
+          fse.writeJsonSync(path.join(dir, '.yo-rc.json'), { [GENERATOR_JHIPSTER]: config });
         })
         .withArguments(['fooBar'])
         .withPrompts({

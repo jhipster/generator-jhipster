@@ -21,11 +21,9 @@ import fs from 'fs';
 import BaseApplication from '../base-application/index.mjs';
 import type { DefaultTaskGroup } from '../base-application/tasks.mjs';
 import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
-import constants from '../generator-constants.cjs';
+import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_LIQUIBASE_CHANGELOGS, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import { liquibaseFiles } from './files.mjs';
-
-const { JHIPSTER_CONFIG_DIR } = constants;
 
 const BASE_CHANGELOG = {
   addedFields: [],
@@ -33,7 +31,6 @@ const BASE_CHANGELOG = {
   addedRelationships: [],
   removedRelationships: [],
 };
-
 export default class DatabaseChangelogGenerator extends BaseApplication<SpringBootApplication & LiquibaseApplication> {
   constructor(args: any, options: any, features: any) {
     super(args, options, { unique: 'namespace', ...features });

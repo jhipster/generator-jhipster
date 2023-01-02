@@ -19,18 +19,18 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types';
+import { relationshipTypes } from '../../../jdl/jhipster/index.mjs';
 
 describe('RelationshipTypes', () => {
   describe('exists', () => {
     context('when checking for a valid unary relationship type', () => {
       it('should return true', () => {
-        expect(RelationshipTypes.exists(RelationshipTypes.MANY_TO_ONE)).to.be.true;
+        expect(relationshipTypes.exists(relationshipTypes.MANY_TO_ONE)).to.be.true;
       });
     });
     context('when checking for an invalid relationship type', () => {
       it('should return false', () => {
-        expect(RelationshipTypes.exists('NOTHING')).to.be.false;
+        expect(relationshipTypes.exists('NOTHING')).to.be.false;
       });
     });
   });

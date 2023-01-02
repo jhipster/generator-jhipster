@@ -16,7 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export const EntityNavbarItems = [
+import NavbarItem from 'app/layouts/navbar/navbar-item.model';
+
+export const EntityNavbarItems: NavbarItem[] = [
 <%_ for (const entity of this.localEntities) { _%>
   {
     name: '<%= entity.entityAngularName %>',

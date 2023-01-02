@@ -22,22 +22,23 @@ import Generator from 'yeoman-generator';
 import chalk from 'chalk';
 import shelljs from 'shelljs';
 import semver from 'semver';
-import { exec } from 'child_process';
 import https from 'https';
 
-import { databaseTypes, buildToolTypes, fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
+import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-import { packageJson as packagejs } from '../../lib/index.mjs';
-import jhipsterUtils from '../utils.cjs';
-import generatorConstants from '../generator-constants.cjs';
+import { packageJson } from '../../lib/index.mjs';
+import { getJavadoc } from '../utils.mjs';
+import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import databaseData from '../sql-constants.mjs';
+import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
-const { JAVA_COMPATIBLE_VERSIONS, SUPPORTED_CLIENT_FRAMEWORKS } = generatorConstants;
-const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
+const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
-const { REQUIRED } = validations;
+const {
+  Validations: { REQUIRED },
+} = validations;
 
 const {
   STRING: TYPE_STRING,
@@ -207,7 +208,7 @@ export default class PrivateBase extends Generator {
    * @returns class javadoc
    */
   formatAsClassJavadoc(text) {
-    return jhipsterUtils.getJavadoc(text, 0);
+    return getJavadoc(text, 0);
   }
 
   /**
@@ -218,7 +219,7 @@ export default class PrivateBase extends Generator {
    * @returns field javadoc
    */
   formatAsFieldJavadoc(text) {
-    return jhipsterUtils.getJavadoc(text, 4);
+    return getJavadoc(text, 4);
   }
 
   /**
@@ -411,54 +412,6 @@ export default class PrivateBase extends Generator {
   }
 
   /**
-   * @private
-   * Utility function to copy and process templates.
-   *
-   * @param {string} source - source
-   * @param {string} destination - destination
-   * @param {*} generator - reference to the generator
-   * @param {*} options - options object
-   * @param {*} context - context
-   */
-  template(source, destination, generator, options = {}, context) {
-    const _this = generator || this;
-    const _context = context || _this;
-    const customDestination = _this.destinationPath(destination);
-    if (!customDestination) {
-      this.debug(`File ${destination} ignored`);
-      return Promise.resolved();
-    }
-    return jhipsterUtils
-      .renderContent(source, _this, _context, options)
-      .then(res => {
-        _this.fs.write(customDestination, res);
-        return customDestination;
-      })
-      .catch(error => {
-        this.warning(source);
-        throw error;
-      });
-  }
-
-  /**
-   * @private
-   * Utility function to render a template into a string
-   *
-   * @param {string} source - source
-   * @param {function} callback - callback to take the rendered template as a string
-   * @param {*} generator - reference to the generator
-   * @param {*} options - options object
-   * @param {*} context - context
-   */
-  render(source, callback, generator, options = {}, context) {
-    const _this = generator || this;
-    const _context = context || _this;
-    jhipsterUtils.renderContent(source, _this, _context, options, res => {
-      callback(res);
-    });
-  }
-
-  /**
    * Print a debug message.
    *
    * @param {string} msg - message to print
@@ -478,36 +431,11 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * Check if Java is installed
-   */
-  checkJava() {
-    if (this.skipChecks || this.skipServer) return;
-    const done = this.async();
-    exec('java -version', (err, stdout, stderr) => {
-      if (err) {
-        this.warning('Java is not found on your computer.');
-      } else {
-        const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-        if (!javaVersion.match(new RegExp(`(${JAVA_COMPATIBLE_VERSIONS.map(ver => `^${ver}`).join('|')})`))) {
-          const [latest, ...others] = JAVA_COMPATIBLE_VERSIONS.concat().reverse();
-          this.warning(
-            `Java ${others.reverse().join(', ')} or ${latest} are not found on your computer. Your Java version is: ${chalk.yellow(
-              javaVersion
-            )}`
-          );
-        }
-      }
-      done();
-    });
-  }
-
-  /**
-   * @private
    * Check if Node is installed
    */
   checkNode() {
     if (this.skipChecks) return;
-    const nodeFromPackageJson = packagejs.engines.node;
+    const nodeFromPackageJson = packageJson.engines.node;
     if (!semver.satisfies(process.version, nodeFromPackageJson)) {
       this.warning(
         `Your NodeJS version is too old (${process.version}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`
@@ -708,7 +636,7 @@ export default class PrivateBase extends Generator {
    * @param {string} db - db
    */
   getDBTypeFromDBValue(db) {
-    return jhipsterUtils.getDBTypeFromDBValue(db);
+    return getDBTypeFromDBValue(db);
   }
 
   /**

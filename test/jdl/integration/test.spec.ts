@@ -22,10 +22,16 @@ import fs from 'fs';
 import path from 'path';
 import { expect } from 'chai';
 
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
-import { parseFromFiles } from '../../../jdl/readers/jdl-reader';
-import DocumentParser from '../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter';
-import exportToJDL from '../../../jdl/exporters/jdl-exporter';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { applicationTypes } from '../../../jdl/jhipster/index.mjs';
+import { parseFromFiles } from '../../../jdl/readers/jdl-reader.js';
+import DocumentParser from '../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import exportToJDL from '../../../jdl/exporters/jdl-exporter.js';
+
+const { MONOLITH } = applicationTypes;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 describe('integration tests', () => {
   context('when parsing and exporting a JDL', () => {
@@ -35,12 +41,12 @@ describe('integration tests', () => {
     before(() => {
       originalContent = DocumentParser.parseFromConfigurationObject({
         parsedContent: parseFromFiles([path.join(__dirname, '..', 'test-files', 'big_sample.jdl')]),
-        applicationType: ApplicationTypes.MONOLITH,
+        applicationType: MONOLITH,
       });
       exportToJDL(originalContent, 'exported.jdl');
       writtenContent = DocumentParser.parseFromConfigurationObject({
         parsedContent: parseFromFiles(['exported.jdl']),
-        applicationType: ApplicationTypes.MONOLITH,
+        applicationType: MONOLITH,
       });
     });
 

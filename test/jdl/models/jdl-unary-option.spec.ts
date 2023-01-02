@@ -20,8 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 
-import JDLUnaryOption from '../../../jdl/models/jdl-unary-option';
-import UnaryOptions from '../../../jdl/jhipster/unary-options';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
+import { unaryOptions } from '../../../jdl/jhipster/index.mjs';
 
 describe('JDLUnaryOption', () => {
   describe('new', () => {
@@ -37,11 +37,11 @@ describe('JDLUnaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+        option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
       });
 
       it('should create an option', () => {
-        expect(option.name).to.equal(UnaryOptions.SKIP_CLIENT);
+        expect(option.name).to.equal(unaryOptions.SKIP_CLIENT);
       });
     });
     context('when passing a list of entity names and excluded names with some of them being repeated', () => {
@@ -49,7 +49,7 @@ describe('JDLUnaryOption', () => {
 
       before(() => {
         option = new JDLUnaryOption({
-          name: UnaryOptions.SKIP_CLIENT,
+          name: unaryOptions.SKIP_CLIENT,
           entityNames: ['A', 'B', 'C', 'A'],
           excludedNames: ['E', 'E', 'D'],
         });
@@ -71,7 +71,7 @@ describe('JDLUnaryOption', () => {
 
     before(() => {
       option = new JDLUnaryOption({
-        name: UnaryOptions.SKIP_CLIENT,
+        name: unaryOptions.SKIP_CLIENT,
         entityNames: ['A', 'B', 'C'],
       });
       option.setEntityNames(['A']);
@@ -87,7 +87,7 @@ describe('JDLUnaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+        option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
       });
 
       it('should fail', () => {
@@ -100,7 +100,7 @@ describe('JDLUnaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+        option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
         option.addEntityName('A');
       });
 
@@ -112,7 +112,7 @@ describe('JDLUnaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+        option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
         option.addEntityName('A');
         option.addEntityName('A');
       });
@@ -125,7 +125,7 @@ describe('JDLUnaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+        option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
         option.addEntityName('A');
         option.excludeEntityName('A');
       });
@@ -141,7 +141,7 @@ describe('JDLUnaryOption', () => {
 
     before(() => {
       option = new JDLUnaryOption({
-        name: UnaryOptions.SKIP_SERVER,
+        name: unaryOptions.SKIP_SERVER,
         entityNames: ['B', 'C'],
         excludedNames: ['Z'],
       });
@@ -157,7 +157,7 @@ describe('JDLUnaryOption', () => {
 
       before(() => {
         const option2 = new JDLUnaryOption({
-          name: UnaryOptions.SKIP_SERVER,
+          name: unaryOptions.SKIP_SERVER,
           entityNames: ['A', 'C'],
           excludedNames: ['Y'],
         });
@@ -180,7 +180,7 @@ describe('JDLUnaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+        option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
       });
 
       it('should fail', () => {
@@ -193,7 +193,7 @@ describe('JDLUnaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+        option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
         option.excludeEntityName('A');
       });
 
@@ -205,7 +205,7 @@ describe('JDLUnaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+        option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
         option.excludeEntityName('A');
         option.excludeEntityName('A');
       });
@@ -218,7 +218,7 @@ describe('JDLUnaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+        option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
         option.excludeEntityName('A');
         option.addEntityName('A');
       });
@@ -232,21 +232,21 @@ describe('JDLUnaryOption', () => {
     let option;
 
     before(() => {
-      option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-      expect(option.toString()).to.equal(`${UnaryOptions.SKIP_CLIENT} *`);
+      option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
+      expect(option.toString()).to.equal(`${unaryOptions.SKIP_CLIENT} *`);
       option.addEntityName('D');
-      expect(option.toString()).to.equal(`${UnaryOptions.SKIP_CLIENT} D`);
+      expect(option.toString()).to.equal(`${unaryOptions.SKIP_CLIENT} D`);
       option.addEntityName('E');
       option.addEntityName('F');
-      expect(option.toString()).to.equal(`${UnaryOptions.SKIP_CLIENT} D, E, F`);
+      expect(option.toString()).to.equal(`${unaryOptions.SKIP_CLIENT} D, E, F`);
       option.excludeEntityName('A');
-      expect(option.toString()).to.equal(`${UnaryOptions.SKIP_CLIENT} D, E, F except A`);
+      expect(option.toString()).to.equal(`${unaryOptions.SKIP_CLIENT} D, E, F except A`);
       option.excludeEntityName('B');
       option.excludeEntityName('C');
     });
 
     it('should stringify the option', () => {
-      expect(option.toString()).to.equal(`${UnaryOptions.SKIP_CLIENT} D, E, F except A, B, C`);
+      expect(option.toString()).to.equal(`${unaryOptions.SKIP_CLIENT} D, E, F except A, B, C`);
     });
   });
 });

@@ -19,7 +19,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import applicationOptions from '../../../jdl/jhipster/application-options';
+import { applicationOptions } from '../../../jdl/jhipster/index.mjs';
 
 const { OptionNames, doesOptionExist, getTypeForOption, shouldTheValueBeQuoted } = applicationOptions;
 

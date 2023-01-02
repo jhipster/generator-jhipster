@@ -20,7 +20,7 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import fs from 'fs';
 import { expect } from 'chai';
-import { readFile, readFiles } from '../../../jdl/readers/file-reader';
+import { readFile, readFiles } from '../../../jdl/readers/file-reader.js';
 
 describe('FileReader', () => {
   describe('readFile', () => {

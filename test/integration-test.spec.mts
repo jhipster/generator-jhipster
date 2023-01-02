@@ -23,9 +23,7 @@ import path, { dirname } from 'path';
 import sortKeys from 'sort-keys';
 import { fileURLToPath } from 'url';
 
-import authenticationTypes from '../jdl/jhipster/authentication-types.js';
-import applicationTypes from '../jdl/jhipster/application-types.js';
-
+import { applicationTypes, authenticationTypes } from '../jdl/jhipster/index.mjs';
 import { formatDateForChangelog } from '../generators/base/utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

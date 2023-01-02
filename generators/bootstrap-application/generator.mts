@@ -21,9 +21,7 @@ import lodash from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import validations from '../../jdl/jhipster/validations.js';
-import fieldTypes from '../../jdl/jhipster/field-types.js';
-import constants from '../generator-constants.cjs';
+import { fieldTypes, validations } from '../../jdl/jhipster/index.mjs';
 import { stringify } from '../../utils/index.mjs';
 import {
   derivedPrimaryKeyProperties,
@@ -37,15 +35,16 @@ import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION
 import type { ClientServerApplication } from '../common/types.mjs';
 
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
-
 const { sortedUniq, intersection } = lodash;
 
 const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = BlobTypes;
 
-const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations.default;
-const { SUPPORTED_VALIDATION_RULES } = constants;
+const {
+  Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
+  SUPPORTED_VALIDATION_RULES,
+} = validations;
 
 /**
  * @class

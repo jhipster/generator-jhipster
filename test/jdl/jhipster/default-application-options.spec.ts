@@ -20,12 +20,14 @@
 
 import { expect } from 'chai';
 
-import {
+import { defaultApplicationOptions } from '../../../jdl/jhipster/index.mjs';
+
+const {
   getConfigForMonolithApplication,
   getConfigForGatewayApplication,
   getConfigForMicroserviceApplication,
   getDefaultConfigForNewApplication,
-} from '../../../jdl/jhipster/default-application-options';
+} = defaultApplicationOptions;
 
 describe('DefaultApplicationOptions', () => {
   describe('getConfigForMonolithApplication', () => {
@@ -149,19 +151,6 @@ describe('DefaultApplicationOptions', () => {
         expect(options.reactive).to.be.true;
       });
     });
-    context('when the service discovery type option is false', () => {
-      let serviceDiscoveryTypeOption;
-
-      before(() => {
-        serviceDiscoveryTypeOption = getConfigForGatewayApplication({
-          serviceDiscoveryType: false,
-        }).serviceDiscoveryType;
-      });
-
-      it('should set it to eureka', () => {
-        expect(serviceDiscoveryTypeOption).to.equal('eureka');
-      });
-    });
     context('when the service discovery type option is no', () => {
       let serviceDiscoveryTypeOption;
 
@@ -171,8 +160,8 @@ describe('DefaultApplicationOptions', () => {
         }).serviceDiscoveryType;
       });
 
-      it('should set it to false', () => {
-        expect(serviceDiscoveryTypeOption).to.be.false;
+      it('should set it to no', () => {
+        expect(serviceDiscoveryTypeOption).to.be.equal('no');
       });
     });
     context('when passing a custom client theme and no variant', () => {
@@ -257,19 +246,6 @@ describe('DefaultApplicationOptions', () => {
         expect(options.skipServer).to.be.undefined;
       });
     });
-    context('when the service discovery type option is false', () => {
-      let serviceDiscoveryTypeOption;
-
-      before(() => {
-        serviceDiscoveryTypeOption = getConfigForMicroserviceApplication({
-          serviceDiscoveryType: false,
-        }).serviceDiscoveryType;
-      });
-
-      it('should set it to eureka', () => {
-        expect(serviceDiscoveryTypeOption).to.equal('eureka');
-      });
-    });
     context('when the service discovery type option is no', () => {
       let serviceDiscoveryTypeOption;
 
@@ -279,8 +255,8 @@ describe('DefaultApplicationOptions', () => {
         }).serviceDiscoveryType;
       });
 
-      it('should set it to false', () => {
-        expect(serviceDiscoveryTypeOption).to.be.false;
+      it('should set it to no', () => {
+        expect(serviceDiscoveryTypeOption).to.equal('no');
       });
     });
     context('when the user management skipping option is not a boolean', () => {
@@ -371,8 +347,8 @@ describe('DefaultApplicationOptions', () => {
       it('should set the languages option to an empty array', () => {
         expect(options.languages).to.be.eql([]);
       });
-      it('should set the message broker option to false', () => {
-        expect(options.messageBroker).to.be.false;
+      it('should set the message broker option to no', () => {
+        expect(options.messageBroker).to.be.equal('no');
       });
       it('should set the package folder to com/mycompany/myapp', () => {
         expect(options.packageFolder).to.equal('com/mycompany/myapp');
@@ -383,14 +359,14 @@ describe('DefaultApplicationOptions', () => {
       it('should set the production database type option to postgresql', () => {
         expect(options.prodDatabaseType).to.equal('postgresql');
       });
-      it('should set the search engine option to false', () => {
-        expect(options.searchEngine).to.be.false;
+      it('should set the search engine option to no', () => {
+        expect(options.searchEngine).to.be.equal('no');
       });
       it('should set the test frameworks option to nothing', () => {
         expect(options.testFrameworks).to.have.lengthOf(0);
       });
-      it('should set the websocket option to false', () => {
-        expect(options.websocket).to.be.false;
+      it('should set the websocket option to no', () => {
+        expect(options.websocket).to.be.equal('no');
       });
     });
     context('when there is no package name option but only a package folder', () => {

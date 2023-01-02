@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import applicationTypes from './application-types';
-import authenticationTypes from './authentication-types';
-import databaseTypes from './database-types';
-import applicationOptions from './application-options';
-import cacheProviderType from './cache-types';
-import serviceDiscoveryTypes from './service-discovery-types';
-import clientFrameworkTypes from './client-framework-types';
-import buildToolTypes from './build-tool-types';
+import applicationTypes from './application-types.js';
+import authenticationTypes from './authentication-types.js';
+import databaseTypes from './database-types.js';
+import applicationOptions from './application-options.js';
+import cacheTypes from './cache-types.js';
+import serviceDiscoveryTypes from './service-discovery-types.js';
+import clientFrameworkTypes from './client-framework-types.js';
+import buildToolTypes from './build-tool-types.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { EUREKA } = serviceDiscoveryTypes;
@@ -33,9 +33,9 @@ const NO_DATABASE_TYPE = databaseTypes.NO;
 const { OptionNames, OptionValues } = applicationOptions;
 const { JWT, OAUTH2 } = authenticationTypes;
 const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
-const { EHCACHE, HAZELCAST } = cacheProviderType;
+const { EHCACHE, HAZELCAST } = cacheTypes;
 
-const NO_CACHE_PROVIDER = cacheProviderType.NO;
+const NO_CACHE_PROVIDER = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 const { MAVEN } = buildToolTypes;
@@ -105,7 +105,7 @@ export function getConfigForMonolithApplication(customOptions: any = {}): any {
     [CACHE_PROVIDER]: EHCACHE,
     [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
-    [SERVICE_DISCOVERY_TYPE]: false,
+    [SERVICE_DISCOVERY_TYPE]: NO_SERVICE_DISCOVERY,
     [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
     [WITH_ADMIN_UI]: true,
     ...customOptions,
@@ -147,12 +147,6 @@ export function getConfigForGatewayApplication(customOptions: any = {}): any {
   if (options[AUTHENTICATION_TYPE] === OAUTH2) {
     options[SKIP_USER_MANAGEMENT] = true;
   }
-  if (options[SERVICE_DISCOVERY_TYPE] === false) {
-    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
-  }
-  if (options[SERVICE_DISCOVERY_TYPE] === NO_SERVICE_DISCOVERY) {
-    options[SERVICE_DISCOVERY_TYPE] = false;
-  }
   options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   options[ENABLE_HIBERNATE_CACHE] = false;
   return {
@@ -185,12 +179,6 @@ export function getConfigForMicroserviceApplication(customOptions: any = {}): an
   if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
     options[SKIP_USER_MANAGEMENT] = true;
   }
-  if (options[SERVICE_DISCOVERY_TYPE] === false) {
-    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
-  }
-  if (options[SERVICE_DISCOVERY_TYPE] === NO_SERVICE_DISCOVERY) {
-    options[SERVICE_DISCOVERY_TYPE] = false;
-  }
   return {
     ...options,
     [APPLICATION_TYPE]: MICROSERVICE,
@@ -209,11 +197,11 @@ export function getDefaultConfigForNewApplication(customOptions: any = {}): any 
     [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
     [JHI_PREFIX]: OptionValues[JHI_PREFIX],
     [LANGUAGES]: OptionValues[LANGUAGES],
-    [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].false,
+    [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].no,
     [PROD_DATABASE_TYPE]: POSTGRESQL,
-    [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].false,
+    [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].no,
     [TEST_FRAMEWORKS]: [],
-    [WEBSOCKET]: OptionValues[WEBSOCKET].false,
+    [WEBSOCKET]: OptionValues[WEBSOCKET].no,
     [ENABLE_GRADLE_ENTERPRISE]: OptionValues[ENABLE_GRADLE_ENTERPRISE],
     [GRADLE_ENTERPRISE_HOST]: OptionValues[GRADLE_ENTERPRISE_HOST],
     ...customOptions,
@@ -230,9 +218,6 @@ export function getDefaultConfigForNewApplication(customOptions: any = {}): any 
   }
   if (options[SKIP_CLIENT]) {
     options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
-  }
-  if (options[CLIENT_FRAMEWORK] === ANGULAR) {
-    options[CLIENT_FRAMEWORK] = ANGULAR;
   }
   if (!options[CLIENT_PACKAGE_MANAGER] && OptionValues[USE_NPM]) {
     options[CLIENT_PACKAGE_MANAGER] = OptionValues[CLIENT_PACKAGE_MANAGER].npm;

@@ -22,7 +22,7 @@ import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.mjs';
 
-import constants from '../generator-constants.cjs';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { askForControllerActions } from './prompts.mjs';
 import statistics from '../statistics.cjs';
 import { GENERATOR_SPRING_CONTROLLER } from '../generator-list.mjs';
@@ -31,8 +31,6 @@ import { applicationOptions, cacheTypes, messageBrokerTypes } from '../../jdl/jh
 const { OptionNames } = applicationOptions;
 const cacheProviders = cacheTypes;
 const messageBrokers = messageBrokerTypes;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const {
   BASE_NAME,
   PACKAGE_NAME,
@@ -181,11 +179,11 @@ export default class SpringControllerGenerator extends BaseGenerator {
           );
         });
 
-        this.template(
+        this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-controller/templates')}/${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
           `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}.java`
         );
-        this.template(
+        this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-controller/templates')}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIT.java.ejs`,
           `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IT.java`
         );

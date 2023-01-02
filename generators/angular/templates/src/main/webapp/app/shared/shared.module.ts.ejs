@@ -16,58 +16,60 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule } from '@angular/core';
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
-import { SharedLibsModule } from './shared-libs.module';
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
-import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
-import { TranslateDirective } from './language/translate.directive';
+import { TranslateModule } from '@ngx-translate/core';
+
+import FindLanguageFromKeyPipe from './language/find-language-from-key.pipe';
+import TranslateDirective from './language/translate.directive';
 <%_ } _%>
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
-import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
-import { DurationPipe } from './date/duration.pipe';
-import { FormatMediumDatetimePipe } from './date/format-medium-datetime.pipe';
-import { FormatMediumDatePipe } from './date/format-medium-date.pipe';
-import { SortByDirective } from './sort/sort-by.directive';
-import { SortDirective } from './sort/sort.directive';
-import { ItemCountComponent } from './pagination/item-count.component';
-import { FilterComponent } from './filter/filter.component';
 
+/**
+ * Application wide Module
+ */
 @NgModule({
-  imports: [SharedLibsModule],
-  declarations: [
+  imports: [
+    AlertComponent,
+    AlertErrorComponent,
 <%_ if (enableTranslation) { _%>
     FindLanguageFromKeyPipe,
     TranslateDirective,
 <%_ } _%>
-    AlertComponent,
-    AlertErrorComponent,
-    HasAnyAuthorityDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-    SortByDirective,
-    SortDirective,
-    ItemCountComponent,
-    FilterComponent,
   ],
   exports: [
-    SharedLibsModule,
+    CommonModule,
+    NgbModule,
+    FontAwesomeModule,
+    AlertComponent,
+    AlertErrorComponent,
 <%_ if (enableTranslation) { _%>
+    TranslateModule,
     FindLanguageFromKeyPipe,
     TranslateDirective,
 <%_ } _%>
-    AlertComponent,
-    AlertErrorComponent,
-    HasAnyAuthorityDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-    SortByDirective,
-    SortDirective,
-    ItemCountComponent,
-    FilterComponent,
   ],
 })
-export class SharedModule {}
+export default class SharedModule {}

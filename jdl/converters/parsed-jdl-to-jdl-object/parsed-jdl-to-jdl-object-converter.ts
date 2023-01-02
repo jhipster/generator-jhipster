@@ -17,26 +17,20 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import JDLObject from '../../models/jdl-object';
-import JDLEntity from '../../models/jdl-entity';
-import JDLUnaryOption from '../../models/jdl-unary-option';
-import JDLBinaryOption from '../../models/jdl-binary-option';
-import ApplicationTypes from '../../jhipster/application-types';
-import BinaryOptions from '../../jhipster/binary-options';
-import DatabaseTypes from '../../jhipster/database-types';
+import JDLObject from '../../models/jdl-object.js';
+import { JDLEntity } from '../../models/index.mjs';
+import JDLUnaryOption from '../../models/jdl-unary-option.js';
+import JDLBinaryOption from '../../models/jdl-binary-option.js';
+import { applicationTypes, binaryOptions, databaseTypes } from '../../jhipster/index.mjs';
 
-import { convertApplications } from './application-converter';
-import { convertEntities } from './entity-converter';
-import { convertEnums } from './enum-converter';
-import { convertField } from './field-converter';
-import { convertValidations } from './validation-converter';
-import { convertOptions } from './option-converter';
-import { convertRelationships } from './relationship-converter';
-import { convertDeployments } from './deployment-converter';
-
-export default {
-  parseFromConfigurationObject,
-};
+import { convertApplications } from './application-converter.js';
+import { convertEntities } from './entity-converter.js';
+import { convertEnums } from './enum-converter.js';
+import { convertField } from './field-converter.js';
+import { convertValidations } from './validation-converter.js';
+import { convertOptions } from './option-converter.js';
+import { convertRelationships } from './relationship-converter.js';
+import { convertDeployments } from './deployment-converter.js';
 
 const USER = 'User';
 
@@ -150,7 +144,7 @@ function addOptionsFromEntityAnnotations() {
         );
       } else if (annotation.type === 'BINARY') {
         if (annotationName === 'paginate') {
-          annotationName = BinaryOptions.Options.PAGINATION;
+          annotationName = binaryOptions.Options.PAGINATION;
         }
         jdlObject.addOption(
           new JDLBinaryOption({
@@ -197,7 +191,7 @@ function getConstantValueFromConstantName(constantName) {
 }
 
 function fillAssociations(conversionOptions: any = {}) {
-  const { unidirectionalRelationships = configuration.databaseType === DatabaseTypes.NEO4J } = conversionOptions;
+  const { unidirectionalRelationships = configuration.databaseType === databaseTypes.NEO4J } = conversionOptions;
   const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions, { unidirectionalRelationships });
   jdlRelationships.forEach(jdlRelationship => {
     // TODO: addRelationship only expects one argument.
@@ -229,7 +223,7 @@ function convertAnnotationsToOptions(annotations) {
 }
 
 function fillOptions() {
-  if (configuration.applicationType === ApplicationTypes.MICROSERVICE && !parsedContent.options.microservice) {
+  if (configuration.applicationType === applicationTypes.MICROSERVICE && !parsedContent.options.microservice) {
     globallyAddMicroserviceOption(configuration.applicationName);
   }
   fillUnaryAndBinaryOptions();
@@ -239,7 +233,7 @@ function fillOptions() {
 function globallyAddMicroserviceOption(applicationName) {
   jdlObject.addOption(
     new JDLBinaryOption({
-      name: BinaryOptions.Options.MICROSERVICE,
+      name: binaryOptions.Options.MICROSERVICE,
       value: applicationName,
       entityNames,
     })
@@ -248,10 +242,10 @@ function globallyAddMicroserviceOption(applicationName) {
 
 function fillUnaryAndBinaryOptions() {
   // TODO: move it to another file? it may not be the parser's responsibility to do it
-  if (configuration.applicationType === ApplicationTypes.MICROSERVICE) {
+  if (configuration.applicationType === applicationTypes.MICROSERVICE) {
     jdlObject.addOption(
       new JDLBinaryOption({
-        name: BinaryOptions.Options.CLIENT_ROOT_FOLDER,
+        name: binaryOptions.Options.CLIENT_ROOT_FOLDER,
         value: configuration.applicationName,
         entityNames,
       })
@@ -262,3 +256,7 @@ function fillUnaryAndBinaryOptions() {
     jdlObject.addOption(convertedOption);
   });
 }
+
+export default {
+  parseFromConfigurationObject,
+};

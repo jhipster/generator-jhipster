@@ -17,14 +17,11 @@
  * limitations under the License.
  */
 
-import constants from './generator-constants.cjs';
+import { SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR, DOCKER_DIR } from './generator-constants.mjs';
 import { languageSnakeCase, languageToJavaLanguage } from './languages/utils.mjs';
+import { clientFrameworkTypes } from '../jdl/jhipster/index.mjs';
 
-export { cleanupOldServerFiles } from './server/cleanup.mjs';
-
-const { SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR } = constants;
-
-const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
+const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore
@@ -87,8 +84,8 @@ export function cleanupOldFiles(generator, data) {
     generator.authenticationType === 'oauth2' &&
     generator.applicationType === 'microservice'
   ) {
-    generator.removeFolder(`${constants.DOCKER_DIR}realm-config`);
-    generator.removeFile(`${constants.DOCKER_DIR}keycloak.yml`);
+    generator.removeFolder(`${DOCKER_DIR}realm-config`);
+    generator.removeFile(`${DOCKER_DIR}keycloak.yml`);
   }
   if (generator.isJhipsterVersionLessThan('6.0.0')) {
     generator.removeFolder(`${data.clientSrcDir}app/shared/layout/header/menus`);

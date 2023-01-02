@@ -21,18 +21,18 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
+import { applicationTypes } from '../../../jdl/jhipster/index.mjs';
 
 describe('ApplicationTypes', () => {
   describe('exists', () => {
     context('when passing a nil arg', () => {
       it('should return false', () => {
-        expect(ApplicationTypes.exists()).to.be.false;
+        expect(applicationTypes.exists()).to.be.false;
       });
     });
     context('when passing an invalid type', () => {
       it('should return false', () => {
-        expect(ApplicationTypes.exists('NotAType')).to.be.false;
+        expect(applicationTypes.exists('NotAType')).to.be.false;
       });
     });
   });

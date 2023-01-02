@@ -16,27 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { uniqBy } from 'lodash';
-import * as JDLReader from './readers/jdl-reader';
-import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter';
-import { readJSONFile } from './readers/json-file-reader';
-import { doesFileExist } from './utils/file-utils';
-import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter';
-import JDLWithApplicationsToJSONConverter from './converters/jdl-to-json/jdl-with-applications-to-json-converter';
-import { exportApplication, exportApplications } from './exporters/applications/jhipster-application-exporter';
-import { formatApplicationToExport, formatApplicationsToExport } from './exporters/applications/jhipster-application-formatter';
-import exportDeployments from './exporters/jhipster-deployment-exporter';
-import exportEntities from './exporters/jhipster-entity-exporter';
-import createWithApplicationValidator from './validators/jdl-with-application-validator';
-import createWithoutApplicationValidator from './validators/jdl-without-application-validator';
-import { OptionNames } from './jhipster/application-options';
+import _ from 'lodash';
+import * as JDLReader from './readers/jdl-reader.js';
+import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import { readJSONFile } from './readers/json-file-reader.js';
+import { doesFileExist } from './utils/file-utils.js';
+import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
+import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
+import { exportApplication, exportApplications } from './exporters/applications/jhipster-application-exporter.js';
+import { formatApplicationToExport, formatApplicationsToExport } from './exporters/applications/jhipster-application-formatter.js';
+import exportDeployments from './exporters/jhipster-deployment-exporter.js';
+import exportEntities from './exporters/jhipster-entity-exporter.js';
+import createWithApplicationValidator from './validators/jdl-with-application-validator.js';
+import createWithoutApplicationValidator from './validators/jdl-without-application-validator.js';
+import { applicationOptions } from './jhipster/index.mjs';
 
+const { OptionNames } = applicationOptions;
 const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
 
-export default {
-  createImporterFromContent,
-  createImporterFromFiles,
-};
+const { uniqBy } = _;
 
 /**
  * Creates a new JDL importer from files.
@@ -256,7 +254,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
   importState.exportedApplications.push(formattedApplication);
   const jdlApplication = jdlObject.getApplications()[0];
   const applicationName = jdlApplication.getConfigurationOptionValue(BASE_NAME);
-  const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
+  const entitiesPerApplicationMap = convert({
     jdlObject,
     unidirectionalRelationships,
   });
@@ -294,7 +292,7 @@ function importApplicationsAndEntities(jdlObject, configuration) {
   if (!skipFileGeneration) {
     exportApplications(formattedApplications);
   }
-  const entitiesPerApplicationMap: Map<any, any> = JDLWithApplicationsToJSONConverter.convert({
+  const entitiesPerApplicationMap: Map<any, any> = convert({
     jdlObject,
     unidirectionalRelationships,
   });
@@ -342,3 +340,8 @@ function exportJSONEntities(entities, configuration) {
     },
   });
 }
+
+export default {
+  createImporterFromContent,
+  createImporterFromFiles,
+};

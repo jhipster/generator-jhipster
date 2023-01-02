@@ -25,20 +25,29 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const { expect } = chai;
 
-import ApplicationValidator from '../../../jdl/validators/application-validator';
+import ApplicationValidator from '../../../jdl/validators/application-validator.js';
+import {
+  applicationOptions,
+  websocketTypes,
+  buildToolTypes,
+  applicationTypes,
+  databaseTypes,
+  authenticationTypes,
+  unaryOptions,
+  binaryOptions,
+} from '../../../jdl/jhipster/index.mjs';
+import JDLApplication from '../../../jdl/models/jdl-application.js';
+import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import logger from '../../../jdl/utils/objects/logger.js';
 
-import { OptionNames, OptionValues } from '../../../jdl/jhipster/application-options';
-import { SPRING_WEBSOCKET } from '../../../jdl/jhipster/websocket-types';
-import { MAVEN } from '../../../jdl/jhipster/build-tool-types';
-import { MONOLITH, MICROSERVICE, GATEWAY } from '../../../jdl/jhipster/application-types';
-import { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } from '../../../jdl/jhipster/database-types';
-import { JWT } from '../../../jdl/jhipster/authentication-types';
-import { READ_ONLY } from '../../../jdl/jhipster/unary-options';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
-import JDLApplication from '../../../jdl/models/jdl-application';
-import JDLUnaryOption from '../../../jdl/models/jdl-unary-option';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
-import logger from '../../../jdl/utils/objects/logger';
+const { OptionNames, OptionValues } = applicationOptions;
+const { SPRING_WEBSOCKET } = websocketTypes;
+const { MAVEN } = buildToolTypes;
+const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
+const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J, H2_DISK, H2_MEMORY } = databaseTypes;
+const { JWT } = authenticationTypes;
+const { READ_ONLY } = unaryOptions;
 
 describe('ApplicationValidator', () => {
   let validator;
@@ -114,7 +123,7 @@ describe('ApplicationValidator', () => {
                   config: {
                     ...basicValidApplicationConfig,
                     databaseType: SQL,
-                    devDatabaseType: 'h2Disk',
+                    devDatabaseType: H2_DISK,
                     prodDatabaseType: POSTGRESQL,
                     applicationType: MONOLITH,
                   },
@@ -202,7 +211,7 @@ describe('ApplicationValidator', () => {
                     config: {
                       ...basicValidApplicationConfig,
                       databaseType: SQL,
-                      devDatabaseType: (OptionValues[OptionNames.DEV_DATABASE_TYPE] as any).h2Memory,
+                      devDatabaseType: H2_MEMORY,
                       prodDatabaseType: MONGODB,
                     },
                   })
@@ -362,8 +371,8 @@ describe('ApplicationValidator', () => {
                 new JDLApplication({
                   config: {
                     ...basicValidApplicationConfig,
-                    databaseType: 'sql',
-                    devDatabaseType: 'mysql',
+                    databaseType: SQL,
+                    devDatabaseType: MYSQL,
                     prodDatabaseType: 'toto',
                   },
                 })
@@ -427,8 +436,8 @@ describe('ApplicationValidator', () => {
             );
             application.addOption(
               new JDLBinaryOption({
-                name: BinaryOptions.Options.DTO,
-                value: BinaryOptions.Values.dto.MAPSTRUCT,
+                name: binaryOptions.Options.DTO,
+                value: binaryOptions.Values.dto.MAPSTRUCT,
                 entityNames: ['A'],
               })
             );
@@ -449,7 +458,7 @@ describe('ApplicationValidator', () => {
             });
             application.addOption(
               new JDLBinaryOption({
-                name: BinaryOptions.Options.DTO,
+                name: binaryOptions.Options.DTO,
                 value: 'unknown',
                 entityNames: ['A'],
               })
@@ -474,8 +483,8 @@ describe('ApplicationValidator', () => {
             });
             application.addOption(
               new JDLBinaryOption({
-                name: BinaryOptions.Options.PAGINATION,
-                value: BinaryOptions.Values.pagination.PAGINATION,
+                name: binaryOptions.Options.PAGINATION,
+                value: binaryOptions.Values.pagination.PAGINATION,
                 entityNames: ['A'],
               })
             );

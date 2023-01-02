@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 
-import JDLValidation from '../../models/jdl-validation';
-import Validations from '../../jhipster/validations';
+import JDLValidation from '../../models/jdl-validation.js';
+import { validations } from '../../jhipster/index.mjs';
 
-const { PATTERN } = Validations;
+const {
+  Validations: { PATTERN },
+} = validations;
 
 export default { convertValidations };
 

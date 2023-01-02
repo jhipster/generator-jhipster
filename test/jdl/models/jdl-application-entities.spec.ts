@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'chai';
-import JDLApplicationEntities from '../../../jdl/models/jdl-application-entities';
+import JDLApplicationEntities from '../../../jdl/models/jdl-application-entities.js';
 
 describe('JDLApplicationEntities', () => {
   describe('addEntityNames', () => {

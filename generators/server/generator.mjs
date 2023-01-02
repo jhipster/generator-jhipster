@@ -40,10 +40,29 @@ import {
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
 import { writeFiles as writeEntityFiles, customizeFiles } from './entity-files.mjs';
-import { packageJson as packagejs } from '../../lib/index.mjs';
-import constants from '../generator-constants.cjs';
+
+import { packageJson } from '../../lib/index.mjs';
+import {
+  SERVER_MAIN_SRC_DIR,
+  SERVER_MAIN_RES_DIR,
+  SERVER_TEST_SRC_DIR,
+  SERVER_TEST_RES_DIR,
+  CLIENT_WEBPACK_DIR,
+  MAIN_DIR,
+  LOGIN_REGEX,
+  TEST_DIR,
+  JHIPSTER_DEPENDENCIES_VERSION,
+  SPRING_BOOT_VERSION,
+  JAVA_VERSION,
+  JAVA_COMPATIBLE_VERSIONS,
+  SPRING_CLOUD_VERSION,
+  HIBERNATE_VERSION,
+  CASSANDRA_DRIVER_VERSION,
+  JACKSON_DATABIND_NULLABLE_VERSION,
+  JACOCO_VERSION,
+} from '../generator-constants.mjs';
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 
 import {
   applicationTypes,
@@ -57,36 +76,40 @@ import {
   entityOptions,
   validations,
   reservedKeywords,
+  searchEngineTypes,
   messageBrokerTypes,
+  clientFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
-
 import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
+import checkJava from './support/checks/check-java.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
 
+const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
+const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const { defaultConfig } = generatorDefaults;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { EUREKA } = serviceDiscoveryTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
-const { FALSE: NO_WEBSOCKET } = websocketTypes;
+const NO_WEBSOCKET = websocketTypes.NO;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
 const { KAFKA } = messageBrokerTypes;
 
-const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, MAIN_DIR, TEST_DIR } = constants;
+const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { INSTANT } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { PaginationTypes, ServiceTypes } = entityOptions;
-const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = validations;
+const {
+  Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
+} = validations;
 
 const WAIT_TIMEOUT = 3 * 60000;
 const { NO: NO_PAGINATION } = PaginationTypes;
 const { NO: NO_SERVICE } = ServiceTypes;
-
-const { SUPPORTED_VALIDATION_RULES } = constants;
 
 /**
  * @class
@@ -159,9 +182,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
 
-      setupRequiredConfig() {
-        if (!this.jhipsterConfig.applicationType) {
-          this.jhipsterConfig.applicationType = defaultConfig.applicationType;
+      validateJava() {
+        if (!this.options.skipChecks) {
+          this.checkJava();
         }
       },
     });
@@ -263,17 +286,17 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
       setupServerconsts({ control, application }) {
         // Make constants available in templates
-        application.MAIN_DIR = constants.MAIN_DIR;
-        application.TEST_DIR = constants.TEST_DIR;
-        application.LOGIN_REGEX = constants.LOGIN_REGEX;
-        application.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
-        application.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-        application.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-        application.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
-        application.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
+        application.MAIN_DIR = MAIN_DIR;
+        application.TEST_DIR = TEST_DIR;
+        application.LOGIN_REGEX = LOGIN_REGEX;
+        application.CLIENT_WEBPACK_DIR = CLIENT_WEBPACK_DIR;
+        application.SERVER_MAIN_SRC_DIR = SERVER_MAIN_SRC_DIR;
+        application.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
+        application.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
+        application.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
 
-        application.JAVA_VERSION = control.useVersionPlaceholders ? 'JAVA_VERSION' : constants.JAVA_VERSION;
-        application.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
+        application.JAVA_VERSION = control.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
+        application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
 
         if (this.projectVersion) {
           this.info(`Using projectVersion: ${application.jhipsterDependenciesVersion}`);
@@ -288,22 +311,23 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
           this.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
         } else {
-          application.jhipsterDependenciesVersion = constants.JHIPSTER_DEPENDENCIES_VERSION;
+          application.jhipsterDependenciesVersion = JHIPSTER_DEPENDENCIES_VERSION;
         }
-        application.SPRING_BOOT_VERSION = control.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : constants.SPRING_BOOT_VERSION;
-        application.SPRING_CLOUD_VERSION = control.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : constants.SPRING_CLOUD_VERSION;
-        application.HIBERNATE_VERSION = control.useVersionPlaceholders ? 'HIBERNATE_VERSION' : constants.HIBERNATE_VERSION;
+        application.SPRING_BOOT_VERSION = control.useVersionPlaceholders ? 'SPRING_BOOT_VERSION' : SPRING_BOOT_VERSION;
+        application.SPRING_CLOUD_VERSION = control.useVersionPlaceholders ? 'SPRING_CLOUD_VERSION' : SPRING_CLOUD_VERSION;
+        application.HIBERNATE_VERSION = control.useVersionPlaceholders ? 'HIBERNATE_VERSION' : HIBERNATE_VERSION;
+        application.CASSANDRA_DRIVER_VERSION = control.useVersionPlaceholders ? 'CASSANDRA_DRIVER_VERSION' : CASSANDRA_DRIVER_VERSION;
         application.JACKSON_DATABIND_NULLABLE_VERSION = control.useVersionPlaceholders
           ? 'JACKSON_DATABIND_NULLABLE_VERSION'
-          : constants.JACKSON_DATABIND_NULLABLE_VERSION;
-        application.JACOCO_VERSION = control.useVersionPlaceholders ? 'JACOCO_VERSION' : constants.JACOCO_VERSION;
+          : JACKSON_DATABIND_NULLABLE_VERSION;
+        application.JACOCO_VERSION = control.useVersionPlaceholders ? 'JACOCO_VERSION' : JACOCO_VERSION;
 
-        application.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-        application.VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
-        application.REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+        application.ANGULAR = ANGULAR;
+        application.VUE = VUE;
+        application.REACT = REACT;
 
-        this.packagejs = packagejs;
-        application.jhipsterPackageJson = packagejs;
+        this.packagejs = packageJson;
+        application.jhipsterPackageJson = packageJson;
       },
 
       prepareForTemplates({ application }) {
@@ -363,19 +387,19 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       configureEntitySearchEngine({ application, entityConfig }) {
         const { applicationTypeMicroservice, applicationTypeGateway, clientFrameworkAny } = application;
         if (entityConfig.microserviceName && !(applicationTypeMicroservice && clientFrameworkAny)) {
-          if (entityConfig.searchEngine === undefined) {
+          if (!entityConfig.searchEngine) {
             // If a non-microfrontent microservice entity, should be disabled by default.
-            entityConfig.searchEngine = false;
+            entityConfig.searchEngine = NO_SEARCH_ENGINE;
           }
         }
         if (
           // Don't touch the configuration for microservice entities published at gateways
           !(applicationTypeGateway && entityConfig.microserviceName) &&
           !application.searchEngineAny &&
-          ![undefined, false, 'no'].includes(entityConfig.searchEngine)
+          !entityConfig.searchEngine
         ) {
           // Search engine can only be enabled at entity level and disabled at application level for gateways publishing a microservice entity
-          entityConfig.searchEngine = false;
+          entityConfig.searchEngine = NO_SEARCH_ENGINE;
           this.warning('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
         }
       },
@@ -748,7 +772,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     if (config.applicationType === MICROSERVICE) {
       config.websocket = NO_WEBSOCKET;
     }
-
     const databaseType = config.databaseType;
     if (databaseType === NO_DATABASE) {
       config.devDatabaseType = NO_DATABASE;
@@ -760,6 +783,23 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       config.prodDatabaseType = databaseType;
       config.enableHibernateCache = false;
     }
+  }
+
+  /**
+   * Check if a supported Java is installed
+   *
+   * Blueprints can customize or disable java checks versions by overriding this method.
+   * @example
+   * // disable checks
+   * checkJava() {}
+   * @examples
+   * // enforce java lts versions
+   * checkJava() {
+   *   super.checkJava(['8', '11', '17'], { throwOnError: true });
+   * }
+   */
+  checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation) {
+    this.validateCheckResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
   }
 
   _generateSqlSafeName(name) {

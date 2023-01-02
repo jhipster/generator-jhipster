@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import JDLEntity from '../../models/jdl-entity';
-import { formatComment } from '../../utils/format-utils';
+import { JDLEntity } from '../../models/index.mjs';
+import { formatComment } from '../../utils/format-utils.js';
 
 export default { convertEntities };
 

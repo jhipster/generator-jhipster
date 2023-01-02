@@ -27,6 +27,7 @@ import BaseDockerGenerator from '../base-docker/index.mjs';
 
 import { writeFiles } from './files.mjs';
 import {
+  authenticationTypes,
   applicationTypes,
   cacheTypes,
   databaseTypes,
@@ -36,15 +37,16 @@ import {
   searchEngineTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
-import { stringHashCode } from '../utils.cjs';
+import { stringHashCode } from '../utils.mjs';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
-const { EUREKA } = serviceDiscoveryTypes;
+const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, ORACLE, NO: NO_DATABASE } = databaseTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 const { KAFKA } = messageBrokerTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
+const { OAUTH2 } = authenticationTypes;
 
 /* eslint-disable consistent-return */
 /**
@@ -167,7 +169,7 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             this.includesApplicationTypeGateway = true;
           }
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-            if (this.keycloakSecrets === undefined && appConfig.authenticationType === 'oauth2') {
+            if (this.keycloakSecrets === undefined && appConfig.authenticationType === OAUTH2) {
               faker.seed(stringHashCode(appConfig.baseName));
               this.keycloakSecrets = Array.from(Array(6), () => faker.datatype.uuid());
             }
@@ -191,7 +193,8 @@ export default class DockerComposeGenerator extends BaseDockerGenerator {
             yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${this.adminPassword}`);
           }
 
-          if (!this.serviceDiscoveryType && appConfig.skipClient) {
+          const hasNoServiceDiscovery = !this.serviceDiscoveryType && this.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
+          if (hasNoServiceDiscovery && appConfig.skipClient) {
             yamlConfig.environment.push('SERVER_PORT=80'); // to simplify service resolution in docker/k8s
           }
 

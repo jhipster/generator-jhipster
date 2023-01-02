@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { merge } from '../utils/object-utils';
-import { addAll } from '../utils/set-utils';
+import { merge } from '../utils/object-utils.js';
+import { addAll } from '../utils/set-utils.js';
 
 export default class AbstractJDLOption {
   name: any;

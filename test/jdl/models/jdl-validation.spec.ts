@@ -19,8 +19,12 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import JDLValidation from '../../../jdl/models/jdl-validation';
-import Validations from '../../../jdl/jhipster/validations';
+import JDLValidation from '../../../jdl/models/jdl-validation.js';
+import { validations } from '../../../jdl/jhipster/index.mjs';
+
+const {
+  Validations: { PATTERN },
+} = validations;
 
 describe('JDLValidation', () => {
   describe('new', () => {
@@ -86,7 +90,7 @@ describe('JDLValidation', () => {
       it('should format it', () => {
         expect(
           new JDLValidation({
-            name: Validations.PATTERN,
+            name: PATTERN,
             value: '[A-z0-9]',
           }).toString()
         ).to.equal('pattern(/[A-z0-9]/)');

@@ -19,8 +19,8 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import { binaryOptions } from '../../../jdl/jhipster/index.mjs';
 
 describe('JDLBinaryOption', () => {
   describe('new', () => {
@@ -35,7 +35,7 @@ describe('JDLBinaryOption', () => {
     context('when passing a name but no value', () => {
       it('should fail', () => {
         expect(() => {
-          new JDLBinaryOption({ name: BinaryOptions.Options.DTO });
+          new JDLBinaryOption({ name: binaryOptions.Options.DTO });
         }).to.throw(/^A binary option must have a value\.$/);
       });
     });
@@ -44,15 +44,15 @@ describe('JDLBinaryOption', () => {
 
       before(() => {
         option = new JDLBinaryOption({
-          name: BinaryOptions.Options.DTO,
-          value: BinaryOptions.Values.dto.MAPSTRUCT,
+          name: binaryOptions.Options.DTO,
+          value: binaryOptions.Values.dto.MAPSTRUCT,
         });
       });
 
       it('creates the option', () => {
         expect(option).not.to.be.null;
-        expect(option.name).to.equal(BinaryOptions.Options.DTO);
-        expect(option.value).to.equal(BinaryOptions.Values.dto.MAPSTRUCT);
+        expect(option.name).to.equal(binaryOptions.Options.DTO);
+        expect(option.value).to.equal(binaryOptions.Values.dto.MAPSTRUCT);
       });
     });
     context('when passing a list of entity names and excluded names with some of them being repeated', () => {
@@ -60,8 +60,8 @@ describe('JDLBinaryOption', () => {
 
       before(() => {
         option = new JDLBinaryOption({
-          name: BinaryOptions.Options.DTO,
-          value: BinaryOptions.Values.dto.MAPSTRUCT,
+          name: binaryOptions.Options.DTO,
+          value: binaryOptions.Values.dto.MAPSTRUCT,
           entityNames: ['A', 'B', 'C', 'A'],
           excludedNames: ['E', 'E', 'D'],
         });
@@ -83,8 +83,8 @@ describe('JDLBinaryOption', () => {
 
     before(() => {
       option = new JDLBinaryOption({
-        name: BinaryOptions.Options.DTO,
-        value: BinaryOptions.Values.dto.MAPSTRUCT,
+        name: binaryOptions.Options.DTO,
+        value: binaryOptions.Values.dto.MAPSTRUCT,
         entityNames: ['A', 'B', 'C'],
       });
       option.setEntityNames(['A']);
@@ -100,7 +100,7 @@ describe('JDLBinaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+        option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
       });
 
       it('should fail', () => {
@@ -113,7 +113,7 @@ describe('JDLBinaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+        option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
         option.addEntityName('A');
       });
 
@@ -125,7 +125,7 @@ describe('JDLBinaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+        option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
         option.addEntityName('A');
         option.addEntityName('A');
       });
@@ -138,7 +138,7 @@ describe('JDLBinaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+        option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
         option.addEntityName('A');
         option.excludeEntityName('A');
       });
@@ -154,7 +154,7 @@ describe('JDLBinaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+        option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
       });
 
       it('should fail', () => {
@@ -167,7 +167,7 @@ describe('JDLBinaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+        option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
         option.excludeEntityName('A');
       });
 
@@ -179,7 +179,7 @@ describe('JDLBinaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+        option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
         option.excludeEntityName('A');
         option.excludeEntityName('A');
       });
@@ -192,7 +192,7 @@ describe('JDLBinaryOption', () => {
       let option;
 
       before(() => {
-        option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+        option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
         option.excludeEntityName('A');
         option.addEntityName('A');
       });
@@ -204,8 +204,8 @@ describe('JDLBinaryOption', () => {
   });
   describe('addEntitiesFromAnotherOption', () => {
     const option = new JDLBinaryOption({
-      name: BinaryOptions.Options.DTO,
-      value: BinaryOptions.Values.dto.MAPSTRUCT,
+      name: binaryOptions.Options.DTO,
+      value: binaryOptions.Values.dto.MAPSTRUCT,
       entityNames: ['B', 'C'],
       excludedNames: ['Z'],
     });
@@ -220,8 +220,8 @@ describe('JDLBinaryOption', () => {
 
       before(() => {
         const option2 = new JDLBinaryOption({
-          name: BinaryOptions.Options.DTO,
-          value: BinaryOptions.Values.dto.MAPSTRUCT,
+          name: binaryOptions.Options.DTO,
+          value: binaryOptions.Values.dto.MAPSTRUCT,
           entityNames: ['A', 'C'],
           excludedNames: ['Y'],
         });
@@ -244,28 +244,28 @@ describe('JDLBinaryOption', () => {
 
     before(() => {
       option = new JDLBinaryOption({
-        name: BinaryOptions.Options.DTO,
-        value: BinaryOptions.Values.dto.MAPSTRUCT,
+        name: binaryOptions.Options.DTO,
+        value: binaryOptions.Values.dto.MAPSTRUCT,
       });
-      expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} * with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
+      expect(option.toString()).to.equal(`${binaryOptions.Options.DTO} * with ${binaryOptions.Values.dto.MAPSTRUCT}`);
       option.addEntityName('D');
-      expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} D with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
+      expect(option.toString()).to.equal(`${binaryOptions.Options.DTO} D with ${binaryOptions.Values.dto.MAPSTRUCT}`);
       option.addEntityName('E');
       option.addEntityName('F');
-      expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
+      expect(option.toString()).to.equal(`${binaryOptions.Options.DTO} D, E, F with ${binaryOptions.Values.dto.MAPSTRUCT}`);
       option.excludeEntityName('A');
-      expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT} except A`);
+      expect(option.toString()).to.equal(`${binaryOptions.Options.DTO} D, E, F with ${binaryOptions.Values.dto.MAPSTRUCT} except A`);
       option.excludeEntityName('B');
       option.excludeEntityName('C');
-      expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT} except A, B, C`);
+      expect(option.toString()).to.equal(`${binaryOptions.Options.DTO} D, E, F with ${binaryOptions.Values.dto.MAPSTRUCT} except A, B, C`);
       option = new JDLBinaryOption({
-        name: BinaryOptions.Options.PAGINATION,
-        value: BinaryOptions.Values.pagination.PAGINATION,
+        name: binaryOptions.Options.PAGINATION,
+        value: binaryOptions.Values.pagination.PAGINATION,
       });
     });
 
     it('should stringify the option', () => {
-      expect(option.toString()).to.equal(`paginate * with ${BinaryOptions.Values.pagination.PAGINATION}`);
+      expect(option.toString()).to.equal(`paginate * with ${binaryOptions.Values.pagination.PAGINATION}`);
     });
   });
 });

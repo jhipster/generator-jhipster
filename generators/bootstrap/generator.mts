@@ -18,7 +18,7 @@
  */
 import memFsEditor from 'mem-fs-editor';
 import environmentTransfrom from 'yeoman-environment/transform';
-import pTransform from 'p-transform';
+import { transform } from 'p-transform';
 import { stat } from 'fs/promises';
 import { isBinaryFile } from 'isbinaryfile';
 
@@ -28,7 +28,7 @@ import type Environment from 'yeoman-environment';
 import BaseGenerator from '../base/index.mjs';
 import MultiStepTransform from './multi-step-transform/index.mjs';
 import { prettierTransform, generatedAnnotationTransform } from './transforms.mjs';
-import constants from '../generator-constants.cjs';
+import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
 import { GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES } from '../base-application/priorities.mjs';
 import type { PreConflictsTaskGroup } from '../base/tasks.mjs';
@@ -44,11 +44,9 @@ const {
   patternFilter,
   patternSpy,
 } = environmentTransfrom;
-const { transform } = pTransform;
 
 const { State } = memFsEditor as any;
 const { hasState, setModifiedFileState } = State;
-const { PRETTIER_EXTENSIONS } = constants;
 
 const TRANSFORM_PRIORITY = BaseGenerator.asPriority(TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);

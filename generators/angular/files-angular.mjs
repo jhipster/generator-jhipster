@@ -36,7 +36,6 @@ export const files = {
         'webpack/environment.js',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',
-        '.browserslistrc',
         'webpack/logo-jhipster.png',
       ],
     },
@@ -50,7 +49,7 @@ export const files = {
   angularApp: [
     {
       ...clientSrcBlock,
-      templates: ['main.ts', 'bootstrap.ts', 'polyfills.ts', 'declarations.d.ts'],
+      templates: ['main.ts', 'bootstrap.ts', 'declarations.d.ts'],
     },
     {
       ...clientApplicationBlock,
@@ -62,6 +61,11 @@ export const files = {
       condition: generator => generator.microfrontend,
       templates: ['webpack/webpack.microfrontend.js'],
     },
+    {
+      condition: generator => generator.microfrontend,
+      ...clientApplicationBlock,
+      templates: ['core/microfrontend/index.ts'],
+    },
   ],
   angularMain: [
     {
@@ -71,8 +75,6 @@ export const files = {
         'entities/entity-navbar-items.ts',
         'entities/entity-routing.module.ts',
         // home module
-        'home/home.module.ts',
-        'home/home.route.ts',
         'home/home.component.ts',
         'home/home.component.html',
         // layouts
@@ -81,9 +83,10 @@ export const files = {
         'layouts/profiles/profile-info.model.ts',
         'layouts/main/main.component.ts',
         'layouts/main/main.component.html',
+        'layouts/main/main.module.ts',
+        'layouts/navbar/navbar-item.model.d.ts',
         'layouts/navbar/navbar.component.ts',
         'layouts/navbar/navbar.component.html',
-        'layouts/navbar/navbar.route.ts',
         'layouts/footer/footer.component.ts',
         'layouts/footer/footer.component.html',
         'layouts/error/error.route.ts',
@@ -106,13 +109,7 @@ export const files = {
     {
       ...clientApplicationBlock,
       condition: generator => !generator.authenticationTypeOauth2,
-      templates: [
-        'login/login.module.ts',
-        'login/login.route.ts',
-        'login/login.component.ts',
-        'login/login.component.html',
-        'login/login.model.ts',
-      ],
+      templates: ['login/login.component.ts', 'login/login.component.html', 'login/login.model.ts'],
     },
     {
       ...clientApplicationBlock,
@@ -126,7 +123,6 @@ export const files = {
       condition: generator => generator.generateUserManagement,
       templates: [
         'account/account.route.ts',
-        'account/account.module.ts',
         'account/activate/activate.route.ts',
         'account/activate/activate.component.ts',
         'account/activate/activate.component.html',
@@ -174,8 +170,6 @@ export const files = {
       ...clientApplicationBlock,
       templates: [
         'admin/admin-routing.module.ts',
-        'admin/docs/docs.route.ts',
-        'admin/docs/docs.module.ts',
         'admin/docs/docs.component.ts',
         'admin/docs/docs.component.html',
         'admin/docs/docs.component.scss',
@@ -186,28 +180,20 @@ export const files = {
       ...clientApplicationBlock,
       templates: [
         // admin modules
-        'admin/configuration/configuration.route.ts',
-        'admin/configuration/configuration.module.ts',
         'admin/configuration/configuration.component.ts',
         'admin/configuration/configuration.component.html',
         'admin/configuration/configuration.service.ts',
         'admin/configuration/configuration.model.ts',
-        'admin/health/health.route.ts',
-        'admin/health/health.module.ts',
         'admin/health/health.component.ts',
         'admin/health/health.component.html',
         'admin/health/modal/health-modal.component.ts',
         'admin/health/modal/health-modal.component.html',
         'admin/health/health.service.ts',
         'admin/health/health.model.ts',
-        'admin/logs/logs.route.ts',
-        'admin/logs/logs.module.ts',
         'admin/logs/log.model.ts',
         'admin/logs/logs.component.ts',
         'admin/logs/logs.component.html',
         'admin/logs/logs.service.ts',
-        'admin/metrics/metrics.route.ts',
-        'admin/metrics/metrics.module.ts',
         'admin/metrics/metrics.component.ts',
         'admin/metrics/metrics.component.html',
         'admin/metrics/metrics.service.ts',
@@ -234,10 +220,13 @@ export const files = {
     },
     {
       condition: generator => generator.communicationSpringWebsocket,
+      ...clientSrcBlock,
+      templates: ['sockjs-client.polyfill.ts'],
+    },
+    {
+      condition: generator => generator.communicationSpringWebsocket,
       ...clientApplicationBlock,
       templates: [
-        'admin/tracker/tracker.route.ts',
-        'admin/tracker/tracker.module.ts',
         'admin/tracker/tracker.component.ts',
         'admin/tracker/tracker.component.html',
         'core/tracker/tracker-activity.model.ts',
@@ -249,7 +238,6 @@ export const files = {
       ...clientApplicationBlock,
       templates: [
         'admin/user-management/user-management.route.ts',
-        'admin/user-management/user-management.module.ts',
         'admin/user-management/user-management.model.ts',
         'admin/user-management/list/user-management.component.ts',
         'admin/user-management/list/user-management.component.html',
@@ -266,8 +254,6 @@ export const files = {
       condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
       ...clientApplicationBlock,
       templates: [
-        'admin/gateway/gateway.route.ts',
-        'admin/gateway/gateway.module.ts',
         'admin/gateway/gateway-route.model.ts',
         'admin/gateway/gateway.component.ts',
         'admin/gateway/gateway.component.html',
@@ -332,13 +318,15 @@ export const files = {
       ...clientApplicationBlock,
       templates: [
         'shared/shared.module.ts',
-        'shared/shared-libs.module.ts',
+        'shared/date/index.ts',
         'shared/date/duration.pipe.ts',
         'shared/date/format-medium-date.pipe.ts',
         'shared/date/format-medium-datetime.pipe.ts',
+        'shared/sort/index.ts',
         'shared/sort/sort.directive.ts',
         'shared/sort/sort.service.ts',
         'shared/sort/sort-by.directive.ts',
+        'shared/pagination/index.ts',
         'shared/pagination/item-count.component.ts',
         // alert service code
         'shared/alert/alert.component.ts',
@@ -347,6 +335,7 @@ export const files = {
         'shared/alert/alert-error.component.html',
         'shared/alert/alert-error.model.ts',
         // filtering options
+        'shared/filter/index.ts',
         'shared/filter/filter.component.html',
         'shared/filter/filter.component.ts',
         'shared/filter/filter.model.spec.ts',
@@ -357,6 +346,7 @@ export const files = {
       condition: generator => generator.enableTranslation,
       ...clientApplicationBlock,
       templates: [
+        'shared/language/index.ts',
         'shared/language/translation.module.ts',
         'shared/language/find-language-from-key.pipe.ts',
         'shared/language/translate.directive.ts',
@@ -480,6 +470,33 @@ export function cleanup({ application }) {
 
   if (this.isJhipsterVersionLessThan('7.6.1')) {
     this.removeFile(`${application.clientSrcDir}content/scss/rtl.scss`);
+  }
+  if (this.isJhipsterVersionLessThan('7.10.0')) {
+    this.removeFile('.browserslistrc');
+    this.removeFile(`${application.clientSrcDir}polyfills.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/health/health.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/gateway/gateway.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/docs/docs.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/configuration/configuration.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/home/home.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/home/home.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/configuration/configuration.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/docs/docs.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/gateway/gateway.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/health/health.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/logs/logs.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/layouts/navbar/navbar.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/shared-libs.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/shared/shared-libs.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/login/login.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/login/login.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/tracker/tracker.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/admin/tracker/tracker.module.ts`);
+    this.removeFile(`${application.clientSrcDir}app/account/account.module.ts`);
   }
 }
 

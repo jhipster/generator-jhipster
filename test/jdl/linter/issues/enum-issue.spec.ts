@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'chai';
-import EnumIssue from '../../../../jdl/linters/issues/enum-issue';
+import EnumIssue from '../../../../jdl/linters/issues/enum-issue.js';
 
 describe('EnumIssue', () => {
   describe('new', () => {

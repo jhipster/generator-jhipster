@@ -28,8 +28,9 @@ import BaseGenerator from '../base/index.mjs';
 import { GENERATOR_GAE } from '../generator-list.mjs';
 import statistics from '../statistics.cjs';
 import dockerPrompts from '../base-docker/docker-prompts.mjs';
-import constants from '../generator-constants.cjs';
+import { CLIENT_MAIN_SRC_DIR, MAIN_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { applicationTypes, buildToolTypes, cacheTypes, databaseTypes } from '../../jdl/jhipster/index.mjs';
+import { mavenProdProfileContent, mavenPluginConfiguration, mavenProfileContent } from './templates.mjs';
 
 const cacheProviders = cacheTypes;
 const { MEMCACHED } = cacheTypes;
@@ -102,7 +103,7 @@ export default class GaeGenerator extends BaseGenerator {
 
       loadConfig() {
         const configuration = this.config;
-        this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+        this.env.options.appPath = configuration.get('appPath') || CLIENT_MAIN_SRC_DIR;
         this.mainClass = this.getMainClassName();
         this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
         this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
@@ -772,13 +773,13 @@ export default class GaeGenerator extends BaseGenerator {
 
         this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
-        this.template('app.yaml.ejs', `${constants.MAIN_DIR}/appengine/app.yaml`);
+        this.writeFile('app.yaml.ejs', `${MAIN_DIR}/appengine/app.yaml`);
         if (this.applicationType === GATEWAY) {
-          this.template('dispatch.yaml.ejs', `${constants.MAIN_DIR}/appengine/dispatch.yaml`);
+          this.writeFile('dispatch.yaml.ejs', `${MAIN_DIR}/appengine/dispatch.yaml`);
         }
-        this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
+        this.writeFile('application-prod-gae.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
         if (this.buildTool === 'gradle') {
-          this.template('gae.gradle.ejs', 'gradle/gae.gradle');
+          this.writeFile('gae.gradle.ejs', 'gradle/gae.gradle');
         }
       },
 
@@ -816,15 +817,9 @@ export default class GaeGenerator extends BaseGenerator {
       addMavenPlugin() {
         if (this.abort) return;
         if (this.buildTool === MAVEN) {
-          this.render('pom-plugin.xml.ejs', rendered => {
-            this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.2.0', rendered.trim());
-          });
-          this.render('pom-profile.xml.ejs', rendered => {
-            this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
-          });
-          this.render('pom-gae-build-profile.xml.ejs', rendered => {
-            this.addMavenProfile('gae', `            ${rendered.trim()}`);
-          });
+          this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.2.0', mavenPluginConfiguration(this));
+          this.addMavenProfile('prod-gae', mavenProdProfileContent(this));
+          this.addMavenProfile('gae', mavenProfileContent(this));
         }
       },
     };

@@ -20,17 +20,17 @@
     "jhiPrefix": "jhi",
     "jhipsterVersion": "6.6.0",
     "languages": ["en", "fr"],
-    "messageBroker": false,
+    "messageBroker": "no",
     "nativeLanguage": "en",
     "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mongodb",
     "reactive": true,
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "no",
     "testFrameworks": ["gatling", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

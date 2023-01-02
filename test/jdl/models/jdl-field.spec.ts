@@ -20,10 +20,14 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 
-import matchField from '../matchers/field-matcher';
-import JDLField from '../../../jdl/models/jdl-field';
-import JDLValidation from '../../../jdl/models/jdl-validation';
-import Validations from '../../../jdl/jhipster/validations';
+import matchField from '../matchers/field-matcher.js';
+import JDLField from '../../../jdl/models/jdl-field.js';
+import JDLValidation from '../../../jdl/models/jdl-validation.js';
+import { validations } from '../../../jdl/jhipster/index.mjs';
+
+const {
+  Validations: { MIN },
+} = validations;
 
 describe('JDLField', () => {
   describe('new', () => {
@@ -93,13 +97,13 @@ describe('JDLField', () => {
       let validation;
 
       before(() => {
-        validation = { name: Validations.MIN, value: 42 };
+        validation = { name: MIN, value: 42 };
         field.addValidation(validation);
       });
 
       it('should add it', () => {
         field.forEachValidation(validation => {
-          expect(validation.name).to.equal(Validations.MIN);
+          expect(validation.name).to.equal(MIN);
           expect(validation.value).to.equal(42);
         });
       });

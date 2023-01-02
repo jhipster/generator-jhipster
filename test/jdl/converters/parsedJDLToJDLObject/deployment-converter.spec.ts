@@ -18,7 +18,7 @@
  */
 
 import { jestExpect as expect } from 'mocha-expect-snapshot';
-import { convertDeployments } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/deployment-converter';
+import { convertDeployments } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/deployment-converter.js';
 
 describe('DeploymentConverter', () => {
   describe('convertDeployments', () => {

@@ -23,13 +23,13 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import exportDeployments from '../../../jdl/exporters/jhipster-deployment-exporter';
-import JDLDeployment from '../../../jdl/models/jdl-deployment';
-import DeploymentOptions from '../../../jdl/jhipster/deployment-options';
+import exportDeployments from '../../../jdl/exporters/jhipster-deployment-exporter.js';
+import JDLDeployment from '../../../jdl/models/jdl-deployment.js';
+import { deploymentOptions } from '../../../jdl/jhipster/index.mjs';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },
-} = DeploymentOptions;
+} = deploymentOptions;
 
 describe('JHipsterDeploymentExporter', () => {
   describe('exportDeployments', () => {

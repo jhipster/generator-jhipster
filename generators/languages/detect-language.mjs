@@ -18,9 +18,7 @@
  */
 
 import osLocale from 'os-locale';
-import constants from '../generator-constants.cjs';
-
-const { LANGUAGES } = constants;
+import { LANGUAGES } from '../generator-constants.mjs';
 
 const detectLanguage = () => {
   const locale = osLocale.sync();

@@ -24,13 +24,14 @@ import chalk from 'chalk';
 import BaseGenerator from '../base/index.mjs';
 
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.cjs';
+import generatorDefaults from '../generator-defaults.mjs';
 
 // Global constants
-import constants from '../generator-constants.cjs';
+import { JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 
 import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
+import { mavenPluginConfiguration } from './templates.mjs';
 
 const { defaultConfig } = generatorDefaults;
 const { MAVEN } = buildToolTypes;
@@ -93,7 +94,7 @@ export default class AzureAppServiceGenerator extends BaseGenerator {
         this.azureGroupId = '';
       },
       loadConstants() {
-        this.JAVA_VERSION = constants.JAVA_VERSION;
+        this.JAVA_VERSION = JAVA_VERSION;
       },
     };
   }
@@ -398,14 +399,15 @@ which is free for the first 30 days`);
 
       addAzureAppServiceMavenPlugin() {
         if (this.abort) return;
-        const done = this.async();
         this.log(chalk.bold('\nAdding Azure Web App Maven plugin'));
         if (this.buildTool === MAVEN) {
-          this.render('pom-plugin.xml.ejs', rendered => {
-            this.addMavenPlugin('com.microsoft.azure', 'azure-webapp-maven-plugin', AZURE_WEBAPP_MAVEN_PLUGIN_VERSION, rendered);
-          });
+          this.addMavenPlugin(
+            'com.microsoft.azure',
+            'azure-webapp-maven-plugin',
+            AZURE_WEBAPP_MAVEN_PLUGIN_VERSION,
+            mavenPluginConfiguration(this)
+          );
         }
-        done();
       },
 
       checkAzureApplicationInsightsExtension() {
@@ -512,9 +514,9 @@ which is free for the first 30 days`);
       writeFiles() {
         if (this.abort) return;
         this.log(chalk.bold('\nCreating Azure App Service deployment files'));
-        this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
+        this.writeFile('application-azure.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
         if (this.azureAppServiceDeploymentType === 'github-action') {
-          this.template('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
+          this.writeFile('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
         }
       },
     };

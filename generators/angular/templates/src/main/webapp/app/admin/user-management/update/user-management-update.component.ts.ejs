@@ -20,6 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
 import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
@@ -36,10 +38,12 @@ const newUser: IUser = {
 } as IUser;
 
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-user-mgmt-update',
   templateUrl: './user-management-update.component.html',
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
-export class UserManagementUpdateComponent implements OnInit {
+export default class UserManagementUpdateComponent implements OnInit {
 <%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
 <%_ } _%>

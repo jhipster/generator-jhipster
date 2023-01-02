@@ -46,6 +46,9 @@ pluginManagement {
         id "com.gradle.enterprise" version "${gradleEnterprisePluginVersion}"
         id "com.gradle.common-custom-user-data-gradle-plugin" version "${gradleCommonCustomUserDataPluginVersion}"
 <%_ } _%>
+<%_ if (gatlingTests) { _%>
+        id "io.gatling.gradle" version "${gatlingPluginVersion}"
+<%_ } _%>
         //jhipster-needle-gradle-plugin-management-plugins - JHipster will add additional entries here
     }
 }

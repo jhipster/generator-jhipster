@@ -18,7 +18,7 @@
  */
 
 import fs from 'fs';
-import { doesFileExist } from '../utils/file-utils';
+import { doesFileExist } from '../utils/file-utils.js';
 
 /**
  * Reads the given files.

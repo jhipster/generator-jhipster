@@ -20,25 +20,25 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
-import UnaryOptions from '../../../jdl/jhipster/unary-options';
+import { unaryOptions } from '../../../jdl/jhipster/index.mjs';
 
 describe('UnaryOptions', () => {
   describe('exists', () => {
     context('when checking for a valid unary option', () => {
       it('should return true', () => {
-        expect(UnaryOptions.exists(UnaryOptions.SKIP_CLIENT)).to.be.true;
+        expect(unaryOptions.exists(unaryOptions.SKIP_CLIENT)).to.be.true;
       });
     });
     context('when checking for an invalid unary option', () => {
       it('should return false', () => {
-        expect(UnaryOptions.exists('NOTHING')).to.be.false;
+        expect(unaryOptions.exists('NOTHING')).to.be.false;
       });
     });
   });
   describe('forEach', () => {
     context('when not passing a function', () => {
       it('should fail', () => {
-        expect(() => UnaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the unary options\.$/);
+        expect(() => unaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the unary options\.$/);
       });
     });
     context('when passing a function', () => {
@@ -46,7 +46,7 @@ describe('UnaryOptions', () => {
 
       before(() => {
         result = [];
-        UnaryOptions.forEach(option => result.push(option));
+        unaryOptions.forEach(option => result.push(option));
       });
 
       it('should loop over the unary options', () => {

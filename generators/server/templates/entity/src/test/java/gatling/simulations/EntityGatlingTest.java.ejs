@@ -1,0 +1,202 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package gatling.simulations;
+
+import static io.gatling.javaapi.core.CoreDsl.StringBody;
+import static io.gatling.javaapi.core.CoreDsl.css;
+import static io.gatling.javaapi.core.CoreDsl.exec;
+import static io.gatling.javaapi.core.CoreDsl.rampUsers;
+import static io.gatling.javaapi.core.CoreDsl.scenario;
+import static io.gatling.javaapi.http.HttpDsl.header;
+import static io.gatling.javaapi.http.HttpDsl.headerRegex;
+import static io.gatling.javaapi.http.HttpDsl.http;
+import static io.gatling.javaapi.http.HttpDsl.status;
+
+import ch.qos.logback.classic.LoggerContext;
+import java.time.Duration;
+import java.util.Map;
+import java.util.Optional;
+import io.gatling.javaapi.core.ChainBuilder;
+import io.gatling.javaapi.core.ScenarioBuilder;
+import io.gatling.javaapi.core.Simulation;
+import io.gatling.javaapi.http.HttpProtocolBuilder;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Performance test for the <%= entityClass %> entity.
+ */
+public class <%= entityClass %>GatlingTest extends Simulation {
+
+    LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+    {
+        // Log all HTTP requests
+        //context.getLogger("io.gatling.http").setLevel(Level.valueOf("TRACE"));
+        // Log failed HTTP requests
+        //context.getLogger("io.gatling.http").setLevel(Level.valueOf("DEBUG"));
+    }
+
+    String baseURL = Optional.ofNullable(System.getProperty("baseURL")).orElse("http://localhost:<%= serverPort %>");
+
+    HttpProtocolBuilder httpConf = http
+        .baseUrl(baseURL)
+        .inferHtmlResources()
+        .acceptHeader("*/*")
+        .acceptEncodingHeader("gzip, deflate")
+        .acceptLanguageHeader("fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3")
+        .connectionHeader("keep-alive")
+        .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0")
+        .silentResources() // Silence all resources like css or css so they don't clutter the results
+<%_ if (authenticationTypeOauth2) { _%>
+        .disableFollowRedirect() // We must follow redirects manually to get the xsrf token from the keycloak redirect
+        .disableAutoReferer()
+<%_ } _%>
+        ;
+
+    Map<String, String> headers_http = Map.of(
+        "Accept", "application/json"
+    );
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+
+    Map<String, String> headers_http_authenticated = Map.of(
+        "Accept", "application/json",
+        "X-XSRF-TOKEN", "${xsrf_token}"
+    );
+<%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+
+    Map<String, String> keycloakHeaders = Map.of(
+        "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Upgrade-Insecure-Requests", "1"
+    );
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+
+    Map<String, String> headers_http_authentication = Map.of(
+        "Content-Type", "application/json",
+        "Accept", "application/json"
+    );
+
+    Map<String, String> headers_http_authenticated = Map.of(
+        "Accept", "application/json",
+        "Authorization", "${access_token}"
+    );
+<%_ } _%>
+
+    ChainBuilder scn = exec(http("First unauthenticated request")
+        .get("/api/account")
+        .headers(headers_http)
+<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && authenticationTypeOauth2) { _%>
+        .check(status().is(302))
+<%_ } else { _%>
+        .check(status().is(401))
+<%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+        .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))
+<%_ } _%>
+        ).exitHereIfFailed()
+        .pause(10)
+        .exec(http("Authentication")
+<%_ if (authenticationTypeSession) { _%>
+        .post("/api/authentication")
+        .headers(headers_http_authenticated)
+        .formParam("username", "admin")
+        .formParam("password", "admin")
+        .formParam("remember-me", "true")
+        .formParam("submit", "Login")
+        .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))).exitHereIfFailed()
+<%_ } else if (authenticationTypeOauth2) { _%>
+        .get("/oauth2/authorization/oidc")
+        .check(status().is(302))
+        .check(header("Location").saveAs("loginUrl"))).exitHereIfFailed()
+        .pause(2)
+        .exec(http("Login Redirect")
+        .get("${loginUrl}")
+        .silent()
+        .headers(keycloakHeaders)
+        .check(css("#kc-form-login", "action").saveAs("kc-form-login"))).exitHereIfFailed()
+        .pause(10)
+        .exec(http("Authenticate")
+        .post("${kc-form-login}")
+        .silent()
+        .headers(keycloakHeaders)
+        .formParam("username", "admin")
+        .formParam("password", "admin")
+        .formParam("submit", "Login")
+        .check(status().is(302))
+        .check(header("Location").saveAs("afterLoginUrl"))).exitHereIfFailed()
+        .pause(2)
+        .exec(http("After Login Redirect")
+        .get("${afterLoginUrl}")
+        .silent()
+        .check(status().is(302))
+        .check(header("Location").saveAs("finalRedirectUrl"))
+        .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token")))
+        .exec(http("Final Redirect")
+        .get("${finalRedirectUrl}")
+        .silent()
+        .check(status().is(200))).exitHereIfFailed()
+<%_ } else if (authenticationTypeJwt) { _%>
+        .post("/api/authenticate")
+        .headers(headers_http_authentication)
+        .body(StringBody("{\"username\":\"admin\", \"password\":\"admin\"}")).asJson()
+        .check(header("Authorization").saveAs("access_token"))).exitHereIfFailed()
+<%_ } _%>
+        .pause(2)
+        .exec(http("Authenticated request")
+        .get("/api/account")
+        .headers(headers_http_authenticated)
+        .check(status().is(200)))
+        .pause(10)
+        .repeat(2).on(
+            exec(http("Get all <%= entityInstancePlural %>")
+            .get("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
+            .headers(headers_http_authenticated)
+            .check(status().is(200)))
+            .pause(Duration.ofSeconds(10), Duration.ofSeconds(20))
+            .exec(http("Create new <%= entityInstance %>")
+            .post("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
+            .headers(headers_http_authenticated)
+            .body(StringBody("{" +
+<%_ fields.filter(f => !(f.id && f.autoGenerate)).forEach((field, idx) => { _%>
+                "<%= idx === 0 ? '' : ', ' %>\"<%= field.fieldName %>\": <% if (field.fieldTypeString) { %>\"SAMPLE_TEXT\"<% } else if (field.fieldTypeNumeric) { %>0<% } else if (field.fieldTypeTemporal) { %>\"2020-01-01T00:00:00.000Z\"<% } else if (field.fieldIsEnum) { %>\"<%= field.enumValues[0].name %>\"<% } else { %>null<% } %>" +
+<%_ }); _%>
+                "}")).asJson()
+            .check(status().is(201))
+            .check(headerRegex("Location", "(.*)").saveAs("new_<%= entityInstance %>_url"))).exitHereIfFailed()
+            .pause(10)
+            .repeat(5).on(
+                exec(http("Get created <%= entityInstance %>")
+                .get("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
+                .headers(headers_http_authenticated))
+                .pause(10)
+            )
+            .exec(http("Delete created <%= entityInstance %>")
+            .delete("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
+            .headers(headers_http_authenticated))
+            .pause(10)
+        );
+
+    ScenarioBuilder users = scenario("Test the <%= entityClass %> entity").exec(scn);
+
+    {
+        setUp(
+            users.injectOpen(rampUsers(Integer.getInteger("users", 100)).during(Duration.ofMinutes(Integer.getInteger("ramp", 1))))
+        ).protocols(httpConf);
+    }
+}

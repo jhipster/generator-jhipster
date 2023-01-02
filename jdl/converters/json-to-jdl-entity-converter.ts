@@ -17,31 +17,25 @@
  * limitations under the License.
  */
 
-import JDLObject from '../models/jdl-object';
-import JDLEntity from '../models/jdl-entity';
-import JDLField from '../models/jdl-field';
-import JDLValidation from '../models/jdl-validation';
-import JDLEnum from '../models/jdl-enum';
-import JDLRelationship from '../models/jdl-relationship';
-import JDLUnaryOption from '../models/jdl-unary-option';
-import JDLBinaryOption from '../models/jdl-binary-option';
+import JDLObject from '../models/jdl-object.js';
+import { JDLEntity, JDLEnum } from '../models/index.mjs';
+import JDLField from '../models/jdl-field.js';
+import JDLValidation from '../models/jdl-validation.js';
+import JDLRelationship from '../models/jdl-relationship.js';
+import JDLUnaryOption from '../models/jdl-unary-option.js';
+import JDLBinaryOption from '../models/jdl-binary-option.js';
 
-import { lowerFirst, upperFirst } from '../utils/string-utils';
+import { lowerFirst, upperFirst } from '../utils/string-utils.js';
 
-import ApplicationOptions from '../jhipster/application-options';
-import FieldTypes from '../jhipster/field-types';
-import UnaryOptions from '../jhipster/unary-options';
-import BinaryOptions from '../jhipster/binary-options';
-import RelationshipTypes from '../jhipster/relationship-types';
-import RelationshipOptions from '../jhipster/relationship-options';
-import { Entity, Field, Relationship } from './types';
+import { applicationOptions, fieldTypes, unaryOptions, binaryOptions, relationshipTypes, relationshipOptions } from '../jhipster/index.mjs';
+import { Entity, Field, Relationship } from './types.js';
 
-const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = FieldTypes;
-const { OptionNames } = ApplicationOptions;
-const { ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY } = RelationshipTypes;
-const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
-const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED } = UnaryOptions;
-const { ANGULAR_SUFFIX, CLIENT_ROOT_FOLDER, DTO, MICROSERVICE, PAGINATION, SEARCH, SERVICE } = BinaryOptions.Options;
+const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
+const { OptionNames } = applicationOptions;
+const { ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY } = relationshipTypes;
+const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED } = unaryOptions;
+const { ANGULAR_SUFFIX, CLIENT_ROOT_FOLDER, DTO, MICROSERVICE, PAGINATION, SEARCH, SERVICE } = binaryOptions.Options;
 
 const { ANY, IMAGE, TEXT } = BlobTypes;
 const { BYTES } = RelationalOnlyDBTypes;

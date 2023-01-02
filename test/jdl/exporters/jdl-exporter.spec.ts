@@ -22,13 +22,13 @@ import { expect } from 'chai';
 import { jestExpect } from 'mocha-expect-snapshot';
 
 import fs from 'fs';
-import JDLObject from '../../../jdl/models/jdl-object';
-import JDLEntity from '../../../jdl/models/jdl-entity';
-import exportToJDL from '../../../jdl/exporters/jdl-exporter';
-import JDLApplication from '../../../jdl/models/jdl-application';
-import applicationOptions from '../../../jdl/jhipster/application-options';
-import { NO as NO_CLIENT_FRAMEWORK } from '../../../jdl/jhipster/client-framework-types';
+import JDLObject from '../../../jdl/models/jdl-object.js';
+import { JDLEntity } from '../../../jdl/models/index.mjs';
+import exportToJDL from '../../../jdl/exporters/jdl-exporter.js';
+import JDLApplication from '../../../jdl/models/jdl-application.js';
+import { applicationOptions, clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
 
+const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const {
   OptionNames: { CLIENT_FRAMEWORK },
 } = applicationOptions;

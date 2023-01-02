@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { GENERATOR_NAME } from '../export-utils';
+import { GENERATOR_NAME } from '../export-utils.js';
 
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).

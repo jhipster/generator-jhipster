@@ -18,20 +18,28 @@
  */
 
 import { expect } from 'chai';
-import ApplicationTypes from '../../../jdl/jhipster/application-types';
-import BinaryOptions from '../../../jdl/jhipster/binary-options';
-import DatabaseTypes from '../../../jdl/jhipster/database-types';
-import FieldTypes from '../../../jdl/jhipster/field-types';
-import RelationshipTypes from '../../../jdl/jhipster/relationship-types';
-import Validations from '../../../jdl/jhipster/validations';
-import JDLObject from '../../../jdl/models/jdl-object';
-import createJDLApplication from '../../../jdl/models/jdl-application-factory';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
-import JDLEntity from '../../../jdl/models/jdl-entity';
-import JDLField from '../../../jdl/models/jdl-field';
-import JDLRelationship from '../../../jdl/models/jdl-relationship';
-import JDLValidation from '../../../jdl/models/jdl-validation';
-import createValidator from '../../../jdl/validators/jdl-with-application-validator';
+
+import {
+  applicationTypes,
+  binaryOptions,
+  databaseTypes,
+  fieldTypes,
+  relationshipTypes,
+  validations,
+} from '../../../jdl/jhipster/index.mjs';
+import JDLObject from '../../../jdl/models/jdl-object.js';
+import createJDLApplication from '../../../jdl/models/jdl-application-factory.js';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import { JDLEntity } from '../../../jdl/models/index.mjs';
+import JDLField from '../../../jdl/models/jdl-field.js';
+import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
+import JDLValidation from '../../../jdl/models/jdl-validation.js';
+import createValidator from '../../../jdl/validators/jdl-with-application-validator.js';
+
+const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+const {
+  Validations: { MIN },
+} = validations;
 
 describe('JDLWithApplicationValidator', () => {
   describe('createValidator', () => {
@@ -49,8 +57,8 @@ describe('JDLWithApplicationValidator', () => {
       before(() => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication({
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         const entity = new JDLEntity({
           name: 'Continue',
@@ -73,8 +81,8 @@ describe('JDLWithApplicationValidator', () => {
       before(() => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication({
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         const entity = new JDLEntity({
           name: 'valid',
@@ -104,8 +112,8 @@ describe('JDLWithApplicationValidator', () => {
       before(() => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication({
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         const entity = new JDLEntity({
           name: 'Valid',
@@ -113,7 +121,7 @@ describe('JDLWithApplicationValidator', () => {
         entity.addField(
           new JDLField({
             name: 'catch',
-            type: FieldTypes.CommonDBTypes.STRING,
+            type: fieldTypes.CommonDBTypes.STRING,
           })
         );
         jdlObject.addEntity(entity);
@@ -139,8 +147,8 @@ describe('JDLWithApplicationValidator', () => {
         before(() => {
           const jdlObject = new JDLObject();
           const application = createJDLApplication({
-            applicationType: ApplicationTypes.GATEWAY,
-            databaseType: DatabaseTypes.SQL,
+            applicationType: GATEWAY,
+            databaseType: databaseTypes.SQL,
           });
           const validEntity = new JDLEntity({
             name: 'Valid',
@@ -170,8 +178,8 @@ describe('JDLWithApplicationValidator', () => {
         before(() => {
           const jdlObject = new JDLObject();
           const application = createJDLApplication({
-            applicationType: ApplicationTypes.MONOLITH,
-            databaseType: DatabaseTypes.SQL,
+            applicationType: MONOLITH,
+            databaseType: databaseTypes.SQL,
           });
           application.addEntityNames(['Valid']);
           jdlObject.addApplication(application);
@@ -201,19 +209,19 @@ describe('JDLWithApplicationValidator', () => {
       before(() => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication({
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         const entity = new JDLEntity({
           name: 'Valid',
         });
         const field = new JDLField({
           name: 'validField',
-          type: FieldTypes.CommonDBTypes.STRING,
+          type: fieldTypes.CommonDBTypes.STRING,
         });
         field.addValidation(
           new JDLValidation({
-            name: Validations.MIN,
+            name: MIN,
             value: 42,
           })
         );
@@ -240,13 +248,13 @@ describe('JDLWithApplicationValidator', () => {
         const relationship = new JDLRelationship({
           from: 'Source',
           to: otherEntity.name,
-          type: RelationshipTypes.ONE_TO_ONE,
+          type: relationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'other',
         });
         const jdlObject = new JDLObject();
         const application = createJDLApplication({
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         jdlObject.addEntity(otherEntity);
         jdlObject.addRelationship(relationship);
@@ -273,13 +281,13 @@ describe('JDLWithApplicationValidator', () => {
             const relationship = new JDLRelationship({
               from: sourceEntity.name,
               to: 'User',
-              type: RelationshipTypes.ONE_TO_ONE,
+              type: relationshipTypes.ONE_TO_ONE,
               injectedFieldInFrom: 'other',
             });
             const jdlObject = new JDLObject();
             const application = createJDLApplication({
-              applicationType: ApplicationTypes.MONOLITH,
-              databaseType: DatabaseTypes.SQL,
+              applicationType: MONOLITH,
+              databaseType: databaseTypes.SQL,
             });
             jdlObject.addEntity(sourceEntity);
             jdlObject.addRelationship(relationship);
@@ -304,13 +312,13 @@ describe('JDLWithApplicationValidator', () => {
             const relationship = new JDLRelationship({
               from: sourceEntity.name,
               to: 'User',
-              type: RelationshipTypes.ONE_TO_ONE,
+              type: relationshipTypes.ONE_TO_ONE,
               injectedFieldInFrom: 'other',
             });
             const jdlObject = new JDLObject();
             const application = createJDLApplication({
-              applicationType: ApplicationTypes.MONOLITH,
-              databaseType: DatabaseTypes.SQL,
+              applicationType: MONOLITH,
+              databaseType: databaseTypes.SQL,
               skipUserManagement: true,
             });
             jdlObject.addEntity(sourceEntity);
@@ -337,13 +345,13 @@ describe('JDLWithApplicationValidator', () => {
           const relationship = new JDLRelationship({
             from: sourceEntity.name,
             to: 'Other',
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other',
           });
           const jdlObject = new JDLObject();
           const application = createJDLApplication({
-            applicationType: ApplicationTypes.MONOLITH,
-            databaseType: DatabaseTypes.SQL,
+            applicationType: MONOLITH,
+            databaseType: databaseTypes.SQL,
           });
           jdlObject.addEntity(sourceEntity);
           jdlObject.addRelationship(relationship);
@@ -365,17 +373,17 @@ describe('JDLWithApplicationValidator', () => {
       before(() => {
         const jdlObject = new JDLObject();
         const application1 = createJDLApplication({
-          applicationType: ApplicationTypes.MICROSERVICE,
+          applicationType: MICROSERVICE,
           baseName: 'app1',
         });
         application1.addEntityNames(['A', 'B']);
         const application2 = createJDLApplication({
-          applicationType: ApplicationTypes.MICROSERVICE,
+          applicationType: MICROSERVICE,
           baseName: 'app2',
         });
         application2.addEntityNames(['B', 'C']);
         const application3 = createJDLApplication({
-          applicationType: ApplicationTypes.MICROSERVICE,
+          applicationType: MICROSERVICE,
           baseName: 'app3',
         });
         application3.addEntityNames(['A', 'B', 'C']);
@@ -401,7 +409,7 @@ describe('JDLWithApplicationValidator', () => {
           new JDLRelationship({
             from: 'A',
             to: 'B',
-            type: RelationshipTypes.MANY_TO_MANY,
+            type: relationshipTypes.MANY_TO_MANY,
             injectedFieldInFrom: 'b',
             injectedFieldInTo: 'a',
           })
@@ -410,7 +418,7 @@ describe('JDLWithApplicationValidator', () => {
           new JDLRelationship({
             from: 'B',
             to: 'C',
-            type: RelationshipTypes.MANY_TO_MANY,
+            type: relationshipTypes.MANY_TO_MANY,
             injectedFieldInFrom: 'c',
             injectedFieldInTo: 'd',
           })
@@ -419,7 +427,7 @@ describe('JDLWithApplicationValidator', () => {
           new JDLRelationship({
             from: 'A',
             to: 'C',
-            type: RelationshipTypes.MANY_TO_MANY,
+            type: relationshipTypes.MANY_TO_MANY,
             injectedFieldInFrom: 'c',
             injectedFieldInTo: 'd',
           })
@@ -438,13 +446,13 @@ describe('JDLWithApplicationValidator', () => {
       before(() => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication({
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.CASSANDRA,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.CASSANDRA,
         });
         jdlObject.addOption(
           new JDLBinaryOption({
-            name: BinaryOptions.Options.PAGINATION,
-            value: BinaryOptions.Values.pagination.PAGINATION,
+            name: binaryOptions.Options.PAGINATION,
+            value: binaryOptions.Values.pagination.PAGINATION,
           })
         );
         jdlObject.addApplication(application);
@@ -463,21 +471,21 @@ describe('JDLWithApplicationValidator', () => {
       before(() => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication({
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         jdlObject.addApplication(application);
         jdlObject.addOption(
           new JDLBinaryOption({
-            name: BinaryOptions.Options.DTO,
-            value: BinaryOptions.Values.dto.MAPSTRUCT,
+            name: binaryOptions.Options.DTO,
+            value: binaryOptions.Values.dto.MAPSTRUCT,
             entityNames: ['A', 'B', 'C'],
           })
         );
         jdlObject.addOption(
           new JDLBinaryOption({
-            name: BinaryOptions.Options.SERVICE,
-            value: BinaryOptions.Values.service.SERVICE_CLASS,
+            name: binaryOptions.Options.SERVICE,
+            value: binaryOptions.Values.service.SERVICE_CLASS,
             entityNames: ['B'],
           })
         );
@@ -496,8 +504,8 @@ describe('JDLWithApplicationValidator', () => {
       before(() => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication({
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
         });
         jdlObject.addEntity(
           new JDLEntity({
@@ -520,15 +528,15 @@ describe('JDLWithApplicationValidator', () => {
         jdlObject.addApplication(application);
         jdlObject.addOption(
           new JDLBinaryOption({
-            name: BinaryOptions.Options.DTO,
-            value: BinaryOptions.Values.dto.MAPSTRUCT,
+            name: binaryOptions.Options.DTO,
+            value: binaryOptions.Values.dto.MAPSTRUCT,
             entityNames: ['A', 'B'],
           })
         );
         jdlObject.addOption(
           new JDLBinaryOption({
-            name: BinaryOptions.Options.SERVICE,
-            value: BinaryOptions.Values.service.SERVICE_CLASS,
+            name: binaryOptions.Options.SERVICE,
+            value: binaryOptions.Values.service.SERVICE_CLASS,
             excludedNames: ['C'],
           })
         );
@@ -554,13 +562,13 @@ describe('JDLWithApplicationValidator', () => {
           const relationship = new JDLRelationship({
             from: sourceEntity.name,
             to: destinationEntity.name,
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other',
           });
           const jdlObject = new JDLObject();
           const application = createJDLApplication({
-            applicationType: ApplicationTypes.MONOLITH,
-            databaseType: DatabaseTypes.SQL,
+            applicationType: MONOLITH,
+            databaseType: databaseTypes.SQL,
             skipUserManagement: true,
           });
           jdlObject.addEntity(sourceEntity);
@@ -586,13 +594,13 @@ describe('JDLWithApplicationValidator', () => {
           const relationship = new JDLRelationship({
             from: 'User',
             to: destinationEntity.name,
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other',
           });
           const jdlObject = new JDLObject();
           const application = createJDLApplication({
-            applicationType: ApplicationTypes.MONOLITH,
-            databaseType: DatabaseTypes.SQL,
+            applicationType: MONOLITH,
+            databaseType: databaseTypes.SQL,
             skipUserManagement: false,
           });
           jdlObject.addEntity(destinationEntity);
@@ -623,13 +631,13 @@ describe('JDLWithApplicationValidator', () => {
           const relationship = new JDLRelationship({
             from: sourceEntity.name,
             to: destinationEntity.name,
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other',
           });
           const jdlObject = new JDLObject();
           const application = createJDLApplication({
-            applicationType: ApplicationTypes.MONOLITH,
-            databaseType: DatabaseTypes.SQL,
+            applicationType: MONOLITH,
+            databaseType: databaseTypes.SQL,
             skipUserManagement: true,
           });
           jdlObject.addEntity(sourceEntity);
@@ -655,13 +663,13 @@ describe('JDLWithApplicationValidator', () => {
           const relationship = new JDLRelationship({
             from: sourceEntity.name,
             to: 'User',
-            type: RelationshipTypes.ONE_TO_ONE,
+            type: relationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other',
           });
           const jdlObject = new JDLObject();
           const application = createJDLApplication({
-            applicationType: ApplicationTypes.MONOLITH,
-            databaseType: DatabaseTypes.SQL,
+            applicationType: MONOLITH,
+            databaseType: databaseTypes.SQL,
             skipUserManagement: false,
           });
           jdlObject.addEntity(sourceEntity);
@@ -682,8 +690,8 @@ describe('JDLWithApplicationValidator', () => {
       before(() => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication({
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          applicationType: MONOLITH,
+          databaseType: databaseTypes.SQL,
           blueprints: ['generator-jhipster-nodejs', 'generator-jhipster-dotnetcore'],
         });
         jdlObject.addApplication(application);

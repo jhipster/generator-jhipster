@@ -20,8 +20,8 @@ import _ from 'lodash';
 import chalk from 'chalk';
 import fs from 'fs';
 import { cleanupOldFiles } from './entity-cleanup.mjs';
-import utils from '../utils.cjs';
-import constants from '../generator-constants.cjs';
+import { getEnumInfo } from '../utils.mjs';
+import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, TEST_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { databaseTypes, searchEngineTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
 
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
@@ -30,12 +30,6 @@ const { MapperTypes, ServiceTypes } = entityOptions;
 const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = cacheTypes;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
-
-/* Constants use throughout */
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-const TEST_DIR = constants.TEST_DIR;
-const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 export const cassandraChangelogFiles = {
   dbChangelog: [
@@ -418,8 +412,8 @@ export const gatlingFiles = {
       path: TEST_DIR,
       templates: [
         {
-          file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
-          renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
+          file: 'java/gatling/simulations/EntityGatlingTest.java',
+          renameTo: generator => `java/gatling/simulations/${generator.entityClass}GatlingTest.java`,
         },
       ],
     },
@@ -463,7 +457,7 @@ export function writeFiles() {
         for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
           const fieldType = field.fieldType;
           const enumInfo = {
-            ...utils.getEnumInfo(field, entity.clientRootFolder),
+            ...getEnumInfo(field, entity.clientRootFolder),
             frontendAppName: application.frontendAppName,
             packageName: application.packageName,
             entityAbsolutePackage: entity.entityAbsolutePackage || application.packageName,

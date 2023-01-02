@@ -17,23 +17,20 @@
  * limitations under the License.
  */
 
-import logger from '../../utils/objects/logger';
-import UnaryOptions from '../../jhipster/unary-options';
+import logger from '../../utils/objects/logger.js';
+import { unaryOptions, binaryOptions, entityOptions } from '../../jhipster/index.mjs';
+import JDLObject from '../../models/jdl-object.js';
+import JDLApplication from '../../models/jdl-application.js';
 
-import BinaryOptions from '../../jhipster/binary-options';
-import EntityOptions from '../../jhipster/entity-options';
-import JDLObject from '../../models/jdl-object';
-import JDLApplication from '../../models/jdl-application';
+const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
-const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = UnaryOptions;
-
-const { ServiceTypes } = EntityOptions;
+const { ServiceTypes } = entityOptions;
 
 const NO_SERVICE = ServiceTypes.NO;
 const {
   Options: { ANGULAR_SUFFIX, MICROSERVICE, SEARCH, DTO },
-} = BinaryOptions;
-const serviceClassOptionValue = BinaryOptions.Values.service.SERVICE_CLASS;
+} = binaryOptions;
+const serviceClassOptionValue = binaryOptions.Values.service.SERVICE_CLASS;
 
 const USER = 'user';
 

@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 
-import Validator from './validator';
-import Validations from '../jhipster/validations';
+import Validator from './validator.js';
+import { validations } from '../jhipster/index.mjs';
 
-const { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES } = Validations;
+const {
+  Validations: { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES },
+} = validations;
 
 export default class ValidationValidator extends Validator {
   constructor() {

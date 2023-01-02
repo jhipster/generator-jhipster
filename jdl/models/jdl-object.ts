@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import JDLEnums from './jdl-enums';
-import JDLRelationships from './jdl-relationships';
-import JDLOptions from './jdl-options';
-import BinaryOptions from '../jhipster/binary-options';
-import JDLEntity from './jdl-entity';
+import JDLEnums from './jdl-enums.js';
+import JDLRelationships from './jdl-relationships.js';
+import JDLOptions from './jdl-options.js';
+import { binaryOptions } from '../jhipster/index.mjs';
+import JDLEntity from './jdl-entity.js';
 
 /**
  * The JDL object class, containing applications, entities etc.
@@ -241,7 +241,7 @@ export default class JDLObject {
   }
 
   isEntityInMicroservice(entityName) {
-    const options = this.getOptionsForName(BinaryOptions.Options.MICROSERVICE);
+    const options = this.getOptionsForName(binaryOptions.Options.MICROSERVICE);
     return options.some(option => option.entityNames.has('*') || option.entityNames.has(entityName));
   }
 

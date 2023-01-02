@@ -21,36 +21,43 @@
 import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import path from 'path';
-import matchEntity from '../../matchers/entity-matcher';
-import * as JDLReader from '../../../../jdl/readers/jdl-reader';
-import ParsedJDLToJDLObjectConverter from '../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter';
-import JDLEntity from '../../../../jdl/models/jdl-entity';
-import JDLEnum from '../../../../jdl/models/jdl-enum';
-import JDLField from '../../../../jdl/models/jdl-field';
-import JDLValidation from '../../../../jdl/models/jdl-validation';
-import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option';
-import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option';
-import ApplicationTypes from '../../../../jdl/jhipster/application-types';
-import FieldTypes from '../../../../jdl/jhipster/field-types';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import matchEntity from '../../matchers/entity-matcher.js';
+import * as JDLReader from '../../../../jdl/readers/jdl-reader.js';
+import ParsedJDLToJDLObjectConverter from '../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import { JDLEntity, JDLEnum } from '../../../../jdl/models/index.mjs';
+import JDLField from '../../../../jdl/models/jdl-field.js';
+import JDLValidation from '../../../../jdl/models/jdl-validation.js';
+import JDLUnaryOption from '../../../../jdl/models/jdl-unary-option.js';
+import JDLBinaryOption from '../../../../jdl/models/jdl-binary-option.js';
+import {
+  applicationTypes,
+  fieldTypes,
+  validations,
+  unaryOptions,
+  applicationOptions,
+  entityOptions,
+  binaryOptions,
+} from '../../../../jdl/jhipster/index.mjs';
 
-import Validations from '../../../../jdl/jhipster/validations';
-import UnaryOptions from '../../../../jdl/jhipster/unary-options';
-import ApplicationOptions from '../../../../jdl/jhipster/application-options';
+const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+const { OptionNames } = applicationOptions;
 
-const { OptionNames } = ApplicationOptions;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-import EntityOptions from '../../../../jdl/jhipster/entity-options';
+const { MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 
-import BinaryOptions from '../../../../jdl/jhipster/binary-options';
-
-const { MapperTypes, ServiceTypes, PaginationTypes } = EntityOptions;
-
-const BinaryOptionValues = BinaryOptions.Values;
-const { DTO } = BinaryOptions.Options;
+const BinaryOptionValues = binaryOptions.Values;
+const { DTO } = binaryOptions.Options;
 const { SKIP_CLIENT, SKIP_SERVER } = OptionNames;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
+const {
+  Validations: { REQUIRED, UNIQUE, MINLENGTH, MAXLENGTH },
+} = validations;
 
 describe('ParsedJDLToJDLObjectConverter', () => {
   describe('parse', () => {
@@ -83,30 +90,30 @@ describe('ParsedJDLToJDLObjectConverter', () => {
               fields: {
                 guid: new JDLField({
                   name: 'guid',
-                  type: FieldTypes.CommonDBTypes.UUID,
+                  type: fieldTypes.CommonDBTypes.UUID,
                   validations: {
-                    required: new JDLValidation({ name: Validations.REQUIRED }),
+                    required: new JDLValidation({ name: REQUIRED }),
                   },
                 }),
                 name: new JDLField({
                   name: 'name',
-                  type: FieldTypes.CommonDBTypes.STRING,
+                  type: fieldTypes.CommonDBTypes.STRING,
                   validations: {
-                    required: new JDLValidation({ name: Validations.REQUIRED }),
-                    unique: new JDLValidation({ name: Validations.UNIQUE }),
+                    required: new JDLValidation({ name: REQUIRED }),
+                    unique: new JDLValidation({ name: UNIQUE }),
                   },
                 }),
                 description: new JDLField({
                   name: 'description',
-                  type: FieldTypes.CommonDBTypes.TEXT_BLOB,
+                  type: fieldTypes.CommonDBTypes.TEXT_BLOB,
                 }),
                 advertisement: new JDLField({
                   name: 'advertisement',
-                  type: FieldTypes.CommonDBTypes.BLOB,
+                  type: fieldTypes.CommonDBTypes.BLOB,
                 }),
                 logo: new JDLField({
                   name: 'logo',
-                  type: FieldTypes.CommonDBTypes.IMAGE_BLOB,
+                  type: fieldTypes.CommonDBTypes.IMAGE_BLOB,
                 }),
               },
             })
@@ -118,11 +125,11 @@ describe('ParsedJDLToJDLObjectConverter', () => {
               fields: {
                 startDate: new JDLField({
                   name: 'startDate',
-                  type: FieldTypes.CommonDBTypes.ZONED_DATE_TIME,
+                  type: fieldTypes.CommonDBTypes.ZONED_DATE_TIME,
                 }),
                 endDate: new JDLField({
                   name: 'endDate',
-                  type: FieldTypes.CommonDBTypes.ZONED_DATE_TIME,
+                  type: fieldTypes.CommonDBTypes.ZONED_DATE_TIME,
                 }),
                 language: new JDLField({ name: 'language', type: 'Language' }),
               },
@@ -142,14 +149,14 @@ describe('ParsedJDLToJDLObjectConverter', () => {
               fields: {
                 jobTitle: new JDLField({
                   name: 'jobTitle',
-                  type: FieldTypes.CommonDBTypes.STRING,
+                  type: fieldTypes.CommonDBTypes.STRING,
                   validations: {
                     minlength: new JDLValidation({
-                      name: Validations.MINLENGTH,
+                      name: MINLENGTH,
                       value: '5',
                     }),
                     maxlength: new JDLValidation({
-                      name: Validations.MAXLENGTH,
+                      name: MAXLENGTH,
                       value: '25',
                     }),
                   },
@@ -157,47 +164,47 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                 jobType: new JDLField({ name: 'jobType', type: 'JobType' }),
                 minSalary: new JDLField({
                   name: 'minSalary',
-                  type: FieldTypes.CommonDBTypes.LONG,
+                  type: fieldTypes.CommonDBTypes.LONG,
                 }),
                 maxSalary: new JDLField({
                   name: 'maxSalary',
-                  type: FieldTypes.CommonDBTypes.LONG,
+                  type: fieldTypes.CommonDBTypes.LONG,
                 }),
               },
             })
           );
           expect(jdlObject.getOptions()).to.deep.eq([
             new JDLUnaryOption({
-              name: UnaryOptions.SKIP_SERVER,
+              name: unaryOptions.SKIP_SERVER,
               entityNames: ['Country'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.DTO,
+              name: binaryOptions.Options.DTO,
               entityNames: ['Employee'],
               value: BinaryOptionValues.dto.MAPSTRUCT,
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.SERVICE,
+              name: binaryOptions.Options.SERVICE,
               entityNames: ['Employee'],
               value: BinaryOptionValues.service.SERVICE_CLASS,
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.PAGINATION,
+              name: binaryOptions.Options.PAGINATION,
               entityNames: ['JobHistory', 'Employee'],
               value: BinaryOptionValues.pagination['INFINITE-SCROLL'],
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.PAGINATION,
+              name: binaryOptions.Options.PAGINATION,
               entityNames: ['Job'],
               value: BinaryOptionValues.pagination.PAGINATION,
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.MICROSERVICE,
+              name: binaryOptions.Options.MICROSERVICE,
               entityNames: ['*'],
               value: 'mymicroservice',
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.Options.SEARCH,
+              name: binaryOptions.Options.SEARCH,
               entityNames: ['Employee'],
               value: BinaryOptionValues.search.ELASTICSEARCH,
             }),
@@ -214,7 +221,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
         it('should not check for field types', () => {
           ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: ApplicationTypes.GATEWAY,
+            applicationType: GATEWAY,
           });
         });
       });
@@ -251,10 +258,10 @@ describe('ParsedJDLToJDLObjectConverter', () => {
               name: 'A',
               tableName: 'A',
               fields: {
-                email: new JDLField({ name: 'email', type: FieldTypes.CommonDBTypes.STRING }),
+                email: new JDLField({ name: 'email', type: fieldTypes.CommonDBTypes.STRING }),
                 id: new JDLField({
                   name: 'id',
-                  type: FieldTypes.CommonDBTypes.LONG,
+                  type: fieldTypes.CommonDBTypes.LONG,
                 }),
               },
             })
@@ -319,7 +326,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
           });
           enumField.addValidation(
             new JDLValidation({
-              name: Validations.REQUIRED,
+              name: REQUIRED,
             })
           );
         });
@@ -348,7 +355,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
         it('should add it correctly', () => {
           expect(jdlObject.getOptions()).to.deep.eq([
             new JDLUnaryOption({
-              name: UnaryOptions.NO_FLUENT_METHOD,
+              name: unaryOptions.NO_FLUENT_METHOD,
               entityNames: ['A'],
             }),
           ]);
@@ -609,7 +616,7 @@ JDLApplication {
       "messageBroker": StringJDLApplicationConfigurationOption {
         "name": "messageBroker",
         "quoted": false,
-        "value": false,
+        "value": "no",
       },
       "packageFolder": StringJDLApplicationConfigurationOption {
         "name": "packageFolder",
@@ -633,7 +640,7 @@ JDLApplication {
       "searchEngine": StringJDLApplicationConfigurationOption {
         "name": "searchEngine",
         "quoted": false,
-        "value": false,
+        "value": "no",
       },
       "serverPort": IntegerJDLApplicationConfigurationOption {
         "name": "serverPort",
@@ -642,7 +649,7 @@ JDLApplication {
       "serviceDiscoveryType": StringJDLApplicationConfigurationOption {
         "name": "serviceDiscoveryType",
         "quoted": false,
-        "value": false,
+        "value": "no",
       },
       "skipUserManagement": BooleanJDLApplicationConfigurationOption {
         "name": "skipUserManagement",
@@ -655,7 +662,7 @@ JDLApplication {
       "websocket": StringJDLApplicationConfigurationOption {
         "name": "websocket",
         "quoted": false,
-        "value": false,
+        "value": "no",
       },
       "withAdminUi": BooleanJDLApplicationConfigurationOption {
         "name": "withAdminUi",
@@ -711,7 +718,7 @@ JDLDeployment {
           jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
           });
-          filterOption = jdlObject.getOptionsForName(UnaryOptions.FILTER)[0];
+          filterOption = jdlObject.getOptionsForName(unaryOptions.FILTER)[0];
         });
 
         it('should work', () => {
@@ -728,10 +735,10 @@ JDLDeployment {
             const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'simple_microservice_setup.jdl')]);
             jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: ApplicationTypes.MICROSERVICE,
+              applicationType: MICROSERVICE,
               applicationName: 'ms',
             });
-            clientRootFolderOption = jdlObject.getOptionsForName(BinaryOptions.Options.CLIENT_ROOT_FOLDER)[0];
+            clientRootFolderOption = jdlObject.getOptionsForName(binaryOptions.Options.CLIENT_ROOT_FOLDER)[0];
           });
 
           it('should set the microservice name as clientRootFolder', () => {
@@ -746,9 +753,9 @@ JDLDeployment {
             const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'client_root_folder.jdl')]);
             jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: ApplicationTypes.MONOLITH,
+              applicationType: MONOLITH,
             });
-            clientRootFolderOption = jdlObject.getOptionsForName(BinaryOptions.Options.CLIENT_ROOT_FOLDER)[0];
+            clientRootFolderOption = jdlObject.getOptionsForName(binaryOptions.Options.CLIENT_ROOT_FOLDER)[0];
           });
 
           it("should set the option's value", () => {
@@ -767,10 +774,10 @@ JDLDeployment {
             const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'no_microservice.jdl')]);
             jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: ApplicationTypes.MICROSERVICE,
+              applicationType: MICROSERVICE,
               applicationName: 'toto',
             });
-            microserviceOption = jdlObject.getOptionsForName(BinaryOptions.Options.MICROSERVICE)[0];
+            microserviceOption = jdlObject.getOptionsForName(binaryOptions.Options.MICROSERVICE)[0];
           });
 
           it('should add it to every entity', () => {
@@ -786,10 +793,10 @@ JDLDeployment {
             const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'simple_microservice_setup.jdl')]);
             jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: ApplicationTypes.MICROSERVICE,
+              applicationType: MICROSERVICE,
               applicationName: 'toto',
             });
-            microserviceOption = jdlObject.getOptionsForName(BinaryOptions.Options.MICROSERVICE)[0];
+            microserviceOption = jdlObject.getOptionsForName(binaryOptions.Options.MICROSERVICE)[0];
           });
 
           it('does not automatically setup the microservice option', () => {
@@ -827,7 +834,7 @@ Array [
           const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'no_injected_field.jdl')]);
           jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: ApplicationTypes.MONOLITH,
+            applicationType: MONOLITH,
           });
           relationshipOneToOne = jdlObject.relationships.getOneToOne('OneToOne_A{b}_B{a}');
           relationshipOneToMany = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}');
@@ -861,13 +868,13 @@ Array [
             const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'annotations.jdl')]);
             const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: ApplicationTypes.MONOLITH,
+              applicationType: MONOLITH,
             });
-            dtoOption = jdlObject.getOptionsForName(BinaryOptions.Options.DTO)[0];
-            filterOption = jdlObject.getOptionsForName(UnaryOptions.FILTER)[0];
-            paginationOption = jdlObject.getOptionsForName(BinaryOptions.Options.PAGINATION)[0];
-            serviceOption = jdlObject.getOptionsForName(BinaryOptions.Options.SERVICE)[0];
-            skipClientOption = jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)[0];
+            dtoOption = jdlObject.getOptionsForName(binaryOptions.Options.DTO)[0];
+            filterOption = jdlObject.getOptionsForName(unaryOptions.FILTER)[0];
+            paginationOption = jdlObject.getOptionsForName(binaryOptions.Options.PAGINATION)[0];
+            serviceOption = jdlObject.getOptionsForName(binaryOptions.Options.SERVICE)[0];
+            skipClientOption = jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)[0];
             customUnaryOption = jdlObject.getOptionsForName('myCustomUnaryOption')[0];
             customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
             customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
@@ -917,13 +924,13 @@ Object {
             const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'capitalized_annotations.jdl')]);
             const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: ApplicationTypes.MONOLITH,
+              applicationType: MONOLITH,
             });
-            dtoOption = jdlObject.getOptionsForName(BinaryOptions.Options.DTO)[0];
-            filterOption = jdlObject.getOptionsForName(UnaryOptions.FILTER)[0];
-            paginationOption = jdlObject.getOptionsForName(BinaryOptions.Options.PAGINATION)[0];
-            serviceOption = jdlObject.getOptionsForName(BinaryOptions.Options.SERVICE)[0];
-            skipClientOption = jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)[0];
+            dtoOption = jdlObject.getOptionsForName(binaryOptions.Options.DTO)[0];
+            filterOption = jdlObject.getOptionsForName(unaryOptions.FILTER)[0];
+            paginationOption = jdlObject.getOptionsForName(binaryOptions.Options.PAGINATION)[0];
+            serviceOption = jdlObject.getOptionsForName(binaryOptions.Options.SERVICE)[0];
+            skipClientOption = jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)[0];
             customUnaryOption = jdlObject.getOptionsForName('myCustomUnaryOption')[0];
             customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
             customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
@@ -971,16 +978,16 @@ Object {
           const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'annotations_and_options.jdl')]);
           const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: ApplicationTypes.MONOLITH,
+            applicationType: MONOLITH,
           });
-          dtoOptions = jdlObject.getOptionsForName(BinaryOptions.Options.DTO);
-          filterOptions = jdlObject.getOptionsForName(UnaryOptions.FILTER);
-          paginationOptions = jdlObject.getOptionsForName(BinaryOptions.Options.PAGINATION);
-          serviceOptions = jdlObject.getOptionsForName(BinaryOptions.Options.SERVICE);
-          skipClientOptions = jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT);
-          skipServerOptions = jdlObject.getOptionsForName(UnaryOptions.SKIP_SERVER);
-          readOnlyOptions = jdlObject.getOptionsForName(UnaryOptions.READ_ONLY);
-          embeddedOptions = jdlObject.getOptionsForName(UnaryOptions.EMBEDDED);
+          dtoOptions = jdlObject.getOptionsForName(binaryOptions.Options.DTO);
+          filterOptions = jdlObject.getOptionsForName(unaryOptions.FILTER);
+          paginationOptions = jdlObject.getOptionsForName(binaryOptions.Options.PAGINATION);
+          serviceOptions = jdlObject.getOptionsForName(binaryOptions.Options.SERVICE);
+          skipClientOptions = jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT);
+          skipServerOptions = jdlObject.getOptionsForName(unaryOptions.SKIP_SERVER);
+          readOnlyOptions = jdlObject.getOptionsForName(unaryOptions.READ_ONLY);
+          embeddedOptions = jdlObject.getOptionsForName(unaryOptions.EMBEDDED);
         });
 
         it('correctly should set the options', () => {
@@ -1017,7 +1024,7 @@ Object {
           const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'pattern_validation_with_quote.jdl')]);
           jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: ApplicationTypes.MONOLITH,
+            applicationType: MONOLITH,
           });
         });
 
@@ -1032,7 +1039,7 @@ Object {
           const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'unique.jdl')]);
           jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: ApplicationTypes.MONOLITH,
+            applicationType: MONOLITH,
           });
         });
 
@@ -1050,7 +1057,7 @@ Object {
           ]);
           jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: ApplicationTypes.MONOLITH,
+            applicationType: MONOLITH,
           });
         });
 

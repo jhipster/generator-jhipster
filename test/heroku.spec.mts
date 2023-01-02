@@ -5,15 +5,11 @@ import sinon from 'sinon';
 import ChildProcess from 'child_process';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-import constants from '../generators/generator-constants.cjs';
+import { SERVER_MAIN_RES_DIR, SERVER_MAIN_RES_DIR } from '../generators/generator-constants.mjs';
 import { getTemplatePath, getGenerator } from './support/index.mjs';
 
 const expectedFiles = {
-  monolith: [
-    'Procfile',
-    `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`,
-    `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`,
-  ],
+  monolith: ['Procfile', `${SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`, `${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`],
 };
 
 describe('JHipster Heroku Sub Generator', () => {
@@ -174,8 +170,8 @@ describe('JHipster Heroku Sub Generator', () => {
       it('creates expected monolith files', () => {
         assert.file(expectedFiles.monolith);
         assert.fileContent('.yo-rc.json', '"herokuDeployType": "jar"');
-        assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
-        assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
+        assert.fileContent(`${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
+        assert.noFileContent(`${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
       });
     });
 
@@ -232,8 +228,8 @@ describe('JHipster Heroku Sub Generator', () => {
       });
       it('creates expected monolith files', () => {
         assert.file(expectedFiles.monolith);
-        assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
-        assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
+        assert.fileContent(`${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
+        assert.noFileContent(`${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
       });
     });
 
@@ -290,8 +286,8 @@ describe('JHipster Heroku Sub Generator', () => {
       it('creates expected monolith files', () => {
         assert.file(expectedFiles.monolith);
         assert.fileContent('.yo-rc.json', '"herokuDeployType": "jar"');
-        assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
-        assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
+        assert.fileContent(`${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
+        assert.noFileContent(`${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
       });
     });
   });

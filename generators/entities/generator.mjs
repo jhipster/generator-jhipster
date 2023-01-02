@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import BaseGenerator from '../base/index.mjs';
-
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_APP } from '../generator-list.mjs';
 

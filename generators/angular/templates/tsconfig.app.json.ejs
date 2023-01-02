@@ -20,8 +20,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./<%= clientDistDir %>app",
-    "types": []
+    "types": ["@angular/localize"]
   },
-  "files": ["<%= clientSrcDir %>main.ts", "<%= clientSrcDir %>polyfills.ts"],
+  "files": [
+<%_ if (communicationSpringWebsocket) { _%>
+    "<%= clientSrcDir %>sockjs-client.polyfill.ts",
+<%_ } _%>
+    "<%= clientSrcDir %>main.ts"
+  ],
   "include": ["<%= clientSrcDir %>**/*.d.ts"]
 }

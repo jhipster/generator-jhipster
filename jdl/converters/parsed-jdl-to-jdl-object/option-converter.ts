@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import JDLUnaryOption from '../../models/jdl-unary-option';
-import JDLBinaryOption from '../../models/jdl-binary-option';
-import UnaryOptions from '../../jhipster/unary-options';
-import BinaryOptions, { OptionValues, getOptionName } from '../../jhipster/binary-options';
+import JDLUnaryOption from '../../models/jdl-unary-option.js';
+import JDLBinaryOption from '../../models/jdl-binary-option.js';
+import { unaryOptions, binaryOptions } from '../../jhipster/index.mjs';
 
+const { OptionValues, getOptionName } = binaryOptions;
 export default { convertOptions };
 
 /**
@@ -42,7 +42,7 @@ export function convertOptions(parsedOptions, useOptions) {
 
 function convertUnaryOptions(parsedOptions) {
   const convertedUnaryOptions: JDLUnaryOption[] = [];
-  UnaryOptions.forEach(unaryOptionName => {
+  unaryOptions.forEach(unaryOptionName => {
     const parsedUnaryOption = parsedOptions[unaryOptionName];
     if (!parsedUnaryOption || !parsedUnaryOption.list || parsedUnaryOption.list.length === 0) {
       return;
@@ -60,7 +60,7 @@ function convertUnaryOptions(parsedOptions) {
 
 function convertBinaryOptions(parsedOptions) {
   const convertedBinaryOptions: JDLBinaryOption[] = [];
-  BinaryOptions.forEach(binaryOptionName => {
+  binaryOptions.forEach(binaryOptionName => {
     if (!parsedOptions[binaryOptionName]) {
       return;
     }

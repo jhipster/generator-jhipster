@@ -28,6 +28,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize<% if (relationships.some(rel => rel.ownerSide === true)) { %>, map<% } %> } from 'rxjs/operators';
 
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { <%= entityAngularName %>FormService, <%= entityAngularName %>FormGroup } from './<%= entityFileName %>-form.service';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
@@ -62,8 +65,10 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
 @Component({
+    standalone: true,
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
-    templateUrl: './<%= entityFileName %>-update.component.html'
+    templateUrl: './<%= entityFileName %>-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class <%= entityAngularName %>UpdateComponent implements OnInit {
     isSaving = false;

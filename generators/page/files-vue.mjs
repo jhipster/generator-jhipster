@@ -16,11 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-constants.cjs';
-import utils from '../utils.cjs';
+import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
+import { vueAddPageToRouterImport, vueAddPageToRouter, vueAddPageServiceToMainImport, vueAddPageServiceToMain } from '../utils.mjs';
 
 /* Constants use throughout */
-const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const VUE_DIR = 'src/main/webapp/app/';
 
 export const vueFiles = {
@@ -67,9 +66,9 @@ export const vueFiles = {
 
 export function customizeFiles(data) {
   // Add page paths to routing system
-  utils.vueAddPageToRouterImport(this, data);
-  utils.vueAddPageToRouter(this, data);
+  vueAddPageToRouterImport(this, data);
+  vueAddPageToRouter(this, data);
   // Add page services to main
-  utils.vueAddPageServiceToMainImport(this, data);
-  utils.vueAddPageServiceToMain(this, data);
+  vueAddPageServiceToMainImport(this, data);
+  vueAddPageServiceToMain(this, data);
 }

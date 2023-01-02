@@ -17,12 +17,18 @@
  limitations under the License.
 -%>
 import { Component, OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> } from '@angular/core';
+import {
 <%_ if (!authenticationTypeOauth2) { _%>
-import { Router } from '@angular/router';
+  Router,
+<%_ } _%>
+  RouterModule,
+} from '@angular/router';
+<%_ if (!authenticationTypeOauth2) { _%>
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 <%_ } _%>
 
+import SharedModule from 'app/shared/shared.module';
 <%_ if (authenticationTypeOauth2) { _%>
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
@@ -30,11 +36,13 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  imports: [SharedModule, RouterModule],
 })
-export class HomeComponent implements OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> {
+export default class HomeComponent implements OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> {
   account: Account | null = null;
 <%_ if (!authenticationTypeOauth2) { _%>
 

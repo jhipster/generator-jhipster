@@ -1,11 +1,11 @@
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
 import ServerGenerator from '../../generators/server/index.mjs';
-import constants from '../../generators/generator-constants.cjs';
+import { SERVER_MAIN_SRC_DIR } from '../../generators/generator-constants.mjs';
 import { getGenerator } from '../support/index.mjs';
+import { serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const DEFAULT_TEST_OPTIONS = { skipInstall: true, skipChecks: true, skipPrettier: true };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -101,7 +101,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           baseName: 'jhipster',
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
-          serviceDiscoveryType: false,
+          serviceDiscoveryType: NO_SERVICE_DISCOVERY,
           authenticationType: 'jwt',
           cacheProvider: 'ehcache',
           enableHibernateCache: true,
@@ -151,7 +151,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           baseName: 'jhipster',
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
-          serviceDiscoveryType: false,
+          serviceDiscoveryType: NO_SERVICE_DISCOVERY,
           authenticationType: 'jwt',
           cacheProvider: 'caffeine',
           enableHibernateCache: true,
@@ -201,7 +201,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           baseName: 'jhipster',
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
-          serviceDiscoveryType: false,
+          serviceDiscoveryType: NO_SERVICE_DISCOVERY,
           authenticationType: 'jwt',
           cacheProvider: 'infinispan',
           enableHibernateCache: true,
@@ -232,7 +232,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           baseName: 'jhipster',
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
-          serviceDiscoveryType: false,
+          serviceDiscoveryType: NO_SERVICE_DISCOVERY,
           authenticationType: 'jwt',
           cacheProvider: 'redis',
           enableHibernateCache: true,

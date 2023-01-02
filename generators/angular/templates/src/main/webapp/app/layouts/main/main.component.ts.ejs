@@ -26,7 +26,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 import { Router } from '@angular/router';
 <%_ if (enableI18nRTL) { _%>
-import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
+import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 
 @Component({
@@ -34,7 +34,7 @@ import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-
   templateUrl: './main.component.html',
   providers: [AppPageTitleStrategy],
 })
-export class MainComponent implements OnInit {
+export default class MainComponent implements OnInit {
 <%_ if (enableTranslation) { _%>
   private renderer: Renderer2;
 <%_ } _%>

@@ -21,15 +21,11 @@ import fs from 'fs';
 import path from 'path';
 import semver from 'semver';
 
-import { packageJson as packagejs } from '../../lib/index.mjs';
-import generatorUtils from '../utils.cjs';
+import { packageJson } from '../../lib/index.mjs';
+import { packageNameToNamespace } from '../utils.mjs';
 import JHipsterBaseGenerator from './generator-base.mjs';
-import blueprintUtils from '../../utils/blueprint.cjs';
-
+import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from '../../utils/blueprint.mjs';
 import { PRIORITY_NAMES } from './priorities.mjs';
-
-const { packageNameToNamespace } = generatorUtils;
-const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = blueprintUtils;
 
 /**
  * Base class for a generator that can be extended through a blueprint.
@@ -613,7 +609,7 @@ export default class JHipsterBaseBlueprintGenerator extends JHipsterBaseGenerato
       this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
       return;
     }
-    const mainGeneratorJhipsterVersion = packagejs.version;
+    const mainGeneratorJhipsterVersion = packageJson.version;
     const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
     if (blueprintJhipsterVersion) {
       if (!semver.valid(blueprintJhipsterVersion) && !semver.validRange(blueprintJhipsterVersion)) {

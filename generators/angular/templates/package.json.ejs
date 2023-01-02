@@ -56,8 +56,8 @@
     "@popperjs/core": "<%= this.dependabotPackageJson.dependencies['@popperjs/core'] %>",
     "rxjs": "<%= this.dependabotPackageJson.dependencies['rxjs'] %>",
 <%_ if (communicationSpringWebsocket) { _%>
-    "sockjs-client": "1.5.0",
-    "webstomp-client": "1.2.6",
+    "sockjs-client": "1.6.1",
+    "@stomp/rx-stomp": "1.2.0",
 <%_ } _%>
 <%_ if (skipServer) { _%>
     "sonar-scanner": "3.1.0",
@@ -66,8 +66,11 @@
     "zone.js": "<%= this.dependabotPackageJson.dependencies['zone.js'] %>"
   },
   "devDependencies": {
+<%_ if (microfrontend && applicationTypeGateway) { _%>
+    "@angular-architects/module-federation-runtime": "<%= this.dependabotPackageJson.devDependencies['@angular-architects/module-federation-runtime'] %>",
+<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-    "@types/sockjs-client": "1.5.0",
+    "@types/sockjs-client": "1.5.1",
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "<%= this.dependabotPackageJson.devDependencies['cypress'] %>",
@@ -81,10 +84,10 @@
 <%_ } _%>
     "@angular/cli": "<%= this.dependabotPackageJson.devDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
+    "@angular/service-worker": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
     "@angular-builders/custom-webpack": "<%= this.dependabotPackageJson.devDependencies['@angular-builders/custom-webpack'] %>",
     "@angular-builders/jest": "<%= this.dependabotPackageJson.devDependencies['@angular-builders/jest'] %>",
     "@angular-devkit/build-angular": "<%= this.dependabotPackageJson.devDependencies['@angular/cli'] %>",
-    "@angular/service-worker": "<%= this.dependabotPackageJson.dependencies['@angular/common'] %>",
     "@angular-eslint/eslint-plugin": "<%= this.dependabotPackageJson.devDependencies['@angular-eslint/eslint-plugin'] %>",
     "@types/jest": "<%= this.dependabotPackageJson.devDependencies['@types/jest'] %>",
     "@types/node": "<%= this.dependabotPackageJson.devDependencies['@types/node'] %>",

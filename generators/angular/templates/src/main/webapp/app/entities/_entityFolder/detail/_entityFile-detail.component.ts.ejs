@@ -17,16 +17,20 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
+import SharedModule from 'app/shared/shared.module';
+import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
 
 @Component({
+    standalone: true,
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
-    templateUrl: './<%= entityFileName %>-detail.component.html'
+    templateUrl: './<%= entityFileName %>-detail.component.html',
+    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
 })
 export class <%= entityAngularName %>DetailComponent implements OnInit {
     <%= entityInstance %>: I<%= entityAngularName %> | null = null;

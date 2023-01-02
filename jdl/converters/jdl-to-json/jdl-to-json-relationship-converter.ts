@@ -18,15 +18,15 @@
  */
 
 import _ from 'lodash';
-import RelationshipTypes from '../../jhipster/relationship-types';
-import RelationshipOptions from '../../jhipster/relationship-options';
-import Validations from '../../jhipster/validations';
-import { camelCase, lowerFirst } from '../../utils/string-utils';
-import JDLRelationship from '../../models/jdl-relationship';
+import { relationshipTypes, relationshipOptions, validations } from '../../jhipster/index.mjs';
+import { camelCase, lowerFirst } from '../../utils/string-utils.js';
+import JDLRelationship from '../../models/jdl-relationship.js';
 
-const { REQUIRED } = Validations;
-const { JPA_DERIVED_IDENTIFIER } = RelationshipOptions;
-const { MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY, ONE_TO_ONE } = RelationshipTypes;
+const {
+  Validations: { REQUIRED },
+} = validations;
+const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
+const { MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY, ONE_TO_ONE } = relationshipTypes;
 
 const USER = 'user';
 const AUTHORITY = 'authority';

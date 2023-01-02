@@ -17,16 +17,15 @@
  * limitations under the License.
  */
 
-import ApplicationTypes from '../jhipster/application-types';
-import {
+import { applicationTypes, defaultApplicationOptions } from '../jhipster/index.mjs';
+import JDLApplication from './jdl-application.js';
+
+const {
   getDefaultConfigForNewApplication,
+  getConfigForMicroserviceApplication,
   getConfigForMonolithApplication,
   getConfigForGatewayApplication,
-  getConfigForMicroserviceApplication,
-} from '../jhipster/default-application-options';
-import JDLApplication from './jdl-application';
-
-export { createJDLApplication };
+} = defaultApplicationOptions;
 
 /**
  * Creates a JDL application from a passed configuration.
@@ -36,15 +35,15 @@ export { createJDLApplication };
 export default function createJDLApplication(config: any = {}) {
   const baseConfig = getDefaultConfigForNewApplication(config);
   switch (config.applicationType) {
-    case ApplicationTypes.MICROSERVICE:
+    case applicationTypes.MICROSERVICE:
       return new JDLApplication({
         config: getConfigForMicroserviceApplication(baseConfig),
       });
-    case ApplicationTypes.GATEWAY:
+    case applicationTypes.GATEWAY:
       return new JDLApplication({
         config: getConfigForGatewayApplication(baseConfig),
       });
-    case ApplicationTypes.MONOLITH:
+    case applicationTypes.MONOLITH:
     default:
       return new JDLApplication({
         config: getConfigForMonolithApplication(baseConfig),

@@ -18,8 +18,8 @@
  */
 
 import { expect } from 'chai';
-import JDLBinaryOption from '../../../jdl/models/jdl-binary-option';
-import BinaryOptionValidator from '../../../jdl/validators/binary-option-validator';
+import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
+import BinaryOptionValidator from '../../../jdl/validators/binary-option-validator.js';
 
 describe('BinaryOptionValidator', () => {
   let validator;

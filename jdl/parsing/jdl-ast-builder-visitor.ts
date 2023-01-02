@@ -16,16 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import JDLParser from './jdl-parser';
-import deduplicate from '../utils/array-utils';
+import JDLParser from './jdl-parser.js';
+import deduplicate from '../utils/array-utils.js';
 
-import ApplicationOptions from '../jhipster/application-options';
-import EntityOptions from '../jhipster/entity-options';
-import Validations from '../jhipster/validations';
+import { applicationOptions, entityOptions, validations } from '../jhipster/index.mjs';
 
-const { OptionNames } = ApplicationOptions;
-const { PaginationTypes } = EntityOptions;
-const { PATTERN, REQUIRED, UNIQUE } = Validations;
+const { OptionNames } = applicationOptions;
+const { PaginationTypes } = entityOptions;
+const {
+  Validations: { PATTERN, REQUIRED, UNIQUE },
+} = validations;
 
 const { PAGINATION } = PaginationTypes;
 const { PACKAGE_NAME } = OptionNames;

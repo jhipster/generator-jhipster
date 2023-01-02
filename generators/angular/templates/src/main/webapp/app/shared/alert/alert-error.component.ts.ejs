@@ -19,6 +19,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
@@ -28,8 +30,10 @@ import { Alert, AlertService } from 'app/core/util/alert.service';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 
 @Component({
+  standalone: true,
   selector: '<%= jhiPrefixDashed %>-alert-error',
   templateUrl: './alert-error.component.html',
+  imports: [CommonModule, NgbModule],
 })
 export class AlertErrorComponent implements OnDestroy {
   alerts: Alert[] = [];

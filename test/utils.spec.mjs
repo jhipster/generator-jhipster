@@ -1,9 +1,8 @@
 import { fileURLToPath } from 'url';
-
 import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
 
-import utils from '../generators/utils.cjs';
+import { getEnumInfo, getJavadoc, deepFind, stringHashCode } from '../generators/utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -12,23 +11,23 @@ describe('JHipster Utils', () => {
   describe('::getJavadoc', () => {
     describe('when passing a negative or nil increment', () => {
       it('returns the comment with no increment', () => {
-        assert.textEqual(utils.getJavadoc('whatever', -42), '/**\n * whatever\n */');
-        assert.textEqual(utils.getJavadoc('whatever', 0), '/**\n * whatever\n */');
+        assert.textEqual(getJavadoc('whatever', -42), '/**\n * whatever\n */');
+        assert.textEqual(getJavadoc('whatever', 0), '/**\n * whatever\n */');
       });
     });
     describe('when passing a positive increment', () => {
       it('returns the comment with the increment', () => {
-        assert.textEqual(utils.getJavadoc('whatever', 1), ' /**\n  * whatever\n  */');
+        assert.textEqual(getJavadoc('whatever', 1), ' /**\n  * whatever\n  */');
       });
     });
     describe('when passing a nil comment', () => {
       it('inserts an empty comment instead of failing', () => {
-        assert.textEqual(utils.getJavadoc(null, 1), ' /**\n  * \n  */');
+        assert.textEqual(getJavadoc(null, 1), ' /**\n  * \n  */');
       });
     });
     describe('when passing a comment containing double quotes', () => {
       it('escapes the quotes', () => {
-        assert.textEqual(utils.getJavadoc('Comment="KO"', 1), ' /**\n  * Comment=\\"KO\\"\n  */');
+        assert.textEqual(getJavadoc('Comment="KO"', 1), ' /**\n  * Comment=\\"KO\\"\n  */');
       });
     });
   });
@@ -39,7 +38,7 @@ describe('JHipster Utils', () => {
       before(() => {
         const clientRootFolder = 'root';
         const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB', fieldTypeJavadoc: 'enum comment' };
-        enumInfo = utils.getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it("returns the enum's name", () => {
@@ -61,7 +60,7 @@ describe('JHipster Utils', () => {
       before(() => {
         const clientRootFolder = 'root';
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-        enumInfo = utils.getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it('returns whether there are custom enums', () => {
@@ -82,7 +81,7 @@ describe('JHipster Utils', () => {
       before(() => {
         const clientRootFolder = 'root';
         const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB' };
-        enumInfo = utils.getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it('returns whether there are custom enums', () => {
@@ -108,7 +107,7 @@ describe('JHipster Utils', () => {
         before(() => {
           const clientRootFolder = 'root';
           const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb)' };
-          enumInfo = utils.getEnumInfo(field, clientRootFolder);
+          enumInfo = getEnumInfo(field, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -133,7 +132,7 @@ describe('JHipster Utils', () => {
         before(() => {
           const clientRootFolder = 'root';
           const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb and b)' };
-          enumInfo = utils.getEnumInfo(field, clientRootFolder);
+          enumInfo = getEnumInfo(field, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -165,7 +164,7 @@ describe('JHipster Utils', () => {
               BBB: 'second comment',
             },
           };
-          enumInfo = utils.getEnumInfo(field, clientRootFolder);
+          enumInfo = getEnumInfo(field, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -190,7 +189,7 @@ describe('JHipster Utils', () => {
 
       before(() => {
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-        enumInfo = utils.getEnumInfo(field);
+        enumInfo = getEnumInfo(field);
       });
 
       it('returns an empty string for the clientRootFolder property', () => {
@@ -203,7 +202,7 @@ describe('JHipster Utils', () => {
       before(() => {
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
         const clientRootFolder = 'root';
-        enumInfo = utils.getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it('returns the clientRootFolder property suffixed by a dash', () => {
@@ -219,59 +218,20 @@ describe('JHipster Utils', () => {
     };
     describe('the key is found in the object that is searched', () => {
       it('returns the value associated to the key', () => {
-        const value = utils.deepFind(jsonData, 'foo21');
+        const value = deepFind(jsonData, 'foo21');
         assert.textEqual(value, 'foo21value');
       });
     });
     describe('the key is not found in the object that is searched', () => {
       it('returns undefined', () => {
-        const value = utils.deepFind(jsonData, 'foo123');
+        const value = deepFind(jsonData, 'foo123');
         assert.textEqual(`${value}`, 'undefined');
       });
     });
   });
   describe('::stringHashCode', () => {
     it('calculates hash', () => {
-      assert.equal(utils.stringHashCode('some text'), 642107175);
-    });
-  });
-  describe('::renderContent', () => {
-    const fixturesPath = path.join(__dirname, 'fixtures', 'renderContent');
-    it('should render the included content', done => {
-      utils.renderContent(
-        path.join(fixturesPath, 'include.ejs'),
-        { templatePath: tmpl => tmpl },
-        {},
-        { root: [path.join(fixturesPath, 'common')] },
-        res => {
-          assert.equal(res, 'common');
-          done();
-        }
-      );
-    });
-    it('when 2 roots are provided, first should have precedence', done => {
-      utils.renderContent(
-        path.join(fixturesPath, 'include.ejs'),
-        { templatePath: tmpl => tmpl },
-        {},
-        { root: [path.join(fixturesPath, 'specific'), path.join(fixturesPath, 'common')] },
-        res => {
-          assert.equal(res, 'specific');
-          done();
-        }
-      );
-    });
-    it('when 2 roots are provided, should find the template in the second folder if does not exists in the first', done => {
-      utils.renderContent(
-        path.join(fixturesPath, 'include_common.ejs'),
-        { templatePath: tmpl => tmpl },
-        {},
-        { root: [path.join(fixturesPath, 'specific'), path.join(fixturesPath, 'common')] },
-        res => {
-          assert.equal(res, 'common');
-          done();
-        }
-      );
+      assert.equal(stringHashCode('some text'), 642107175);
     });
   });
 });

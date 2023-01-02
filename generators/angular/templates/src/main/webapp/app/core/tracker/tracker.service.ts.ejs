@@ -19,10 +19,11 @@
 import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, NavigationEnd, Event } from '@angular/router';
-import { Subscription, ReplaySubject, Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Subscription, Observer } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+
 import SockJS from 'sockjs-client';
-import Stomp, { Client, Subscription as StompSubscription, ConnectionHeaders, Message } from 'webstomp-client';
+import { RxStomp } from '@stomp/rx-stomp';
 
 <%_ if (authenticationTypeSession) { _%>
 import { CSRFService } from 'app/core/auth/csrf.service';
@@ -31,18 +32,20 @@ import { CSRFService } from 'app/core/auth/csrf.service';
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } _%>
 import { TrackerActivity } from './tracker-activity.model';
+import { AccountService } from '../auth/account.service';
+import { Account } from '../auth/account.model';
+
+const DESTINATION_TRACKER = '/topic/tracker';
+const DESTINATION_ACTIVITY = '/topic/activity';
 
 @Injectable({ providedIn: 'root' })
 export class TrackerService {
-  private stompClient: Client | null = null;
+  private rxStomp?: RxStomp;
   private routerSubscription: Subscription | null = null;
-  private connectionSubject: ReplaySubject<void> = new ReplaySubject(1);
-  private connectionSubscription: Subscription | null = null;
-  private stompSubscription: StompSubscription | null = null;
-  private listenerSubject: Subject<TrackerActivity> = new Subject();
 
   constructor(
     private router: Router,
+    private accountService: AccountService,
 <%_ if (authenticationTypeSession) { _%>
     private csrfService: CSRFService,
 <%_ } else if (authenticationTypeJwt) { _%>
@@ -51,29 +54,24 @@ export class TrackerService {
     private location: Location
   ) {}
 
-  connect(): void {
-    if (this.stompClient?.connected) {
-      return;
-    }
+  setup(): void {
+    this.rxStomp = new RxStomp();
+    this.rxStomp.configure({
+      // eslint-disable-next-line no-console
+      debug: (msg: string): void => console.log(new Date(), msg),
+    });
 
-    // building absolute path so that websocket doesn't fail when deploying with a context path
-    let url = '/websocket/tracker';
-    url = this.location.prepareExternalUrl(url);
-<%_ if (authenticationTypeJwt) { _%>
-    const authToken = this.authServerProvider.getToken();
-    if (authToken) {
-      url += '?access_token=' + authToken;
-    }
-<%_ } _%>
-    const socket: WebSocket = new SockJS(url);
-    this.stompClient = Stomp.over(socket, { protocols: ['v12.stomp'] });
-    const headers: ConnectionHeaders = {};
-<%_ if (authenticationTypeSession) { _%>
-    headers['X-XSRF-TOKEN'] = this.csrfService.getCSRF('XSRF-TOKEN');
-<%_ } _%>
-    this.stompClient.connect(headers, () => {
-      this.connectionSubject.next();
+    this.accountService.getAuthenticationState().subscribe({
+      next: (account: Account | null) => {
+        if (account) {
+          this.connect();
+        } else {
+          this.disconnect();
+        }
+      },
+    });
 
+    this.rxStomp.connected$.subscribe(() => {
       this.sendActivity();
 
       this.routerSubscription = this.router.events
@@ -82,61 +80,64 @@ export class TrackerService {
     });
   }
 
-  disconnect(): void {
-    this.unsubscribe();
+  get stomp(): RxStomp {
+    if (!this.rxStomp) {
+      throw new Error('Stomp connection not initialized');
+    }
+    return this.rxStomp;
+  }
 
-    this.connectionSubject = new ReplaySubject(1);
+  public subscribe(observer: Partial<Observer<TrackerActivity>>): Subscription {
+    return (
+      this.stomp
+        .watch(DESTINATION_TRACKER)
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        .pipe(map(imessage => JSON.parse(imessage.body)))
+        .subscribe(observer)
+    );
+  }
 
+  private connect(): void {
+    this.updateCredentials();
+    return this.stomp.activate();
+  }
+
+  private disconnect(): Promise<void> {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
       this.routerSubscription = null;
     }
-
-    if (this.stompClient) {
-      if (this.stompClient.connected) {
-        this.stompClient.disconnect();
-      }
-      this.stompClient = null;
-    }
+    return this.stomp.deactivate();
   }
 
-  receive(): Subject<TrackerActivity> {
-    return this.listenerSubject;
+  private buildUrl(): string {
+    // building absolute path so that websocket doesn't fail when deploying with a context path
+    let url = '/websocket/tracker';
+    url = this.location.prepareExternalUrl(url);
+<%_ if (authenticationTypeJwt) { _%>
+    const authToken = this.authServerProvider.getToken();
+    if (authToken) {
+      return `${url}?access_token=${authToken}`;
+    }
+<%_ } _%>
+    return url;
   }
 
-  subscribe(): void {
-    if (this.connectionSubscription) {
-      return;
-    }
-
-    this.connectionSubscription = this.connectionSubject.subscribe(() => {
-      if (this.stompClient) {
-        this.stompSubscription = this.stompClient.subscribe('/topic/tracker', (data: Message) => {
-          this.listenerSubject.next(JSON.parse(data.body));
-        });
+  private updateCredentials(): void {
+    this.stomp.configure({
+      webSocketFactory: () => SockJS(this.buildUrl()),
+<%_ if (authenticationTypeSession) { _%>
+      connectHeaders: {
+        ['X-XSRF-TOKEN']: this.csrfService.getCSRF('XSRF-TOKEN'),
       }
+<%_ } _%>
     });
   }
 
-  unsubscribe(): void {
-    if (this.stompSubscription) {
-      this.stompSubscription.unsubscribe();
-      this.stompSubscription = null;
-    }
-
-    if (this.connectionSubscription) {
-      this.connectionSubscription.unsubscribe();
-      this.connectionSubscription = null;
-    }
-  }
-
   private sendActivity(): void {
-    if (this.stompClient?.connected) {
-      this.stompClient.send(
-        '/topic/activity', // destination
-        JSON.stringify({ page: this.router.routerState.snapshot.url }), // body
-        {} // header
-      );
-    }
+    this.stomp.publish({
+      destination: DESTINATION_ACTIVITY,
+      body: JSON.stringify({ page: this.router.routerState.snapshot.url }),
+    });
   }
 }

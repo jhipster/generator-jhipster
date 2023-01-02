@@ -21,15 +21,13 @@ import _ from 'lodash';
 
 import BaseGenerator from '../base/index.mjs';
 
-import constants from '../generator-constants.cjs';
+import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.cjs';
 import { GENERATOR_SPRING_SERVICE } from '../generator-list.mjs';
 import { applicationOptions } from '../../jdl/jhipster/index.mjs';
 
 const { OptionNames } = applicationOptions;
 const { BASE_NAME, PACKAGE_NAME, PACKAGE_FOLDER, DATABASE_TYPE } = OptionNames;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-
 export default class SpringServiceGenerator extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, features);
@@ -131,13 +129,13 @@ export default class SpringServiceGenerator extends BaseGenerator {
         this.serviceClass = _.upperFirst(this.name) + (this.name.endsWith('Service') ? '' : 'Service');
         this.serviceInstance = _.lowerCase(this.serviceClass);
 
-        this.template(
+        this.writeFile(
           `${this.fetchFromInstalledJHipster('spring-service/templates')}/${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
           `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`
         );
 
         if (this.useInterface) {
-          this.template(
+          this.writeFile(
             `${this.fetchFromInstalledJHipster(
               'spring-service/templates'
             )}/${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
