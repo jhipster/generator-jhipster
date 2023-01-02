@@ -126,16 +126,10 @@ spec:
         - name: K8S_CONFIG_PATH
           value: '/central-config/'
   <%_ if (useKeycloak) { _%>
-    <%_ if (ingressDomain) { _%>        
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
           value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
-    <%_ } else { _%>
-        # For Keycloak to work without an ingressDomain or hosted DNS, add keycloak service IP to your hosts file
-        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
-          value: https://keycloak:9443/realms/jhipster
-    <%_ } _%>
         - name: JAVA_OPTS
-          value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts"
+          value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456"
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: jhipster-registry
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
@@ -145,7 +139,7 @@ spec:
         - name: config-volume
           mountPath: /central-config
     <%_ if (useKeycloak) { _%>
-        # if using self-signed certificates, for a successful start, add keycloak certificate to java truststore 
+        # if using Let's Encrypt staging certificates, for a successful start, add CAs to java truststore 
         - name: java-truststore
           mountPath: /etc/pki/java
     <%_ } _%>
@@ -156,7 +150,7 @@ spec:
   <%_ if (useKeycloak) { _%>
       - name: java-truststore
         secret:
-          secretName: keycloak-tls-secret
+          secretName: letsencrypt-ca-secret
           items:
           - key: truststore.jks
             path: cacerts

@@ -1,49 +1,22 @@
-<%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
-
- This file is part of the JHipster project, see https://www.jhipster.tech/
- for more information.
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-      https://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--%>
-apiVersion: <%= KUBERNETES_INGRESS_API_VERSION %>
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: keycloak
+  name: keycloak-ingress
   namespace: <%= kubernetesNamespace %>
+  annotations:
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.allow-http: "true"
+    kubernetes.io/ingress.global-static-ip-name: jhipster-ip
+    cert-manager.io/issuer: letsencrypt-staging
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/issue-temporary-certificate: "true"
 spec:
-  ingressClassName: <%= ingressType || "nginx" %>
-  rules:
-  <%_ if (ingressDomain) { _%>
-  - host: keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
-    http:
-  <%_ } else { _%>
-  - http:
-  <%_ } _%>
-      paths:
-      - path: /<%= ingressTypeNginx ? "" : "*" %>
-        pathType: Prefix
-        backend:
-          service:
-            name: keycloak
-            port:
-              number: 9080
   tls:
-  <%_ if (ingressDomain) { _%>
-  - hosts: 
-    - keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
-    secretName: keycloak-tls-secret
-  <%_ } else { _%>
-  - hosts:
-    secretName: keycloak-tls-secret
-  <%_ } _%>
+    - secretName: keycloak-ssl
+      hosts:
+        - keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+  defaultBackend:
+    service:
+      name: keycloak
+      port:
+        number: 9080

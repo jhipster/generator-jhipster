@@ -127,17 +127,10 @@ export function writeFiles() {
       });
       this.template('keycloak/keycloak-configmap.yml.ejs', `${keycloakOut}/keycloak-configmap.yml`);
       this.template('keycloak/keycloak.yml.ejs', `${keycloakOut}/keycloak.yml`);
+      this.template('keycloak/keycloak-ingress.yml.ejs', `${keycloakOut}/keycloak-ingress.yml`);
+      this.template('cert-manager/letsencrypt-staging-ca-secret.yml.ejs', 'cert-manager/letsencrypt-staging-ca-secret.yml');
+      this.template('cert-manager/letsencrypt-staging-issuer.yml.ejs', 'cert-manager/letsencrypt-staging-issuer.yml');
 
-      if (this.kubernetesServiceType === 'Ingress') {
-        this.template('keycloak/keycloak-ingress.yml.ejs', `${keycloakOut}/keycloak-ingress.yml`);
-      }
-      if (this.istio) {
-        this.template('istio/gateway/keycloak-gateway.yml.ejs', `${keycloakOut}/keycloak-gateway.yml`);
-      }
-
-      this.template('cert-manager/cluster-issuer.yml.ejs', 'cert-manager/cluster-issuer.yml');
-      this.template('cert-manager/ca-secret.yml.ejs', 'cert-manager/ca-secret.yml');
-      this.template('keycloak/keycloak-cert.yml.ejs', `${keycloakOut}/keycloak-cert.yml`);
     },
 
     writePrometheusGrafanaFiles() {
