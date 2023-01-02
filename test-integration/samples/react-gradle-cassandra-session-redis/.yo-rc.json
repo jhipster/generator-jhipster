@@ -5,7 +5,7 @@
     "baseName": "sampleReactCassandraSessionRedis",
     "blueprints": [],
     "buildTool": "gradle",
-    "cacheProvider": "redis",
+    "cacheProvider": "no",
     "clientFramework": "react",
     "clientPackageManager": "npm",
     "clientTheme": "none",
