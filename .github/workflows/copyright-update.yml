@@ -18,7 +18,6 @@
 
 name: Copyright Update
 on:
-  pull_request:
   schedule:
     - cron: '0 0 31 12 *' # Repeats December 31st every year
 
@@ -42,12 +41,9 @@ jobs:
           fetch-depth: 0
       # Update the copyright headers
       - name: Find and Replace
-        #              run: |
-        #                  CURRENT_YEAR=$(date +'%Y')
-        #                  NEW_YEAR=$(($CURRENT_YEAR + 1))
         run: |
-          NEW_YEAR=$(date +'%Y')
-          CURRENT_YEAR=$(($NEW_YEAR - 1))
+          CURRENT_YEAR=$(date +'%Y')
+          NEW_YEAR=$(($CURRENT_YEAR + 1))
           grep -rlZE "Copyright ([0-9]+)-$CURRENT_YEAR" . | xargs -0 sed -i -E "s/Copyright ([0-9]+)-$CURRENT_YEAR/Copyright \1-$NEW_YEAR/g"
       # Create PR
       - name: Create Pull Request
