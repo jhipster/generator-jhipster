@@ -1,5 +1,5 @@
 
-    Copyright 2013-2022 the original author or authors from the JHipster project
+    Copyright 2013-2023 the original author or authors from the JHipster project
 
                                  Apache License
                            Version 2.0, January 2004
