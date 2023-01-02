@@ -1,0 +1,57 @@
+#
+# Copyright the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Copyright Update
+on:
+  schedule:
+    - cron: '0 0 31 12 *' # Repeats December 31st every year
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    permissions:
+      contents: write # for peter-evans/create-pull-request to create branch
+      pull-requests: write # for peter-evans/create-pull-request to create a PR
+    name: copyright update
+    if: github.repository == 'jhipster/generator-jhipster'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      # Checkout
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+      # Update the copyright headers
+      - name: Find and Replace
+        run: |
+          CURRENT_YEAR=$(date +'%Y')
+          NEW_YEAR=$(($CURRENT_YEAR + 1))
+          grep -rlZE "Copyright ([0-9]+)-$CURRENT_YEAR" . | xargs -0 sed -i -E "s/Copyright ([0-9]+)-$CURRENT_YEAR/Copyright \1-$NEW_YEAR/g"
+      # Create PR
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Update copyright headers'
+          title: 'Update Copyright Headers'
+          body: 'This is an automated pull request to update the copyright headers'
+          branch: 'copyright-date-update'
+          author: 'jhipster-bot <jhipster-bot@users.noreply.github.com>'
