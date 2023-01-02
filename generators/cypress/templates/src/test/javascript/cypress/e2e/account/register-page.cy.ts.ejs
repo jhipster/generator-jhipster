@@ -29,10 +29,6 @@ import {
 <% const registerPage = clientFrameworkVue ? '/register' : '/account/register'; _%>
 describe('<%= registerPage %>', () => {
   beforeEach(() => {
-    cy.clearAllCookies();
-    cy.clearAllLocalStorage();
-    cy.clearAllSessionStorage();
-
     cy.visit('<%= registerPage %>');
   });
 

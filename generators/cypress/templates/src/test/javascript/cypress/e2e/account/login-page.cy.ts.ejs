@@ -29,10 +29,6 @@ describe('login modal', () => {
   const password = Cypress.env('E2E_PASSWORD') ?? '<%= skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) ? 'admin' : 'user' %>';
 
   beforeEach(() => {
-    cy.clearAllCookies();
-    cy.clearAllLocalStorage();
-    cy.clearAllSessionStorage();
-
     cy.visit('');
     cy.clickOnLoginItem();
   });
