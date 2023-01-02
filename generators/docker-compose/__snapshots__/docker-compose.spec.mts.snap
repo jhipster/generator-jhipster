@@ -117,7 +117,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   mscouchbase:
     image: mscouchbase
     environment:
@@ -160,7 +160,7 @@ eureka:
     environment:
       - TYPE=MASTER
       - BUCKET=mscouchbase
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -307,7 +307,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   mscassandra:
     image: mscassandra
     environment:
@@ -316,7 +316,7 @@ eureka:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
-      - SPRING_DATA_CASSANDRA_CONTACTPOINTS=mscassandra-cassandra
+      - SPRING_CASSANDRA_CONTACTPOINTS=mscassandra-cassandra
       - JHIPSTER_SLEEP=10
       - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
@@ -355,7 +355,7 @@ eureka:
       interval: 5s
       timeout: 25s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -515,7 +515,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -558,7 +558,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   mspsql:
     image: mspsql
     environment:
@@ -615,7 +615,7 @@ eureka:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmongodb:
     image: msmongodb
     environment:
@@ -655,7 +655,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmariadb:
     image: msmariadb
     environment:
@@ -698,7 +698,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -864,7 +864,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -912,7 +912,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   mspsql:
     image: mspsql
     environment:
@@ -974,7 +974,7 @@ eureka:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   mscouchbase:
     image: mscouchbase
     environment:
@@ -1021,7 +1021,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmariadb:
     image: msmariadb
     environment:
@@ -1069,7 +1069,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -1258,7 +1258,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -1301,7 +1301,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   mspsql:
     image: mspsql
     environment:
@@ -1358,7 +1358,7 @@ eureka:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmongodb:
     image: msmongodb
     environment:
@@ -1396,7 +1396,7 @@ eureka:
   msmongodb-mongodb:
     image: mongodb-placeholder
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -1556,7 +1556,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -1599,7 +1599,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   mspsql:
     image: mspsql
     environment:
@@ -1656,7 +1656,7 @@ eureka:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   mscouchbase:
     image: mscouchbase
     environment:
@@ -1698,7 +1698,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmariadb:
     image: msmariadb
     environment:
@@ -1741,7 +1741,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -1888,7 +1888,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -1931,7 +1931,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -2078,7 +2078,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -2121,7 +2121,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -2293,7 +2293,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -2336,7 +2336,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -2573,7 +2573,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -2616,7 +2616,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -2750,7 +2750,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
 ",
     "stateCleared": "modified",
   },
@@ -2866,7 +2866,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -3009,7 +3009,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -3150,7 +3150,7 @@ eureka:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   jhipster-registry:
     image: jhipster-registry-placeholder
     volumes:
@@ -3245,7 +3245,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       interval: 5s
       timeout: 5s
       retries: 40
-  
+
 ",
     "stateCleared": "modified",
   },

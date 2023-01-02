@@ -5,7 +5,7 @@ services:
         environment:
             - SPRING_PROFILES_ACTIVE=prod
             - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
-            - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
+            - SPRING_CASSANDRA_CONTACTPOINTS=cassandra
             - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
     cassandra:
         build:
