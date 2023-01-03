@@ -150,7 +150,9 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       defaults() {
         const { nativeLanguage, languages, enableTranslation } = this.jhipsterConfigWithDefaults;
         if (!enableTranslation) {
-          this.cancelCancellableTasks();
+          if (!this.jhipsterConfig.nativeLanguage) {
+            this.jhipsterConfig.nativeLanguage = nativeLanguage;
+          }
           return;
         }
         if (!this.jhipsterConfig.nativeLanguage) {
