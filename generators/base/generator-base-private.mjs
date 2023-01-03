@@ -893,6 +893,13 @@ export default class PrivateBase extends Generator {
         ...(databaseDataForType.getData(options) || {}),
       };
     }
+    if (options.protocolSuffix) {
+      databaseDataForType = {
+        ...databaseDataForType,
+        ...databaseDataForType[protocol],
+        protocolSuffix: options.protocolSuffix,
+      };
+    }
     const { port = '', protocolSuffix = '', extraOptions = '', localDirectory = options.localDirectory } = databaseDataForType;
     let url = `${protocol}:${protocolSuffix}`;
     if (hostname || localDirectory) {
