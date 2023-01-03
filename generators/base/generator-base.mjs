@@ -2577,7 +2577,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       skipCheckLengthOfIdentifier: false,
       enableGradleEnterprise: false,
       pages: [],
-      gatewayServerPort: 8080,
     });
     return configWithDefaults;
   }

@@ -166,7 +166,7 @@ export function getConfigForTranslation(options: any = {}): any {
   if (options[ENABLE_TRANSLATION] === undefined) {
     options[ENABLE_TRANSLATION] = true;
   }
-  if (options[ENABLE_TRANSLATION] && options[NATIVE_LANGUAGE] === undefined) {
+  if (options[NATIVE_LANGUAGE] === undefined) {
     options[NATIVE_LANGUAGE] = 'en';
   }
   if (options[ENABLE_TRANSLATION] && options[LANGUAGES] === undefined) {
