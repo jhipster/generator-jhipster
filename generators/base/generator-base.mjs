@@ -53,7 +53,7 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 
-import { databaseData, getDatabaseData, getJdbcUrl, getR2dbcUrl } from '../sql/support/index.mjs';
+import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
@@ -2506,73 +2506,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
 
     if (dest.databaseTypeSql) {
-      const devDatabaseData = getDatabaseData(dest.devDatabaseType);
-      const prodDatabaseData = getDatabaseData(dest.prodDatabaseType);
-
-      dest.devHibernateDialect = devDatabaseData.hibernateDialect;
-      dest.prodHibernateDialect = prodDatabaseData.hibernateDialect;
-
-      dest.devJdbcDriver = devDatabaseData.jdbcDriver;
-      dest.prodJdbcDriver = prodDatabaseData.jdbcDriver;
-
-      dest.devDatabaseUsername = devDatabaseData.defaultUsername ?? dest.baseName;
-      dest.devDatabasePassword = devDatabaseData.defaultPassword ?? '';
-      dest.prodDatabaseUsername = prodDatabaseData.defaultUsername ?? dest.baseName;
-      dest.prodDatabasePassword = prodDatabaseData.defaultPassword ?? '';
-
-      const prodDatabaseOptions = {
-        databaseName: prodDatabaseData.defaultDatabaseName ?? dest.baseName,
-        hostname: 'localhost',
-      };
-
-      dest.prodJdbcUrl = getJdbcUrl(dest.prodDatabaseType, prodDatabaseOptions);
-      dest.prodLiquibaseUrl = getJdbcUrl(dest.prodDatabaseType, {
-        ...prodDatabaseOptions,
-        skipExtraOptions: true,
-      });
-      if (dest.reactive) {
-        dest.prodR2dbcUrl = getR2dbcUrl(dest.prodDatabaseType, prodDatabaseOptions);
-      }
-
-      if (dest.devDatabaseTypeH2Any) {
-        const devDatabaseOptions = {
-          databaseName: devDatabaseData.defaultDatabaseName ?? dest.lowercaseBaseName,
-        };
-        dest.devJdbcUrl = getJdbcUrl(dest.devDatabaseType, {
-          ...devDatabaseOptions,
-          buildDirectory: `./${dest.temporaryDir}`,
-          prodDatabaseType: dest.prodDatabaseType,
-        });
-
-        let devLiquibaseOptions;
-        if (dest.devDatabaseTypeH2Memory) {
-          devLiquibaseOptions = {
-            protocolSuffix: 'h2:tcp://',
-            localDirectory: 'localhost:18080/mem:',
-          };
-        } else {
-          // eslint-disable-next-line no-template-curly-in-string
-          devLiquibaseOptions = { buildDirectory: dest.buildToolGradle ? `./${dest.temporaryDir}` : '${project.build.directory}/' };
-        }
-
-        dest.devLiquibaseUrl = getJdbcUrl(dest.devDatabaseType, {
-          ...devDatabaseOptions,
-          skipExtraOptions: true,
-          ...devLiquibaseOptions,
-        });
-
-        if (dest.reactive) {
-          dest.devR2dbcUrl = getR2dbcUrl(dest.devDatabaseType, {
-            ...devDatabaseOptions,
-            buildDirectory: `./${dest.temporaryDir}`,
-            prodDatabaseType: dest.prodDatabaseType,
-          });
-        }
-      } else {
-        dest.devJdbcUrl = dest.prodJdbcUrl;
-        dest.devLiquibaseUrl = dest.prodLiquibaseUrl;
-        dest.devR2dbcUrl = dest.prodR2dbcUrl;
-      }
+      prepareSqlApplicationProperties(dest);
     }
 
     this.loadServerAndPlatformConfig(dest);
