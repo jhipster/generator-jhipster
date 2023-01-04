@@ -25,6 +25,18 @@ const {
   FLOAT: TYPE_FLOAT,
   DOUBLE: TYPE_DOUBLE,
 } = fieldTypes.CommonDBTypes;
+
+/**
+ * return the input if it's a type, otherwise returns the type attribute of the input
+ * @param primaryKey
+ * @returns {*}
+ */
+const getEntryIfTypeOrTypeAttribute = primaryKey => {
+  if (typeof primaryKey === 'object') {
+    return primaryKey.type;
+  }
+  return primaryKey;
+};
 /**
  * @private
  * Find key type for Typescript
@@ -33,10 +45,7 @@ const {
  * @returns {string} primary key type in Typescript
  */
 const getTypescriptKeyType = primaryKey => {
-  if (typeof primaryKey === 'object') {
-    primaryKey = primaryKey.type;
-  }
-  if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(primaryKey)) {
+  if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(getEntryIfTypeOrTypeAttribute(primaryKey))) {
     return 'number';
   }
   return 'string';

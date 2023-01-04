@@ -19,15 +19,18 @@
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { fieldTypes } from '../../jdl/jhipster/index.mjs';
+import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
 import { writeEntityFiles, postWriteEntityFiles } from './entity-files-vue.mjs';
 import { writeFiles, writeEntitiesFiles, cleanup } from './files-vue.mjs';
 import { addEntityMenuEntry as addVueEntityMenuEntry } from './support/index.mjs';
-import { getTypescriptKeyType as getTSKeyType } from '../client/support/index.mjs';
+import {
+  generateEntityClientFields as getHydratedEntityClientFields,
+  getTypescriptKeyType as getTSKeyType,
+} from '../client/support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
-const TYPE_LONG = CommonDBTypes.LONG;
+const { VUE } = clientFrameworkTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
 /**
@@ -184,5 +187,9 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   getTypescriptKeyType(primaryKey) {
     return getTSKeyType(primaryKey);
+  }
+
+  generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
+    return getHydratedEntityClientFields(primaryKey, fields, relationships, dto, customDateType, embedded, VUE);
   }
 }

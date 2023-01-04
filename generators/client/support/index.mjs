@@ -18,3 +18,4 @@
  */
 export { addMenuEntry, addExternalResourcesToIndexHtml } from './needles.mjs';
 export { default as getTypescriptKeyType } from './types-utils.mjs';
+export { default as generateEntityClientFields } from './entity-definition.mjs';
