@@ -216,7 +216,7 @@ liquibase {
     activities {
         main {
             driver "<%= devJdbcDriver %>"
-            url "<% if (devDatabaseTypeH2Disk) { %><%- this.getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Memory) { %><%- this.getJDBCUrl(devDatabaseType, { protocolSuffix: 'h2:tcp://', localDirectory: 'localhost:18080/mem:', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else { %><%- prodLiquibaseUrl %><% } %>"
+            url "<%- devLiquibaseUrl %>"
             username "<%- devDatabaseUsername %>"
             password "<%- devDatabasePassword %>"
             changeLogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
@@ -226,7 +226,7 @@ liquibase {
         }
         diffLog {
             driver "<%= devJdbcDriver %>"
-            url "<% if (devDatabaseTypeH2Disk) { %><%- this.getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Memory) { %><%- this.getJDBCUrl(devDatabaseType, { protocolSuffix: 'h2:tcp://', localDirectory: 'localhost:18080/mem:', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else { %><%- prodLiquibaseUrl %><% } %>"
+            url "<%- devLiquibaseUrl %>"
             username "<%- devDatabaseUsername %>"
             password "<%- devDatabasePassword %>"
             changeLogFile project.ext.diffChangelogFile

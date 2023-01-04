@@ -66,6 +66,7 @@ import {
   CLIENT_TEST_SRC_DIR,
   NODE_VERSION,
   LANGUAGES,
+  CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
 import { getJdbcUrl, getR2dbcUrl } from '../sql/support/database-url.mjs';
 
@@ -2447,7 +2448,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
     dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
-    dest.buildDir = this.getBuildDirectoryForBuildTool(dest.buildTool);
+
+    dest.temporaryDir = dest.buildToolGradle ? 'build/' : 'target/';
+    const buildDestinationDir = `${dest.temporaryDir}${dest.buildToolGradle ? 'resources/main/' : 'classes/'}`;
+    dest.clientDistDir = `${buildDestinationDir}${CLIENT_DIST_DIR}`;
 
     dest.cacheProviderNo = dest.cacheProvider === NO_CACHE;
     dest.cacheProviderCaffeine = dest.cacheProvider === CAFFEINE;
@@ -2517,20 +2521,60 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.prodDatabaseUsername = prodDatabaseData.defaultUsername ?? dest.baseName;
       dest.prodDatabasePassword = prodDatabaseData.defaultPassword ?? '';
 
-      dest.prodJdbcUrl = getJdbcUrl(dest.prodDatabaseType, {
-        databaseName: devDatabaseData.defaultDatabaseName ?? dest.baseName,
+      const prodDatabaseOptions = {
+        databaseName: prodDatabaseData.defaultDatabaseName ?? dest.baseName,
         hostname: 'localhost',
-      });
+      };
+
+      dest.prodJdbcUrl = getJdbcUrl(dest.prodDatabaseType, prodDatabaseOptions);
       dest.prodLiquibaseUrl = getJdbcUrl(dest.prodDatabaseType, {
-        databaseName: devDatabaseData.defaultDatabaseName ?? dest.baseName,
-        hostname: 'localhost',
+        ...prodDatabaseOptions,
         skipExtraOptions: true,
       });
       if (dest.reactive) {
-        dest.prodR2dbcUrl = getR2dbcUrl(dest.prodDatabaseType, {
-          databaseName: devDatabaseData.defaultDatabaseName ?? dest.baseName,
-          hostname: 'localhost',
+        dest.prodR2dbcUrl = getR2dbcUrl(dest.prodDatabaseType, prodDatabaseOptions);
+      }
+
+      if (dest.devDatabaseTypeH2Any) {
+        const devDatabaseOptions = {
+          databaseName: devDatabaseData.defaultDatabaseName ?? dest.lowercaseBaseName,
+        };
+        dest.devJdbcUrl = getJdbcUrl(dest.devDatabaseType, {
+          ...devDatabaseOptions,
+          buildDirectory: `./${dest.temporaryDir}`,
+          prodDatabaseType: dest.prodDatabaseType,
         });
+
+        let devLiquibaseOptions;
+        if (dest.devDatabaseTypeH2Memory) {
+          devLiquibaseOptions = {
+            protocolSuffix: 'h2:tcp://',
+            localDirectory: 'localhost:18080/mem:',
+          };
+        } else if (dest.buildToolGradle) {
+          devLiquibaseOptions = { localDirectory: './build/h2db/db' };
+        } else {
+          // eslint-disable-next-line no-template-curly-in-string
+          devLiquibaseOptions = { buildDirectory: '${project.build.directory}/' };
+        }
+
+        dest.devLiquibaseUrl = getJdbcUrl(dest.devDatabaseType, {
+          ...devDatabaseOptions,
+          skipExtraOptions: true,
+          ...devLiquibaseOptions,
+        });
+
+        if (dest.reactive) {
+          dest.devR2dbcUrl = getR2dbcUrl(dest.devDatabaseType, {
+            ...devDatabaseOptions,
+            buildDirectory: `./${dest.temporaryDir}`,
+            prodDatabaseType: dest.prodDatabaseType,
+          });
+        }
+      } else {
+        dest.devJdbcUrl = dest.prodJdbcUrl;
+        dest.devLiquibaseUrl = dest.prodLiquibaseUrl;
+        dest.devR2dbcUrl = dest.prodR2dbcUrl;
       }
     }
 

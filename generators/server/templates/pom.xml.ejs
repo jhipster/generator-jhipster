@@ -1794,7 +1794,7 @@
                                 <changeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml</changeLogFile>
                                 <diffChangeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                                 <driver><%= devJdbcDriver %></driver>
-                                <url><% if (devDatabaseTypeH2Disk) { %><%- this.getJDBCUrl(devDatabaseType, { buildDirectory: '${project.build.directory}/', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Memory) { %><%- this.getJDBCUrl(devDatabaseType, { protocolSuffix: 'h2:tcp://', localDirectory: 'localhost:18080/mem:', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else { %><%- prodLiquibaseUrl %><% } %></url>
+                                <url><%- devLiquibaseUrl %></url>
                                 <defaultSchemaName><% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %></defaultSchemaName>
                                 <username><%- devDatabaseUsername %></username>
                                 <password><%- devDatabasePassword %></password>

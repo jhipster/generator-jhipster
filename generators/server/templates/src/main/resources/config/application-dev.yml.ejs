@@ -131,11 +131,7 @@ spring:
 <%_ if (databaseTypeSql && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-  <%_ if (devDatabaseTypeH2Any) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
-  <%_ } else { _%>
-    url: <%- prodJdbcUrl %>
-  <%_ } _%>
+    url: <%- devJdbcUrl %>
     username: <%- devDatabaseUsername %>
     password: <%- devDatabasePassword %>
     hikari:
@@ -185,11 +181,7 @@ spring:
   <%_ } _%>
     contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
   <%_ if (reactive) { _%>
-    <%_ if (devDatabaseTypeH2Any) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
-    <%_ } else { _%>
-    url: <%- prodJdbcUrl %>
-    <%_ } _%>
+    url: <%- devJdbcUrl %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
@@ -203,11 +195,7 @@ spring:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
-  <%_ if (devDatabaseTypeH2Any) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
-  <%_ } else { _%>
-    url: prodR2dbcUrl %>
-  <%_ } _%>
+    url: devR2dbcUrl %>
     username: <%- devDatabaseUsername %>
     password: <%- devDatabasePassword %>
 <%_ } _%>
