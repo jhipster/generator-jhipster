@@ -22,6 +22,7 @@ export type DatabaseData = {
   name: string;
   protocolSuffix: string;
   jdbcDriver: string;
+  hibernateDialect: string;
   port?: string;
   localDirectory?: string;
   extraOptions?: string;
@@ -90,6 +91,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     name: 'SQL Server',
     protocolSuffix: 'sqlserver://',
     jdbcDriver: '',
+    hibernateDialect: 'org.hibernate.dialect.SQLServer2012Dialect',
     port: ':1433;database=',
     defaultUsername: 'SA',
     defaultPassword: 'yourStrong(!)Password',
@@ -106,6 +108,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     name: 'MariaDB',
     protocolSuffix: 'mariadb://',
     jdbcDriver: 'org.mariadb.jdbc.Driver',
+    hibernateDialect: 'org.hibernate.dialect.MariaDB103Dialect',
     port: ':3306/',
     extraOptions: '?useLegacyDatetimeCode=false&serverTimezone=UTC',
     defaultUsername: 'root',
@@ -115,10 +118,11 @@ const databaseData: Record<string, DatabaseDataSpec> = {
   },
   [MYSQL]: {
     name: 'MySQL',
+    protocolSuffix: 'mysql://',
     jdbcDriver: 'com.mysql.cj.jdbc.Driver',
+    hibernateDialect: 'org.hibernate.dialect.MySQL8Dialect',
     tableNameMaxLength: 64,
     constraintNameMaxLength: 64,
-    protocolSuffix: 'mysql://',
     port: ':3306/',
     extraOptions:
       '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true',
@@ -132,6 +136,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     name: 'Oracle',
     protocolSuffix: 'oracle:thin:@',
     jdbcDriver: 'oracle.jdbc.OracleDriver',
+    hibernateDialect: 'org.hibernate.dialect.Oracle12cDialect',
     port: ':1521:',
     defaultUsername: 'system',
     defaultPassword: 'oracle',
@@ -143,6 +148,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     name: 'PostgreSQL',
     protocolSuffix: 'postgresql://',
     jdbcDriver: 'org.postgresql.Driver',
+    hibernateDialect: 'org.hibernate.dialect.PostgreSQLDialect',
     port: ':5432/',
 
     constraintNameMaxLength: 63,
@@ -152,6 +158,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     name: 'H2Disk',
     protocolSuffix: 'h2:file:',
     jdbcDriver: 'org.h2.Driver',
+    hibernateDialect: 'org.hibernate.dialect.H2Dialect',
 
     getData: options => h2GetProdDatabaseData(H2_DISK, { extraOptions: ';DB_CLOSE_DELAY=-1' }, options),
     r2dbc: {
@@ -162,6 +169,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     name: 'H2Memory',
     protocolSuffix: 'h2:mem:',
     jdbcDriver: 'org.h2.Driver',
+    hibernateDialect: 'org.hibernate.dialect.H2Dialect',
 
     getData: options => h2GetProdDatabaseData(H2_MEMORY, { extraOptions: ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE' }, options),
     r2dbc: {
@@ -177,8 +185,4 @@ export function getDatabaseData(databaseType: string) {
     throw new Error(`Database data not found for database ${databaseType}`);
   }
   return databaseData[databaseType];
-}
-
-export function getJdbcDriver(databaseType: string): string {
-  return getDatabaseData(databaseType).jdbcDriver;
 }

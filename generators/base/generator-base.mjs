@@ -53,7 +53,7 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 
-import databaseData, { getDatabaseData, getJdbcDriver } from '../sql/support/database-data.mjs';
+import databaseData, { getDatabaseData } from '../sql/support/database-data.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
@@ -67,7 +67,6 @@ import {
   NODE_VERSION,
   LANGUAGES,
 } from '../generator-constants.mjs';
-import { getApplicationDialect } from '../sql/support/hibernate.mjs';
 import { getJdbcUrl, getR2dbcUrl } from '../sql/support/database-url.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -2504,16 +2503,19 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
 
     if (dest.databaseTypeSql) {
-      dest.devHibernateDialect = getApplicationDialect(dest.devDatabaseType);
-      dest.prodHibernateDialect = getApplicationDialect(dest.prodDatabaseType);
+      const devDatabaseData = getDatabaseData(dest.devDatabaseType);
+      const prodDatabaseData = getDatabaseData(dest.prodDatabaseType);
 
-      dest.devJdbcDriver = getJdbcDriver(dest.devDatabaseType);
-      dest.prodJdbcDriver = getJdbcDriver(dest.prodDatabaseType);
+      dest.devHibernateDialect = devDatabaseData.hibernateDialect;
+      dest.prodHibernateDialect = prodDatabaseData.hibernateDialect;
 
-      dest.devDatabaseUsername = getDatabaseData(dest.devDatabaseType).defaultUsername ?? dest.baseName;
-      dest.devDatabasePassword = getDatabaseData(dest.devDatabaseType).defaultPassword ?? '';
-      dest.prodDatabaseUsername = getDatabaseData(dest.prodDatabaseType).defaultUsername ?? dest.baseName;
-      dest.prodDatabasePassword = getDatabaseData(dest.prodDatabaseType).defaultPassword ?? '';
+      dest.devJdbcDriver = devDatabaseData.jdbcDriver;
+      dest.prodJdbcDriver = prodDatabaseData.jdbcDriver;
+
+      dest.devDatabaseUsername = devDatabaseData.defaultUsername ?? dest.baseName;
+      dest.devDatabasePassword = devDatabaseData.defaultPassword ?? '';
+      dest.prodDatabaseUsername = prodDatabaseData.defaultUsername ?? dest.baseName;
+      dest.prodDatabasePassword = prodDatabaseData.defaultPassword ?? '';
     }
 
     this.loadServerAndPlatformConfig(dest);
