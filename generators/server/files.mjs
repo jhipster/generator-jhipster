@@ -821,16 +821,6 @@ export const baseServerFiles = {
         },
       ],
     },
-    {
-      condition: generator => generator.searchEngineElasticsearch,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/ElasticsearchConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/ElasticsearchConfiguration.java`,
-        },
-      ],
-    },
   ],
   serverJavaDomain: [
     {
@@ -850,16 +840,6 @@ export const baseServerFiles = {
     },
   ],
   serverJavaPackageInfo: [
-    {
-      condition: generator => generator.searchEngineElasticsearch,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/search/package-info.java',
-          renameTo: generator => `${generator.javaDir}repository/search/package-info.java`,
-        },
-      ],
-    },
     {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -1306,16 +1286,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2 && generator.searchEngineElasticsearch,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/search/UserSearchRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/search/UserSearchRepository.java`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_RES_DIR,
       templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
@@ -1366,16 +1336,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.generateBuiltInUserEntity && generator.searchEngineElasticsearch,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/search/UserSearchRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/search/UserSearchRepository.java`,
-        },
-      ],
-    },
-    {
       condition: generator =>
         generator.databaseTypeSql ||
         generator.messageBrokerKafka ||
@@ -1405,30 +1365,6 @@ export const baseServerFiles = {
         {
           file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
           renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.searchEngineElasticsearch,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/EmbeddedElasticsearch.java',
-          renameTo: generator => `${generator.testDir}config/EmbeddedElasticsearch.java`,
-        },
-        {
-          file: 'package/config/ElasticsearchTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/ElasticsearchTestContainer.java`,
-        },
-      ],
-    },
-    {
-      condition: ({ searchEngineElasticsearch }) => searchEngineElasticsearch,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/ElasticsearchTestConfiguration.java',
-          renameTo: generator => `${generator.testDir}config/ElasticsearchTestConfiguration.java`,
         },
       ],
     },

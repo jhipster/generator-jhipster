@@ -272,6 +272,18 @@ Object {
   "generators/docker/templates/template-file-docker.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/elasticsearch/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/elasticsearch/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/elasticsearch/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/elasticsearch/templates/template-file-elasticsearch.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/entities/generator.mjs": Object {
     "stateCleared": "modified",
   },

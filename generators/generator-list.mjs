@@ -38,6 +38,7 @@ export const GENERATOR_COUCHBASE = 'couchbase';
 export const GENERATOR_CYPRESS = 'cypress';
 export const GENERATOR_DOCKER = 'docker';
 export const GENERATOR_DOCKER_COMPOSE = 'docker-compose';
+export const GENERATOR_ELASTICSEARCH = 'elasticsearch';
 export const GENERATOR_ENTITIES = 'entities';
 export const GENERATOR_ENTITY = 'entity';
 export const GENERATOR_EXPORT_JDL = 'export-jdl';

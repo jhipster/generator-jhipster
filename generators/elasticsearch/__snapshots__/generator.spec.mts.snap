@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster elasticsearch generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mongodb-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mongodb-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -497,7 +497,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-cassandra-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-cassandra-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -949,7 +949,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -1365,7 +1365,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-neo4j-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-neo4j-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -1739,7 +1739,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-cassandra-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-cassandra-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -2185,7 +2185,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-mongodb-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-mongodb-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -2622,7 +2622,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-cassandra-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-cassandra-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -3146,7 +3146,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -3550,7 +3550,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -4017,7 +4017,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -4496,7 +4496,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -5017,7 +5017,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-neo4j-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch - monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-neo4j-elasticsearch should match generated files snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",
@@ -5403,7 +5403,7 @@ Object {
 }
 `;
 
-exports[`JHipster elasticsearch generator samples matrix should match snapshot 1`] = `
+exports[`generator - elasticsearch - samples matrix should match snapshot 1`] = `
 Object {
   "gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mongodb-elasticsearch": Object {
     "applicationWithEntities": Object {
