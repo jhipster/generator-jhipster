@@ -16,21 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Removes server files that where generated in previous JHipster versions and therefore
- * need to be removed.
- *
- * @param {any} generator - reference to generator
- * @param {string} javaDir - Java directory
- * @param {string} testDir - Java tests directory
- * @param {string} mainResourceDir - Main resources directory
- * @param {string} testResourceDir - Test resources directory
- */
-export default function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
-  if (generator.isJhipsterVersionLessThan('3.10.0')) {
-    generator.removeFile(`${javaDir}config/CloudMongoDbConfiguration.java`);
+export default function cleanupMongodbFilesTask({ application }) {
+  if (this.isJhipsterVersionLessThan('3.10.0')) {
+    this.removeFile(`${application.javaPackageSrcDir}config/CloudMongoDbConfiguration.java`);
   }
-  if (generator.isJhipsterVersionLessThan('7.7.1')) {
-    generator.removeFile(`${testDir}MongoDbTestContainerExtension.java`);
+  if (this.isJhipsterVersionLessThan('7.7.1')) {
+    this.removeFile(`${application.javaPackageTestDir}MongoDbTestContainerExtension.java`);
   }
 }

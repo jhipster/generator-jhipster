@@ -485,6 +485,18 @@ Object {
   "generators/maven/templates/template-file-maven.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/mongodb/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/mongodb/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/mongodb/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/mongodb/templates/template-file-mongodb.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/openapi-client/generator.mjs": Object {
     "stateCleared": "modified",
   },

@@ -119,12 +119,6 @@ Object {
   "src/main/java/com/package/config/WebConfigurer.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/dbmigrations/InitialSetupMigration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/dbmigrations/package-info.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -371,13 +365,7 @@ Object {
   "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedMongo.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/MongoDbTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": Object {
@@ -2295,12 +2283,6 @@ Object {
   "src/main/java/com/package/config/WebConfigurer.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/dbmigrations/InitialSetupMigration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/dbmigrations/package-info.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -2508,13 +2490,7 @@ Object {
   "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedMongo.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/MongoDbTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": Object {
@@ -3265,9 +3241,6 @@ Object {
   "src/main/java/com/package/config/WebConfigurer.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/dbmigrations/package-info.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -3436,13 +3409,7 @@ Object {
   "src/test/java/com/package/config/EmbeddedElasticsearch.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedMongo.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/package/config/MongoDbTestContainer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/config/SpringBootTestClassOrderer.java": Object {
