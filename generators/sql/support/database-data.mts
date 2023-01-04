@@ -34,6 +34,7 @@ export type getData = (options: {
   prodDatabaseType?: string;
   localDirectory?: string;
   buildDirectory?: string;
+  protocolSuffix?: string;
   itests?: boolean;
 }) => Partial<DatabaseData>;
 
@@ -53,9 +54,12 @@ const H2_PROD_DATABASE_MODE = {
 const h2GetProdDatabaseData = (
   databaseType: string,
   { extraOptions = '' }: { extraOptions?: string },
-  { prodDatabaseType, buildDirectory, itests, localDirectory }: Parameters<getData>[0]
+  { prodDatabaseType, buildDirectory, itests, localDirectory, protocolSuffix }: Parameters<getData>[0]
 ): Partial<DatabaseData> => {
   const data: Partial<DatabaseData> = {};
+  if (protocolSuffix) {
+    data.protocolSuffix = protocolSuffix;
+  }
   if (H2_DISK === databaseType) {
     if (!localDirectory && !buildDirectory) {
       throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
