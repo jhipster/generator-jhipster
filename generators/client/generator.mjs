@@ -147,20 +147,12 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         application.clientPackageManager = 'npm';
       },
 
-      loadPackageJson({ application }) {
+      loadPackageJson() {
         // Load common client package.json into packageJson
         _.merge(
           this.dependabotPackageJson,
-          this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json'))
+          this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'templates', 'package.json'))
         );
-        // Load client package.json into packageJson
-        const clientFramework = application.clientFramework;
-        if (!application.clientFrameworkVue) {
-          _.merge(
-            this.dependabotPackageJson,
-            this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', clientFramework, 'package.json'))
-          );
-        }
       },
     });
   }

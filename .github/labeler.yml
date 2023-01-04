@@ -31,19 +31,12 @@
 
 'theme: front':
   - generators/common/**
-  - generators/entity/**
-  - generators/*client/*
-  - generators/*client/needle-api/**
-  - generators/*client/templates/common/**
+  - generators/client/**
 
 'theme: angular':
-  - generators/**/*-angular.*
-  - generators/*client/templates/angular/**/*
   - generators/angular/**
 
 'theme: react':
-  - generators/**/*-react.*
-  - generators/*client/templates/react/**/*
   - generators/react/**
 
 'theme: vue':
@@ -53,16 +46,16 @@
   - generators/*.*
   - generators/app/**
   - generators/base/**
+  - generators/base-application/**
   - generators/bootstrap/**
+  - generators/bootstrap-*/**
 
 'theme: i18n':
   - generators/languages/**/*
 
 'theme: java':
   - generators/common/**
-  - generators/entity/**
   - generators/server/**/*
-  - generators/entity-server/**/*
 
 'theme: upgrade':
   - generators/upgrade/**/*

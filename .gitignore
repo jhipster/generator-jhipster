@@ -20,4 +20,4 @@ test/temp/
 .project
 .settings
 test/**/*.png
-dist
+/dist
