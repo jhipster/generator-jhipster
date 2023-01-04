@@ -19,8 +19,9 @@
 import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
 
 export type DatabaseData = {
-  name?: string;
+  name: string;
   protocolSuffix: string;
+  jdbcDriver: string;
   port?: string;
   localDirectory?: string;
   extraOptions?: string;
@@ -80,7 +81,9 @@ const h2GetProdDatabaseData = (
 
 const databaseData: Record<string, DatabaseDataSpec> = {
   [MSSQL]: {
+    name: 'SQL Server',
     protocolSuffix: 'sqlserver://',
+    jdbcDriver: '',
     port: ':1433;database=',
     jdbc: {
       extraOptions: ';encrypt=false',
@@ -92,14 +95,17 @@ const databaseData: Record<string, DatabaseDataSpec> = {
   },
   [MARIADB]: {
     name: 'MariaDB',
-    tableNameMaxLength: 64,
-    constraintNameMaxLength: 64,
     protocolSuffix: 'mariadb://',
+    jdbcDriver: 'org.mariadb.jdbc.Driver',
     port: ':3306/',
     extraOptions: '?useLegacyDatetimeCode=false&serverTimezone=UTC',
+
+    constraintNameMaxLength: 64,
+    tableNameMaxLength: 64,
   },
   [MYSQL]: {
     name: 'MySQL',
+    jdbcDriver: 'com.mysql.cj.jdbc.Driver',
     tableNameMaxLength: 64,
     constraintNameMaxLength: 64,
     protocolSuffix: 'mysql://',
@@ -112,27 +118,35 @@ const databaseData: Record<string, DatabaseDataSpec> = {
   },
   [ORACLE]: {
     name: 'Oracle',
-    tableNameMaxLength: 128,
-    constraintNameMaxLength: 128,
     protocolSuffix: 'oracle:thin:@',
+    jdbcDriver: 'oracle.jdbc.OracleDriver',
     port: ':1521:',
+
+    constraintNameMaxLength: 128,
+    tableNameMaxLength: 128,
   },
   [POSTGRESQL]: {
     name: 'PostgreSQL',
-    tableNameMaxLength: 63,
-    constraintNameMaxLength: 63,
     protocolSuffix: 'postgresql://',
+    jdbcDriver: 'org.postgresql.Driver',
     port: ':5432/',
+
+    constraintNameMaxLength: 63,
+    tableNameMaxLength: 63,
   },
   [H2_DISK]: {
+    name: 'H2Disk',
     protocolSuffix: 'h2:file:',
+    jdbcDriver: 'org.h2.Driver',
     getData: options => h2GetProdDatabaseData(H2_DISK, { extraOptions: ';DB_CLOSE_DELAY=-1' }, options),
     r2dbc: {
       protocolSuffix: 'h2:file:///',
     },
   },
   [H2_MEMORY]: {
+    name: 'H2Memory',
     protocolSuffix: 'h2:mem:',
+    jdbcDriver: 'org.h2.Driver',
     getData: options => h2GetProdDatabaseData(H2_MEMORY, { extraOptions: ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE' }, options),
     r2dbc: {
       protocolSuffix: 'h2:mem:///',
@@ -141,3 +155,14 @@ const databaseData: Record<string, DatabaseDataSpec> = {
 };
 
 export default databaseData;
+
+function getDatabaseData(databaseType: string) {
+  if (databaseData[databaseType] === undefined) {
+    throw new Error(`Database data not found for database ${databaseType}`);
+  }
+  return databaseData[databaseType];
+}
+
+export function getJdbcDriver(databaseType: string): string {
+  return getDatabaseData(databaseType).jdbcDriver;
+}

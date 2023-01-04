@@ -53,7 +53,7 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 
-import databaseData from '../sql/support/database-data.mjs';
+import databaseData, { getJdbcDriver } from '../sql/support/database-data.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
@@ -2506,6 +2506,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (dest.databaseTypeSql) {
       dest.devHibernateDialect = getApplicationDialect(dest.devDatabaseType);
       dest.prodHibernateDialect = getApplicationDialect(dest.prodDatabaseType);
+      dest.devJdbcDriver = getJdbcDriver(dest.devDatabaseType);
+      dest.prodJdbcDriver = getJdbcDriver(dest.prodDatabaseType);
     }
 
     this.loadServerAndPlatformConfig(dest);

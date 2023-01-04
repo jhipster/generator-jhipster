@@ -215,7 +215,7 @@ project.ext.diffChangelogFile = "<%= SERVER_MAIN_RES_DIR %>config/liquibase/chan
 liquibase {
     activities {
         main {
-            driver "<% if (devDatabaseTypeMysql) { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseTypeMariadb) { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseTypePostgres) { %>org.postgresql.Driver<% } else if (devDatabaseTypeH2Disk) { %>org.h2.Driver<% } else if (devDatabaseTypeOracle) { %>oracle.jdbc.OracleDriver<% } %>"
+            driver "<%= devJdbcDriver %>"
             url "<% if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Disk) { %><%- this.getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeOracle) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %>"
             username "<% if (devDatabaseTypeMysql) { %>root<% } else if (devDatabaseTypePostgres || devDatabaseTypeH2Any) { %><%= baseName %><% } else if (devDatabaseTypeMssql) { %>SA<% } %>"
             password "<% if (devDatabaseTypeMssql) { %>yourStrong(!)Password<% } %>"
@@ -225,7 +225,7 @@ liquibase {
             classpath "<%= SERVER_MAIN_RES_DIR %>"
         }
         diffLog {
-            driver "<% if (devDatabaseTypeMysql) { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseTypeMariadb) { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseTypePostgres) { %>org.postgresql.Driver<% } else if (devDatabaseTypeH2Disk) { %>org.h2.Driver<% } else if (devDatabaseTypeOracle) { %>oracle.jdbc.OracleDriver<% } %>"
+            driver "<%= devJdbcDriver %>"
             url "<% if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Disk) { %><%- this.getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeOracle) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %>"
             username "<% if (devDatabaseTypeMysql) { %>root<% } else if (devDatabaseTypePostgres || devDatabaseTypeH2Any) { %><%= baseName %><% } else if (devDatabaseTypeMssql) { %>SA<% } %>"
             password "<% if (devDatabaseTypeMssql) { %>yourStrong(!)Password<% } %>"

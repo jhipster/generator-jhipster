@@ -98,6 +98,7 @@ Object {
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgres": false,
   "devHibernateDialect": "org.hibernate.dialect.H2Dialect",
+  "devJdbcDriver": "org.h2.Driver",
   "devServerPort": 4200,
   "dockerContainers": Object {
     "cassandra": "cassandra-placeholder",
@@ -339,6 +340,7 @@ Object {
   "prodDatabaseTypeOracle": false,
   "prodDatabaseTypePostgres": true,
   "prodHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
+  "prodJdbcDriver": "org.postgresql.Driver",
   "projectDescription": "Description for JHipster",
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": false,
@@ -481,6 +483,7 @@ Object {
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgres": false,
   "devHibernateDialect": "org.hibernate.dialect.H2Dialect",
+  "devJdbcDriver": "org.h2.Driver",
   "devServerPort": 4200,
   "dockerContainers": Object {
     "cassandra": "cassandra-placeholder",
@@ -722,6 +725,7 @@ Object {
   "prodDatabaseTypeOracle": false,
   "prodDatabaseTypePostgres": true,
   "prodHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
+  "prodJdbcDriver": "org.postgresql.Driver",
   "projectDescription": "Description for JHipster",
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": true,
@@ -864,6 +868,7 @@ Object {
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgres": false,
   "devHibernateDialect": "org.hibernate.dialect.H2Dialect",
+  "devJdbcDriver": "org.h2.Driver",
   "devServerPort": undefined,
   "dockerContainers": Object {
     "cassandra": "cassandra-placeholder",
@@ -1105,6 +1110,7 @@ Object {
   "prodDatabaseTypeOracle": false,
   "prodDatabaseTypePostgres": true,
   "prodHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
+  "prodJdbcDriver": "org.postgresql.Driver",
   "projectDescription": "Description for JHipster",
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": false,
