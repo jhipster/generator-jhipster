@@ -1794,7 +1794,7 @@
                                 <changeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml</changeLogFile>
                                 <diffChangeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                                 <driver><%= devJdbcDriver %></driver>
-                                <url><% if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Disk) { %><%- this.getJDBCUrl(devDatabaseType, { buildDirectory: '${project.build.directory}/', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Memory) { %><%- this.getJDBCUrl(devDatabaseType, { protocolSuffix: 'h2:tcp://', localDirectory: 'localhost:18080/mem:', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeOracle) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %></url>
+                                <url><% if (devDatabaseTypeH2Disk) { %><%- this.getJDBCUrl(devDatabaseType, { buildDirectory: '${project.build.directory}/', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Memory) { %><%- this.getJDBCUrl(devDatabaseType, { protocolSuffix: 'h2:tcp://', localDirectory: 'localhost:18080/mem:', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else { %><%- prodLiquibaseUrl %><% } %></url>
                                 <defaultSchemaName><% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %></defaultSchemaName>
                                 <username><%- devDatabaseUsername %></username>
                                 <password><%- devDatabasePassword %></password>
@@ -1979,7 +1979,7 @@
                                 <changeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml</changeLogFile>
                                 <diffChangeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                                 <driver><%= prodJdbcDriver %></driver>
-                                <url><% if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypePostgres || prodDatabaseTypeMssql) { %><%- this.getJDBCUrl(prodDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (prodDatabaseTypeOracle) { %><%- this.getJDBCUrl(prodDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %></url>
+                                <url><%- prodLiquibaseUrl %></url>
                                 <defaultSchemaName><% if (prodDatabaseTypeMysql) { %><%= baseName %><% } else if (prodDatabaseTypePostgres) { %><% } %></defaultSchemaName>
                                 <username><%- prodDatabaseUsername %></username>
                                 <password><%- prodDatabasePassword %></password>

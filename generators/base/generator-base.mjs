@@ -2516,6 +2516,22 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.devDatabasePassword = devDatabaseData.defaultPassword ?? '';
       dest.prodDatabaseUsername = prodDatabaseData.defaultUsername ?? dest.baseName;
       dest.prodDatabasePassword = prodDatabaseData.defaultPassword ?? '';
+
+      dest.prodJdbcUrl = getJdbcUrl(dest.prodDatabaseType, {
+        databaseName: devDatabaseData.defaultDatabaseName ?? dest.baseName,
+        hostname: 'localhost',
+      });
+      dest.prodLiquibaseUrl = getJdbcUrl(dest.prodDatabaseType, {
+        databaseName: devDatabaseData.defaultDatabaseName ?? dest.baseName,
+        hostname: 'localhost',
+        skipExtraOptions: true,
+      });
+      if (dest.reactive) {
+        dest.prodR2dbcUrl = getR2dbcUrl(dest.prodDatabaseType, {
+          databaseName: devDatabaseData.defaultDatabaseName ?? dest.baseName,
+          hostname: 'localhost',
+        });
+      }
     }
 
     this.loadServerAndPlatformConfig(dest);

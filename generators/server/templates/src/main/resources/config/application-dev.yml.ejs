@@ -131,16 +131,10 @@ spring:
 <%_ if (databaseTypeSql && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypePostgres) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeH2Any) { _%>
+  <%_ if (devDatabaseTypeH2Any) { _%>
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
+  <%_ } else { _%>
+    url: <%- prodJdbcUrl %>
   <%_ } _%>
     username: <%- devDatabaseUsername %>
     password: <%- devDatabasePassword %>
@@ -190,14 +184,12 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
   <%_ } _%>
     contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
-<%_ } _%>
-<%_ if (reactive) { _%>
-  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeH2Any) { _%>
+  <%_ if (reactive) { _%>
+    <%_ if (devDatabaseTypeH2Any) { _%>
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
+    <%_ } else { _%>
+    url: <%- prodJdbcUrl %>
+    <%_ } _%>
   <%_ } _%>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
@@ -211,16 +203,10 @@ spring:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
-  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypePostgres) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (devDatabaseTypeH2Any) { _%>
+  <%_ if (devDatabaseTypeH2Any) { _%>
     url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
+  <%_ } else { _%>
+    url: prodR2dbcUrl %>
   <%_ } _%>
     username: <%- devDatabaseUsername %>
     password: <%- devDatabasePassword %>

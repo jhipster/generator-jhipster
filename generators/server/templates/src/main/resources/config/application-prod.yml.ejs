@@ -117,15 +117,7 @@ spring:
 <%_ if (databaseTypeSql && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-  <%_ } _%>
+    url: <%- prodJdbcUrl %>
     username: <%- prodDatabaseUsername %>
     password: <%- prodDatabasePassword %>
     hikari:
@@ -167,11 +159,7 @@ spring:
   liquibase:
     contexts: prod
   <%_ if (reactive) { _%>
-    <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypePostgres || prodDatabaseTypeMssql) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    <%_ } _%>
+    url: <%- prodJdbcUrl %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
@@ -183,15 +171,7 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
-    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-  <%_ } _%>
+    url: <%- prodR2dbcUrl %>
     username: <%- prodDatabaseUsername %>
     password: <%- prodDatabasePassword %>
 <%_ } _%>

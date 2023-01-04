@@ -28,6 +28,7 @@ export type DatabaseData = {
   extraOptions?: string;
   defaultUsername?: string;
   defaultPassword?: string;
+  defaultDatabaseName?: string;
 
   constraintNameMaxLength?: number;
   tableNameMaxLength?: number;
@@ -140,6 +141,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     port: ':1521:',
     defaultUsername: 'system',
     defaultPassword: 'oracle',
+    defaultDatabaseName: 'xe',
 
     constraintNameMaxLength: 128,
     tableNameMaxLength: 128,
