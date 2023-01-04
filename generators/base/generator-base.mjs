@@ -68,7 +68,7 @@ import {
   LANGUAGES,
 } from '../generator-constants.mjs';
 import { getApplicationDialect } from '../sql/support/hibernate.mjs';
-import getDatabaseUrl from '../sql/support/database-url.mjs';
+import { getJdbcUrl, getR2dbcUrl } from '../sql/support/database-url.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -2612,7 +2612,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
   getJDBCUrl(databaseType, options = {}) {
-    return getDatabaseUrl(databaseType, 'jdbc', options);
+    return getJdbcUrl(databaseType, options);
   }
 
   /**
@@ -2623,7 +2623,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
   getR2DBCUrl(databaseType, options = {}) {
-    return getDatabaseUrl(databaseType, 'r2dbc', options);
+    return getR2dbcUrl(databaseType, options);
   }
 
   /**

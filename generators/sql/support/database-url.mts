@@ -40,3 +40,25 @@ export default function getDatabaseUrl(databaseType: string, protocol: string, o
   }
   return `${url}${skipExtraOptions ? '' : extraOptions}`;
 }
+
+/**
+ * Returns the JDBC URL for a databaseType
+ *
+ * @param databaseType
+ * @param options
+ * @returns
+ */
+export function getJdbcUrl(databaseType: string, options?: DatabaseUrlOptions) {
+  return getDatabaseUrl(databaseType, 'jdbc', options);
+}
+
+/**
+ * Returns the R2DBC URL for a databaseType
+ *
+ * @param databaseType
+ * @param options
+ * @returns
+ */
+export function getR2dbcUrl(databaseType: string, options?: DatabaseUrlOptions) {
+  return getDatabaseUrl(databaseType, 'r2dbc', options);
+}
