@@ -53,7 +53,7 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 
-import databaseData from '../sql/support/constants.mjs';
+import databaseData from '../sql/support/database-data.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
@@ -68,6 +68,7 @@ import {
   LANGUAGES,
 } from '../generator-constants.mjs';
 import { getApplicationDialect } from '../sql/support/hibernate.mjs';
+import getDatabaseUrl from '../sql/support/database-url.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -2609,7 +2610,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
   getJDBCUrl(databaseType, options = {}) {
-    return this.getDBCUrl(databaseType, 'jdbc', options);
+    return getDatabaseUrl(databaseType, 'jdbc', options);
   }
 
   /**
@@ -2620,7 +2621,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
   getR2DBCUrl(databaseType, options = {}) {
-    return this.getDBCUrl(databaseType, 'r2dbc', options);
+    return getDatabaseUrl(databaseType, 'r2dbc', options);
   }
 
   /**

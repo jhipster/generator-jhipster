@@ -28,10 +28,9 @@ import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFramework
 
 import { packageJson } from '../../lib/index.mjs';
 import { getJavadoc } from '../utils.mjs';
-import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
-import databaseData from '../sql/support/constants.mjs';
+import databaseData from '../sql/support/database-data.mjs';
 import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -58,7 +57,7 @@ const {
 const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
 
-const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL, ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databaseTypes;
+const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL } = databaseTypes;
 
 const { MAVEN } = buildToolTypes;
 
@@ -857,50 +856,6 @@ export default class PrivateBase extends Generator {
       return TYPE_UUID;
     }
     return TYPE_LONG;
-  }
-
-  /**
-   * @private
-   * Returns the URL for a particular databaseType and protocol
-   *
-   * @param {string} databaseType
-   * @param {string} protocol
-   * @param {*} options
-   */
-  getDBCUrl(databaseType, protocol, options = {}) {
-    if (!protocol) {
-      throw new Error('protocol is required');
-    }
-    const { databaseName, hostname, skipExtraOptions } = options;
-    if (!databaseName) {
-      throw new Error("option 'databaseName' is required");
-    }
-    if ([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL].includes(databaseType) && !hostname) {
-      throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
-    } else if (![MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL, H2_DISK, H2_MEMORY].includes(databaseType)) {
-      throw new Error(`${databaseType} databaseType is not supported`);
-    }
-    let databaseDataForType = databaseData[databaseType];
-    if (databaseDataForType[protocol]) {
-      databaseDataForType = {
-        ...databaseDataForType,
-        ...databaseDataForType[protocol],
-      };
-    }
-    if (databaseDataForType.getData) {
-      databaseDataForType = {
-        ...databaseDataForType,
-        ...(databaseDataForType.getData(options) || {}),
-      };
-    }
-    const { port = '', protocolSuffix = '', extraOptions = '', localDirectory = options.localDirectory } = databaseDataForType;
-    let url = `${protocol}:${protocolSuffix}`;
-    if (hostname || localDirectory) {
-      url = `${url}${localDirectory || hostname + port}${databaseName}`;
-    } else {
-      url = `${url}${databaseName}${port}`;
-    }
-    return `${url}${skipExtraOptions ? '' : extraOptions}`;
   }
 
   /**

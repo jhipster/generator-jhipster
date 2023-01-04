@@ -18,6 +18,30 @@
  */
 import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
 
+export type DatabaseData = {
+  name?: string;
+  protocolSuffix: string;
+  port?: string;
+  localDirectory?: string;
+  extraOptions?: string;
+
+  constraintNameMaxLength?: number;
+  tableNameMaxLength?: number;
+};
+
+export type getData = (options: {
+  prodDatabaseType?: string;
+  localDirectory?: string;
+  buildDirectory?: string;
+  itests?: boolean;
+}) => Partial<DatabaseData>;
+
+export type DatabaseDataSpec = DatabaseData & {
+  jdbc?: Partial<DatabaseData>;
+  r2dbc?: Partial<DatabaseData>;
+  getData?: getData;
+};
+
 const { H2_DISK, H2_MEMORY, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 
 const H2_PROD_DATABASE_MODE = {
@@ -25,8 +49,12 @@ const H2_PROD_DATABASE_MODE = {
   [MARIADB]: ';MODE=LEGACY',
 };
 
-const h2GetProdDatabaseData = (databaseType, { extraOptions = '' }, { prodDatabaseType, buildDirectory, itests, localDirectory }) => {
-  const data = {};
+const h2GetProdDatabaseData = (
+  databaseType: string,
+  { extraOptions = '' }: { extraOptions?: string },
+  { prodDatabaseType, buildDirectory, itests, localDirectory }: Parameters<getData>[0]
+): Partial<DatabaseData> => {
+  const data: Partial<DatabaseData> = {};
   if (H2_DISK === databaseType) {
     if (!localDirectory && !buildDirectory) {
       throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
@@ -42,14 +70,15 @@ const h2GetProdDatabaseData = (databaseType, { extraOptions = '' }, { prodDataba
     data.port = ':12344';
   }
 
+  const h2ProdDatabaseMode = prodDatabaseType ? H2_PROD_DATABASE_MODE[prodDatabaseType] ?? '' : '';
   return {
     ...data,
     localDirectory,
-    extraOptions: `${extraOptions}${H2_PROD_DATABASE_MODE[prodDatabaseType] || ''}`,
+    extraOptions: `${extraOptions}${h2ProdDatabaseMode}`,
   };
 };
 
-export default {
+const databaseData: Record<string, DatabaseDataSpec> = {
   [MSSQL]: {
     protocolSuffix: 'sqlserver://',
     port: ':1433;database=',
@@ -110,3 +139,5 @@ export default {
     },
   },
 };
+
+export default databaseData;
