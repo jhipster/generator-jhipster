@@ -30,7 +30,7 @@ import { packageJson } from '../../lib/index.mjs';
 import { getJavadoc } from '../utils.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
-import databaseData from '../sql/support/database-data.mjs';
+import { databaseData } from '../sql/support/index.mjs';
 import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;

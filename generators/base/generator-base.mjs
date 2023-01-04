@@ -53,7 +53,7 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 
-import databaseData, { getDatabaseData } from '../sql/support/database-data.mjs';
+import { databaseData, getDatabaseData, getJdbcUrl, getR2dbcUrl } from '../sql/support/index.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
@@ -68,7 +68,6 @@ import {
   LANGUAGES,
   CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
-import { getJdbcUrl, getR2dbcUrl } from '../sql/support/database-url.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
