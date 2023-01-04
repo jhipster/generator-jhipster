@@ -89,7 +89,7 @@ module.exports = async (env, options) => {
       cache: {
         // 1. Set cache type to filesystem
         type: 'filesystem',
-        cacheDirectory: resolve('<%= buildDir %>webpack'),
+        cacheDirectory: resolve('<%= temporaryDir %>webpack'),
         buildDependencies: {
           // 2. Add your config as buildDependency to get cache invalidation on config change
           config: [
