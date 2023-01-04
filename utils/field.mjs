@@ -19,6 +19,8 @@
 import assert from 'assert';
 import _ from 'lodash';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../jdl/jhipster/index.mjs';
+import { getTypescriptType } from '../generators/client/support/index.mjs';
+import { fieldIsEnum } from '../generators/entity/support/index.mjs';
 
 const { isReservedTableName } = reservedKeywords;
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -269,7 +271,7 @@ export function prepareCommonFieldForTemplates(entityWithConfig, field, generato
     fieldNameUnderscored: _.snakeCase(field.fieldName),
     fieldNameHumanized: _.startCase(field.fieldName),
     fieldTranslationKey: `${entityWithConfig.i18nKeyPrefix}.${field.fieldName}`,
-    tsType: generator.getTypescriptType(field.fieldType),
+    tsType: getTypescriptType(field.fieldType),
     entity: entityWithConfig,
   });
   const fieldType = field.fieldType;
@@ -341,29 +343,6 @@ export function prepareCommonFieldForTemplates(entityWithConfig, field, generato
   field.reference = fieldToReference(entityWithConfig, field);
   _derivedProperties(field);
   return field;
-}
-
-export function fieldIsEnum(fieldType) {
-  return ![
-    STRING,
-    INTEGER,
-    LONG,
-    FLOAT,
-    DOUBLE,
-    BIG_DECIMAL,
-    LOCAL_DATE,
-    INSTANT,
-    ZONED_DATE_TIME,
-    DURATION,
-    UUID,
-    BOOLEAN,
-    BYTES,
-    BYTE_BUFFER,
-    ANY_BLOB,
-    BLOB,
-    IMAGE_BLOB,
-    TEXT_BLOB,
-  ].includes(fieldType);
 }
 
 /**

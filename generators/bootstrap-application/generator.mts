@@ -29,7 +29,7 @@ import {
   preparePostEntityCommonDerivedProperties,
   preparePostEntityServerDerivedProperties,
 } from '../../utils/entity.mjs';
-import { fieldIsEnum } from '../../utils/field.mjs';
+import { fieldIsEnum } from '../entity/support/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 
 import type { ClientServerApplication } from '../common/types.mjs';

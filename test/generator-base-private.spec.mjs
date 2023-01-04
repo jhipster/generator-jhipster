@@ -10,6 +10,8 @@ import { default as JHipsterServerGeneratorClass } from '../generators/server/ge
 import { default as DatabaseChangelogLiquibaseClass } from '../generators/liquibase-changelogs/index.mjs';
 import { stripMargin } from '../generators/base/support/index.mjs';
 
+import { generateEntityClientImports, getTypescriptType } from '../generators/client/support/index.mjs';
+
 const { CASSANDRA, MONGODB, MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
 const { CommonDBTypes } = fieldTypes;
@@ -88,7 +90,7 @@ export * from './entityFolderName/entityFileName.state';`;
       ];
       describe('when called with 2 distinct relationships without dto option', () => {
         it('return a Map with 2 imports', () => {
-          const imports = BaseGenerator.generateEntityClientImports(relationships, NO_DTO);
+          const imports = generateEntityClientImports(relationships, NO_DTO);
           expect(imports).to.have.all.keys('IUser', 'IAnEntity');
           expect(imports.size).to.eql(relationships.length);
         });
@@ -103,7 +105,7 @@ export * from './entityFolderName/entityFileName.state';`;
           },
         ];
         it('return a Map with 1 import', () => {
-          const imports = BaseGenerator.generateEntityClientImports(relationships, NO_DTO);
+          const imports = generateEntityClientImports(relationships, NO_DTO);
           expect(imports).to.have.key('IUser');
           expect(imports.size).to.eql(1);
         });
@@ -310,7 +312,7 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('getTypescriptType', () => {
     describe('when called with sql DB name', () => {
       it('return SQL', () => {
-        jestExpect(Object.fromEntries(Object.values(CommonDBTypes).map(dbType => [dbType, BaseGenerator.getTypescriptType(dbType)])))
+        jestExpect(Object.fromEntries(Object.values(CommonDBTypes).map(dbType => [dbType, getTypescriptType(dbType)])))
           .toMatchInlineSnapshot(`
 {
   "AnyBlob": "string",

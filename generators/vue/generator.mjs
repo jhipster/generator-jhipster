@@ -26,6 +26,7 @@ import { writeFiles, writeEntitiesFiles, cleanup } from './files-vue.mjs';
 import { addEntityMenuEntry as addVueEntityMenuEntry } from './support/index.mjs';
 import {
   generateEntityClientFields as getHydratedEntityClientFields,
+  generateEntityClientImports as formatEntityClientImports,
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.mjs';
 
@@ -191,5 +192,9 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
     return getHydratedEntityClientFields(primaryKey, fields, relationships, dto, customDateType, embedded, VUE);
+  }
+
+  generateEntityClientImports(relationships, dto) {
+    return formatEntityClientImports(relationships, dto, VUE);
   }
 }

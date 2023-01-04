@@ -28,16 +28,6 @@ const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 
 export { checkDocker } from './docker-utils.mjs';
 
-export default {
-  checkImages,
-  generateJwtSecret,
-  configureImageNames,
-  setAppsFolderPaths,
-  loadConfigs,
-  loadFromYoRc,
-  setClusteredApps,
-};
-
 /**
  * Check Images
  */

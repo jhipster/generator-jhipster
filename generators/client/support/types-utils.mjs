@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,8 +17,13 @@
  * limitations under the License.
  */
 import { fieldTypes } from '../../../jdl/jhipster/index.mjs';
+import { fieldIsEnum } from '../../entity/support/index.mjs';
 
 const {
+  BOOLEAN: TYPE_BOOLEAN,
+  ZONED_DATE_TIME: TYPE_ZONED_DATE_TIME,
+  INSTANT: TYPE_INSTANT,
+  LOCAL_DATE: TYPE_LOCAL_DATE,
   INTEGER: TYPE_INTEGER,
   LONG: TYPE_LONG,
   BIG_DECIMAL: TYPE_BIG_DECIMAL,
@@ -47,6 +52,29 @@ const getEntryIfTypeOrTypeAttribute = primaryKey => {
 const getTypescriptKeyType = primaryKey => {
   if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(getEntryIfTypeOrTypeAttribute(primaryKey))) {
     return 'number';
+  }
+  return 'string';
+};
+
+/**
+ * @private
+ * Find type for Typescript
+ *
+ * @param {string} fieldType - field type
+ * @returns {string} field type in Typescript
+ */
+export const getTypescriptType = fieldType => {
+  if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(fieldType)) {
+    return 'number';
+  }
+  if ([TYPE_LOCAL_DATE, TYPE_ZONED_DATE_TIME, TYPE_INSTANT].includes(fieldType)) {
+    return 'dayjs.Dayjs';
+  }
+  if ([TYPE_BOOLEAN].includes(fieldType)) {
+    return 'boolean';
+  }
+  if (fieldIsEnum(fieldType)) {
+    return fieldType;
   }
   return 'string';
 };

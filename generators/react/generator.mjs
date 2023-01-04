@@ -25,7 +25,10 @@ import { writeFiles, cleanupFiles } from './files-react.mjs';
 import { prepareEntity } from './application/entities/index.mjs';
 import { addEntityMenuEntry as addReactEntityMenuEntry } from './support/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { generateEntityClientFields as getHydratedEntityClientFields } from '../client/support/index.mjs';
+import {
+  generateEntityClientFields as getHydratedEntityClientFields,
+  generateEntityClientImports as formatEntityClientImports,
+} from '../client/support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
@@ -196,5 +199,9 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
     return getHydratedEntityClientFields(primaryKey, fields, relationships, dto, customDateType, embedded, REACT);
+  }
+
+  generateEntityClientImports(relationships, dto) {
+    return formatEntityClientImports(relationships, dto, REACT);
   }
 }

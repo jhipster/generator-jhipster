@@ -28,13 +28,9 @@ import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import { deleteFile, deleteFolder, renderContent } from './support/index.mjs';
 import { getDBTypeFromDBValue } from '../server/support/database.mjs';
-import { getTypescriptKeyType } from '../client/support/index.mjs';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
-const {
-  Validations: { REQUIRED },
-} = validations;
 
 const {
   STRING: TYPE_STRING,
@@ -44,7 +40,6 @@ const {
   FLOAT: TYPE_FLOAT,
   DOUBLE: TYPE_DOUBLE,
   UUID: TYPE_UUID,
-  BOOLEAN: TYPE_BOOLEAN,
   LOCAL_DATE: TYPE_LOCAL_DATE,
   ZONED_DATE_TIME: TYPE_ZONED_DATE_TIME,
   INSTANT: TYPE_INSTANT,
@@ -170,57 +165,6 @@ export default class PrivateBase extends Generator {
     await renderContent(source, _this, _context, options, res => {
       callback(res);
     });
-  }
-
-  /**
-   * @private
-   * Find type for Typescript
-   *
-   * @param {string} fieldType - field type
-   * @returns {string} field type in Typescript
-   */
-  getTypescriptType(fieldType) {
-    if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(fieldType)) {
-      return 'number';
-    }
-    if ([TYPE_LOCAL_DATE, TYPE_ZONED_DATE_TIME, TYPE_INSTANT].includes(fieldType)) {
-      return 'dayjs.Dayjs';
-    }
-    if ([TYPE_BOOLEAN].includes(fieldType)) {
-      return 'boolean';
-    }
-    if (fieldIsEnum(fieldType)) {
-      return fieldType;
-    }
-    return 'string';
-  }
-
-  /**
-   * @private
-   * Generate Entity Client Imports
-   *
-   * @param {Array|Object} relationships - array of relationships
-   * @param {string} dto - dto
-   * @param {string} clientFramework the client framework, 'angular' or 'react'.
-   * @returns typeImports: Map
-   */
-  generateEntityClientImports(relationships, dto, clientFramework = this.clientFramework) {
-    const typeImports = new Map();
-    relationships.forEach(relationship => {
-      const otherEntityAngularName = relationship.otherEntityAngularName;
-      const importType = `I${otherEntityAngularName}`;
-      let importPath;
-      if (relationship.otherEntity?.builtInUser) {
-        importPath = clientFramework === ANGULAR ? 'app/entities/user/user.model' : 'app/shared/model/user.model';
-      } else {
-        importPath =
-          clientFramework === ANGULAR
-            ? `app/entities/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFolderName}/${relationship.otherEntityFileName}.model`
-            : `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
-      }
-      typeImports.set(importType, importPath);
-    });
-    return typeImports;
   }
 
   /**

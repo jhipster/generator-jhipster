@@ -17,5 +17,6 @@
  * limitations under the License.
  */
 export { addMenuEntry, addExternalResourcesToIndexHtml } from './needles.mjs';
-export { default as getTypescriptKeyType } from './types-utils.mjs';
+export { default as getTypescriptKeyType, getTypescriptType } from './types-utils.mjs';
 export { default as generateEntityClientFields } from './entity-definition.mjs';
+export { generateEntityClientImports } from './template-utils.mjs';

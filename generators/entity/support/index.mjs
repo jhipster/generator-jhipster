@@ -22,3 +22,4 @@ export {
   isSignedNumber as inputIsSignedNumber,
   isSignedDecimalNumber as inputIsSignedDecimalNumber,
 } from './asserts.mjs';
+export { fieldIsEnum } from './field-utils.mjs';
