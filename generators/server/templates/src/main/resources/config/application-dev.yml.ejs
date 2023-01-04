@@ -133,25 +133,17 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
   <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
   <%_ } else if (devDatabaseTypePostgres) { _%>
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: <%= baseName %>
-    password:
   <%_ } else if (devDatabaseTypeOracle) { _%>
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    username: system
-    password: oracle
   <%_ } else if (devDatabaseTypeMssql) { _%>
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: SA
-    password: yourStrong(!)Password
   <%_ } else if (devDatabaseTypeH2Any) { _%>
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
-    username: <%= baseName %>
-    password:
   <%_ } _%>
+    username: <%- devDatabaseUsername %>
+    password: <%- devDatabasePassword %>
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -221,25 +213,17 @@ spring:
   r2dbc:
   <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
     url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
   <%_ } else if (devDatabaseTypePostgres) { _%>
     url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: <%= baseName %>
-    password:
   <%_ } else if (devDatabaseTypeOracle) { _%>
     url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    username: system
-    password: oracle
   <%_ } else if (devDatabaseTypeMssql) { _%>
     url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: SA
-    password: yourStrong(!)Password
   <%_ } else if (devDatabaseTypeH2Any) { _%>
     url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
-    username: <%= baseName %>
-    password:
   <%_ } _%>
+    username: <%- devDatabaseUsername %>
+    password: <%- devDatabasePassword %>
 <%_ } _%>
   thymeleaf:
     cache: false

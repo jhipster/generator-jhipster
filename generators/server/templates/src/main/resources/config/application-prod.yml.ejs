@@ -119,21 +119,15 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
   <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
     url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
   <%_ } else if (prodDatabaseTypePostgres) { _%>
     url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: <%= baseName %>
-    password:
   <%_ } else if (prodDatabaseTypeMssql) { _%>
     url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: SA
-    password: yourStrong(!)Password
   <%_ } else if (prodDatabaseTypeOracle) { _%>
     url: <%- this.getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    username: system
-    password: oracle
   <%_ } _%>
+    username: <%- prodDatabaseUsername %>
+    password: <%- prodDatabasePassword %>
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -191,21 +185,15 @@ spring:
   r2dbc:
   <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
     url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
   <%_ } else if (prodDatabaseTypePostgres) { _%>
     url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: <%= baseName %>
-    password:
   <%_ } else if (prodDatabaseTypeMssql) { _%>
     url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: SA
-    password: yourStrong(!)Password
   <%_ } else if (prodDatabaseTypeOracle) { _%>
     url: <%- this.getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    username: system
-    password: oracle
   <%_ } _%>
+    username: <%- prodDatabaseUsername %>
+    password: <%- prodDatabasePassword %>
 <%_ } _%>
   thymeleaf:
     cache: true

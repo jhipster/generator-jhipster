@@ -1796,8 +1796,8 @@
                                 <driver><%= devJdbcDriver %></driver>
                                 <url><% if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Disk) { %><%- this.getJDBCUrl(devDatabaseType, { buildDirectory: '${project.build.directory}/', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Memory) { %><%- this.getJDBCUrl(devDatabaseType, { protocolSuffix: 'h2:tcp://', localDirectory: 'localhost:18080/mem:', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeOracle) { %><%- this.getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %></url>
                                 <defaultSchemaName><% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %></defaultSchemaName>
-                                <username><% if (devDatabaseTypeMysql) { %>root<% } else if (devDatabaseTypePostgres || devDatabaseTypeH2Any) { %><%= baseName %><% } else if (devDatabaseTypeMssql) { %>SA<% } %></username>
-                                <password><% if (devDatabaseTypeMssql) { %>yourStrong(!)Password<% } %></password>
+                                <username><%- devDatabaseUsername %></username>
+                                <password><%- devDatabasePassword %></password>
                                 <referenceUrl>hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                                 <verbose>true</verbose>
                                 <logging>debug</logging>
@@ -1981,8 +1981,8 @@
                                 <driver><%= prodJdbcDriver %></driver>
                                 <url><% if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypePostgres || prodDatabaseTypeMssql) { %><%- this.getJDBCUrl(prodDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (prodDatabaseTypeOracle) { %><%- this.getJDBCUrl(prodDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %></url>
                                 <defaultSchemaName><% if (prodDatabaseTypeMysql) { %><%= baseName %><% } else if (prodDatabaseTypePostgres) { %><% } %></defaultSchemaName>
-                                <username><% if (prodDatabaseTypeMysql) { %>root<% } else if (prodDatabaseTypePostgres) { %><%= baseName %><% } else if (prodDatabaseTypeMssql) { %>SA<% } %></username>
-                                <password><% if (prodDatabaseTypeMssql) { %>yourStrong(!)Password<% } %></password>
+                                <username><%- prodDatabaseUsername %></username>
+                                <password><%- prodDatabasePassword %></password>
                                 <referenceUrl>hibernate:spring:<%= packageName %>.domain?dialect=<%= prodHibernateDialect %>&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                                 <verbose>true</verbose>
                                 <logging>debug</logging>

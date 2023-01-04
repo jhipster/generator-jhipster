@@ -25,6 +25,8 @@ export type DatabaseData = {
   port?: string;
   localDirectory?: string;
   extraOptions?: string;
+  defaultUsername?: string;
+  defaultPassword?: string;
 
   constraintNameMaxLength?: number;
   tableNameMaxLength?: number;
@@ -89,6 +91,9 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     protocolSuffix: 'sqlserver://',
     jdbcDriver: '',
     port: ':1433;database=',
+    defaultUsername: 'SA',
+    defaultPassword: 'yourStrong(!)Password',
+
     jdbc: {
       extraOptions: ';encrypt=false',
     },
@@ -103,6 +108,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     jdbcDriver: 'org.mariadb.jdbc.Driver',
     port: ':3306/',
     extraOptions: '?useLegacyDatetimeCode=false&serverTimezone=UTC',
+    defaultUsername: 'root',
 
     constraintNameMaxLength: 64,
     tableNameMaxLength: 64,
@@ -116,6 +122,8 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     port: ':3306/',
     extraOptions:
       '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true',
+    defaultUsername: 'root',
+
     r2dbc: {
       protocolSuffix: 'mariadb://',
     },
@@ -125,6 +133,8 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     protocolSuffix: 'oracle:thin:@',
     jdbcDriver: 'oracle.jdbc.OracleDriver',
     port: ':1521:',
+    defaultUsername: 'system',
+    defaultPassword: 'oracle',
 
     constraintNameMaxLength: 128,
     tableNameMaxLength: 128,
@@ -142,6 +152,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     name: 'H2Disk',
     protocolSuffix: 'h2:file:',
     jdbcDriver: 'org.h2.Driver',
+
     getData: options => h2GetProdDatabaseData(H2_DISK, { extraOptions: ';DB_CLOSE_DELAY=-1' }, options),
     r2dbc: {
       protocolSuffix: 'h2:file:///',
@@ -151,6 +162,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     name: 'H2Memory',
     protocolSuffix: 'h2:mem:',
     jdbcDriver: 'org.h2.Driver',
+
     getData: options => h2GetProdDatabaseData(H2_MEMORY, { extraOptions: ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE' }, options),
     r2dbc: {
       protocolSuffix: 'h2:mem:///',
@@ -160,7 +172,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
 
 export default databaseData;
 
-function getDatabaseData(databaseType: string) {
+export function getDatabaseData(databaseType: string) {
   if (databaseData[databaseType] === undefined) {
     throw new Error(`Database data not found for database ${databaseType}`);
   }
