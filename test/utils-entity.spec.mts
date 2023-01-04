@@ -20,13 +20,12 @@
 import { expect } from 'chai';
 import { prepareEntityPrimaryKeyForTemplates } from '../utils/entity.mjs';
 import { formatDateForChangelog } from '../generators/base/utils.mjs';
-import generatorDefaults from '../generators/generator-defaults.mjs';
+import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
 import BaseGenerator from '../generators/base/index.mjs';
-
-const { defaultConfig, entityDefaultConfig } = generatorDefaults;
+import { getConfigWithDefaults } from '../jdl/jhipster/index.mjs';
 
 describe('entity utilities', () => {
-  const defaultGenerator = { jhipsterConfig: defaultConfig };
+  const defaultGenerator = { jhipsterConfig: getConfigWithDefaults() };
   Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
 
   describe('prepareEntityPrimaryKeyForTemplates', () => {

@@ -3,7 +3,6 @@ application {
     baseName MyApp
     applicationType monolith
     entitySuffix Entity
-    dtoSuffix false
   }
   entities *
 }

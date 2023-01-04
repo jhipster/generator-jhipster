@@ -22,14 +22,12 @@ import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import generatorDefaults from '../generator-defaults.mjs';
 import prompts from './prompts.mjs';
 import statistics from '../statistics.cjs';
 import { NODE_VERSION, SERVER_MAIN_RES_DIR, JAVA_VERSION } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
 import { buildToolTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-const { defaultConfig } = generatorDefaults;
 const { MAVEN, GRADLE } = buildToolTypes;
 const { REACT } = clientFrameworkTypes;
 
@@ -177,7 +175,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
-  _loadCiCdConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  _loadCiCdConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     dest.cicdIntegrations = dest.cicdIntegrations || config.cicdIntegrations || [];
     dest.cicdIntegrationsSnyk = dest.cicdIntegrations.includes('snyk');
     dest.cicdIntegrationsSonar = dest.cicdIntegrations.includes('sonar');

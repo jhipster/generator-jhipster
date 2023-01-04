@@ -19,10 +19,8 @@
 import chalk from 'chalk';
 import statistics from '../statistics.cjs';
 
-import generatorsDefaults from '../generator-defaults.mjs';
 import { applicationTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
-const { appDefaultConfig, defaultConfigMicroservice } = generatorsDefaults;
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 
@@ -57,6 +55,7 @@ const promptValueToMicrofrontends = answer =>
 
 export async function askForApplicationType({ control }) {
   if (control.existingProject && this.options.askAnswered !== true) return;
+  const config = this.jhipsterConfigWithDefaults;
 
   const applicationTypeChoices = [
     {
@@ -80,7 +79,7 @@ export async function askForApplicationType({ control }) {
         name: 'applicationType',
         message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
         choices: applicationTypeChoices,
-        default: appDefaultConfig.applicationType,
+        default: config.applicationType,
       },
       {
         when: answers => {
@@ -94,7 +93,7 @@ export async function askForApplicationType({ control }) {
         type: 'confirm',
         name: 'microfrontend',
         message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
-        default: defaultConfigMicroservice.microfrontend,
+        default: config.microfrontend,
       },
       {
         when: answers => {
@@ -125,12 +124,13 @@ export async function askForApplicationType({ control }) {
 export async function askForTestOpts({ control }) {
   if (control.existingProject && this.options.askAnswered !== true) return;
 
+  const config = this.jhipsterConfigWithDefaults;
   const choices = [];
-  if (!this.skipClient) {
+  if (!config.skipClient) {
     // all client side test frameworks should be added here
     choices.push({ name: 'Cypress', value: CYPRESS });
   }
-  if (!this.skipServer) {
+  if (!config.skipServer) {
     // all server side test frameworks should be added here
     choices.push({ name: 'Gatling', value: GATLING }, { name: 'Cucumber', value: CUCUMBER });
   }
@@ -139,7 +139,7 @@ export async function askForTestOpts({ control }) {
     name: 'testFrameworks',
     message: 'Besides JUnit and Jest, which testing frameworks would you like to use?',
     choices,
-    default: appDefaultConfig.testFrameworks,
+    default: config.testFrameworks,
   };
 
   const answers = await this.prompt(PROMPT);

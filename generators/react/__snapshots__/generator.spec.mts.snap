@@ -1017,6 +1017,9 @@ Object {
   "src/app/index.tsx": Object {
     "stateCleared": "modified",
   },
+  "src/app/main.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/app/modules/administration/administration.reducer.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -1072,6 +1075,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/app/shared/error/error-boundary.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/app/shared/error/error-loading.tsx": Object {
     "stateCleared": "modified",
   },
   "src/app/shared/error/page-not-found.tsx": Object {
@@ -1272,6 +1278,9 @@ Object {
   "webpack/webpack.dev.js": Object {
     "stateCleared": "modified",
   },
+  "webpack/webpack.microfrontend.js": Object {
+    "stateCleared": "modified",
+  },
   "webpack/webpack.prod.js": Object {
     "stateCleared": "modified",
   },
@@ -1433,6 +1442,9 @@ Object {
   "src/main/webapp2/app/index.tsx": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/main.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/modules/administration/administration.reducer.spec.ts": Object {
     "stateCleared": "modified",
   },
@@ -1485,6 +1497,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/error/error-boundary.tsx": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/error/error-loading.tsx": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/error/page-not-found.tsx": Object {
@@ -1701,6 +1716,9 @@ Object {
     "stateCleared": "modified",
   },
   "webpack/webpack.dev.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.microfrontend.js": Object {
     "stateCleared": "modified",
   },
   "webpack/webpack.prod.js": Object {

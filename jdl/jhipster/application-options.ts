@@ -208,7 +208,7 @@ const optionValues: any = {
     [COUCHBASE_SEARCH_ENGINE]: COUCHBASE_SEARCH_ENGINE,
     [NO_SEARCH_ENGINE]: NO_SEARCH_ENGINE,
   },
-  [optionNames.SERVER_PORT]: '8080',
+  [optionNames.SERVER_PORT]: 8080,
   [optionNames.SERVICE_DISCOVERY_TYPE]: {
     [EUREKA]: EUREKA,
     [CONSUL]: CONSUL,

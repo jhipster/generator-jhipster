@@ -16,8 +16,6 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://jhipster-mariadb:3306/jhipster?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - JHIPSTER_CACHE_REDIS_SERVER=redis://jhipster-redis:6379
-      - JHIPSTER_CACHE_REDIS_CLUSTER=false
       - SPRING_ELASTICSEARCH_URIS=http://jhipster-elasticsearch:9200
     ports:
       - 127.0.0.1:8080:8080
@@ -45,10 +43,6 @@ services:
     extends:
       file: ./elasticsearch.yml
       service: elasticsearch
-  redis:
-    extends:
-      file: ./redis.yml
-      service: redis
   jhipster-registry:
     extends:
       file: ./jhipster-registry.yml
@@ -107,18 +101,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis-cluster.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/Redis-Cluster.Dockerfile": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/redis/connectRedisCluster.sh": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/services.yml": Object {
@@ -229,9 +211,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/jhipster-control-center.yml": Object {
@@ -451,9 +430,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/jhipster-control-center.yml": Object {
@@ -726,9 +702,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/datasources/datasource.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/hazelcast-management-center.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/jhipster-control-center.yml": Object {

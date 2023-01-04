@@ -57,7 +57,6 @@ describe(`JHipster ${generator} generator`, () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
-          jwtSecretKey: expect.any(String),
         });
       });
     });

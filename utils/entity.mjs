@@ -22,7 +22,7 @@ import path from 'path';
 
 import { hibernateSnakeCase } from './db.mjs';
 import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
-import generatorDefaults from '../generators/generator-defaults.mjs';
+import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
 import { fieldToReference } from './field.mjs';
 import {
   applicationTypes,
@@ -35,7 +35,6 @@ import {
 } from '../jdl/jhipster/index.mjs';
 import { OFFICIAL_DATABASE_TYPE_NAMES } from '../generators/server/support/database.mjs';
 
-const { entityDefaultConfig } = generatorDefaults;
 const { ELASTICSEARCH } = searchEngineTypes;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;

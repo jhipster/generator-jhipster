@@ -25,15 +25,12 @@ import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '.
 import { askForLanguages, askI18n } from './prompts.mjs';
 import statistics from '../statistics.cjs';
 
-import generatorDefaults from '../generator-defaults.mjs';
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import { clientI18nFiles } from './files.mjs';
 import { writeEntityFiles } from './entity-files.mjs';
 import { languageToJavaLanguage } from './utils.mjs';
 import { replaceContent } from '../utils.mjs';
 import TranslationData from './translation-data.mjs';
-
-const { translationDefaultConfig } = generatorDefaults;
 
 /**
  * This is the base class for a generator that generates entities.
@@ -151,23 +148,26 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   get configuring() {
     return {
       defaults() {
-        if (this.jhipsterConfig.enableTranslation === false) {
+        const { nativeLanguage, languages, enableTranslation } = this.jhipsterConfigWithDefaults;
+        if (!enableTranslation) {
+          if (!this.jhipsterConfig.nativeLanguage) {
+            this.jhipsterConfig.nativeLanguage = nativeLanguage;
+          }
           return;
         }
         if (!this.jhipsterConfig.nativeLanguage) {
-          // If native language is not set, use defaults, otherwise languages will be built with nativeLanguage.
-          this.setConfigDefaults(translationDefaultConfig);
           if (this.languagesToApply.length === 0) {
-            this.languagesToApply = this.jhipsterConfig.languages;
+            this.languagesToApply = languages;
           }
+          this.jhipsterConfig.nativeLanguage = nativeLanguage;
         }
         if (!this.jhipsterConfig.languages) {
           this.jhipsterConfig.languages = [];
         }
         if (this.jhipsterConfig.languages.length === 0 || this.jhipsterConfig.languages[0] !== this.jhipsterConfig.nativeLanguage) {
-          this.jhipsterConfig.languages = [...new Set([this.jhipsterConfig.nativeLanguage, ...this.jhipsterConfig.languages])];
+          this.jhipsterConfig.languages = [...new Set([nativeLanguage, ...languages])];
         }
-        if (this.languagesToApply.length > 0) {
+        if (this.languagesToApply && this.languagesToApply.length > 0) {
           // Save new languages;
           this.jhipsterConfig.languages = [...new Set([...this.jhipsterConfig.languages, ...this.languagesToApply])];
         }

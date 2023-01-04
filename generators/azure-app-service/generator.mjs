@@ -24,7 +24,6 @@ import chalk from 'chalk';
 import BaseGenerator from '../base/index.mjs';
 
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.mjs';
 
 // Global constants
 import { JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
@@ -33,7 +32,6 @@ import { GENERATOR_AZURE_APP_SERVICE } from '../generator-list.mjs';
 import { buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { mavenPluginConfiguration } from './templates.mjs';
 
-const { defaultConfig } = generatorDefaults;
 const { MAVEN } = buildToolTypes;
 // Local constants
 const AZURE_WEBAPP_MAVEN_PLUGIN_VERSION = '1.8.0';
@@ -487,7 +485,7 @@ which is free for the first 30 days`);
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
-  _computeDerivedConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  _computeDerivedConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
     this.loadAppConfig(config, dest);
     this.loadServerConfig(config, dest);
 

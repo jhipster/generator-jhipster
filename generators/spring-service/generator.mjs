@@ -100,6 +100,7 @@ export default class SpringServiceGenerator extends BaseGenerator {
   get loading() {
     return {
       loadSharedConfig() {
+        this.loadServerConfig();
         this.loadDerivedServerConfig();
       },
     };

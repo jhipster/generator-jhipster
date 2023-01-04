@@ -19,8 +19,6 @@
 
 import chalk from 'chalk';
 
-import generatorDefaults from '../generator-defaults.mjs';
-
 import {
   applicationOptions,
   applicationTypes,
@@ -33,7 +31,6 @@ import {
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
 
 const { OptionNames } = applicationOptions;
-const { serverDefaultConfig } = generatorDefaults;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
@@ -59,14 +56,14 @@ const NO_CACHE_PROVIDER = cacheTypes.NO;
 export async function askForServerSideOpts({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const { applicationType, serverPort: defaultServerPort } = this.jhipsterConfigWithDefaults;
+  const { applicationType, serverPort: defaultServerPort, reactive } = this.jhipsterConfigWithDefaults;
   const prompts = [
     {
       when: () => [MONOLITH, MICROSERVICE].includes(applicationType),
       type: 'confirm',
       name: REACTIVE,
       message: 'Do you want to make it reactive with Spring WebFlux?',
-      default: serverDefaultConfig.reactive,
+      default: reactive,
     },
     {
       when: () => applicationType === GATEWAY || applicationType === MICROSERVICE,
@@ -85,7 +82,7 @@ export async function askForServerSideOpts({ control }) {
           ? true
           : 'The package name you have provided is not a valid Java package name.',
       message: 'What is your default Java package name?',
-      default: serverDefaultConfig.packageName,
+      default: this.jhipsterConfigWithDefaults.packageName,
       store: true,
     },
     {
@@ -134,7 +131,7 @@ export async function askForServerSideOpts({ control }) {
         }
         return opts;
       },
-      default: serverDefaultConfig.authenticationType,
+      default: this.jhipsterConfigWithDefaults.authenticationType,
     },
     {
       type: 'list',
@@ -177,7 +174,7 @@ export async function askForServerSideOpts({ control }) {
         });
         return opts;
       },
-      default: serverDefaultConfig.databaseType,
+      default: this.jhipsterConfigWithDefaults.databaseType,
     },
     {
       when: response => response.databaseType === SQL,
@@ -185,7 +182,7 @@ export async function askForServerSideOpts({ control }) {
       name: PROD_DATABASE_TYPE,
       message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
       choices: answers => (answers.reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS),
-      default: serverDefaultConfig.prodDatabaseType,
+      default: this.jhipsterConfigWithDefaults.prodDatabaseType,
     },
     {
       when: response => response.databaseType === SQL,
@@ -203,7 +200,7 @@ export async function askForServerSideOpts({ control }) {
             name: 'H2 with in-memory persistence',
           },
         ].concat(SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
-      default: serverDefaultConfig.devDatabaseType,
+      default: this.jhipsterConfigWithDefaults.devDatabaseType,
     },
     {
       when: answers => !answers.reactive,
@@ -240,7 +237,7 @@ export async function askForServerSideOpts({ control }) {
           name: 'No cache - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
         },
       ],
-      default: applicationType === MICROSERVICE ? 2 : serverDefaultConfig.cacheProvider,
+      default: this.jhipsterConfigWithDefaults.cacheProvider,
     },
     {
       when: answers =>
@@ -250,7 +247,7 @@ export async function askForServerSideOpts({ control }) {
       type: 'confirm',
       name: 'enableHibernateCache',
       message: 'Do you want to use Hibernate 2nd level cache?',
-      default: serverDefaultConfig.enableHibernateCache,
+      default: this.jhipsterConfigWithDefaults.enableHibernateCache,
     },
     {
       type: 'list',
@@ -266,14 +263,14 @@ export async function askForServerSideOpts({ control }) {
           name: 'Gradle',
         },
       ],
-      default: serverDefaultConfig.buildTool,
+      default: this.jhipsterConfigWithDefaults.buildTool,
     },
     {
       when: answers => answers.buildTool === GRADLE && this.options.experimental,
       type: 'confirm',
       name: 'enableGradleEnterprise',
       message: 'Do you want to enable Gradle Enterprise integration?',
-      default: serverDefaultConfig.enableGradleEnterprise,
+      default: this.jhipsterConfigWithDefaults.enableGradleEnterprise,
     },
     {
       when: answers => answers.enableGradleEnterprise,
@@ -297,7 +294,7 @@ export async function askForServerSideOpts({ control }) {
           name: 'Yes',
         },
       ],
-      default: serverDefaultConfig.serviceDiscoveryType,
+      default: this.jhipsterConfigWithDefaults.serviceDiscoveryType,
     },
   ];
 

@@ -29,14 +29,12 @@ import { writeEnumerationFiles } from './entity-files.mjs';
 
 import { LOGIN_REGEX_JS } from '../generator-constants.mjs';
 import statistics from '../statistics.cjs';
-import generatorDefaults from '../generator-defaults.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.mjs';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 
 const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
-const { clientDefaultConfig } = generatorDefaults;
 
 /**
  * @class
@@ -109,29 +107,10 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      configureDevServerPort() {
-        this.devServerBasePort = this.jhipsterConfig.clientFramework === ANGULAR ? 4200 : 9060;
-
-        if (this.jhipsterConfig.devServerBasePort !== undefined) return undefined;
-        let devServerPort;
-
-        if (this.jhipsterConfig.applicationIndex !== undefined) {
-          devServerPort = this.devServerBasePort + this.jhipsterConfig.applicationIndex;
-        } else if (!this.devServerPort) {
-          devServerPort = this.devServerBasePort;
-        }
-
-        this.jhipsterConfig.devServerPort = devServerPort;
-      },
-
       upgradeAngular() {
         if (this.jhipsterConfig.clientFramework === 'angularX') {
           this.jhipsterConfig.clientFramework = ANGULAR;
         }
-      },
-
-      saveConfig() {
-        this.setConfigDefaults(clientDefaultConfig);
       },
     });
   }

@@ -1629,6 +1629,9 @@ Object {
   "src/app/core/interceptor/notification.interceptor.ts": Object {
     "stateCleared": "modified",
   },
+  "src/app/core/microfrontend/index.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/app/core/request/request-util.ts": Object {
     "stateCleared": "modified",
   },
@@ -2166,6 +2169,9 @@ Object {
   "webpack/webpack.custom.js": Object {
     "stateCleared": "modified",
   },
+  "webpack/webpack.microfrontend.js": Object {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -2289,6 +2295,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/core/interceptor/notification.interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/core/microfrontend/index.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/core/request/request-util.ts": Object {
@@ -2835,6 +2844,9 @@ Object {
     "stateCleared": "modified",
   },
   "webpack/webpack.custom.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.microfrontend.js": Object {
     "stateCleared": "modified",
   },
 }

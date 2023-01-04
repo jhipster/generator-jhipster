@@ -4,6 +4,7 @@ import { writeFileSync, mkdirSync, readFileSync } from 'fs';
 import { getTemplatePath } from './get-template-path.mjs';
 
 import GeneratorBase from '../../generators/base/index.mjs';
+import { getConfigWithDefaults } from '../../jdl/jhipster/default-application-options.js';
 
 const { loadDerivedAppConfig, loadDerivedServerConfig } = GeneratorBase.prototype;
 
@@ -129,7 +130,7 @@ const createMockedConfig = (sampleDir, testDir, { appDir = sampleDir, config = {
   if (!appConfig) {
     throw new Error(`Sample ${sampleDir} not found`);
   }
-  appConfig = { packageName: 'com.mycompany.myapp', ...appConfig, ...config };
+  appConfig = getConfigWithDefaults({ packageName: 'com.mycompany.myapp', ...appConfig, ...config });
   generator.editFile(`${appDir}.yo-rc.json`, () => JSON.stringify({ 'generator-jhipster': { ...appConfig, mockAppConfig: undefined } }));
   Object.assign(generator, appConfig);
   loadDerivedAppConfig.call(GeneratorBase.prototype, generator);

@@ -17,12 +17,17 @@
  * limitations under the License.
  */
 
-const applicationTypes: any = {
-  MONOLITH: 'monolith',
-  MICROSERVICE: 'microservice',
-  GATEWAY: 'gateway',
-};
+const APPLICATION_TYPE_MONOLITH = 'monolith';
+const APPLICATION_TYPE_MICROSERVICE = 'microservice';
+const APPLICATION_TYPE_GATEWAY = 'gateway';
 
-applicationTypes.exists = applicationType => !!applicationType && !!applicationTypes[applicationType.toUpperCase()];
+export { APPLICATION_TYPE_MONOLITH, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_GATEWAY };
+
+/** @deprecated */
+const applicationTypes: any = {
+  MONOLITH: APPLICATION_TYPE_MONOLITH,
+  MICROSERVICE: APPLICATION_TYPE_MICROSERVICE,
+  GATEWAY: APPLICATION_TYPE_GATEWAY,
+};
 
 export default applicationTypes;

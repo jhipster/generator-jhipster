@@ -83,6 +83,7 @@ describe('JSONToJDLConverter', () => {
     skipUserManagement true
     testFrameworks []
     websocket no
+    withAdminUi false
   }
 }
 
@@ -136,6 +137,7 @@ describe('JSONToJDLConverter', () => {
     skipUserManagement true
     testFrameworks []
     websocket no
+    withAdminUi false
   }
 
   entities Country, Department, Employee, Job, JobHistory, Location, Region, Task
@@ -270,6 +272,7 @@ paginate Country with pager
     skipUserManagement true
     testFrameworks []
     websocket no
+    withAdminUi false
   }
 
   entities Region
@@ -307,6 +310,7 @@ application {
     skipUserManagement true
     testFrameworks []
     websocket no
+    withAdminUi false
   }
 
   entities Country, Location
@@ -344,6 +348,7 @@ application {
     skipUserManagement true
     testFrameworks []
     websocket no
+    withAdminUi false
   }
 }
 

@@ -618,6 +618,11 @@ JDLApplication {
         "quoted": false,
         "value": "no",
       },
+      "nativeLanguage": StringJDLApplicationConfigurationOption {
+        "name": "nativeLanguage",
+        "quoted": false,
+        "value": "en",
+      },
       "packageFolder": StringJDLApplicationConfigurationOption {
         "name": "packageFolder",
         "quoted": false,
@@ -644,7 +649,7 @@ JDLApplication {
       },
       "serverPort": IntegerJDLApplicationConfigurationOption {
         "name": "serverPort",
-        "value": "8080",
+        "value": 8080,
       },
       "serviceDiscoveryType": StringJDLApplicationConfigurationOption {
         "name": "serviceDiscoveryType",
