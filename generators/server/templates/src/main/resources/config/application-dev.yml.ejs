@@ -195,7 +195,7 @@ spring:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
-    url: devR2dbcUrl %>
+    url: <%- devR2dbcUrl %>
     username: <%- devDatabaseUsername %>
     password: <%- devDatabasePassword %>
 <%_ } _%>
