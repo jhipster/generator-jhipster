@@ -2551,11 +2551,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             protocolSuffix: 'h2:tcp://',
             localDirectory: 'localhost:18080/mem:',
           };
-        } else if (dest.buildToolGradle) {
-          devLiquibaseOptions = { localDirectory: './build/h2db/db' };
         } else {
           // eslint-disable-next-line no-template-curly-in-string
-          devLiquibaseOptions = { buildDirectory: '${project.build.directory}/' };
+          devLiquibaseOptions = { buildDirectory: dest.buildToolGradle ? `./${dest.temporaryDir}` : '${project.build.directory}/' };
         }
 
         dest.devLiquibaseUrl = getJdbcUrl(dest.devDatabaseType, {
