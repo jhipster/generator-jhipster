@@ -1540,7 +1540,7 @@ objects:
                     secretKeyRef:
                       name: \${REG_SECRET_REF}
                       key: registry-admin-password
-                - name: SPRING_DATA_CASSANDRA_CONTACTPOINTS
+                - name: SPRING_CASSANDRA_CONTACTPOINTS
                   value: \${APPLICATION_NAME}-cassandra
               ports:
                 - name: http

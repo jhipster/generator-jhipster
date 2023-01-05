@@ -316,7 +316,7 @@ eureka:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
-      - SPRING_DATA_CASSANDRA_CONTACTPOINTS=mscassandra-cassandra
+      - SPRING_CASSANDRA_CONTACTPOINTS=mscassandra-cassandra
       - JHIPSTER_SLEEP=10
       - JHIPSTER_REGISTRY_PASSWORD=admin
     healthcheck:
