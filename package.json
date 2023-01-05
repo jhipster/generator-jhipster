@@ -127,7 +127,7 @@
   },
   "devDependencies": {
     "@node-loaders/auto": "0.7.0",
-    "@node-loaders/esbuild": "0.7.0",
+    "@node-loaders/esbuild": "0.7.1",
     "@node-loaders/mock": "0.7.0",
     "@types/chai": "4.3.4",
     "@types/mocha": "10.0.1",
