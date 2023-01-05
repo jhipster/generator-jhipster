@@ -10,6 +10,7 @@ test/temp/
 /docs
 *debug.log*
 .vscode
+.vscode-test
 .DS_Store
 /.jhipster
 *.sw?
@@ -20,4 +21,4 @@ test/temp/
 .project
 .settings
 test/**/*.png
-dist
+/dist

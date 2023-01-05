@@ -201,10 +201,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
     return {
       loadPackageJson() {
         // Load common client package.json into dependabotPackageJson
-        _.merge(
-          this.dependabotPackageJson,
-          this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json'))
-        );
+        _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'package.json')));
       },
 
       configure() {

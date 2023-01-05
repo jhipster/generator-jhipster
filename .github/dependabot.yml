@@ -62,7 +62,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'npm'
-    directory: '/generators/client/templates/common/'
+    directory: '/generators/client/templates/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'

@@ -112,6 +112,22 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
           this.jhipsterConfig.clientFramework = ANGULAR;
         }
       },
+
+      configureDevServerPort() {
+        if (this.jhipsterConfig.devServerPort !== undefined) return undefined;
+
+        const { clientFramework, applicationIndex } = this.jhipsterConfigWithDefaults;
+        const devServerBasePort = clientFramework === ANGULAR ? 4200 : 9060;
+        let devServerPort;
+
+        if (applicationIndex !== undefined) {
+          devServerPort = devServerBasePort + applicationIndex;
+        } else if (!devServerPort) {
+          devServerPort = devServerBasePort;
+        }
+
+        this.jhipsterConfig.devServerPort = devServerPort;
+      },
     });
   }
 
@@ -147,20 +163,12 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         application.clientPackageManager = 'npm';
       },
 
-      loadPackageJson({ application }) {
+      loadPackageJson() {
         // Load common client package.json into packageJson
         _.merge(
           this.dependabotPackageJson,
-          this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json'))
+          this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'templates', 'package.json'))
         );
-        // Load client package.json into packageJson
-        const clientFramework = application.clientFramework;
-        if (!application.clientFrameworkVue) {
-          _.merge(
-            this.dependabotPackageJson,
-            this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', clientFramework, 'package.json'))
-          );
-        }
       },
     });
   }

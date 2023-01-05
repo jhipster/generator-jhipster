@@ -36,6 +36,7 @@ import {
   GENERATOR_LANGUAGES,
   GENERATOR_LIQUIBASE,
   GENERATOR_MAVEN,
+  GENERATOR_MONGODB,
   GENERATOR_SERVER,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -262,6 +263,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_LIQUIBASE);
         } else if (databaseType === COUCHBASE) {
           await this.composeWithJHipster(GENERATOR_COUCHBASE);
+        } else if (databaseType === MONGODB) {
+          await this.composeWithJHipster(GENERATOR_MONGODB);
         }
         if (messageBroker === KAFKA) {
           await this.composeWithJHipster(GENERATOR_KAFKA);

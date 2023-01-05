@@ -117,9 +117,6 @@ export function getConfigForClientApplication(options: any = {}): any {
     } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
       options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].default;
     }
-    if (options.devServerPort === undefined) {
-      options.devServerPort = clientFramework === ANGULAR ? 4200 : 9060;
-    }
   }
   return options;
 }

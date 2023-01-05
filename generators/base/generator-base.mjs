@@ -53,7 +53,7 @@ import {
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
 
-import databaseData from '../sql-constants.mjs';
+import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
 import {
@@ -66,6 +66,7 @@ import {
   CLIENT_TEST_SRC_DIR,
   NODE_VERSION,
   LANGUAGES,
+  CLIENT_DIST_DIR,
 } from '../generator-constants.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -2446,7 +2447,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
     dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
-    dest.buildDir = this.getBuildDirectoryForBuildTool(dest.buildTool);
+
+    dest.temporaryDir = dest.buildToolGradle ? 'build/' : 'target/';
+    const buildDestinationDir = `${dest.temporaryDir}${dest.buildToolGradle ? 'resources/main/' : 'classes/'}`;
+    dest.clientDistDir = `${buildDestinationDir}${CLIENT_DIST_DIR}`;
 
     dest.cacheProviderNo = dest.cacheProvider === NO_CACHE;
     dest.cacheProviderCaffeine = dest.cacheProvider === CAFFEINE;
@@ -2500,6 +2504,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       (dest.applicationType === MICROSERVICE && !dest.skipUserManagement);
 
     dest.generateBuiltInAuthorityEntity = dest.generateBuiltInUserEntity && !dest.databaseTypeCassandra;
+
+    if (dest.databaseTypeSql) {
+      prepareSqlApplicationProperties(dest);
+    }
+
     this.loadServerAndPlatformConfig(dest);
   }
 
@@ -2602,7 +2611,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
   getJDBCUrl(databaseType, options = {}) {
-    return this.getDBCUrl(databaseType, 'jdbc', options);
+    return getJdbcUrl(databaseType, options);
   }
 
   /**
@@ -2613,7 +2622,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
   getR2DBCUrl(databaseType, options = {}) {
-    return this.getDBCUrl(databaseType, 'r2dbc', options);
+    return getR2dbcUrl(databaseType, options);
   }
 
   /**

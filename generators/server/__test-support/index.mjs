@@ -15,6 +15,7 @@ export const mockedGenerators = [
   'jhipster:languages',
   'jhipster:liquibase',
   'jhipster:maven',
+  'jhipster:mongodb',
 ];
 
 export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {

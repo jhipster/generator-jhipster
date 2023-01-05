@@ -33,43 +33,6 @@ const moveToJavaPackageSrcDir = (data, filePath) => `${data.javaPackageSrcDir}${
  */
 const moveToJavaPackageTestDir = (data, filePath) => `${data.javaPackageTestDir}${filePath.replace(/_\w*/, '')}`;
 
-export const mongoDbFiles = {
-  serverResource: [
-    {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/dbmigrations/package-info.java',
-          renameTo: generator => `${generator.javaDir}config/dbmigrations/package-info.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.generateBuiltInUserEntity,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/dbmigrations/InitialSetupMigration.java',
-          renameTo: generator => `${generator.javaDir}config/dbmigrations/InitialSetupMigration.java`,
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/MongoDbTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/MongoDbTestContainer.java`,
-        },
-        {
-          file: 'package/config/EmbeddedMongo.java',
-          renameTo: generator => `${generator.testDir}config/EmbeddedMongo.java`,
-        },
-      ],
-    },
-  ],
-};
-
 export const neo4jFiles = {
   serverResource: [
     {
@@ -1443,7 +1406,6 @@ export const baseServerFiles = {
 
 export const serverFiles = mergeSections(
   baseServerFiles,
-  addSectionsCondition(mongoDbFiles, context => context.databaseTypeMongodb),
   addSectionsCondition(neo4jFiles, context => context.databaseTypeNeo4j),
   addSectionsCondition(cassandraFiles, context => context.databaseTypeCassandra),
   addSectionsCondition(jwtFiles, context => context.authenticationTypeJwt)

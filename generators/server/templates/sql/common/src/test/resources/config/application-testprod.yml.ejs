@@ -51,9 +51,6 @@ spring:
         useServerPrepStmts: true
 <%_ } _%>
   jpa:
-<%_ if (prodDatabaseTypePostgres) { _%>
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-<%_ } _%>
     open-in-view: false
     hibernate:
       ddl-auto: none

@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import cleanupCassandra from './cleanup-cassandra.mjs';
-import cleanupMongodb from './cleanup-mongodb.mjs';
 import cleanupSql from './cleanup-sql.mjs';
 import cleanupCacheProvider from './cleanup-cache-provider.mjs';
 import cleanupAngular from './cleanup-angular.mjs';
@@ -46,9 +45,6 @@ export function cleanupOldServerFiles(generator, application, javaDir, testDir, 
   }
   if (application.databaseTypeCassandra) {
     cleanupCassandra(generator, javaDir, testDir, mainResourceDir, testResourceDir);
-  }
-  if (application.databaseTypeMongodb) {
-    cleanupMongodb(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
   cleanupCacheProvider(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   if (application.clientFrameworkAngular) {

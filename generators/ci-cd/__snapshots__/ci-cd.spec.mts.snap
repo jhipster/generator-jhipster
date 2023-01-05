@@ -2518,7 +2518,6 @@ webapp-prod:
     \\"clientThemeVariant\\": \\"\\",
     \\"creationTimestamp\\": 1583434912169,
     \\"databaseType\\": \\"sql\\",
-    \\"devDatabaseType\\": \\"sql\\",
     \\"dtoSuffix\\": \\"DTO\\",
     \\"enableTranslation\\": true,
     \\"entities\\": [],
@@ -2526,7 +2525,6 @@ webapp-prod:
     \\"jhiPrefix\\": \\"jhi\\",
     \\"languages\\": [\\"en\\"],
     \\"nativeLanguage\\": \\"en\\",
-    \\"prodDatabaseType\\": \\"sql\\",
     \\"promptValues\\": {
       \\"nativeLanguage\\": \\"en\\"
     },
