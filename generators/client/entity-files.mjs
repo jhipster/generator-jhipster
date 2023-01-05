@@ -38,7 +38,6 @@ async function addEnumerationFiles({ application, entity }) {
             destinationFile: ctx => `${application.webappEnumerationsDir}${enumFileName}.model.ts`,
           },
         ],
-        rootTemplatesPath: [CLIENT_COMMON_TEMPLATES_DIR],
         context: enumInfo,
       });
     }

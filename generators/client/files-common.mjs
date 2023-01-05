@@ -77,7 +77,6 @@ export const files = {
 export async function writeFiles({ application }) {
   await this.writeFiles({
     sections: files,
-    rootTemplatesPath: 'common',
     context: application,
   });
 }

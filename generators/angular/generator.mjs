@@ -50,7 +50,10 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       loadPackageJson() {
-        _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('angular', 'templates', 'package.json')));
+        _.merge(
+          this.dependabotPackageJson,
+          this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'templates', 'package.json'))
+        );
       },
     });
   }
