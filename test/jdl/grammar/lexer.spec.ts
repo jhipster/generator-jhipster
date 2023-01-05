@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import { JDLLexer } from '../../../jdl/parsing/lexer/lexer.js';
 
-describe('JDLLexer', () => {
+describe('jdl - JDLLexer', () => {
   context('when passing a valid JDL input', () => {
     let lexingResult;
 

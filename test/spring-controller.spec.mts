@@ -7,7 +7,7 @@ import { getGenerator, getTemplatePath } from './support/index.mjs';
 
 const generator = getGenerator('spring-controller');
 
-describe('JHipster generator spring-controller', () => {
+describe('generator - spring-controller', () => {
   describe('creates spring controller', () => {
     before(async () => {
       await helpers

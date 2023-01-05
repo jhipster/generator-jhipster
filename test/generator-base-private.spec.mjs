@@ -16,7 +16,7 @@ BaseGenerator.log = msg => {
   console.log(msg);
 };
 
-describe('Generator Base Private', () => {
+describe('generator - base-private', () => {
   describe('stripMargin', () => {
     it('should produce correct output without margin', () => {
       const entityFolderName = 'entityFolderName';

@@ -22,7 +22,7 @@ import { jestExpect as expect } from 'mocha-expect-snapshot';
 import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
 import { binaryOptions } from '../../../jdl/jhipster/index.mjs';
 
-describe('AbstractJDLOption', () => {
+describe('jdl - AbstractJDLOption', () => {
   describe('resolveEntityNames', () => {
     context('when not passing entity names', () => {
       it('should fail', () => {

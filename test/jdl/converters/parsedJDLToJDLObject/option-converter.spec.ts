@@ -27,7 +27,7 @@ const { COUCHBASE } = searchEngineTypes;
 const { MAPSTRUCT } = MapperTypes;
 const { PAGINATION } = PaginationTypes;
 
-describe('OptionConverter', () => {
+describe('jdl - OptionConverter', () => {
   describe('convertOptions', () => {
     context('when not passing options', () => {
       it('should fail', () => {

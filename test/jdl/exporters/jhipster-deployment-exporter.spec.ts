@@ -31,7 +31,7 @@ const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },
 } = deploymentOptions;
 
-describe('JHipsterDeploymentExporter', () => {
+describe('jdl - JHipsterDeploymentExporter', () => {
   describe('exportDeployments', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {

@@ -22,7 +22,7 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import { JDLEnum } from '../../../jdl/models/index.mjs';
 
-describe('JDLEnum', () => {
+describe('jdl - JDLEnum', () => {
   describe('new', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {

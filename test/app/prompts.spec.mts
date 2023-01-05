@@ -21,7 +21,7 @@ const { MAVEN } = buildToolTypes;
 
 const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:client', 'jhipster:languages', 'jhipster:entity'];
 
-describe('jhipster:app prompts', () => {
+describe('generator - app - prompts', () => {
   describe('testFrameworks prompt', () => {
     describe('with cypress value', () => {
       let runResult;

@@ -31,7 +31,7 @@ const createPage = runResult =>
     })
     .run();
 
-describe('Page subgenerator', () => {
+describe('generator - page', () => {
   it.skip('with angular client framework');
 
   it.skip('with react client framework');

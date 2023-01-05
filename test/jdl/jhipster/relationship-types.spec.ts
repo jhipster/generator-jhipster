@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import { relationshipTypes } from '../../../jdl/jhipster/index.mjs';
 
-describe('RelationshipTypes', () => {
+describe('jdl - RelationshipTypes', () => {
   describe('exists', () => {
     context('when checking for a valid unary relationship type', () => {
       it('should return true', () => {

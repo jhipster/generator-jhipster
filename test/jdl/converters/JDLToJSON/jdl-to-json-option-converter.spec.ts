@@ -33,7 +33,7 @@ import { unaryOptions, binaryOptions } from '../../../../jdl/jhipster/index.mjs'
 import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-to-json-option-converter.js';
 import logger from '../../../../jdl/utils/objects/logger.js';
 
-describe('JDLToJSONOptionConverter', () => {
+describe('jdl - JDLToJSONOptionConverter', () => {
   describe('convert', () => {
     context('when not passing a JDL option holder', () => {
       it('should fail', () => {

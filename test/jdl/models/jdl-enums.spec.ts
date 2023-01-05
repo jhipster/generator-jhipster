@@ -23,7 +23,7 @@ import { expect } from 'chai';
 import JDLEnums from '../../../jdl/models/jdl-enums.js';
 import { JDLEnum } from '../../../jdl/models/index.mjs';
 
-describe('JDLEnums', () => {
+describe('jdl - JDLEnums', () => {
   describe('add', () => {
     let jdlEnums;
 

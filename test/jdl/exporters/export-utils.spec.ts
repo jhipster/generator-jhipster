@@ -28,7 +28,7 @@ import { writeConfigFile } from '../../../jdl/exporters/export-utils.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('ExportUtils', () => {
+describe('jdl - ExportUtils', () => {
   describe('writeConfigFile', () => {
     context('when there is no .yo-rc.json file present', () => {
       let exportedConfig;

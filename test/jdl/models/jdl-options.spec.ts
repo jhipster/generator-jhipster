@@ -25,7 +25,7 @@ import JDLOptions from '../../../jdl/models/jdl-options.js';
 import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
 
-describe('JDLOptions', () => {
+describe('jdl - JDLOptions', () => {
   describe('addOption', () => {
     context('when passing an invalid option', () => {
       let options;

@@ -23,7 +23,7 @@ import { applicationOptions } from '../../../jdl/jhipster/index.mjs';
 
 const { OptionNames } = applicationOptions;
 
-describe('JDLApplicationConfigurationFactory', () => {
+describe('jdl - JDLApplicationConfigurationFactory', () => {
   describe('createApplicationConfigurationFromObject', () => {
     context('when passing no configuration', () => {
       let createdConfiguration;

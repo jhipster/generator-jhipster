@@ -34,7 +34,7 @@ const generatorPath = join(__dirname, 'index.mjs');
 
 const contextBuilder = () => helpers.create(generatorPath);
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', () => {
     expect(GENERATOR_INIT).toBe(generator);
   });

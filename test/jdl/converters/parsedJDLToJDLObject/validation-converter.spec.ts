@@ -20,7 +20,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { convertValidations } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/validation-converter.js';
 
-describe('ValidationConverter', () => {
+describe('jdl - ValidationConverter', () => {
   describe('convertValidations', () => {
     context('when not passing validations', () => {
       it('should fail', () => {

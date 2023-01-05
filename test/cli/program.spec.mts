@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import { createProgram } from '../../cli/program.mjs';
 import { prepareTempDir } from './utils/utils.cjs';
 
-describe('jhipster program', () => {
+describe('cli - program', () => {
   let cleanup;
   beforeEach(() => {
     cleanup = prepareTempDir();

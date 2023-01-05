@@ -26,7 +26,7 @@ import FieldIssue from '../../../../jdl/linters/issues/field-issue.js';
 import EnumIssue from '../../../../jdl/linters/issues/enum-issue.js';
 import RelationshipIssue from '../../../../jdl/linters/issues/relationship-issue.js';
 
-describe('Issues', () => {
+describe('jdl - Issues', () => {
   describe('getNumberOfIssues', () => {
     let issues: Issues;
 

@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import JDLApplicationEntities from '../../../jdl/models/jdl-application-entities.js';
 
-describe('JDLApplicationEntities', () => {
+describe('jdl - JDLApplicationEntities', () => {
   describe('addEntityNames', () => {
     context('when not passing anything', () => {
       let jdlApplicationEntities;

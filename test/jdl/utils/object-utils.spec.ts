@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import { areEntitiesEqual, merge } from '../../../jdl/utils/object-utils.js';
 
-describe('ObjectUtils', () => {
+describe('jdl - ObjectUtils', () => {
   describe('merge', () => {
     context('when merging a nil object with a not-empty one', () => {
       let merged: any;

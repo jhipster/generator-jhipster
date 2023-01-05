@@ -21,7 +21,7 @@ import { expect } from 'chai';
 import Rule from '../../../jdl/linters/rule.js';
 import { INFO, ERROR } from '../../../jdl/linters/rule-levels.js';
 
-describe('Rule', () => {
+describe('jdl - Rule', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
       it('should fail', () => {

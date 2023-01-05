@@ -8,7 +8,7 @@ import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('JHipster application generator with blueprint with constructor error', () => {
+describe('generator - app - with blueprint with constructor error', () => {
   describe('generate monolith application with scoped blueprint', () => {
     it('rejects the environment', () => {
       return helpers

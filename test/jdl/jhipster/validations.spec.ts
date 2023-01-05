@@ -25,7 +25,7 @@ const {
   Validations: { REQUIRED, MAXLENGTH, MAXBYTES },
 } = validations;
 
-describe('Validations', () => {
+describe('jdl - Validations', () => {
   describe('exists', () => {
     describe('when checking for a valid validation', () => {
       it('should return true', () => {

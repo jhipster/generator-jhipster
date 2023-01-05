@@ -32,7 +32,7 @@ const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('JSONReader', () => {
+describe('jdl - JSONReader', () => {
   describe('parseFromDir', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {

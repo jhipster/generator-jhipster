@@ -43,7 +43,7 @@ const expectedFiles = {
   applyScript: ['./kubectl-apply.sh'],
 };
 
-describe('JHipster Kubernetes Sub Generator', () => {
+describe('generator - Kubernetes', () => {
   describe('only gateway', () => {
     let runResult;
     before(async () => {

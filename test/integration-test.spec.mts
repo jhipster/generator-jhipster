@@ -51,7 +51,7 @@ const itEntitiesSamplesEntries = fs
   .map(({ name }) => name)
   .map(name => [name, path.join(itEntitiesSamplesPath, name)]);
 
-describe('Integration Test', () => {
+describe('integration-test', () => {
   describe('::application samples', () => {
     for (const [name, yoFile] of itSamplesEntries) {
       let yoJson = fse.readJsonSync(yoFile);

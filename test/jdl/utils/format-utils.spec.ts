@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import formatComment from '../../../jdl/utils/format-utils.js';
 
-describe('FormatUtils', () => {
+describe('jdl - FormatUtils', () => {
   describe('formatComment', () => {
     context('when the comment is in the one-line form', () => {
       const oneLineComment1 = ' comment ';

@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import FieldIssue from '../../../../jdl/linters/issues/field-issue.js';
 
-describe('FieldIssue', () => {
+describe('jdl - FieldIssue', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
       it('should fail', () => {

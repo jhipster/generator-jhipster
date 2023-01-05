@@ -28,7 +28,7 @@ const {
   Validations: { MIN, MAXLENGTH, PATTERN },
 } = validations;
 
-describe('FieldTypes', () => {
+describe('jdl - FieldTypes', () => {
   describe('isCommonDBType', () => {
     context('when passing an invalid argument', () => {
       it('should fail', () => {

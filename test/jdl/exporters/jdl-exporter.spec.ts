@@ -33,7 +33,7 @@ const {
   OptionNames: { CLIENT_FRAMEWORK },
 } = applicationOptions;
 
-describe('JDLExporter', () => {
+describe('jdl - JDLExporter', () => {
   describe('exportToJDL', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {

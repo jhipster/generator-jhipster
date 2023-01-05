@@ -48,7 +48,7 @@ const { JWT } = authenticationTypes;
 const { ANGULAR } = clientFrameworkTypes;
 const { SQL, H2_DISK, MYSQL } = databaseTypes;
 
-describe('JHipsterApplicationExporter', () => {
+describe('jdl - JHipsterApplicationExporter', () => {
   describe('exportApplication', () => {
     context('when passing valid arguments', () => {
       context('when exporting an application to JSON', () => {

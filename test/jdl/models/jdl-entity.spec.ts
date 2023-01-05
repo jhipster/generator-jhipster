@@ -23,7 +23,7 @@ import { JDLEntity } from '../../../jdl/models/index.mjs';
 import JDLField from '../../../jdl/models/jdl-field.js';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';
 
-describe('JDLEntity', () => {
+describe('jdl - JDLEntity', () => {
   describe('new', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {

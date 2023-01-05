@@ -29,7 +29,7 @@ const {
   Validations: { MIN },
 } = validations;
 
-describe('JDLField', () => {
+describe('jdl - JDLField', () => {
   describe('new', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {

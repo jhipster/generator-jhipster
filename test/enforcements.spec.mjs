@@ -52,7 +52,7 @@ const readDir = dirPath => {
   return files;
 };
 
-describe('Enforce some developments patterns', () => {
+describe('enforce some developments patterns', () => {
   describe('at client/common generators', () => {
     const filesToTest = [
       ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_CLIENT)),

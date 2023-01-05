@@ -95,7 +95,7 @@ const prompts = {
   languages: ['fr'],
 };
 
-describe('JHipster with app blueprints', () => {
+describe('generator - app - blueprints', () => {
   describe('1 app blueprint', () => {
     let spyClient1;
     let spyServer1;

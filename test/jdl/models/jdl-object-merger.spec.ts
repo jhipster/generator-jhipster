@@ -29,7 +29,7 @@ import mergeJDLObjects from '../../../jdl/models/jdl-object-merger.js';
 
 const { MONOLITH } = applicationTypes;
 
-describe('JDLObjectMerger', () => {
+describe('jdl - JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {
     context('when not passing the first object', () => {
       it('should fail', () => {

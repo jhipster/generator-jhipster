@@ -29,7 +29,7 @@ import { convertToJDL, convertSingleContentToJDL } from '../../../jdl/converters
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('JSONToJDLConverter', () => {
+describe('jdl - JSONToJDLConverter', () => {
   describe('convertToJDL', () => {
     context('when there is a yo-rc file in the passed directory', () => {
       let dir;

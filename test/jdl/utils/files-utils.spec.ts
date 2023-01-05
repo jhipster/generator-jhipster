@@ -29,7 +29,7 @@ import { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } from 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('FileUtils', () => {
+describe('jdl - FileUtils', () => {
   describe('doesFileExist', () => {
     context('when checking a file path', () => {
       context('with a nil file path', () => {

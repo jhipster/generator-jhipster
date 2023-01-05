@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import EnumIssue from '../../../../jdl/linters/issues/enum-issue.js';
 
-describe('EnumIssue', () => {
+describe('jdl - EnumIssue', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
       it('should fail', () => {

@@ -34,7 +34,7 @@ import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
 
 const { MONOLITH } = applicationTypes;
 
-describe('JDLObject', () => {
+describe('jdl - JDLObject', () => {
   describe('addApplication', () => {
     context('when adding an invalid application', () => {
       const object = new JDLObject();

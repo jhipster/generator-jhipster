@@ -39,7 +39,7 @@ const {
   Validations: { MIN },
 } = validations;
 
-describe('JDLWithoutApplicationValidator', () => {
+describe('jdl - JDLWithoutApplicationValidator', () => {
   describe('createValidator', () => {
     context('when not passing a JDL object', () => {
       it('should fail', () => {

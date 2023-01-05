@@ -82,7 +82,7 @@ enum ProductCategory {
 const generatorPath = join(__dirname, '../server/index.mjs');
 const mockedGenerators = ['jhipster:common', 'jhipster:gradle', 'jhipster:maven'];
 
-describe('jhipster:app --incremental-changelog', function () {
+describe('generator - app - --incremental-changelog', function () {
   this.timeout(45000);
   const options = {
     ...DEFAULT_TEST_OPTIONS,

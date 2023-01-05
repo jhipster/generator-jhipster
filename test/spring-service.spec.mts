@@ -6,7 +6,7 @@ import { getGenerator, getTemplatePath } from './support/index.mjs';
 
 const generator = getGenerator('spring-service');
 
-describe('JHipster generator service', () => {
+describe('generator - service', () => {
   describe('creates service without interface', () => {
     before(async () => {
       await helpers

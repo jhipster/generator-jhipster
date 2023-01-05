@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import { parse } from '../../../jdl/parsing/api.js';
 
-describe('JDLSyntaxValidatorVisitor', () => {
+describe('jdl - JDLSyntaxValidatorVisitor', () => {
   context('when declaring an application', () => {
     for (const booleanOption of ['microfrontend']) {
       context(`and using for ${booleanOption}`, () => {

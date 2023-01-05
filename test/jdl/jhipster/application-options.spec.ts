@@ -23,7 +23,7 @@ import { applicationOptions } from '../../../jdl/jhipster/index.mjs';
 
 const { OptionNames, doesOptionExist, getTypeForOption, shouldTheValueBeQuoted } = applicationOptions;
 
-describe('ApplicationOptions', () => {
+describe('jdl - ApplicationOptions', () => {
   describe('doesOptionExist', () => {
     context('when not passing anything', () => {
       it('should return false', () => {

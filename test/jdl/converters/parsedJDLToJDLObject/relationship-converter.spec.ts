@@ -20,7 +20,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { convertRelationships } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/relationship-converter.js';
 
-describe('RelationshipConverter', () => {
+describe('jdl - RelationshipConverter', () => {
   describe('convertRelationships', () => {
     context('when not passing relationships', () => {
       it('should fail', () => {

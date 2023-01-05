@@ -49,7 +49,7 @@ const FULL_BODY = `
 <span v-bind:value="$t('sessions.title')"></span>
 `;
 
-describe('Vue transform', () => {
+describe('generator - vue - transform', () => {
   describe('replaceVueTranslations', () => {
     let generator;
 

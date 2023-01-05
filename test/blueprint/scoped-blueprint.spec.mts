@@ -7,7 +7,7 @@ import fse from 'fs-extra';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
-describe('JHipster application generator with scoped blueprint', () => {
+describe('generator - app - with scoped blueprint', () => {
   describe('generate monolith application with scoped blueprint', () => {
     let runResult;
     before(async () => {

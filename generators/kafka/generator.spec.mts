@@ -58,7 +58,7 @@ const samplesBuilder = (): [string, any][] =>
 
 const testSamples = samplesBuilder();
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });

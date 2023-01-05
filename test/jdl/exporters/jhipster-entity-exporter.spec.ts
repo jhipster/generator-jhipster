@@ -35,7 +35,7 @@ const NO_DTO = MapperTypes.NO;
 const NO_PAGINATION = PaginationTypes.NO;
 const NO_SERVICE = ServiceTypes.NO;
 
-describe('JHipsterEntityExporter', () => {
+describe('jdl - JHipsterEntityExporter', () => {
   describe('exportEntities', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {

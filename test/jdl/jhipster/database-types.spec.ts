@@ -23,7 +23,7 @@ import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
 
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 
-describe('DatabaseTypes', () => {
+describe('jdl - DatabaseTypes', () => {
   describe('isSql', () => {
     context('when not passing anything', () => {
       it('should return false', () => {

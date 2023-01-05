@@ -18,7 +18,7 @@
  */
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-describe('Public api', () => {
+describe('public api', () => {
   it('generator-jhipster/generators should match snapshot', async () => {
     // eslint-disable-next-line import/no-unresolved
     expect(await import('generator-jhipster/generators')).toMatchSnapshot();

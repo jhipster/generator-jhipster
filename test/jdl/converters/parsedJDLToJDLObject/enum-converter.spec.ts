@@ -20,7 +20,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { convertEnums } from '../../../../jdl/converters/parsed-jdl-to-jdl-object/enum-converter.js';
 
-describe('EnumConverter', () => {
+describe('jdl - EnumConverter', () => {
   describe('convertEnums', () => {
     context('when not passing enumerations', () => {
       it('should fail', () => {

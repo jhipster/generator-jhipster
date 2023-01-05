@@ -25,7 +25,7 @@ import { relationshipOptions, relationshipTypes } from '../../../jdl/jhipster/in
 const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
 
-describe('RelationshipValidator', () => {
+describe('jdl - RelationshipValidator', () => {
   let validator;
 
   before(() => {

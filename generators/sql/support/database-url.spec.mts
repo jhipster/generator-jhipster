@@ -4,7 +4,7 @@ import { getJdbcUrl, getR2dbcUrl } from './database-url.mjs';
 
 const { H2_MEMORY, H2_DISK, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 
-describe('generators - sql - database-url', () => {
+describe('generator - sql - database-url', () => {
   describe('getJdbcUrl', () => {
     describe('when called for mysql', () => {
       it('return jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {

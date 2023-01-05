@@ -14,7 +14,7 @@ const expectedFiles = {
   dockerRegistry: ['src/main/docker/docker-registry.yml'],
 };
 
-describe('JHipster CI-CD Sub Generator', () => {
+describe('generator - CI-CD', () => {
   //--------------------------------------------------
   // Jenkins tests
   //--------------------------------------------------

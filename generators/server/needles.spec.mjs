@@ -29,7 +29,7 @@ const __dirname = dirname(__filename);
 const generatorPath = join(__dirname, 'index.mjs');
 const generator = basename(__dirname);
 
-describe(`JHipster ${generator} needles`, () => {
+describe(`generator - ${generator} - needles`, () => {
   describe('generated project', () => {
     let runResult;
     before(async () => {

@@ -24,7 +24,7 @@ import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
 import BaseGenerator from '../generators/base/index.mjs';
 import { getConfigWithDefaults } from '../jdl/jhipster/index.mjs';
 
-describe('entity utilities', () => {
+describe('utils - entity', () => {
   const defaultGenerator = { jhipsterConfig: getConfigWithDefaults() };
   Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
 

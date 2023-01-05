@@ -32,7 +32,7 @@ const {
   Validations: { MINBYTES, PATTERN, MAXLENGTH, UNIQUE, REQUIRED, MAXBYTES, MINLENGTH, MIN, MAX },
 } = validations;
 
-describe('JDLToJSONFieldConverter', () => {
+describe('jdl - JDLToJSONFieldConverter', () => {
   describe('convert', () => {
     context('when not passing a JDL object', () => {
       it('should fail', () => {
