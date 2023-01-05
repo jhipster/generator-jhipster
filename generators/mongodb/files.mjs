@@ -40,7 +40,7 @@ export const mongoDbFiles = {
   ],
 };
 
-export default async function writeCouchbaseFilesTask({ application }) {
+export default async function writeMongodbFilesTask({ application }) {
   await this.writeFiles({
     sections: mongoDbFiles,
     context: application,
