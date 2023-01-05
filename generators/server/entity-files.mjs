@@ -157,16 +157,6 @@ export const entityFiles = {
       ],
     },
     {
-      condition: generator => generator.databaseTypeMongodb,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/domain/Entity.java.jhi.spring_data_mongodb',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.spring_data_mongodb`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.databaseTypeSql && !generator.reactive && generator.enableHibernateCache,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
