@@ -1,27 +1,33 @@
-import { mock } from '@node-loaders/mock';
+import { mock, resetAllMocks } from '@node-loaders/jest-mock';
+import { ExecaSyncReturnValue } from 'execa';
+import { afterEach } from 'mocha';
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-const createExecaMock = mockedResult => ({
-  execaCommandSync: () => ({
-    command: 'java',
-    escapedCommand: 'java',
-    exitCode: 0,
-    stdout: '',
-    stderr: '',
-    failed: false,
-    timedOut: false,
-    killed: false,
-    ...mockedResult,
-  }),
-});
+const execa = await mock<typeof import('execa')>('execa');
+
+const baseResult: ExecaSyncReturnValue<string> = {
+  command: 'java',
+  escapedCommand: 'java',
+  exitCode: 0,
+  stdout: '',
+  stderr: '',
+  failed: false,
+  timedOut: false,
+  killed: false,
+};
 
 describe('checkJava', () => {
+  afterEach(() => {
+    resetAllMocks();
+  });
+
   describe('with valid java --version output', () => {
     const stderr = 'openjdk 17.0.1 2021-10-19';
     let result;
 
     before(async () => {
-      const { default: checkJava } = await mock('./check-java.mjs', { execa: createExecaMock({ stderr }) });
+      execa.execaCommandSync.mockReturnValue({ ...baseResult, stderr } as any);
+      const { default: checkJava } = await import('./check-java.mjs');
       result = checkJava();
     });
 
@@ -39,7 +45,8 @@ describe('checkJava', () => {
     let result;
 
     before(async () => {
-      const { default: checkJava } = await mock('./check-java.mjs', { execa: createExecaMock({ exitCode, stderr }) });
+      execa.execaCommandSync.mockReturnValue({ ...baseResult, exitCode, stderr } as any);
+      const { default: checkJava } = await import('./check-java.mjs');
       result = checkJava();
     });
 
@@ -52,13 +59,10 @@ describe('checkJava', () => {
     let result;
 
     before(async () => {
-      const { default: checkJava } = await mock('./check-java.mjs', {
-        execa: {
-          execaCommandSync: () => {
-            throw new Error('foo');
-          },
-        },
+      execa.execaCommandSync.mockImplementation(() => {
+        throw new Error('foo');
       });
+      const { default: checkJava } = await import('./check-java.mjs');
       result = checkJava();
     });
 
