@@ -128,7 +128,8 @@
   "devDependencies": {
     "@node-loaders/auto": "0.7.0",
     "@node-loaders/esbuild": "0.7.1",
-    "@node-loaders/mock": "0.7.0",
+    "@node-loaders/jest-mock": "0.1.3",
+    "@node-loaders/mock": "0.9.1",
     "@types/chai": "4.3.4",
     "@types/mocha": "10.0.1",
     "@types/sinon-chai": "3.2.9",
@@ -138,7 +139,6 @@
     "chokidar": "3.5.3",
     "concurrently": "7.6.0",
     "ejs-lint": "2.0.0",
-    "esbuild": "0.16.14",
     "eslint": "8.31.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.6.0",

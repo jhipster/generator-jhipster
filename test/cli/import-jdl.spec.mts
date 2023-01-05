@@ -1,9 +1,9 @@
-import { mock } from '@node-loaders/mock';
+import { mock } from '@node-loaders/jest-mock';
 import path from 'path';
 import fse from 'fs-extra';
 import assert from 'yeoman-assert';
 import { expect } from 'chai';
-import * as utils from '../../cli/utils.mjs';
+import { getOptionAsArgs } from '../../cli/utils.mjs';
 
 import { getTemplatePath, testInTempDir, revertTempDir } from './utils/utils.cjs';
 
@@ -37,48 +37,36 @@ const env = {
   },
 };
 
-const createImportJdl = async (options?) => {
-  options = {
-    './utils.mjs': {
-      ...utils,
-      logger: {
-        ...utils.logger,
-        info: () => {},
-      },
-      printSuccess: () => {},
+const utilsMock = await mock<typeof import('../../cli/utils.mjs')>('../../cli/utils.mjs');
+utilsMock.getOptionAsArgs.mockImplementation(getOptionAsArgs);
+
+const childProcessMock = await mock<typeof import('child_process')>('child_process');
+childProcessMock.fork.mockImplementation(((runYeomanProcess, argv, opts) => {
+  pushCall(argv[0], argv.slice(1));
+  return {
+    on(code, cb) {
+      cb(0);
     },
-    child_process: {
-      fork: (runYeomanProcess, argv, opts) => {
-        const command = argv[0];
-        const options = argv.slice(1);
-        pushCall(command, options);
-        return {
-          on(code, cb) {
-            cb(0);
-          },
-        };
-      },
-    },
-    './environment-builder.mjs': {
-      default: {
-        createDefaultBuilder: async () => {
-          return Promise.resolve({
-            getEnvironment: () => {
-              return {
-                composeWith() {},
-                run: (generatorArgs, generatorOptions) => {
-                  pushCall(generatorArgs, generatorOptions);
-                  return Promise.resolve();
-                },
-              };
-            },
-          });
-        },
-      },
-    },
-    ...options,
   };
-  const importJdl = (await mock('../../cli/import-jdl.mjs', options)).default;
+}) as any);
+
+const EnvironmentBuilderMock = await mock<typeof import('../../cli/environment-builder.mjs')>('../../cli/environment-builder.mjs');
+EnvironmentBuilderMock.default.createDefaultBuilder.mockImplementation((async () => {
+  return Promise.resolve({
+    getEnvironment: () => {
+      return {
+        composeWith() {},
+        run: (generatorArgs, generatorOptions) => {
+          pushCall(generatorArgs, generatorOptions);
+          return Promise.resolve();
+        },
+      };
+    },
+  });
+}) as any);
+
+const createImportJdl = async () => {
+  const { default: importJdl } = await import('../../cli/import-jdl.mjs');
   return importJdl;
 };
 
