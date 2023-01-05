@@ -30,6 +30,7 @@ import {
   GENERATOR_COMMON,
   GENERATOR_COUCHBASE,
   GENERATOR_DOCKER,
+  GENERATOR_ELASTICSEARCH,
   GENERATOR_GRADLE,
   GENERATOR_KAFKA,
   GENERATOR_LANGUAGES,
@@ -97,7 +98,7 @@ const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseT
 const { MICROSERVICE, GATEWAY } = applicationTypes;
 const { KAFKA } = messageBrokerTypes;
 
-const NO_SEARCH_ENGINE = searchEngineTypes.NO;
+const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { INSTANT } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
@@ -243,7 +244,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
 
       async composing() {
-        const { buildTool, enableTranslation, databaseType, messageBroker } = this.jhipsterConfigWithDefaults;
+        const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine } = this.jhipsterConfigWithDefaults;
         if (buildTool === GRADLE) {
           await this.composeWithJHipster(GENERATOR_GRADLE);
         } else if (buildTool === MAVEN) {
@@ -267,6 +268,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if (messageBroker === KAFKA) {
           await this.composeWithJHipster(GENERATOR_KAFKA);
+        }
+        if (searchEngine === ELASTICSEARCH) {
+          await this.composeWithJHipster(GENERATOR_ELASTICSEARCH);
         }
       },
     });

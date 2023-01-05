@@ -23,6 +23,7 @@ Object {
   "GENERATOR_CYPRESS": "cypress",
   "GENERATOR_DOCKER": "docker",
   "GENERATOR_DOCKER_COMPOSE": "docker-compose",
+  "GENERATOR_ELASTICSEARCH": "elasticsearch",
   "GENERATOR_ENTITIES": "entities",
   "GENERATOR_ENTITY": "entity",
   "GENERATOR_EXPORT_JDL": "export-jdl",
