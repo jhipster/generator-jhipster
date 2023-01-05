@@ -68,9 +68,6 @@ spring:
     <%_ } _%>
   <%_ } _%>
   jpa:
-  <%_ if (devDatabaseTypePostgres) { _%>
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-  <%_ } _%>
     open-in-view: false
     hibernate:
       ddl-auto: none

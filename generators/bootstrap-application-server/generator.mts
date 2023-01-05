@@ -58,9 +58,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
 
         application.gradleVersion = control.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
-        application.temporaryDir = application.buildTool === 'gradle' ? 'build/' : 'target/';
-        application.buildDir = `${application.temporaryDir}${application.buildTool === 'gradle' ? 'resources/main/' : 'classes/'}`;
-        application.clientDistDir = `${application.buildDir}${CLIENT_DIST_DIR}`;
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
         application.javaDependencies = this.prepareDependencies(

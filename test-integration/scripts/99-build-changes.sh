@@ -95,6 +95,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/kafka' \
   'generators/maven' \
   'generators/server' \
+  'generators/sql' \
   'generators/database-changelog' \
   'generators/database-changelog-liquibase' \
   || SERVER=true ANY=true
