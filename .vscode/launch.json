@@ -1,292 +1,217 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "JHipster Mocha Tests",
-            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-            "args": [
-                "--timeout",
-                "999999",
-                "--reporter",
-                "spec",
-                "${workspaceFolder}/test"
-            ],
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster generate sample-dev blueprint",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "timeout": 100000,
-            "args": [
-                "-d",
-                "--skip-checks",
-                "--skip-git",
-                "--skip-cache",
-                "--blueprint",
-                "sample-blueprint"
-                ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster generate sample-dev",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "timeout": 100000,
-            "args": [
-                "-d",
-                "--skip-checks",
-                "--skip-git",
-                "--skip-cache"
-                ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster generate sample-ng-default (protractor)",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "timeout": 100000,
-            "args": [
-                "-d",
-                "--skip-checks",
-                "--skip-git",
-                "--skip-cache"
-                ],
-            "cwd": "${workspaceFolder}/test-integration/samples/ng-default/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster generate sample-ng-default",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "timeout": 100000,
-            "args": [
-                "-d",
-                "--skip-checks",
-                "--skip-git",
-                "--skip-cache"
-                ],
-            "cwd": "${workspaceFolder}/test-integration/samples/ng-default/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster generate sample-gateway-ng-eureka",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "timeout": 100000,
-            "args": [
-                "-d",
-                "--skip-checks",
-                "--skip-git",
-                "--skip-cache"
-                ],
-            "cwd": "${workspaceFolder}/test-integration/samples/ms-ng-gateway-eureka/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster generate sample-microservice-eureka",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "timeout": 100000,
-            "args": [
-                "-d",
-                "--skip-checks",
-                "--skip-git",
-                "--skip-cache"
-                ],
-            "cwd": "${workspaceFolder}/test-integration/samples/ms-micro-eureka/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster generate sample-ng-gradle-fr",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "timeout": 100000,
-            "args": [
-                "-d",
-                "--skip-checks",
-                "--skip-git",
-                "--skip-cache"
-                ],
-            "cwd": "${workspaceFolder}/test-integration/samples/ng-gradle-fr/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster entity",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "entity",
-                "BankAccount",
-                "--force"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster ci-cd",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "ci-cd"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster import-jdl",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "import-jdl",
-                "--inline",
-                "application { config { baseName jhapp }}"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster info",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "info"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster language",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "language"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster upgrade",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "upgrade"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster docker-compose",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "docker-compose"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster kubernetes",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "kubernetes"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster rancher-compose",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "rancher-compose"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster openshift",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "openshift"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster heroku",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "heroku"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster login",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "login"
-            ],
-            "env": {
-                "JHIPSTER_ONLINE_URL": "http://localhost:8080"
-            },
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster logout",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "logout"
-            ],
-            "env": {
-                "JHIPSTER_ONLINE_URL": "http://localhost:8080"
-            },
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "jhipster openapi-client",
-            "program": "${workspaceFolder}/cli/jhipster.js",
-            "args": [
-                "openapi-client"
-            ],
-            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
-            "console": "integratedTerminal"
-        },
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "JHipster Mocha Tests",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": ["--timeout", "999999", "--reporter", "spec", "${workspaceFolder}/test"],
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster generate sample-dev blueprint",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "timeout": 100000,
+      "args": ["-d", "--skip-checks", "--skip-git", "--skip-cache", "--blueprint", "sample-blueprint"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster generate sample-dev",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "timeout": 100000,
+      "args": ["-d", "--skip-checks", "--skip-git", "--skip-cache"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster generate sample-ng-default (protractor)",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "timeout": 100000,
+      "args": ["-d", "--skip-checks", "--skip-git", "--skip-cache"],
+      "cwd": "${workspaceFolder}/test-integration/samples/ng-default/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster generate sample-ng-default",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "timeout": 100000,
+      "args": ["-d", "--skip-checks", "--skip-git", "--skip-cache"],
+      "cwd": "${workspaceFolder}/test-integration/samples/ng-default/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster generate sample-gateway-ng-eureka",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "timeout": 100000,
+      "args": ["-d", "--skip-checks", "--skip-git", "--skip-cache"],
+      "cwd": "${workspaceFolder}/test-integration/samples/ms-ng-gateway-eureka/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster generate sample-microservice-eureka",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "timeout": 100000,
+      "args": ["-d", "--skip-checks", "--skip-git", "--skip-cache"],
+      "cwd": "${workspaceFolder}/test-integration/samples/ms-micro-eureka/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster generate sample-ng-gradle-fr",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "timeout": 100000,
+      "args": ["-d", "--skip-checks", "--skip-git", "--skip-cache"],
+      "cwd": "${workspaceFolder}/test-integration/samples/ng-gradle-fr/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster entity",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["entity", "BankAccount", "--force"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster ci-cd",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["ci-cd"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster import-jdl",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["import-jdl", "--inline", "application { config { baseName jhapp }}"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster info",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["info"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster language",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["language"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster upgrade",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["upgrade"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster docker-compose",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["docker-compose"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster kubernetes",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["kubernetes"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster rancher-compose",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["rancher-compose"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster openshift",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["openshift"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster heroku",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["heroku"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster login",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["login"],
+      "env": {
+        "JHIPSTER_ONLINE_URL": "http://localhost:8080"
+      },
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster logout",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["logout"],
+      "env": {
+        "JHIPSTER_ONLINE_URL": "http://localhost:8080"
+      },
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "jhipster openapi-client",
+      "program": "${workspaceFolder}/cli/jhipster.js",
+      "args": ["openapi-client"],
+      "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+      "console": "integratedTerminal"
+    }
+  ]
 }
