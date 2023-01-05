@@ -31,7 +31,7 @@ import writeElasticsearchEntityFilesTask, { cleanupElasticsearchEntityFilesTask 
  * @class
  * @extends {BaseApplicationGenerator<SpringBootApplication>}
  */
-export default class MongoDBGenerator extends BaseApplicationGenerator {
+export default class ElasticsearchGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
