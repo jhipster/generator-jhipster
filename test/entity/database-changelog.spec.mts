@@ -17,7 +17,7 @@ class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
   }
 }
 
-describe('jhipster:entity database changelogs', () => {
+describe('generator - entity database changelogs', () => {
   context('when regenerating the entity', () => {
     describe('with cassandra database', () => {
       let runResult;

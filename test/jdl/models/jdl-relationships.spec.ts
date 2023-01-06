@@ -25,7 +25,7 @@ import JDLRelationship from '../../../jdl/models/jdl-relationship.js';
 import { relationshipTypes } from '../../../jdl/jhipster/index.mjs';
 import JDLRelationships from '../../../jdl/models/jdl-relationships.js';
 
-describe('JDLRelationships', () => {
+describe('jdl - JDLRelationships', () => {
   describe('add', () => {
     context('when passing an invalid relationship', () => {
       context('because it is nil', () => {

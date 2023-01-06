@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import { getRule, rules, rulesNames } from '../../../jdl/linters/rules.js';
 
-describe('Rules', () => {
+describe('jdl - Rules', () => {
   describe('getRules', () => {
     context('when not passing a rule name', () => {
       it('should fail', () => {

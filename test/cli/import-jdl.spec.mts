@@ -86,7 +86,7 @@ function testDocumentsRelationships() {
   });
 }
 
-describe('JHipster generator import jdl', () => {
+describe('generator - import jdl', () => {
   let originalCwd;
   before(() => {
     originalCwd = process.cwd();

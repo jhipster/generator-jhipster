@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import JDLDeployment from '../../../jdl/models/jdl-deployment.js';
 
-describe('JDLDeployment', () => {
+describe('jdl - JDLDeployment', () => {
   describe('new', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {

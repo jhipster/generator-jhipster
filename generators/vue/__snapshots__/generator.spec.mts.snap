@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster vue generator gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(true) should match generated files snapshot 1`] = `
+exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(true) should match generated files snapshot 1`] = `
 Object {
   ".eslintignore": Object {
     "stateCleared": "modified",
@@ -443,7 +443,7 @@ Object {
 }
 `;
 
-exports[`JHipster vue generator gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/-websocket(true) should match generated files snapshot 1`] = `
+exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/-websocket(true) should match generated files snapshot 1`] = `
 Object {
   ".eslintignore": Object {
     "stateCleared": "modified",
@@ -961,7 +961,7 @@ Object {
 }
 `;
 
-exports[`JHipster vue generator microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(false) should match generated files snapshot 1`] = `
+exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(false) should match generated files snapshot 1`] = `
 Object {
   ".eslintignore": Object {
     "stateCleared": "modified",
@@ -1413,7 +1413,7 @@ Object {
 }
 `;
 
-exports[`JHipster vue generator microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(false) should match generated files snapshot 1`] = `
+exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(false) should match generated files snapshot 1`] = `
 Object {
   ".eslintignore": Object {
     "stateCleared": "modified",
@@ -1868,7 +1868,7 @@ Object {
 }
 `;
 
-exports[`JHipster vue generator monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(true) should match generated files snapshot 1`] = `
+exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(true) should match generated files snapshot 1`] = `
 Object {
   ".eslintignore": Object {
     "stateCleared": "modified",
@@ -2473,7 +2473,7 @@ Object {
 }
 `;
 
-exports[`JHipster vue generator monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match generated files snapshot 1`] = `
+exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match generated files snapshot 1`] = `
 Object {
   ".eslintignore": Object {
     "stateCleared": "modified",
@@ -2898,7 +2898,7 @@ Object {
 }
 `;
 
-exports[`JHipster vue generator monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true) should match generated files snapshot 1`] = `
+exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true) should match generated files snapshot 1`] = `
 Object {
   ".eslintignore": Object {
     "stateCleared": "modified",
@@ -3329,7 +3329,7 @@ Object {
 }
 `;
 
-exports[`JHipster vue generator samples matrix should match snapshot 1`] = `
+exports[`generator - vue samples matrix should match snapshot 1`] = `
 Object {
   "gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(true)": Object {
     "applicationWithEntities": Object {

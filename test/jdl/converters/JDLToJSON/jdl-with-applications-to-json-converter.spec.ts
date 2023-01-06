@@ -59,7 +59,7 @@ const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes
 
 const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
 
-describe('JDLWithApplicationsToJSONConverter', () => {
+describe('jdl - JDLWithApplicationsToJSONConverter', () => {
   describe('convert', () => {
     context('when passing invalid parameters', () => {
       context('such as no JDL object', () => {

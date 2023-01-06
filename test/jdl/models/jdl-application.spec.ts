@@ -27,7 +27,7 @@ import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
 
 const { OptionNames } = applicationOptions;
 
-describe('JDLApplication', () => {
+describe('jdl - JDLApplication', () => {
   describe('hasConfigurationOption', () => {
     context('when the application does not have the option', () => {
       let application;

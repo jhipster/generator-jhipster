@@ -23,7 +23,7 @@ import { applicationTypes } from '../../../jdl/jhipster/index.mjs';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 
-describe('JDLApplicationFactory', () => {
+describe('jdl - JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
     context(`when passing a ${MICROSERVICE} config`, () => {
       let application;

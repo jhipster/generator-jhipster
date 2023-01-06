@@ -23,7 +23,7 @@ import { expect } from 'chai';
 
 import { lowerFirst, camelCase, upperFirst } from '../../../jdl/utils/string-utils.js';
 
-describe('StringUtils', () => {
+describe('jdl - StringUtils', () => {
   describe('camelCase', () => {
     context('when passing a valid string', () => {
       context('with only one letter', () => {

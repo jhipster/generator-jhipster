@@ -23,7 +23,7 @@ import path from 'path';
 
 import * as JSONFileReader from '../../../jdl/readers/json-file-reader.js';
 
-describe('JSONFileReader', () => {
+describe('jdl - JSONFileReader', () => {
   describe('toFilePath', () => {
     context('when converting an entity name to a path', () => {
       context('with a nil entity name', () => {

@@ -34,7 +34,7 @@ const { Options, Values, OptionValues } = binaryOptions;
 
 const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX, MICROSERVICE } = Options;
 
-describe('Grammar tests', () => {
+describe('jdl - Grammar tests', () => {
   context('when parsing constants', () => {
     context('with integer values', () => {
       let constants;

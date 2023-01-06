@@ -22,7 +22,7 @@ import { entityTableNameCreator } from '../../../jdl/jhipster/index.mjs';
 
 const getTableNameFromEntityName = entityTableNameCreator;
 
-describe('EntityTableNameCreator', () => {
+describe('jdl - EntityTableNameCreator', () => {
   describe('getTableNameFromEntityName', () => {
     context('when not passing an entity name', () => {
       it('should fail', () => {

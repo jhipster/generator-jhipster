@@ -21,7 +21,7 @@ const mockCli = async (argv: string[]) => {
   return program.parseAsync(argv);
 };
 
-describe('jdl command test', () => {
+describe('cli - jdl command', () => {
   let originalCwd;
   beforeEach(async () => {
     resetAllMocks();
@@ -32,7 +32,7 @@ describe('jdl command test', () => {
   after(() => {
     revertTempDir(originalCwd);
   });
-  describe('jhipster cli', () => {
+  describe('cli - ', () => {
     describe('with 1 argument and options', () => {
       beforeEach(async () => {
         await mockCli(['jhipster', 'jhipster', 'jdl', 'foo.jdl', '--json-only']);

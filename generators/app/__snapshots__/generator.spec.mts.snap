@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster app generator with default config should match snapshot 1`] = `
+exports[`generator - app with default config should match snapshot 1`] = `
 Object {
   "ANGULAR": "angular",
   "CASSANDRA_DRIVER_VERSION": "CASSANDRA_DRIVER_VERSION",
@@ -392,7 +392,7 @@ Object {
 }
 `;
 
-exports[`JHipster app generator with gateway should match snapshot 1`] = `
+exports[`generator - app with gateway should match snapshot 1`] = `
 Object {
   "ANGULAR": "angular",
   "CASSANDRA_DRIVER_VERSION": "CASSANDRA_DRIVER_VERSION",
@@ -786,7 +786,7 @@ Object {
 }
 `;
 
-exports[`JHipster app generator with microservice should match snapshot 1`] = `
+exports[`generator - app with microservice should match snapshot 1`] = `
 Object {
   "ANGULAR": "angular",
   "CASSANDRA_DRIVER_VERSION": "CASSANDRA_DRIVER_VERSION",

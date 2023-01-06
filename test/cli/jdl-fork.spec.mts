@@ -4,7 +4,7 @@ import { prepareTempDir } from './utils/utils.cjs';
 import { runJHipster } from '../../cli/program.mjs';
 import { getTemplatePath } from '../support/index.mjs';
 
-describe('jhipster cli with jdl fork', () => {
+describe('cli - with jdl fork', () => {
   let cleanup;
   beforeEach(() => {
     cleanup = prepareTempDir();

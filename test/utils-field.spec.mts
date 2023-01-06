@@ -26,7 +26,7 @@ import { getConfigWithDefaults } from '../jdl/jhipster/index.mjs';
 
 const defaultConfig = getConfigWithDefaults();
 
-describe('main utilities', () => {
+describe('utils - field', () => {
   const defaultGenerator = { jhipsterConfig: defaultConfig };
   Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
 

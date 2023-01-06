@@ -12,7 +12,7 @@ const expectedFiles = {
   monolith: ['Procfile', `${SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`, `${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`],
 };
 
-describe('JHipster Heroku Sub Generator', () => {
+describe('generator - Heroku', () => {
   const herokuAppName = 'jhipster-test';
   let stub;
 

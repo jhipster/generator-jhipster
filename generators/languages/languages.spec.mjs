@@ -97,7 +97,7 @@ const containsLanguageInVueStore = languageValue => {
   });
 };
 
-describe('JHipster generator languages', () => {
+describe('generator - languages', () => {
   context('Creates default i18n files', () => {
     LANGUAGES.forEach(language => {
       describe(`with prompts for ${language.name}`, () => {

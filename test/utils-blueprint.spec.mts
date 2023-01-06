@@ -1,7 +1,7 @@
 import assert from 'yeoman-assert';
 import { mergeBlueprints, normalizeBlueprintName, parseBluePrints, removeBlueprintDuplicates } from '../utils/blueprint.mjs';
 
-describe('JHipster Blueprint Utils', () => {
+describe('utils - blueprint', () => {
   describe('::parseBluePrints', () => {
     it('does nothing if an array', () => {
       const expected = [{ name: 'generator-jhipster-foo', version: 'latest' }];

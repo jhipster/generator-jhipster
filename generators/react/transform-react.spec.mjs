@@ -21,7 +21,7 @@ import jest from 'jest-mock';
 
 import { createTranslationReplacer } from './transform-react.mjs';
 
-describe('React transform', () => {
+describe('generator - react - transform', () => {
   describe('replaceReactTranslations', () => {
     let replaceReactTranslations;
     beforeEach(() => {

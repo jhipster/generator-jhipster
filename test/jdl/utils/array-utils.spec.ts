@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import deduplicate from '../../../jdl/utils/array-utils.js';
 
-describe('ArrayUtils', () => {
+describe('jdl - ArrayUtils', () => {
   describe('deduplicate', () => {
     context('when not passing an array', () => {
       it('should return an empty array', () => {

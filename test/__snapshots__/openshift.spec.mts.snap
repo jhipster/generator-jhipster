@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster OpenShift Sub Generator gateway and one microservice with mysql should match files snapshot 1`] = `
+exports[`generator - OpenShift gateway and one microservice with mysql should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -949,7 +949,7 @@ objects:
 }
 `;
 
-exports[`JHipster OpenShift Sub Generator gateway with multiple microservices backed by mysql, postgres, mongo, cassandra and mariadb should match files snapshot 1`] = `
+exports[`generator - OpenShift gateway with multiple microservices backed by mysql, postgres, mongo, cassandra and mariadb should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -3247,7 +3247,7 @@ objects:
 }
 `;
 
-exports[`JHipster OpenShift Sub Generator monolith application should match files snapshot 1`] = `
+exports[`generator - OpenShift monolith application should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -3766,7 +3766,7 @@ objects:
 }
 `;
 
-exports[`JHipster OpenShift Sub Generator only gateway should match files snapshot 1`] = `
+exports[`generator - OpenShift only gateway should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -4390,7 +4390,7 @@ objects:
 }
 `;
 
-exports[`JHipster OpenShift Sub Generator two microservices backed by mysql and postgres without gateway should match files snapshot 1`] = `
+exports[`generator - OpenShift two microservices backed by mysql and postgres without gateway should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{

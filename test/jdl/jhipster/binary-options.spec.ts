@@ -22,7 +22,7 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import { binaryOptions } from '../../../jdl/jhipster/index.mjs';
 
-describe('BinaryOptions', () => {
+describe('jdl - BinaryOptions', () => {
   it('should match values', () => {
     jestExpect(binaryOptions.Values).toMatchInlineSnapshot(`
 Object {

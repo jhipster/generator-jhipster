@@ -27,7 +27,7 @@ import { unaryOptions } from '../../../jdl/jhipster/index.mjs';
 
 const { SKIP_CLIENT } = unaryOptions;
 
-describe('JSONToJDLOptionConverter', () => {
+describe('jdl - JSONToJDLOptionConverter', () => {
   describe('convertToServerOptions', () => {
     context('when not passing any argument', () => {
       let jdlObject;

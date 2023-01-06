@@ -28,7 +28,7 @@ import { getTemplatePath } from '../support/index.mjs';
 
 import { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } from './utils/utils.cjs';
 
-describe('Environment builder', () => {
+describe('cli - EnvironmentBuilder', () => {
   let cleanup;
   before(() => {
     cleanup = prepareTempDir();

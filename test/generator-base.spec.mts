@@ -19,7 +19,7 @@ BaseGenerator.log = msg => {
   console.log(msg);
 };
 
-describe('Generator Base', () => {
+describe('generator - base', () => {
   describe('getAllSupportedLanguages', () => {
     describe('when called', () => {
       it('returns an array', () => {

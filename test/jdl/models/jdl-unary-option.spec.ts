@@ -23,7 +23,7 @@ import { expect } from 'chai';
 import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
 import { unaryOptions } from '../../../jdl/jhipster/index.mjs';
 
-describe('JDLUnaryOption', () => {
+describe('jdl - JDLUnaryOption', () => {
   describe('new', () => {
     context('when passing no argument', () => {
       it('should fail', () => {

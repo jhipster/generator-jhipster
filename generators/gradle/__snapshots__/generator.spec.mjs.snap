@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster gradle generator with empty configuration should generate only gradle files 1`] = `
+exports[`generator - gradle with empty configuration should generate only gradle files 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -20,7 +20,7 @@ Object {
 }
 `;
 
-exports[`JHipster gradle generator with valid configuration should generate only gradle files 1`] = `
+exports[`generator - gradle with valid configuration should generate only gradle files 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",

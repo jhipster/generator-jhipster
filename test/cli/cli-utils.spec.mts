@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { getOptionAsArgs, getCommand } from '../../cli/utils.mjs';
 
-describe('jhipster cli utils test', () => {
+describe('cli - utils test', () => {
   describe('getOptionAsArgs', () => {
     describe('when called with empty args', () => {
       it('returns a default string array', () => {

@@ -21,7 +21,7 @@ import { expect } from 'chai';
 import JDLUnaryOption from '../../../jdl/models/jdl-unary-option.js';
 import UnaryOptionValidator from '../../../jdl/validators/unary-option-validator.js';
 
-describe('UnaryOptionValidator', () => {
+describe('jdl - UnaryOptionValidator', () => {
   let validator;
 
   before(() => {

@@ -98,7 +98,7 @@ const helmExpectedFiles = {
   applyScript: ['./helm-knative-apply.sh', './helm-knative-upgrade.sh'],
 };
 
-describe('JHipster Knative Sub Generator', () => {
+describe('generator - Knative', () => {
   describe('Using K8s generator type', () => {
     describe('only gateway', () => {
       let runResult;

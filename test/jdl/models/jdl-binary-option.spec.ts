@@ -22,7 +22,7 @@ import { expect } from 'chai';
 import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
 import { binaryOptions } from '../../../jdl/jhipster/index.mjs';
 
-describe('JDLBinaryOption', () => {
+describe('jdl - JDLBinaryOption', () => {
   describe('new', () => {
     context('when passing no argument', () => {
       it('should fail', () => {

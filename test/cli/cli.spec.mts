@@ -23,7 +23,7 @@ const mockCli = async (argv: string[], opts = {}) => {
   return program.parseAsync(argv);
 };
 
-describe('jhipster cli', () => {
+describe('cli', () => {
   let argv;
   let cleanup;
   beforeEach(() => {

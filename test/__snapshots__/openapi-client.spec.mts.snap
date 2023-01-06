@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster OpenAPI Client Sub Generator Spring: microservice petstore custom endpoint  should match files snapshot 1`] = `
+exports[`generator - OpenAPI Client Spring: microservice petstore custom endpoint  should match files snapshot 1`] = `
 Object {
   ".openapi-generator-ignore": Object {
     "contents": "pom.xml
@@ -54,7 +54,7 @@ package.json
 }
 `;
 
-exports[`JHipster OpenAPI Client Sub Generator Spring: microservice petstore regenerate  should match files snapshot 1`] = `
+exports[`generator - OpenAPI Client Spring: microservice petstore regenerate  should match files snapshot 1`] = `
 Object {
   ".openapi-generator-ignore": Object {
     "contents": "pom.xml

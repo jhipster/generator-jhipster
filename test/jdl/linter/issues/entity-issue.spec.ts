@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import EntityIssue from '../../../../jdl/linters/issues/entity-issue.js';
 
-describe('EntityIssue', () => {
+describe('jdl - EntityIssue', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
       it('should fail', () => {

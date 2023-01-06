@@ -29,7 +29,7 @@ import { JDLEntity } from '../../../../jdl/models/index.mjs';
 import { convert } from '../../../../jdl/converters/jdl-to-json/jdl-to-json-basic-entity-converter.js';
 import logger from '../../../../jdl/utils/objects/logger.js';
 
-describe('JDLToJSONBasicEntityConverter', () => {
+describe('jdl - JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {
     context('when not passing JDL entities', () => {
       it('should fail', () => {

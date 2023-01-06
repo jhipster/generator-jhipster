@@ -59,7 +59,7 @@ const {
   Validations: { REQUIRED, UNIQUE, MINLENGTH, MAXLENGTH },
 } = validations;
 
-describe('ParsedJDLToJDLObjectConverter', () => {
+describe('jdl - ParsedJDLToJDLObjectConverter', () => {
   describe('parse', () => {
     context('when passing invalid args', () => {
       context('because there is no parsedContent', () => {

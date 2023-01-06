@@ -21,7 +21,7 @@ import { expect } from 'chai';
 import JDLField from '../../../jdl/models/jdl-field.js';
 import FieldValidator from '../../../jdl/validators/field-validator.js';
 
-describe('FieldValidator', () => {
+describe('jdl - FieldValidator', () => {
   let validator;
 
   before(() => {

@@ -1,7 +1,7 @@
 import assert from 'yeoman-assert';
 import NeedleApiBase from '../../generators/needle-base.mjs';
 
-describe('Unit tests for needle-base API', () => {
+describe('needle-api - base', () => {
   let needleApiBase;
   before(() => {
     needleApiBase = new NeedleApiBase();

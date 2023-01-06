@@ -33,7 +33,7 @@ const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('integration tests', () => {
+describe('jdl - integration tests', () => {
   context('when parsing and exporting a JDL', () => {
     let originalContent;
     let writtenContent;

@@ -25,7 +25,7 @@ import { relationshipTypes, relationshipOptions } from '../../../jdl/jhipster/in
 
 const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
 
-describe('JDLRelationship', () => {
+describe('jdl - JDLRelationship', () => {
   describe('new', () => {
     context('when not passing at least one injected field', () => {
       it('should fail', () => {

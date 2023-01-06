@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster Knative Sub Generator Using Helm generator type MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
+exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -941,7 +941,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using Helm generator type gateway and ingress should match files snapshot 1`] = `
+exports[`generator - Knative Using Helm generator type gateway and ingress should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -1635,7 +1635,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using Helm generator type gateway and mysql microservice should match files snapshot 1`] = `
+exports[`generator - Knative Using Helm generator type gateway and mysql microservice should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -2545,7 +2545,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using Helm generator type gateway with istio routing files should match files snapshot 1`] = `
+exports[`generator - Knative Using Helm generator type gateway with istio routing files should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -3239,7 +3239,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using Helm generator type gateway, mysql, psql, mongodb, mariadb microservices should match files snapshot 1`] = `
+exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mongodb, mariadb microservices should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -4894,7 +4894,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using Helm generator type mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
+exports[`generator - Knative Using Helm generator type mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -7941,7 +7941,7 @@ metadata:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using Helm generator type mysql microservice with custom namespace should match files snapshot 1`] = `
+exports[`generator - Knative Using Helm generator type mysql microservice with custom namespace should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -8591,7 +8591,7 @@ metadata:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using Helm generator type only gateway should match files snapshot 1`] = `
+exports[`generator - Knative Using Helm generator type only gateway should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -9294,7 +9294,7 @@ metadata:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using K8s generator type MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
+exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -10157,7 +10157,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using K8s generator type gateway and ingress should match files snapshot 1`] = `
+exports[`generator - Knative Using K8s generator type gateway and ingress should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -10780,7 +10780,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using K8s generator type gateway and mysql microservice should match files snapshot 1`] = `
+exports[`generator - Knative Using K8s generator type gateway and mysql microservice should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -11604,7 +11604,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using K8s generator type gateway with istio routing files should match files snapshot 1`] = `
+exports[`generator - Knative Using K8s generator type gateway with istio routing files should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -12227,7 +12227,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using K8s generator type gateway, mysql, psql, mongodb, mariadb, mssql microservices should match files snapshot 1`] = `
+exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mongodb, mariadb, mssql microservices should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -14256,7 +14256,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using K8s generator type mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
+exports[`generator - Knative Using K8s generator type mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -17526,7 +17526,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using K8s generator type mysql microservice with custom namespace should match files snapshot 1`] = `
+exports[`generator - Knative Using K8s generator type mysql microservice with custom namespace should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -18104,7 +18104,7 @@ spec:
 }
 `;
 
-exports[`JHipster Knative Sub Generator Using K8s generator type only gateway should match files snapshot 1`] = `
+exports[`generator - Knative Using K8s generator type only gateway should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{

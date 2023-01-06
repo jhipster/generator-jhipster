@@ -25,7 +25,7 @@ import { deploymentOptions } from '../../../jdl/jhipster/index.mjs';
 
 const { DeploymentTypes, Options } = deploymentOptions;
 
-describe('DeploymentOptions', () => {
+describe('jdl - DeploymentOptions', () => {
   describe('DeploymentTypes', () => {
     describe('exists', () => {
       context('when passing a nil arg', () => {

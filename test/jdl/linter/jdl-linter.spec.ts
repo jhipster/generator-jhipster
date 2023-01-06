@@ -33,7 +33,7 @@ import relationshipIssue from '../../../jdl/linters/issues/relationship-issue.js
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('JDLLinter', () => {
+describe('jdl - JDLLinter', () => {
   describe('createJDLLinterFromFile', () => {
     context('when not passing a file', () => {
       it('should fail', () => {

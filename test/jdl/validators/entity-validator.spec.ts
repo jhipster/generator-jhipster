@@ -21,7 +21,7 @@ import { expect } from 'chai';
 import { JDLEntity } from '../../../jdl/models/index.mjs';
 import EntityValidator from '../../../jdl/validators/entity-validator.js';
 
-describe('EntityValidator', () => {
+describe('jdl - EntityValidator', () => {
   let validator;
 
   before(() => {

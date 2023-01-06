@@ -6,7 +6,7 @@ import createMockedConfig from '../support/mock-config.mjs';
 import { SERVER_MAIN_RES_DIR } from '../../generators/generator-constants.mjs';
 import { getEntityTemplatePath, getGenerator } from '../support/index.mjs';
 
-describe('jhipster:app database changelogs', () => {
+describe('generator - app - database changelogs', () => {
   context('when regenerating the application', () => {
     describe('with cassandra database', () => {
       let runResult;

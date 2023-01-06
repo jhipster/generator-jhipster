@@ -10,7 +10,7 @@ import { packageJson } from '../../lib/index.mjs';
 
 const jhipsterVersion = packageJson.version;
 
-describe('JHipster application generator with blueprint', () => {
+describe('generator - app - with blueprint', () => {
   describe('generate application with a version-compatible blueprint', () => {
     let runResult;
     before(async () => {

@@ -25,7 +25,7 @@ import { applicationTypes } from '../../../jdl/jhipster/index.mjs';
 
 const { MONOLITH } = applicationTypes;
 
-describe('JSONToJDLApplicationConverter', () => {
+describe('jdl - JSONToJDLApplicationConverter', () => {
   describe('convert', () => {
     context('when not passing any argument', () => {
       let jdlObject;

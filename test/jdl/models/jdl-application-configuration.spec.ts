@@ -25,7 +25,7 @@ import { applicationOptions } from '../../../jdl/jhipster/index.mjs';
 
 const { OptionNames } = applicationOptions;
 
-describe('JDLApplicationConfiguration', () => {
+describe('jdl - JDLApplicationConfiguration', () => {
   describe('hasOption', () => {
     context('when not passing an option name', () => {
       let configuration;

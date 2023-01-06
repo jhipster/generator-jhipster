@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster Kubernetes Sub Generator Kafka application should match files snapshot 1`] = `
+exports[`generator - Kubernetes Kafka application should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -481,7 +481,7 @@ deploy:
 }
 `;
 
-exports[`JHipster Kubernetes Sub Generator MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
+exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -1335,7 +1335,7 @@ deploy:
 }
 `;
 
-exports[`JHipster Kubernetes Sub Generator gateway and ingress should match files snapshot 1`] = `
+exports[`generator - Kubernetes gateway and ingress should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -1912,7 +1912,7 @@ deploy:
 }
 `;
 
-exports[`JHipster Kubernetes Sub Generator gateway and mysql microservice should match files snapshot 1`] = `
+exports[`generator - Kubernetes gateway and mysql microservice should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -2655,7 +2655,7 @@ deploy:
 }
 `;
 
-exports[`JHipster Kubernetes Sub Generator gateway with istio routing should match files snapshot 1`] = `
+exports[`generator - Kubernetes gateway with istio routing should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -3523,7 +3523,7 @@ deploy:
 }
 `;
 
-exports[`JHipster Kubernetes Sub Generator gateway, mysql, psql, mongodb, mariadb, mssql microservices should match files snapshot 1`] = `
+exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql microservices should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -5443,7 +5443,7 @@ deploy:
 }
 `;
 
-exports[`JHipster Kubernetes Sub Generator monolith application should match files snapshot 1`] = `
+exports[`generator - Kubernetes monolith application should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -5896,7 +5896,7 @@ deploy:
 }
 `;
 
-exports[`JHipster Kubernetes Sub Generator mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
+exports[`generator - Kubernetes mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -9139,7 +9139,7 @@ deploy:
 }
 `;
 
-exports[`JHipster Kubernetes Sub Generator mysql microservice with custom namespace should match files snapshot 1`] = `
+exports[`generator - Kubernetes mysql microservice with custom namespace should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -9706,7 +9706,7 @@ deploy:
 }
 `;
 
-exports[`JHipster Kubernetes Sub Generator mysql, psql, mongodb, mariadb, mssql microservices with dynamic storage provisioning should match files snapshot 1`] = `
+exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservices with dynamic storage provisioning should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -11626,7 +11626,7 @@ deploy:
 }
 `;
 
-exports[`JHipster Kubernetes Sub Generator only gateway should match files snapshot 1`] = `
+exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{

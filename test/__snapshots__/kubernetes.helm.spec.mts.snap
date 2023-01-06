@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster Kubernetes Helm Sub Generator Kafka application should match files snapshot 1`] = `
+exports[`generator - Kubernetes Helm Kafka application should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -386,7 +386,7 @@ spec:
 }
 `;
 
-exports[`JHipster Kubernetes Helm Sub Generator MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
+exports[`generator - Kubernetes Helm MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -1146,7 +1146,7 @@ spec:
 }
 `;
 
-exports[`JHipster Kubernetes Helm Sub Generator gateway and ingress should match files snapshot 1`] = `
+exports[`generator - Kubernetes Helm gateway and ingress should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -1664,7 +1664,7 @@ spec:
 }
 `;
 
-exports[`JHipster Kubernetes Helm Sub Generator gateway and mysql microservice should match files snapshot 1`] = `
+exports[`generator - Kubernetes Helm gateway and mysql microservice should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -2349,7 +2349,7 @@ spec:
 }
 `;
 
-exports[`JHipster Kubernetes Helm Sub Generator gateway with istio should match files snapshot 1`] = `
+exports[`generator - Kubernetes Helm gateway with istio should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -3092,7 +3092,7 @@ spec:
 }
 `;
 
-exports[`JHipster Kubernetes Helm Sub Generator gateway, mysql, psql, mongodb, mariadb microservices should match files snapshot 1`] = `
+exports[`generator - Kubernetes Helm gateway, mysql, psql, mongodb, mariadb microservices should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -4432,7 +4432,7 @@ spec:
 }
 `;
 
-exports[`JHipster Kubernetes Helm Sub Generator monolith application should match files snapshot 1`] = `
+exports[`generator - Kubernetes Helm monolith application should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -4803,7 +4803,7 @@ spec:
 }
 `;
 
-exports[`JHipster Kubernetes Helm Sub Generator mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
+exports[`generator - Kubernetes Helm mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -7651,7 +7651,7 @@ metadata:
 }
 `;
 
-exports[`JHipster Kubernetes Helm Sub Generator mysql microservice with custom namespace should match files snapshot 1`] = `
+exports[`generator - Kubernetes Helm mysql microservice with custom namespace should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -8152,7 +8152,7 @@ metadata:
 }
 `;
 
-exports[`JHipster Kubernetes Helm Sub Generator only gateway should match files snapshot 1`] = `
+exports[`generator - Kubernetes Helm only gateway should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{

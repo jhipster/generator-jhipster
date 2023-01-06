@@ -23,7 +23,7 @@ import { normalizeLineEndings, parseChangelog } from './utils.mjs';
 import { joinCallbacks } from './ts-utils.mjs';
 import { EditFileCallback } from './api.mjs';
 
-describe('base support', () => {
+describe('generator - base - utils', () => {
   describe('joinCallbacks', () => {
     it('should return a function', () => {
       expect(typeof joinCallbacks()).toBe('function');

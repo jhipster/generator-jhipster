@@ -21,7 +21,7 @@ import { expect } from 'chai';
 import JDLValidation from '../../../jdl/models/jdl-validation.js';
 import ValidationValidator from '../../../jdl/validators/validation-validator.js';
 
-describe('ValidationValidator', () => {
+describe('jdl - ValidationValidator', () => {
   let validator;
 
   before(() => {

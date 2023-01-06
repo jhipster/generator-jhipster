@@ -7,7 +7,7 @@ import { getEnumInfo, getJavadoc, deepFind, stringHashCode } from '../generators
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('JHipster Utils', () => {
+describe('utils - generator', () => {
   describe('::getJavadoc', () => {
     describe('when passing a negative or nil increment', () => {
       it('returns the comment with no increment', () => {

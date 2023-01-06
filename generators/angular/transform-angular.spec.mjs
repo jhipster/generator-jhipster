@@ -21,7 +21,7 @@ import jest from 'jest-mock';
 
 import { createTranslationReplacer } from './transform-angular.mjs';
 
-describe('Angular transform', () => {
+describe('generator - angular - transform', () => {
   describe('replaceAngularTranslations', () => {
     let generator;
     let replaceAngularTranslations;

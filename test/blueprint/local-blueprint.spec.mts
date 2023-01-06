@@ -24,7 +24,7 @@ const BLUEPRINT_CONTENTS = `export async function createGenerator(env){
 }
 `;
 
-describe('Local blueprint', () => {
+describe('generator - base - local blueprint', () => {
   describe('generates application', () => {
     let runResult;
     before(async () => {

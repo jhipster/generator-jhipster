@@ -26,7 +26,7 @@ const { MICROSERVICE } = applicationTypes;
 const { MONGODB, NO } = databaseTypes;
 const { Options } = deploymentOptions;
 
-describe('DeploymentValidator', () => {
+describe('jdl - DeploymentValidator', () => {
   let validator;
 
   before(() => {

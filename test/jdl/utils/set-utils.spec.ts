@@ -20,7 +20,7 @@
 import { jestExpect as expect } from 'mocha-expect-snapshot';
 import { addAll, join } from '../../../jdl/utils/set-utils.js';
 
-describe('SetUtils', () => {
+describe('jdl - SetUtils', () => {
   describe('addAll', () => {
     context('when not passing a set', () => {
       it('should fail', () => {

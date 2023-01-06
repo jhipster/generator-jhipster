@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JDLImporter import when not parsing applications should export entity Country 1`] = `
+exports[`jdl - JDLImporter import when not parsing applications should export entity Country 1`] = `
 Object {
   "applications": "*",
   "dto": "no",
@@ -38,7 +38,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when not parsing applications should export entity Department 1`] = `
+exports[`jdl - JDLImporter import when not parsing applications should export entity Department 1`] = `
 Object {
   "applications": "*",
   "dto": "no",
@@ -103,7 +103,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when not parsing applications should export entity Employee 1`] = `
+exports[`jdl - JDLImporter import when not parsing applications should export entity Employee 1`] = `
 Object {
   "applications": "*",
   "dto": "mapstruct",
@@ -186,7 +186,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when not parsing applications should export entity Job 1`] = `
+exports[`jdl - JDLImporter import when not parsing applications should export entity Job 1`] = `
 Object {
   "applications": "*",
   "dto": "no",
@@ -251,7 +251,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when not parsing applications should export entity JobHistory 1`] = `
+exports[`jdl - JDLImporter import when not parsing applications should export entity JobHistory 1`] = `
 Object {
   "applications": "*",
   "dto": "no",
@@ -311,7 +311,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when not parsing applications should export entity Location 1`] = `
+exports[`jdl - JDLImporter import when not parsing applications should export entity Location 1`] = `
 Object {
   "applications": "*",
   "dto": "no",
@@ -363,7 +363,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when not parsing applications should export entity Region 1`] = `
+exports[`jdl - JDLImporter import when not parsing applications should export entity Region 1`] = `
 Object {
   "applications": "*",
   "dto": "no",
@@ -393,7 +393,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when not parsing applications should export entity Task 1`] = `
+exports[`jdl - JDLImporter import when not parsing applications should export entity Task 1`] = `
 Object {
   "applications": "*",
   "dto": "no",
@@ -429,7 +429,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when not parsing applications should return the final state 1`] = `
+exports[`jdl - JDLImporter import when not parsing applications should return the final state 1`] = `
 Object {
   "exportedApplications": Array [],
   "exportedApplicationsWithEntities": Object {},
@@ -850,7 +850,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when parsing JDL applications and deployment config should export the application & deployment contents 1`] = `
+exports[`jdl - JDLImporter import when parsing JDL applications and deployment config should export the application & deployment contents 1`] = `
 Array [
   Object {
     "entities": Array [],
@@ -1021,7 +1021,7 @@ Array [
 ]
 `;
 
-exports[`JDLImporter import when parsing JDL applications and deployment config with a realistic sample should export the application & deployment contents 1`] = `
+exports[`jdl - JDLImporter import when parsing JDL applications and deployment config with a realistic sample should export the application & deployment contents 1`] = `
 Array [
   Object {
     "entities": Array [
@@ -1236,7 +1236,7 @@ Array [
 ]
 `;
 
-exports[`JDLImporter import when parsing JDL applications and exporting them should export the application contents 1`] = `
+exports[`jdl - JDLImporter import when parsing JDL applications and exporting them should export the application contents 1`] = `
 Array [
   Object {
     "entities": Array [],
@@ -1392,7 +1392,7 @@ Array [
 ]
 `;
 
-exports[`JDLImporter import when parsing deployment config should export the deployment contents 1`] = `
+exports[`jdl - JDLImporter import when parsing deployment config should export the deployment contents 1`] = `
 Array [
   Object {
     "generator-jhipster": Object {
@@ -1451,7 +1451,7 @@ Array [
 ]
 `;
 
-exports[`JDLImporter import when parsing multiple JDL files with applications and entities should export myFirstApp applications 1`] = `
+exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export myFirstApp applications 1`] = `
 Object {
   "entities": Array [
     "A",
@@ -1497,7 +1497,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when parsing multiple JDL files with applications and entities should export mySecondApp applications 1`] = `
+exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export mySecondApp applications 1`] = `
 Object {
   "entities": Array [
     "E",
@@ -1539,7 +1539,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when parsing multiple JDL files with applications and entities should export myThirdApp applications 1`] = `
+exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export myThirdApp applications 1`] = `
 Object {
   "entities": Array [
     "F",
@@ -1581,7 +1581,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 1`] = `
+exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 1`] = `
 Object {
   "applications": Array [
     "myFirstApp",
@@ -1600,7 +1600,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 2`] = `
+exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 2`] = `
 Object {
   "applications": Array [
     "myFirstApp",
@@ -1619,7 +1619,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 3`] = `
+exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 3`] = `
 Object {
   "applications": Array [
     "myFirstApp",
@@ -1640,7 +1640,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 4`] = `
+exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 4`] = `
 Object {
   "applications": Array [
     "myFirstApp",
@@ -1660,7 +1660,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for mySecondApp 1`] = `
+exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for mySecondApp 1`] = `
 Object {
   "applications": Array [
     "myFirstApp",
@@ -1681,7 +1681,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myThirdApp 1`] = `
+exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myThirdApp 1`] = `
 Object {
   "applications": Array [
     "myFirstApp",
@@ -1701,7 +1701,7 @@ Object {
 }
 `;
 
-exports[`JDLImporter import when passing the unidirectionalRelationships option when parsing one JDL application and entities should return the corresponding exportedApplicationsWithEntities 1`] = `
+exports[`jdl - JDLImporter import when passing the unidirectionalRelationships option when parsing one JDL application and entities should return the corresponding exportedApplicationsWithEntities 1`] = `
 Array [
   JSONEntity {
     "applications": Array [

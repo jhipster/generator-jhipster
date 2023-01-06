@@ -30,7 +30,7 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 const generatorFile = join(__dirname, 'index.mjs');
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', () => {
     expect(GENERATOR_GRADLE).toBe(generator);
   });

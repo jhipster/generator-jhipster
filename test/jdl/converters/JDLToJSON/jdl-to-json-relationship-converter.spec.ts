@@ -27,7 +27,7 @@ import { relationshipTypes, relationshipOptions } from '../../../../jdl/jhipster
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
 const { JPA_DERIVED_IDENTIFIER } = relationshipOptions;
 
-describe('JDLToJSONRelationshipConverter', () => {
+describe('jdl - JDLToJSONRelationshipConverter', () => {
   describe('convert', () => {
     context('when not passing any relationship', () => {
       it('should return an empty map', () => {

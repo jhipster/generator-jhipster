@@ -16,7 +16,7 @@ const baseResult: ExecaSyncReturnValue<string> = {
   killed: false,
 };
 
-describe('checkJava', () => {
+describe('generator - server - checkJava', () => {
   afterEach(() => {
     resetAllMocks();
   });

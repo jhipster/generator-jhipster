@@ -24,7 +24,7 @@ import { relationshipOptions } from '../../../jdl/jhipster/index.mjs';
 
 const { JPA_DERIVED_IDENTIFIER, exists } = relationshipOptions;
 
-describe('RelationshipOptions', () => {
+describe('jdl - RelationshipOptions', () => {
   describe('exists', () => {
     describe('when the option does not exist', () => {
       it('should return false', () => {

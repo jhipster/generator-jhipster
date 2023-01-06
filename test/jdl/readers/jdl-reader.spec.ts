@@ -29,7 +29,7 @@ import * as JDLReader from '../../../jdl/readers/jdl-reader.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-describe('JDLReader', () => {
+describe('jdl - JDLReader', () => {
   describe('parseFromFiles', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {

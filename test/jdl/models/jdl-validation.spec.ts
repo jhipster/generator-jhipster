@@ -26,7 +26,7 @@ const {
   Validations: { PATTERN },
 } = validations;
 
-describe('JDLValidation', () => {
+describe('jdl - JDLValidation', () => {
   describe('new', () => {
     context('when not passing any argument', () => {
       let validation;

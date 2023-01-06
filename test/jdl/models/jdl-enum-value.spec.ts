@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import JDLEnumValue from '../../../jdl/models/jdl-enum-value.js';
 
-describe('JDLEnumValue', () => {
+describe('jdl - JDLEnumValue', () => {
   describe('new', () => {
     context('when not passing an enum value name', () => {
       it('should fail', () => {

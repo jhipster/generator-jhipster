@@ -24,7 +24,7 @@ import { convertApplications } from '../../../../jdl/converters/parsed-jdl-to-jd
 
 const { MONOLITH } = applicationTypes;
 
-describe('ApplicationConverter', () => {
+describe('jdl - ApplicationConverter', () => {
   describe('convertApplications', () => {
     context('when not passing applications', () => {
       it('should fail', () => {

@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import { reservedKeywords } from '../../../jdl/jhipster/index.mjs';
 
-describe('ReservedKeywords', () => {
+describe('jdl - ReservedKeywords', () => {
   describe('isReserved', () => {
     context('when passing a nil or empty keyword', () => {
       it('should return false', () => {

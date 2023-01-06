@@ -42,7 +42,7 @@ const {
   },
 } = binaryOptions;
 
-describe('JSONToJDLEntityConverter', () => {
+describe('jdl - JSONToJDLEntityConverter', () => {
   describe('convertEntitiesToJDL', () => {
     context('when not passing entities', () => {
       it('should fail', () => {

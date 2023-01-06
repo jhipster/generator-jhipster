@@ -29,7 +29,7 @@ const {
   getDefaultConfigForNewApplication,
 } = defaultApplicationOptions;
 
-describe('DefaultApplicationOptions', () => {
+describe('jdl - DefaultApplicationOptions', () => {
   describe('getConfigForMonolithApplication', () => {
     context('without passing custom options', () => {
       let options;

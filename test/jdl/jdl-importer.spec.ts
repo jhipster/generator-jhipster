@@ -34,7 +34,7 @@ const __dirname = dirname(__filename);
 
 const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 
-describe('JDLImporter', () => {
+describe('jdl - JDLImporter', () => {
   describe('createImporterFromFiles', () => {
     context('when not passing files', () => {
       it('should fail', () => {

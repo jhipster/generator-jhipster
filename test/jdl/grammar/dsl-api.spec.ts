@@ -22,7 +22,7 @@ import { tokens } from '../../../jdl/parsing/lexer/lexer.js';
 
 import { getSyntacticAutoCompleteSuggestions, parse } from '../../../jdl/parsing/api.js';
 
-describe('JDL DSL API', () => {
+describe('jdl - JDL DSL API', () => {
   context('when wanting an AST', () => {
     context('with a valid input', () => {
       let ast;

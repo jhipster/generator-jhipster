@@ -58,7 +58,7 @@ class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
   }
 }
 
-describe(`JHipster ${clientFramework} generator`, () => {
+describe(`generator - ${clientFramework}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });

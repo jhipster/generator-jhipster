@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster common generator with default config should succeed 1`] = `
+exports[`generator - common with default config should succeed 1`] = `
 Object {
   ".editorconfig": Object {
     "contents": "# EditorConfig helps developers define and maintain consistent

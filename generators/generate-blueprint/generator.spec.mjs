@@ -35,7 +35,7 @@ const generator = basename(__dirname);
 
 const mockedGenerators = ['jhipster:init'];
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
     const generatorList = await import('../generator-list.mjs');
     await expect(generatorList[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);

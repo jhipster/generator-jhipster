@@ -21,7 +21,7 @@ import { expect } from 'chai';
 import JDLBinaryOption from '../../../jdl/models/jdl-binary-option.js';
 import BinaryOptionValidator from '../../../jdl/validators/binary-option-validator.js';
 
-describe('BinaryOptionValidator', () => {
+describe('jdl - BinaryOptionValidator', () => {
   let validator;
 
   before(() => {

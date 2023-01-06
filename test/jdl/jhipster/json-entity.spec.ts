@@ -22,7 +22,7 @@ import { jestExpect } from 'mocha-expect-snapshot';
 import { expect } from 'chai';
 import { jsonEntity as JSONEntity } from '../../../jdl/jhipster/index.mjs';
 
-describe('JSONEntity', () => {
+describe('jdl - JSONEntity', () => {
   describe('new', () => {
     context('when not passing a configuration', () => {
       it('should fail', () => {

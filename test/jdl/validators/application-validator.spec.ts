@@ -49,7 +49,7 @@ const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J, H2_DISK, H
 const { JWT } = authenticationTypes;
 const { READ_ONLY } = unaryOptions;
 
-describe('ApplicationValidator', () => {
+describe('jdl - ApplicationValidator', () => {
   let validator;
 
   before(() => {
