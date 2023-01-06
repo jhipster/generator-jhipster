@@ -87,13 +87,14 @@ export function mergeSections(...allFiles) {
 
 const replaceFilePathVariables = (data, filePath) => filePath?.replace(/_package_/, data.package)?.replace(/_\w*/, '');
 
-const replaceEntityFilePathVariables = (data, filePath) =>
-  filePath
+const replaceEntityFilePathVariables = (data, filePath) => {
+  filePath = filePath
     ?.replace(/_package_/, data.entityJavaPackageFolder)
     ?.replace(/_PersistClass_/, data.persistClass)
     ?.replace(/_EntityClass_/, data.entityClass)
-    ?.replace(/_DtoClass_/, data.dtoClass)
-    ?.replace(/_\w*/, '');
+    ?.replace(/_DtoClass_/, data.dtoClass);
+  return filePath?.includes('.jhi.') ? filePath : filePath?.replace(/_\w*/, '');
+};
 
 /**
  * Move the template to `javaPackageSrcDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).

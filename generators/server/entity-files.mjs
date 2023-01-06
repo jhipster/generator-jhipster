@@ -94,7 +94,7 @@ const sqlFiles = {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_Callback.java'],
-    }
+    },
   ],
 };
 
