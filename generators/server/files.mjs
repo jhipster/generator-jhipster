@@ -42,17 +42,9 @@ export const neo4jFiles = {
   ],
   serverTestFw: [
     {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/Neo4jTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/Neo4jTestContainer.java`,
-        },
-        {
-          file: 'package/config/EmbeddedNeo4j.java',
-          renameTo: generator => `${generator.testDir}config/EmbeddedNeo4j.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/Neo4jTestContainer.java', 'config/EmbeddedNeo4j.java'],
     },
   ],
 };
@@ -232,23 +224,15 @@ export const baseServerFiles = {
     },
     {
       condition: generator => !generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/SecurityUtilsUnitTest.java',
-          renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['security/SecurityUtilsUnitTest.java'],
     },
     {
       condition: generator => generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/SecurityUtilsUnitTest_reactive.java',
-          renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['security/SecurityUtilsUnitTest_reactive.java'],
     },
     {
       condition: generator => !generator.reactive,
@@ -287,30 +271,18 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/oauth2/AudienceValidatorTest.java',
-          renameTo: generator => `${generator.testDir}security/oauth2/AudienceValidatorTest.java`,
-        },
-        {
-          file: 'package/config/TestSecurityConfiguration.java',
-          renameTo: generator => `${generator.testDir}config/TestSecurityConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['security/oauth2/AudienceValidatorTest.java', 'config/TestSecurityConfiguration.java'],
     },
     {
       condition: generator =>
         !generator.reactive &&
         generator.authenticationTypeOauth2 &&
         (generator.applicationTypeMicroservice || generator.applicationTypeGateway),
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/oauth2/AuthorizationHeaderUtilTest.java',
-          renameTo: generator => `${generator.testDir}security/oauth2/AuthorizationHeaderUtilTest.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['security/oauth2/AuthorizationHeaderUtilTest.java'],
     },
     {
       condition: generator => generator.generateUserManagement,
@@ -332,13 +304,9 @@ export const baseServerFiles = {
     },
     {
       condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/oauth2/CustomClaimConverterIT.java',
-          renameTo: generator => `${generator.testDir}security/oauth2/CustomClaimConverterIT.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['security/oauth2/CustomClaimConverterIT.java'],
     },
   ],
   serverJavaGateway: [
@@ -378,13 +346,9 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny && generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/filter/ModifyServersOpenApiFilterTest.java',
-          renameTo: generator => `${generator.testDir}web/filter/ModifyServersOpenApiFilterTest.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/filter/ModifyServersOpenApiFilterTest.java'],
     },
   ],
   serverMicroservice: [
@@ -440,30 +404,14 @@ export const baseServerFiles = {
       templates: ['ApplicationWebXml.java'],
     },
     {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/TechnicalStructureTest.java',
-          renameTo: generator => `${generator.testDir}TechnicalStructureTest.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['TechnicalStructureTest.java'],
     },
     {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/AsyncSyncConfiguration.java',
-          renameTo: generator => `${generator.testDir}config/AsyncSyncConfiguration.java`,
-        },
-        {
-          file: 'package/IntegrationTest.java',
-          renameTo: generator => `${generator.testDir}/IntegrationTest.java`,
-        },
-        {
-          file: 'package/config/SpringBootTestClassOrderer.java',
-          renameTo: generator => `${generator.testDir}config/SpringBootTestClassOrderer.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/AsyncSyncConfiguration.java', 'IntegrationTest.java', 'config/SpringBootTestClassOrderer.java'],
     },
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
@@ -537,17 +485,9 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.cacheProviderRedis,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/EmbeddedRedis.java',
-          renameTo: generator => `${generator.testDir}config/EmbeddedRedis.java`,
-        },
-        {
-          file: 'package/config/RedisTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/RedisTestContainer.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/EmbeddedRedis.java', 'config/RedisTestContainer.java'],
     },
     {
       condition: generator => generator.communicationSpringWebsocket,
@@ -654,13 +594,9 @@ export const baseServerFiles = {
   serverTestReactive: [
     {
       condition: generator => generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/JHipsterBlockHoundIntegration.java',
-          renameTo: generator => `${generator.testDir}config/JHipsterBlockHoundIntegration.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/JHipsterBlockHoundIntegration.java'],
     },
     {
       condition: generator => generator.reactive,
@@ -687,52 +623,34 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        { file: 'package/test/util/OAuth2TestUtil.java', renameTo: generator => `${generator.testDir}test/util/OAuth2TestUtil.java` },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['test/util/OAuth2TestUtil.java'],
     },
   ],
   serverTestFw: [
     {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        { file: 'package/web/rest/TestUtil.java', renameTo: generator => `${generator.testDir}web/rest/TestUtil.java` },
-        {
-          file: 'package/web/rest/errors/ExceptionTranslatorTestController.java',
-          renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorTestController.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/TestUtil.java', 'web/rest/errors/ExceptionTranslatorTestController.java'],
     },
     {
       condition: generator => !generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/errors/ExceptionTranslatorIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorIT.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/errors/ExceptionTranslatorIT.java'],
     },
     {
       condition: generator => generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/errors/ExceptionTranslatorIT_reactive.java',
-          renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorIT.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/errors/ExceptionTranslatorIT_reactive.java'],
     },
     {
       condition: generator => !generator.skipClient && !generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/ClientForwardControllerTest.java',
-          renameTo: generator => `${generator.testDir}web/rest/ClientForwardControllerTest.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/ClientForwardControllerTest.java'],
     },
     {
       path: SERVER_TEST_RES_DIR,
@@ -741,28 +659,16 @@ export const baseServerFiles = {
     {
       // TODO : add these tests to reactive
       condition: generator => !generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/WebConfigurerTest.java',
-          renameTo: generator => `${generator.testDir}config/WebConfigurerTest.java`,
-        },
-        {
-          file: 'package/config/WebConfigurerTestController.java',
-          renameTo: generator => `${generator.testDir}config/WebConfigurerTestController.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/WebConfigurerTest.java', 'config/WebConfigurerTestController.java'],
     },
     {
       // TODO : add these tests to reactive
       condition: generator => !generator.skipClient && !generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/StaticResourcesWebConfigurerTest.java',
-          renameTo: generator => `${generator.testDir}config/StaticResourcesWebConfigurerTest.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/StaticResourcesWebConfigurerTest.java'],
     },
     {
       condition: generator => generator.serviceDiscoveryAny,
@@ -771,13 +677,9 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.authenticationTypeOauth2 && (generator.applicationTypeMonolith || generator.applicationTypeGateway),
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/LogoutResourceIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/LogoutResourceIT.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/LogoutResourceIT.java'],
     },
     {
       condition: generator => generator.gatlingTests,
@@ -790,34 +692,27 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.cucumberTests,
-      path: SERVER_TEST_SRC_DIR,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
       templates: [
         // Create Cucumber test files
-        { file: 'package/cucumber/CucumberIT.java', renameTo: generator => `${generator.testDir}cucumber/CucumberIT.java` },
-        {
-          file: 'package/cucumber/stepdefs/StepDefs.java',
-          renameTo: generator => `${generator.testDir}cucumber/stepdefs/StepDefs.java`,
-        },
-        {
-          file: 'package/cucumber/CucumberTestContextConfiguration.java',
-          renameTo: generator => `${generator.testDir}cucumber/CucumberTestContextConfiguration.java`,
-        },
+        'cucumber/CucumberIT.java',
+        'cucumber/stepdefs/StepDefs.java',
+        'cucumber/CucumberTestContextConfiguration.java',
       ],
     },
     {
       condition: generator => generator.cucumberTests,
       path: SERVER_TEST_RES_DIR,
-      templates: [{ file: 'package/features/gitkeep', renameTo: generator => `${generator.testDir}cucumber/gitkeep`, noEjs: true }],
+      templates: [{ file: 'package/features/gitkeep', renameTo: generator => `${generator.packageFolder}/cucumber/gitkeep`, noEjs: true }],
     },
     {
       condition: generator => generator.generateUserManagement,
-      path: SERVER_TEST_SRC_DIR,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
       templates: [
         // Create auth config test files
-        {
-          file: 'package/security/DomainUserDetailsServiceIT.java',
-          renameTo: generator => `${generator.testDir}security/DomainUserDetailsServiceIT.java`,
-        },
+        'security/DomainUserDetailsServiceIT.java',
       ],
     },
   ],
@@ -910,31 +805,15 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/service/UserServiceIT.java',
-          renameTo: generator => `${generator.testDir}service/UserServiceIT.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['service/UserServiceIT.java'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2 && !generator.databaseTypeNo,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/service/mapper/UserMapperTest.java',
-          renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`,
-        },
-        {
-          file: 'package/web/rest/PublicUserResourceIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/PublicUserResourceIT.java`,
-        },
-        {
-          file: 'package/web/rest/UserResourceIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/UserResourceIT.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['service/mapper/UserMapperTest.java', 'web/rest/PublicUserResourceIT.java', 'web/rest/UserResourceIT.java'],
     },
     {
       condition: generator => generator.generateUserManagement,
@@ -1003,24 +882,16 @@ export const baseServerFiles = {
         generator.databaseTypeCouchbase ||
         generator.searchEngineCouchbase ||
         generator.databaseTypeNeo4j,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/TestContainersSpringContextCustomizerFactory.java'],
     },
     {
       condition: generator =>
         generator.generateUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/cucumber/stepdefs/UserStepDefs.java',
-          renameTo: generator => `${generator.testDir}cucumber/stepdefs/UserStepDefs.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['cucumber/stepdefs/UserStepDefs.java'],
     },
     {
       condition: generator =>
@@ -1029,7 +900,7 @@ export const baseServerFiles = {
       templates: [
         {
           file: 'package/features/user/user.feature',
-          renameTo: generator => `${generator.testDir}cucumber/user.feature`,
+          renameTo: generator => `${generator.packageFolder}/cucumber/user.feature`,
         },
       ],
     },
@@ -1048,38 +919,20 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.generateUserManagement,
-      path: SERVER_TEST_SRC_DIR,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
       templates: [
-        {
-          file: 'package/service/MailServiceIT.java',
-          renameTo: generator => `${generator.testDir}service/MailServiceIT.java`,
-        },
-        {
-          file: 'package/service/UserServiceIT.java',
-          renameTo: generator => `${generator.testDir}service/UserServiceIT.java`,
-        },
-        {
-          file: 'package/service/mapper/UserMapperTest.java',
-          renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`,
-        },
-        {
-          file: 'package/web/rest/PublicUserResourceIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/PublicUserResourceIT.java`,
-        },
-        {
-          file: 'package/web/rest/UserResourceIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/UserResourceIT.java`,
-        },
+        'service/MailServiceIT.java',
+        'service/UserServiceIT.java',
+        'service/mapper/UserMapperTest.java',
+        'web/rest/PublicUserResourceIT.java',
+        'web/rest/UserResourceIT.java',
       ],
     },
     {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/WithUnauthenticatedMockUser.java',
-          renameTo: generator => `${generator.testDir}web/rest/WithUnauthenticatedMockUser.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/WithUnauthenticatedMockUser.java'],
     },
   ],
 };
