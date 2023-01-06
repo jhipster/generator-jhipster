@@ -467,7 +467,7 @@ public class UserService {
       <%_ } _%>
         userRepository.save(user);
       <%_ if (searchEngineElasticsearch) { _%>
-        userSearchRepository.save(user);
+        userSearchRepository.index(user);
       <%_ } _%>
       <%_ if (cacheManagerIsAvailable) { _%>
         this.clearUserCaches(user);
@@ -554,11 +554,9 @@ public class UserService {
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
       <%_ } _%>
-      <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
-      <%_ } _%>
       <%_ if (searchEngineElasticsearch) { _%>
-                userSearchRepository.save(user);
+                userSearchRepository.index(user);
       <%_ } _%>
       <%_ if (cacheManagerIsAvailable) { _%>
                 this.clearUserCaches(user);
@@ -591,7 +589,7 @@ public class UserService {
         userRepository.findOneByLogin(login).ifPresent(user -> {
             userRepository.delete(user);
       <%_ if (searchEngineElasticsearch) { _%>
-            userSearchRepository.delete(user);
+            userSearchRepository.deleteFromIndex(user);
       <%_ } _%>
       <%_ if (cacheManagerIsAvailable) { _%>
             this.clearUserCaches(user);
@@ -644,11 +642,9 @@ public class UserService {
             .doOnNext(user -> log.debug("Changed Information for User: {}", user))
             .then();
   <%_ } else { _%>
-    <%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra) { _%>
                 userRepository.save(user);
-    <%_ } _%>
     <%_ if (searchEngineElasticsearch) { _%>
-                userSearchRepository.save(user);
+                userSearchRepository.index(user);
     <%_ } _%>
     <%_ if (cacheManagerIsAvailable) { _%>
                 this.clearUserCaches(user);
@@ -843,7 +839,7 @@ public class UserService {
                 log.debug("Deleting not activated user {}", user.getLogin());
                 userRepository.delete(user);
       <%_ if (searchEngineElasticsearch) { _%>
-                userSearchRepository.delete(user);
+                userSearchRepository.deleteFromIndex(user);
       <%_ } _%>
       <%_ if (cacheManagerIsAvailable) { _%>
                 this.clearUserCaches(user);

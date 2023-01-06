@@ -52,10 +52,11 @@ _%>
   <% if (!updatableEntity) { %>// <%} %>.<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
   <%_ if (searchEngineElasticsearch) { _%>
     .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
-        <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
     <%_ if(reactive) { %>
+        <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
         return Mono.just(saved<%= entityClass %>);
     <%_ } else { %>
+        <%= entityInstance %>SearchRepository.index(saved<%= entityClass %>);
         return saved<%= entityClass %>;
     <%_ } %>
       })

@@ -112,7 +112,11 @@ interface <%= entityClass %>SearchRepositoryInternal {
     Page<<%= persistClass %>> search(Query query);
   <%_ } _%>
 
+    @Async
     void index(<%= persistClass %> entity);
+
+    @Async
+    void deleteFromIndexById(<%= primaryKey.type %> id);
 }
 
 class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
@@ -157,6 +161,11 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
     @Override
     public void index(<%= persistClass %> entity) {
         repository.find<% if (implementsEagerLoadApis) { %>OneWithEagerRelationships<% } else { %>ById<% } %>(entity.get<%= primaryKey.nameCapitalized %>()).ifPresent(elasticsearchTemplate::save);
+    }
+
+    @Override
+    public void deleteFromIndexById(<%= primaryKey.type %> id) {
+        elasticsearchTemplate.delete(String.valueOf(id), <%= persistClass %>.class);
     }
 }
 <%_ } _%>

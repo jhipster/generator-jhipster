@@ -27,6 +27,6 @@
 <%_ } else { _%>
         <%= entityInstance %><%= viaService ? 'Service.delete' : 'Repository.deleteById' %>(id);
   <%_ if (!viaService && searchEngineElasticsearch) { _%>
-        <%= entityInstance %>SearchRepository.deleteById(id);
+        <%= entityInstance %>SearchRepository.deleteFromIndexById(id);
   <%_ } _%>
 <%_ } _%>
