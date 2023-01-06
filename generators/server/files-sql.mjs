@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mergeSections, addSectionsCondition, moveToJavaPackageSrcDir } from './utils.mjs';
+import { mergeSections, addSectionsCondition, moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from './utils.mjs';
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 
 export const sqlFiles = {
@@ -30,74 +30,42 @@ export const sqlFiles = {
   reactiveJavaUserManagement: [
     {
       condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/UserSqlHelper.java',
-          renameTo: generator => `${generator.javaDir}repository/UserSqlHelper.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['repository/UserSqlHelper.java'],
     },
     {
       condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/rowmapper/UserRowMapper.java',
-          renameTo: generator => `${generator.javaDir}repository/rowmapper/UserRowMapper.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['repository/rowmapper/UserRowMapper.java'],
     },
   ],
   reactiveCommon: [
     {
       condition: generator => generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/rowmapper/ColumnConverter.java',
-          renameTo: generator => `${generator.javaDir}repository/rowmapper/ColumnConverter.java`,
-        },
-        {
-          file: 'package/repository/EntityManager.java',
-          renameTo: generator => `${generator.javaDir}repository/EntityManager.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['repository/rowmapper/ColumnConverter.java', 'repository/EntityManager.java'],
     },
   ],
   hibernate: [
     {
       condition: generator => !generator.reactive,
-      path: SERVER_TEST_SRC_DIR,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
       templates: [
-        {
-          file: 'package/config/timezone/HibernateTimeZoneIT.java',
-          renameTo: generator => `${generator.testDir}config/timezone/HibernateTimeZoneIT.java`,
-        },
-        {
-          file: 'package/repository/timezone/DateTimeWrapper.java',
-          renameTo: generator => `${generator.testDir}repository/timezone/DateTimeWrapper.java`,
-        },
-        {
-          file: 'package/repository/timezone/DateTimeWrapperRepository.java',
-          renameTo: generator => `${generator.testDir}repository/timezone/DateTimeWrapperRepository.java`,
-        },
+        'config/timezone/HibernateTimeZoneIT.java',
+        'repository/timezone/DateTimeWrapper.java',
+        'repository/timezone/DateTimeWrapperRepository.java',
       ],
     },
   ],
   testContainers: [
     {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/EmbeddedSQL.java',
-          renameTo: generator => `${generator.testDir}config/EmbeddedSQL.java`,
-        },
-        {
-          file: 'package/config/SqlTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/SqlTestContainer.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/EmbeddedSQL.java', 'config/SqlTestContainer.java'],
     },
     {
       path: SERVER_TEST_RES_DIR,
@@ -123,13 +91,9 @@ export const h2Files = {
 export const mysqlFiles = {
   serverTestSources: [
     {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/MysqlTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/MysqlTestContainer.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/MysqlTestContainer.java'],
     },
   ],
 };
@@ -137,13 +101,9 @@ export const mysqlFiles = {
 export const mariadbFiles = {
   serverTestSources: [
     {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/MariadbTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/MariadbTestContainer.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/MariadbTestContainer.java'],
     },
     {
       path: SERVER_TEST_RES_DIR,
@@ -155,13 +115,9 @@ export const mariadbFiles = {
 export const mssqlFiles = {
   serverTestSources: [
     {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/MsSqlTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/MsSqlTestContainer.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/MsSqlTestContainer.java'],
     },
   ],
 };
@@ -169,13 +125,9 @@ export const mssqlFiles = {
 export const postgresFiles = {
   serverTestSources: [
     {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/PostgreSqlTestContainer.java',
-          renameTo: generator => `${generator.testDir}config/PostgreSqlTestContainer.java`,
-        },
-      ],
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['config/PostgreSqlTestContainer.java'],
     },
   ],
 };
