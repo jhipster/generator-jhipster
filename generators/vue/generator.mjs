@@ -25,6 +25,7 @@ import { writeEntityFiles, postWriteEntityFiles } from './entity-files-vue.mjs';
 import { writeFiles, writeEntitiesFiles, cleanup } from './files-vue.mjs';
 import { addEntityMenuEntry as addVueEntityMenuEntry } from './support/index.mjs';
 import {
+  generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
   getTypescriptKeyType as getTSKeyType,
@@ -196,5 +197,9 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   generateEntityClientImports(relationships, dto) {
     return formatEntityClientImports(relationships, dto, VUE);
+  }
+
+  generateEntityClientEnumImports(fields) {
+    return getClientEnumImportsFormat(fields, VUE);
   }
 }

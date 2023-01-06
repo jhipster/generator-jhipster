@@ -26,6 +26,7 @@ import { prepareEntity } from './application/entities/index.mjs';
 import { addEntityMenuEntry as addReactEntityMenuEntry } from './support/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import {
+  generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.mjs';
@@ -203,5 +204,9 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   generateEntityClientImports(relationships, dto) {
     return formatEntityClientImports(relationships, dto, REACT);
+  }
+
+  generateEntityClientEnumImports(fields) {
+    return getClientEnumImportsFormat(fields, REACT);
   }
 }

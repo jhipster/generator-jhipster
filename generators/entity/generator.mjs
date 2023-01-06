@@ -28,6 +28,7 @@ import { JHIPSTER_CONFIG_DIR, ANGULAR_DIR } from '../generator-constants.mjs';
 import { applicationTypes, clientFrameworkTypes, getConfigWithDefaults, reservedKeywords } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
 import { removeFieldsWithUnsetValues } from '../base/support/index.mjs';
+import { getDBTypeFromDBValue } from '../server/support/index.mjs';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { NO: CLIENT_FRAMEWORK_NO, ANGULAR } = clientFrameworkTypes;
@@ -217,7 +218,7 @@ export default class EntityGenerator extends BaseGenerator {
         const context = this.context;
 
         if (this.options.db) {
-          context.databaseType = this.getDBTypeFromDBValue(this.options.db);
+          context.databaseType = getDBTypeFromDBValue(this.options.db);
           context.prodDatabaseType = this.options.db;
           context.devDatabaseType = this.options.db;
         }

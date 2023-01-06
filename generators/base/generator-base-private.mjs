@@ -22,14 +22,13 @@ import _ from 'lodash';
 import Generator from 'yeoman-generator';
 import chalk from 'chalk';
 
-import { databaseTypes, buildToolTypes, fieldTypes, validations, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { databaseTypes, buildToolTypes, fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { databaseData } from '../sql/support/index.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import { deleteFile, deleteFolder, renderContent } from './support/index.mjs';
-import { getDBTypeFromDBValue } from '../server/support/database.mjs';
 
-const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
+const { REACT } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
 
 const {
@@ -165,58 +164,6 @@ export default class PrivateBase extends Generator {
     await renderContent(source, _this, _context, options, res => {
       callback(res);
     });
-  }
-
-  /**
-   * @private
-   * Generate Entity Client Enum Imports
-   *
-   * @param {Array|Object} fields - array of the entity fields
-   * @param {string} clientFramework the client framework, 'angular' or 'react'.
-   * @returns typeImports: Map
-   */
-  generateEntityClientEnumImports(fields, clientFramework = this.clientFramework) {
-    const typeImports = new Map();
-    const uniqueEnums = {};
-    fields.forEach(field => {
-      const { enumFileName, fieldType } = field;
-      if (field.fieldIsEnum && (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues.length !== 0))) {
-        const importType = `${fieldType}`;
-        const basePath = clientFramework === VUE ? '@' : 'app';
-        const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
-        const importPath = `${basePath}/${modelPath}/enumerations/${enumFileName}.model`;
-        uniqueEnums[fieldType] = field.fieldType;
-        typeImports.set(importType, importPath);
-      }
-    });
-    return typeImports;
-  }
-
-  /**
-   * @private
-   * Get DB type from DB value
-   * @param {string} db - db
-   */
-  getDBTypeFromDBValue(db) {
-    return getDBTypeFromDBValue(db);
-  }
-
-  /**
-   * @private
-   * Get build directory used by buildTool
-   * @param {string} buildTool - buildTool
-   */
-  getBuildDirectoryForBuildTool(buildTool) {
-    return buildTool === MAVEN ? 'target/' : 'build/';
-  }
-
-  /**
-   * @private
-   * Get resource build directory used by buildTool
-   * @param {string} buildTool - buildTool
-   */
-  getResourceBuildDirectoryForBuildTool(buildTool) {
-    return buildTool === MAVEN ? 'target/classes/' : 'build/resources/main/';
   }
 
   /**

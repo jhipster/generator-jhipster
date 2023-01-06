@@ -36,6 +36,7 @@ import PrivateBase from './generator-base-private.mjs';
 import NeedleApi from '../needle-api.mjs';
 import commonOptions from './options.mjs';
 import detectLanguage from '../languages/detect-language.mjs';
+import { getDBTypeFromDBValue } from '../server/support/index.mjs';
 import { formatDateForChangelog, normalizePathEnd } from './utils.mjs';
 import { calculateDbNameWithLimit, hibernateSnakeCase } from '../../utils/db.mjs';
 import {
@@ -1832,7 +1833,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.baseName = this.options.baseName;
     }
     if (options.db) {
-      const databaseType = this.getDBTypeFromDBValue(this.options.db);
+      const databaseType = getDBTypeFromDBValue(this.options.db);
       if (databaseType) {
         this.jhipsterConfig.databaseType = databaseType;
       } else if (!this.jhipsterConfig.databaseType) {

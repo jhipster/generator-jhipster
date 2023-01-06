@@ -18,7 +18,7 @@
  */
 import { clientFrameworkTypes } from '../../../jdl/jhipster/index.mjs';
 
-const { ANGULAR } = clientFrameworkTypes;
+const { ANGULAR, VUE } = clientFrameworkTypes;
 
 /**
  * @private
@@ -45,6 +45,31 @@ export const generateEntityClientImports = (relationships, dto, clientFramework)
           : `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
     }
     typeImports.set(importType, importPath);
+  });
+  return typeImports;
+};
+
+/**
+ * @private
+ * Generate Entity Client Enum Imports
+ *
+ * @param {Array|Object} fields - array of the entity fields
+ * @param {string} clientFramework the client framework, 'angular' or 'react'.
+ * @returns typeImports: Map
+ */
+export const generateEntityClientEnumImports = (fields, clientFramework) => {
+  const typeImports = new Map();
+  const uniqueEnums = {};
+  fields.forEach(field => {
+    const { enumFileName, fieldType } = field;
+    if (field.fieldIsEnum && (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues.length !== 0))) {
+      const importType = `${fieldType}`;
+      const basePath = clientFramework === VUE ? '@' : 'app';
+      const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
+      const importPath = `${basePath}/${modelPath}/enumerations/${enumFileName}.model`;
+      uniqueEnums[fieldType] = field.fieldType;
+      typeImports.set(importType, importPath);
+    }
   });
   return typeImports;
 };

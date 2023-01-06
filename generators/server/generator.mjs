@@ -22,7 +22,7 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import os from 'os';
-
+import { getDBTypeFromDBValue } from './support/index.mjs';
 import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 import {
@@ -777,7 +777,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
 
     if (!config.databaseType && config.prodDatabaseType) {
-      config.databaseType = this.getDBTypeFromDBValue(config.prodDatabaseType);
+      config.databaseType = getDBTypeFromDBValue(config.prodDatabaseType);
     }
     if (!config.devDatabaseType && config.prodDatabaseType) {
       config.devDatabaseType = config.prodDatabaseType;

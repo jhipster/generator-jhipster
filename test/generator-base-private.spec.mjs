@@ -9,7 +9,7 @@ import { default as JHipsterServerGeneratorClass } from '../generators/server/ge
 // eslint-disable-next-line import/no-named-default
 import { default as DatabaseChangelogLiquibaseClass } from '../generators/liquibase-changelogs/index.mjs';
 import { stripMargin } from '../generators/base/support/index.mjs';
-
+import { getDBTypeFromDBValue } from '../generators/server/support/index.mjs';
 import { generateEntityClientImports, getTypescriptType } from '../generators/client/support/index.mjs';
 
 const { CASSANDRA, MONGODB, MYSQL, SQL } = databaseTypes;
@@ -63,17 +63,17 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('getDBTypeFromDBValue', () => {
     describe('when called with sql DB name', () => {
       it('return SQL', () => {
-        expect(BaseGenerator.getDBTypeFromDBValue(MYSQL)).to.equal(SQL);
+        expect(getDBTypeFromDBValue(MYSQL)).to.equal(SQL);
       });
     });
     describe('when called with mongo DB', () => {
       it('return mongodb', () => {
-        expect(BaseGenerator.getDBTypeFromDBValue(MONGODB)).to.equal(MONGODB);
+        expect(getDBTypeFromDBValue(MONGODB)).to.equal(MONGODB);
       });
     });
     describe('when called with cassandra', () => {
       it('return cassandra', () => {
-        expect(BaseGenerator.getDBTypeFromDBValue(CASSANDRA)).to.equal(CASSANDRA);
+        expect(getDBTypeFromDBValue(CASSANDRA)).to.equal(CASSANDRA);
       });
     });
   });
