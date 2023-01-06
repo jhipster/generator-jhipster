@@ -544,9 +544,6 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1759,9 +1756,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(false)-maven-ena
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2589,9 +2583,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
