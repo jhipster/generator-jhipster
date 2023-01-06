@@ -151,6 +151,7 @@
     "jsdoc": "4.0.0",
     "mocha": "10.2.0",
     "mocha-expect-snapshot": "6.2.0",
+    "open-cli": "7.1.0",
     "rimraf": "3.0.2",
     "sinon": "15.0.1",
     "sinon-chai": "3.7.0",
