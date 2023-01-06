@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster docker generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(no)-redis should match app.yml snapshot 1`] = `
+exports[`generator - docker gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(no)-redis should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -53,7 +53,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(no)-redis should match generated files snapshot 1`] = `
+exports[`generator - docker gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-eureka-enableSwaggerCodegen(true)-messageBroker(no)-redis should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -118,7 +118,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
+exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -184,7 +184,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
+exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-eureka-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -249,7 +249,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match app.yml snapshot 1`] = `
+exports[`generator - docker microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -287,7 +287,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`generator - docker microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -340,7 +340,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
+exports[`generator - docker microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -400,7 +400,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
+exports[`generator - docker microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-eureka-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -465,7 +465,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match app.yml snapshot 1`] = `
+exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -524,7 +524,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match generated files snapshot 1`] = `
+exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-memcached should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -583,7 +583,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(no) should match app.yml snapshot 1`] = `
+exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(no) should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -651,7 +651,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(no) should match generated files snapshot 1`] = `
+exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(no) should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -731,7 +731,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -778,7 +778,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -828,7 +828,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(no) should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(no) should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -883,7 +883,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(no) should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(no) should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -954,7 +954,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1001,7 +1001,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -1048,7 +1048,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1120,7 +1120,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -1191,7 +1191,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-redis should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-redis should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1235,7 +1235,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-redis should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-redis should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
@@ -1294,7 +1294,7 @@ Object {
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match app.yml snapshot 1`] = `
 Object {
   "src/main/docker/app.yml": Object {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1359,7 +1359,7 @@ services:
 }
 `;
 
-exports[`JHipster docker generator monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match generated files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",

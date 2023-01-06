@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`jhipster:app --incremental-changelog regenerating the application should match snapshot 1`] = `
+exports[`generator - app - --incremental-changelog regenerating the application should match snapshot 1`] = `
 Object {
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
     "contents": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
@@ -319,7 +319,7 @@ ROLE_USER
 }
 `;
 
-exports[`jhipster:app --incremental-changelog when adding a field with constraints should match snapshot 1`] = `
+exports[`generator - app - --incremental-changelog when adding a field with constraints should match snapshot 1`] = `
 Object {
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
     "contents": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
@@ -656,7 +656,7 @@ ROLE_USER
 }
 `;
 
-exports[`jhipster:app --incremental-changelog when adding a field without constraints should match snapshot 1`] = `
+exports[`generator - app - --incremental-changelog when adding a field without constraints should match snapshot 1`] = `
 Object {
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
     "contents": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
@@ -976,7 +976,7 @@ ROLE_USER
 }
 `;
 
-exports[`jhipster:app --incremental-changelog when adding a relationship should match snapshot 1`] = `
+exports[`generator - app - --incremental-changelog when adding a relationship should match snapshot 1`] = `
 Object {
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
     "contents": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
@@ -1375,7 +1375,7 @@ ROLE_USER
 }
 `;
 
-exports[`jhipster:app --incremental-changelog when creating a new application should match snapshot 1`] = `
+exports[`generator - app - --incremental-changelog when creating a new application should match snapshot 1`] = `
 Object {
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
     "contents": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
@@ -1554,7 +1554,7 @@ ROLE_USER
 }
 `;
 
-exports[`jhipster:app --incremental-changelog when incremental liquibase files exists with --recreate-initial-changelog should match snapshot 1`] = `
+exports[`generator - app - --incremental-changelog when incremental liquibase files exists with --recreate-initial-changelog should match snapshot 1`] = `
 Object {
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
     "contents": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
@@ -1733,7 +1733,7 @@ ROLE_USER
 }
 `;
 
-exports[`jhipster:app --incremental-changelog when incremental liquibase files exists with default options should match snapshot 1`] = `
+exports[`generator - app - --incremental-changelog when incremental liquibase files exists with default options should match snapshot 1`] = `
 Object {
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
     "contents": "00000000000000_initial_schema.xml",
@@ -1766,7 +1766,7 @@ ROLE_USER
 }
 `;
 
-exports[`jhipster:app --incremental-changelog when removing a field with constraints should match snapshot 1`] = `
+exports[`generator - app - --incremental-changelog when removing a field with constraints should match snapshot 1`] = `
 Object {
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
     "contents": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
@@ -2039,7 +2039,7 @@ ROLE_USER
 }
 `;
 
-exports[`jhipster:app --incremental-changelog when removing a field without constraints should match snapshot 1`] = `
+exports[`generator - app - --incremental-changelog when removing a field without constraints should match snapshot 1`] = `
 Object {
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
     "contents": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>

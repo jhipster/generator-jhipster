@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster entities generator regenerating all entities should match snapshot 1`] = `
+exports[`generator - entities regenerating all entities should match snapshot 1`] = `
 Object {
   ".jhipster/Bar.json": Object {
     "stateCleared": "modified",
@@ -287,7 +287,7 @@ Object {
 }
 `;
 
-exports[`JHipster entities generator regenerating selected entities with writeEveryEntity should match snapshot 1`] = `
+exports[`generator - entities regenerating selected entities with writeEveryEntity should match snapshot 1`] = `
 Object {
   ".jhipster/Bar.json": Object {
     "stateCleared": "modified",
@@ -574,7 +574,7 @@ Object {
 }
 `;
 
-exports[`JHipster entities generator regenerating some entities should match snapshot 1`] = `
+exports[`generator - entities regenerating some entities should match snapshot 1`] = `
 Object {
   ".jhipster/Bar.json": Object {
     "stateCleared": "modified",

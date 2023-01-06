@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster init generator with default config should write files and match snapshot 1`] = `
+exports[`generator - init with default config should write files and match snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -35,7 +35,7 @@ Object {
 }
 `;
 
-exports[`JHipster init generator with skipCommitHook option should not create husky files and match snapshot 1`] = `
+exports[`generator - init with skipCommitHook option should not create husky files and match snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",

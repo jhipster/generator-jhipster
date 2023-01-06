@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`OptionConverter convertOptions when passing options such as angularSuffix should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as angularSuffix should convert it 1`] = `
 Array [
   JDLBinaryOption {
     "entityNames": Set {
@@ -15,7 +15,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as clientRootFolder should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as clientRootFolder should convert it 1`] = `
 Array [
   JDLBinaryOption {
     "entityNames": Set {
@@ -30,7 +30,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as dto should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as dto should convert it 1`] = `
 Array [
   JDLBinaryOption {
     "entityNames": Set {
@@ -45,7 +45,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as embedded should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as embedded should convert it 1`] = `
 Array [
   JDLUnaryOption {
     "entityNames": Set {
@@ -59,7 +59,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as filter should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as filter should convert it 1`] = `
 Array [
   JDLUnaryOption {
     "entityNames": Set {
@@ -73,7 +73,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as microservice should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as microservice should convert it 1`] = `
 Array [
   JDLBinaryOption {
     "entityNames": Set {
@@ -88,7 +88,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as noFluentMethod should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as noFluentMethod should convert it 1`] = `
 Array [
   JDLUnaryOption {
     "entityNames": Set {
@@ -102,7 +102,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as pagination should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as pagination should convert it 1`] = `
 Array [
   JDLBinaryOption {
     "entityNames": Set {
@@ -117,7 +117,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as readOnly should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as readOnly should convert it 1`] = `
 Array [
   JDLUnaryOption {
     "entityNames": Set {
@@ -131,7 +131,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as search should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as search should convert it 1`] = `
 Array [
   JDLBinaryOption {
     "entityNames": Set {
@@ -146,7 +146,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as service should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as service should convert it 1`] = `
 Array [
   JDLBinaryOption {
     "entityNames": Set {
@@ -161,7 +161,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as skipClient should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as skipClient should convert it 1`] = `
 Array [
   JDLUnaryOption {
     "entityNames": Set {
@@ -175,7 +175,7 @@ Array [
 ]
 `;
 
-exports[`OptionConverter convertOptions when passing options such as skipServer should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as skipServer should convert it 1`] = `
 Array [
   JDLUnaryOption {
     "entityNames": Set {

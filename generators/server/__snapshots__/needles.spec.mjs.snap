@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster server needles generated project should match state snapshot 1`] = `
+exports[`generator - server - needles generated project should match state snapshot 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",

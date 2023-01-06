@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster application generator with scoped blueprint generate monolith application with scoped blueprint creates expected default files for server and angular 1`] = `
+exports[`generator - app - with scoped blueprint generate monolith application with scoped blueprint creates expected default files for server and angular 1`] = `
 Object {
   ".devcontainer/Dockerfile": Object {
     "stateCleared": "modified",

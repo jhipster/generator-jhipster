@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster CI-CD Sub Generator Azure Pipelines tests Azure Pipelines: Gradle Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular NPM should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -130,7 +130,7 @@ Object {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Azure Pipelines tests Azure Pipelines: Gradle Angular NPM with Snyk should match files snapshot 1`] = `
+exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular NPM with Snyk should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -272,7 +272,7 @@ Object {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Azure Pipelines tests Azure Pipelines: Maven Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular NPM should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -402,7 +402,7 @@ Object {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Azure Pipelines tests Azure Pipelines: Maven Angular NPM with Snyk should match files snapshot 1`] = `
+exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular NPM with Snyk should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -544,7 +544,7 @@ Object {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Azure Pipelines tests Azure Pipelines: autoconfigure should match files snapshot 1`] = `
+exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -674,7 +674,7 @@ Object {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Circle CI test Circle CI: Gradle Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD Circle CI test Circle CI: Gradle Angular NPM should match files snapshot 1`] = `
 Object {
   ".circleci/config.yml": Object {
     "contents": "version: 2.1
@@ -767,7 +767,7 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Circle CI test Circle CI: Gradle with Snyk should match files snapshot 1`] = `
+exports[`generator - CI-CD Circle CI test Circle CI: Gradle with Snyk should match files snapshot 1`] = `
 Object {
   ".circleci/config.yml": Object {
     "contents": "version: 2.1
@@ -871,7 +871,7 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Circle CI test Circle CI: Maven Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD Circle CI test Circle CI: Maven Angular NPM should match files snapshot 1`] = `
 Object {
   ".circleci/config.yml": Object {
     "contents": "version: 2.1
@@ -964,7 +964,7 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Circle CI test Circle CI: Maven with Snyk should match files snapshot 1`] = `
+exports[`generator - CI-CD Circle CI test Circle CI: Maven with Snyk should match files snapshot 1`] = `
 Object {
   ".circleci/config.yml": Object {
     "contents": "version: 2.1
@@ -1068,7 +1068,7 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Gradle Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Gradle Angular NPM should match files snapshot 1`] = `
 Object {
   ".github/workflows/main.yml": Object {
     "contents": "name: Application CI
@@ -1156,7 +1156,7 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Gradle Angular NPM with full options should match files snapshot 1`] = `
+exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Gradle Angular NPM with full options should match files snapshot 1`] = `
 Object {
   ".github/workflows/main.yml": Object {
     "contents": "name: Application CI
@@ -1327,7 +1327,7 @@ services:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Maven Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Maven Angular NPM should match files snapshot 1`] = `
 Object {
   ".github/workflows/main.yml": Object {
     "contents": "name: Application CI
@@ -1409,7 +1409,7 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Maven Angular NPM with full options should match files snapshot 1`] = `
+exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Maven Angular NPM with full options should match files snapshot 1`] = `
 Object {
   ".github/workflows/main.yml": Object {
     "contents": "name: Application CI
@@ -1596,7 +1596,7 @@ services:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: autoconfigure should match files snapshot 1`] = `
+exports[`generator - CI-CD GitHub Actions tests GitHub Actions: autoconfigure should match files snapshot 1`] = `
 Object {
   ".github/workflows/main.yml": Object {
     "contents": "name: Application CI
@@ -1678,7 +1678,7 @@ jobs:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: Gradle Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD GitLab CI tests GitLab CI: Gradle Angular NPM should match files snapshot 1`] = `
 Object {
   ".gitlab-ci.yml": Object {
     "contents": "cache:
@@ -1802,7 +1802,7 @@ gradle-package:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: Maven Angular NPM inside Docker should match files snapshot 1`] = `
+exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular NPM inside Docker should match files snapshot 1`] = `
 Object {
   ".gitlab-ci.yml": Object {
     "contents": "image: jhipster/jhipster:v
@@ -1976,7 +1976,7 @@ deploy-to-production:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: Maven Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular NPM should match files snapshot 1`] = `
 Object {
   ".gitlab-ci.yml": Object {
     "contents": "cache:
@@ -2093,7 +2093,7 @@ maven-package:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: Maven Angular NPM with full options should match files snapshot 1`] = `
+exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular NPM with full options should match files snapshot 1`] = `
 Object {
   ".gitlab-ci.yml": Object {
     "contents": "cache:
@@ -2257,7 +2257,7 @@ deploy-to-production:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: Maven Angular Yarn inside Docker Autoconfigure should match files snapshot 1`] = `
+exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular Yarn inside Docker Autoconfigure should match files snapshot 1`] = `
 Object {
   ".gitlab-ci.yml": Object {
     "contents": "image: jhipster/jhipster:v
@@ -2384,7 +2384,7 @@ maven-package:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator GitLab CI tests GitLab CI: npm skip server should match files snapshot 1`] = `
+exports[`generator - CI-CD GitLab CI tests GitLab CI: npm skip server should match files snapshot 1`] = `
 Object {
   ".gitlab-ci.yml": Object {
     "contents": "image: jhipster/jhipster:v
@@ -2538,7 +2538,7 @@ webapp-prod:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Jenkins tests Jenkins: Gradle Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD Jenkins tests Jenkins: Gradle Angular NPM should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -2736,7 +2736,7 @@ contributor(nodeCtx) {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Jenkins tests Jenkins: Maven Angular NPM inside Docker should match files snapshot 1`] = `
+exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM inside Docker should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -3029,7 +3029,7 @@ contributor(nodeCtx) {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Jenkins tests Jenkins: Maven Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -3230,7 +3230,7 @@ contributor(nodeCtx) {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Jenkins tests Jenkins: Maven Angular NPM with full options should match files snapshot 1`] = `
+exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM with full options should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -3520,7 +3520,7 @@ contributor(nodeCtx) {
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Travis CI tests Travis CI: Gradle Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD Travis CI tests Travis CI: Gradle Angular NPM should match files snapshot 1`] = `
 Object {
   ".travis.yml": Object {
     "contents": "os:
@@ -3608,7 +3608,7 @@ notifications:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Travis CI tests Travis CI: Maven Angular NPM should match files snapshot 1`] = `
+exports[`generator - CI-CD Travis CI tests Travis CI: Maven Angular NPM should match files snapshot 1`] = `
 Object {
   ".travis.yml": Object {
     "contents": "os:
@@ -3697,7 +3697,7 @@ notifications:
 }
 `;
 
-exports[`JHipster CI-CD Sub Generator Travis CI tests Travis CI: Maven Angular NPM with full options should match files snapshot 1`] = `
+exports[`generator - CI-CD Travis CI tests Travis CI: Maven Angular NPM with full options should match files snapshot 1`] = `
 Object {
   ".travis.yml": Object {
     "contents": "os:
