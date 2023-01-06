@@ -126,11 +126,7 @@ export const baseServerFiles = {
   ],
   serverBuild: [
     {
-      templates: [
-        'checkstyle.xml',
-        '.devcontainer/devcontainer.json',
-        '.devcontainer/Dockerfile',
-      ],
+      templates: ['checkstyle.xml', '.devcontainer/devcontainer.json', '.devcontainer/Dockerfile'],
     },
     {
       condition: generator => generator.buildToolGradle,
@@ -943,16 +939,7 @@ export function writeFiles() {
       this.generateKeyStore();
     },
 
-    cleanupOldServerFiles({ application }) {
-      cleanupOldServerFiles(
-        this,
-        application,
-        application.javaPackageSrcDir,
-        application.javaPackageTestDir,
-        SERVER_MAIN_RES_DIR,
-        SERVER_TEST_RES_DIR
-      );
-    },
+    cleanupOldServerFiles,
 
     async writeFiles({ application }) {
       const recreateInitialChangelog = this.configOptions.recreateInitialChangelog;

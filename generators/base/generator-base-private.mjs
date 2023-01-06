@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { rmSync, statSync } from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import Generator from 'yeoman-generator';
@@ -156,16 +157,18 @@ export default class PrivateBase extends Generator {
   }
 
   /**
-   * @private
    * Remove Folder
    *
    * @param folder
    */
   removeFolder(folder) {
     folder = this.destinationPath(folder);
-    if (folder && shelljs.test('-d', folder)) {
-      this.log(`Removing the folder - ${folder}`);
-      shelljs.rm('-rf', folder);
+    try {
+      if (statSync(folder).isDirectory()) {
+        rmSync(folder, { recursive: true });
+      }
+    } catch (error) {
+      this.log(`Could not remove folder ${folder}`);
     }
   }
 
