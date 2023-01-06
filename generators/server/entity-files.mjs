@@ -48,16 +48,34 @@ export const modelFiles = {
   ],
 };
 
-/**
- * The default is to use a file path string. It implies use of the template method.
- * For any other config an object { file:.., method:.., template:.. } can be used
- */
-export const entityFiles = {
-  server: [
+const sqlFiles = {
+  sqlFiles: [
     {
+      condition: generator => generator.databaseTypeSql && !generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.jakarta_validation'],
+      templates: ['domain/_PersistClass_.java.jhi.jakarta_persistence'],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.requiresPersistableImplementation,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaEntityPackageSrcDir,
+      templates: ['domain/_PersistClass_.java.jhi.jakarta_lifecycle_events'],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.enableHibernateCache,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaEntityPackageSrcDir,
+      templates: ['domain/_PersistClass_.java.jhi.hibernate_cache'],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.reactive && !generator.embedded && generator.containsBagRelationships,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaEntityPackageSrcDir,
+      templates: [
+        'repository/_EntityClass_RepositoryWithBagRelationships.java',
+        'repository/_EntityClass_RepositoryWithBagRelationshipsImpl.java',
+      ],
     },
     {
       condition: generator => generator.databaseTypeSql && generator.reactive,
@@ -76,30 +94,26 @@ export const entityFiles = {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_Callback.java'],
-    },
+    }
+  ],
+};
+
+/**
+ * The default is to use a file path string. It implies use of the template method.
+ * For any other config an object { file:.., method:.., template:.. } can be used
+ */
+export const entityFiles = {
+  server: [
     {
-      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.requiresPersistableImplementation,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.jakarta_lifecycle_events'],
+      templates: ['domain/_PersistClass_.java.jhi.jakarta_validation'],
     },
     {
       condition: generator => generator.databaseTypeNeo4j,
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['domain/_PersistClass_.java.jhi.spring_data_neo4j'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.jakarta_persistence'],
-    },
-    {
-      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.enableHibernateCache,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.hibernate_cache'],
     },
   ],
 };
@@ -168,15 +182,6 @@ export const respositoryFiles = {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaEntityPackageSrcDir,
       templates: ['repository/_EntityClass_Repository.java'],
-    },
-    {
-      condition: generator => !generator.reactive && generator.databaseTypeSql && !generator.embedded && generator.containsBagRelationships,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: [
-        'repository/_EntityClass_RepositoryWithBagRelationships.java',
-        'repository/_EntityClass_RepositoryWithBagRelationshipsImpl.java',
-      ],
     },
     {
       condition: generator => generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
@@ -264,6 +269,7 @@ export const serverFiles = {
   ...serviceFiles,
   ...dtoFiles,
   ...gatlingFiles,
+  ...sqlFiles,
 };
 
 export function writeFiles() {
