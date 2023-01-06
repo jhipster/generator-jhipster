@@ -20,7 +20,7 @@ import type { WriteFileSection } from '../base/api.mjs';
 import type LiquibaseGenerator from './generator.mjs';
 import type { LiquibaseApplication, SpringBootApplication } from '../server/types.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import { moveToJavaPackageSrcDir } from '../server/utils.mjs';
+import { moveToJavaPackageSrcDir } from '../server/support/utils.mjs';
 
 // eslint-disable-next-line import/prefer-default-export
 export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, SpringBootApplication & LiquibaseApplication> = {

@@ -23,7 +23,7 @@ import { cleanupOldFiles } from './entity-cleanup.mjs';
 import { getEnumInfo } from '../utils.mjs';
 import { SERVER_MAIN_SRC_DIR, TEST_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { databaseTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
-import { moveToJavaEntityPackageSrcDir, moveToJavaEntityPackageTestDir } from './utils.mjs';
+import { moveToJavaEntityPackageSrcDir, moveToJavaEntityPackageTestDir } from './support/utils.mjs';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MapperTypes, ServiceTypes } = entityOptions;
