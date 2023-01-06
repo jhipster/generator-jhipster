@@ -83,7 +83,7 @@ export const h2Files = {
   serverResource: [
     {
       path: SERVER_MAIN_RES_DIR,
-      templates: [{ file: 'h2.server.properties', renameTo: () => '.h2.server.properties' }],
+      templates: ['.h2.server.properties'],
     },
   ],
 };
