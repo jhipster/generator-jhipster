@@ -128,8 +128,8 @@ export const baseServerFiles = {
     {
       templates: [
         'checkstyle.xml',
-        { file: 'devcontainer/devcontainer.json', renameTo: () => '.devcontainer/devcontainer.json' },
-        { file: 'devcontainer/Dockerfile', renameTo: () => '.devcontainer/Dockerfile' },
+        '.devcontainer/devcontainer.json',
+        '.devcontainer/Dockerfile',
       ],
     },
     {
@@ -156,31 +156,18 @@ export const baseServerFiles = {
     },
     {
       condition: generator => !generator.skipClient,
-      templates: [
-        { file: 'npmw', noEjs: true },
-        { file: 'npmw.cmd', noEjs: true },
-      ],
+      transform: false,
+      templates: ['npmw', 'npmw.cmd'],
     },
   ],
   serverResource: [
     {
-      condition: generator => generator.clientFrameworkReact,
+      condition: generator => generator.clientFrameworkReact || generator.clientFrameworkVue,
       path: SERVER_MAIN_RES_DIR,
+      transform: false,
       templates: [
         {
-          file: 'banner-react.txt',
-          noEjs: true,
-          renameTo: () => 'banner.txt',
-        },
-      ],
-    },
-    {
-      condition: generator => generator.clientFrameworkVue,
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        {
-          file: 'banner-vue.txt',
-          noEjs: true,
+          file: ctx => `banner-${ctx.clientFramework}.txt`,
           renameTo: () => 'banner.txt',
         },
       ],
@@ -188,7 +175,8 @@ export const baseServerFiles = {
     {
       condition: generator => !generator.clientFrameworkReact && !generator.clientFrameworkVue,
       path: SERVER_MAIN_RES_DIR,
-      templates: [{ file: 'banner.txt', noEjs: true }],
+      transform: false,
+      templates: ['banner.txt'],
     },
     {
       condition: generator => !!generator.enableSwaggerCodegen,
@@ -376,7 +364,7 @@ export const baseServerFiles = {
     {
       condition: generator => generator.applicationTypeMicroservice,
       path: SERVER_MAIN_RES_DIR,
-      templates: [{ file: 'static/microservices_index.html', renameTo: () => 'static/index.html' }],
+      templates: [{ file: 'static/index_microservices.html', renameTo: () => 'static/index.html' }],
     },
   ],
   serverMicroserviceAndGateway: [
