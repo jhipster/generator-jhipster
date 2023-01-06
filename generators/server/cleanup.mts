@@ -18,10 +18,8 @@
  */
 import cleanupSql from './cleanup-sql.mjs';
 import cleanupCacheProvider from './cleanup-cache-provider.mjs';
-import cleanupGradle from './cleanup-gradle.mjs';
 import cleanupOauth2 from './cleanup-oauth2.mjs';
 import cleanupCucumber from './cleanup-cucumber.mjs';
-import cleanupMaven from './cleanup-maven.mjs';
 import { DOCKER_DIR } from '../generator-constants.mjs';
 
 import type BaseGenerator from '../base/generator.mjs';
@@ -38,12 +36,6 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
     cleanupSql.call(this, taskParam);
   }
   cleanupCacheProvider.call(this, taskParam as any);
-  if (application.buildToolGradle) {
-    cleanupGradle.call(this);
-  }
-  if (application.buildToolMaven) {
-    cleanupMaven.call(this);
-  }
   if (application.authenticationTypeOauth2) {
     cleanupOauth2.call(this, taskParam);
   }
