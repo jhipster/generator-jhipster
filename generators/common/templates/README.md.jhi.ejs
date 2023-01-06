@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -52,8 +52,8 @@ Node is required for generation and recommended for development. `package.json` 
 
 In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
 
-<%_ if (configOptions.backendName === 'Java') { %>
-`/src/*` structure follows default <%= configOptions.backendName %> structure.
+<%_ if (backendType === 'Java') { %>
+`/src/*` structure follows default <%= backendType %> structure.
 
 <%_ } _%>
 - `.yo-rc.json` - Yeoman configuration file
@@ -85,7 +85,7 @@ For further instructions on how to develop with JHipster, have a look at [Using 
 JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
 
 ```
-docker-compose -f src/main/docker/jhipster-control-center.yml up
+docker compose -f src/main/docker/jhipster-control-center.yml up
 ```
 
 <%_ if (authenticationTypeOauth2) { -%>
@@ -96,7 +96,7 @@ Congratulations! You've selected an excellent way to secure your JHipster applic
 To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up and running. The JHipster Team has created a Docker container for you that has the default users and roles. Start Keycloak using the following command.
 
 ```
-docker-compose -f src/main/docker/keycloak.yml up
+docker compose -f src/main/docker/keycloak.yml up
 ```
 
 The security settings in `src/main/resources/config/application.yml` are configured for this image.
@@ -163,7 +163,7 @@ security:
 
 Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the **Next** button. Give the app a name you’ll remember, specify `http://localhost:8080` as a Base URI, and `http://localhost:8080/login/oauth2/code/oidc` as a Login Redirect URI. Click **Done**, then Edit and add `http://localhost:8080` as a Logout redirect URI. Copy and paste the client ID and secret into your `application.yml` file.
 
-Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `<%= CLIENT_TEST_SRC_DIR %>e2e/account/account.spec.ts` and `<%= CLIENT_TEST_SRC_DIR %>e2e/admin/administration.spec.ts`.
+Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `<%= clientTestDir %>e2e/account/account.spec.ts` and `<%= clientTestDir %>e2e/admin/administration.spec.ts`.
 
 Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
 
@@ -256,7 +256,7 @@ See Cypress' documentation for setting OS [environment variables](https://docs.c
     <%_ } _%>
 Then implements the generated delegate classes with `@Service` classes.
 
-To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
+To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
 
 Refer to [Doing API-First development][] for more details.
 <%_ } _%>
@@ -324,41 +324,26 @@ To launch your application's tests, run:
 <%_ if (gatlingTests) { _%>
 ### Other tests
 
-Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling).
+Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/java/gatling/simulations](src/test/java/gatling/simulations).
 
-To use those tests, you must install Gatling from [https://gatling.io/](https://gatling.io/).
+You can execute all Gatling tests with
+```
+<%_ if (buildToolMaven) { _%>
+./mvnw gatling:test
+<%_ } else { _%>
+./gradlew gatlingRun.
+<%_ } _%>
+```
 <%_ } _%>
 
 For more information, refer to the [Running tests page][].
-
-<%_ if (cypressCoverage) { _%>
-
-### E2E Webapp Code Coverage
-
-When using Cypress, you can generate code coverage report by running your dev server with instrumented code:
-
-Build your Angular application with instrumented code:
-
-    npm run webapp:instrumenter
-
-Start your backend without compiling frontend:
-
-    npm run backend:start
-
-Start your Cypress end to end testing:
-
-    npm run e2e:cypress:coverage
-
-The coverage report is generated under `./coverage/lcov-report/`
-
-<%_ } _%>
 
 ### Code quality
 
 Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
 
 ```
-docker-compose -f src/main/docker/sonar.yml up -d
+docker compose -f src/main/docker/sonar.yml up -d
 ```
 
 Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
@@ -393,13 +378,13 @@ You can use Docker to improve your JHipster development experience. A number of 
 For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
 ```
-docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
+docker compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
 ```
 
 To stop it and remove the container, run:
 
 ```
-docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
+docker compose -f src/main/docker/<%= prodDatabaseType %>.yml down
 ```
 <%_ } _%>
 
@@ -419,7 +404,7 @@ npm run java:docker:arm64
 Then run:
 
 ```
-docker-compose -f src/main/docker/app.yml up -d
+docker compose -f src/main/docker/app.yml up -d
 ```
 
 When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental `Use the new Virtualization framework` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -50,10 +50,10 @@
     </root>
 -->
 
-    <logger name="javax.activation" level="WARN"/>
-    <logger name="javax.mail" level="WARN"/>
-    <logger name="javax.management.remote" level="WARN"/>
-    <logger name="javax.xml.bind" level="WARN"/>
+    <logger name="jakarta.activation" level="WARN"/>
+    <logger name="jakarta.mail" level="WARN"/>
+    <logger name="jakarta.management.remote" level="WARN"/>
+    <logger name="jakarta.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
 <%_ if (databaseTypeCassandra) { _%>
     <logger name="com.datastax" level="WARN"/>
@@ -145,7 +145,7 @@
 <%_ } _%>
     <logger name="io.swagger.v3" level="INFO"/>
     <logger name="sun.rmi" level="WARN"/>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (enableLiquibase) { _%>
     <logger name="liquibase" level="WARN"/>
     <logger name="LiquibaseSchemaResolver" level="INFO"/>
 <%_ } _%>

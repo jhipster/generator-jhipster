@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -63,10 +63,18 @@ org:
       installed-by: <%= baseName %>
 <%_ } _%>
 management:
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: false
+<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
+  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    sampling:
+      probability: 1.0 # report 100% of traces
+<%_ } _%>
 
 spring:
   devtools:
@@ -109,23 +117,9 @@ spring:
 <%_ if (databaseTypeSql && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: SA
-    password: yourStrong(!)Password
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    username: system
-    password: oracle
-  <%_ } _%>
+    url: <%- prodJdbcUrl %>
+    username: <%- prodDatabaseUsername %>
+    password: <%- prodDatabasePassword %>
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -136,25 +130,19 @@ spring:
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
   <%_ } _%>
-  jpa:
-  <%_ if (prodDatabaseTypePostgres) { _%>
-    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-  <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCassandra || (searchEngineElasticsearch && reactive)) { _%>
-  data:
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
+  data:
     mongodb:
       uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
       database: <%= baseName %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-    cassandra:
-      contact-points: localhost
-      compression: LZ4
-      keyspace-name: <%= baseName %>
-      local-datacenter: datacenter1
+  cassandra:
+    contact-points: localhost
+    compression: LZ4
+    keyspace-name: <%= baseName %>
+    local-datacenter: datacenter1
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
   elasticsearch:
@@ -171,14 +159,10 @@ spring:
   liquibase:
     contexts: prod
   <%_ if (reactive) { _%>
-    <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypePostgres || prodDatabaseTypeMssql) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    <%_ } _%>
+    url: <%- prodJdbcUrl %>
   <%_ } _%>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   mail:
     host: localhost
     port: 25
@@ -187,42 +171,12 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
-    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: SA
-    password: yourStrong(!)Password
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-    username: system
-    password: oracle
-  <%_ } _%>
+    url: <%- prodR2dbcUrl %>
+    username: <%- prodDatabaseUsername %>
+    password: <%- prodDatabasePassword %>
 <%_ } _%>
   thymeleaf:
     cache: true
-<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
-  sleuth:
-    # https://github.com/spring-projects/spring-framework/issues/27844#issuescomment-1002866885
-    # https://github.com/spring-cloud/spring-cloud-sleuth/issues/2094
-    async:
-      enabled: false
-    enabled: false
-    sampler:
-      probability: 1 # report 100% of traces
-  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
-    base-url: http://localhost:9411
-    enabled: false
-    locator:
-      discovery:
-        enabled: true
-<%_ } _%>
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
@@ -351,7 +305,7 @@ jhipster:
       # security key (this key should be unique for your application, and kept secret)
       key: <%= rememberMeKey %>
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://my-server-url-to-change # Modify according to your server's URL
 <%_ } _%>
@@ -361,7 +315,7 @@ jhipster:
       enabled: false
       host: localhost
       port: 5000
-      queue-size: 512
+      ring-buffer-size: 512
 
 # ===================================================================
 # Application specific properties

@@ -1,0 +1,158 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<div>
+  <h2>
+    <span id="user-management-page-heading" <%= jhiPrefix %>Translate="userManagement.home.title" data-cy="userManagementPageHeading"><%- getWebappTranslation('userManagement.home.title') %></span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span <%= jhiPrefix %>Translate="userManagement.home.refreshListLabel"><%- getWebappTranslation('userManagement.home.refreshListLabel') %></span>
+      </button>
+      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
+        <fa-icon icon="plus"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.createLabel"><%- getWebappTranslation('userManagement.home.createLabel') %></span>
+      </button>
+    </div>
+  </h2>
+
+  <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+
+  <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
+
+  <div class="table-responsive" *ngIf="users">
+    <table class="table table-striped" aria-describedby="user-management-page-heading">
+      <thead>
+        <tr<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()"<% } %>>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="id"<% } %>>
+            <span <%= jhiPrefix %>Translate="global.field.id"><%- getWebappTranslation('global.field.id') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+          </th>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="login"<% } %>>
+            <span <%= jhiPrefix %>Translate="userManagement.login"><%- getWebappTranslation('userManagement.login') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+          </th>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="email"<% } %>>
+            <span <%= jhiPrefix %>Translate="userManagement.email"><%- getWebappTranslation('userManagement.email') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+          </th>
+          <th scope="col"></th>
+<%_ if (enableTranslation) { _%>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="langKey"<% } %>>
+            <span <%= jhiPrefix %>Translate="userManagement.langKey"><%- getWebappTranslation('userManagement.langKey') %></span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+          </th>
+<%_ } _%>
+          <th scope="col"><span <%= jhiPrefix %>Translate="userManagement.profiles"><%- getWebappTranslation('userManagement.profiles') %></span></th>
+<%_ if (!databaseTypeCassandra) { _%>
+          <th scope="col" <%= jhiPrefix %>SortBy="createdDate">
+            <span <%= jhiPrefix %>Translate="userManagement.createdDate"><%- getWebappTranslation('userManagement.createdDate') %></span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedBy">
+            <span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy"><%- getWebappTranslation('userManagement.lastModifiedBy') %></span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedDate">
+            <span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate"><%- getWebappTranslation('userManagement.lastModifiedDate') %></span> <fa-icon icon="sort"></fa-icon>
+          </th>
+<%_ } _%>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="users">
+        <tr *ngFor="let user of users; trackBy: trackIdentity">
+          <td>
+            <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
+          </td>
+          <td>{{ user.login }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="setActive(user, true)"
+              *ngIf="!user.activated"
+              <%= jhiPrefix %>Translate="userManagement.deactivated"
+            >
+              <%- getWebappTranslation('userManagement.deactivated') %>
+            </button>
+            <button
+              class="btn btn-success btn-sm"
+              (click)="setActive(user, false)"
+              *ngIf="user.activated"
+              [disabled]="!currentAccount || currentAccount.login === user.login"
+              <%= jhiPrefix %>Translate="userManagement.activated"
+            >
+              <%- getWebappTranslation('userManagement.activated') %>
+            </button>
+          </td>
+<%_ if (enableTranslation) { _%>
+          <td>{{ user.langKey }}</td>
+<%_ } _%>
+          <td>
+            <div *ngFor="let authority of user.authorities">
+              <span class="badge bg-info">{{ authority }}</span>
+            </div>
+          </td>
+<%_ if (!databaseTypeCassandra) { _%>
+          <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
+          <td>{{ user.lastModifiedBy }}</td>
+          <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
+<%_ } _%>
+          <td class="text-end">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view"><%- getWebappTranslation('entity.action.view') %></span>
+              </button>
+
+              <button type="submit" [routerLink]="['./', user.login, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit"><%- getWebappTranslation('entity.action.edit') %></span>
+              </button>
+
+              <button
+                type="button"
+                (click)="deleteUser(user)"
+                class="btn btn-danger btn-sm"
+                [disabled]="!currentAccount || currentAccount.login === user.login"
+              >
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete"><%- getWebappTranslation('entity.action.delete') %></span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<%_ if (!databaseTypeCassandra) { _%>
+
+  <div *ngIf="users">
+    <div class="d-flex justify-content-center">
+      <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="page"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="transition()"
+      ></ngb-pagination>
+    </div>
+  </div>
+<%_ } _%>
+</div>

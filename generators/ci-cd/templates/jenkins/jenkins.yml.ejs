@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,7 +19,7 @@
 version: '2'
 services:
   jenkins:
-    image: <%= DOCKER_JENKINS %>
+    image: <%- dockerContainers.jenkins %>
     ports:
       - 49001:8080
       - 50000:50000

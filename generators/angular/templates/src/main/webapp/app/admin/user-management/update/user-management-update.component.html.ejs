@@ -1,0 +1,174 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="myUserLabel" <%= jhiPrefix %>Translate="userManagement.home.createOrEditLabel"><%- getWebappTranslation('userManagement.home.createOrEditLabel') %></h2>
+
+      <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+
+      <div class="mb-3" [hidden]="!editForm.value.id">
+        <label <%= jhiPrefix %>Translate="global.field.id"><%- getWebappTranslation('global.field.id') %></label>
+        <input type="text" class="form-control" name="id" formControlName="id" readonly />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" <%= jhiPrefix %>Translate="userManagement.login"><%- getWebappTranslation('userManagement.login') %></label>
+        <input type="text" class="form-control" name="login" formControlName="login" />
+
+        <div *ngIf="editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)">
+          <small
+            class="form-text text-danger"
+            *ngIf="editForm.get('login')?.errors?.required"
+            <%= jhiPrefix %>Translate="entity.validation.required"
+          >
+           <%- getWebappTranslation('entity.validation.required') %>
+          </small>
+
+          <small
+            class="form-text text-danger"
+            *ngIf="editForm.get('login')?.errors?.maxlength"
+            <%= jhiPrefix %>Translate="entity.validation.maxlength"
+            [translateValues]="{ max: 50 }"
+          >
+            <%- getWebappTranslation('entity.validation.maxlength', { max: '50' }) %>
+          </small>
+
+          <small
+            class="form-text text-danger"
+            *ngIf="editForm.get('login')?.errors?.pattern"
+            <%= jhiPrefix %>Translate="entity.validation.patternLogin"
+          >
+            <%- getWebappTranslation('entity.validation.patternLogin') %>
+          </small>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" <%= jhiPrefix %>Translate="userManagement.firstName"><%- getWebappTranslation('userManagement.firstName') %></label>
+        <input type="text" class="form-control" name="firstName" formControlName="firstName" />
+
+        <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
+          <small
+            class="form-text text-danger"
+            *ngIf="editForm.get('firstName')?.errors?.maxlength"
+            <%= jhiPrefix %>Translate="entity.validation.maxlength"
+            [translateValues]="{ max: 50 }"
+          >
+            <%- getWebappTranslation('entity.validation.maxlength', { max: '50' }) %>
+          </small>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label <%= jhiPrefix %>Translate="userManagement.lastName"><%- getWebappTranslation('userManagement.lastName') %></label>
+        <input type="text" class="form-control" name="lastName" formControlName="lastName" />
+
+        <div *ngIf="editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)">
+          <small
+            class="form-text text-danger"
+            *ngIf="editForm.get('lastName')?.errors?.maxlength"
+            <%= jhiPrefix %>Translate="entity.validation.maxlength"
+            [translateValues]="{ max: 50 }"
+          >
+            <%- getWebappTranslation('entity.validation.maxlength', { max: '50' }) %>
+          </small>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" <%= jhiPrefix %>Translate="userManagement.email"><%- getWebappTranslation('userManagement.email') %></label>
+        <input type="email" class="form-control" name="email" formControlName="email" />
+
+        <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
+          <small
+            class="form-text text-danger"
+            *ngIf="editForm.get('email')?.errors?.required"
+            <%= jhiPrefix %>Translate="entity.validation.required"
+          >
+            <%- getWebappTranslation('entity.validation.required') %>
+          </small>
+
+          <small
+            class="form-text text-danger"
+            *ngIf="editForm.get('email')?.errors?.maxlength"
+            <%= jhiPrefix %>Translate="entity.validation.maxlength"
+            [translateValues]="{ max: 100 }"
+          >
+            <%- getWebappTranslation('entity.validation.maxlength', { max: '100' }) %>
+          </small>
+
+          <small
+            class="form-text text-danger"
+            *ngIf="editForm.get('email')?.errors?.minlength"
+            <%= jhiPrefix %>Translate="entity.validation.minlength"
+            [translateValues]="{ min: 5 }"
+          >
+            <%- getWebappTranslation('entity.validation.minlength', { min: '5' }) %>
+          </small>
+
+          <small
+            class="form-text text-danger"
+            *ngIf="editForm.get('email')?.errors?.email"
+            <%= jhiPrefix %>Translate="global.messages.validate.email.invalid"
+          >
+           <%- getWebappTranslation('global.messages.validate.email.invalid') %>
+          </small>
+        </div>
+      </div>
+
+      <div class="form-check">
+        <label class="form-check-label" for="activated">
+          <input
+            class="form-check-input"
+            [attr.disabled]="editForm.value.id === undefined ? 'disabled' : null"
+            type="checkbox"
+            id="activated"
+            name="activated"
+            formControlName="activated"
+          />
+          <span <%= jhiPrefix %>Translate="userManagement.activated"><%- getWebappTranslation('userManagement.activated') %></span>
+        </label>
+      </div>
+<%_ if (enableTranslation) { _%>
+
+      <div class="mb-3" *ngIf="languages && languages.length > 0">
+        <label <%= jhiPrefix %>Translate="userManagement.langKey"><%- getWebappTranslation('userManagement.langKey') %></label>
+        <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
+          <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
+        </select>
+      </div>
+<%_ } _%>
+
+      <div class="mb-3">
+        <label <%= jhiPrefix %>Translate="userManagement.profiles"><%- getWebappTranslation('userManagement.profiles') %></label>
+        <select class="form-control" multiple name="authority" formControlName="authorities">
+          <option *ngFor="let authority of authorities" [value]="authority">{{ authority }}</option>
+        </select>
+      </div>
+      <button type="button" class="btn btn-secondary" (click)="previousState()">
+        <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel"><%- getWebappTranslation('entity.action.cancel') %></span>
+      </button>
+
+      <button type="submit" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+        <fa-icon icon="save"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.save"><%- getWebappTranslation('entity.action.save') %></span>
+      </button>
+    </form>
+  </div>
+</div>

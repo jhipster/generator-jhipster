@@ -1,27 +1,54 @@
 {
   "env": {
     "node": true,
-    "es2020": true
+    "es2022": true
   },
-  "extends": ["airbnb-base", "plugin:prettier/recommended"],
-  "plugins": ["mocha", "prettier", "chai-friendly"],
+  "extends": ["airbnb-base", "plugin:prettier/recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["mocha", "prettier", "chai-friendly", "@typescript-eslint"],
   "settings": {
     "import/core-modules": ["generator-jhipster", "generator-jhipster/support"]
   },
+  "parserOptions": {
+    "ecmaVersion": 13
+  },
   "overrides": [
     {
-      "files": ["**/*.mjs"],
-      "parserOptions": {
-        "ecmaVersion": 11
-      },
+      "files": ["**/*.{c,m,}{js,ts}"],
       "rules": {
-        "import/extensions": [0, { "pattern": { "{c,m,}js": "always" } }]
+        "import/extensions": [0, { "pattern": { "{c,m,}{js,ts}": "always" } }]
       }
     },
     {
-      "files": ["**/*.spec.{c,m,}js", "test/**/*.{c,m,}js"],
+      "files": ["**/*.spec.{c,m,}{js,ts}", "**/__test-support/*.{c,m,}{js,ts}", "test/**/*.{c,m,}{js,ts}"],
       "env": {
         "mocha": true
+      },
+      "rules": {
+        "@typescript-eslint/ban-ts-comment": "off",
+        "import/first": "off"
+      }
+    },
+    {
+      "files": ["**/*.{c,m,}js", "**/*.{c,m,}js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-this-alias": "off"
+      }
+    },
+    {
+      "files": ["**/*.mjs"],
+      "rules": {
+        "import/no-unresolved": "off"
+      }
+    },
+    {
+      "files": ["**/*.{c,m,}ts"],
+      "rules": {
+        "import/extensions": "off",
+        "import/no-unresolved": "off"
       }
     }
   ],
@@ -39,12 +66,15 @@
     "no-restricted-exports": "off",
     "no-use-before-define": [2, "nofunc"],
     "no-confusing-arrow": "off",
-    "no-unused-vars": [2, { "vars": "local", "args": "none" }],
     "no-multi-str": 2,
     "no-promise-executor-return": "off",
     "no-irregular-whitespace": 2,
+    "@typescript-eslint/no-empty-function": "off",
     "comma-dangle": "off",
     "max-len": "off",
+    // TODO: Fix the duplicate imports issue and then activate the rule again
+    // See: https://github.com/jhipster/generator-jhipster/issues/20015
+    "import/no-duplicates": "off",
     "func-names": "off",
     "class-methods-use-this": "off",
     "no-underscore-dangle": "off",
@@ -54,7 +84,8 @@
     "prefer-destructuring": "off",
     "no-multi-assign": "off",
     "no-param-reassign": "off",
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "lines-between-class-members": [2, "always", { "exceptAfterSingleLine": true }],
+    "import/no-extraneous-dependencies": "off",
     "no-await-in-loop": "off",
     "no-restricted-syntax": [
       "error",

@@ -1,0 +1,62 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+<%_ const entityTableName = entity.entityTableName;
+if (addedFields.length || addedRelationships.length) { _%>
+    <changeSet id="<%= changelogDate %>-columns-faker" author="jhipster" context="faker">
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+        <loadUpdateData
+                  file="config/liquibase/fake-data/<%= changelogDate %>_entity_<%= entityTableName %>.csv"
+                  separator=";"
+                  onlyUpdate="true"
+                  primaryKey="id"
+                  tableName="<%= entityTableName %>">
+            <column name="id" type="numeric"/>
+    <%_ for (field of addedFields) { _%>
+            <column name="<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
+        <%_ if (field.shouldCreateContentType) { _%>
+            <column name="<%= field.columnName %>_content_type" type="string"/>
+        <%_ } _%>
+    <%_ } _%>
+    <%_ for (relationship of addedRelationships) { _%>
+        <%_ if (relationship.shouldWriteRelationship) { _%>
+            <column name="<%= relationship.columnName %>" type="string"/>
+        <%_ } _%>
+    <%_ } _%>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadUpdateData>
+    </changeSet>
+<%_ } _%>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+</databaseChangeLog>

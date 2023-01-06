@@ -1,0 +1,51 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import axios from 'axios';
+
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { serializeAxiosError } from './reducer.utils';
+
+const initialState = {
+  ribbonEnv: '',
+  inProduction: true,
+  isOpenAPIEnabled: false
+};
+
+export type ApplicationProfileState =  Readonly<typeof initialState>;
+
+export const getProfile = createAsyncThunk('applicationProfile/get_profile', async () => axios.get<any>('management/info'), {
+  serializeError: serializeAxiosError,
+});
+
+export const ApplicationProfileSlice = createSlice({
+  name: 'applicationProfile',
+  initialState: initialState as ApplicationProfileState,
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(getProfile.fulfilled, (state, action) => {
+      const { data } = action.payload;
+      state.ribbonEnv = data['display-ribbon-on-profiles'];
+      state.inProduction = data.activeProfiles.includes('prod');
+      state.isOpenAPIEnabled = data.activeProfiles.includes('api-docs');
+    });
+  },
+});
+
+// Reducer
+export default ApplicationProfileSlice.reducer;

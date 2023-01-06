@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,218 +18,19 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (authenticationTypeOauth2) { _%>
-  <%_ if (reactive) { _%>
-import <%= packageName %>.security.SecurityUtils;
-  <%_ } _%>
-import <%= packageName %>.service.UserService;
-import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-<%_ if (reactive) { _%>
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
-<%_ } else { _%>
-import javax.servlet.http.HttpServletRequest;
-<%_ } _%>
-
-import java.security.Principal;
-
-/**
- * REST controller for managing the current user's account.
- */
-@RestController
-@RequestMapping("/api")
-public class AccountResource {
-
-    private static class AccountResourceException extends RuntimeException {
-
-        private static final long serialVersionUID = 1L;
-
-        private AccountResourceException(String message) {
-            super(message);
-        }
-    }
-
-    private final Logger log = LoggerFactory.getLogger(AccountResource.class);
-
-    private final UserService userService;
-
-    public AccountResource(UserService userService) {
-        this.userService = userService;
-    }
-
-    /**
-     * {@code GET  /account} : get the current user.
-     *
-     * @param principal the current user; resolves to {@code null} if not authenticated.
-     * @return the current user.
-     * @throws AccountResourceException {@code 500 (Internal Server Error)} if the user couldn't be returned.
-     */
-    @GetMapping("/account")
-    @SuppressWarnings("unchecked")
-    public <% if (reactive) { %>Mono<<%= asDto('AdminUser') %>><% } else { %><%= asDto('AdminUser') %><% } %> getAccount(Principal principal) {
-        if (principal instanceof AbstractAuthenticationToken) {
-            return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal);
-        } else {
-            throw new AccountResourceException("User could not be found");
-        }
-    }
-
-    /**
-     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
-     *
-     * @param request the HTTP request.
-     * @return the login if the user is authenticated.
-     */
-    @GetMapping("/authenticate")
-<%_ if (reactive) { _%>
-    public Mono<String> isAuthenticated(ServerWebExchange request) {
-        log.debug("REST request to check if the current user is authenticated");
-        return request.getPrincipal().map(Principal::getName);
-<%_ } else { _%>
-    public String isAuthenticated(HttpServletRequest request) {
-        log.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
-<%_ } _%>
-    }
-}
-<%_ } else if (skipUserManagement) { /* not oauth, skipUserManagement */ _%>
-  <%_ if (!reactive) { _%>
-import <%= packageName %>.security.SecurityUtils;
-
-  <%_ } _%>
-import com.fasterxml.jackson.annotation.JsonCreator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
-  <%_ if (reactive) { _%>
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.userdetails.UserDetails;
-  <%_ } else { _%>
-import org.springframework.security.core.context.SecurityContextHolder;
-  <%_ } _%>
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-  <%_ if (reactive) { _%>
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
-import java.security.Principal;
-  <%_ } else { _%>
-import javax.servlet.http.HttpServletRequest;
-  <%_ } _%>
-
-import java.util.Set;
-import java.util.stream.Collectors;
-
-@RestController
-@RequestMapping("/api")
-public class AccountResource {
-
-    private final Logger log = LoggerFactory.getLogger(AccountResource.class);
-
-    private static class AccountResourceException extends RuntimeException {
-    }
-
-    /**
-     * {@code GET  /account} : get the current user.
-     *
-     * @return the current user.
-     * @throws AccountResourceException {@code 500 (Internal Server Error)} if the user couldn't be returned.
-     */
-    @GetMapping("/account")
-  <%_ if (reactive) { _%>
-    public Mono<UserVM> getAccount() {
-        return ReactiveSecurityContextHolder.getContext()
-            .map(SecurityContext::getAuthentication)
-            .map(authentication -> {
-                String login;
-                if (authentication.getPrincipal() instanceof UserDetails) {
-                    login = ((UserDetails) authentication.getPrincipal()).getUsername();
-                } else if (authentication.getPrincipal() instanceof String) {
-                    login = (String) authentication.getPrincipal();
-                } else {
-                    throw new AccountResourceException();
-                }
-                Set<String> authorities = authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toSet());
-                return new UserVM(login, authorities);
-            })
-            .switchIfEmpty(Mono.error(new AccountResourceException()));
-  <%_ } else { _%>
-    public UserVM getAccount() {
-        String login = SecurityUtils.getCurrentUserLogin()
-            .orElseThrow(AccountResourceException::new);
-        Set<String> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toSet());
-        return new UserVM(login, authorities);
-  <%_ } _%>
-    }
-
-    /**
-     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
-     *
-     * @param request the HTTP request.
-     * @return the login if the user is authenticated.
-     */
-    @GetMapping("/authenticate")
-  <%_ if (reactive) { _%>
-    public Mono<String> isAuthenticated(ServerWebExchange request) {
-        log.debug("REST request to check if the current user is authenticated");
-        return request.getPrincipal().map(Principal::getName);
-  <%_ } else { _%>
-    public String isAuthenticated(HttpServletRequest request) {
-        log.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
-  <%_ } _%>
-    }
-
-    private static class UserVM {
-        private String login;
-        private Set<String> authorities;
-
-        @JsonCreator
-        UserVM(String login, Set<String> authorities) {
-            this.login = login;
-            this.authorities = authorities;
-        }
-
-        public boolean isActivated() {
-            return true;
-        }
-
-        public Set<String> getAuthorities() {
-            return authorities;
-        }
-
-        public String getLogin() {
-            return login;
-        }
-    }
-}
-<%_ } else { /* not oauth, not skipUserManagement */ _%>
   <%_ if (authenticationTypeSession && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 import <%= packageName %>.repository.PersistentTokenRepository;
   <%_ } _%>
   <%_ if (!reactive) { _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
   <%_ } _%>
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.security.SecurityUtils;
 import <%= packageName %>.service.MailService;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.PasswordChangeDTO;
-import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import <%= packageName %>.web.rest.errors.*;
 import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
@@ -245,9 +46,9 @@ import reactor.core.publisher.Mono;
   <%_ } _%>
 
   <%_ if (!reactive) { _%>
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
   <%_ } _%>
-import javax.validation.Valid;
+import jakarta.validation.Valid;
   <%_ if (authenticationTypeSession && !reactive) { _%>
 import java.nio.charset.StandardCharsets;
 import java.net.URLDecoder;
@@ -314,7 +115,7 @@ public class AccountResource {
             .doOnSuccess(mailService::sendActivationEmail)
             .then();
   <%_ } else { _%>
-        <%= asEntity('User') %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        <%= user.persistClass %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
   <%_ } _%>
     }
@@ -332,13 +133,14 @@ public class AccountResource {
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
             .then();
   <%_ } else { _%>
-        Optional<<%= asEntity('User') %>> user = userService.activateRegistration(key);
+        Optional<<%= user.persistClass %>> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
   <%_ } _%>
     }
 
+  <%_ if (!authenticationTypeJwt) { _%>
     /**
      * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
      *
@@ -346,17 +148,18 @@ public class AccountResource {
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-  <%_ if (reactive) { _%>
+    <%_ if (reactive) { _%>
     public Mono<String> isAuthenticated(ServerWebExchange request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getPrincipal().map(Principal::getName);
-  <%_ } else { _%>
+    <%_ } else { _%>
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
-  <%_ } _%>
+    <%_ } _%>
     }
 
+  <%_ } _%>
     /**
      * {@code GET  /account} : get the current user.
      *
@@ -364,9 +167,9 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
-    public <% if (reactive) { %>Mono<<%= asDto('AdminUser') %>><% } else { %><%= asDto('AdminUser') %><% } %> getAccount() {
+    public <% if (reactive) { %>Mono<<%= user.adminUserDto %>><% } else { %><%= user.adminUserDto %><% } %> getAccount() {
         return userService.getUserWithAuthorities()
-            .map(<%= asDto('AdminUser') %>::new)
+            .map(<%= user.adminUserDto %>::new)
   <%_ if (reactive) { _%>
             .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")));
   <%_ } else { _%>
@@ -383,7 +186,7 @@ public class AccountResource {
      */
     @PostMapping("/account")
   <%_ if (reactive) { _%>
-    public Mono<Void> saveAccount(@Valid @RequestBody <%= asDto('AdminUser') %> userDTO) {
+    public Mono<Void> saveAccount(@Valid @RequestBody <%= user.adminUserDto %> userDTO) {
         return SecurityUtils.getCurrentUserLogin()
             .switchIfEmpty(Mono.error(new AccountResourceException("Current user login not found")))
             .flatMap(userLogin -> userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
@@ -399,13 +202,13 @@ public class AccountResource {
                 .flatMap(user -> userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                     userDTO.getLangKey()<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { %>, userDTO.getImageUrl()<% } %>));
   <%_ } else { _%>
-    public void saveAccount(@Valid @RequestBody <%= asDto('AdminUser') %> userDTO) {
+    public void saveAccount(@Valid @RequestBody <%= user.adminUserDto %> userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
-        Optional<<%= asEntity('User') %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<<%= user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
-        Optional<<%= asEntity('User') %>> user = userRepository.findOneByLogin(userLogin);
+        Optional<<%= user.persistClass %>> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
@@ -499,7 +302,7 @@ public class AccountResource {
             .then();
   <%_ } else { _%>
     public void requestPasswordReset(@RequestBody String mail) {
-        Optional<<%= asEntity('User') %>> user = userService.requestPasswordReset(mail);
+        Optional<<%= user.persistClass %>> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
         } else {
@@ -527,7 +330,7 @@ public class AccountResource {
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this reset key")))
             .then();
   <%_ } else { _%>
-        Optional<<%= asEntity('User') %>> user =
+        Optional<<%= user.persistClass %>> user =
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
@@ -542,4 +345,3 @@ public class AccountResource {
             password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
 }
-<%_ } _%>

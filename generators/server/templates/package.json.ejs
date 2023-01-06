@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,22 +28,22 @@
   "devDependencies": {
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ otherModules.forEach(module => { _%>
-    "<%= module.name %>": "<%= module.version %>",
-  <%_ });
-} _%>
-    "prettier": "<%= dependabotPackageJson.devDependencies['prettier'] %>",
-    "prettier-plugin-java": "<%= dependabotPackageJson.devDependencies['prettier-plugin-java'] %>",
-    "prettier-plugin-packagejson": "<%= dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>"
+  <%_ blueprints.forEach(blueprint => { _%>
+    "<%= blueprint.name %>": "<%= blueprint.version %>",
+  <%_ }); _%>
+<%_ } _%>
+    "prettier": "<%= this.dependabotPackageJson.devDependencies?.['prettier'] %>",
+    "prettier-plugin-java": "<%= this.dependabotPackageJson.devDependencies?.['prettier-plugin-java'] %>",
+    "prettier-plugin-packagejson": "<%= this.dependabotPackageJson.devDependencies?.['prettier-plugin-packagejson'] %>"
   },
   "engines": {
-    "node": ">=<%= NODE_VERSION %>"
+    "node": ">=<%= nodeVersion %>"
   },
   "config": {
     "default_environment": "prod"
   },
   "scripts": {
-    "prettier:check": "prettier --check \"{,src/**/,.blueprint/**/}*.{<%= getPrettierExtensions() %>}\"",
-    "prettier:format": "prettier --write \"{,src/**/,.blueprint/**/}*.{<%= getPrettierExtensions() %>}\""
+    "prettier:check": "prettier --check \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\""
   }
 }

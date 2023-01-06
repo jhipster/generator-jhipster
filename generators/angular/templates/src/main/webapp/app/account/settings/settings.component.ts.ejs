@@ -1,0 +1,98 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+<%_ if (enableTranslation) { _%>
+import { TranslateService } from '@ngx-translate/core';
+<%_ } _%>
+
+import SharedModule from 'app/shared/shared.module';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
+<%_ if (enableTranslation) { _%>
+import { LANGUAGES } from 'app/config/language.constants';
+<%_ } _%>
+
+const initialAccount: Account = {} as Account;
+
+@Component({
+  selector: '<%= jhiPrefixDashed %>-settings',
+  standalone: true,
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  templateUrl: './settings.component.html',
+})
+export default class SettingsComponent implements OnInit {
+  success = false;
+<%_ if (enableTranslation) { _%>
+  languages = LANGUAGES;
+<%_ } _%>
+
+  settingsForm = new FormGroup({
+    firstName: new FormControl(initialAccount.firstName, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
+    }),
+    lastName: new FormControl(initialAccount.lastName, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
+    }),
+    email: new FormControl(initialAccount.email, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
+    }),
+    langKey: new FormControl(initialAccount.langKey, { nonNullable: true }),
+
+    activated: new FormControl(initialAccount.activated, { nonNullable: true }),
+    authorities: new FormControl(initialAccount.authorities, { nonNullable: true }),
+    imageUrl: new FormControl(initialAccount.imageUrl, { nonNullable: true }),
+    login: new FormControl(initialAccount.login, { nonNullable: true }),
+  });
+
+  constructor(
+    private accountService: AccountService,
+<%_ if (enableTranslation) { _%>
+    private translateService: TranslateService,
+<%_ } _%>
+  ) {}
+
+  ngOnInit(): void {
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.settingsForm.patchValue(account);
+      }
+    });
+  }
+
+  save(): void {
+    this.success = false;
+
+    const account = this.settingsForm.getRawValue();
+    this.accountService.save(account).subscribe(() => {
+      this.success = true;
+
+      this.accountService.authenticate(account);
+
+<%_ if (enableTranslation) { _%>
+      if (account.langKey !== this.translateService.currentLang) {
+        this.translateService.use(account.langKey);
+      }
+<%_ } _%>
+    });
+  }
+}

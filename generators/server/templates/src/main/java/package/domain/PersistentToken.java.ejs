@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -54,10 +54,10 @@ import static <%= packageName %>.domain.Authority.TYPE_NAME;
 <%_ } _%>
 
 <%_ if (databaseTypeSql) { _%>
-import javax.persistence.*;
+import jakarta.persistence.*;
 <%_ } _%>
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -182,7 +182,7 @@ public class PersistentToken implements Serializable {
   <%_ if (databaseTypeNeo4j) { _%>
     @Relationship(value = "HAS_PERSISTENT_TOKEN", direction = Relationship.Direction.INCOMING)
   <%_ } _%>
-    private <%= asEntity('User') %> user;
+    private <%= user.persistClass %> user;
 <%_ } _%>
 
     public String getSeries() {
@@ -230,11 +230,11 @@ public class PersistentToken implements Serializable {
     }
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 
-    public <%= asEntity('User') %> getUser() {
+    public <%= user.persistClass %> getUser() {
         return user;
     }
 
-    public void setUser(<%= asEntity('User') %> user) {
+    public void setUser(<%= user.persistClass %> user) {
         this.user = user;
     }
 <%_ } else if (databaseTypeCassandra || databaseTypeCouchbase) { _%>

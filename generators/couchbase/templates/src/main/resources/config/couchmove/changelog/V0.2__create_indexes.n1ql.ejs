@@ -1,0 +1,34 @@
+CREATE INDEX user_mail ON `${bucket}`.`${scope}`.`user`(type, LOWER(email))
+    WHERE `type` = "user"
+    WITH { "defer_build" : true };
+
+CREATE INDEX user_activationKey ON `${bucket}`.`${scope}`.`user`(activationKey)
+    WHERE `type` = "user"
+    WITH { "defer_build" : true };
+
+CREATE INDEX user_resetKey ON `${bucket}`.`${scope}`.`user`(resetKey)
+    WHERE `type` = "user"
+    WITH { "defer_build" : true };
+
+CREATE INDEX user_activated ON `${bucket}`.`${scope}`.`user`(activated)
+    WHERE `type` = "user"
+      AND activated = true
+    WITH { "defer_build" : true };
+
+CREATE INDEX user_non_activated ON `${bucket}`.`${scope}`.`user`(createdDate)
+    WHERE `type` = "user"
+      AND activated = false
+      AND activationKey IS NOT NULL
+    WITH { "defer_build" : true };
+
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+CREATE INDEX authority_type ON `${bucket}`.`${scope}`.`authority`(type)
+    WHERE `type` = "authority"
+    WITH { "defer_build" : true };
+<%_ } _%>
+
+<%_ if (authenticationTypeSession) { _%>
+CREATE INDEX token_date ON `${bucket}`.`${scope}`.`persistentToken` %>(tokenDate)
+    WHERE `type` = "persistentToken"
+    WITH { "defer_build" : true };
+<%_ } _%>

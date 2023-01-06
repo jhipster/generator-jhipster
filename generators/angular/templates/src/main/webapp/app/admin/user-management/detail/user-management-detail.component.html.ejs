@@ -1,0 +1,75 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="user">
+      <h2>
+        <span <%= jhiPrefix %>Translate="userManagement.detail.title"><%- getWebappTranslation('userManagement.detail.title') %></span> [<strong>{{ user.login }}</strong>]
+      </h2>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span <%= jhiPrefix %>Translate="userManagement.login"><%- getWebappTranslation('userManagement.login') %></span></dt>
+        <dd>
+          <span>{{ user.login }}</span>
+          <span *ngIf="user.activated" class="badge bg-success" <%= jhiPrefix %>Translate="userManagement.activated"><%- getWebappTranslation('userManagement.activated') %></span>
+          <span *ngIf="!user.activated" class="badge bg-danger" <%= jhiPrefix %>Translate="userManagement.deactivated"><%- getWebappTranslation('userManagement.deactivated') %></span>
+        </dd>
+
+        <dt><span <%= jhiPrefix %>Translate="userManagement.firstName"><%- getWebappTranslation('userManagement.firstName') %></span></dt>
+        <dd>{{ user.firstName }}</dd>
+
+        <dt><span <%= jhiPrefix %>Translate="userManagement.lastName"><%- getWebappTranslation('userManagement.lastName') %></span></dt>
+        <dd>{{ user.lastName }}</dd>
+
+        <dt><span <%= jhiPrefix %>Translate="userManagement.email"><%- getWebappTranslation('userManagement.email') %></span></dt>
+        <dd>{{ user.email }}</dd>
+<%_ if (enableTranslation) { _%>
+
+        <dt><span <%= jhiPrefix %>Translate="userManagement.langKey"><%- getWebappTranslation('userManagement.langKey') %></span></dt>
+        <dd>{{ user.langKey }}</dd>
+<%_ } _%>
+
+        <dt><span <%= jhiPrefix %>Translate="userManagement.createdBy"><%- getWebappTranslation('userManagement.createdBy') %></span></dt>
+        <dd>{{ user.createdBy }}</dd>
+
+        <dt><span <%= jhiPrefix %>Translate="userManagement.createdDate"><%- getWebappTranslation('userManagement.createdDate') %></span></dt>
+        <dd>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
+
+        <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy"><%- getWebappTranslation('userManagement.lastModifiedBy') %></span></dt>
+        <dd>{{ user.lastModifiedBy }}</dd>
+
+        <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate"><%- getWebappTranslation('userManagement.lastModifiedDate') %></span></dt>
+        <dd>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
+
+        <dt><span <%= jhiPrefix %>Translate="userManagement.profiles"><%- getWebappTranslation('userManagement.profiles') %></span></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <li *ngFor="let authority of user.authorities">
+              <span class="badge bg-info">{{ authority }}</span>
+            </li>
+          </ul>
+        </dd>
+      </dl>
+
+      <button type="submit" routerLink="../../" class="btn btn-info">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back"><%- getWebappTranslation('entity.action.back') %></span>
+      </button>
+    </div>
+  </div>
+</div>

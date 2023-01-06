@@ -1,6 +1,6 @@
 [![Logo][jhipster-image]][jhipster-url]
 
-[![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url] [![Known Vulnerabilities][snyk-image]][snyk-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url] [![Known Vulnerabilities][snyk-image]][snyk-url] [![Package Health][health-image]][health-url]
 
 [![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Vue Build Status][github-actions-vue-image]][github-actions-url] [![Revved up by Gradle Enterprise](https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.jhipster.tech/scans)
 
@@ -146,3 +146,5 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [gitter-badge-url]: https://gitter.im/jhipster/generator-jhipster?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 [snyk-image]: https://snyk.io/test/npm/generator-jhipster/badge.svg
 [snyk-url]: https://snyk.io/test/npm/generator-jhipster
+[health-image]: https://snyk.io/advisor/npm-package/generator-jhipster/badge.svg
+[health-url]: https://snyk.io/advisor/npm-package/generator-jhipster

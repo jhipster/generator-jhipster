@@ -1,0 +1,213 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.web.rest;
+
+import <%= packageName %>.IntegrationTest;
+<%_ if (generateUserManagement) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
+import <%= packageName %>.config.Constants;
+  <%_ } _%>
+import <%= packageName %>.domain.<%= user.persistClass %>;
+import <%= packageName %>.repository.UserRepository;
+<%_ } _%>
+import <%= packageName %>.web.rest.vm.LoginVM;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (reactive) { _%>
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+<%_ } _%>
+import org.springframework.http.MediaType;
+<%_ if (generateUserManagement) { _%>
+import org.springframework.security.crypto.password.PasswordEncoder;
+<%_ } _%>
+<%_ if (reactive) { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } else { _%>
+import org.springframework.test.web.servlet.MockMvc;
+  <%_ if (databaseTypeSql) { _%>
+import org.springframework.transaction.annotation.Transactional;
+  <%_ } _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+
+import java.util.UUID;
+<%_ } _%>
+<%_ if (!reactive) { _%>
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+<%_ } _%>
+
+/**
+ * Integration tests for the {@link AuthenticateController} REST controller.
+ */
+<%_ if (reactive) { _%>
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
+<%_ } else { _%>
+@AutoConfigureMockMvc
+<%_ } _%>
+@IntegrationTest
+class AuthenticateControllerIT {
+
+<%_ if (generateUserManagement) { _%>
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+<%_ } _%>
+    @Autowired
+<%_ if (reactive) { _%>
+    private WebTestClient webTestClient;
+<%_ } else { _%>
+    private MockMvc mockMvc;
+<%_ } _%>
+
+    @Test
+<%_ if (generateUserManagement) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+  <%_ } _%>
+    void testAuthorize() throws Exception {
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
+  <%_ if (databaseTypeCassandra) { _%>
+        user.setId(UUID.randomUUID().toString());
+  <%_ } _%>
+        user.setLogin("user-jwt-controller");
+        user.setEmail("user-jwt-controller@example.com");
+        user.setActivated(true);
+        user.setPassword(passwordEncoder.encode("test"));
+  <%_ if (databaseTypeSql && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM);
+  <%_ } _%>
+
+        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+
+        LoginVM login = new LoginVM();
+        login.setUsername("user-jwt-controller");
+<%_ } else { _%>
+    void testAuthorize() throws Exception {
+        LoginVM login = new LoginVM();
+        login.setUsername("test");
+<%_ } _%>
+        login.setPassword("test");
+<%_ if (reactive) { _%>
+        webTestClient.post().uri("/api/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().valueMatches("Authorization", "Bearer .+")
+            .expectBody()
+            .jsonPath("$.id_token").isNotEmpty();
+<%_ } else { _%>
+        mockMvc.perform(post("/api/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(login)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id_token").isString())
+            .andExpect(jsonPath("$.id_token").isNotEmpty())
+            .andExpect(header().string("Authorization", not(nullValue())))
+            .andExpect(header().string("Authorization", not(is(emptyString()))));
+<%_ } _%>
+    }
+
+    @Test
+<%_ if (generateUserManagement) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+  <%_ } _%>
+    void testAuthorizeWithRememberMe() throws Exception {
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
+  <%_ if (databaseTypeCassandra) { _%>
+        user.setId(UUID.randomUUID().toString());
+  <%_ } _%>
+        user.setLogin("user-jwt-controller-remember-me");
+        user.setEmail("user-jwt-controller-remember-me@example.com");
+        user.setActivated(true);
+        user.setPassword(passwordEncoder.encode("test"));
+  <%_ if (databaseTypeSql && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM);
+  <%_ } _%>
+
+        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+
+        LoginVM login = new LoginVM();
+        login.setUsername("user-jwt-controller-remember-me");
+<%_ } else { _%>
+    void testAuthorizeWithRememberMe() throws Exception {
+        LoginVM login = new LoginVM();
+        login.setUsername("test");
+<%_ } _%>
+        login.setPassword("test");
+        login.setRememberMe(true);
+<%_ if (reactive) { _%>
+        webTestClient.post().uri("/api/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().valueMatches("Authorization", "Bearer .+")
+            .expectBody()
+            .jsonPath("$.id_token").isNotEmpty();
+<%_ } else { _%>
+        mockMvc.perform(post("/api/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(login)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id_token").isString())
+            .andExpect(jsonPath("$.id_token").isNotEmpty())
+            .andExpect(header().string("Authorization", not(nullValue())))
+            .andExpect(header().string("Authorization", not(is(emptyString()))));
+<%_ } _%>
+    }
+
+    @Test
+    void testAuthorizeFails() throws Exception {
+        LoginVM login = new LoginVM();
+        login.setUsername("wrong-user");
+        login.setPassword("wrong password");
+<%_ if (reactive) { _%>
+        webTestClient.post().uri("/api/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
+            .exchange()
+            .expectStatus().isUnauthorized()
+            .expectHeader().doesNotExist("Authorization")
+            .expectBody()
+            .jsonPath("$.id_token").doesNotExist();
+<%_ } else { _%>
+        mockMvc.perform(post("/api/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(login)))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.id_token").doesNotExist())
+            .andExpect(header().doesNotExist("Authorization"));
+<%_ } _%>
+    }
+}

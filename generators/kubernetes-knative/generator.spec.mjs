@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect } from 'expect';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 import lodash from 'lodash';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import Generator from './index.js';
+import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
 
@@ -30,15 +30,12 @@ const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
 
-describe(`JHipster ${generator} generator`, () => {
+describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
-  it('should be exported at package.json', async () => {
-    await expect((await import(`generator-jhipster/esm/generators/${generator}`)).default).toBe(Generator);
+    await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('should support features parameter', () => {
-    const instance = new Generator([], { help: true }, { bar: true });
+    const instance = new Generator([], { help: true, env: { cwd: 'foo', sharedOptions: { sharedData: {} } } }, { bar: true });
     expect(instance.features.bar).toBe(true);
   });
 });

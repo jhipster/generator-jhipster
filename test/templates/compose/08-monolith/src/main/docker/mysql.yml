@@ -1,7 +1,7 @@
-version: '2'
+name: 'samplemysql'
 services:
-    samplemysql-mysql:
-        image: mysql:8.0.30
+    mysql:
+        image: <%- dockerContainers.mysql %>
         # volumes:
         #     - ~/volumes/jhipster/sampleMysql/mysql/:/var/lib/mysql/
         environment:

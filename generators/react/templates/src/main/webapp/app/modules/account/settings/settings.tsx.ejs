@@ -1,0 +1,134 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import React, { useEffect } from 'react';
+import { Button, Col, Row } from 'reactstrap';
+import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
+import { toast } from 'react-toastify';
+
+<%_ if (enableTranslation) { _%>
+import { locales, languages } from 'app/config/translation';
+<%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getSession } from 'app/shared/reducers/authentication';
+import { saveAccountSettings, reset } from './settings.reducer';
+
+export const SettingsPage = () => {
+  const dispatch = useAppDispatch();
+  const account = useAppSelector(state => state.authentication.account);
+  const successMessage = useAppSelector(state => state.settings.successMessage);
+
+  useEffect(() => {
+    dispatch(getSession());
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (successMessage) {
+<%_ if (enableTranslation) { _%>
+      toast.success(translate(successMessage));
+<%_ } else { _%>
+      toast.success(successMessage);
+<%_ } _%>
+    }
+  }, [successMessage]);
+
+  const handleValidSubmit = values => {
+    dispatch(
+      saveAccountSettings({
+        ...account,
+        ...values,
+      })
+    );
+  };
+
+  return (
+    <div>
+      <Row className="justify-content-center">
+        <Col md="8">
+          <h2 id="settings-title">
+            <Translate contentKey="settings.title" interpolate={{ username: account.login }}>
+              User settings for {account.login}
+            </Translate>
+          </h2>
+          <ValidatedForm id="settings-form" onSubmit={handleValidSubmit} defaultValues={account}>
+            <ValidatedField
+              name="firstName"
+              label={translate('settings.form.firstname')}
+              id="firstName"
+              placeholder={translate('settings.form.firstname.placeholder')}
+              validate={{
+                required: { value: true, message: translate('settings.messages.validate.firstname.required') },
+                minLength: { value: 1, message: translate('settings.messages.validate.firstname.minlength') },
+                maxLength: { value: 50, message: translate('settings.messages.validate.firstname.maxlength') },
+              }}
+              data-cy="firstname"
+            />
+            <ValidatedField
+              name="lastName"
+              label={translate('settings.form.lastname')}
+              id="lastName"
+              placeholder={translate('settings.form.lastname.placeholder')}
+              validate={{
+                required: { value: true, message: translate('settings.messages.validate.lastname.required') },
+                minLength: { value: 1, message: translate('settings.messages.validate.lastname.minlength') },
+                maxLength: { value: 50, message: translate('settings.messages.validate.lastname.maxlength') },
+              }}
+              data-cy="lastname"
+            />
+            <ValidatedField
+              name="email"
+              label={translate('global.form.email.label')}
+              placeholder={translate('global.form.email.placeholder')}
+              type="email"
+              validate={{
+                required: { value: true, message: translate('global.messages.validate.email.required') },
+                minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
+                maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
+                validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
+              }}
+              data-cy="email"
+            />
+<%_ if (enableTranslation) { _%>
+            <ValidatedField
+              type="select"
+              id="langKey"
+              name="langKey"
+              label={translate('settings.form.language')}
+              data-cy="langKey"
+            >
+              {locales.map(locale => (
+                <option value={locale} key={locale}>
+                  {languages[locale].name}
+                </option>
+              ))}
+            </ValidatedField>
+<%_ } _%>
+            <Button color="primary" type="submit" data-cy="submit">
+              <Translate contentKey="settings.form.button">Save</Translate>
+            </Button>
+          </ValidatedForm>
+        </Col>
+      </Row>
+    </div>
+  );
+};
+
+export default SettingsPage;

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -41,7 +41,7 @@ public class RedisTestContainer implements InitializingBean, DisposableBean {
     @Override
     public void afterPropertiesSet() {
         if (null == redisContainer) {
-            redisContainer = new GenericContainer("<%= DOCKER_REDIS %>")
+            redisContainer = new GenericContainer("<%- dockerContainers.redis %>")
                 .withExposedPorts(6379)
                 .withLogConsumer(new Slf4jLogConsumer(log))
                 .withReuse(true);

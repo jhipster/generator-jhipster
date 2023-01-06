@@ -1,0 +1,69 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<div>
+  <h2>
+    <span id="metrics-page-heading" <%= jhiPrefix %>Translate="metrics.title" data-cy="metricsPageHeading"><%- getWebappTranslation('metrics.title') %></span>
+
+    <button class="btn btn-primary float-end" (click)="refresh()">
+      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="metrics.refresh.button"><%- getWebappTranslation('metrics["refresh.button"]') %></span>
+    </button>
+  </h2>
+
+  <h3 <%= jhiPrefix %>Translate="metrics.jvm.title"><%- getWebappTranslation('metrics.jvm.title') %></h3>
+
+  <div class="row" *ngIf="metrics && !updatingMetrics">
+    <<%= jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics" [jvmMemoryMetrics]="metrics.jvm"></<%= jhiPrefixDashed %>-jvm-memory>
+
+    <<%= jhiPrefixDashed %>-jvm-threads class="col-md-4" [threads]="threads"></<%= jhiPrefixDashed %>-jvm-threads>
+
+    <<%= jhiPrefixDashed %>-metrics-system class="col-md-4" [updating]="updatingMetrics" [systemMetrics]="metrics.processMetrics"></<%= jhiPrefixDashed %>-metrics-system>
+  </div>
+
+  <<%= jhiPrefixDashed %>-metrics-garbagecollector
+    *ngIf="metrics && metricsKeyExists('garbageCollector')"
+    [updating]="updatingMetrics"
+    [garbageCollectorMetrics]="metrics.garbageCollector"
+  ></<%= jhiPrefixDashed %>-metrics-garbagecollector>
+
+  <div class="well well-lg" *ngIf="updatingMetrics" <%= jhiPrefix %>Translate="metrics.updating"><%- getWebappTranslation('metrics.updating') %></div>
+
+  <<%= jhiPrefixDashed %>-metrics-request
+    *ngIf="metrics && metricsKeyExists('http.server.requests')"
+    [updating]="updatingMetrics"
+    [requestMetrics]="metrics['http.server.requests']"
+  ></<%= jhiPrefixDashed %>-metrics-request>
+
+  <<%= jhiPrefixDashed %>-metrics-endpoints-requests
+    *ngIf="metrics && metricsKeyExists('services')"
+    [updating]="updatingMetrics"
+    [endpointsRequestsMetrics]="metrics.services"
+  ></<%= jhiPrefixDashed %>-metrics-endpoints-requests>
+
+  <<%= jhiPrefixDashed %>-metrics-cache
+    *ngIf="metrics && metricsKeyExists('cache')"
+    [updating]="updatingMetrics"
+    [cacheMetrics]="metrics.cache"
+  ></<%= jhiPrefixDashed %>-metrics-cache>
+
+  <<%= jhiPrefixDashed %>-metrics-datasource
+    *ngIf="metrics && metricsKeyExistsAndObjectNotEmpty('databases')"
+    [updating]="updatingMetrics"
+    [datasourceMetrics]="metrics.databases"
+  ></<%= jhiPrefixDashed %>-metrics-datasource>
+</div>

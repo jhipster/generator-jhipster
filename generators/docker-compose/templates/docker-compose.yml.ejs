@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,13 +22,13 @@ services:
 <%_ } _%>
 <%_ if (useKafka) { _%>
   zookeeper:
-    image: <%= DOCKER_ZOOKEEPER %>
+    image: <%- dockerContainers.zookeeper %>
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_SYNC_LIMIT: 2
   kafka:
-    image: <%= DOCKER_KAFKA %>
+    image: <%- dockerContainers.kafka %>
     environment:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -39,7 +39,7 @@ services:
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka) { _%>
   jhipster-registry:
-    image: <%= DOCKER_JHIPSTER_REGISTRY %>
+    image: <%- dockerContainers.jhipsterRegistry %>
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the "dev" and "native"
@@ -48,9 +48,6 @@ services:
     # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-  <%_ if (usesOauth2) { _%>
-      - JHIPSTER_SLEEP=80
-  <%_ } _%>
       - SPRING_PROFILES_ACTIVE=dev<% if (usesOauth2) { %>,oauth2<% } %>
       - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
       - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
@@ -64,27 +61,35 @@ services:
       - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
   <%_ } _%>
   <%_ if (monitoringPrometheus) { _%>
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
   <%_ } _%>
   <%_ if (usesOauth2) { _%>
       # For Keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
+    depends_on:
+      keycloak:
+        condition: 'service_healthy'
   <%_ } _%>
     ports:
       - 8761:8761
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/management/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
   consul:
-    image: <%= DOCKER_CONSUL %>
+    image: <%- dockerContainers.consul %>
     ports:
       - 8300:8300
       - 8500:8500
       - 8600:8600
     command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
   consul-config-loader:
-    image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
+    image: <%- dockerContainers.consulConfigLoader %>
     volumes:
       - ./central-server-config:/config
     environment:
@@ -94,7 +99,7 @@ services:
 <%_ } _%>
 <%_ if (usesOauth2) { _%>
   keycloak:
-    image: <%= DOCKER_KEYCLOAK %>
+    image: <%- dockerContainers.keycloak %>
     command: ['start-dev --import-realm']
     volumes:
       - ./realm-config:/opt/keycloak/data/import
@@ -108,11 +113,16 @@ services:
     ports:
       - 9080:9080
       - 9443:9443
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9080/realms/jhipster"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
 
   prometheus:
-    image: <%= DOCKER_PROMETHEUS %>
+    image: <%- dockerContainers.prometheus %>
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -121,7 +131,7 @@ services:
     ports:
       - 9090:9090
   alertmanager:
-    image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
+    image: <%- dockerContainers.prometheusAlertmanager %>
     ports:
       - 9093:9093
     volumes:
@@ -131,7 +141,7 @@ services:
       - '--storage.path=/alertmanager'
 
   grafana:
-    image: <%= DOCKER_GRAFANA %>
+    image: <%- dockerContainers.grafana %>
     ports:
       - 3000:3000
     volumes:

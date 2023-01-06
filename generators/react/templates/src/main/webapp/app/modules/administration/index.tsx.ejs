@@ -1,0 +1,63 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import React from 'react';
+
+import { Route } from 'react-router-dom';
+import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
+<%_ if (generateUserManagement) { _%>
+import UserManagement from './user-management';
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+import Logs from './logs/logs';
+import Health from './health/health';
+import Metrics from './metrics/metrics';
+import Configuration from './configuration/configuration';
+<%_ } _%>
+import Docs from './docs/docs';
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+import Gateway from './gateway/gateway';
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
+import Tracker from './tracker/tracker';
+<%_ } _%>
+
+const AdministrationRoutes = () => (
+  <div>
+    <ErrorBoundaryRoutes>
+<%_ if (generateUserManagement) { _%>
+      <Route path="user-management/*" element={<UserManagement />} />
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
+      <Route path="tracker" element={<Tracker />} />
+<%_ } _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+      <Route path="gateway" element={<Gateway />} />
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+      <Route path="health" element={<Health />} />
+      <Route path="metrics" element={<Metrics />} />
+      <Route path="configuration" element={<Configuration />} />
+      <Route path="logs" element={<Logs />} />
+  <%_ } _%>
+      <Route path="docs" element={<Docs />} />
+    </ErrorBoundaryRoutes>
+  </div>
+);
+
+export default AdministrationRoutes;

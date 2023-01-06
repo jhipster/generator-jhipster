@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,15 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect } from 'expect';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 
-describe('Public api', () => {
+describe('public api', () => {
   it('generator-jhipster/generators should match snapshot', async () => {
     // eslint-disable-next-line import/no-unresolved
-    expect(await import('generator-jhipster/esm/generators')).toMatchSnapshot();
-  });
-  it('generator-jhipster/priorities should match snapshot', async () => {
-    // eslint-disable-next-line import/no-unresolved
-    expect(await import('generator-jhipster/esm/priorities')).toMatchSnapshot();
+    expect(await import('generator-jhipster/generators')).toMatchSnapshot();
   });
 });

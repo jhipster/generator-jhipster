@@ -1,0 +1,54 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import axios from 'axios';
+
+const TIMEOUT = 1000000;
+const onRequestSuccess = config => {
+<%_ if (authenticationTypeJwt) { _%>
+  const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
+  if (token) {
+    if (!config.headers) {
+      config.headers = {};
+    }
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+<%_ } _%>
+  config.timeout = TIMEOUT;
+  config.url = `${SERVER_API_URL}${config.url}`;
+  return config;
+};
+const setupAxiosInterceptors = (onUnauthenticated, onServerError) => {
+  const onResponseError = err => {
+    const status = err.status || err.response.status;
+    if (status === 403 || status === 401) {
+      return onUnauthenticated(err);
+    }
+    if (status >= 500) {
+      return onServerError(err);
+    }
+    return Promise.reject(err);
+  };
+  
+  if (axios.interceptors) {
+    axios.interceptors.request.use(onRequestSuccess);
+    axios.interceptors.response.use(res => res, onResponseError);
+  }
+};
+
+export { onRequestSuccess, setupAxiosInterceptors };

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -26,12 +26,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
 import io.r2dbc.spi.Row;
+import tech.jhipster.service.ColumnConverterReactive;
 
 /**
  * This service provides helper function dealing with the low level {@link Row} and Spring's {@link R2dbcCustomConversions}, so type conversions can be applied.
  */
 @Component
-public class ColumnConverter {
+public class ColumnConverter implements ColumnConverterReactive {
 
     private final ConversionService conversionService;
     private final R2dbcCustomConversions conversions;
@@ -48,6 +49,7 @@ public class ColumnConverter {
      * @param <T> the parameter for the intended type.
      * @return the value which can be constructed from the input.
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T convert(@Nullable Object value, @Nullable Class<T> target) {
 

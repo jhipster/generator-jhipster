@@ -7,12 +7,12 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -a src/main/docker/couchbase.yml ]; then
-    docker-compose -f src/main/docker/couchbase.yml up -d
+    docker compose -f src/main/docker/couchbase.yml up -d
     sleep 20
     docker ps -a
 fi
 if [ -a src/main/docker/cassandra.yml ]; then
-    docker-compose -f src/main/docker/cassandra.yml up -d
+    docker compose -f src/main/docker/cassandra.yml up -d
     sleep 30
     docker ps -a
 fi
@@ -78,7 +78,6 @@ if [ "$JHI_RUN_APP" == 1 ]; then
             -jar app.war \
             --spring.profiles.active="$JHI_PROFILE" \
             --logging.level.ROOT=OFF \
-            --logging.level.org.zalando=OFF \
             --logging.level.org.springframework.web=ERROR \
             --logging.level.tech.jhipster=OFF \
             --logging.level.tech.jhipster.sample=OFF &
@@ -88,7 +87,6 @@ if [ "$JHI_RUN_APP" == 1 ]; then
             -jar app.jar \
             --spring.profiles.active="$JHI_PROFILE" \
             --logging.level.ROOT=OFF \
-            --logging.level.org.zalando=OFF \
             --logging.level.org.springframework.web=ERROR \
             --logging.level.tech.jhipster=OFF \
             --logging.level.tech.jhipster.sample=OFF &

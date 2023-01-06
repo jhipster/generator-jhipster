@@ -1,0 +1,75 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import axios from 'axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
+
+const initialState = {
+  loading: false,
+  registrationSuccess: false,
+  registrationFailure: false,
+  errorMessage: null,
+  successMessage: null,
+};
+
+export type RegisterState = Readonly<typeof initialState>;
+
+// Actions
+
+export const handleRegister = createAsyncThunk(
+  'register/create_account',
+  async (data: { login: string; email: string; password: string; langKey?: string }) => axios.post<any>('api/register', data),
+  { serializeError: serializeAxiosError }
+);
+
+export const RegisterSlice = createSlice({
+  name: 'register',
+  initialState: initialState as RegisterState,
+  reducers: {
+    reset() {
+      return initialState;
+    },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(handleRegister.pending, state => {
+        state.loading = true;
+      })
+      .addCase(handleRegister.rejected, (state, action) => ({
+        ...initialState,
+        registrationFailure: true,
+        errorMessage: action.error.message,
+      }))
+      .addCase(handleRegister.fulfilled, () => ({
+        ...initialState,
+        registrationSuccess: true,
+        <%_ if (enableTranslation) { _%>
+        successMessage: 'register.messages.success',
+        <%_ } else { _%>
+        successMessage: 'Registration saved! Please check your email for confirmation.'
+        <%_ } _%>
+      }));
+  },
+});
+
+export const { reset } = RegisterSlice.actions;
+
+// Reducer
+export default RegisterSlice.reducer;

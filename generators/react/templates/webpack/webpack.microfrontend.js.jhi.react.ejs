@@ -1,0 +1,99 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<&_ if (fragment.importsSection) { -&>
+<%_ if (applicationTypeMicroservice) { _%>
+const { DefinePlugin } = require('webpack');
+<%_ } _%>
+<&_ } -&>
+<&_ if (fragment.moduleFederationSection) { -&>
+<%_ if (applicationTypeGateway) { _%>
+        remotes: {
+  <%_ for (const microfrontend of microfrontends) { _%>
+          '@<%= microfrontend.lowercaseBaseName %>': `<%= microfrontend.lowercaseBaseName %>@/<%= microfrontend.endpointPrefix %>/remoteEntry.js`,
+  <%_ } _%>
+        },
+<%_ } _%>
+<%_ if (applicationTypeMicroservice) { _%>
+        exposes: {
+          './entities-menu': './<%= clientSrcDir %>app/entities/menu',
+          './entities-routes': './<%= clientSrcDir %>app/entities/routes',
+        },
+<%_ } _%>
+        shared: {
+          ...Object.fromEntries(Object.entries(packageJson.dependencies).map(([module, version]) => ([module, { requiredVersion: version, singleton: true, shareScope: 'default' }]))),
+          'app/config/constants': {
+            singleton: true,
+            import: 'app/config/constants',
+            requiredVersion: appVersion,
+          },
+          'app/config/store': {
+            singleton: true,
+            import: 'app/config/store',
+            requiredVersion: appVersion,
+          },
+          'app/shared/error/error-boundary-routes': {
+            singleton: true,
+            import: 'app/shared/error/error-boundary-routes',
+            requiredVersion: appVersion,
+          },
+          'app/shared/layout/menus/menu-components': {
+            singleton: true,
+            import: 'app/shared/layout/menus/menu-components',
+            requiredVersion: appVersion,
+          },
+          'app/shared/layout/menus/menu-item': {
+            singleton: true,
+            import: 'app/shared/layout/menus/menu-item',
+            requiredVersion: appVersion,
+          },
+          'app/shared/reducers': {
+            singleton: true,
+            import: 'app/shared/reducers',
+            requiredVersion: appVersion,
+          },
+          'app/shared/reducers/locale': {
+            singleton: true,
+            import: 'app/shared/reducers/locale',
+            requiredVersion: appVersion,
+          },
+          'app/shared/reducers/reducer.utils': {
+            singleton: true,
+            import: 'app/shared/reducers/reducer.utils',
+            requiredVersion: appVersion,
+          },
+          'app/shared/util/date-utils': {
+            singleton: true,
+            import: 'app/shared/util/date-utils',
+            requiredVersion: appVersion,
+          },
+          'app/shared/util/entity-utils': {
+            singleton: true,
+            import: 'app/shared/util/entity-utils',
+            requiredVersion: appVersion,
+          },
+        },
+<&_ } -&>
+<&_ if (fragment.pluginsSection) { -&>
+<%_ if (applicationTypeMicroservice) { _%>
+      new DefinePlugin({
+        <%= this._.upperCase(baseName) %>_I18N_RESOURCES_PREFIX: JSON.stringify(''),
+      }),
+<%_ } _%>
+<&_ } -&>
+

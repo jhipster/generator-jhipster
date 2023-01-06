@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,7 +29,8 @@ sourceSets {
 dependencies {
   <%_ if (prodDatabaseTypeMysql) { _%>
     <%_ if (reactive) { _%>
-    implementation ("org.mariadb:r2dbc-mariadb")
+    // TODO spring-data-r2dbc is not managing r2dbc-mariadb version
+    implementation ("org.mariadb:r2dbc-mariadb:1.1.2")
     <%_ } _%>
     implementation "mysql:mysql-connector-java"
     liquibaseRuntime "mysql:mysql-connector-java"
@@ -45,7 +46,8 @@ dependencies {
   <%_ } _%>
   <%_ if (prodDatabaseTypeMariadb) { _%>
     <%_ if (reactive) { _%>
-    implementation "org.mariadb:r2dbc-mariadb"
+    // TODO spring-data-r2dbc is not managing r2dbc-mariadb version
+    implementation "org.mariadb:r2dbc-mariadb:1.1.2"
     <%_ } _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
@@ -57,9 +59,9 @@ dependencies {
     <%_ } _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
     testImplementation "org.testcontainers:mssqlserver"
-    implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
+    implementation "org.liquibase.ext:liquibase-mssql:<%- javaDependencies.liquibase %>"
     liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
-    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
+    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%- javaDependencies.liquibase %>"
   <%_ } _%>
   <%_ if (prodDatabaseTypeOracle) { _%>
     implementation "com.oracle.database.jdbc:ojdbc8"

@@ -1,0 +1,136 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "<%= dasherizedBaseName %>": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "",
+      "sourceRoot": "<%= clientSrcDir.replace(/\/$/, "") %>",
+      "prefix": "<%= jhiPrefixDashed %>",
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "customWebpackConfig": {
+              "path": "./webpack/webpack.custom.js"
+            },
+            "outputPath": "<%= clientDistDir %>",
+            "index": "<%= clientSrcDir %>index.html",
+            "main": "<%= clientSrcDir %>main.ts",
+            "polyfills": [
+<%_ if (communicationSpringWebsocket) { _%>
+              "./<%= clientSrcDir %>sockjs-client.polyfill",
+<%_ } _%>
+<%_ if (microfrontend) { _%>
+              "zone.js/dist/zone"
+<%_ } else { _%>
+              "zone.js"
+<%_ } _%>
+            ],
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "<%= clientSrcDir %>content",
+              "<%= clientSrcDir %>favicon.ico",
+              "<%= clientSrcDir %>manifest.webapp",
+              "<%= clientSrcDir %>robots.txt"
+            ],
+            "styles": ["<%= clientSrcDir %>content/scss/vendor.scss", "<%= clientSrcDir %>content/scss/global.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": <%= Boolean(microfrontend) %>,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-builders/custom-webpack:dev-server",
+          "options": {
+            "browserTarget": "<%= dasherizedBaseName %>:build:development",
+            "port": <%= devServerPort %>
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "<%= dasherizedBaseName %>:build:production"
+            },
+            "development": {
+              "browserTarget": "<%= dasherizedBaseName %>:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "configPath": "jest.conf.js"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "cache": {
+      "enabled": true,
+      "path": "./<%= temporaryDir %>angular/",
+      "environment": "all"
+    },
+    "packageManager": "<%= clientPackageManager %>"
+  }
+}

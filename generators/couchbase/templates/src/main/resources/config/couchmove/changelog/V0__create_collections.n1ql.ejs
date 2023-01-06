@@ -1,0 +1,8 @@
+CREATE COLLECTION `${bucket}`.`${scope}`.`user`;
+
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+CREATE COLLECTION `${bucket}`.`${scope}`.`authority`;
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
+CREATE COLLECTION `${bucket}`.`${scope}`.`persistentToken`;
+<%_ } _%>

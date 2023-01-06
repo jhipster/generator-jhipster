@@ -54,46 +54,50 @@ fi
 
 echo "::group::Check Angular"
 git -c color.ui=always diff --exit-code @~1 -- \
-  'generators/*client/**/angular/**' \
-  'generators/*client/**/*-angular*' \
+  'generators/angular' \
   || ANGULAR=true WORKFLOW_ANGULAR=true
 echo "::endgroup::"
 
 echo "::group::Check React"
 git -c color.ui=always diff --exit-code @~1 -- \
-  'generators/*client/**/react/**' \
-  'generators/*client/**/*-react*' \
+  'generators/react' \
   || REACT=true WORKFLOW_REACT=true
 echo "::endgroup::"
 
 echo "::group::Check Vue"
 git -c color.ui=always diff --exit-code @~1 -- \
-  'generators/*client/**/vue/**' \
-  'generators/*client/**/*-vue*' \
+  'generators/vue' \
   || VUE=true WORKFLOW_VUE=true
 echo "::endgroup::"
 
 echo "::group::Check Client Common"
 git -c color.ui=always diff --exit-code @~1 -- \
-  'generators/*client/**' \
-  ':^*-angular*' \
-  ':^**/angular/**' \
-  ':^*-react*' \
-  ':^**/react/**' \
-  ':^*-vue*' \
-  ':^**/vue/**' \
+  'generators/bootstrap-application-client' \
+  'generators/client/**' \
   || CLIENT_COMMON=true
 echo "::endgroup::"
 
 echo "::group::Check Client"
 git -c color.ui=always diff --exit-code @~1 -- \
-  'generators/*client/**' \
+  'generators/bootstrap-application-client' \
+  'generators/client/**' \
+  'generators/angular/**' \
+  'generators/react/**' \
+  'generators/vue/**' \
   || CLIENT=true ANY=true
 echo "::endgroup::"
 
 echo "::group::Check Server"
 git -c color.ui=always diff --exit-code @~1 -- \
-  'generators/*server/**' \
+  'generators/bootstrap-application-server' \
+  'generators/couchbase' \
+  'generators/elasticsearch' \
+  'generators/gradle' \
+  'generators/kafka' \
+  'generators/maven' \
+  'generators/mongodb' \
+  'generators/server' \
+  'generators/sql' \
   'generators/database-changelog' \
   'generators/database-changelog-liquibase' \
   || SERVER=true ANY=true
@@ -104,14 +108,11 @@ git -c color.ui=always diff --exit-code @~1 -- \
   '.github/actions' \
   '.github/workflows' \
   'generators/app' \
-  'generators/bootstrap' \
+  'generators/base-application' \
+  'generators/bootstrap-application' \
+  'generators/bootstrap-application-base' \
   'generators/common' \
-  'generators/entities' \
-  'generators/entity' \
-  'generators/entity-i18n' \
-  'generators/gradle' \
   'generators/languages' \
-  'generators/maven' \
   'jdl' \
   'lib' \
   'test-integration' \
@@ -120,7 +121,12 @@ git -c color.ui=always diff --exit-code @~1 -- \
 echo "::endgroup::"
 
 echo "::group::Check Base"
-git -c color.ui=always diff --exit-code @~1 -- $(ls generators/*.*) \
+git -c color.ui=always diff --exit-code @~1 -- \
+  'generators/base' \
+  'generators/base-application' \
+  'generators/bootstrap' \
+  'generators/bootstrap-application-base' \
+  $(ls generators/*.*) \
   || CLIENT=true SERVER=true COMMON=true ANY=true
 echo "::endgroup::"
 
@@ -133,6 +139,7 @@ echo "::endgroup::"
 echo "::group::Check Workspaces"
 git -c color.ui=always diff --exit-code @~1 -- \
   'generators/workspaces' \
+  'generators/docker' \
   'generators/docker-compose' \
   || WORKSPACES=true ANY=true
 echo "::endgroup::"

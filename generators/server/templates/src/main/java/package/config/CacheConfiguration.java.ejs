@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -68,7 +68,7 @@ import org.springframework.cache.CacheManager;
 
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
-  <%_ if (!skipUserManagement || (authenticationTypeOauth2 && !databaseTypeNo)) { _%>
+  <%_ if (generateBuiltInUserEntity) { _%>
 import <%= packageName %>.repository.UserRepository;
   <%_ } _%>
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PreDestroy;
 <%_ } _%>
 <%_ if (cacheProviderInfinispan) { _%>
 import org.infinispan.configuration.cache.CacheMode;
@@ -120,7 +120,6 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomi
 import java.util.stream.Stream;
   <%_ if (serviceDiscoveryAny) { _%>
 import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
-import org.jgroups.Channel;
 import org.jgroups.JChannel;
 import org.jgroups.PhysicalAddress;
 import org.jgroups.protocols.*;
@@ -218,16 +217,16 @@ public class CacheConfiguration {
   <%_ if (authenticationTypeOauth2 && applicationTypeMicroservice) { _%>
             createCache(cm, "oAuth2Authentication");
   <%_ } _%>
-  <%_ if (!skipUserManagement || (authenticationTypeOauth2 && !databaseTypeNo)) { _%>
+  <%_ if (generateBuiltInUserEntity) { _%>
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
     <%_ if (enableHibernateCache) { _%>
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName());
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName());
             createCache(cm, <%= packageName %>.domain.Authority.class.getName());
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".authorities");
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName() + ".authorities");
       <%_ if (authenticationTypeSession) { _%>
             createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName());
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens");
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName() + ".persistentTokens");
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
@@ -550,7 +549,7 @@ public class CacheConfiguration {
                 .statistics().enabled(cacheInfo.isStatsEnabled())
                 .simpleCache(true).transaction().transactionMode(TransactionMode.NON_TRANSACTIONAL).expiration().maxIdle(60000).template(true).build());
 
-  <%_ if (!skipUserManagement || (authenticationTypeOauth2 && !databaseTypeNo)) { _%>
+  <%_ if (generateBuiltInUserEntity) { _%>
             Stream.of(<%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE)
                 .forEach(cacheName -> manager.defineConfiguration(cacheName, new ConfigurationBuilder().clustering()
                     .cacheMode(CacheMode.INVALIDATION_SYNC)
@@ -685,7 +684,7 @@ public class CacheConfiguration {
     CacheFactory defaultCacheFactory(JHipsterProperties jHipsterProperties) {
         return createCache("default", jHipsterProperties);
     }
-  <%_ if (!skipUserManagement || (authenticationTypeOauth2 && !databaseTypeNo)) { _%>
+  <%_ if (generateBuiltInUserEntity) { _%>
 
     @Bean
     public CacheFactory usersByLoginCache(JHipsterProperties jHipsterProperties) {
@@ -781,16 +780,16 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         return cm -> {
-  <%_ if (!skipUserManagement || (authenticationTypeOauth2 && !databaseTypeNo)) { _%>
+  <%_ if (generateBuiltInUserEntity) { _%>
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
     <%_ if (enableHibernateCache) { _%>
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName(), jcacheConfiguration);
             createCache(cm, <%= packageName %>.domain.Authority.class.getName(), jcacheConfiguration);
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName() + ".authorities", jcacheConfiguration);
       <%_ if (authenticationTypeSession) { _%>
             createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName(), jcacheConfiguration);
-            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.<%= user.persistClass %>.class.getName() + ".persistentTokens", jcacheConfiguration);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>

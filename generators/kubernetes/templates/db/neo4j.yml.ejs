@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -74,7 +74,7 @@ spec:
 <%_ } _%>
       containers:
       - name: neo4j
-        image: <%= DOCKER_NEO4J %>
+        image: <%- dockerContainers.neo4j %>
         env:
         - name: NEO4J_AUTH
           value: 'none'

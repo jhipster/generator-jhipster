@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -31,7 +31,7 @@ import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 <%_ if (!skipClient) { _%>
 import java.io.File;
 <%_ } _%>
@@ -86,7 +86,7 @@ class WebConfigurerTest {
         assertThat(container.getMimeMappings().get("html")).isEqualTo("text/html");
         assertThat(container.getMimeMappings().get("json")).isEqualTo("application/json");
         if (container.getDocumentRoot() != null) {
-            assertThat(container.getDocumentRoot()).isEqualTo(new File("<%= CLIENT_DIST_DIR %>"));
+            assertThat(container.getDocumentRoot()).isEqualTo(new File("<%= clientDistDir %>"));
         }
     }
 

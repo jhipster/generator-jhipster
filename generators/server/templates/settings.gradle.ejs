@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -45,6 +45,9 @@ pluginManagement {
 <%_ if (enableGradleEnterprise) { _%>
         id "com.gradle.enterprise" version "${gradleEnterprisePluginVersion}"
         id "com.gradle.common-custom-user-data-gradle-plugin" version "${gradleCommonCustomUserDataPluginVersion}"
+<%_ } _%>
+<%_ if (gatlingTests) { _%>
+        id "io.gatling.gradle" version "${gatlingPluginVersion}"
 <%_ } _%>
         //jhipster-needle-gradle-plugin-management-plugins - JHipster will add additional entries here
     }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -115,7 +115,7 @@ spec:
       - args:
         - --kubelet-service=kube-system/kubelet
         - --config-reloader-image=quay.io/coreos/configmap-reload:v0.0.1
-        image: <%= DOCKER_PROMETHEUS_OPERATOR %>
+        image: <%- dockerContainers.prometheusOperator %>
         name: prometheus-operator
         ports:
         - containerPort: 8080

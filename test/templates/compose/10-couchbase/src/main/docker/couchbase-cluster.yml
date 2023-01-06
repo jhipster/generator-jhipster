@@ -1,6 +1,6 @@
-version: '2'
+name: 'mscouchbase'
 services:
-    mscouchbase-couchbase:
+    couchbase:
         build:
             context: .
             dockerfile: couchbase/Couchbase.Dockerfile
@@ -13,7 +13,7 @@ services:
         environment:
             - TYPE=MASTER
             - BUCKET=mscouchbase
-    mscouchbase-couchbase-node:
+    couchbase-node:
         build:
             context: .
             dockerfile: couchbase/Couchbase.Dockerfile

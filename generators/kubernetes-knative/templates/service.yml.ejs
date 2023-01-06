@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -85,7 +85,7 @@ spec:
 <%_ } _%>
 <%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb) { _%>
             - name: SPRING_DATASOURCE_URL
-              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
+              value: <%- this.getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
 <%_ } _%>
 <%_ if (app.prodDatabaseTypeMariadb) { _%>
             - name: SPRING_DATASOURCE_PASSWORD
@@ -96,7 +96,7 @@ spec:
 <%_ } _%>
 <%_ if (app.prodDatabaseTypePostgres) { _%>
             - name: SPRING_DATASOURCE_URL
-              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName }) %>
+              value: <%- this.getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName }) %>
             - name: SPRING_DATASOURCE_USERNAME
               value: <%= app.baseName %>
             - name: SPRING_DATASOURCE_PASSWORD
@@ -140,11 +140,11 @@ spec:
               value: 'org.apache.kafka.common.serialization.StringDeserializer'
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
-            - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
+            - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
               value: 'true'
 <%_ } _%>
 <%_ if (deploymentApplicationTypeMicroservice) { _%>
-            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: "x-request-id,x-ot-span-context"
 <%_ } _%>
             - name: JAVA_OPTS

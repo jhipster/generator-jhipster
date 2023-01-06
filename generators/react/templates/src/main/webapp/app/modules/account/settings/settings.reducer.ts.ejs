@@ -1,0 +1,94 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import axios from 'axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+<% if (enableTranslation) { %>import { Storage } from 'react-jhipster';<% } %>
+<%_ if (enableTranslation && enableI18nRTL) { _%>import { isRTL } from 'app/config/translation';<%_ } _%>
+import { getSession } from 'app/shared/reducers/authentication';
+import { AppThunk } from 'app/config/store';
+import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
+
+const initialState = {
+  loading: false,
+  errorMessage: null,
+  successMessage: null,
+  updateSuccess: false,
+  updateFailure: false
+};
+
+export type SettingsState =  Readonly<typeof initialState>;
+
+// Actions
+const apiUrl = 'api/account';
+
+export const saveAccountSettings: (account: any) => AppThunk = account => async dispatch => {
+  await dispatch(updateAccount(account));
+
+<% if (enableTranslation) { %>
+    if (Storage.session.get(`locale`)) {
+      Storage.session.remove(`locale`);
+    }
+<% } %>
+<% if (enableTranslation && enableI18nRTL) { %>
+    document.querySelector('html').setAttribute('dir', isRTL(account.langKey) ? 'rtl' : 'ltr');
+<% } %>
+  dispatch(getSession());
+};
+
+export const updateAccount = createAsyncThunk('settings/update_account', async (account: any) => axios.post<any>(apiUrl, account), {
+  serializeError: serializeAxiosError,
+});
+
+export const SettingsSlice = createSlice({
+  name: 'settings',
+  initialState: initialState as SettingsState,
+  reducers: {
+    reset() {
+      return initialState;
+    },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(updateAccount.pending, state => {
+        state.loading = true;
+        state.errorMessage = null;
+        state.updateSuccess = false;
+      })
+      .addCase(updateAccount.rejected, state => {
+        state.loading = false;
+        state.updateSuccess = false;
+        state.updateFailure = true;
+      })
+      .addCase(updateAccount.fulfilled, state => {
+        state.loading = false;
+        state.updateSuccess = true;
+        state.updateFailure = false;
+        <%_ if (enableTranslation) { _%>
+        state.successMessage = 'settings.messages.success';
+        <%_ } else { _%>
+        state.successMessage = 'Settings saved!';
+        <%_ } _%>
+      });
+  },
+});
+
+export const { reset } = SettingsSlice.actions;
+
+// Reducer
+export default SettingsSlice.reducer;

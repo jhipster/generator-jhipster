@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -75,12 +75,12 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 <%_ } _%>
 
 <%_ if (databaseTypeSql && !reactive) { _%>
-import javax.persistence.*;
+import jakarta.persistence.*;
 <%_ } _%>
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 <%_ if (!authenticationTypeOauth2) { _%>
 import java.time.Instant;
@@ -131,7 +131,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (searchEngineElasticsearch) { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 <%_ } _%>
-public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %> extends AbstractAuditingEntity<<%= user.primaryKey.type %>><% } %> implements Serializable {
+public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %> extends AbstractAuditingEntity<<%= user.primaryKey.type %>><% } %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -528,10 +528,10 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
         if (this == o) {
             return true;
         }
-        if (!(o instanceof <%= asEntity('User') %>)) {
+        if (!(o instanceof <%= user.persistClass %>)) {
             return false;
         }
-        return id != null && id.equals(((<%= asEntity('User') %>) o).id);
+        return id != null && id.equals(((<%= user.persistClass %>) o).id);
     }
 
     @Override
@@ -543,7 +543,7 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= asEntity('User') %>{" +
+        return "<%= user.persistClass %>{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +

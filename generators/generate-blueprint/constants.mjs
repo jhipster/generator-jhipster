@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,10 +18,10 @@
  */
 import chalk from 'chalk';
 
-import GENERATOR_LIST from '../generator-list.js';
-import { BASE_PRIORITY_NAMES, ENTITY_PRIORITY_NAMES } from '../../lib/constants/priorities.mjs';
+import * as GENERATOR_LIST from '../generator-list.mjs';
+import { PRIORITY_NAMES_LIST } from '../base-application/priorities.mjs';
 
-const prioritiesForSub = subGenerator => (subGenerator.startsWith('entit') ? ENTITY_PRIORITY_NAMES : BASE_PRIORITY_NAMES);
+const prioritiesForSub = subGenerator => PRIORITY_NAMES_LIST;
 
 export const GENERATE_SNAPSHOTS = 'generateSnapshots';
 export const LINK_JHIPSTER_DEPENDENCY = 'linkJhipsterDependency';

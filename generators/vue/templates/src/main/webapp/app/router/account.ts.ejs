@@ -1,0 +1,59 @@
+import {Authority} from "@/shared/security/authority";
+
+
+<%_ if (generateUserManagement) { _%>
+  const Register = () => import('@/account/register/register.vue');
+  const Activate = () => import('@/account/activate/activate.vue');
+  const ResetPasswordInit = () => import('@/account/reset-password/init/reset-password-init.vue');
+  const ResetPasswordFinish = () => import('@/account/reset-password/finish/reset-password-finish.vue');
+  const ChangePassword = () => import('@/account/change-password/change-password.vue');
+  const Settings = () => import('@/account/settings/settings.vue');
+  <%_ if (authenticationTypeSession && generateUserManagement) { _%>
+  const Sessions = () => import('@/account/sessions/sessions.vue');
+  <%_ } _%>
+<%_ } _%>
+
+export default [
+<%_ if (generateUserManagement) { _%>
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
+    {
+      path: '/account/activate',
+      name: 'Activate',
+      component: Activate
+    },
+    {
+      path: '/account/reset/request',
+      name: 'ResetPasswordInit',
+      component: ResetPasswordInit
+    },
+    {
+      path: '/account/reset/finish',
+      name: 'ResetPasswordFinish',
+      component: ResetPasswordFinish
+    },
+    {
+      path: '/account/password',
+      name: 'ChangePassword',
+      component: ChangePassword,
+      meta: { authorities: [Authority.USER] }
+    },
+    <%_ if (authenticationTypeSession) { _%>
+    {
+      path: '/account/sessions',
+      name: 'Sessions',
+      component: Sessions,
+      meta: { authorities: [Authority.USER] }
+    },
+    <%_ } _%>
+    {
+      path: '/account/settings',
+      name: 'Settings',
+      component: Settings,
+      meta: { authorities: [Authority.USER] }
+    }
+<%_ } _%>
+]

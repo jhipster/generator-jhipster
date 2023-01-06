@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM eclipse-temurin:11-focal
+FROM eclipse-temurin:17-focal
 
 # copy sources
 COPY . /home/jhipster/generator-jhipster
@@ -55,7 +55,8 @@ RUN \
 
 RUN \
   # install jhipster
-  cd /home/jhipster/generator-jhipster && npm ci --production && \
+  cd /home/jhipster/generator-jhipster && \
+  npm ci && \
   npm install -g /home/jhipster/generator-jhipster && \
   # fix jhipster user permissions
   chown -R jhipster:jhipster \

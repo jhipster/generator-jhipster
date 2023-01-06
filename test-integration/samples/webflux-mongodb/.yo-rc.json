@@ -5,7 +5,7 @@
     "baseName": "sampleWebfluxMongodb",
     "buildTool": "maven",
     "cacheProvider": "no",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "mongodb",
@@ -20,9 +20,9 @@
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mongodb",
     "reactive": true,
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
     "testFrameworks": ["gatling", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

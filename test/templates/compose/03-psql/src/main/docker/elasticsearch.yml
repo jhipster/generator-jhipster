@@ -1,7 +1,7 @@
-version: '2'
+name: 'mspsql'
 services:
-    mspsql-elasticsearch:
-        image: elasticsearch:2.4.6
+    elasticsearch:
+        image: <%- dockerContainers.elasticsearch %>
         # volumes:
         #     - ~/volumes/jhipster/mspsql/elasticsearch/:/usr/share/elasticsearch/data/
         ports:

@@ -1,0 +1,189 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<div>
+  <div class="d-flex justify-content-center">
+    <div class="col-md-8">
+      <h2 <%= jhiPrefix %>Translate="settings.title" [translateValues]="{ username: settingsForm.value.login }" *ngIf="settingsForm.value.login">
+        <%- getWebappTranslation('settings.title', { username: '{{ settingsForm.value.login }}' }) %>
+      </h2>
+
+      <div class="alert alert-success" *ngIf="success" <%= jhiPrefix %>Translate="settings.messages.success">
+          <%- getWebappTranslation('settings.messages.success') %>
+      </div>
+
+      <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+
+      <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.value.login" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="firstName" <%= jhiPrefix %>Translate="settings.form.firstname"><%- getWebappTranslation('settings.form.firstname') %></label>
+          <input
+            type="text"
+            class="form-control"
+            id="firstName"
+            name="firstName"
+            placeholder="{{ 'settings.form.firstname.placeholder' | translate }}"
+            formControlName="firstName"
+            data-cy="firstname"
+          />
+
+          <div
+            *ngIf="
+              settingsForm.get('firstName')!.invalid &&
+              (settingsForm.get('firstName')!.dirty || settingsForm.get('firstName')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('firstName')?.errors?.required"
+              <%= jhiPrefix %>Translate="settings.messages.validate.firstname.required"
+            >
+              <%- getWebappTranslation('settings.messages.validate.firstname.required') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('firstName')?.errors?.minlength"
+              <%= jhiPrefix %>Translate="settings.messages.validate.firstname.minlength"
+            >
+              <%- getWebappTranslation('settings.messages.validate.firstname.minlength') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('firstName')?.errors?.maxlength"
+              <%= jhiPrefix %>Translate="settings.messages.validate.firstname.maxlength"
+            >
+              <%- getWebappTranslation('settings.messages.validate.firstname.maxlength') %>
+            </small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="lastName" <%= jhiPrefix %>Translate="settings.form.lastname"><%- getWebappTranslation('settings.form.lastname') %></label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            name="lastName"
+            placeholder="{{ 'settings.form.lastname.placeholder' | translate }}"
+            formControlName="lastName"
+            data-cy="lastname"
+          />
+
+          <div
+            *ngIf="
+              settingsForm.get('lastName')!.invalid &&
+              (settingsForm.get('lastName')!.dirty || settingsForm.get('lastName')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('lastName')?.errors?.required"
+              <%= jhiPrefix %>Translate="settings.messages.validate.lastname.required"
+            >
+              <%- getWebappTranslation('settings.messages.validate.lastname.required') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('lastName')?.errors?.minlength"
+              <%= jhiPrefix %>Translate="settings.messages.validate.lastname.minlength"
+            >
+              <%- getWebappTranslation('settings.messages.validate.lastname.minlength') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('lastName')?.errors?.maxlength"
+              <%= jhiPrefix %>Translate="settings.messages.validate.lastname.maxlength"
+            >
+               <%- getWebappTranslation('settings.messages.validate.lastname.maxlength') %>
+            </small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label"><%- getWebappTranslation('global.form["email.label"]') %></label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="{{ 'global.form.email.placeholder' | translate }}"
+            formControlName="email"
+            data-cy="email"
+          />
+
+          <div *ngIf="settingsForm.get('email')!.invalid && (settingsForm.get('email')!.dirty || settingsForm.get('email')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('email')?.errors?.required"
+              <%= jhiPrefix %>Translate="global.messages.validate.email.required"
+            >
+              <%- getWebappTranslation('global.messages.validate.email.required') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('email')?.errors?.email"
+              <%= jhiPrefix %>Translate="global.messages.validate.email.invalid"
+            >
+              <%- getWebappTranslation('global.messages.validate.email.invalid') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('email')?.errors?.minlength"
+              <%= jhiPrefix %>Translate="global.messages.validate.email.minlength"
+            >
+              <%- getWebappTranslation('global.messages.validate.email.minlength') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('email')?.errors?.maxlength"
+              <%= jhiPrefix %>Translate="global.messages.validate.email.maxlength"
+            >
+              <%- getWebappTranslation('global.messages.validate.email.maxlength') %>
+            </small>
+          </div>
+        </div>
+        <%_ if (enableTranslation) { _%>
+
+        <div class="mb-3" *ngIf="languages && languages.length > 0">
+          <label for="langKey" <%= jhiPrefix %>Translate="settings.form.language"><%- getWebappTranslation('settings.form.language') %></label>
+          <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
+            <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
+          </select>
+        </div>
+        <%_ } _%>
+
+        <button
+          type="submit"
+          [disabled]="settingsForm.invalid"
+          class="btn btn-primary"
+          <%= jhiPrefix %>Translate="settings.form.button"
+          data-cy="submit"
+        >
+          <%- getWebappTranslation('settings.form.button') %>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

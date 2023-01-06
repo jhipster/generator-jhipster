@@ -1,0 +1,138 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import React<% if (applicationTypeGateway && microfrontend) { %>, { Suspense }<% } %> from 'react';
+import { Route <% if (communicationSpringWebsocket) { %>, useLocation <% } %>} from 'react-router-dom';
+import Loadable from 'react-loadable';
+
+<%_ if (!authenticationTypeOauth2) { _%>
+import Login from 'app/modules/login/login';
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import LoginRedirect from 'app/modules/login/login-redirect';
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+import Register from 'app/modules/account/register/register';
+import Activate from 'app/modules/account/activate/activate';
+import PasswordResetInit from 'app/modules/account/password-reset/init/password-reset-init';
+import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
+<%_ } _%>
+import Logout from 'app/modules/login/logout';
+import Home from 'app/modules/home/home';
+import EntitiesRoutes from 'app/entities/routes';
+import PrivateRoute from 'app/shared/auth/private-route';
+import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
+import PageNotFound from 'app/shared/error/page-not-found';
+import { AUTHORITIES } from 'app/config/constants';
+<%_ if (communicationSpringWebsocket) { _%>
+import { sendActivity } from 'app/config/websocket-middleware';
+<%_ } _%>
+
+const loading = <div>loading ...</div>;
+<%_ if (generateUserManagement) { _%>
+
+  const Account = Loadable({
+  loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
+  loading: () => loading,
+});
+<%_ } _%>
+
+const Admin = Loadable({
+  loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/administration'),
+  loading: () => loading,
+});
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+
+  <%_ for (const remote of microfrontends) { _%>
+const <%= remote.capitalizedBaseName %>Routes = React.lazy(() => import('@<%= remote.lowercaseBaseName %>/entities-routes').catch(() => import('app/shared/error/error-loading')));
+  <%_ } _%>
+<%_ } _%>
+
+const AppRoutes = () => {
+<%_ if (communicationSpringWebsocket) { _%>
+  const location = useLocation();
+  React.useEffect(() => {
+    sendActivity(location.pathname);
+  }, [location]);
+<%_ } _%>
+  return (
+    <div className="view-routes">
+      <ErrorBoundaryRoutes>
+        <Route index element={<Home />} />
+<%_ if (!authenticationTypeOauth2) { _%>
+        <Route path="login" element={<Login />} />
+<%_ } _%>
+        <Route path="logout" element={<Logout />} />
+<%_ if (generateUserManagement) { _%>
+        <Route path="account">
+          <Route
+            path="*"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+                <Account />
+              </PrivateRoute>
+            }
+          />
+          <Route path="register" element={<Register />} />
+          <Route path="activate" element={<Activate />} />
+          <Route path="reset">
+            <Route path="request" element={<PasswordResetInit />} />
+            <Route path="finish" element={<PasswordResetFinish />} />
+          </Route>
+        </Route>
+<%_ } _%>
+        <Route
+          path="admin/*"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+              <Admin />
+            </PrivateRoute>
+          }
+        />
+<%_ if (authenticationTypeOauth2) { _%>
+        <Route path="oauth2/authorization/oidc" element={<LoginRedirect />} />
+<%_ } _%>
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+        <Route
+          path="<%= remote.lowercaseBaseName %>/*"
+          element={
+            <Suspense fallback={loading}>
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+                <<%= remote.capitalizedBaseName %>Routes />
+              </PrivateRoute>
+            </Suspense>
+          }
+        />
+  <%_ } _%>
+<%_ } _%>
+        <Route
+          path="<%= microfrontend && applicationTypeMicroservice ? lowercaseBaseName + '/' : '' %>*"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+              <EntitiesRoutes />
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<PageNotFound />} />
+      </ErrorBoundaryRoutes>
+    </div>
+  );
+};
+
+export default AppRoutes;

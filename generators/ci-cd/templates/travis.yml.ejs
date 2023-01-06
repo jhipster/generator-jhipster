@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "<%= NODE_VERSION %>"
+  - "<%= nodeVersion %>"
 cache:
   directories:
     - node
@@ -34,7 +34,7 @@ cache:
 <%_ } _%>
 env:
   global:
-    - NODE_VERSION=<%= NODE_VERSION %>
+    - NODE_VERSION=<%= nodeVersion %>
     - JHI_JDK=<%= JAVA_VERSION %>
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
@@ -48,21 +48,11 @@ env:
 <%_ } _%>
 before_install:
   - |
-    if [[ $JHI_JDK = '17' ]]; then
-      echo '*** Using OpenJDK 17'
-      sudo add-apt-repository ppa:openjdk-r/ppa -y
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-17-jdk -y
-      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
-      java -version
-    else
-      echo '*** Using OpenJDK 11 by default'
-      sudo apt-get update -q
-      sudo apt-get install -y openjdk-11-jdk
-      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
-      java -version
-    fi
-  - java -version
+    echo '*** Using OpenJDK 17 by default'
+    sudo apt-get update -q
+    sudo apt-get install -y openjdk-17-jdk
+    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - nvm install $NODE_VERSION
@@ -103,7 +93,7 @@ script:
   - ./gradlew deployHeroku
   <%_ } _%>
 <%_ } _%>
-<%_ if (cypressTests || protractorTests) {
+<%_ if (cypressTests) {
     const commented = applicationTypeGateway ? '# ' : ''; _%>
   <%= commented %>- <%= clientPackageManager %> run ci:e2e:package
   <%= commented %>- <%= clientPackageManager %> run ci:e2e:prepare

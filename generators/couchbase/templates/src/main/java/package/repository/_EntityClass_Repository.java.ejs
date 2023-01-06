@@ -1,0 +1,125 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= entityAbsolutePackage %>.repository;
+
+import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+
+<%_ if (relationships.length !== 0) { _%>
+import org.springframework.data.couchbase.repository.Query;
+import org.springframework.data.domain.Pageable;
+import static <%= packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.couchbase.repository.ScanConsistency;
+  <%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+  <%_ } else { _%>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import java.util.List;
+  <%_ } _%>
+<%_ } _%>
+<%_ if (relationships.length !== 0 && !reactive) { _%>
+import java.util.Optional;
+<%_ } _%>
+import org.springframework.stereotype.Repository;
+<%_ if (primaryKey.typeUUID) { _%>
+import java.util.UUID;
+<%_ } _%>
+
+import static <%= packageName %>.domain.<%= persistClass %>.TYPE_NAME;
+
+/**
+ * Spring Data Couchbase repository for the <%= persistClass %> entity.
+ */
+<%_ if (!implementsEagerLoadApis) { _%>
+@SuppressWarnings("unused")
+<%_ } _%>
+<%_
+    let optionalOrMono = reactive ? 'Mono' : 'Optional';
+    let listOrFlux = reactive ? 'Flux' : 'List';
+    let pageOrFlux = reactive ? 'Flux' : 'Page';
+_%>
+@Repository
+public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngineAny) { %>, CouchbaseSearchRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
+  <%_
+  var notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntityIsEmbedded)
+  if (notEmbeddedRelationships.length !== 0) { %>
+    String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + <%
+      for (const relationship of notEmbeddedRelationships) {
+          if (relationship.collection) {
+            %> ", ARRAY OBJECT_ADD(item, 'id', meta(item).id) FOR item IN `<%= relationship.relationshipFieldNamePlural %>` END AS `<%= relationship.relationshipFieldNamePlural %>`"  + <%
+          } else {
+            %> ", OBJECT_ADD(`<%= relationship.relationshipFieldName %>`, 'id', meta(`<%= relationship.relationshipFieldName %>`).id) AS `<%= relationship.relationshipFieldName %>`" + <%
+          }
+      } %>
+        " FROM #{#n1ql.bucket} b";
+
+    String JOIN = <%
+        notEmbeddedRelationships.forEach(function (relationship, index) {
+          if (!relationship.collection) { %>
+            " LEFT JOIN `<%= relationship.otherEntity.entityInstance %>` `<%= relationship.relationshipFieldName %>` ON KEYS b.`<%= relationship.relationshipFieldName %>`"<%
+          } else { %>
+            " LEFT NEST `<%= relationship.otherEntity.entityInstance %>` `<%= relationship.relationshipFieldNamePlural %>` ON KEYS b.`<%= relationship.relationshipFieldNamePlural %>`"<%
+          }
+          if (index < notEmbeddedRelationships.length - 1) { %>
+            + <%
+          }
+        }); %>;
+
+    String WHERE = " WHERE b.type = '" + TYPE_NAME + "'";
+
+    default <%= pageOrFlux %><<%= persistClass %>> findAll(Pageable pageable) {
+        return
+        <% if (!reactive) { %>new PageImpl<>(<% } %>
+            findAll(pageableStatement(pageable, "b"))
+        <% if (!reactive) { %>,
+            pageable,
+            count()
+        )<% } %>;
+    }
+
+    @Query(SELECT + JOIN + WHERE + " #{[0]}")
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    <%= listOrFlux %><<%= persistClass %>> findAll(String pageableStatement);
+
+    @Query(SELECT + JOIN + WHERE)
+    <%= listOrFlux %><<%= persistClass %>> findAll();
+
+    @Query(SELECT + " USE KEYS $1" + JOIN)
+    <%= optionalOrMono %><<%= persistClass %>> findById(String id);<%
+    } _%>
+
+<%_ if (searchEngineAny && notEmbeddedRelationships.length !== 0) { _%>
+    @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
+    <%= listOrFlux %><<%= persistClass %>> search(String queryString);
+
+    default <%= pageOrFlux %><<%= persistClass %>> search(String queryString, Pageable pageable) {
+        return
+            <% if (!reactive) { %>new PageImpl<>(<% } %>
+                search(queryString, pageableStatement(pageable, "b"))
+            <% if (!reactive) { %>)<% } %>;
+    }
+
+    @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
+    @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION + " #{[1]}")
+    <%= listOrFlux %><<%= persistClass %>> search(String queryString, String pageableStatement);
+<%_ } _%>
+
+}

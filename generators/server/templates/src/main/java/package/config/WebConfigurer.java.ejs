@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -72,12 +72,12 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver;
 import org.springframework.web.server.WebExceptionHandler;
-import org.zalando.problem.spring.webflux.advice.ProblemExceptionHandler;
-import org.zalando.problem.spring.webflux.advice.ProblemHandling;
+import <%= packageName %>.web.rest.errors.ExceptionTranslator;
+import tech.jhipster.web.rest.errors.ReactiveWebExceptionHandler;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 
-import javax.servlet.*;
+import jakarta.servlet.*;
     <%_ if (!skipClient) { _%>
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -157,7 +157,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             ConfigurableServletWebServerFactory servletWebServer = (ConfigurableServletWebServerFactory) server;
             File root;
             String prefixPath = resolvePathPrefix();
-            root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
+            root = new File(prefixPath + "<%= clientDistDir %>");
             if (root.exists() && root.isDirectory()) {
                 servletWebServer.setDocumentRoot(root);
             }
@@ -171,7 +171,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         String fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8);
         String rootPath = Paths.get(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
-        int extractionEndIndex = extractedPath.indexOf("<%= BUILD_DIR %>");
+        int extractionEndIndex = extractedPath.indexOf("<%= temporaryDir %>");
         if (extractionEndIndex <= 0) {
             return "";
         }
@@ -217,9 +217,10 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 
     @Bean
     @Order(-2) // The handler must have precedence over WebFluxResponseStatusExceptionHandler and Spring Boot's ErrorWebExceptionHandler
-    public WebExceptionHandler problemExceptionHandler(ObjectMapper mapper, ProblemHandling problemHandling) {
-        return new ProblemExceptionHandler(mapper, problemHandling);
+    public WebExceptionHandler problemExceptionHandler(ObjectMapper mapper, ExceptionTranslator problemHandling) {
+        return new ReactiveWebExceptionHandler(problemHandling, mapper);
     }
+
   <%_ if (!skipClient) { _%>
 
     @Bean

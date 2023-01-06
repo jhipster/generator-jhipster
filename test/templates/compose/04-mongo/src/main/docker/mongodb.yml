@@ -1,7 +1,7 @@
-version: '2'
+name: 'msmongodb'
 services:
-    msmongodb-mongodb:
-        image: mongo:4.4.15
+    mongodb:
+        image: <%- dockerContainers.mongodb %>
         ports:
             - "27017:27017"
         # volumes:

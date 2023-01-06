@@ -15,7 +15,7 @@
     "enableTranslation": true,
     "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
     "buildTool": "maven",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "testFrameworks": [
       "gatling",

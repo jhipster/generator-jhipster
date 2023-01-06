@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -25,7 +25,7 @@ import <%= packageName %>.config.Constants;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= user.persistClass %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
@@ -55,7 +55,7 @@ import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
@@ -68,7 +68,7 @@ import reactor.core.publisher.Mono;
 <%_ } _%>
 
 <%_ if (databaseTypeSql && !reactive) { _%>
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 <%_ } _%>
 <%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
 import java.util.stream.Collectors;
@@ -84,7 +84,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
-<%_ if (reactive && testsNeedCsrf) { _%>
+<%_ if (reactive && authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } else if (!reactive) { _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
@@ -96,7 +96,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } _%>
 
 /**
- * Integration tests for the {@link UserResource} REST controller.
+ * Integration tests for the {@link PublicUserResource} REST controller.
  */
 <%_ if (reactive) { _%>
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
@@ -144,7 +144,7 @@ class PublicUserResourceIT {
     private MockMvc restUserMockMvc;
 <%_ } _%>
 
-    private <%= asEntity('User') %> user;
+    private <%= user.persistClass %> user;
 
 <%_ if (cacheManagerIsAvailable) { _%>
     @BeforeEach
@@ -154,7 +154,7 @@ class PublicUserResourceIT {
     }
 
 <%_ } _%>
-<%_ if (reactive && testsNeedCsrf) { _%>
+<%_ if (reactive && authenticationUsesCsrf) { _%>
     @BeforeEach
     public void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
@@ -176,16 +176,16 @@ class PublicUserResourceIT {
 
         // Get all the users
 <%_ if (reactive) { _%>
-        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,desc")
+        <%= user.dtoClass %> foundUser = webTestClient.get().uri("/api/users?sort=id,desc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
+            .returnResult(<%= user.dtoClass %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-        assertThat(foundUser.get<%= javaBeanCase(field.fieldName) %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
+        assertThat(foundUser.get<%= this.javaBeanCase(field.fieldName) %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
   <%_ } _%>
 <%_ } else { _%>
         restUserMockMvc.perform(get("/api/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")

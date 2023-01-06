@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -40,23 +40,20 @@ spring:
 <%_ if (reactive) { _%>
   <%_ if (devDatabaseTypeH2Any) { _%>
   r2dbc:
-    <%_ if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true }) %>
-    <%_ } else { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `././${BUILD_DIR}h2db/testdb` }) %>
-    <%_ } _%>
+    url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
     username: <%= lowercaseBaseName %>
     password:
   liquibase:
-    <%_ if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true }) %>
-    <%_ } else { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/testdb` }) %>
-    <%_ } _%>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
   <%_ } _%>
 <%_ } else { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
+  <%_ if (devDatabaseTypeH2Any) { _%>
+    url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
+    username: <%= baseName %>
+    password:
+  <%_ } _%>
     hikari:
       auto-commit: false
   <%_ if (!devDatabaseTypeH2Any) { _%>
@@ -71,14 +68,11 @@ spring:
     <%_ } _%>
   <%_ } _%>
   jpa:
-  <%_ if (devDatabaseTypePostgres) { _%>
-    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-  <%_ } _%>
     open-in-view: false
     hibernate:
       ddl-auto: none
       naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     properties:
       hibernate.id.new_generator_mappings: true
@@ -86,7 +80,7 @@ spring:
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
-      hibernate.hbm2ddl.auto: validate
+      hibernate.hbm2ddl.auto: none #TODO: temp relief for integration tests, revisit required
       hibernate.jdbc.time_zone: UTC
       hibernate.query.fail_on_pagination_over_collection_fetch: true
 <%_ } _%>

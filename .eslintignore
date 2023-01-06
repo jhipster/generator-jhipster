@@ -1,3 +1,4 @@
+.vscode-test
 coverage
 generators/**/templates
 node_modules
@@ -6,3 +7,4 @@ docs
 test/templates
 jdl/bundling
 test/fixtures/**
+dist

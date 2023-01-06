@@ -1,7 +1,7 @@
-version: '2'
+name: 'mspsql'
 services:
-    mspsql-postgresql:
-        image: postgres:14.5
+    postgresql:
+        image: <%- dockerContainers.postgresql %>
         # volumes:
         #     - ~/volumes/jhipster/mspsql/postgresql/:/var/lib/postgresql/
         environment:

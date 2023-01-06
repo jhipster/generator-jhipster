@@ -1,0 +1,60 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<h3 id="cacheMetrics" <%= jhiPrefix %>Translate="metrics.cache.title"><%- getWebappTranslation('metrics.cache.title') %></h3>
+
+<div class="table-responsive" *ngIf="!updating && cacheMetrics">
+  <table class="table table-striped" aria-describedby="cacheMetrics">
+    <thead>
+      <tr>
+        <th scope="col" <%= jhiPrefix %>Translate="metrics.cache.cachename"><%- getWebappTranslation('metrics.cache.cachename') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.hits"><%- getWebappTranslation('metrics.cache.hits') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.misses"><%- getWebappTranslation('metrics.cache.misses') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.gets"><%- getWebappTranslation('metrics.cache.gets') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.puts"><%- getWebappTranslation('metrics.cache.puts') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.removals"><%- getWebappTranslation('metrics.cache.removals') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.evictions"><%- getWebappTranslation('metrics.cache.evictions') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.hitPercent"><%- getWebappTranslation('metrics.cache.hitPercent') %></th>
+        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.missPercent"><%- getWebappTranslation('metrics.cache.missPercent') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let entry of cacheMetrics | keyvalue">
+        <td>{{ entry.key }}</td>
+        <td class="text-end">{{ entry.value['cache.gets.hit'] }}</td>
+        <td class="text-end">{{ entry.value['cache.gets.miss'] }}</td>
+        <td class="text-end">{{ entry.value['cache.gets.hit'] + entry.value['cache.gets.miss'] }}</td>
+        <td class="text-end">{{ entry.value['cache.puts'] }}</td>
+        <td class="text-end">{{ entry.value['cache.removals'] }}</td>
+        <td class="text-end">{{ entry.value['cache.evictions'] }}</td>
+        <td class="text-end">
+          {{
+            filterNaN((100 * entry.value['cache.gets.hit']) / (entry.value['cache.gets.hit'] + entry.value['cache.gets.miss']))
+              | number: '1.0-4'
+          }}
+        </td>
+        <td class="text-end">
+          {{
+            filterNaN((100 * entry.value['cache.gets.miss']) / (entry.value['cache.gets.hit'] + entry.value['cache.gets.miss']))
+              | number: '1.0-4'
+          }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

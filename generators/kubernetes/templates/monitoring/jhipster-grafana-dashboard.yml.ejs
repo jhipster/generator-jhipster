@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -2335,7 +2335,7 @@ spec:
                 done
       containers:
       - name: grafana-configurer
-        image: <%= DOCKER_GRAFANA_WATCHER %>
+        image: <%- dockerContainers.grafanaWatcher %>
         args:
           - '--watch-dir=/var/grafana-dashboard'
           - '--grafana-url=http://jhipster-grafana:3000'

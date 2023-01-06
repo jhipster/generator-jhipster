@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -215,7 +215,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: <%= DOCKER_MONGODB %>
+          image: <%- dockerContainers.mongodb %>
           command:
             - /work-dir/peer-finder
           args:
@@ -245,7 +245,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: <%= DOCKER_MONGODB %>
+          image: <%- dockerContainers.mongodb %>
           imagePullPolicy: "IfNotPresent"
           env:
             - name: POD_NAMESPACE

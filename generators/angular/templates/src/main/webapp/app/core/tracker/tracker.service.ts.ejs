@@ -1,0 +1,143 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Injectable } from '@angular/core';
+import { Location } from '@angular/common';
+import { Router, NavigationEnd, Event } from '@angular/router';
+import { Subscription, Observer } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+
+import SockJS from 'sockjs-client';
+import { RxStomp } from '@stomp/rx-stomp';
+
+<%_ if (authenticationTypeSession) { _%>
+import { CSRFService } from 'app/core/auth/csrf.service';
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
+<%_ } _%>
+import { TrackerActivity } from './tracker-activity.model';
+import { AccountService } from '../auth/account.service';
+import { Account } from '../auth/account.model';
+
+const DESTINATION_TRACKER = '/topic/tracker';
+const DESTINATION_ACTIVITY = '/topic/activity';
+
+@Injectable({ providedIn: 'root' })
+export class TrackerService {
+  private rxStomp?: RxStomp;
+  private routerSubscription: Subscription | null = null;
+
+  constructor(
+    private router: Router,
+    private accountService: AccountService,
+<%_ if (authenticationTypeSession) { _%>
+    private csrfService: CSRFService,
+<%_ } else if (authenticationTypeJwt) { _%>
+    private authServerProvider: AuthServerProvider,
+<%_ } _%>
+    private location: Location
+  ) {}
+
+  setup(): void {
+    this.rxStomp = new RxStomp();
+    this.rxStomp.configure({
+      // eslint-disable-next-line no-console
+      debug: (msg: string): void => console.log(new Date(), msg),
+    });
+
+    this.accountService.getAuthenticationState().subscribe({
+      next: (account: Account | null) => {
+        if (account) {
+          this.connect();
+        } else {
+          this.disconnect();
+        }
+      },
+    });
+
+    this.rxStomp.connected$.subscribe(() => {
+      this.sendActivity();
+
+      this.routerSubscription = this.router.events
+        .pipe(filter((event: Event) => event instanceof NavigationEnd))
+        .subscribe(() => this.sendActivity());
+    });
+  }
+
+  get stomp(): RxStomp {
+    if (!this.rxStomp) {
+      throw new Error('Stomp connection not initialized');
+    }
+    return this.rxStomp;
+  }
+
+  public subscribe(observer: Partial<Observer<TrackerActivity>>): Subscription {
+    return (
+      this.stomp
+        .watch(DESTINATION_TRACKER)
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        .pipe(map(imessage => JSON.parse(imessage.body)))
+        .subscribe(observer)
+    );
+  }
+
+  private connect(): void {
+    this.updateCredentials();
+    return this.stomp.activate();
+  }
+
+  private disconnect(): Promise<void> {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+      this.routerSubscription = null;
+    }
+    return this.stomp.deactivate();
+  }
+
+  private buildUrl(): string {
+    // building absolute path so that websocket doesn't fail when deploying with a context path
+    let url = '/websocket/tracker';
+    url = this.location.prepareExternalUrl(url);
+<%_ if (authenticationTypeJwt) { _%>
+    const authToken = this.authServerProvider.getToken();
+    if (authToken) {
+      return `${url}?access_token=${authToken}`;
+    }
+<%_ } _%>
+    return url;
+  }
+
+  private updateCredentials(): void {
+    this.stomp.configure({
+      webSocketFactory: () => SockJS(this.buildUrl()),
+<%_ if (authenticationTypeSession) { _%>
+      connectHeaders: {
+        ['X-XSRF-TOKEN']: this.csrfService.getCSRF('XSRF-TOKEN'),
+      }
+<%_ } _%>
+    });
+  }
+
+  private sendActivity(): void {
+    this.stomp.publish({
+      destination: DESTINATION_ACTIVITY,
+      body: JSON.stringify({ page: this.router.routerState.snapshot.url }),
+    });
+  }
+}

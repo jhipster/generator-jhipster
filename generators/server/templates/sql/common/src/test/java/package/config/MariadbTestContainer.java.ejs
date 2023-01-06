@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -42,7 +42,7 @@ public class MariadbTestContainer implements SqlTestContainer {
     @Override
     public void afterPropertiesSet() {
         if (null == mariaDBContainer) {
-            mariaDBContainer = new MariaDBContainer<>("<%= DOCKER_MARIADB %>")
+            mariaDBContainer = new MariaDBContainer<>("<%- dockerContainers.mariadb %>")
                 .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))

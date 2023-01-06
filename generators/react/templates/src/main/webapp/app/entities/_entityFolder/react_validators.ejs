@@ -1,0 +1,44 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%# Returns a string of all react validators required for the input field. -%>
+<%_ if (field.fieldValidate === true) { _%>
+        validate={{
+  <%_ if (field.fieldValidationRequired && !field.fieldTypeBoolean) { _%>
+          required: { value: true, message: translate('entity.validation.required') },
+  <%_ } _%>
+  <%_ if (field.fieldValidationMinLength) { _%>
+          minLength: { value: <%= field.fieldValidateRulesMinlength %>, message: translate('entity.validation.minlength', { min: <%= field.fieldValidateRulesMinlength %> }) },
+  <%_ } _%>
+  <%_ if (field.fieldValidationMaxLength) { _%>
+          maxLength: { value: <%= field.fieldValidateRulesMaxlength %>, message: translate('entity.validation.maxlength', { max: <%= field.fieldValidateRulesMaxlength %> }) },
+  <%_ } _%>
+  <%_ if (field.fieldValidationMin) { _%>
+          min: { value: <%= field.fieldValidateRulesMin %>, message: translate('entity.validation.min', { min: <%= field.fieldValidateRulesMin %> }) },
+  <%_ } _%>
+  <%_ if (field.fieldValidationMax) { _%>
+          max: { value: <%= field.fieldValidateRulesMax %>, message: translate('entity.validation.max', { max: <%= field.fieldValidateRulesMax %> }) },
+  <%_ } _%>
+  <%_ if (field.fieldValidationPattern) { _%>
+          pattern: { value: /<%= field.fieldValidateRulesPatternReact%>/, message: translate('entity.validation.pattern', { pattern: '<%= field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\')%>' }) },
+  <%_ } _%>
+  <%_ if (field.fieldTypeNumeric) { _%>
+          validate: v => isNumber(v) || translate('entity.validation.number'),
+  <%_ } _%>
+        }}
+<%_ } _%>

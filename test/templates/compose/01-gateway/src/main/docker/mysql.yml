@@ -1,7 +1,7 @@
-version: '2'
+name: 'jhgate'
 services:
-    jhgate-mysql:
-        image: mysql:8.0.30
+    mysql:
+        image: <%- dockerContainers.mysql %>
         # volumes:
         #     - ~/volumes/jhipster/jhgate/mysql/:/var/lib/mysql/
         environment:

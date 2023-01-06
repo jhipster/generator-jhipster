@@ -1,6 +1,6 @@
-version: '2'
+name: 'mscouchbase'
 services:
-    mscouchbase-couchbase:
+    couchbase:
         build:
             context: .
             dockerfile: couchbase/Couchbase.Dockerfile

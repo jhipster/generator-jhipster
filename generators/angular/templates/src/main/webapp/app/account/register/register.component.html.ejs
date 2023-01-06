@@ -1,0 +1,251 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<div>
+  <div class="d-flex justify-content-center">
+    <div class="col-md-8">
+      <h1 <%= jhiPrefix %>Translate="register.title" data-cy="registerTitle"><%- getWebappTranslation('register.title') %></h1>
+
+      <div class="alert alert-success" *ngIf="success" <%= jhiPrefix %>Translate="register.messages.success">
+        <%- getWebappTranslation('register.messages.success') %>
+      </div>
+
+      <div class="alert alert-danger" *ngIf="error" <%= jhiPrefix %>Translate="register.messages.error.fail">
+        <%- getWebappTranslation('register.messages.error.fail') %>
+      </div>
+
+      <div class="alert alert-danger" *ngIf="errorUserExists" <%= jhiPrefix %>Translate="register.messages.error.userexists">
+        <%- getWebappTranslation('register.messages.error.userexists') %>
+      </div>
+
+      <div class="alert alert-danger" *ngIf="errorEmailExists" <%= jhiPrefix %>Translate="register.messages.error.emailexists">
+        <%- getWebappTranslation('register.messages.error.emailexists') %>
+      </div>
+
+      <div class="alert alert-danger" *ngIf="doNotMatch" <%= jhiPrefix %>Translate="global.messages.error.dontmatch">
+        <%- getWebappTranslation('global.messages.error.dontmatch') %>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center">
+    <div class="col-md-8">
+      <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success">
+        <div class="mb-3">
+          <label class="form-label" for="login" <%= jhiPrefix %>Translate="global.form.username.label"><%- getWebappTranslation('global.form["username.label"]') %></label>
+          <input
+            type="text"
+            class="form-control"
+            id="login"
+            name="login"
+            placeholder="{{ 'global.form.username.placeholder' | translate }}"
+            formControlName="login"
+            data-cy="username"
+            #login
+          />
+
+          <div *ngIf="registerForm.get('login')!.invalid && (registerForm.get('login')!.dirty || registerForm.get('login')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('login')?.errors?.required"
+              <%= jhiPrefix %>Translate="register.messages.validate.login.required"
+            >
+               <%- getWebappTranslation('register.messages.validate.login.required') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('login')?.errors?.minlength"
+              <%= jhiPrefix %>Translate="register.messages.validate.login.minlength"
+            >
+              <%- getWebappTranslation('register.messages.validate.login.minlength') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('login')?.errors?.maxlength"
+              <%= jhiPrefix %>Translate="register.messages.validate.login.maxlength"
+            >
+              <%- getWebappTranslation('register.messages.validate.login.maxlength') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('login')?.errors?.pattern"
+              <%= jhiPrefix %>Translate="register.messages.validate.login.pattern"
+            >
+              <%- getWebappTranslation('register.messages.validate.login.pattern') %>
+            </small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label"><%- getWebappTranslation('global.form["email.label"]') %></label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="{{ 'global.form.email.placeholder' | translate }}"
+            formControlName="email"
+            data-cy="email"
+          />
+
+          <div *ngIf="registerForm.get('email')!.invalid && (registerForm.get('email')!.dirty || registerForm.get('email')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('email')?.errors?.required"
+              <%= jhiPrefix %>Translate="global.messages.validate.email.required"
+            >
+              <%- getWebappTranslation('global.messages.validate.email.required') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('email')?.errors?.invalid"
+              <%= jhiPrefix %>Translate="global.messages.validate.email.invalid"
+            >
+               <%- getWebappTranslation('global.messages.validate.email.invalid') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('email')?.errors?.minlength"
+              <%= jhiPrefix %>Translate="global.messages.validate.email.minlength"
+            >
+              <%- getWebappTranslation('global.messages.validate.email.minlength') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('email')?.errors?.maxlength"
+              <%= jhiPrefix %>Translate="global.messages.validate.email.maxlength"
+            >
+              <%- getWebappTranslation('global.messages.validate.email.maxlength') %>
+            </small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="password" <%= jhiPrefix %>Translate="global.form.newpassword.label"><%- getWebappTranslation('global.form["newpassword.label"]') %></label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            placeholder="{{ 'global.form.newpassword.placeholder' | translate }}"
+            formControlName="password"
+            data-cy="firstPassword"
+          />
+
+          <div
+            *ngIf="
+              registerForm.get('password')!.invalid &&
+              (registerForm.get('password')!.dirty || registerForm.get('password')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('password')?.errors?.required"
+              <%= jhiPrefix %>Translate="global.messages.validate.newpassword.required"
+            >
+              <%- getWebappTranslation('global.messages.validate.newpassword.required') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('password')?.errors?.minlength"
+              <%= jhiPrefix %>Translate="global.messages.validate.newpassword.minlength"
+            >
+              <%- getWebappTranslation('global.messages.validate.newpassword.minlength') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('password')?.errors?.maxlength"
+              <%= jhiPrefix %>Translate="global.messages.validate.newpassword.maxlength"
+            >
+               <%- getWebappTranslation('global.messages.validate.newpassword.maxlength') %>
+            </small>
+          </div>
+
+          <<%= jhiPrefixDashed %>-password-strength-bar [passwordToCheck]="registerForm.get('password')!.value"></<%= jhiPrefixDashed %>-password-strength-bar>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="confirmPassword" <%= jhiPrefix %>Translate="global.form.confirmpassword.label"><%- getWebappTranslation('global.form["confirmpassword.label"]') %></label>
+          <input
+            type="password"
+            class="form-control"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="{{ 'global.form.confirmpassword.placeholder' | translate }}"
+            formControlName="confirmPassword"
+            data-cy="secondPassword"
+          />
+
+          <div
+            *ngIf="
+              registerForm.get('confirmPassword')!.invalid &&
+              (registerForm.get('confirmPassword')!.dirty || registerForm.get('confirmPassword')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('confirmPassword')?.errors?.required"
+              <%= jhiPrefix %>Translate="global.messages.validate.confirmpassword.required"
+            >
+              <%- getWebappTranslation('global.messages.validate.confirmpassword.required') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('confirmPassword')?.errors?.minlength"
+              <%= jhiPrefix %>Translate="global.messages.validate.confirmpassword.minlength"
+            >
+              <%- getWebappTranslation('global.messages.validate.confirmpassword.minlength') %>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registerForm.get('confirmPassword')?.errors?.maxlength"
+              <%= jhiPrefix %>Translate="global.messages.validate.confirmpassword.maxlength"
+            >
+              <%- getWebappTranslation('global.messages.validate.confirmpassword.maxlength') %>
+            </small>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="registerForm.invalid"
+          class="btn btn-primary"
+          <%= jhiPrefix %>Translate="register.form.button"
+          data-cy="submit"
+        >
+          <%- getWebappTranslation('register.form.button') %>
+        </button>
+      </form>
+
+      <div class="mt-3 alert alert-warning">
+        <span <%= jhiPrefix %>Translate="global.messages.info.authenticated.prefix"><%- getWebappTranslation('global.messages.info.authenticated.prefix') %> </span>
+        <a class="alert-link" routerLink="/login" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link"><%- getWebappTranslation('global.messages.info.authenticated.link') %></a><span <%= jhiPrefix %>Translate="global.messages.info.authenticated.suffix"><%- getWebappTranslation('global.messages.info.authenticated.suffix') %></span>
+      </div>
+    </div>
+  </div>
+</div>

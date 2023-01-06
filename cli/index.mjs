@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { createProgram, buildCommands, buildJHipster, runJHipster, printJHipsterLogo, done, logger } from './program.js';
-export { default as EnvironmentBuilder } from './environment-builder.js';
+export { createProgram, buildCommands, buildJHipster, runJHipster, printJHipsterLogo, done, logger } from './program.mjs';
+export { default as EnvironmentBuilder } from './environment-builder.mjs';

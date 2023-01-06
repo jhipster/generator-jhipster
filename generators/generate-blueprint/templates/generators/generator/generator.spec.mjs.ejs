@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { expect } from 'expect';
+import { jestExpect as expect } from 'mocha-expect-snapshot';
 
 import { helpers, lookups } from '#test-utils';
 
@@ -36,6 +36,7 @@ describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipst
         .withOptions({
           reproducible: true,
           defaults: true,
+          baseName: 'jhipster',
 <%_ if (!customGenerator) { _%>
           blueprint: '<%= application.baseName %>',
 <%_ } _%>

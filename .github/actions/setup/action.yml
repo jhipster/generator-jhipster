@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2022 the original author or authors from the JHipster project.
+# Copyright 2013-2023 the original author or authors from the JHipster project.
 #
 # This file is part of the JHipster project, see https://www.jhipster.tech/
 # for more information.
@@ -148,7 +148,7 @@ runs:
         echo "JHI_PROJECT_VERSION=$JHI_PROJECT_VERSION" >> $GITHUB_ENV
 
         if [[ "${{inputs.jhipster-bom-branch}}" != "release" && "${{inputs.jhipster-bom-branch}}" != "ignore" ]]; then
-          echo "JHI_BOM_VERSION=0.0.0-CICD" >> $GITHUB_ENV
+          echo "JHIPSTER_DEPENDENCIES_VERSION=0.0.0-CICD" >> $GITHUB_ENV
         fi
 
         # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080

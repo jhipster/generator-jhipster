@@ -1,3 +1,22 @@
+#
+# Copyright the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 version: 2
 updates:
   - package-ecosystem: 'npm'
@@ -12,19 +31,11 @@ updates:
       - 'skip-changelog'
     ignore:
       # ESM only version
-      - dependency-name: 'p-queue'
-        versions: ['>=7']
       - dependency-name: 'os-locale'
         versions: ['>=6']
-      - dependency-name: 'sort-keys'
-        versions: ['>=5']
-      - dependency-name: 'escape-string-regexp'
-        versions: ['>=5']
-      - dependency-name: 'isbinaryfile'
-        versions: ['>=5']
 
   - package-ecosystem: 'npm'
-    directory: '/generators/client/templates/angular/'
+    directory: '/generators/angular/templates/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
@@ -51,7 +62,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'npm'
-    directory: '/generators/client/templates/common/'
+    directory: '/generators/client/templates/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
@@ -63,7 +74,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'npm'
-    directory: '/generators/client/templates/react/'
+    directory: '/generators/react/templates/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
@@ -79,7 +90,7 @@ updates:
         versions: ['>=17']
 
   - package-ecosystem: 'npm'
-    directory: '/generators/client/templates/vue/'
+    directory: '/generators/vue/templates/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
@@ -99,6 +110,26 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=17']
+
+  - package-ecosystem: 'docker'
+    directory: '/generators/server/templates/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 5
+    labels:
+      - 'theme: dependencies'
+      - 'theme: docker :whale:'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'maven'
+    directory: '/generators/server/templates/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 5
+    labels:
+      - 'theme: dependencies'
+      - 'theme: java'
+      - 'skip-changelog'
 
   - package-ecosystem: 'github-actions'
     directory: '/'

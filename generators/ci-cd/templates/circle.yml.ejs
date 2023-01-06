@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -102,7 +102,7 @@ jobs:
                 command: './gradlew deployHeroku --no-daemon'
                 <%_ } _%>
             <%_ } _%>
-            <%_ if (cypressTests || protractorTests) {
+            <%_ if (cypressTests) {
                 const commented = '# '; _%>
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Package'

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,15 +18,15 @@
 -%>
 package <%= packageName %>.web.rest.vm;
 
-import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 <%_ if (!authenticationTypeOauth2) { _%>
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 <%_ } _%>
 
 /**
- * View Model extending the <%= asDto('AdminUser') %>, which is meant to be used in the user management UI.
+ * View Model extending the <%= user.adminUserDto %>, which is meant to be used in the user management UI.
  */
-public class ManagedUserVM extends <%= asDto('AdminUser') %> {
+public class ManagedUserVM extends <%= user.adminUserDto %> {
 <%_ if (!authenticationTypeOauth2) { _%>
 
     public static final int PASSWORD_MIN_LENGTH = 4;

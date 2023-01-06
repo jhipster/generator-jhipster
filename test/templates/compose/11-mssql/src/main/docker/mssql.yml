@@ -1,7 +1,7 @@
-version: '2'
+name: 'msmssql'
 services:
-    msmssql-mssql:
-        image: mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
+    mssql:
+        image: <%- dockerContainers.mssql %>
         # volumes are not supported on macOS
         # volumes:
         #     - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/

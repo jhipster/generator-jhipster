@@ -1,0 +1,72 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+
+import SharedModule from 'app/shared/shared.module';
+import { LoginService } from 'app/login/login.service';
+import { AccountService } from 'app/core/auth/account.service';
+
+@Component({
+  selector: '<%= jhiPrefixDashed %>-login',
+  standalone: true,
+  imports: [SharedModule, FormsModule, ReactiveFormsModule, RouterModule],
+  templateUrl: './login.component.html',
+})
+export default class LoginComponent implements OnInit, AfterViewInit {
+  @ViewChild('username', { static: false })
+  username!: ElementRef;
+
+  authenticationError = false;
+
+  loginForm = new FormGroup({
+    username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    rememberMe: new FormControl(false, { nonNullable: true, validators: [Validators.required] }),
+  });
+
+  constructor(private accountService: AccountService, private loginService: LoginService, private router: Router) {}
+
+  ngOnInit(): void {
+    // if already authenticated then navigate to home page
+    this.accountService.identity().subscribe(() => {
+      if (this.accountService.isAuthenticated()) {
+        this.router.navigate(['']);
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.username.nativeElement.focus();
+  }
+
+  login(): void {
+    this.loginService.login(this.loginForm.getRawValue()).subscribe({
+      next: () => {
+        this.authenticationError = false;
+        if (!this.router.getCurrentNavigation()) {
+          // There were no routing during login (eg from navigationToStoredUrl)
+          this.router.navigate(['']);
+        }
+      },
+      error: () => (this.authenticationError = true),
+    });
+  }
+}

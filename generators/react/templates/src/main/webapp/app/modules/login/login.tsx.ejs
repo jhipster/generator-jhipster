@@ -1,0 +1,53 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import React, { useState, useEffect } from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { login } from 'app/shared/reducers/authentication';
+import LoginModal from './login-modal';
+
+export const Login = () => {
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+  const loginError = useAppSelector(state => state.authentication.loginError);
+  const showModalLogin = useAppSelector(state => state.authentication.showModalLogin);
+  const [showModal, setShowModal] = useState(showModalLogin);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setShowModal(true);
+  }, []);
+
+  const handleLogin = (username, password, rememberMe = false) => dispatch(login(username, password, rememberMe));
+
+  const handleClose = () => {
+    setShowModal(false);
+    navigate('/');
+  };
+
+  const { from } = location.state || { from: { pathname: '/', search: location.search } };
+  if (isAuthenticated) {
+    return <Navigate to={from} replace />;
+  }
+  return <LoginModal showModal={showModal} handleLogin={handleLogin} handleClose={handleClose} loginError={loginError} />;
+};
+
+export default Login;

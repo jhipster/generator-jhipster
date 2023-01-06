@@ -5,7 +5,7 @@
     "baseName": "sampleWebfluxNodb",
     "buildTool": "maven",
     "cacheProvider": "no",
-    "clientFramework": "angularX",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "",
@@ -21,10 +21,10 @@
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "no",
     "reactive": true,
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "no",
     "testFrameworks": ["gatling", "cypress"],
-    "websocket": false
+    "websocket": "no"
   }
 }

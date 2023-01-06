@@ -1,0 +1,102 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: <%= baseName.toLowerCase() %>
+services:
+  app:
+    image: <%= baseName.toLowerCase() %>
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+<%_ if (serviceDiscoveryConsul) { _%>
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
+<%_ } _%>
+<%_ if (databaseTypeSql) {
+const databaseName = prodDatabaseTypeMysql || prodDatabaseTypeMariadb ? baseName.toLowerCase() : baseName;
+_%>
+  <%_ if (reactive) { _%>
+      - SPRING_R2DBC_URL=<%- this.getR2DBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
+  <%_ } else { _%>
+      - SPRING_DATASOURCE_URL=<%- this.getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
+  <%_ } _%>
+      - SPRING_LIQUIBASE_URL=<%- this.getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
+      - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
+      - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+      - SPRING_NEO4J_URI=bolt://<%= baseName.toLowerCase() %>-neo4j:7687
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+      - SPRING_COUCHBASE_CONNECTION_STRING=<%= baseName.toLowerCase() %>-couchbase
+      - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=<%= baseName %>
+<%_ } _%>
+<%_ if (cacheProviderMemcached) { _%>
+      - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
+<%_ } _%>
+<%_ if (cacheProviderRedis) { _%>
+      - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+      - JHIPSTER_CACHE_REDIS_CLUSTER=false
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
+  <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+  <%_ } _%>
+  <%_ if (applicationTypeMicroservice) { _%>
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+  <%_ } _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+      - SPRING_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+      - JHIPSTER_SLEEP=10 # Let migration complete
+<%_ } else if (databaseTypeCouchbase) { _%>
+      - JHIPSTER_SLEEP=20 # Let database to start
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+      - SPRING_ELASTICSEARCH_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
+<%_ } _%>
+<%_ if (messageBrokerKafka) { _%>
+      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+<%_ } _%>
+<%_ if (cacheProviderInfinispan) { _%>
+      - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
+<%_ } _%>
+<%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
+<%_ } _%>
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:<%= serverPort %>/management/health']
+      interval: 5s
+      timeout: 5s
+      retries: 40

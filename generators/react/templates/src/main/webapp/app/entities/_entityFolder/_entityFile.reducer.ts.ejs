@@ -1,0 +1,233 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+    let entityActionName = entityInstance.toUpperCase();
+    let entityActionNamePlural = entityInstancePlural.toUpperCase();
+_%>
+import axios from 'axios';
+import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
+<%_ if (paginationInfiniteScroll) { _%>
+import { loadMoreDataWhenScrolled, parseHeaderForLinks } from 'react-jhipster';
+<%_ } else if (paginationNo) { _%>
+import { ASC } from 'app/shared/util/pagination.constants';
+<%_ } _%>
+import { cleanEntity } from 'app/shared/util/entity-utils';
+import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
+import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
+
+const initialState: EntityState<I<%= entityReactName %>> = {
+  loading: false,
+  errorMessage: null,
+  entities: [],
+  entity: defaultValue,
+<%_ if (paginationInfiniteScroll) { _%>
+  links: { next: 0 },
+<%_ } _%>
+  updating: false,
+<%_ if (!paginationNo) { _%>
+  totalItems: 0,
+<%_ } _%>
+  updateSuccess: false
+};
+
+const apiUrl = '<%= entityApi %>api/<%= entityApiUrl %>';
+<%_ if (searchEngineAny) { _%>
+const apiSearchUrl = '<%= entityApi %>api/_search/<%= entityApiUrl %>';
+<%_ } _%>
+
+// Actions
+
+<%_ if (searchEngineAny) { _%>
+export const searchEntities = createAsyncThunk(
+  '<%= entityInstance %>/search_entity',
+  async ({ query, page, size, sort }: IQueryParams) => {
+  <%_ if (!paginationNo) { _%>
+    const requestUrl = `${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`;
+  <%_ } else { _%>
+    const requestUrl = `${apiSearchUrl}?query=${query}`;
+  <%_ } _%>
+    return axios.get<I<%= entityReactName %>[]>(requestUrl);
+  }
+);
+
+<%_ } _%>
+export const getEntities = createAsyncThunk('<%= entityInstance %>/fetch_entity_list', async ({ <%_ if(!paginationNo) { _%>page, size, <%_ } _%>sort }: IQueryParams) => {
+<%_ if (!paginationNo) { _%>
+  const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+<%_ } else { _%>
+  const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+<%_ } _%>
+  return axios.get<I<%= entityReactName %>[]>(requestUrl);
+});
+
+export const getEntity = createAsyncThunk(
+  '<%= entityInstance %>/fetch_entity',
+  async (id: string | number) => {
+    const requestUrl = `${apiUrl}/${id}`;
+    return axios.get<I<%= entityReactName %>>(requestUrl);
+  },
+  { serializeError: serializeAxiosError }
+);
+
+<%_ if (!readOnly) { _%>
+export const createEntity = createAsyncThunk(
+  '<%= entityInstance %>/create_entity',
+  async (entity: I<%= entityReactName %>, thunkAPI) => {
+  <%_ if (!paginationInfiniteScroll) { _%>
+    const result = await axios.post<I<%= entityReactName %>>(apiUrl, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+  <%_ } else { _%>
+    return axios.post<I<%= entityReactName %>>(apiUrl, cleanEntity(entity));
+  <%_ } _%>
+  },
+  { serializeError: serializeAxiosError }
+);
+
+export const updateEntity = createAsyncThunk(
+  '<%= entityInstance %>/update_entity',
+  async (entity: I<%= entityReactName %>, thunkAPI) => {
+  <%_ if (!paginationInfiniteScroll) { _%>
+    const result = await axios.put<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+  <%_ } else { _%>
+    return axios.put<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
+  <%_ } _%>
+  },
+  { serializeError: serializeAxiosError }
+);
+
+export const partialUpdateEntity = createAsyncThunk(
+  '<%= entityInstance %>/partial_update_entity',
+  async (entity: I<%= entityReactName %>, thunkAPI) => {
+  <%_ if (!paginationInfiniteScroll) { _%>
+    const result = await axios.patch<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+  <%_ } else { _%>
+    return axios.patch<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
+  <%_ } _%>
+  },
+  { serializeError: serializeAxiosError }
+);
+
+export const deleteEntity = createAsyncThunk(
+  '<%= entityInstance %>/delete_entity',
+  async (id: string | number, thunkAPI) => {
+    const requestUrl = `${apiUrl}/${id}`;
+  <%_ if (!paginationInfiniteScroll) { _%>
+    const result = await axios.delete<I<%= entityReactName %>>(requestUrl);
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+  <%_ } else { _%>
+    return await axios.delete<I<%= entityReactName %>>(requestUrl);
+  <%_ } _%>
+  },
+  { serializeError: serializeAxiosError }
+);
+<%_ } _%>
+
+// slice
+
+export const <%= entityReactName %>Slice = createEntitySlice({
+  name: '<%= entityInstance %>',
+  initialState,
+  extraReducers(builder) {
+    builder
+      .addCase(getEntity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.entity = action.payload.data;
+      })
+<%_ if (!readOnly) { _%>
+      .addCase(deleteEntity.fulfilled, state => {
+        state.updating = false;
+        state.updateSuccess = true;
+        state.entity = {};
+      })
+<%_ } _%>
+      .addMatcher(isFulfilled(
+        getEntities,
+<%_ if (searchEngineAny) { _%>
+        searchEntities,
+<%_ } _%>
+        ), (state, action) => {
+          const { data<% if (!paginationNo) { %>, headers<% } %> } = action.payload;
+<%_ if (paginationInfiniteScroll) { _%>
+          const links = parseHeaderForLinks(headers.link);
+<%_ } _%>
+
+          return {
+            ...state,
+            loading: false,
+<%_ if (paginationInfiniteScroll) { _%>
+  <%_ if (!databaseTypeCassandra) { _%>
+            links,
+            entities: loadMoreDataWhenScrolled(state.entities, data, links),
+  <%_ } _%>
+<%_ } else { _%>
+            entities: data<%_ if (paginationNo) { _%>.sort((a, b) => {
+              if (!action.meta?.arg?.sort) {
+                return 1;
+              }
+              const order = action.meta.arg.sort.split(',')[1];
+              const predicate = action.meta.arg.sort.split(',')[0];
+              return order === ASC ? (a[predicate] < b[predicate] ? -1 : 1) : b[predicate] < a[predicate] ? -1 : 1;
+            })<%_ } _%>,
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+  <%_ if (!databaseTypeCassandra) { _%>
+            totalItems: parseInt(headers['x-total-count'], 10)
+  <%_ } _%>
+<%_ } _%>
+          };
+      })
+<%_ if (!readOnly) { _%>
+      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
+        state.updating = false;
+        state.loading = false;
+        state.updateSuccess = true;
+        state.entity = action.payload.data;
+      })
+<%_ } _%>
+      .addMatcher(isPending(
+        getEntities,
+        getEntity,
+<%_ if (searchEngineAny) { _%>
+        searchEntities,
+<%_ } _%>
+        ), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.loading = true;
+      })
+<%_ if (!readOnly) { _%>
+      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.updating = true;
+      })
+<%_ } _%>
+  },
+});
+
+export const { reset } = <%= entityReactName %>Slice.actions;
+
+// Reducer
+export default <%= entityReactName %>Slice.reducer;

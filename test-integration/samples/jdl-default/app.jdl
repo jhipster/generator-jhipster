@@ -6,9 +6,9 @@ application {
     authenticationType jwt,
     prodDatabaseType postgresql,
     buildTool maven,
-    searchEngine false,
+    searchEngine no,
     testFrameworks [gatling, cypress],
-    clientFramework angularX,
+    clientFramework angular,
     enableTranslation true,
     nativeLanguage en,
     languages [ en, fr ]

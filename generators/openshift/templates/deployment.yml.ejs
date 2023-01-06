@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2023 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -150,11 +150,11 @@ objects:
 <%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgres) { _%>
             - name: SPRING_DATASOURCE_URL
   <%_ if (app.prodDatabaseTypeMysql) { _%>
-              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: app.baseName.toLowerCase() }) %>
+              value: <%- this.getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: app.baseName.toLowerCase() }) %>
   <%_ } else if (app.prodDatabaseTypeMariadb) { _%>
-              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}`, databaseName: app.baseName.toLowerCase() }) %>
+              value: <%- this.getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}`, databaseName: app.baseName.toLowerCase() }) %>
   <%_ } else if (app.prodDatabaseTypePostgres) { _%>
-              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: '${APPLICATION_NAME}' }) %>
+              value: <%- this.getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: '${APPLICATION_NAME}' }) %>
   <%_ } _%>
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
@@ -184,7 +184,7 @@ objects:
                   key: database-password
 <%_ } _%>
 <%_ if (app.databaseTypeCassandra) { _%>
-            - name: SPRING_DATA_CASSANDRA_CONTACTPOINTS
+            - name: SPRING_CASSANDRA_CONTACTPOINTS
               value: ${APPLICATION_NAME}-cassandra
 <%_ } _%>
 <%_ if (app.databaseTypeCouchbase) { _%>
@@ -216,7 +216,7 @@ objects:
               value: 'org.apache.kafka.common.serialization.StringDeserializer'
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
-            - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
+            - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
               value: "true"
 <%_ } _%>
             ports:

@@ -1,0 +1,115 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
+_%>
+import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
+
+import { Authority } from 'app/config/authority.constants';
+import { UserManagementService } from '../service/user-management.service';
+import { User } from '../user-management.model';
+
+import UserManagementUpdateComponent from './user-management-update.component';
+
+describe('User Management Update Component', () => {
+  let comp: UserManagementUpdateComponent;
+  let fixture: ComponentFixture<UserManagementUpdateComponent>;
+  let service: UserManagementService;
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, UserManagementUpdateComponent],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({ user: new User(<%- tsKeyId %>, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') }),
+          },
+        },
+      ],
+    })
+      .overrideTemplate(UserManagementUpdateComponent, '')
+      .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(UserManagementUpdateComponent);
+    comp = fixture.componentInstance;
+    service = TestBed.inject(UserManagementService);
+  });
+
+  describe('OnInit', () => {
+    it('Should load authorities and language on init', inject(
+      [],
+      fakeAsync(() => {
+        // GIVEN
+        jest.spyOn(service, 'authorities').mockReturnValue(of(['USER']));
+
+        // WHEN
+        comp.ngOnInit();
+
+        // THEN
+        expect(service.authorities).toHaveBeenCalled();
+        expect(comp.authorities).toEqual(['USER']);
+      })
+    ));
+  });
+
+  describe('save', () => {
+    it('Should call update service on save for existing user', inject(
+      [],
+      fakeAsync(() => {
+        // GIVEN
+        const entity = { id: <%- tsKeyId %> };
+        jest.spyOn(service, 'update').mockReturnValue(of(entity));
+        comp.editForm.patchValue(entity);
+        // WHEN
+        comp.save();
+        tick(); // simulate async
+
+        // THEN
+        expect(service.update).toHaveBeenCalledWith(expect.objectContaining(entity));
+        expect(comp.isSaving).toEqual(false);
+      })
+    ));
+
+    it('Should call create service on save for new user', inject(
+      [],
+      fakeAsync(() => {
+        // GIVEN
+        const entity = { login: 'foo' } as User;
+        jest.spyOn(service, 'create').mockReturnValue(of(entity));
+        comp.editForm.patchValue(entity);
+        // WHEN
+        comp.save();
+        tick(); // simulate async
+
+        // THEN
+        expect(comp.editForm.getRawValue().id).toBeNull();
+        expect(service.create).toHaveBeenCalledWith(expect.objectContaining(entity));
+        expect(comp.isSaving).toEqual(false);
+      })
+    ));
+  });
+});

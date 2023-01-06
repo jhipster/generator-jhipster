@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,24 +18,9 @@
  */
 import chalk from 'chalk';
 import lodash from 'lodash';
-import { readFile } from 'fs/promises';
 
-import BaseBlueprintGenerator from '../generator-base-blueprint.js';
-import { SKIP_COMMIT_HOOK } from '../init/constants.cjs';
-import {
-  PRIORITY_PREFIX,
-  INITIALIZING_PRIORITY,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-  WRITING_PRIORITY,
-  POST_WRITING_PRIORITY,
-  POST_INSTALL_PRIORITY,
-  END_PRIORITY,
-  COMPOSING_PRIORITY,
-  BASE_PRIORITY_NAMES,
-} from '../../lib/constants/priorities.mjs';
+import BaseGenerator from '../base/index.mjs';
+import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.mjs';
 
 import {
   options,
@@ -57,15 +42,17 @@ import {
   ALL_PRIORITIES,
 } from './constants.mjs';
 
-import GENERATOR_LIST from '../generator-list.js';
+import * as GENERATOR_LIST from '../generator-list.mjs';
 import { files, generatorFiles } from './files.mjs';
+import { packageJson } from '../../lib/index.mjs';
+import { SKIP_COMMIT_HOOK } from '../init/constants.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
 
-export default class extends BaseBlueprintGenerator {
+export default class extends BaseGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { jhipsterModular: true, taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
+    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
 
     // Register options available to cli.
     if (!this.fromBlueprint) {
@@ -98,22 +85,14 @@ export default class extends BaseBlueprintGenerator {
 
   get initializing() {
     return {
-      validateFromCli() {
-        this.checkInvocationFromCLI();
-      },
-      sayHello() {
-        if (!this.showHello()) return;
-        this.log(chalk.white('⬢ Welcome to the JHipster Generate Blueprint ⬢'));
-      },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
       },
     };
   }
 
-  get [INITIALIZING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.initializing;
+  get [BaseGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -128,7 +107,7 @@ export default class extends BaseBlueprintGenerator {
         for (const subGenerator of subGenerators) {
           const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
           if (allPriorities) {
-            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES });
+            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
           await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, options: this.options }), subGeneratorStorage);
         }
@@ -143,7 +122,7 @@ export default class extends BaseBlueprintGenerator {
           .filter(Boolean)) {
           const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
           if (allPriorities) {
-            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES });
+            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
           await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: true }), subGeneratorStorage);
         }
@@ -151,9 +130,8 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [PROMPTING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.prompting;
+  get [BaseGenerator.PROMPTING]() {
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -171,23 +149,21 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [CONFIGURING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.configuring;
+  get [BaseGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get composing() {
     return {
       async compose() {
-        const configure = this.options.configure || !this.shouldComposeModular() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION];
-        await this.composeWithJHipster(GENERATOR_INIT, [], { configure });
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        await this.composeWithJHipster(GENERATOR_INIT);
       },
     };
   }
 
-  get [COMPOSING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.composing;
+  get [BaseGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get loading() {
@@ -196,14 +172,13 @@ export default class extends BaseBlueprintGenerator {
         this.application = { ...defaultConfig(), ...this.config.getAll() };
       },
       async load() {
-        this.application.packagejs = JSON.parse(await readFile(new URL('../../package.json', import.meta.url)));
+        this.application.packagejs = packageJson;
       },
     };
   }
 
-  get [LOADING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.loading;
+  get [BaseGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -224,15 +199,13 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [PREPARING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.preparing;
+  get [BaseGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
     return {
       async writing() {
-        if (this.shouldSkipFiles()) return;
         await this.writeFiles({
           sections: files,
           context: this.application,
@@ -245,7 +218,7 @@ export default class extends BaseBlueprintGenerator {
           const subGeneratorConfig = subGeneratorStorage.getAll();
           const priorities = (subGeneratorConfig[PRIORITIES] || []).map(priority => ({
             name: priority,
-            constant: `${snakeCase(priority).toUpperCase()}_PRIORITY`,
+            constant: `${snakeCase(priority).toUpperCase()}`,
           }));
           const customGenerator = !Object.values(GENERATOR_LIST).includes(generator);
           const jhipsterGenerator = customGenerator ? 'base' : generator;
@@ -270,15 +243,14 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [WRITING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.writing;
+  get [BaseGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get postWriting() {
     return {
       packageJson() {
-        if (this.shouldSkipFiles() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
         this.packageJson.merge({
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
@@ -306,7 +278,6 @@ export default class extends BaseBlueprintGenerator {
             'eslint-plugin-import': `${packagejs.devDependencies['eslint-plugin-import']}`,
             'eslint-plugin-mocha': `${packagejs.devDependencies['eslint-plugin-mocha']}`,
             'eslint-plugin-prettier': `${packagejs.devDependencies['eslint-plugin-prettier']}`,
-            expect: `${packagejs.devDependencies.expect}`,
             mocha: `${packagejs.devDependencies.mocha}`,
             'mocha-expect-snapshot': `${packagejs.devDependencies['mocha-expect-snapshot']}`,
             prettier: `${packagejs.dependencies.prettier}`,
@@ -321,7 +292,7 @@ export default class extends BaseBlueprintGenerator {
         });
       },
       addCliToPackageJson() {
-        if (this.shouldSkipFiles() || !this.jhipsterConfig.cli || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        if (!this.jhipsterConfig.cli || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { baseName, cliName = `jhipster-${baseName}` } = this.application;
         this.packageJson.merge({
           bin: {
@@ -331,7 +302,7 @@ export default class extends BaseBlueprintGenerator {
         });
       },
       addGeneratorJHipsterDependency() {
-        if (this.shouldSkipFiles() || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
         if (this.jhipsterConfig.dynamic) {
           this.packageJson.merge({
@@ -353,9 +324,8 @@ export default class extends BaseBlueprintGenerator {
     };
   }
 
-  get [POST_WRITING_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.postWriting;
+  get [BaseGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get postInstall() {
@@ -389,9 +359,8 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
     };
   }
 
-  get [POST_INSTALL_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.postInstall;
+  get [BaseGenerator.POST_INSTALL]() {
+    return this.delegateTasksToBlueprint(() => this.postInstall);
   }
 
   get end() {
@@ -414,9 +383,8 @@ To begin to work:
     };
   }
 
-  get [END_PRIORITY]() {
-    if (this.delegateToBlueprint) return {};
-    return this.end;
+  get [BaseGenerator.END]() {
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   getSubGeneratorStorage(subGenerator) {
