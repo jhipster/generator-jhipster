@@ -92,6 +92,7 @@ const replaceEntityFilePathVariables = (data, filePath) =>
     ?.replace(/_package_/, data.entityJavaPackageFolder)
     ?.replace(/_PersistClass_/, data.persistClass)
     ?.replace(/_EntityClass_/, data.entityClass)
+    ?.replace(/_DtoClass_/, data.dtoClass)
     ?.replace(/_\w*/, '');
 
 /**
@@ -108,3 +109,6 @@ export const moveToJavaPackageTestDir = (data, filePath) => `${data.javaPackageT
 
 export const moveToJavaEntityPackageSrcDir = (data, filePath) =>
   `${data.srcMainJava}${data.entityAbsoluteFolder}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
+
+export const moveToJavaEntityPackageTestDir = (data, filePath) =>
+  `${data.srcTestJava}${data.entityAbsoluteFolder}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;

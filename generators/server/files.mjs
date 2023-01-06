@@ -49,6 +49,41 @@ export const neo4jFiles = {
   ],
 };
 
+const cucumberFiles = {
+  cucumberFiles: [
+    {
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: [
+        // Create Cucumber test files
+        'cucumber/CucumberIT.java',
+        'cucumber/stepdefs/StepDefs.java',
+        'cucumber/CucumberTestContextConfiguration.java',
+      ],
+    },
+    {
+      condition: generator => generator.generateUserManagement && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
+      path: `${SERVER_TEST_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['cucumber/stepdefs/UserStepDefs.java'],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: [{ file: 'package/features/gitkeep', renameTo: generator => `${generator.packageFolder}/cucumber/gitkeep`, noEjs: true }],
+    },
+    {
+      condition: generator => generator.generateUserManagement && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'package/features/user/user.feature',
+          renameTo: generator => `${generator.packageFolder}/cucumber/user.feature`,
+        },
+      ],
+    },
+  ],
+};
+
 const jwtFiles = {
   jwtBaseFiles: [
     {
@@ -675,22 +710,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.cucumberTests,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: [
-        // Create Cucumber test files
-        'cucumber/CucumberIT.java',
-        'cucumber/stepdefs/StepDefs.java',
-        'cucumber/CucumberTestContextConfiguration.java',
-      ],
-    },
-    {
-      condition: generator => generator.cucumberTests,
-      path: SERVER_TEST_RES_DIR,
-      templates: [{ file: 'package/features/gitkeep', renameTo: generator => `${generator.packageFolder}/cucumber/gitkeep`, noEjs: true }],
-    },
-    {
       condition: generator => generator.generateUserManagement,
       path: `${SERVER_TEST_SRC_DIR}package/`,
       renameTo: moveToJavaPackageTestDir,
@@ -871,24 +890,6 @@ export const baseServerFiles = {
       templates: ['config/TestContainersSpringContextCustomizerFactory.java'],
     },
     {
-      condition: generator =>
-        generator.generateUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['cucumber/stepdefs/UserStepDefs.java'],
-    },
-    {
-      condition: generator =>
-        generator.generateUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'package/features/user/user.feature',
-          renameTo: generator => `${generator.packageFolder}/cucumber/user.feature`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.generateUserManagement,
       path: SERVER_TEST_RES_DIR,
       templates: [
@@ -923,6 +924,7 @@ export const baseServerFiles = {
 
 export const serverFiles = mergeSections(
   baseServerFiles,
+  addSectionsCondition(cucumberFiles, context => context.cucumberTests),
   addSectionsCondition(neo4jFiles, context => context.databaseTypeNeo4j),
   addSectionsCondition(jwtFiles, context => context.authenticationTypeJwt)
 );
