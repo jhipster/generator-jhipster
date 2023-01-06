@@ -176,6 +176,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/bootstrap/templates/template-file-bootstrap.ejs": {
     "stateCleared": "modified",
   },
+  "generators/cassandra/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/cassandra/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/cassandra/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/cassandra/templates/template-file-cassandra.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/ci-cd/generator.mjs": {
     "stateCleared": "modified",
   },

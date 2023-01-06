@@ -24,26 +24,11 @@ import { getEnumInfo } from '../utils.mjs';
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, TEST_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { databaseTypes, searchEngineTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
 
-const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
+const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MapperTypes, ServiceTypes } = entityOptions;
 const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = cacheTypes;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
-
-export const cassandraChangelogFiles = {
-  dbChangelog: [
-    {
-      condition: generator => generator.databaseType === CASSANDRA && !generator.skipDbChangelog,
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        {
-          file: 'config/cql/changelog/added_entity.cql',
-          renameTo: generator => `config/cql/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.cql`,
-        },
-      ],
-    },
-  ],
-};
 
 export const modelFiles = {
   model: [
@@ -122,16 +107,6 @@ export const entityFiles = {
         {
           file: 'package/domain/Entity.java.jhi.jakarta_lifecycle_events',
           renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.jakarta_lifecycle_events`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseTypeCassandra,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/domain/Entity.java.jhi.spring_data_cassandra',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.spring_data_cassandra`,
         },
       ],
     },
@@ -385,7 +360,6 @@ export const gatlingFiles = {
 };
 
 export const serverFiles = {
-  ...cassandraChangelogFiles,
   ...modelFiles,
   ...entityFiles,
   ...restFiles,

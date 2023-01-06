@@ -27,6 +27,7 @@ import serverOptions from './options.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
+  GENERATOR_CASSANDRA,
   GENERATOR_COMMON,
   GENERATOR_COUCHBASE,
   GENERATOR_DOCKER,
@@ -261,6 +262,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if (databaseType === SQL) {
           await this.composeWithJHipster(GENERATOR_LIQUIBASE);
+        } else if (databaseType === CASSANDRA) {
+          await this.composeWithJHipster(GENERATOR_CASSANDRA);
         } else if (databaseType === COUCHBASE) {
           await this.composeWithJHipster(GENERATOR_COUCHBASE);
         } else if (databaseType === MONGODB) {
