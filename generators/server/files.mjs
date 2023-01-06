@@ -18,36 +18,21 @@
  */
 import { cleanupOldServerFiles } from './cleanup.mjs';
 import { TEST_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
-import { addSectionsCondition, mergeSections } from './utils.mjs';
+import { addSectionsCondition, mergeSections, moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from './utils.mjs';
 import { writeSqlFiles } from './files-sql.mjs';
-
-/**
- * Move the template to `javaPackageSrcDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).
- * Removes trailing specifiers.
- */
-const moveToJavaPackageSrcDir = (data, filePath) => `${data.javaPackageSrcDir}${filePath.replace(/_\w*/, '')}`;
-
-/**
- * Move the template to `javaPackageTestDir` (defaults to`src/main/java/${packageFolder}/${filePath}`).
- * Removes trailing specifiers.
- */
-const moveToJavaPackageTestDir = (data, filePath) => `${data.javaPackageTestDir}${filePath.replace(/_\w*/, '')}`;
 
 export const neo4jFiles = {
   serverResource: [
     {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/DatabaseConfiguration.java_neo4j'],
+    },
+    {
       condition: generator => generator.generateBuiltInUserEntity,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/neo4j/Neo4jMigrations.java',
-          renameTo: generator => `${generator.javaDir}config/neo4j/Neo4jMigrations.java`,
-        },
-        {
-          file: 'package/config/neo4j/package-info.java',
-          renameTo: generator => `${generator.javaDir}config/neo4j/package-info.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/neo4j/Neo4jMigrations.java', 'config/neo4j/package-info.java'],
     },
     {
       condition: generator => generator.generateBuiltInUserEntity,
@@ -236,30 +221,14 @@ export const baseServerFiles = {
     {
       condition: generator =>
         !generator.reactive && (generator.databaseTypeSql || generator.databaseTypeMongodb || generator.databaseTypeCouchbase),
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/SpringSecurityAuditorAware.java',
-          renameTo: generator => `${generator.javaDir}security/SpringSecurityAuditorAware.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['security/SpringSecurityAuditorAware.java'],
     },
     {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/SecurityUtils.java',
-          renameTo: generator => `${generator.javaDir}security/SecurityUtils.java`,
-        },
-        {
-          file: 'package/security/AuthoritiesConstants.java',
-          renameTo: generator => `${generator.javaDir}security/AuthoritiesConstants.java`,
-        },
-        {
-          file: 'package/security/package-info.java',
-          renameTo: generator => `${generator.javaDir}security/package-info.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['security/SecurityUtils.java', 'security/AuthoritiesConstants.java', 'security/package-info.java'],
     },
     {
       condition: generator => !generator.reactive,
@@ -283,65 +252,37 @@ export const baseServerFiles = {
     },
     {
       condition: generator => !generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/SecurityConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/SecurityConfiguration.java'],
     },
     {
       condition: generator => generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/SecurityConfiguration_reactive.java',
-          renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/SecurityConfiguration_reactive.java'],
     },
     {
       condition: generator => generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/PersistentTokenRememberMeServices.java',
-          renameTo: generator => `${generator.javaDir}security/PersistentTokenRememberMeServices.java`,
-        },
-        {
-          file: 'package/domain/PersistentToken.java',
-          renameTo: generator => `${generator.javaDir}domain/PersistentToken.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['security/PersistentTokenRememberMeServices.java', 'domain/PersistentToken.java'],
     },
     {
       condition: generator =>
         generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive && !generator.databaseTypeCouchbase,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/PersistentTokenRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/PersistentTokenRepository.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['repository/PersistentTokenRepository.java'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
-      path: SERVER_MAIN_SRC_DIR,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
       templates: [
-        {
-          file: 'package/security/oauth2/AudienceValidator.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/AudienceValidator.java`,
-        },
-        {
-          file: 'package/security/oauth2/JwtGrantedAuthorityConverter.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/JwtGrantedAuthorityConverter.java`,
-        },
-        {
-          file: 'package/security/oauth2/OAuthIdpTokenResponseDTO.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/OAuthIdpTokenResponseDTO.java`,
-        },
+        'security/oauth2/AudienceValidator.java',
+        'security/oauth2/JwtGrantedAuthorityConverter.java',
+        'security/oauth2/OAuthIdpTokenResponseDTO.java',
       ],
     },
     {
@@ -350,7 +291,7 @@ export const baseServerFiles = {
       templates: [
         {
           file: 'package/security/oauth2/AudienceValidatorTest.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/AudienceValidatorTest.java`,
+          renameTo: generator => `${generator.testDir}security/oauth2/AudienceValidatorTest.java`,
         },
         {
           file: 'package/config/TestSecurityConfiguration.java',
@@ -367,43 +308,27 @@ export const baseServerFiles = {
       templates: [
         {
           file: 'package/security/oauth2/AuthorizationHeaderUtilTest.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderUtilTest.java`,
+          renameTo: generator => `${generator.testDir}security/oauth2/AuthorizationHeaderUtilTest.java`,
         },
       ],
     },
     {
       condition: generator => generator.generateUserManagement,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/DomainUserDetailsService.java',
-          renameTo: generator => `${generator.javaDir}security/DomainUserDetailsService.java`,
-        },
-        {
-          file: 'package/security/UserNotActivatedException.java',
-          renameTo: generator => `${generator.javaDir}security/UserNotActivatedException.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['security/DomainUserDetailsService.java', 'security/UserNotActivatedException.java'],
     },
     {
       condition: generator => !!generator.enableSwaggerCodegen,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/OpenApiConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/OpenApiConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/OpenApiConfiguration.java'],
     },
     {
       condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/oauth2/CustomClaimConverter.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/CustomClaimConverter.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['security/oauth2/CustomClaimConverter.java'],
     },
     {
       condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
@@ -411,7 +336,7 @@ export const baseServerFiles = {
       templates: [
         {
           file: 'package/security/oauth2/CustomClaimConverterIT.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/CustomClaimConverterIT.java`,
+          renameTo: generator => `${generator.testDir}security/oauth2/CustomClaimConverterIT.java`,
         },
       ],
     },
@@ -419,58 +344,37 @@ export const baseServerFiles = {
   serverJavaGateway: [
     {
       condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        { file: 'package/web/rest/vm/RouteVM.java', renameTo: generator => `${generator.javaDir}web/rest/vm/RouteVM.java` },
-        {
-          file: 'package/web/rest/GatewayResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/GatewayResource.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/vm/RouteVM.java', 'web/rest/GatewayResource.java'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2 && (generator.applicationTypeMonolith || generator.applicationTypeGateway),
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/AuthInfoResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/AuthInfoResource.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/AuthInfoResource.java'],
     },
     {
       condition: generator =>
         generator.authenticationTypeOauth2 &&
         !generator.reactive &&
         (generator.applicationTypeMonolith || generator.applicationTypeGateway),
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/LogoutResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/LogoutResource.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/LogoutResource.java'],
     },
     {
       condition: generator =>
         generator.authenticationTypeOauth2 && generator.reactive && (generator.applicationTypeMonolith || generator.applicationTypeGateway),
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/LogoutResource_reactive.java',
-          renameTo: generator => `${generator.javaDir}web/rest/LogoutResource.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/LogoutResource_reactive.java'],
     },
     {
       condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny && generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/filter/ModifyServersOpenApiFilter.java',
-          renameTo: generator => `${generator.javaDir}web/filter/ModifyServersOpenApiFilter.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/filter/ModifyServersOpenApiFilter.java'],
     },
     {
       condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny && generator.reactive,
@@ -489,39 +393,21 @@ export const baseServerFiles = {
         !generator.reactive &&
         generator.authenticationTypeOauth2 &&
         (generator.applicationTypeMicroservice || generator.applicationTypeGateway),
-      path: SERVER_MAIN_SRC_DIR,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
       templates: [
-        {
-          file: 'package/security/oauth2/AuthorizationHeaderUtil.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderUtil.java`,
-        },
-        {
-          file: 'package/config/FeignConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java`,
-        },
-        {
-          file: 'package/client/AuthorizedFeignClient.java',
-          renameTo: generator => `${generator.javaDir}client/AuthorizedFeignClient.java`,
-        },
-        {
-          file: 'package/client/OAuth2InterceptedFeignConfiguration.java',
-          renameTo: generator => `${generator.javaDir}client/OAuth2InterceptedFeignConfiguration.java`,
-        },
-        {
-          file: 'package/client/TokenRelayRequestInterceptor.java',
-          renameTo: generator => `${generator.javaDir}client/TokenRelayRequestInterceptor.java`,
-        },
+        'security/oauth2/AuthorizationHeaderUtil.java',
+        'config/FeignConfiguration.java',
+        'client/AuthorizedFeignClient.java',
+        'client/OAuth2InterceptedFeignConfiguration.java',
+        'client/TokenRelayRequestInterceptor.java',
       ],
     },
     {
       condition: generator => !generator.reactive && generator.applicationTypeGateway && !generator.serviceDiscoveryAny,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/RestTemplateConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/RestTemplateConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/RestTemplateConfiguration.java'],
     },
     {
       condition: generator => generator.applicationTypeMicroservice,
@@ -539,22 +425,19 @@ export const baseServerFiles = {
   serverJavaApp: [
     {
       path: SERVER_MAIN_SRC_DIR,
-      templates: [{ file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` }],
+      templates: [{ file: 'package/Application.java', renameTo: generator => `${generator.packageFolder}/${generator.mainClass}.java` }],
     },
     {
       condition: generator => generator.serviceDiscoveryAny && generator.serviceDiscoveryEureka,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/EurekaWorkaroundConfiguration.java',
-          renameTo: generator => `${generator.javaDir}/config/EurekaWorkaroundConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/EurekaWorkaroundConfiguration.java'],
     },
     {
       condition: generator => !generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [{ file: 'package/ApplicationWebXml.java', renameTo: generator => `${generator.javaDir}ApplicationWebXml.java` }],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['ApplicationWebXml.java'],
     },
     {
       path: SERVER_TEST_SRC_DIR,
@@ -583,64 +466,33 @@ export const baseServerFiles = {
       ],
     },
     {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/GeneratedByJHipster.java',
-          renameTo: generator => `${generator.javaDir}GeneratedByJHipster.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['GeneratedByJHipster.java'],
     },
   ],
   serverJavaConfig: [
     {
-      path: SERVER_MAIN_SRC_DIR,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
       templates: [
-        {
-          file: 'package/aop/logging/LoggingAspect.java',
-          renameTo: generator => `${generator.javaDir}aop/logging/LoggingAspect.java`,
-        },
-        { file: 'package/config/package-info.java', renameTo: generator => `${generator.javaDir}config/package-info.java` },
-        {
-          file: 'package/config/AsyncConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/AsyncConfiguration.java`,
-        },
-        {
-          file: 'package/config/CRLFLogConverter.java',
-          renameTo: generator => `${generator.javaDir}config/CRLFLogConverter.java`,
-        },
-        {
-          file: 'package/config/DateTimeFormatConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/DateTimeFormatConfiguration.java`,
-        },
-        {
-          file: 'package/config/LoggingConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/LoggingConfiguration.java`,
-        },
-        {
-          file: 'package/config/ApplicationProperties.java',
-          renameTo: generator => `${generator.javaDir}config/ApplicationProperties.java`,
-        },
-        {
-          file: 'package/config/JacksonConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/JacksonConfiguration.java`,
-        },
-        {
-          file: 'package/config/LoggingAspectConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/LoggingAspectConfiguration.java`,
-        },
-        { file: 'package/config/WebConfigurer.java', renameTo: generator => `${generator.javaDir}config/WebConfigurer.java` },
+        'aop/logging/LoggingAspect.java',
+        'config/package-info.java',
+        'config/AsyncConfiguration.java',
+        'config/CRLFLogConverter.java',
+        'config/DateTimeFormatConfiguration.java',
+        'config/LoggingConfiguration.java',
+        'config/ApplicationProperties.java',
+        'config/JacksonConfiguration.java',
+        'config/LoggingAspectConfiguration.java',
+        'config/WebConfigurer.java',
       ],
     },
     {
       condition: generator => !generator.skipClient && !generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/StaticResourcesWebConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/StaticResourcesWebConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/StaticResourcesWebConfiguration.java'],
     },
     {
       condition: generator =>
@@ -649,32 +501,21 @@ export const baseServerFiles = {
         generator.databaseTypeMongodb ||
         generator.databaseTypeCouchbase ||
         generator.databaseTypeNeo4j,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [{ file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` }],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/Constants.java'],
     },
     {
       condition: generator => !generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/LocaleConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/LocaleConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/LocaleConfiguration.java'],
     },
     {
       condition: generator => generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/ReactorConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/ReactorConfiguration.java`,
-        },
-        {
-          file: 'package/config/LocaleConfiguration_reactive.java',
-          renameTo: generator => `${generator.javaDir}config/LocaleConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/ReactorConfiguration.java', 'config/LocaleConfiguration_reactive.java'],
     },
     {
       condition: generator =>
@@ -684,23 +525,15 @@ export const baseServerFiles = {
         generator.cacheProviderInfinispan ||
         generator.cacheProviderMemcached ||
         generator.cacheProviderRedis,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/CacheConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/CacheConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/CacheConfiguration.java'],
     },
     {
       condition: generator => generator.cacheProviderInfinispan,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/CacheFactoryConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/CacheFactoryConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/CacheFactoryConfiguration.java'],
     },
     {
       condition: generator => generator.cacheProviderRedis,
@@ -717,182 +550,104 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.databaseTypeNo,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: generator => `package/config/DatabaseConfiguration_${generator.databaseType}.java`,
-          renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.communicationSpringWebsocket,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/WebsocketConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/WebsocketConfiguration.java`,
-        },
-        {
-          file: 'package/config/WebsocketSecurityConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/WebsocketSecurityConfiguration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/WebsocketConfiguration.java', 'config/WebsocketSecurityConfiguration.java'],
     },
   ],
   serverJavaDomain: [
     {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [{ file: 'package/domain/package-info.java', renameTo: generator => `${generator.javaDir}domain/package-info.java` }],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['domain/package-info.java'],
     },
     {
       condition: generator =>
         generator.databaseTypeSql || generator.databaseTypeMongodb || generator.databaseTypeNeo4j || generator.databaseTypeCouchbase,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/domain/AbstractAuditingEntity.java',
-          renameTo: generator => `${generator.javaDir}domain/AbstractAuditingEntity.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['domain/AbstractAuditingEntity.java'],
     },
   ],
   serverJavaPackageInfo: [
     {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        { file: 'package/repository/package-info.java', renameTo: generator => `${generator.javaDir}repository/package-info.java` },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['repository/package-info.java'],
     },
   ],
   serverJavaServiceError: [
     {
       condition: generator => generator.generateUserManagement,
-      path: SERVER_MAIN_SRC_DIR,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
       templates: [
-        {
-          file: 'package/service/EmailAlreadyUsedException.java',
-          renameTo: generator => `${generator.javaDir}service/EmailAlreadyUsedException.java`,
-        },
-        {
-          file: 'package/service/InvalidPasswordException.java',
-          renameTo: generator => `${generator.javaDir}service/InvalidPasswordException.java`,
-        },
-        {
-          file: 'package/service/UsernameAlreadyUsedException.java',
-          renameTo: generator => `${generator.javaDir}service/UsernameAlreadyUsedException.java`,
-        },
+        'service/EmailAlreadyUsedException.java',
+        'service/InvalidPasswordException.java',
+        'service/UsernameAlreadyUsedException.java',
       ],
     },
   ],
   serverJavaService: [
     {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [{ file: 'package/service/package-info.java', renameTo: generator => `${generator.javaDir}service/package-info.java` }],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['service/package-info.java'],
     },
   ],
   serverJavaWebError: [
     {
-      path: SERVER_MAIN_SRC_DIR,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
       templates: [
-        {
-          file: 'package/web/rest/errors/package-info.java',
-          renameTo: generator => `${generator.javaDir}web/rest/errors/package-info.java`,
-        },
-        {
-          file: 'package/web/rest/errors/BadRequestAlertException.java',
-          renameTo: generator => `${generator.javaDir}web/rest/errors/BadRequestAlertException.java`,
-        },
-        {
-          file: 'package/web/rest/errors/ErrorConstants.java',
-          renameTo: generator => `${generator.javaDir}web/rest/errors/ErrorConstants.java`,
-        },
-        {
-          file: 'package/web/rest/errors/ExceptionTranslator.java',
-          renameTo: generator => `${generator.javaDir}web/rest/errors/ExceptionTranslator.java`,
-        },
-        {
-          file: 'package/web/rest/errors/FieldErrorVM.java',
-          renameTo: generator => `${generator.javaDir}web/rest/errors/FieldErrorVM.java`,
-        },
+        'web/rest/errors/package-info.java',
+        'web/rest/errors/BadRequestAlertException.java',
+        'web/rest/errors/ErrorConstants.java',
+        'web/rest/errors/ExceptionTranslator.java',
+        'web/rest/errors/FieldErrorVM.java',
       ],
     },
     {
       condition: generator => generator.generateUserManagement,
-      path: SERVER_MAIN_SRC_DIR,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
       templates: [
-        {
-          file: 'package/web/rest/errors/EmailAlreadyUsedException.java',
-          renameTo: generator => `${generator.javaDir}web/rest/errors/EmailAlreadyUsedException.java`,
-        },
-        {
-          file: 'package/web/rest/errors/InvalidPasswordException.java',
-          renameTo: generator => `${generator.javaDir}web/rest/errors/InvalidPasswordException.java`,
-        },
-        {
-          file: 'package/web/rest/errors/LoginAlreadyUsedException.java',
-          renameTo: generator => `${generator.javaDir}web/rest/errors/LoginAlreadyUsedException.java`,
-        },
+        'web/rest/errors/EmailAlreadyUsedException.java',
+        'web/rest/errors/InvalidPasswordException.java',
+        'web/rest/errors/LoginAlreadyUsedException.java',
       ],
     },
   ],
   serverJavaWeb: [
     {
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/vm/package-info.java',
-          renameTo: generator => `${generator.javaDir}web/rest/vm/package-info.java`,
-        },
-        {
-          file: 'package/web/rest/package-info.java',
-          renameTo: generator => `${generator.javaDir}web/rest/package-info.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/vm/package-info.java', 'web/rest/package-info.java'],
     },
     {
       condition: generator => !generator.skipClient && !generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/rest/ClientForwardController.java',
-          renameTo: generator => `${generator.javaDir}web/rest/ClientForwardController.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/ClientForwardController.java'],
     },
     {
       condition: generator => !generator.skipClient && generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/filter/SpaWebFilter.java',
-          renameTo: generator => `${generator.javaDir}web/filter/SpaWebFilter.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/filter/SpaWebFilter.java'],
     },
   ],
   serverJavaWebsocket: [
     {
       condition: generator => generator.communicationSpringWebsocket,
-      path: SERVER_MAIN_SRC_DIR,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
       templates: [
-        {
-          file: 'package/web/websocket/package-info.java',
-          renameTo: generator => `${generator.javaDir}web/websocket/package-info.java`,
-        },
-        {
-          file: 'package/web/websocket/ActivityService.java',
-          renameTo: generator => `${generator.javaDir}web/websocket/ActivityService.java`,
-        },
-        {
-          file: 'package/web/websocket/dto/package-info.java',
-          renameTo: generator => `${generator.javaDir}web/websocket/dto/package-info.java`,
-        },
-        {
-          file: 'package/web/websocket/dto/ActivityDTO.java',
-          renameTo: generator => `${generator.javaDir}web/websocket/dto/ActivityDTO.java`,
-        },
+        'web/websocket/package-info.java',
+        'web/websocket/ActivityService.java',
+        'web/websocket/dto/package-info.java',
+        'web/websocket/dto/ActivityDTO.java',
       ],
     },
   ],
@@ -916,13 +671,9 @@ export const baseServerFiles = {
   springBootOauth2: [
     {
       condition: generator => generator.authenticationTypeOauth2 && generator.applicationTypeMonolith,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/OAuth2Configuration.java',
-          renameTo: generator => `${generator.javaDir}config/OAuth2Configuration.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/OAuth2Configuration.java'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
@@ -1121,25 +872,20 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.generateBuiltInAuthorityEntity,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
-        {
-          file: 'package/repository/AuthorityRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`,
-        },
-      ],
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['domain/Authority.java', 'repository/AuthorityRepository.java'],
+    },
+    {
+      condition: generator => generator.authenticationTypeOauth2,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/Constants.java', 'service/UserService.java', 'service/dto/package-info.java'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
-        { file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` },
-        { file: 'package/service/UserService.java', renameTo: generator => `${generator.javaDir}service/UserService.java` },
-        {
-          file: 'package/service/dto/package-info.java',
-          renameTo: generator => `${generator.javaDir}service/dto/package-info.java`,
-        },
         {
           file: 'package/service/dto/AdminUserDTO.java',
           renameTo: generator => `${generator.javaDir}service/dto/${generator.user.adminUserDto}.java`,
@@ -1152,28 +898,14 @@ export const baseServerFiles = {
     },
     {
       condition: generator => generator.generateBuiltInUserEntity,
-      path: SERVER_MAIN_SRC_DIR,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
       templates: [
-        {
-          file: 'package/service/mapper/package-info.java',
-          renameTo: generator => `${generator.javaDir}service/mapper/package-info.java`,
-        },
-        {
-          file: 'package/service/mapper/UserMapper.java',
-          renameTo: generator => `${generator.javaDir}service/mapper/UserMapper.java`,
-        },
-        {
-          file: 'package/repository/UserRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/UserRepository.java`,
-        },
-        {
-          file: 'package/web/rest/PublicUserResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`,
-        },
-        {
-          file: 'package/web/rest/vm/ManagedUserVM.java',
-          renameTo: generator => `${generator.javaDir}web/rest/vm/ManagedUserVM.java`,
-        },
+        'service/mapper/package-info.java',
+        'service/mapper/UserMapper.java',
+        'repository/UserRepository.java',
+        'web/rest/PublicUserResource.java',
+        'web/rest/vm/ManagedUserVM.java',
       ],
     },
     {
@@ -1218,15 +950,6 @@ export const baseServerFiles = {
       condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
-        /* User management java service files */
-        { file: 'package/service/UserService.java', renameTo: generator => `${generator.javaDir}service/UserService.java` },
-        { file: 'package/service/MailService.java', renameTo: generator => `${generator.javaDir}service/MailService.java` },
-
-        /* User management java web files */
-        {
-          file: 'package/service/dto/package-info.java',
-          renameTo: generator => `${generator.javaDir}service/dto/package-info.java`,
-        },
         {
           file: 'package/service/dto/AdminUserDTO.java',
           renameTo: generator => `${generator.javaDir}service/dto/${generator.user.adminUserDto}.java`,
@@ -1235,23 +958,24 @@ export const baseServerFiles = {
           file: 'package/service/dto/UserDTO.java',
           renameTo: generator => `${generator.javaDir}service/dto/${generator.user.dtoClass}.java`,
         },
-        {
-          file: 'package/service/dto/PasswordChangeDTO.java',
-          renameTo: generator => `${generator.javaDir}service/dto/PasswordChangeDTO.java`,
-        },
-        {
-          file: 'package/web/rest/AccountResource.java',
-          renameTo: generator => `${generator.javaDir}web/rest/AccountResource.java`,
-        },
-        { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
-        {
-          file: 'package/web/rest/vm/KeyAndPasswordVM.java',
-          renameTo: generator => `${generator.javaDir}web/rest/vm/KeyAndPasswordVM.java`,
-        },
-        {
-          file: 'package/service/mapper/package-info.java',
-          renameTo: generator => `${generator.javaDir}service/mapper/package-info.java`,
-        },
+      ],
+    },
+    {
+      condition: generator => generator.generateUserManagement,
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: [
+        /* User management java service files */
+        'service/UserService.java',
+        'service/MailService.java',
+
+        /* User management java web files */
+        'service/dto/package-info.java',
+        'service/dto/PasswordChangeDTO.java',
+        'web/rest/AccountResource.java',
+        'web/rest/UserResource.java',
+        'web/rest/vm/KeyAndPasswordVM.java',
+        'service/mapper/package-info.java',
       ],
     },
     {
@@ -1382,8 +1106,8 @@ export function writeFiles() {
       cleanupOldServerFiles(
         this,
         application,
-        `${SERVER_MAIN_SRC_DIR}${application.javaDir}`,
-        `${SERVER_TEST_SRC_DIR}${application.testDir}`,
+        application.javaPackageSrcDir,
+        application.javaPackageTestDir,
         SERVER_MAIN_RES_DIR,
         SERVER_TEST_RES_DIR
       );

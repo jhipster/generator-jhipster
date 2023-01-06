@@ -24,7 +24,7 @@ export const mongoDbFiles = {
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/dbmigrations/package-info.java'],
+      templates: ['config/dbmigrations/package-info.java', 'config/DatabaseConfiguration.java'],
     },
     {
       condition: generator => generator.generateBuiltInUserEntity,

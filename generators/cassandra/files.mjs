@@ -20,6 +20,13 @@ import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR } from '.
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/utils.mjs';
 
 export const cassandraFiles = {
+  serverFiles: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/DatabaseConfiguration.java'],
+    },
+  ],
   serverResource: [
     {
       path: SERVER_MAIN_RES_DIR,

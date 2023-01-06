@@ -16,10 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mergeSections, addSectionsCondition } from './utils.mjs';
+import { mergeSections, addSectionsCondition, moveToJavaPackageSrcDir } from './utils.mjs';
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 
 export const sqlFiles = {
+  serverFiles: [
+    {
+      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['config/DatabaseConfiguration.java'],
+    },
+  ],
   reactiveJavaUserManagement: [
     {
       condition: generator => generator.reactive && generator.generateBuiltInUserEntity,

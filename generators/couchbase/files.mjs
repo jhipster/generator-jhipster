@@ -24,7 +24,7 @@ export const couchbaseFiles = {
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['repository/JHipsterCouchbaseRepository.java'],
+      templates: ['repository/JHipsterCouchbaseRepository.java', 'config/DatabaseConfiguration.java'],
     },
     {
       condition: data => data.authenticationTypeSession && !data.reactive && data.generateUserManagement,
