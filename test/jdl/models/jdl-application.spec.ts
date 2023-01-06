@@ -307,7 +307,7 @@ describe('jdl - JDLApplication', () => {
 
       it('uses each entity name', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "A",
   "B",
 ]

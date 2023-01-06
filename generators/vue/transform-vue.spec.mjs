@@ -70,25 +70,25 @@ describe('generator - vue - transform', () => {
         expect(replaceVueTranslations.call(generator, FULL_BODY, 'foo.vue')).toMatchInlineSnapshot(`
 "
 <span><strong>Your user account has been activated.</strong> Please </span>
-<b-form-group label-for=\\"password\\">
+<b-form-group label-for="password">
   <b-form-input
-    id=\\"password\\"
-    type=\\"password\\"
-    name=\\"password\\"
-    v-model.trim=\\"name\\"
-    v-model=\\"password\\"
-    data-cy=\\"password\\"
+    id="password"
+    type="password"
+    name="password"
+    v-model.trim="name"
+    v-model="password"
+    data-cy="password"
   >
   </b-form-input>
 </b-form-group>
 
-<b-modal ref=\\"removeUser\\" id=\\"removeUser\\" @ok=\\"deleteUser()\\">
-  <div class=\\"modal-body\\">
-    <p id=\\"<%= jhiPrefixDashed %>-delete-user-heading\\">Are you sure you want to delete this user?</p>
+<b-modal ref="removeUser" id="removeUser" @ok="deleteUser()">
+  <div class="modal-body">
+    <p id="<%= jhiPrefixDashed %>-delete-user-heading">Are you sure you want to delete this user?</p>
   </div>
-  <div slot=\\"modal-footer\\">
-    <button type=\\"button\\" class=\\"btn btn-secondary\\" v-on:click=\\"closeDialog()\\">Cancel</button>
-    <button type=\\"button\\" class=\\"btn btn-primary\\" id=\\"confirm-delete-user\\" v-on:click=\\"deleteUser()\\">Delete</button>
+  <div slot="modal-footer">
+    <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+    <button type="button" class="btn btn-primary" id="confirm-delete-user" v-on:click="deleteUser()">Delete</button>
   </div>
 </b-modal>
 

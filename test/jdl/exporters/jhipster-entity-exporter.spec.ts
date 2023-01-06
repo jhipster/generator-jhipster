@@ -111,7 +111,7 @@ describe('jdl - JHipsterEntityExporter', () => {
           });
         });
         it('should return an empty list', () => {
-          jestExpect(returned).toMatchInlineSnapshot('Array []');
+          jestExpect(returned).toMatchInlineSnapshot('[]');
         });
         it('should not create a .jhipster folder', () => {
           expect(doesDirectoryExist('.jhipster')).to.be.false;
@@ -169,14 +169,14 @@ describe('jdl - JHipsterEntityExporter', () => {
 
         it('should return the exported entities', () => {
           jestExpect(returned).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "applications": Array [],
+[
+  {
+    "applications": [],
     "changelogDate": "42",
     "dto": "no",
     "entityTableName": "a",
-    "fields": Array [
-      Object {
+    "fields": [
+      {
         "fieldName": "myEnum",
         "fieldType": "MyEnum",
         "fieldValues": "FRENCH,ENGLISH",
@@ -187,7 +187,7 @@ Array [
     "jpaMetamodelFiltering": false,
     "name": "A",
     "pagination": "no",
-    "relationships": Array [],
+    "relationships": [],
     "service": "no",
   },
 ]
@@ -308,20 +308,20 @@ Array [
 
           it('should return the exported entities', () => {
             jestExpect(returned).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "applications": "*",
     "changelogDate": "20180303092308",
     "dto": "no",
     "entityTableName": "client",
-    "fields": Array [],
+    "fields": [],
     "fluentMethods": true,
     "jpaMetamodelFiltering": true,
     "microserviceName": "client",
     "name": "Client",
     "pagination": "no",
-    "relationships": Array [
-      Object {
+    "relationships": [
+      {
         "otherEntityName": "location",
         "relationshipName": "location",
         "relationshipType": "many-to-one",
@@ -329,19 +329,19 @@ Array [
     ],
     "service": "serviceClass",
   },
-  Object {
+  {
     "applications": "*",
     "changelogDate": "20180303092309",
     "dto": "no",
     "entityTableName": "location",
-    "fields": Array [],
+    "fields": [],
     "fluentMethods": true,
     "jpaMetamodelFiltering": true,
     "microserviceName": "client",
     "name": "Location",
     "pagination": "no",
-    "relationships": Array [
-      Object {
+    "relationships": [
+      {
         "otherEntityName": "client",
         "otherEntityRelationshipName": "location",
         "relationshipName": "clients",
@@ -350,19 +350,19 @@ Array [
     ],
     "service": "serviceClass",
   },
-  Object {
+  {
     "applications": "*",
     "changelogDate": "20180303092310",
     "dto": "no",
     "entityTableName": "local_store",
-    "fields": Array [],
+    "fields": [],
     "fluentMethods": true,
     "jpaMetamodelFiltering": true,
     "microserviceName": "store",
     "name": "LocalStore",
     "pagination": "no",
-    "relationships": Array [
-      Object {
+    "relationships": [
+      {
         "otherEntityName": "product",
         "otherEntityRelationshipName": "store",
         "relationshipName": "products",
@@ -371,13 +371,13 @@ Array [
     ],
     "service": "serviceClass",
   },
-  Object {
+  {
     "applications": "*",
     "changelogDate": "20180303092311",
     "dto": "no",
     "entityTableName": "product",
-    "fields": Array [
-      Object {
+    "fields": [
+      {
         "fieldName": "name",
         "fieldType": "String",
       },
@@ -387,8 +387,8 @@ Array [
     "microserviceName": "store",
     "name": "Product",
     "pagination": "no",
-    "relationships": Array [
-      Object {
+    "relationships": [
+      {
         "otherEntityName": "localStore",
         "relationshipName": "store",
         "relationshipType": "many-to-one",

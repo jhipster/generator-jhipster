@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`public api generator-jhipster/generators should match snapshot 1`] = `
-Object {
+{
   "GENERATOR_ANGULAR": "angular",
   "GENERATOR_APP": "app",
   "GENERATOR_AWS": "aws",

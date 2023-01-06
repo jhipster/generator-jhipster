@@ -165,14 +165,14 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": false,
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -269,7 +269,7 @@ JSONEntity {
   "dto": "mapstruct",
   "embedded": true,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": false,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": true,
@@ -277,7 +277,7 @@ JSONEntity {
   "name": "A",
   "pagination": "pagination",
   "readOnly": true,
-  "relationships": Array [],
+  "relationships": [],
   "searchEngine": "couchbase",
   "service": "serviceImpl",
   "skipClient": true,
@@ -332,14 +332,14 @@ JSONEntity {
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": false,
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "serviceClass",
 }
 `);
@@ -390,14 +390,14 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": true,
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "serviceClass",
 }
 `);
@@ -438,14 +438,14 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": false,
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "searchEngine": false,
   "service": "no",
 }
@@ -490,12 +490,12 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "firstField",
       "fieldType": "String",
     },
-    Object {
+    {
       "fieldName": "secondField",
       "fieldType": "Integer",
     },
@@ -506,7 +506,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -559,23 +559,23 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "anyBlobField",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any",
     },
-    Object {
+    {
       "fieldName": "textBlobField",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "text",
     },
-    Object {
+    {
       "fieldName": "blobField",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any",
     },
-    Object {
+    {
       "fieldName": "imageBlobField",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "image",
@@ -587,7 +587,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -626,8 +626,8 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "enumField",
       "fieldType": "CustomEnum",
       "fieldValues": "AA,AB",
@@ -639,7 +639,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -678,8 +678,8 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "firstField",
       "fieldType": "String",
       "javadoc": "The best field",
@@ -691,7 +691,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -785,11 +785,11 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "stringField",
       "fieldType": "String",
-      "fieldValidateRules": Array [
+      "fieldValidateRules": [
         "required",
         "unique",
         "minlength",
@@ -800,21 +800,21 @@ JSONEntity {
       "fieldValidateRulesMinlength": 0,
       "fieldValidateRulesPattern": "^d$",
     },
-    Object {
+    {
       "fieldName": "integerField",
       "fieldType": "Integer",
-      "fieldValidateRules": Array [
+      "fieldValidateRules": [
         "min",
         "max",
       ],
       "fieldValidateRulesMax": 10,
       "fieldValidateRulesMin": 0,
     },
-    Object {
+    {
       "fieldName": "blobField",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any",
-      "fieldValidateRules": Array [
+      "fieldValidateRules": [
         "minbytes",
         "maxbytes",
       ],
@@ -828,7 +828,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -870,12 +870,12 @@ JSONEntity {
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [
-    Object {
+  "fields": [
+    {
       "fieldName": "firstField",
       "fieldType": "String",
       "javadoc": "The best field",
-      "options": Object {
+      "options": {
         "id": 42,
       },
     },
@@ -886,7 +886,7 @@ JSONEntity {
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -948,27 +948,27 @@ JSONEntity {
 
           it('should convert them', () => {
             jestExpect(relationshipsForA).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
     "ownerSide": true,
     "relationshipName": "b",
     "relationshipType": "one-to-one",
   },
-  Object {
+  {
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
     "relationshipName": "b",
     "relationshipType": "one-to-many",
   },
-  Object {
+  {
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
     "relationshipName": "b",
     "relationshipType": "many-to-one",
   },
-  Object {
+  {
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
     "ownerSide": true,
@@ -978,27 +978,27 @@ Array [
 ]
 `);
             jestExpect(relationshipsForB).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
     "ownerSide": false,
     "relationshipName": "a",
     "relationshipType": "one-to-one",
   },
-  Object {
+  {
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
     "relationshipName": "a",
     "relationshipType": "many-to-one",
   },
-  Object {
+  {
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
     "relationshipName": "a",
     "relationshipType": "one-to-many",
   },
-  Object {
+  {
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
     "ownerSide": false,
@@ -1043,8 +1043,8 @@ Array [
 
             it('should convert them', () => {
               jestExpect(convertedRelationship).toMatchInlineSnapshot(`
-Object {
-  "options": Object {
+{
+  "options": {
     "custom": 42,
   },
   "otherEntityName": "b",
@@ -1089,7 +1089,7 @@ Object {
 
             it('should convert them', () => {
               jestExpect(convertedRelationship).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
   "ownerSide": true,
@@ -1133,8 +1133,8 @@ Object {
 
           it('should convert them', () => {
             jestExpect(relationshipsForA).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
     "ownerSide": true,
@@ -1145,8 +1145,8 @@ Array [
 ]
 `);
             jestExpect(relationshipsForB).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
     "ownerSide": false,
@@ -1190,8 +1190,8 @@ Array [
 
           it('should convert them', () => {
             jestExpect(relationshipsForA).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "javadoc": "A to B",
     "otherEntityName": "b",
     "otherEntityRelationshipName": "a",
@@ -1202,8 +1202,8 @@ Array [
 ]
 `);
             jestExpect(relationshipsForB).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "javadoc": "A to B but in the destination",
     "otherEntityName": "a",
     "otherEntityRelationshipName": "b",
@@ -1245,7 +1245,7 @@ Array [
 
             it('should add the relationship for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "b",
   "ownerSide": true,
   "relationshipName": "b",
@@ -1286,7 +1286,7 @@ Object {
 
             it('should add the relationship for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
   "relationshipName": "b",
@@ -1296,7 +1296,7 @@ Object {
             });
             it('should add the relationship for the destination entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",
   "relationshipName": "a",
@@ -1334,7 +1334,7 @@ Object {
 
             it('should add the relationship for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "b",
   "relationshipName": "b",
   "relationshipType": "many-to-one",
@@ -1374,7 +1374,7 @@ Object {
 
             it('should add the relationship for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
   "ownerSide": true,
@@ -1385,7 +1385,7 @@ Object {
             });
             it('should add the relationship for the destination entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",
   "ownerSide": false,
@@ -1427,7 +1427,7 @@ Object {
 
             it('should add it for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
@@ -1439,7 +1439,7 @@ Object {
             });
             it('should ignore it for the destination entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",
@@ -1480,7 +1480,7 @@ Object {
 
             it('should ignore it for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
@@ -1491,7 +1491,7 @@ Object {
             });
             it('should add it for the destination entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",
@@ -1531,7 +1531,7 @@ Object {
 
             it('should add it for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
@@ -1542,7 +1542,7 @@ Object {
             });
             it('should ignore it for the source entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",
@@ -1582,7 +1582,7 @@ Object {
 
             it('should add it for the source entity', () => {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "b",
   "otherEntityRelationshipName": "a",
@@ -1594,7 +1594,7 @@ Object {
             });
             it('should add it for the destination entity', () => {
               jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
-Object {
+{
   "otherEntityField": "name",
   "otherEntityName": "a",
   "otherEntityRelationshipName": "b",

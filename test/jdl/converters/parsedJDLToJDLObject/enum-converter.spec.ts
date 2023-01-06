@@ -46,7 +46,7 @@ describe('jdl - EnumConverter', () => {
 
       it('should convert them', () => {
         expect(convertedEnums).toMatchInlineSnapshot(`
-Array [
+[
   JDLEnum {
     "comment": "A comment",
     "name": "Country",

@@ -104,7 +104,7 @@ describe('jdl - OptionConverter', () => {
         });
         it('should convert them', () => {
           expect(convertedOptions).toMatchInlineSnapshot(`
-Array [
+[
   JDLBinaryOption {
     "entityNames": Set {
       "*",
@@ -157,7 +157,7 @@ Array [
         });
         it('should not convert them', () => {
           expect(convertedOptions).toMatchInlineSnapshot(`
-Array [
+[
   JDLBinaryOption {
     "entityNames": Set {
       "*",

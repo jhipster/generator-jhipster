@@ -51,18 +51,18 @@ describe('jdl - JSONEntity', () => {
       it('should set default values', () => {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
-  "applications": Array [],
+  "applications": [],
   "dto": "no",
   "embedded": false,
   "entityTableName": "toto",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": undefined,
   "jpaMetamodelFiltering": false,
   "name": "Toto",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -98,12 +98,12 @@ JSONEntity {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "yes",
-  "applications": Array [],
+  "applications": [],
   "clientRootFolder": "oh",
   "dto": "mapstruct",
   "embedded": true,
   "entityTableName": "titi",
-  "fields": Array [
+  "fields": [
     42,
   ],
   "fluentMethods": true,
@@ -113,7 +113,7 @@ JSONEntity {
   "name": "Titi",
   "pagination": "pagination",
   "readOnly": true,
-  "relationships": Array [
+  "relationships": [
     42,
     43,
   ],
@@ -273,18 +273,18 @@ JSONEntity {
       it('should set them', () => {
         jestExpect(jsonEntity).toMatchInlineSnapshot(`
 JSONEntity {
-  "applications": Array [],
+  "applications": [],
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "toto",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": "A comment",
   "jpaMetamodelFiltering": false,
   "name": "Toto",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);

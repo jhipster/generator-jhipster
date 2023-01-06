@@ -446,13 +446,13 @@ describe('jdl - JDLRelationships', () => {
 
       it('should use each relationship', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "from": "Abc",
     "to": "Abc2",
     "type": "OneToOne",
   },
-  Object {
+  {
     "from": "Abc",
     "to": "Abc2",
     "type": "OneToMany",

@@ -67,21 +67,21 @@ describe('jdl - RelationshipConverter', () => {
 
         it('should convert them', () => {
           expect(convertedRelationships).toMatchInlineSnapshot(`
-Array [
+[
   JDLRelationship {
-    "commentInFrom": "/**\\\\nRequired\\\\n/",
-    "commentInTo": "/**\\\\nNot required\\\\n/",
+    "commentInFrom": "/**\\nRequired\\n/",
+    "commentInTo": "/**\\nNot required\\n/",
     "from": "Source",
     "injectedFieldInFrom": "destination",
     "injectedFieldInTo": "source",
     "isInjectedFieldInFromRequired": true,
     "isInjectedFieldInToRequired": false,
-    "options": Object {
-      "destination": Object {},
-      "global": Object {
+    "options": {
+      "destination": {},
+      "global": {
         "jpaDerivedIdentifier": true,
       },
-      "source": Object {},
+      "source": {},
     },
     "to": "Destination",
     "type": "OneToMany",
@@ -126,21 +126,21 @@ Array [
 
         it('should generate them', () => {
           expect(convertedRelationships).toMatchInlineSnapshot(`
-Array [
+[
   JDLRelationship {
-    "commentInFrom": "/**\\\\nRequired\\\\n/",
-    "commentInTo": "/**\\\\nNot required\\\\n/",
+    "commentInFrom": "/**\\nRequired\\n/",
+    "commentInTo": "/**\\nNot required\\n/",
     "from": "Source",
     "injectedFieldInFrom": "destination",
     "injectedFieldInTo": "source",
     "isInjectedFieldInFromRequired": true,
     "isInjectedFieldInToRequired": false,
-    "options": Object {
-      "destination": Object {},
-      "global": Object {
+    "options": {
+      "destination": {},
+      "global": {
         "jpaDerivedIdentifier": true,
       },
-      "source": Object {},
+      "source": {},
     },
     "to": "Destination",
     "type": "OneToMany",

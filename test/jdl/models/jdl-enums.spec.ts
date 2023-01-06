@@ -128,7 +128,7 @@ describe('jdl - JDLEnums', () => {
 
       it('should use each enum name', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "A",
   "B",
 ]

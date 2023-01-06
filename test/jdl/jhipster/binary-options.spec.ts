@@ -25,22 +25,22 @@ import { binaryOptions } from '../../../jdl/jhipster/index.mjs';
 describe('jdl - BinaryOptions', () => {
   it('should match values', () => {
     jestExpect(binaryOptions.Values).toMatchInlineSnapshot(`
-Object {
-  "dto": Object {
+{
+  "dto": {
     "MAPSTRUCT": "mapstruct",
     "NO": "no",
   },
-  "pagination": Object {
+  "pagination": {
     "INFINITE-SCROLL": "infinite-scroll",
     "NO": "no",
     "PAGINATION": "pagination",
   },
-  "search": Object {
+  "search": {
     "COUCHBASE": "couchbase",
     "ELASTICSEARCH": "elasticsearch",
     "NO": "no",
   },
-  "service": Object {
+  "service": {
     "NO": "no",
     "SERVICE_CLASS": "serviceClass",
     "SERVICE_IMPL": "serviceImpl",
@@ -78,7 +78,7 @@ Object {
 
       it('should iterate over them', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "dto",
   "service",
   "pagination",
