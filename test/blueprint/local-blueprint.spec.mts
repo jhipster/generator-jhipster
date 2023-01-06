@@ -43,11 +43,11 @@ describe('generator - base - local blueprint', () => {
 
     it('creates expected default files', () => {
       jestExpect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
-Object {
-  ".yo-rc.json": Object {
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "local-blueprint.txt": Object {
+  "local-blueprint.txt": {
     "stateCleared": "modified",
   },
 }

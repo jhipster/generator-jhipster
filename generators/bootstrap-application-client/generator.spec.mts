@@ -62,13 +62,13 @@ describe(`generator - ${generator}`, () => {
 
       it('should succeed', () => {
         expect(runResult.getSnapshot()).toMatchInlineSnapshot(`
-Object {
-  ".yo-rc.json": Object {
+{
+  ".yo-rc.json": {
     "contents": "{
-  \\"generator-jhipster\\": {
-    \\"baseName\\": \\"jhipster\\",
-    \\"creationTimestamp\\": 946684800000,
-    \\"entities\\": []
+  "generator-jhipster": {
+    "baseName": "jhipster",
+    "creationTimestamp": 946684800000,
+    "entities": []
   }
 }
 ",

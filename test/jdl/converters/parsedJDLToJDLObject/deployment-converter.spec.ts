@@ -43,7 +43,7 @@ describe('jdl - DeploymentConverter', () => {
 
       it('should convert them', () => {
         expect(convertedDeployments).toMatchInlineSnapshot(`
-Array [
+[
   JDLDeployment {
     "appsFolders": Set {
       "tata",

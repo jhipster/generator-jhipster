@@ -168,8 +168,8 @@ describe('jdl - JHipsterApplicationExporter', () => {
 
         it('should add the read content to the exported application', () => {
           jestExpect(content).toMatchInlineSnapshot(`
-Object {
-  "generator-jhipster": Object {
+{
+  "generator-jhipster": {
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "toto",
@@ -188,7 +188,7 @@ Object {
     "jhiPrefix": "jhi",
     "jhipsterVersion": "4.9.0",
     "jwtSecretKey": "1234",
-    "languages": Array [],
+    "languages": [],
     "messageBroker": "no",
     "packageFolder": "com/mathieu/sample",
     "packageName": "com.mathieu.sample",
@@ -199,7 +199,7 @@ Object {
     "skipClient": false,
     "skipServer": false,
     "skipUserManagement": false,
-    "testFrameworks": Array [],
+    "testFrameworks": [],
     "websocket": "no",
     "withAdminUi": true,
   },

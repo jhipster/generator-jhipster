@@ -121,23 +121,23 @@ describe(`generator - ${generator}`, () => {
 
       it('should write files', () => {
         expect(runResult.getSnapshot('**/{.jhipster/**, entities.json}')).toMatchInlineSnapshot(`
-Object {
-  ".jhipster/EntityA.json": Object {
+{
+  ".jhipster/EntityA.json": {
     "contents": "{
-  \\"changelogDate\\": \\"20220129025419\\",
-  \\"fields\\": [
+  "changelogDate": "20220129025419",
+  "fields": [
     {
-      \\"fieldName\\": \\"id\\",
-      \\"fieldType\\": \\"UUID\\"
+      "fieldName": "id",
+      "fieldType": "UUID"
     }
   ],
-  \\"name\\": \\"EntityA\\",
-  \\"relationships\\": []
+  "name": "EntityA",
+  "relationships": []
 }
 ",
     "stateCleared": "modified",
   },
-  ".jhipster/User.json": Object {
+  ".jhipster/User.json": {
     "contents": null,
   },
 }
@@ -145,7 +145,7 @@ Object {
       });
       it('should prepare entities', () => {
         expect(Object.keys(runResult.generator.sharedData.getEntitiesMap())).toMatchInlineSnapshot(`
-Array [
+[
   "User",
   "EntityA",
 ]
@@ -156,7 +156,7 @@ Array [
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
-Object {
+{
   "adminUserDto": "AdminUserDTO",
   "allReferences": Any<Array>,
   "applicationType": "monolith",
@@ -170,15 +170,15 @@ Object {
   "containsBagRelationships": false,
   "cypressBootstrapEntities": true,
   "databaseType": "sql",
-  "differentRelationships": Object {},
-  "differentTypes": Array [],
+  "differentRelationships": {},
+  "differentTypes": [],
   "dto": true,
   "dtoClass": "UserDTO",
   "dtoInstance": "userDTO",
   "dtoMapstruct": false,
   "dtoReferences": Any<Array>,
   "dtoSuffix": "DTO",
-  "eagerRelations": Array [],
+  "eagerRelations": [],
   "embedded": false,
   "entityAbsoluteClass": "com.mycompany.myapp.domain.User",
   "entityAbsoluteFolder": "com/mycompany/myapp/",
@@ -216,13 +216,13 @@ Object {
   "entityTranslationKey": "user",
   "entityTranslationKeyMenu": "user",
   "entityUrl": "user",
-  "enums": Array [],
+  "enums": [],
   "existingEnum": false,
   "fakeDataCount": 2,
   "faker": Any<Object>,
-  "fieldNameChoices": Array [],
-  "fields": Array [
-    Object {
+  "fieldNameChoices": [],
+  "fields": [
+    {
       "autoGenerate": true,
       "autoGenerateByRepository": true,
       "autoGenerateByService": false,
@@ -288,21 +288,21 @@ Object {
       "jpaGeneratedValue": "sequence",
       "loadColumnType": "numeric",
       "nullable": true,
-      "path": Array [
+      "path": [
         "id",
       ],
       "propertyName": "id",
       "readonly": true,
       "reference": Any<Object>,
-      "relationshipsPath": Array [],
+      "relationshipsPath": [],
       "requiresPersistableImplementation": false,
       "shouldCreateContentType": false,
       "shouldDropDefaultValue": false,
       "tsType": "number",
       "unique": false,
-      "uniqueValue": Array [],
+      "uniqueValue": [],
     },
-    Object {
+    {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
       "blobContentTypeText": false,
@@ -361,19 +361,19 @@ Object {
       "javaFieldType": "String",
       "loadColumnType": "string",
       "nullable": true,
-      "path": Array [
+      "path": [
         "login",
       ],
       "propertyName": "login",
       "reference": Any<Object>,
-      "relationshipsPath": Array [],
+      "relationshipsPath": [],
       "shouldCreateContentType": false,
       "shouldDropDefaultValue": false,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": Array [],
+      "uniqueValue": [],
     },
-    Object {
+    {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
       "blobContentTypeText": false,
@@ -432,19 +432,19 @@ Object {
       "javaFieldType": "String",
       "loadColumnType": "string",
       "nullable": true,
-      "path": Array [
+      "path": [
         "firstName",
       ],
       "propertyName": "firstName",
       "reference": Any<Object>,
-      "relationshipsPath": Array [],
+      "relationshipsPath": [],
       "shouldCreateContentType": false,
       "shouldDropDefaultValue": false,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": Array [],
+      "uniqueValue": [],
     },
-    Object {
+    {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
       "blobContentTypeText": false,
@@ -503,17 +503,17 @@ Object {
       "javaFieldType": "String",
       "loadColumnType": "string",
       "nullable": true,
-      "path": Array [
+      "path": [
         "lastName",
       ],
       "propertyName": "lastName",
       "reference": Any<Object>,
-      "relationshipsPath": Array [],
+      "relationshipsPath": [],
       "shouldCreateContentType": false,
       "shouldDropDefaultValue": false,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": Array [],
+      "uniqueValue": [],
     },
   ],
   "fieldsContainBigDecimal": false,
@@ -541,17 +541,17 @@ Object {
   "haveFieldWithJavadoc": false,
   "i18nAlertHeaderPrefix": "jhipsterApp.user",
   "i18nKeyPrefix": "jhipsterApp.user",
-  "i18nToLoad": Array [],
+  "i18nToLoad": [],
   "implementsEagerLoadApis": false,
   "importApiModelProperty": false,
   "isUsingMapsId": false,
   "jhiPrefix": "jhi",
   "jpaMetamodelFiltering": false,
-  "liquibaseFakeData": Array [
-    Object {
+  "liquibaseFakeData": [
+    {
       "id": 1,
     },
-    Object {
+    {
       "id": 2,
     },
   ],
@@ -563,10 +563,10 @@ Object {
   "officialDatabaseType": "SQL",
   "otherDtoReferences": Any<Array>,
   "otherEntities": Any<Array>,
-  "otherEntityPrimaryKeyTypes": Array [],
+  "otherEntityPrimaryKeyTypes": [],
   "otherEntityPrimaryKeyTypesIncludesUUID": false,
   "otherReferences": Any<Array>,
-  "otherRelationships": Array [],
+  "otherRelationships": [],
   "packageFolder": "com/mycompany/myapp/",
   "packageName": "com.mycompany.myapp",
   "pagination": "no",
@@ -575,7 +575,7 @@ Object {
   "paginationPagination": false,
   "persistClass": "User",
   "persistInstance": "user",
-  "primaryKey": Object {
+  "primaryKey": {
     "autoGenerate": true,
     "composite": false,
     "derived": false,
@@ -583,8 +583,8 @@ Object {
     "fields": Any<Array>,
     "hasLong": true,
     "hasUUID": false,
-    "ids": Array [
-      Object {
+    "ids": [
+      {
         "autoGenerate": true,
         "field": Any<Object>,
         "getter": "getId",
@@ -592,14 +592,14 @@ Object {
         "nameCapitalized": "Id",
         "nameDotted": "id",
         "nameDottedAsserted": "id!",
-        "relationshipsPath": Array [],
+        "relationshipsPath": [],
         "setter": "setId",
       },
     ],
     "name": "id",
     "nameCapitalized": "Id",
     "ownFields": Any<Array>,
-    "relationships": Array [],
+    "relationships": [],
     "tsType": "number",
     "type": "Long",
     "typeLong": true,
@@ -615,7 +615,7 @@ Object {
   "reactiveUniqueEntityTypes": Any<Set>,
   "readOnly": false,
   "regularEagerRelations": Any<Array>,
-  "relationships": Array [],
+  "relationships": [],
   "relationshipsContainEagerLoad": false,
   "relationshipsContainOtherSideIgnore": false,
   "requiresPersistableImplementation": false,
@@ -630,7 +630,7 @@ Object {
   "skipUiGrouping": false,
   "springDataDescription": "Spring Data JPA",
   "tsKeyType": "number",
-  "uniqueEnums": Object {},
+  "uniqueEnums": {},
   "updatableEntity": true,
   "useMicroserviceJson": false,
   "validation": false,
@@ -645,7 +645,7 @@ Object {
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
-Object {
+{
   "allReferences": Any<Array>,
   "applicationType": "monolith",
   "authenticationType": "jwt",
@@ -658,13 +658,13 @@ Object {
   "containsBagRelationships": false,
   "cypressBootstrapEntities": true,
   "databaseType": "sql",
-  "differentRelationships": Object {},
-  "differentTypes": Array [],
+  "differentRelationships": {},
+  "differentTypes": [],
   "dto": "no",
   "dtoMapstruct": false,
   "dtoReferences": Any<Array>,
   "dtoSuffix": "DTO",
-  "eagerRelations": Array [],
+  "eagerRelations": [],
   "embedded": false,
   "entityAbsoluteClass": "com.mycompany.myapp.domain.EntityA",
   "entityAbsoluteFolder": "com/mycompany/myapp/",
@@ -702,12 +702,12 @@ Object {
   "entityTranslationKey": "entityA",
   "entityTranslationKeyMenu": "entityA",
   "entityUrl": "entity-a",
-  "enums": Array [],
+  "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
-  "fieldNameChoices": Array [],
-  "fields": Array [
-    Object {
+  "fieldNameChoices": [],
+  "fields": [
+    {
       "autoGenerate": true,
       "autoGenerateByRepository": true,
       "autoGenerateByService": false,
@@ -771,19 +771,19 @@ Object {
       "jpaGeneratedValue": true,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
-      "path": Array [
+      "path": [
         "id",
       ],
       "propertyName": "id",
       "readonly": true,
       "reference": Any<Object>,
-      "relationshipsPath": Array [],
+      "relationshipsPath": [],
       "requiresPersistableImplementation": false,
       "shouldCreateContentType": false,
       "shouldDropDefaultValue": false,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": Array [],
+      "uniqueValue": [],
     },
   ],
   "fieldsContainBigDecimal": false,
@@ -811,7 +811,7 @@ Object {
   "haveFieldWithJavadoc": false,
   "i18nAlertHeaderPrefix": "jhipsterApp.entityA",
   "i18nKeyPrefix": "jhipsterApp.entityA",
-  "i18nToLoad": Array [],
+  "i18nToLoad": [],
   "implementsEagerLoadApis": false,
   "importApiModelProperty": false,
   "isUsingMapsId": false,
@@ -826,10 +826,10 @@ Object {
   "officialDatabaseType": "SQL",
   "otherDtoReferences": Any<Array>,
   "otherEntities": Any<Array>,
-  "otherEntityPrimaryKeyTypes": Array [],
+  "otherEntityPrimaryKeyTypes": [],
   "otherEntityPrimaryKeyTypesIncludesUUID": false,
   "otherReferences": Any<Array>,
-  "otherRelationships": Array [],
+  "otherRelationships": [],
   "packageFolder": "com/mycompany/myapp/",
   "packageName": "com.mycompany.myapp",
   "pagination": "no",
@@ -838,7 +838,7 @@ Object {
   "paginationPagination": false,
   "persistClass": "EntityA",
   "persistInstance": "entityA",
-  "primaryKey": Object {
+  "primaryKey": {
     "autoGenerate": true,
     "composite": false,
     "derived": false,
@@ -846,8 +846,8 @@ Object {
     "fields": Any<Array>,
     "hasLong": false,
     "hasUUID": true,
-    "ids": Array [
-      Object {
+    "ids": [
+      {
         "autoGenerate": true,
         "field": Any<Object>,
         "getter": "getId",
@@ -855,14 +855,14 @@ Object {
         "nameCapitalized": "Id",
         "nameDotted": "id",
         "nameDottedAsserted": "id!",
-        "relationshipsPath": Array [],
+        "relationshipsPath": [],
         "setter": "setId",
       },
     ],
     "name": "id",
     "nameCapitalized": "Id",
     "ownFields": Any<Array>,
-    "relationships": Array [],
+    "relationships": [],
     "tsType": "string",
     "type": "UUID",
     "typeLong": false,
@@ -878,7 +878,7 @@ Object {
   "reactiveUniqueEntityTypes": Any<Set>,
   "readOnly": false,
   "regularEagerRelations": Any<Array>,
-  "relationships": Array [],
+  "relationships": [],
   "relationshipsContainEagerLoad": false,
   "relationshipsContainOtherSideIgnore": false,
   "requiresPersistableImplementation": false,
@@ -897,7 +897,7 @@ Object {
   "skipUiGrouping": false,
   "springDataDescription": "Spring Data JPA",
   "tsKeyType": "string",
-  "uniqueEnums": Object {},
+  "uniqueEnums": {},
   "updatableEntity": false,
   "useMicroserviceJson": false,
   "validation": false,
@@ -937,18 +937,18 @@ Object {
 
       it('should write files', () => {
         expect(runResult.getSnapshot('**/{.jhipster/**, entities.json}')).toMatchInlineSnapshot(`
-Object {
-  ".jhipster/EntityA.json": Object {
+{
+  ".jhipster/EntityA.json": {
     "contents": "{
-  \\"changelogDate\\": \\"20220129025419\\",
-  \\"fields\\": [
+  "changelogDate": "20220129025419",
+  "fields": [
     {
-      \\"fieldName\\": \\"id\\",
-      \\"fieldType\\": \\"UUID\\"
+      "fieldName": "id",
+      "fieldType": "UUID"
     }
   ],
-  \\"name\\": \\"EntityA\\",
-  \\"relationships\\": []
+  "name": "EntityA",
+  "relationships": []
 }
 ",
     "stateCleared": "modified",
@@ -958,7 +958,7 @@ Object {
       });
       it('should prepare entities', () => {
         expect(Object.keys(runResult.generator.sharedData.getEntitiesMap())).toMatchInlineSnapshot(`
-Array [
+[
   "EntityA",
 ]
 `);
@@ -968,7 +968,7 @@ Array [
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
-Object {
+{
   "allReferences": Any<Array>,
   "applicationType": "monolith",
   "authenticationType": "jwt",
@@ -981,13 +981,13 @@ Object {
   "containsBagRelationships": false,
   "cypressBootstrapEntities": true,
   "databaseType": "sql",
-  "differentRelationships": Object {},
-  "differentTypes": Array [],
+  "differentRelationships": {},
+  "differentTypes": [],
   "dto": "no",
   "dtoMapstruct": false,
   "dtoReferences": Any<Array>,
   "dtoSuffix": "DTO",
-  "eagerRelations": Array [],
+  "eagerRelations": [],
   "embedded": false,
   "entityAbsoluteClass": "com.mycompany.myapp.domain.EntityA",
   "entityAbsoluteFolder": "com/mycompany/myapp/",
@@ -1025,12 +1025,12 @@ Object {
   "entityTranslationKey": "entityA",
   "entityTranslationKeyMenu": "entityA",
   "entityUrl": "entity-a",
-  "enums": Array [],
+  "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
-  "fieldNameChoices": Array [],
-  "fields": Array [
-    Object {
+  "fieldNameChoices": [],
+  "fields": [
+    {
       "autoGenerate": true,
       "autoGenerateByRepository": true,
       "autoGenerateByService": false,
@@ -1094,19 +1094,19 @@ Object {
       "jpaGeneratedValue": true,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
-      "path": Array [
+      "path": [
         "id",
       ],
       "propertyName": "id",
       "readonly": true,
       "reference": Any<Object>,
-      "relationshipsPath": Array [],
+      "relationshipsPath": [],
       "requiresPersistableImplementation": false,
       "shouldCreateContentType": false,
       "shouldDropDefaultValue": false,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": Array [],
+      "uniqueValue": [],
     },
   ],
   "fieldsContainBigDecimal": false,
@@ -1134,7 +1134,7 @@ Object {
   "haveFieldWithJavadoc": false,
   "i18nAlertHeaderPrefix": "jhipsterApp.entityA",
   "i18nKeyPrefix": "jhipsterApp.entityA",
-  "i18nToLoad": Array [],
+  "i18nToLoad": [],
   "implementsEagerLoadApis": false,
   "importApiModelProperty": false,
   "isUsingMapsId": false,
@@ -1149,10 +1149,10 @@ Object {
   "officialDatabaseType": "SQL",
   "otherDtoReferences": Any<Array>,
   "otherEntities": Any<Array>,
-  "otherEntityPrimaryKeyTypes": Array [],
+  "otherEntityPrimaryKeyTypes": [],
   "otherEntityPrimaryKeyTypesIncludesUUID": false,
   "otherReferences": Any<Array>,
-  "otherRelationships": Array [],
+  "otherRelationships": [],
   "packageFolder": "com/mycompany/myapp/",
   "packageName": "com.mycompany.myapp",
   "pagination": "no",
@@ -1161,7 +1161,7 @@ Object {
   "paginationPagination": false,
   "persistClass": "EntityA",
   "persistInstance": "entityA",
-  "primaryKey": Object {
+  "primaryKey": {
     "autoGenerate": true,
     "composite": false,
     "derived": false,
@@ -1169,8 +1169,8 @@ Object {
     "fields": Any<Array>,
     "hasLong": false,
     "hasUUID": true,
-    "ids": Array [
-      Object {
+    "ids": [
+      {
         "autoGenerate": true,
         "field": Any<Object>,
         "getter": "getId",
@@ -1178,14 +1178,14 @@ Object {
         "nameCapitalized": "Id",
         "nameDotted": "id",
         "nameDottedAsserted": "id!",
-        "relationshipsPath": Array [],
+        "relationshipsPath": [],
         "setter": "setId",
       },
     ],
     "name": "id",
     "nameCapitalized": "Id",
     "ownFields": Any<Array>,
-    "relationships": Array [],
+    "relationships": [],
     "tsType": "string",
     "type": "UUID",
     "typeLong": false,
@@ -1201,7 +1201,7 @@ Object {
   "reactiveUniqueEntityTypes": Any<Set>,
   "readOnly": false,
   "regularEagerRelations": Any<Array>,
-  "relationships": Array [],
+  "relationships": [],
   "relationshipsContainEagerLoad": false,
   "relationshipsContainOtherSideIgnore": false,
   "requiresPersistableImplementation": false,
@@ -1220,7 +1220,7 @@ Object {
   "skipUiGrouping": false,
   "springDataDescription": "Spring Data JPA",
   "tsKeyType": "string",
-  "uniqueEnums": Object {},
+  "uniqueEnums": {},
   "updatableEntity": false,
   "useMicroserviceJson": false,
   "validation": false,

@@ -161,7 +161,7 @@ describe('jdl - JDLOptions', () => {
 
       it('should use each option', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "skipClient",
   "skipServer",
 ]

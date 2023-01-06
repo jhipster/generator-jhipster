@@ -38,7 +38,7 @@ describe('jdl - ValidationConverter', () => {
 
         it('should convert it', () => {
           expect(convertedJDLValidations).toMatchInlineSnapshot(`
-Array [
+[
   JDLValidation {
     "name": "min",
     "value": 0,
@@ -111,7 +111,7 @@ Array [
 
         it('should ignore it', () => {
           expect(convertedJDLValidations).toMatchInlineSnapshot(`
-Array [
+[
   JDLValidation {
     "name": "min",
     "value": 0,

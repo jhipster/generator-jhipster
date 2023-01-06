@@ -49,16 +49,16 @@ describe('jdl - EntityConverter', () => {
 
       it('should convert them', () => {
         expect(convertedEntities).toMatchInlineSnapshot(`
-Array [
+[
   JDLEntity {
     "comment": "/** No comment */",
-    "fields": Object {},
+    "fields": {},
     "name": "A",
     "tableName": "A",
   },
   JDLEntity {
     "comment": undefined,
-    "fields": Object {},
+    "fields": {},
     "name": "B",
     "tableName": "b_table",
   },

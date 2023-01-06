@@ -73,7 +73,7 @@ describe('jdl - JDLEnum', () => {
 
     it('returns the comments by enum value', () => {
       jestExpect(result).toMatchInlineSnapshot(`
-Object {
+{
   "A": "first comment",
   "B": "second comment",
 }

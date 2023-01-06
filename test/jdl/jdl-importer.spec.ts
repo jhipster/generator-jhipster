@@ -654,112 +654,112 @@ paginate * with infinite-scroll
 
       it('should set them', () => {
         jestExpect(entityA).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tata",
   ],
   "dto": "no",
   "embedded": false,
   "entityTableName": "a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "A",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
         jestExpect(entityB).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tata",
   ],
   "dto": "no",
   "embedded": false,
   "entityTableName": "b",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "B",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
         jestExpect(entityCInTata).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tata",
     "tutu",
   ],
   "dto": "no",
   "embedded": false,
   "entityTableName": "c",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "C",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
         jestExpect(entityCInTutu).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tata",
     "tutu",
   ],
   "dto": "no",
   "embedded": false,
   "entityTableName": "c",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "C",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
         jestExpect(entityD).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tutu",
   ],
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "d",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "D",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "serviceClass",
 }
 `);
         jestExpect(entityE).toMatchInlineSnapshot(`
-Object {
-  "applications": Array [
+{
+  "applications": [
     "tutu",
   ],
   "dto": "no",
   "embedded": false,
   "entityTableName": "e",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "name": "E",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);
@@ -1087,8 +1087,8 @@ relationship OneToOne {
 
       it('should export them', () => {
         jestExpect(relationshipOnSource).toMatchInlineSnapshot(`
-Object {
-  "options": Object {
+{
+  "options": {
     "notId": "value",
     "something": true,
   },
@@ -1101,8 +1101,8 @@ Object {
 }
 `);
         jestExpect(relationshipOnDestination).toMatchInlineSnapshot(`
-Object {
-  "options": Object {
+{
+  "options": {
     "id": true,
   },
   "otherEntityName": "a",
@@ -1127,11 +1127,11 @@ Object {
         );
         const importState = importer.import();
         jestExpect(importState.exportedApplications[0]['generator-jhipster'].microfrontends).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "baseName": "foo",
   },
-  Object {
+  {
     "baseName": "bar",
   },
 ]

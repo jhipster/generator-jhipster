@@ -48,8 +48,8 @@ describe('jdl - ExportUtils', () => {
 
       it('should export the config', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
-Object {
-  "generator-jhipster": Object {
+{
+  "generator-jhipster": {
     "jhipsterVersion": "7.0.0",
   },
 }
@@ -86,14 +86,14 @@ Object {
 
       it('should export the config', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
-Object {
-  "generator-jhipster": Object {
+{
+  "generator-jhipster": {
     "jhipsterVersion": "7.0.0",
   },
-  "somethingElse": Object {
+  "somethingElse": {
     "answer": 42,
   },
-  "somethingNew": Object {
+  "somethingNew": {
     "question": "No comment",
   },
 }
@@ -133,15 +133,15 @@ Object {
 
       it('should export the config', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
-Object {
-  "generator-jhipster": Object {
+{
+  "generator-jhipster": {
     "creationTimestamp": "old",
     "jhipsterVersion": "7.0.0",
   },
-  "somethingElse": Object {
+  "somethingElse": {
     "answer": 42,
   },
-  "somethingNew": Object {
+  "somethingNew": {
     "question": "No comment",
   },
 }
@@ -180,15 +180,15 @@ Object {
 
       it('should export the config with new creationTimestamp', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
-Object {
-  "generator-jhipster": Object {
+{
+  "generator-jhipster": {
     "creationTimestamp": "new",
     "jhipsterVersion": "7.0.0",
   },
-  "somethingElse": Object {
+  "somethingElse": {
     "answer": 42,
   },
-  "somethingNew": Object {
+  "somethingNew": {
     "question": "No comment",
   },
 }

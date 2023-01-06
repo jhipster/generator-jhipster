@@ -217,7 +217,7 @@ describe('jdl - JDLObject', () => {
 
       it('should use each entity name', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "A",
   "B",
 ]
@@ -330,10 +330,10 @@ Array [
 
       it('should return them in an array', () => {
         jestExpect(returnedEntities).toMatchInlineSnapshot(`
-Array [
+[
   JDLEntity {
     "comment": undefined,
-    "fields": Object {},
+    "fields": {},
     "name": "toto",
     "tableName": "toto",
   },
@@ -422,7 +422,7 @@ Array [
 
       it('should use each entity name', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "A",
   "B",
 ]
@@ -576,7 +576,7 @@ Array [
 
       it('should use each enum name', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "A",
   "B",
 ]
@@ -719,7 +719,7 @@ Array [
 
       it('should use each relationship', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "OneToOne",
   "OneToMany",
 ]
@@ -862,7 +862,7 @@ Array [
 
       it('should use each option', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "skipClient",
   "skipServer",
 ]

@@ -517,7 +517,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           jestExpect(parsedConfig).toMatchInlineSnapshot(`
 JDLApplication {
   "config": JDLApplicationConfiguration {
-    "options": Object {
+    "options": {
       "applicationType": StringJDLApplicationConfigurationOption {
         "name": "applicationType",
         "quoted": false,
@@ -680,7 +680,7 @@ JDLApplication {
   },
   "options": JDLOptions {
     "optionSize": 0,
-    "options": Object {},
+    "options": {},
   },
 }
 `);
@@ -823,7 +823,7 @@ JDLDeployment {
 
         it('should add the application entities in the application object', () => {
           jestExpect(entityNames).toMatchInlineSnapshot(`
-Array [
+[
   "BankAccount",
 ]
 `);
@@ -901,12 +901,12 @@ Array [
             expect(customBinaryOption2.value).to.deep.equal('customValue2');
             expect(fieldAnnotation).to.deep.equal(true);
             jestExpect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
-Object {
+{
   "annotationOnSource": "toto",
 }
 `);
             jestExpect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
-Object {
+{
   "annotationOnDestination": true,
 }
 `);
@@ -957,12 +957,12 @@ Object {
             expect(customBinaryOption2.value).to.deep.equal('customValue2');
             expect(fieldAnnotation).to.deep.equal(true);
             jestExpect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
-Object {
+{
   "annotationOnSource": true,
 }
 `);
             jestExpect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
-Object {
+{
   "annotationOnDestination": true,
 }
 `);

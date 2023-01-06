@@ -51,7 +51,7 @@ describe('jdl - UnaryOptions', () => {
 
       it('should loop over the unary options', () => {
         jestExpect(result).toMatchInlineSnapshot(`
-Array [
+[
   "skipClient",
   "skipServer",
   "noFluentMethod",

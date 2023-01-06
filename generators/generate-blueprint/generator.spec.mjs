@@ -81,8 +81,8 @@ describe(`generator - ${generator}`, () => {
       });
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
-Object {
-  ".yo-rc.json": Object {
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
 }
@@ -102,17 +102,17 @@ Object {
       });
       it('should write java files with gradle build tool and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
-Object {
-  ".blueprint/app/generator.mjs": Object {
+{
+  ".blueprint/app/generator.mjs": {
     "stateCleared": "modified",
   },
-  ".blueprint/app/index.mjs": Object {
+  ".blueprint/app/index.mjs": {
     "stateCleared": "modified",
   },
-  ".blueprint/app/templates/template-file-app.ejs": Object {
+  ".blueprint/app/templates/template-file-app.ejs": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": Object {
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
 }

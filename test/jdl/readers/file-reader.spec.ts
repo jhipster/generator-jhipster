@@ -88,7 +88,7 @@ describe('jdl - FileReader', () => {
 
       it('should read them', () => {
         jestExpect(content).toMatchInlineSnapshot(`
-Array [
+[
   "Hello...",
   " World!",
 ]

@@ -133,7 +133,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
 
         it('should convert the options', () => {
           jestExpect(convertedOptions).toMatchInlineSnapshot(`
-Object {
+{
   "angularJSSuffix": "suffix",
   "clientRootFolder": "../client_root_folder",
   "dto": "mapstruct",
@@ -187,7 +187,7 @@ Object {
         });
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedOptions).toMatchInlineSnapshot(`
-Object {
+{
   "dto": "mapstruct",
   "service": "serviceClass",
 }
@@ -229,7 +229,7 @@ Object {
         });
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedOptions).toMatchInlineSnapshot(`
-Object {
+{
   "jpaMetamodelFiltering": true,
   "service": "serviceClass",
 }
@@ -261,7 +261,7 @@ Object {
 
         it('should prevent the entities from being searched', () => {
           jestExpect(convertedOptions).toMatchInlineSnapshot(`
-Object {
+{
   "searchEngine": false,
 }
 `);

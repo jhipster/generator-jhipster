@@ -294,7 +294,7 @@ export * from './entityFolderName/entityFileName.state';`;
       it('return SQL', () => {
         jestExpect(Object.fromEntries(Object.values(CommonDBTypes).map(dbType => [dbType, BaseGenerator.getTypescriptType(dbType)])))
           .toMatchInlineSnapshot(`
-Object {
+{
   "AnyBlob": "string",
   "BigDecimal": "number",
   "Blob": "string",

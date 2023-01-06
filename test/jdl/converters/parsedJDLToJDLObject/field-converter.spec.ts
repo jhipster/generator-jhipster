@@ -45,9 +45,9 @@ describe('jdl - FieldConverter', () => {
 JDLField {
   "comment": undefined,
   "name": "anAwesomeField",
-  "options": Object {},
+  "options": {},
   "type": "String",
-  "validations": Object {},
+  "validations": {},
 }
 `);
         });

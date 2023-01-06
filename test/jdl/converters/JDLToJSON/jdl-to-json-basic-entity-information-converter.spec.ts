@@ -101,18 +101,18 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
         it('should convert the entity', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
-  "applications": Array [],
+  "applications": [],
   "dto": "no",
   "embedded": false,
   "entityTableName": "entity_a",
-  "fields": Array [],
+  "fields": [],
   "fluentMethods": true,
   "javadoc": "The best entity",
   "jpaMetamodelFiltering": false,
   "name": "A",
   "pagination": "no",
   "readOnly": false,
-  "relationships": Array [],
+  "relationships": [],
   "service": "no",
 }
 `);

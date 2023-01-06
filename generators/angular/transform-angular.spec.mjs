@@ -107,8 +107,8 @@ describe('generator - angular - transform', () => {
 `;
           expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
-<input placeholder=\\"translated-value-global.form.currentpassword.placeholder1-0\\"/>
-<input placeholder=\\"translated-value-global.form.currentpassword.placeholder2-1\\"/>
+<input placeholder="translated-value-global.form.currentpassword.placeholder1-0"/>
+<input placeholder="translated-value-global.form.currentpassword.placeholder2-1"/>
 "
 `);
         });
@@ -120,8 +120,8 @@ describe('generator - angular - transform', () => {
 `;
           expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
-<input title=\\"translated-value-global.form.currentpassword.title1-0\\"/>
-<input title=\\"translated-value-global.form.currentpassword.title2-1\\"/>
+<input title="translated-value-global.form.currentpassword.title1-0"/>
+<input title="translated-value-global.form.currentpassword.title2-1"/>
 "
 `);
         });
