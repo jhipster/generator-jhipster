@@ -30,6 +30,7 @@ export const GENERATOR_BOOTSTRAP_APPLICATION = 'bootstrap-application';
 export const GENERATOR_BOOTSTRAP_APPLICATION_BASE = 'bootstrap-application-base';
 export const GENERATOR_BOOTSTRAP_APPLICATION_CLIENT = 'bootstrap-application-client';
 export const GENERATOR_BOOTSTRAP_APPLICATION_SERVER = 'bootstrap-application-server';
+export const GENERATOR_CASSANDRA = 'cassandra';
 export const GENERATOR_CI_CD = 'ci-cd';
 export const GENERATOR_CLIENT = 'client';
 export const GENERATOR_CLOUDFOUNDRY = 'cloudfoundry';

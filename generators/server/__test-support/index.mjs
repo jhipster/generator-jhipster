@@ -7,6 +7,7 @@ const { KAFKA } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
 
 export const mockedGenerators = [
+  'jhipster:cassandra',
   'jhipster:common',
   'jhipster:couchbase',
   'jhipster:docker',

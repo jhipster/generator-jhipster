@@ -90,6 +90,7 @@ echo "::endgroup::"
 echo "::group::Check Server"
 git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap-application-server' \
+  'generators/cassandra' \
   'generators/couchbase' \
   'generators/elasticsearch' \
   'generators/gradle' \
