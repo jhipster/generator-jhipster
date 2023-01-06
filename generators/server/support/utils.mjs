@@ -85,9 +85,9 @@ export function mergeSections(...allFiles) {
   return generated;
 }
 
-const replaceFilePathVariables = (data, filePath) => filePath?.replace(/_package_/, data.package)?.replace(/_\w*/, '');
+export const replaceFilePathVariables = (data, filePath) => filePath?.replace(/_package_/, data.package)?.replace(/_\w*/, '');
 
-const replaceEntityFilePathVariables = (data, filePath) => {
+export const replaceEntityFilePathVariables = (data, filePath) => {
   filePath = filePath
     ?.replace(/_package_/, data.entityJavaPackageFolder)
     ?.replace(/_PersistClass_/, data.persistClass)

@@ -23,7 +23,7 @@ import { cleanupOldFiles } from './entity-cleanup.mjs';
 import { getEnumInfo } from '../utils.mjs';
 import { SERVER_MAIN_SRC_DIR, TEST_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { databaseTypes, entityOptions, cacheTypes } from '../../jdl/jhipster/index.mjs';
-import { moveToJavaEntityPackageSrcDir, moveToJavaEntityPackageTestDir } from './support/utils.mjs';
+import { moveToJavaEntityPackageSrcDir, moveToJavaEntityPackageTestDir, replaceEntityFilePathVariables } from './support/utils.mjs';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MapperTypes, ServiceTypes } = entityOptions;
@@ -212,9 +212,14 @@ export const serviceFiles = {
     },
     {
       condition: generator => generator.service === SERVICE_CLASS && !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['service/impl/_EntityClass_ServiceImpl.java'],
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/service/impl/_EntityClass_ServiceImpl.java',
+          renameTo: generator =>
+            replaceEntityFilePathVariables(generator, `${generator.entityAbsoluteFolder}/service/_EntityClass_ServiceImpl.java`),
+        },
+      ],
     },
   ],
 };
