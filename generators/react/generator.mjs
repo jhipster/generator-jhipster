@@ -30,6 +30,7 @@ import {
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.mjs';
+import { LANGUAGES } from '../generator-constants.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
@@ -208,5 +209,13 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   generateEntityClientEnumImports(fields) {
     return getClientEnumImportsFormat(fields, REACT);
+  }
+
+  /**
+   * @private
+   * get all the languages options supported by JHipster
+   */
+  getAllSupportedLanguageOptions() {
+    return LANGUAGES;
   }
 }

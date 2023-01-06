@@ -86,8 +86,21 @@ import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
 import checkJava from './support/checks/check-java.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
-import { checkJavaCompliant, getApiDescription, javadoc } from './support/index.mjs';
+import { getApiDescription, javadoc } from './support/index.mjs';
 
+const dbTypes = fieldTypes;
+const {
+  STRING: TYPE_STRING,
+  INTEGER: TYPE_INTEGER,
+  LONG: TYPE_LONG,
+  BIG_DECIMAL: TYPE_BIG_DECIMAL,
+  FLOAT: TYPE_FLOAT,
+  DOUBLE: TYPE_DOUBLE,
+  LOCAL_DATE: TYPE_LOCAL_DATE,
+  ZONED_DATE_TIME: TYPE_ZONED_DATE_TIME,
+  INSTANT: TYPE_INSTANT,
+  DURATION: TYPE_DURATION,
+} = dbTypes.CommonDBTypes;
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -953,5 +966,32 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    */
   formatAsClassJavadoc(text) {
     return javadoc(text, 0);
+  }
+
+  /**
+   * @private
+   * Return the method name which converts the filter to specification
+   * @param {string} fieldType
+   */
+  getSpecificationBuilder(fieldType) {
+    if (
+      [
+        TYPE_INTEGER,
+        TYPE_LONG,
+        TYPE_FLOAT,
+        TYPE_DOUBLE,
+        TYPE_BIG_DECIMAL,
+        TYPE_LOCAL_DATE,
+        TYPE_ZONED_DATE_TIME,
+        TYPE_INSTANT,
+        TYPE_DURATION,
+      ].includes(fieldType)
+    ) {
+      return 'buildRangeSpecification';
+    }
+    if (fieldType === TYPE_STRING) {
+      return 'buildStringSpecification';
+    }
+    return 'buildSpecification';
   }
 }

@@ -12,11 +12,18 @@ import { stripMargin } from '../generators/base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../generators/server/support/index.mjs';
 import { generateEntityClientImports, getTypescriptType } from '../generators/client/support/index.mjs';
 
+// eslint-disable-next-line import/no-named-default
+import { default as JHipsterLanguagesGeneratorClass } from '../generators/languages/generator.mjs';
+// eslint-disable-next-line import/no-named-default
+import { default as JHipsterAngularGeneratorClass } from '../generators/angular/generator.mjs';
+
 const { CASSANDRA, MONGODB, MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
 const { CommonDBTypes } = fieldTypes;
 const BaseGenerator = BaseGeneratorClass.prototype;
 const JHipsterServerGenerator = JHipsterServerGeneratorClass.prototype;
+const LanguagesGenerator = JHipsterLanguagesGeneratorClass.prototype;
+const AngularGenerator = JHipsterAngularGeneratorClass.prototype;
 const JHipsterDatabaseChangelogLiquibase = DatabaseChangelogLiquibaseClass.prototype;
 
 const NO_DTO = MapperTypes.NO;
@@ -116,12 +123,12 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('generateLanguageOptions', () => {
     describe('when called with empty array', () => {
       it('return empty', () => {
-        expect(BaseGenerator.generateLanguageOptions([])).to.eql([]);
+        expect(LanguagesGenerator.generateLanguageOptions([])).to.eql([]);
       });
     });
     describe('when called with languages array', () => {
       it('return languages pipe syntax', () => {
-        expect(BaseGenerator.generateLanguageOptions(['en', 'fr'])).to.eql([
+        expect(LanguagesGenerator.generateLanguageOptions(['en', 'fr'])).to.eql([
           `'en': { name: 'English' }`, // eslint-disable-line
           `'fr': { name: 'Français' }`, // eslint-disable-line
         ]);
@@ -132,12 +139,12 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('skipLanguageForLocale', () => {
     describe('when called with english', () => {
       it('return false', () => {
-        expect(BaseGenerator.skipLanguageForLocale('en')).to.equal(false);
+        expect(AngularGenerator.skipLanguageForLocale('en')).to.equal(false);
       });
     });
     describe('when called with languages ar-ly', () => {
       it('return true', () => {
-        expect(BaseGenerator.skipLanguageForLocale('ar-ly')).to.be.true;
+        expect(AngularGenerator.skipLanguageForLocale('ar-ly')).to.be.true;
       });
     });
   });

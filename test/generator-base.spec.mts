@@ -39,7 +39,7 @@ describe('generator - base', () => {
       });
     });
   });
-  describe('getAllSupportedLanguageOptions', () => {
+  describe('getAllSupportedLanguage', () => {
     describe('when called', () => {
       it('returns an array', () => {
         expect(BaseGenerator.getAllSupportedLanguages()).to.not.have.length(0);

@@ -29,6 +29,7 @@ import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.mjs';
+import { LANGUAGES } from '../generator-constants.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 /**
@@ -203,5 +204,15 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   getTypescriptKeyType(primaryKey) {
     return getTSKeyType(primaryKey);
+  }
+
+  /**
+   * @private
+   * Check if language should be skipped for locale setting
+   * @param {string} language
+   */
+  skipLanguageForLocale(language) {
+    const out = LANGUAGES.filter(lang => language === lang.value);
+    return out && out[0] && !!out[0].skipForLocale;
   }
 }

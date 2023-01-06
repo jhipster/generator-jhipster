@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import detectLanguage from './detect-language.mjs';
+import { LANGUAGES } from '../generator-constants.mjs';
 
 export async function askI18n() {
   if (!this.askForMoreLanguages) return;
@@ -33,7 +34,7 @@ export async function askI18n() {
         type: 'list',
         name: 'nativeLanguage',
         message: 'Please choose the native language of the application',
-        choices: () => this.getAllSupportedLanguageOptions(),
+        choices: () => LANGUAGES,
         default: () => (this.options.reproducible ? 'en' : detectLanguage()),
         store: true,
       },
@@ -55,7 +56,7 @@ export async function askForLanguages() {
       name: 'languages',
       message: 'Please choose additional languages to install',
       choices: () => {
-        const languageOptions = this.getAllSupportedLanguageOptions();
+        const languageOptions = LANGUAGES;
         const nativeLanguage = this.jhipsterConfig.nativeLanguage;
         const currentLanguages = this.jhipsterConfig.languages || [];
         return languageOptions.filter(l => l.value !== nativeLanguage && !currentLanguages.includes(l.value));

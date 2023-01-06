@@ -21,10 +21,9 @@ import chalk from 'chalk';
 import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
+import { SERVER_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR, LANGUAGES } from '../generator-constants.mjs';
 import { askForLanguages, askI18n } from './prompts.mjs';
 import statistics from '../statistics.cjs';
-
 import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
 import { clientI18nFiles } from './files.mjs';
 import { writeEntityFiles } from './entity-files.mjs';
@@ -88,9 +87,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           this.log('\n');
           this.error(
             `Unsupported language "${language}" passed as argument to language generator.` +
-              `\nSupported languages: ${_.map(this.getAllSupportedLanguageOptions(), o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join(
-                ''
-              )}`
+              `\nSupported languages: ${_.map(LANGUAGES, o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join('')}`
           );
         }
       });
@@ -415,6 +412,17 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   /**
+   * @private
+   * Generate language objects in array of "'en': { name: 'English' }" format
+   * @param {string[]} languages
+   * @returns generated language options
+   */
+  generateLanguageOptions(languages) {
+    const selectedLangs = LANGUAGES.filter(lang => languages.includes(lang.value));
+    return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
+  }
+
+  /**
    * Update Languages In Language Pipe
    *
    * @param languages
@@ -425,7 +433,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       : `${application.clientSrcDir}/app/config/translation.ts`;
     try {
       let content = '{\n';
-      this.generateLanguageOptions(languages, application.clientFramework).forEach((ln, i) => {
+      this.generateLanguageOptions(languages).forEach((ln, i) => {
         content += `        ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
       });
       content += '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    };';
@@ -573,7 +581,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     try {
       let content = 'languages: {\n';
       if (application.enableTranslation) {
-        this.generateLanguageOptions(languages, application.clientFramework).forEach((ln, i) => {
+        this.generateLanguageOptions(languages).forEach((ln, i) => {
           content += `      ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
         });
       }

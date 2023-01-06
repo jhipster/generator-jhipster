@@ -16,41 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { rmSync, statSync } from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import Generator from 'yeoman-generator';
 import chalk from 'chalk';
 
-import { databaseTypes, buildToolTypes, fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { databaseData } from '../sql/support/index.mjs';
 import { stringify } from '../../utils/index.mjs';
 import { fieldIsEnum } from '../../utils/field.mjs';
 import { deleteFile, deleteFolder, renderContent } from './support/index.mjs';
 
-const { REACT } = clientFrameworkTypes;
 const dbTypes = fieldTypes;
 
-const {
-  STRING: TYPE_STRING,
-  INTEGER: TYPE_INTEGER,
-  LONG: TYPE_LONG,
-  BIG_DECIMAL: TYPE_BIG_DECIMAL,
-  FLOAT: TYPE_FLOAT,
-  DOUBLE: TYPE_DOUBLE,
-  UUID: TYPE_UUID,
-  LOCAL_DATE: TYPE_LOCAL_DATE,
-  ZONED_DATE_TIME: TYPE_ZONED_DATE_TIME,
-  INSTANT: TYPE_INSTANT,
-  DURATION: TYPE_DURATION,
-} = dbTypes.CommonDBTypes;
+const { STRING: TYPE_STRING, LONG: TYPE_LONG, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;
 
 const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
 
 const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL } = databaseTypes;
-
-const { MAVEN } = buildToolTypes;
 
 /**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
@@ -164,59 +148,6 @@ export default class PrivateBase extends Generator {
     await renderContent(source, _this, _context, options, res => {
       callback(res);
     });
-  }
-
-  /**
-   * @private
-   * Generate language objects in array of "'en': { name: 'English' }" format
-   * @param {string[]} languages
-   * @param clientFramework
-   * @returns generated language options
-   */
-  generateLanguageOptions(languages, clientFramework) {
-    const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
-    if (clientFramework === REACT) {
-      return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
-    }
-
-    return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
-  }
-
-  /**
-   * @private
-   * Check if language should be skipped for locale setting
-   * @param {string} language
-   */
-  skipLanguageForLocale(language) {
-    const out = this.getAllSupportedLanguageOptions().filter(lang => language === lang.value);
-    return out && out[0] && !!out[0].skipForLocale;
-  }
-
-  /**
-   * @private
-   * Return the method name which converts the filter to specification
-   * @param {string} fieldType
-   */
-  getSpecificationBuilder(fieldType) {
-    if (
-      [
-        TYPE_INTEGER,
-        TYPE_LONG,
-        TYPE_FLOAT,
-        TYPE_DOUBLE,
-        TYPE_BIG_DECIMAL,
-        TYPE_LOCAL_DATE,
-        TYPE_ZONED_DATE_TIME,
-        TYPE_INSTANT,
-        TYPE_DURATION,
-      ].includes(fieldType)
-    ) {
-      return 'buildRangeSpecification';
-    }
-    if (fieldType === TYPE_STRING) {
-      return 'buildStringSpecification';
-    }
-    return 'buildSpecification';
   }
 
   /**

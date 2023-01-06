@@ -360,7 +360,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * get all the languages supported by JHipster
    */
   getAllSupportedLanguages() {
-    return _.map(this.getAllSupportedLanguageOptions(), 'value');
+    return _.map(LANGUAGES, 'value');
   }
 
   /**
@@ -380,7 +380,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     if (!languages) {
       return false;
     }
-    const rtlLanguages = this.getAllSupportedLanguageOptions().filter(langObj => langObj.rtl);
+    const rtlLanguages = LANGUAGES.filter(langObj => langObj.rtl);
     return languages.some(lang => !!rtlLanguages.find(langObj => langObj.value === lang));
   }
 
@@ -391,7 +391,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} language - language key
    */
   getLocaleId(language) {
-    const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
+    const langObj = LANGUAGES.find(langObj => langObj.value === language);
     return langObj.localeId || language;
   }
 
@@ -402,16 +402,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} language - language key
    */
   getDayjsLocaleId(language) {
-    const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
+    const langObj = LANGUAGES.find(langObj => langObj.value === language);
     return langObj.dayjsLocaleId || language;
-  }
-
-  /**
-   * @private
-   * get all the languages options supported by JHipster
-   */
-  getAllSupportedLanguageOptions() {
-    return LANGUAGES;
   }
 
   /**
