@@ -336,10 +336,11 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (cacheProviderInfinispan) { _%>
     implementation "org.infinispan:infinispan-hibernate-cache-v60"
     implementation group: "org.infinispan", name: "infinispan-spring-boot-starter-embedded", {
+        exclude group: "org.infinispan", module: "infinispan-commons"
         exclude group: "org.infinispan", module: "infinispan-core"
     }
+    implementation "org.infinispan:infinispan-commons-jakarta"
     implementation "org.infinispan:infinispan-core-jakarta"
-    implementation "org.infinispan:infinispan-jcache"
     compileOnly "org.infinispan:infinispan-component-annotations"
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
