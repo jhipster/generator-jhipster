@@ -28,14 +28,13 @@ import {
   prepareEntityPrimaryKeyForTemplates,
 } from '../../utils/entity.mjs';
 import type { SpringBootApplication } from '../server/types.mjs';
-import { authenticationTypes, fieldTypes, buildToolTypes, relationshipTypes } from '../../jdl/jhipster/index.mjs';
+import { authenticationTypes, fieldTypes, buildToolTypes } from '../../jdl/jhipster/index.mjs';
 import { prepareFieldForLiquibaseTemplates } from '../../utils/liquibase.mjs';
 import { getPomVersionProperties } from '../server/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
 
 const { GRADLE } = buildToolTypes;
-const { MANY_TO_MANY, ONE_TO_MANY, ONE_TO_ONE } = relationshipTypes;
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
 const { LONG: TYPE_LONG } = CommonDBTypes;
@@ -60,9 +59,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
 
         application.gradleVersion = control.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.backendType = 'Java';
-        application.temporaryDir = application.buildTool === GRADLE ? 'build/' : 'target/';
-        application.buildDir = `${application.temporaryDir}${application.buildTool === GRADLE ? 'resources/main/' : 'classes/'}`;
-        application.clientDistDir = `${application.buildDir}${CLIENT_DIST_DIR}`;
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/templates/pom.xml'));
         application.javaDependencies = this.prepareDependencies(
@@ -117,10 +113,10 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
           for (const relationship of entity.relationships) {
             if (
               relationship.unidirectional &&
-              (relationship.relationshipType === MANY_TO_MANY ||
+              (relationship.relationshipType === 'many-to-many' ||
                 // OneToOne back reference is required due to filtering
-                relationship.relationshipType === ONE_TO_ONE ||
-                (relationship.relationshipType === ONE_TO_MANY && !entity.databaseTypeNeo4j && !entity.databaseTypeNo))
+                relationship.relationshipType === 'one-to-one' ||
+                (relationship.relationshipType === 'one-to-many' && !entity.databaseTypeNeo4j && !entity.databaseTypeNo))
             ) {
               relationship.otherEntityRelationshipName = _.lowerFirst(entity.name);
               relationship.otherEntity.relationships.push({
