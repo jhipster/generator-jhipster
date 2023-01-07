@@ -1801,6 +1801,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           ...(options?.renderOptions ?? {}),
           // Set root for ejs to lookup for partials.
           root: rootTemplatesAbsolutePath,
+          cache: false,
         };
         // TODO drop for v8 final release
         const data = jhipster7Proxy(this, context, { ignoreWarnings: true });
