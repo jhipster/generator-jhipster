@@ -29,6 +29,7 @@ import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   getTypescriptKeyType as getTSKeyType,
   generateTestEntityId as getTestEntityId,
+  generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
 } from '../client/support/index.mjs';
 import { LANGUAGES } from '../generator-constants.mjs';
 
@@ -219,5 +220,9 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   generateTestEntityId(primaryKey, index = 0, wrapped = true) {
     return getTestEntityId(primaryKey, index, wrapped);
+  }
+
+  generateTestEntityPrimaryKey(primaryKey, index) {
+    return getTestEntityPrimaryKey(primaryKey, index);
   }
 }

@@ -30,9 +30,6 @@ const dbTypes = fieldTypes;
 
 const { STRING: TYPE_STRING, LONG: TYPE_LONG, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;
 
-const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
-const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
-
 const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL } = databaseTypes;
 
 /**
@@ -151,15 +148,6 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * @param {string} fieldType
-   * @returns {boolean} true if type is filterable; false otherwise.
-   */
-  isFilterableType(fieldType) {
-    return ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(fieldType);
-  }
-
-  /**
-   * @private
    * Rebuild client for Angular
    */
   rebuildClient() {
@@ -168,22 +156,6 @@ export default class PrivateBase extends Generator {
     this.spawnCommand(this.clientPackageManager, ['run', 'webapp:build']).on('close', () => {
       done();
     });
-  }
-
-  /**
-   * @private
-   * Generate a test entity, according to the type
-   *
-   * @param {any} primaryKey - primary key definition.
-   * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
-   */
-  generateTestEntityPrimaryKey(primaryKey, index) {
-    return JSON.stringify(
-      this.generateTestEntity(
-        primaryKey.fields.map(f => f.reference),
-        index
-      )
-    );
   }
 
   /**
@@ -223,34 +195,6 @@ export default class PrivateBase extends Generator {
     return `{
   ${[...entries, ...Object.entries(additionalFields)].map(([key, value]) => `${key}: ${value}`).join(',\n  ')}
 }`;
-  }
-
-  /**
-   * @private
-   * Generate a test entity, according to the type
-   *
-   * @param references
-   * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
-   */
-  generateTestEntity(references, index = 'random') {
-    const random = index === 'random';
-    const entries = references
-      .map(reference => {
-        if (random && reference.field) {
-          const field = reference.field;
-          const fakeData = field.generateFakeData('json-serializable');
-          if (reference.field.fieldWithContentType) {
-            return [
-              [reference.name, fakeData],
-              [field.contentTypeFieldName, 'unknown'],
-            ];
-          }
-          return [[reference.name, fakeData]];
-        }
-        return [[reference.name, this.generateTestEntityId(reference.type, index, false)]];
-      })
-      .flat();
-    return Object.fromEntries(entries);
   }
 
   /**

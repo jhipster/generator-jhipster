@@ -36,6 +36,7 @@ import type {
   WritingEntitiesTaskGroup,
   WritingTaskGroup,
 } from '../base-application/tasks.mjs';
+import { generateTestEntity as entityWithFakeValues } from '../client/support/index.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -281,5 +282,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressAp
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  generateTestEntity(references, index = 'random') {
+    return entityWithFakeValues(references);
   }
 }

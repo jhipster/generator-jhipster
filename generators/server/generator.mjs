@@ -101,6 +101,9 @@ const {
   INSTANT: TYPE_INSTANT,
   DURATION: TYPE_DURATION,
 } = dbTypes.CommonDBTypes;
+const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
+const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
+
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -993,5 +996,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       return 'buildStringSpecification';
     }
     return 'buildSpecification';
+  }
+
+  /**
+   * @private
+   * @param {string} fieldType
+   * @returns {boolean} true if type is filterable; false otherwise.
+   */
+  isFilterableType(fieldType) {
+    return ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(fieldType);
   }
 }

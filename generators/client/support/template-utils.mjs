@@ -101,3 +101,47 @@ export const generateTestEntityId = (primaryKey, index = 0, wrapped = true) => {
   }
   return value;
 };
+
+/**
+ * @private
+ * Generate a test entity, according to the type
+ *
+ * @param references
+ * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
+ */
+export const generateTestEntity = (references, index = 'random') => {
+  const random = index === 'random';
+  const entries = references
+    .map(reference => {
+      if (random && reference.field) {
+        const field = reference.field;
+        const fakeData = field.generateFakeData('json-serializable');
+        if (reference.field.fieldWithContentType) {
+          return [
+            [reference.name, fakeData],
+            [field.contentTypeFieldName, 'unknown'],
+          ];
+        }
+        return [[reference.name, fakeData]];
+      }
+      return [[reference.name, generateTestEntityId(reference.type, index, false)]];
+    })
+    .flat();
+  return Object.fromEntries(entries);
+};
+
+/**
+ * @private
+ * Generate a test entity, according to the type
+ *
+ * @param {any} primaryKey - primary key definition.
+ * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
+ */
+export const generateTestEntityPrimaryKey = (primaryKey, index) => {
+  return JSON.stringify(
+    generateTestEntity(
+      primaryKey.fields.map(f => f.reference),
+      index
+    )
+  );
+};
