@@ -67,7 +67,7 @@ inputs:
   jhipster-bom-branch:
     description: 'JHipster BOM branch'
     required: false
-    default: skip_ci-infinispan
+    default: revert-1121-skip_ci-infinispan
   jhipster-bom-directory:
     description: 'JHipster BOM path'
     required: false
