@@ -175,7 +175,7 @@ import tech.jhipster.config.JHipsterProperties;
 <%_ } _%>
 
 @Configuration
-@EnableCaching
+@EnableCaching(proxyTargetClass = true)
 public class CacheConfiguration {
 <%_ if (!cacheProviderNo) { _%>
     private GitProperties gitProperties;
