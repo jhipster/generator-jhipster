@@ -35,7 +35,7 @@ const deleteFolder = (context, folder) => {
       rmSync(folder, { recursive: true });
     }
   } catch (error) {
-    this.log(`Could not remove folder ${folder}`);
+    context.log(`Could not remove folder ${folder}`);
   }
 };
 

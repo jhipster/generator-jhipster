@@ -24,7 +24,6 @@ import chalk from 'chalk';
 import { databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { databaseData } from '../sql/support/index.mjs';
 import { stringify } from '../../utils/index.mjs';
-import { fieldIsEnum } from '../../utils/field.mjs';
 import { deleteFile, deleteFolder, renderContent } from './support/index.mjs';
 
 const dbTypes = fieldTypes;
