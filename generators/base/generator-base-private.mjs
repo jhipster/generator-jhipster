@@ -173,32 +173,6 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
-   * Generate a primary key, according to the type
-   *
-   * @param {any} primaryKey - primary key definition
-   * @param {number} index - the index of the primary key, currently it's possible to generate 2 values, index = 0 - first key (default), otherwise second key
-   * @param {boolean} [wrapped=true] - wrapped values for required types.
-   */
-  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
-    if (typeof primaryKey === 'object') {
-      primaryKey = primaryKey.type;
-    }
-    let value;
-    if (primaryKey === TYPE_STRING) {
-      value = index === 0 ? 'ABC' : 'CBA';
-    } else if (primaryKey === TYPE_UUID) {
-      value = index === 0 ? '9fec3727-3421-4967-b213-ba36557ca194' : '1361f429-3817-4123-8ee3-fdf8943310b2';
-    } else {
-      value = index === 0 ? 123 : 456;
-    }
-    if (wrapped && [TYPE_UUID, TYPE_STRING].includes(primaryKey)) {
-      return `'${value}'`;
-    }
-    return value;
-  }
-
-  /**
-   * @private
    * Generate a test entity, according to the type
    *
    * @param {any} primaryKey - primary key definition.

@@ -28,6 +28,7 @@ import { addIconInImport } from './support/index.mjs';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   getTypescriptKeyType as getTSKeyType,
+  generateTestEntityId as getTestEntityId,
 } from '../client/support/index.mjs';
 import { LANGUAGES } from '../generator-constants.mjs';
 
@@ -214,5 +215,9 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   skipLanguageForLocale(language) {
     const out = LANGUAGES.filter(lang => language === lang.value);
     return out && out[0] && !!out[0].skipForLocale;
+  }
+
+  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
+    return getTestEntityId(primaryKey, index, wrapped);
   }
 }

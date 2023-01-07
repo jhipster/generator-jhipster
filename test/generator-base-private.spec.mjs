@@ -10,7 +10,7 @@ import { default as JHipsterServerGeneratorClass } from '../generators/server/ge
 import { default as DatabaseChangelogLiquibaseClass } from '../generators/liquibase-changelogs/index.mjs';
 import { stripMargin } from '../generators/base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../generators/server/support/index.mjs';
-import { generateEntityClientImports, getTypescriptType } from '../generators/client/support/index.mjs';
+import { generateEntityClientImports, getTypescriptType, generateTestEntityId } from '../generators/client/support/index.mjs';
 
 // eslint-disable-next-line import/no-named-default
 import { default as JHipsterLanguagesGeneratorClass } from '../generators/languages/generator.mjs';
@@ -152,17 +152,17 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('generateTestEntityId', () => {
     describe('when called with int', () => {
       it('return 123', () => {
-        expect(BaseGenerator.generateTestEntityId('int')).to.equal(123);
+        expect(generateTestEntityId('int')).to.equal(123);
       });
     });
     describe('when called with String', () => {
       it("return 'ABC'", () => {
-        expect(BaseGenerator.generateTestEntityId('String')).to.equal("'ABC'");
+        expect(generateTestEntityId('String')).to.equal("'ABC'");
       });
     });
     describe('when called with UUID', () => {
       it("return '9fec3727-3421-4967-b213-ba36557ca194'", () => {
-        expect(BaseGenerator.generateTestEntityId('UUID')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
+        expect(generateTestEntityId('UUID')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
       });
     });
   });

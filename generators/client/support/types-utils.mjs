@@ -33,14 +33,14 @@ const {
 
 /**
  * return the input if it's a type, otherwise returns the type attribute of the input
- * @param primaryKey
+ * @param key
  * @returns {*}
  */
-const getEntryIfTypeOrTypeAttribute = primaryKey => {
-  if (typeof primaryKey === 'object') {
-    return primaryKey.type;
+export const getEntryIfTypeOrTypeAttribute = key => {
+  if (typeof key === 'object') {
+    return key.type;
   }
-  return primaryKey;
+  return key;
 };
 /**
  * @private

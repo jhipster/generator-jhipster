@@ -28,6 +28,7 @@ import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
+  generateTestEntityId as getTestEntityId,
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.mjs';
 
@@ -201,5 +202,9 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   generateEntityClientEnumImports(fields) {
     return getClientEnumImportsFormat(fields, VUE);
+  }
+
+  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
+    return getTestEntityId(primaryKey, index, wrapped);
   }
 }

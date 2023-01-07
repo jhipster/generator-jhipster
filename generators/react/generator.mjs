@@ -29,6 +29,7 @@ import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
+  generateTestEntityId as getTestEntityId,
 } from '../client/support/index.mjs';
 import { LANGUAGES } from '../generator-constants.mjs';
 
@@ -217,5 +218,9 @@ export default class ReactGenerator extends BaseApplicationGenerator {
    */
   getAllSupportedLanguageOptions() {
     return LANGUAGES;
+  }
+
+  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
+    return getTestEntityId(primaryKey, index, wrapped);
   }
 }
