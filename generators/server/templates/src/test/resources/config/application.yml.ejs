@@ -68,6 +68,13 @@ spring:
     exclude:
       - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
 <%_ } _%>
+<%_ if (cacheProviderInfinispan) { _%>
+  cache:
+    cache-names: 
+      - usersByLogin
+      - usersByEmail
+    type: <%= cacheProvider %>
+<%_ } _%>
 <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul || messageBrokerKafka) { _%>
   cloud:
 <%_ } _%>
