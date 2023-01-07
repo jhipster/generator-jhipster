@@ -217,7 +217,7 @@ export const serviceFiles = {
         {
           file: 'package/service/impl/_EntityClass_ServiceImpl.java',
           renameTo: generator =>
-            replaceEntityFilePathVariables(generator, `${generator.entityAbsoluteFolder}/service/_EntityClass_ServiceImpl.java`),
+            replaceEntityFilePathVariables(generator, `${generator.entityAbsoluteFolder}/service/_EntityClass_Service.java`),
         },
       ],
     },
