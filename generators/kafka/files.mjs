@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/utils.mjs';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/utils.mjs';
 
 /**
  * @type {import('../base/api.mjs').WriteFileSection}

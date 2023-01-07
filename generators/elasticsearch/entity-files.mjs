@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import { moveToJavaEntityPackageSrcDir } from '../server/utils.mjs';
+import { moveToJavaEntityPackageSrcDir } from '../server/support/utils.mjs';
 
 export const entityFiles = {
   elasticSearchFiles: [

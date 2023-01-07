@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/utils.mjs';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/utils.mjs';
 
 export const couchbaseFiles = {
   serverJavaConfig: [
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['repository/JHipsterCouchbaseRepository.java'],
+      templates: ['repository/JHipsterCouchbaseRepository.java', 'config/DatabaseConfiguration.java'],
     },
     {
       condition: data => data.authenticationTypeSession && !data.reactive && data.generateUserManagement,

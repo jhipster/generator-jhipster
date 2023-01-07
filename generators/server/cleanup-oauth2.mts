@@ -16,27 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type BaseGenerator from '../base/generator.mjs';
+import { type ApplicationTaskParam } from '../base-application/tasks.mjs';
+import { type SpringBootApplication } from './types.mjs';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
- *
- * @param {any} generator - reference to generator
- * @param {string} javaDir - Java directory
- * @param {string} testDir - Java tests directory
- * @param {string} mainResourceDir - Main resources directory
- * @param {string} testResourceDir - Test resources directory
  */
-export default function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
-  if (generator.cacheProviderHazelcast) {
-    if (generator.isJhipsterVersionLessThan('3.12.0')) {
-      generator.removeFile(`${javaDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
-      generator.removeFile(`${javaDir}config/hazelcast/package-info.java`);
-    }
+export default function cleanupOldServerFilesTask(this: BaseGenerator, { application }: ApplicationTaskParam<SpringBootApplication>) {
+  if (this.isJhipsterVersionLessThan('6.0.0')) {
+    this.removeFile(`${application.javaPackageSrcDir}config/OAuth2Configuration.java`);
+    this.removeFile(`${application.javaPackageSrcDir}security/OAuth2AuthenticationSuccessHandler.java`);
   }
-  if (generator.cacheProviderRedis) {
-    if (generator.isJhipsterVersionLessThan('7.8.2')) {
-      generator.removeFile(`${testDir}RedisTestContainerExtension.java`);
+  if (this.isJhipsterVersionLessThan('7.6.1')) {
+    if (!application.databaseTypeNo) {
+      this.removeFile(`${application.javaPackageSrcDir}web/rest/UserResource.java`);
     }
   }
 }

@@ -16,33 +16,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type BaseGenerator from '../base/generator.mjs';
+
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
- *
- * @param {any} generator - reference to generator
- * @param {import('./types.mjs').SpringBootApplication} application
- * @param {string} javaDir - Java directory
- * @param {string} testDir - Java tests directory
- * @param {string} mainResourceDir - Main resources directory
- * @param {string} testResourceDir - Test resources directory
  */
-export default function cleanupOldServerFiles(generator, application, javaDir, testDir, mainResourceDir, testResourceDir) {
-  if (generator.isJhipsterVersionLessThan('4.0.0')) {
+export default function cleanupOldServerFilesTask(this: BaseGenerator, { application }: any) {
+  if (this.isJhipsterVersionLessThan('4.0.0')) {
     if (application.devDatabaseTypeH2Any) {
-      generator.removeFile(`${javaDir}domain/util/FixedH2Dialect.java`);
+      this.removeFile(`${application.javaPackageSrcDir}domain/util/FixedH2Dialect.java`);
     }
     if (application.devDatabaseTypePostgres || application.prodDatabaseTypePostgres) {
-      generator.removeFile(`${javaDir}domain/util/FixedPostgreSQL82Dialect`);
+      this.removeFile(`${application.javaPackageSrcDir}domain/util/FixedPostgreSQL82Dialect`);
     }
   }
-  if (generator.isJhipsterVersionLessThan('7.8.2')) {
-    generator.removeFile(`${testResourceDir}config/application-testcontainers.yml`);
+  if (this.isJhipsterVersionLessThan('7.8.2')) {
+    this.removeFile(`${application.srcTestResources}config/application-testcontainers.yml`);
     if (application.reactive) {
-      generator.removeFile(`${testDir}ReactiveSqlTestContainerExtension.java`);
+      this.removeFile(`${application.javaPackageTestDir}ReactiveSqlTestContainerExtension.java`);
     }
   }
-  if (application.prodDatabaseTypeMysql && generator.isJhipsterVersionLessThan('7.9.0')) {
-    generator.removeFile(`${testResourceDir}testcontainers/mysql/my.cnf`);
+  if (application.prodDatabaseTypeMysql && this.isJhipsterVersionLessThan('7.9.0')) {
+    this.removeFile(`${application.srcTestResources}testcontainers/mysql/my.cnf`);
   }
 }

@@ -16,19 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type BaseGenerator from '../base/generator.mjs';
+
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
- *
- * @param {any} generator - reference to generator
- * @param {string} javaDir - Java directory
- * @param {string} testDir - Java tests directory
- * @param {string} mainResourceDir - Main resources directory
- * @param {string} testResourceDir - Test resources directory
  */
-export default function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
-  if (generator.isJhipsterVersionLessThan('6.8.1')) {
-    generator.removeFile(`${javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java`);
-    generator.removeFile(`${javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java`);
+export default function cleanupOldServerFilesTask(this: BaseGenerator, application: any) {
+  if (this.isJhipsterVersionLessThan('7.4.2')) {
+    this.removeFile(`${application.javaPackageTestDir}cucumber.properties`);
+    this.removeFile(`${application.srcTestJava}features/gitkeep`);
+    this.removeFile(`${application.srcTestJava}features/user/user.feature`);
   }
 }

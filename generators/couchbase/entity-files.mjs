@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import { moveToJavaEntityPackageSrcDir } from '../server/utils.mjs';
+import { moveToJavaEntityPackageSrcDir } from '../server/support/utils.mjs';
 
 export const entityFiles = {
   dbChangelog: [

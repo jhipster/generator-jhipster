@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/utils.mjs';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/utils.mjs';
 
 export const mongoDbFiles = {
   serverResource: [
     {
       path: `${SERVER_MAIN_SRC_DIR}package/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/dbmigrations/package-info.java'],
+      templates: ['config/dbmigrations/package-info.java', 'config/DatabaseConfiguration.java'],
     },
     {
       condition: generator => generator.generateBuiltInUserEntity,

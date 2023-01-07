@@ -86,9 +86,6 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/main/java/com/package/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -545,9 +542,6 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
@@ -1762,9 +1756,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(false)-maven-ena
   "src/main/java/tech/jhipster/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2184,9 +2175,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "src/main/java/com/package/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2595,9 +2583,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/Constants.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
@@ -3098,9 +3083,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/Constants.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {

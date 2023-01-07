@@ -16,18 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type BaseGenerator from '../base/generator.mjs';
+
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
- *
- * @param {any} generator - reference to generator
- * @param {string} javaDir - Java directory
- * @param {string} testDir - Java tests directory
- * @param {string} mainResourceDir - Main resources directory
- * @param {string} testResourceDir - Test resources directory
  */
-export default function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
-  if (generator.isJhipsterVersionLessThan('4.0.0')) {
-    generator.removeFile(`${javaDir}config/locale/AngularCookieLocaleResolver.java`);
+export default function cleanupOldServerFilesTask(this: BaseGenerator) {
+  if (this.isJhipsterVersionLessThan('5.0.0')) {
+    this.removeFile('gradle/mapstruct.gradle');
+  }
+  if (this.isJhipsterVersionLessThan('5.2.2')) {
+    this.removeFile('gradle/liquibase.gradle');
   }
 }

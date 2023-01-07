@@ -16,21 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type BaseGenerator from '../base/generator.mjs';
+import { type ApplicationTaskParam } from '../base-application/tasks.mjs';
+import { type CacheProviderApplication, type SpringBootApplication } from './types.mjs';
+
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
- *
- * @param {any} generator - reference to generator
- * @param {string} javaDir - Java directory
- * @param {string} testDir - Java tests directory
- * @param {string} mainResourceDir - Main resources directory
- * @param {string} testResourceDir - Test resources directory
  */
-export default function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
-  if (generator.isJhipsterVersionLessThan('5.0.0')) {
-    generator.removeFile('gradle/mapstruct.gradle');
+export default function cleanupOldServerFilesTask(
+  this: BaseGenerator,
+  { application }: ApplicationTaskParam<CacheProviderApplication & SpringBootApplication>
+) {
+  if (application.cacheProviderHazelcast) {
+    if (this.isJhipsterVersionLessThan('3.12.0')) {
+      this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
+      this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/package-info.java`);
+    }
   }
-  if (generator.isJhipsterVersionLessThan('5.2.2')) {
-    generator.removeFile('gradle/liquibase.gradle');
+  if (application.cacheProviderRedis) {
+    if (this.isJhipsterVersionLessThan('7.8.2')) {
+      this.removeFile(`${application.javaPackageTestDir}RedisTestContainerExtension.java`);
+    }
   }
 }
