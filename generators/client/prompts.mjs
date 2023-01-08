@@ -19,6 +19,7 @@
 import chalk from 'chalk';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { httpsGet } from '../base/support/index.mjs';
+import { warning } from '../base/support/index.mjs';
 
 const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -76,7 +77,7 @@ export async function askForClientTheme({ control }) {
       message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
       choices: async () => {
         const bootswatchChoices = await retrieveOnlineBootswatchThemes(this).catch(errorMessage => {
-          this.warning(errorMessage);
+          warning(this, errorMessage);
           return retrieveLocalBootswatchThemes();
         });
         return [

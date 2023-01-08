@@ -28,7 +28,7 @@ import os from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { logDebug } from './support/index.mjs';
+import { logDebug, warning } from './support/index.mjs';
 import jhipster7Proxy from './jhipster7-proxy.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { stringHashCode } from '../utils.mjs';
@@ -54,11 +54,9 @@ import {
   clientFrameworkTypes,
   getConfigWithDefaults,
 } from '../../jdl/jhipster/index.mjs';
-
 import { databaseData, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from '../sql/support/index.mjs';
 import { CUSTOM_PRIORITIES } from './priorities.mjs';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.mjs';
-
 import {
   JHIPSTER_CONFIG_DIR,
   SERVER_MAIN_SRC_DIR,
@@ -79,12 +77,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
-
 const GENERATOR_JHIPSTER = 'generator-jhipster';
-
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
-
 const { PROMETHEUS, ELK } = monitoringTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
@@ -95,7 +90,6 @@ const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
-
 const NO_CACHE = cacheTypes.NO;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
@@ -1033,7 +1027,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     try {
       return this.fs.readJSON(file);
     } catch (error) {
-      this.warning(`Unable to parse ${file}, is the entity file malformed or invalid?`);
+      warning(this, `Unable to parse ${file}, is the entity file malformed or invalid?`);
       logDebug(this, 'Error:', error);
       return undefined;
     }
@@ -1119,7 +1113,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
     const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
     if (tableNameMaxLength && joinTableName.length > tableNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
+      this.logguer.warn(
         `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
       );
       return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator });
@@ -1148,7 +1142,8 @@ export default class JHipsterBaseGenerator extends PrivateBase {
     }
     const { name, constraintNameMaxLength } = databaseData[prodDatabaseType] || {};
     if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
+      warning(
+        this,
         `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`
       );
       return `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
@@ -1161,6 +1156,62 @@ export default class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+<<<<<<< HEAD
+=======
+   * @deprecated Should be removed in V8 in favour of getConstraintName
+   *
+   * get a constraint name for tables in JHipster preferred style after applying any length limits required.
+   *
+   * @param {string} entityName - name of the entity
+   * @param {string} columnOrRelationName - name of the column or related entity
+   * @param {string} prodDatabaseType - database type
+   * @param {boolean} noSnakeCase - do not convert names to snakecase
+   * @param {string} prefix - constraintName prefix for the constraintName
+   */
+  getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '') {
+    let constraintName;
+    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
+    const separator = legacyDbNames ? '_' : '__';
+    if (noSnakeCase) {
+      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}`;
+    } else {
+      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
+    }
+    let limit = 0;
+    if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+      warning(
+        this,
+        `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
+      );
+
+      limit = 62;
+    } else if (prodDatabaseType === POSTGRESQL && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+      warning(
+        this,
+        `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
+      );
+
+      limit = 61;
+    } else if (prodDatabaseType === MARIADB && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+      warning(
+        this,
+        `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
+      );
+
+      limit = 62;
+    }
+    return limit === 0
+      ? constraintName
+      : calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
+          separator,
+          noSnakeCase,
+          prefix,
+          appendHash: !legacyDbNames,
+        });
+  }
+
+  /**
+>>>>>>> 76be228d4d (removes warning method)
    * @private
    * get a foreign key constraint name for tables in JHipster preferred style.
    *
@@ -1279,7 +1330,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
                 + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
         code => {
           if (code !== 0) {
-            this.warning("\nFailed to create a KeyStore with 'keytool'", code);
+            warning(this, "\nFailed to create a KeyStore with 'keytool'", code);
           } else {
             this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
           }
@@ -1547,7 +1598,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
           const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
 templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           if (existingTemplates.length > 2) {
-            this.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
+            warning(this, `Possible blueprint conflict detected: ${moreThanOneMessage}`);
           } else {
             logDebug(this, moreThanOneMessage);
           }
@@ -1932,7 +1983,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (this.jhipsterConfig.clientPackageManager) {
       const usingNpm = this.jhipsterConfig.clientPackageManager === 'npm';
       if (!usingNpm) {
-        this.warning(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
+        warning(this, `Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
         options.skipInstall = true;
       }
     }

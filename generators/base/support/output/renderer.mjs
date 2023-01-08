@@ -18,8 +18,9 @@
  */
 import path from 'path';
 import ejs from 'ejs';
-// eslint-disable-next-line  import/no-named-default
-import { appendYeomanOptionsFromGeneratorOptions, isReproducible } from '../options.mjs';
+
+import { warning } from '../logging.mjs';
+import { appendYeomanOptionsFromGeneratorOptions } from '../options.mjs';
 import { resetFakerSeed } from '../sequences.mjs';
 
 const appendCallBackToTemplate = (generator, cb, promise, source) => {
@@ -27,7 +28,7 @@ const appendCallBackToTemplate = (generator, cb, promise, source) => {
     return promise
       .then(res => cb(res))
       .catch(err => {
-        generator.warning(`Copying template ${source} failed. [${err}]`);
+        warning(generator, `Copying template ${source} failed. [${err}]`);
         throw err;
       });
   }
@@ -59,15 +60,15 @@ const renderContent = (source, generator, context, options, cb) => {
   return appendCallBackToTemplate(generator, cb, promise, source);
 };
 
-const writeContent = (_this, context, destination, options, source) => {
+const writeContent = (yeomanContext, context, destination, options, source) => {
   // TODO simplify: looks like there's no need of so much params
-  return renderContent(source, _this, context, options)
+  return renderContent(source, yeomanContext, context, options)
     .then(res => {
-      _this.fs.write(destination, res);
+      yeomanContext.fs.write(destination, res);
       return destination;
     })
     .catch(error => {
-      this.warning(source);
+      warning(this, source);
       throw error;
     });
 };

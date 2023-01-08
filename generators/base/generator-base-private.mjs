@@ -20,16 +20,8 @@ import path from 'path';
 import _ from 'lodash';
 import Generator from 'yeoman-generator';
 
-import { databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
-import { databaseData } from '../sql/support/index.mjs';
 import { stringify } from '../../utils/index.mjs';
-import { deleteFile, deleteFolder, renderContent } from './support/index.mjs';
-
-const dbTypes = fieldTypes;
-
-const { STRING: TYPE_STRING, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;
-
-const { SQL } = databaseTypes;
+import { deleteFile, deleteFolder } from './support/index.mjs';
 
 /**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
@@ -125,72 +117,6 @@ export default class PrivateBase extends Generator {
    */
   removeFolder(folder) {
     deleteFolder(this, folder);
-  }
-
-  /**
-   * @private
-   */
-  getDBCExtraOption(databaseType) {
-    const databaseDataForType = databaseData[databaseType];
-    const { extraOptions = '' } = databaseDataForType;
-    return extraOptions;
-  }
-
-  /**
-   * @private
-   * Returns the primary key value based on the primary key type, DB and default value
-   *
-   * @param {string} primaryKey - the primary key type
-   * @param {string} databaseType - the database type
-   * @param {string} defaultValue - default value
-   * @returns {string} java primary key value
-   */
-  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
-    if (typeof primaryKey === 'object' && primaryKey.composite) {
-      return `new ${primaryKey.type}(${primaryKey.references
-        .map(ref => this.getPrimaryKeyValue(ref.type, databaseType, defaultValue))
-        .join(', ')})`;
-    }
-    const primaryKeyType = typeof primaryKey === 'string' ? primaryKey : primaryKey.type;
-    if (primaryKeyType === TYPE_STRING) {
-      if (databaseType === SQL && defaultValue === 0) {
-        return this.getJavaValueGeneratorForType(primaryKeyType);
-      }
-      return `"id${defaultValue}"`;
-    }
-    if (primaryKeyType === TYPE_UUID) {
-      return this.getJavaValueGeneratorForType(primaryKeyType);
-    }
-    return `${defaultValue}L`;
-  }
-
-  /**
-   * @private
-   */
-  getJavaValueGeneratorForType(type) {
-    if (type === 'String') {
-      return 'UUID.randomUUID().toString()';
-    }
-    if (type === 'UUID') {
-      return 'UUID.randomUUID()';
-    }
-    if (type === 'Long') {
-      return 'count.incrementAndGet()';
-    }
-    throw new Error(`Java type ${type} does not have a random generator implemented`);
-  }
-
-  /**
-   * @private
-   * Get a root folder name for entity
-   * @param {string} clientRootFolder
-   * @param {string} entityFileName
-   */
-  getEntityFolderName(clientRootFolder, entityFileName) {
-    if (clientRootFolder) {
-      return `${clientRootFolder}/${entityFileName}`;
-    }
-    return entityFileName;
   }
 
   /**

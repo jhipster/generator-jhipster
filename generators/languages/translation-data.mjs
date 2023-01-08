@@ -19,6 +19,7 @@
 import _ from 'lodash';
 import { entityClientI18nFiles } from './entity-files.mjs';
 import { clientI18nFiles } from './files.mjs';
+import { warning } from '../base/support/index.mjs';
 
 export default class TranslationData {
   constructor(generator, control) {
@@ -112,7 +113,7 @@ export default class TranslationData {
     }
     if (translatedValue === undefined) {
       const errorMessage = `Translation missing for ${translationKey}`;
-      this.generator.warning(`${errorMessage} at ${JSON.stringify(this.translations)}`);
+      warning(this.generator, `${errorMessage} at ${JSON.stringify(this.translations)}`);
       return errorMessage;
     }
     if (!data) {

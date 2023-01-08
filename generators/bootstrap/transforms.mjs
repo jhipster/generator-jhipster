@@ -25,6 +25,8 @@ import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 // eslint-disable-next-line import/no-unresolved
 import environmentTransform from 'yeoman-environment/transform';
 
+import { warning } from '../base/support/index.mjs';
+
 const { State } = memFsEditor;
 const { patternSpy } = environmentTransform;
 
@@ -77,7 +79,7 @@ At: ${fileContent
           errorMessage = `Unknown prettier error: ${error}`;
         }
         if (ignoreErrors) {
-          generator.warning(errorMessage);
+          warning(generator, errorMessage);
           return file;
         }
         throw new Error(errorMessage);

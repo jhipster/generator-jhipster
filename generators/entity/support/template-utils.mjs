@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,12 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * @private
+ * Get a root folder name for entity
+ * @param {string} clientRootFolder
+ * @param {string} entityFileName
+ */
 // eslint-disable-next-line import/prefer-default-export
-export {
-  isNumber as inputIsNumber,
-  isSignedNumber as inputIsSignedNumber,
-  isSignedDecimalNumber as inputIsSignedDecimalNumber,
-} from './asserts.mjs';
-export { fieldIsEnum } from './field-utils.mjs';
-export { getPkType } from './pk-utils.mjs';
-export { getEntityFolderName } from './template-utils.mjs';
+export const getEntityFolderName = (clientRootFolder, entityFileName) => {
+  if (clientRootFolder) {
+    return `${clientRootFolder}/${entityFileName}`;
+  }
+  return entityFileName;
+};

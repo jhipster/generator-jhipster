@@ -25,6 +25,8 @@ import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
 import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
 import { fieldToReference } from './field.mjs';
 import { getTypescriptKeyType } from '../generators/client/support/index.mjs';
+import { warning } from '../generators/base/support/index.mjs';
+import { getEntityFolderName } from '../generators/entity/support/index.mjs';
 import {
   applicationTypes,
   authenticationTypes,
@@ -54,18 +56,7 @@ const NO_MAPPER = MapperTypes.NO;
 
 const { POSTGRESQL, MYSQL, MARIADB, CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
 
-const {
-  INTEGER: TYPE_INTEGER,
-  LONG: TYPE_LONG,
-  BIG_DECIMAL: TYPE_BIG_DECIMAL,
-  FLOAT: TYPE_FLOAT,
-  DOUBLE: TYPE_DOUBLE,
-  INSTANT,
-  ZONED_DATE_TIME,
-  DURATION,
-  LOCAL_DATE,
-  BIG_DECIMAL,
-} = fieldTypes.CommonDBTypes;
+const { INSTANT, ZONED_DATE_TIME, DURATION, LOCAL_DATE, BIG_DECIMAL } = fieldTypes.CommonDBTypes;
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = fieldTypes.BlobTypes;
@@ -205,7 +196,7 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
   entityWithConfig.entityFileName = _.kebabCase(
     entityWithConfig.entityNameCapitalized + _.upperFirst(entityWithConfig.entityAngularJSSuffix)
   );
-  entityWithConfig.entityFolderName = generator.getEntityFolderName(entityWithConfig.clientRootFolder, entityWithConfig.entityFileName);
+  entityWithConfig.entityFolderName = getEntityFolderName(entityWithConfig.clientRootFolder, entityWithConfig.entityFileName);
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
   entityWithConfig.entityParentPathAddition = generator.getEntityParentPathAddition(entityWithConfig.clientRootFolder);
   entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
@@ -260,7 +251,7 @@ export function prepareEntityForTemplates(entityWithConfig, generator, applicati
     });
     const withError = fieldEntries.find(entry => !entry);
     if (withError) {
-      generator.warning(`Error generating a full sample for entity ${entityName}`);
+      warning(generator, `Error generating a full sample for entity ${entityName}`);
       return undefined;
     }
     return Object.fromEntries(fieldEntries);

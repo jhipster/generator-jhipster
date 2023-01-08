@@ -3,7 +3,7 @@ import assert from 'yeoman-assert';
 import path, { dirname } from 'path';
 
 import { deepFind, stringHashCode } from '../generators/utils.mjs';
-import { renderContent, getEnumInfo } from '../generators/base/support/index.mjs';
+import { getEnumInfo } from '../generators/base/support/index.mjs';
 import { javadoc } from '../generators/server/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

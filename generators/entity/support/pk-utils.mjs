@@ -20,7 +20,7 @@ import { databaseTypes, fieldTypes } from '../../../jdl/jhipster/index.mjs';
 
 const dbTypes = fieldTypes;
 const { STRING: TYPE_STRING, LONG: TYPE_LONG, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;
-const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL } = databaseTypes;
+const { MONGODB, NEO4J, COUCHBASE, CASSANDRA } = databaseTypes;
 /**
  * @private
  * Return the primary key data type based on DB

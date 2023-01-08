@@ -21,6 +21,7 @@ import _ from 'lodash';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../jdl/jhipster/index.mjs';
 import { getTypescriptType } from '../generators/client/support/index.mjs';
 import { fieldIsEnum } from '../generators/entity/support/index.mjs';
+import { warning } from '../generators/base/support/index.mjs';
 
 const { isReservedTableName } = reservedKeywords;
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -121,7 +122,7 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
       data = generated;
     }
     if (data.length === 0) {
-      this.warning(`Generated value for pattern ${field.fieldValidateRulesPattern} is not valid.`);
+      warning(this, `Generated value for pattern ${field.fieldValidateRulesPattern} is not valid.`);
       data = undefined;
     }
   } else if (field.fieldIsEnum) {
@@ -129,7 +130,7 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
       const enumValues = field.enumValues;
       data = enumValues[faker.datatype.number(enumValues.length - 1)].name;
     } else {
-      this.warning(`Enum ${field.fieldType} is not valid`);
+      warning(this, `Enum ${field.fieldType} is not valid`);
       data = undefined;
     }
   } else if (field.fieldType === DURATION && type === 'cypress') {
@@ -170,7 +171,7 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
   } else if (field.fieldType === BOOLEAN) {
     data = faker.datatype.boolean();
   } else {
-    this.warning(`Fake data for field ${field.fieldType} is not supported`);
+    warning(this, `Fake data for field ${field.fieldType} is not supported`);
   }
 
   if (field.fieldType === BYTES && type === 'json-serializable') {
@@ -303,12 +304,12 @@ export function prepareCommonFieldForTemplates(entityWithConfig, field, generato
       // eslint-disable-next-line no-new
       new RegExp(field.fieldValidateRulesPattern);
     } catch (e) {
-      generator.warning(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
+      warning(generator, `${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
       return undefined;
     }
     const re = faker.createRandexp(field.fieldValidateRulesPattern);
     if (!re) {
-      generator.warning(`Error creating generator for pattern ${field.fieldValidateRulesPattern}`);
+      warning(generator, `Error creating generator for pattern ${field.fieldValidateRulesPattern}`);
     }
     return re;
   };
@@ -328,13 +329,13 @@ export function prepareCommonFieldForTemplates(entityWithConfig, field, generato
         data = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
       }
       if (data === undefined) {
-        generator.warning(`Error generating a unique value field ${field.fieldName} and type ${field.fieldType}`);
+        warning(generator, `Error generating a unique value field ${field.fieldName} and type ${field.fieldType}`);
       } else {
         field.uniqueValue.push(data);
       }
     }
     if (data === undefined) {
-      generator.warning(`Error generating fake data for field ${entityWithConfig.name}.${field.fieldName}`);
+      warning(generator, `Error generating fake data for field ${entityWithConfig.name}.${field.fieldName}`);
     }
     return data;
   };
@@ -437,7 +438,8 @@ export function prepareServerFieldForTemplates(entityWithConfig, field, generato
 
     if (isReservedTableName(fieldNameUnderscored, entityWithConfig.prodDatabaseType)) {
       if (!jhiFieldNamePrefix) {
-        generator.warning(
+        warning(
+          generator,
           `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
         );
         field.fieldNameAsDatabaseColumn = fieldNameUnderscored;

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { warning } from './logging.mjs';
 
 /**
  * @private
@@ -23,12 +24,12 @@
  * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
  *                   obtained by parsing the given string representation of the creationTimestamp.
  */
-const parseCreationTimestamp = (context, creationTimestampOption) => {
+const parseCreationTimestamp = (yeomanContext, creationTimestampOption) => {
   let creationTimestamp;
   if (creationTimestampOption) {
     creationTimestamp = Date.parse(creationTimestampOption);
     if (!creationTimestamp) {
-      context.warning(`Error parsing creationTimestamp ${creationTimestampOption}.`);
+      warning(yeomanContext, `Error parsing creationTimestamp ${creationTimestampOption}.`);
     } else if (creationTimestamp > new Date().getTime()) {
       throw new Error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
     }

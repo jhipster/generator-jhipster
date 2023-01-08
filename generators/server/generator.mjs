@@ -24,6 +24,7 @@ import chalk from 'chalk';
 import os from 'os';
 import { getDBTypeFromDBValue } from './support/index.mjs';
 import serverOptions from './options.mjs';
+import { warning } from '../base/support/index.mjs';
 import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
@@ -86,7 +87,13 @@ import { stringify } from '../../utils/index.mjs';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret-utils.mjs';
 import checkJava from './support/checks/check-java.mjs';
 import { normalizePathEnd } from '../base/utils.mjs';
-import { getApiDescription, javadoc } from './support/index.mjs';
+import {
+  getApiDescription,
+  javadoc,
+  getDBCExtraOption as getDBExtraOption,
+  getJavaValueGeneratorForType as getJavaValueForType,
+  getPrimaryKeyValue as getPKValue,
+} from './support/index.mjs';
 
 const dbTypes = fieldTypes;
 const {
@@ -240,7 +247,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       forceReactiveGateway() {
         if (this.jhipsterConfig.applicationType === GATEWAY) {
           if (this.jhipsterConfig.reactive !== undefined && !this.jhipsterConfig.reactive) {
-            this.warning('Non reactive gateway is not supported. Switching to reactive.');
+            warning(this, 'Non reactive gateway is not supported. Switching to reactive.');
           }
           this.jhipsterConfig.reactive = true;
         }
@@ -431,7 +438,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         ) {
           // Search engine can only be enabled at entity level and disabled at application level for gateways publishing a microservice entity
           entityConfig.searchEngine = NO_SEARCH_ENGINE;
-          this.warning('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
+          warning(this, 'Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
         }
       },
       configureModelFiltering({ application, entityConfig }) {
@@ -442,7 +449,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           entityConfig.jpaMetamodelFiltering &&
           (!databaseTypeSql || entityConfig.service === NO_SERVICE)
         ) {
-          this.warning('Not compatible with jpaMetamodelFiltering, disabling');
+          warning(this, 'Not compatible with jpaMetamodelFiltering, disabling');
           entityConfig.jpaMetamodelFiltering = false;
         }
       },
@@ -511,7 +518,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           this._validateField(entityName, field);
 
           if (field.fieldType === BYTE_BUFFER) {
-            this.warning(
+            warning(
+              this,
               `Cannot use validation in .jhipster/${entityName}.json for field ${stringify(
                 field
               )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
@@ -531,7 +539,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
           if (relationship.relationshipName === undefined) {
             relationship.relationshipName = relationship.otherEntityName;
-            this.warning(
+            warning(
+              this,
               `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}, using ${
                 relationship.otherEntityName
               } as fallback`
@@ -738,7 +747,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asEndTaskGroup({
       checkLocaleValue({ application }) {
         if (application.languages && application.languages.includes('in')) {
-          this.warning(
+          warning(
+            this,
             "For jdk 17 compatibility 'in' locale value should set 'java.locale.useOldISOCodes=true' environment variable. Refer to https://bugs.openjdk.java.net/browse/JDK-8267069"
           );
         }
@@ -856,12 +866,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
     if (isReservedTableName(entityTableName, prodDatabaseType)) {
       if (jhiTablePrefix) {
-        this.warning(
+        warning(
+          this,
           `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
         );
         entity.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
       } else {
-        this.warning(
+        warning(
+          this,
           `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
         );
       }
@@ -1005,5 +1017,29 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
    */
   isFilterableType(fieldType) {
     return ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(fieldType);
+  }
+
+  /**
+   * @private
+   */
+  getDBCExtraOption(databaseType) {
+    return getDBExtraOption(databaseType);
+  }
+
+  getJavaValueGeneratorForType(type) {
+    return getJavaValueForType(type);
+  }
+
+  /**
+   * @private
+   * Returns the primary key value based on the primary key type, DB and default value
+   *
+   * @param {string} primaryKey - the primary key type
+   * @param {string} databaseType - the database type
+   * @param {string} defaultValue - default value
+   * @returns {string} java primary key value
+   */
+  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
+    return getPKValue(primaryKey, databaseType, defaultValue);
   }
 }

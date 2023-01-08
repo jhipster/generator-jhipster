@@ -19,22 +19,25 @@
 import semver from 'semver';
 import chalk from 'chalk';
 
+import { warning } from '../../base/support/index.mjs';
 import { packageJson } from '../../../lib/index.mjs';
 
 /**
  * @private
  * Check if Node is installed
  */
-const checkNode = context => {
-  if (context.skipChecks) return;
+const checkNode = yeomanContext => {
+  if (yeomanContext.skipChecks) return;
   const nodeFromPackageJson = packageJson.engines.node;
   if (!semver.satisfies(process.version, nodeFromPackageJson)) {
-    context.warning(
+    warning(
+      yeomanContext,
       `Your NodeJS version is too old (${process.version}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`
     );
   }
   if (!(process.release || {}).lts) {
-    context.warning(
+    warning(
+      yeomanContext,
       'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
     );
   }

@@ -28,11 +28,20 @@ const formatDebugMessageHeader = message => {
 };
 
 /**
- * Checks if the configOptions or generatorOptions contains the debug flag.
- * @param context
+ * formats the message to be displayed in the console.
+ * @param message the debug message to format.
  */
-const jhipsterDebugOptionsChecker = context => {
-  return (context.configOptions && context.configOptions.isDebugEnabled) || (context.options && context.options.debug);
+const formatWarningMessageHeader = message => {
+  return `${chalk.yellow.bold('WARNING!')} ${message}`;
+};
+
+/**
+ * Checks if the configOptions or generatorOptions contains the debug flag.
+ * @param configOptions the jh configOptions
+ * @param options the jh options
+ */
+const jhipsterDebugOptionsChecker = (configOptions, options) => {
+  return (configOptions && configOptions.isDebugEnabled) || (options && options.debug);
 };
 
 /**
@@ -41,36 +50,54 @@ const jhipsterDebugOptionsChecker = context => {
  * @param message message to print as a prefix
  * @param args arguments to print
  */
-const printMessageUsingGeneratorLogger = (context, message, ...args) => {
-  context.log(message);
-  args.forEach(arg => context.log(arg));
+const printMessageUsingGeneratorLogger = (log, message, ...args) => {
+  log(message);
+  args.forEach(arg => log(arg));
 };
 
 /**
  * Checks if the configOptions or generatorOptions contains the debug flag.
- * @param context the generator context.
+ * @param debuggerChannel the debugguer output
  */
-const generatorDebugOptionChecker = context => {
-  return context._debug && context._debug.enabled;
+const generatorDebugOptionChecker = debuggerChannel => {
+  return debuggerChannel && debuggerChannel.enabled;
 };
 
 /**
  * Print message using then internal yeoman debugger.
- * @param context the generator context.
+ * @param debuggerChannel the debugguer output context.
+ * @param message message to print as a prefix
+ * @param args arguments to print
  */
-const printMessageAndArgumentsUsingInternalDebugger = (context, message, ...args) => {
-  context._debug(message);
-  args.forEach(arg => context._debug(arg));
+const printMessageAndArgumentsUsingInternalDebugger = (debuggerChannel, message, ...args) => {
+  debuggerChannel(message);
+  args.forEach(arg => debuggerChannel(arg));
 };
 
-const debug = (context, message, ...args) => {
+const logDebug = (configOptions, options, log, _debug, message, ...args) => {
   const formattedMsg = formatDebugMessageHeader(message);
-  if (jhipsterDebugOptionsChecker(context)) {
-    printMessageUsingGeneratorLogger(context, formattedMsg, ...args);
+  if (jhipsterDebugOptionsChecker(configOptions, options)) {
+    printMessageUsingGeneratorLogger(log, formattedMsg, ...args);
   }
-  if (generatorDebugOptionChecker(context)) {
-    printMessageAndArgumentsUsingInternalDebugger(context, formattedMsg, ...args);
+  if (generatorDebugOptionChecker(_debug)) {
+    printMessageAndArgumentsUsingInternalDebugger(_debug, formattedMsg, ...args);
   }
 };
 
+export const debug = (yeomanContext, message, ...args) => {
+  logDebug(yeomanContext.configOptions, yeomanContext.options, yeomanContext.log, yeomanContext._debug, message, ...args);
+};
+
+/**
+ * Print a warning message.
+ *
+ * @param {string} msg - message to print
+ */
+export const warning = (yeomanContext, msg) => {
+  const warn = formatWarningMessageHeader(msg);
+  printMessageUsingGeneratorLogger(yeomanContext.log, warn);
+  if (generatorDebugOptionChecker(yeomanContext._debug)) {
+    printMessageAndArgumentsUsingInternalDebugger(yeomanContext._debug, warn);
+  }
+};
 export default debug;

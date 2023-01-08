@@ -21,7 +21,7 @@ import _ from 'lodash';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-
+import { warning } from '../base/support/index.mjs';
 import prompts from './prompts.mjs';
 import statistics from '../statistics.cjs';
 import { NODE_VERSION, SERVER_MAIN_RES_DIR, JAVA_VERSION } from '../generator-constants.mjs';
@@ -254,7 +254,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
           } else if (this.buildTool === GRADLE) {
             // TODO: add support here
             // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
-            this.warning('No support for Artifactory yet, when using Gradle.\n');
+            warning(this, 'No support for Artifactory yet, when using Gradle.\n');
           }
         }
 

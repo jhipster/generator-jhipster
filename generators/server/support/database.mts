@@ -1,4 +1,5 @@
 import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
+import { databaseData } from '../../sql/support/index.mjs';
 
 const SQL = databaseTypes.SQL;
 
@@ -62,3 +63,9 @@ export function getDBTypeFromDBValue(db) {
   }
   return db;
 }
+
+export const getDBCExtraOption = databaseType => {
+  const databaseDataForType = databaseData[databaseType];
+  const { extraOptions = '' } = databaseDataForType;
+  return extraOptions;
+};

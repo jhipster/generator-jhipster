@@ -18,8 +18,9 @@
  */
 /* eslint-disable consistent-return */
 import chalk from 'chalk';
-import { JHipsterOptions } from '../base/api.mjs';
 
+import { JHipsterOptions } from '../base/api.mjs';
+import { warning } from '../base/support/index.mjs';
 import BaseGenerator from '../base/index.mjs';
 import { GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { files } from './files.mjs';
@@ -53,7 +54,7 @@ export default class InitGenerator extends BaseGenerator {
         if (!this.skipGit) {
           this.gitInstalled = (await this.createGit().version()).installed;
           if (!this.gitInstalled) {
-            this.warning('Git repository will not be created, as Git is not installed on your system');
+            warning(this, 'Git repository will not be created, as Git is not installed on your system');
             this.skipGit = true;
           }
         }
@@ -102,7 +103,7 @@ export default class InitGenerator extends BaseGenerator {
       async gitCommit() {
         if (this.skipGit) return;
         if (!this.gitInitialized) {
-          this.warning('The generated application could not be committed to Git, as a Git repository could not be initialized.');
+          warning(this, 'The generated application could not be committed to Git, as a Git repository could not be initialized.');
           return;
         }
         this.debug('Committing files to git');
@@ -146,7 +147,7 @@ export default class InitGenerator extends BaseGenerator {
       this.gitInitialized = (await git.checkIsRepo()) || ((await git.init()) && true);
       this.log(chalk.green.bold('Git repository initialized.'));
     } catch (error) {
-      this.warning(`Failed to initialize Git repository.\n ${error}`);
+      warning(this, `Failed to initialize Git repository.\n ${error}`);
     }
   }
 }
