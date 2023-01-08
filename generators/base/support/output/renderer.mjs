@@ -20,8 +20,8 @@ import path from 'path';
 import ejs from 'ejs';
 
 import { warning } from '../logging.mjs';
-import { appendYeomanOptionsFromGeneratorOptions } from '../options.mjs';
-import { resetFakerSeed } from '../sequences.mjs';
+import { appendYeomanOptionsFromGeneratorOptions } from '../configuration-helpers/options.mjs';
+import { resetFakerSeed } from '../configuration-helpers/sequences.mjs';
 
 const appendCallBackToTemplate = (generator, cb, promise, source) => {
   if (cb) {

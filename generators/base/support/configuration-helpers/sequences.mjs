@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { warning } from './logging.mjs';
+import { warning } from '../logging.mjs';
 
 /**
  * @private
