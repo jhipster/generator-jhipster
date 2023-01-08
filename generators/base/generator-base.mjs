@@ -546,6 +546,30 @@ export default class JHipsterBaseGenerator extends PrivateBase {
 
   /**
    * @private
+   * Add new scss style to the angular application in "global.scss
+   *
+   * @param {string} style - css to add in the file
+   * @param {string} comment - comment to add before css code
+   *
+   * example:
+   *
+   * style = '.jhipster {\n     color: #baa186;\n}'
+   * comment = 'New JHipster color'
+   *
+   * * ==========================================================================
+   * New JHipster color
+   * ========================================================================== *
+   * .jhipster {
+   *     color: #baa186;
+   * }
+   *
+   */
+  addMainSCSSStyle(style, comment) {
+    this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
+  }
+
+  /**
+   * @private
    * Add new scss style to the angular application in "vendor.scss".
    *
    * @param {string} style - scss to add in the file
