@@ -19,7 +19,6 @@
 import path from 'path';
 import _ from 'lodash';
 import Generator from 'yeoman-generator';
-import chalk from 'chalk';
 
 import { databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { databaseData } from '../sql/support/index.mjs';
@@ -28,9 +27,9 @@ import { deleteFile, deleteFolder, renderContent } from './support/index.mjs';
 
 const dbTypes = fieldTypes;
 
-const { STRING: TYPE_STRING, LONG: TYPE_LONG, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;
+const { STRING: TYPE_STRING, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;
 
-const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL } = databaseTypes;
+const { SQL } = databaseTypes;
 
 /**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
@@ -126,94 +125,6 @@ export default class PrivateBase extends Generator {
    */
   removeFolder(folder) {
     deleteFolder(this, folder);
-  }
-
-  /**
-   * @private
-   * Utility function to render a template into a string
-   *
-   * @param {string} source - source
-   * @param {function} callback - callback to take the rendered template as a string
-   * @param {*} generator - reference to the generator
-   * @param {*} options - options object
-   * @param {*} context - context
-   */
-  async render(source, callback, generator, options = {}, context) {
-    const _this = generator || this;
-    const _context = context || _this;
-    await renderContent(source, _this, _context, options, res => {
-      callback(res);
-    });
-  }
-
-  /**
-   * @private
-   * Rebuild client for Angular
-   */
-  rebuildClient() {
-    const done = this.async();
-    this.log(`\n${chalk.bold.green('Running `webapp:build` to update client app\n')}`);
-    this.spawnCommand(this.clientPackageManager, ['run', 'webapp:build']).on('close', () => {
-      done();
-    });
-  }
-
-  /**
-   * @private
-   * Generate a test entity, according to the references
-   *
-   * @param references
-   * @param additionalFields
-   * @return {String} test sample
-   */
-  generateTypescriptTestEntity(references, additionalFields = {}) {
-    const entries = references
-      .map(reference => {
-        if (reference.field) {
-          const field = reference.field;
-          const { fieldIsEnum, fieldType, fieldTypeTimed, fieldTypeLocalDate, fieldWithContentType, fieldName, contentTypeFieldName } =
-            field;
-
-          const fakeData = field.generateFakeData('ts');
-          if (fieldWithContentType) {
-            return [
-              [fieldName, fakeData],
-              [contentTypeFieldName, "'unknown'"],
-            ];
-          }
-          if (fieldIsEnum) {
-            return [[fieldName, `${fieldType}[${fakeData}]`]];
-          }
-          if (fieldTypeTimed || fieldTypeLocalDate) {
-            return [[fieldName, `dayjs(${fakeData})`]];
-          }
-          return [[fieldName, fakeData]];
-        }
-        return [[reference.name, this.generateTestEntityId(reference.type, 'random', false)]];
-      })
-      .flat();
-    return `{
-  ${[...entries, ...Object.entries(additionalFields)].map(([key, value]) => `${key}: ${value}`).join(',\n  ')}
-}`;
-  }
-
-  /**
-   * @private
-   * Return the primary key data type based on DB
-   *
-   * @param {any} databaseType - the database type
-   */
-  getPkType(databaseType) {
-    if (this.jhipsterConfig.pkType) {
-      return this.jhipsterConfig.pkType;
-    }
-    if ([MONGODB, NEO4J, COUCHBASE].includes(databaseType)) {
-      return TYPE_STRING;
-    }
-    if (databaseType === CASSANDRA) {
-      return TYPE_UUID;
-    }
-    return TYPE_LONG;
   }
 
   /**

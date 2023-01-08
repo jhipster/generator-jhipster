@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 
-import needleClientBase from './needle-client.mjs';
+import needleClientBase from '../../client/needle-api/needle-client.mjs';
 import { LINE_LENGTH } from '../../generator-constants.mjs';
 import { checkStringInFile, replaceContent, checkRegexInFile } from '../../utils.mjs';
 import { stripMargin } from '../../base/support/index.mjs';

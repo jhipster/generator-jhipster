@@ -23,3 +23,4 @@ export {
   isSignedDecimalNumber as inputIsSignedDecimalNumber,
 } from './asserts.mjs';
 export { fieldIsEnum } from './field-utils.mjs';
+export { getPkType } from './pk-utils.mjs';

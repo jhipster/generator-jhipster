@@ -19,7 +19,7 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
 import path from 'path';
-
+import { getPkType } from '../generators/entity/support/index.mjs';
 import { hibernateSnakeCase } from './db.mjs';
 import { normalizePathEnd, parseChangelog } from '../generators/base/utils.mjs';
 import { entityDefaultConfig } from '../generators/generator-defaults.mjs';
@@ -426,7 +426,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       idField.dynamic = false;
       // Allow ids type to be empty and fallback to default type for the database.
       if (!idField.fieldType) {
-        idField.fieldType = generator.getPkType(entityWithConfig.databaseType);
+        idField.fieldType = getPkType(generator, entityWithConfig.databaseType);
       }
       primaryKeyName = idField.fieldName;
       primaryKeyType = idField.fieldType;

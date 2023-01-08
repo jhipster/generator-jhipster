@@ -20,7 +20,7 @@ import _ from 'lodash';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
-import { dockerContainers, javaDependencies, CLIENT_DIST_DIR } from '../generator-constants.mjs';
+import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
 import {
   loadRequiredConfigIntoEntity,
   loadRequiredConfigDerivedProperties,
@@ -34,7 +34,6 @@ import { getPomVersionProperties } from '../server/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
 
-const { GRADLE } = buildToolTypes;
 const { CommonDBTypes } = fieldTypes;
 const { OAUTH2 } = authenticationTypes;
 const { LONG: TYPE_LONG } = CommonDBTypes;

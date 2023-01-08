@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 // eslint-disable-next-line import/prefer-default-export
-export { default as checkNode } from './asserts.mjs';
+export { default as checkNode } from './check-node.mjs';

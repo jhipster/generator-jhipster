@@ -23,13 +23,12 @@ import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../gen
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.mjs';
 import { writeFiles, cleanup } from './files-angular.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { addAdminMenuEntry, addEntityMenuEntry as addAngularEntityMenuEntry } from './support/index.mjs';
-import { addIconInImport } from './support/index.mjs';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   getTypescriptKeyType as getTSKeyType,
   generateTestEntityId as getTestEntityId,
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
+  generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.mjs';
 import { LANGUAGES } from '../generator-constants.mjs';
 
@@ -146,7 +145,13 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     entityTranslationValue = _.startCase(routerName),
     jhiPrefix = this.jhiPrefix
   ) {
-    addAngularEntityMenuEntry(this, routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue, jhiPrefix);
+    this.needleApi.clientAngular.addEntityToMenu(
+      routerName,
+      enableTranslation,
+      entityTranslationKeyMenu,
+      entityTranslationValue,
+      jhiPrefix
+    );
   }
 
   /**
@@ -185,7 +190,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {string} iconName - The name of the Font Awesome icon.
    */
   addIcon(iconName) {
-    addIconInImport(this, iconName);
+    this.needleApi.clientAngular.addIcon(iconName);
   }
 
   /**
@@ -197,7 +202,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {string} translationKeyMenu - i18n key for entry in the admin menu
    */
   addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = _.camelCase(routerName)) {
-    addAdminMenuEntry(this, routerName, iconName, enableTranslation, translationKeyMenu);
+    this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
   }
 
   generateEntityClientEnumImports(fields) {
@@ -224,5 +229,9 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   generateTestEntityPrimaryKey(primaryKey, index) {
     return getTestEntityPrimaryKey(primaryKey, index);
+  }
+
+  generateTypescriptTestEntity(references, additionalFields) {
+    return generateTestEntity(references, additionalFields);
   }
 }

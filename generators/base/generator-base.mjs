@@ -74,7 +74,6 @@ import {
 import { removeFieldsWithUnsetValues } from './support/index.mjs';
 import { locateGenerator, parseCreationTimestamp } from './support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
-import { addExternalResourcesToIndexHtml, addMenuEntry } from '../client/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -231,7 +230,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
   addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    addMenuEntry(this, routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
+    this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
   }
 
   /**
@@ -242,7 +241,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} comment - comment to add before resources content.
    */
   addExternalResourcesToRoot(resources, comment) {
-    addExternalResourcesToIndexHtml(this, resources, comment);
+    this.needleApi.client.addExternalResourcesToRoot(resources, comment);
   }
 
   /**
@@ -543,30 +542,6 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    */
   addChangesetToLiquibaseEntityChangelog(filePath, content) {
     this.needleApi.serverLiquibase.addChangesetToEntityChangelog(filePath, content);
-  }
-
-  /**
-   * @private
-   * Add new scss style to the angular application in "global.scss
-   *
-   * @param {string} style - css to add in the file
-   * @param {string} comment - comment to add before css code
-   *
-   * example:
-   *
-   * style = '.jhipster {\n     color: #baa186;\n}'
-   * comment = 'New JHipster color'
-   *
-   * * ==========================================================================
-   * New JHipster color
-   * ========================================================================== *
-   * .jhipster {
-   *     color: #baa186;
-   * }
-   *
-   */
-  addMainSCSSStyle(style, comment) {
-    this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
   }
 
   /**
