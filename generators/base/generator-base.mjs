@@ -230,7 +230,7 @@ export default class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
   addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-    this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu);
+    this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
   }
 
   /**
