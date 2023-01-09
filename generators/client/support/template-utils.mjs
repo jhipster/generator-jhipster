@@ -132,7 +132,6 @@ export const generateTestEntity = (references, index = 'random') => {
 };
 
 /**
- * @private
  * Generate a test entity, according to the references
  *
  * @param references
@@ -169,8 +168,7 @@ export const generateTypescriptTestEntity = (references, additionalFields = {}) 
 }`;
 };
 /**
- * @private
- * Generate a test entity, according to the type
+ * Generate a test entity for the PK references (when the PK is a composite key)
  *
  * @param {any} primaryKey - primary key definition.
  * @param {number} [index] - index of the primary key sample, pass undefined for a random key.

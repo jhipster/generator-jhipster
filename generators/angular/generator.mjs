@@ -229,10 +229,20 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
   }
 
+  /**
+   * Returns the typescript import section of enums referenced by all fields of the entity.
+   * @param fields returns the import of enums that are referenced by the fields
+   * @returns {typeImports:Map} the fields that potentially contains some enum types
+   */
   generateEntityClientEnumImports(fields) {
     return getClientEnumImportsFormat(fields, ANGULAR);
   }
 
+  /**
+   * Get the typescript type of a non-composite primary key
+   * @param primaryKey the primary key of the entity
+   * @returns {string} the typescript type.
+   */
   getTypescriptKeyType(primaryKey) {
     return getTSKeyType(primaryKey);
   }
@@ -247,14 +257,35 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     return out && out[0] && !!out[0].skipForLocale;
   }
 
+  /**
+   * generates a value for a primary key type
+   * @param primaryKey the primary key attribute of the entity
+   * @param index an index to add salt to the value
+   * @param wrapped if the value should be within quotes
+   * @returns {string|number|string}
+   */
   generateTestEntityId(primaryKey, index = 0, wrapped = true) {
     return getTestEntityId(primaryKey, index, wrapped);
   }
 
+  /**
+   * @private
+   * Generate a test entity, for the PK references (when the PK is a composite, derived key)
+   *
+   * @param {any} primaryKey - primary key definition.
+   * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
+   */
   generateTestEntityPrimaryKey(primaryKey, index) {
     return getTestEntityPrimaryKey(primaryKey, index);
   }
 
+  /**
+   * @private
+   * Generate a test entity instance with faked values.
+   *
+   * @param {any} references - references to other entities.
+   * @param {any} additionalFields - additional fields to add to the entity or with default values that overrides generated values.
+   */
   generateTypescriptTestEntity(references, additionalFields) {
     return generateTestEntity(references, additionalFields);
   }
