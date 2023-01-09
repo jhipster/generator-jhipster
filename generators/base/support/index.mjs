@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 export { default as locateGenerator } from './generator-architecture/locator.mjs';
-export { moveWithGit } from './output/file-operations.mjs';
 export { textToArray, stringNullOrEmpty, isSimpleText, htmlEncode, stripMargin, escapeRegExp } from './templates/doc-formatters.mjs';
 export { parseCreationTimestamp, resetFakerSeed } from './configuration-helpers/sequences.mjs';
 export { default as getOptionFromArray } from './configuration-helpers/options-helpers.mjs';

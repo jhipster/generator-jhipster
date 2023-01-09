@@ -133,6 +133,24 @@ export default class PrivateBase extends Generator {
 
   /**
    * @private
+   * Execute a git mv.
+   *
+   * @param {string} source
+   * @param {string} dest
+   * @returns {boolean} true if success; false otherwise
+   */
+  gitMove(from, to) {
+    const source = this.destinationPath(from);
+    const dest = this.destinationPath(to);
+    if (source && dest && shelljs.test('-f', source)) {
+      this.info(`Renaming the file - ${source} to ${dest}`);
+      return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
+    }
+    return true;
+  }
+
+  /**
+   * @private
    * Get a parent folder path addition for entity
    * @param {string} clientRootFolder
    */
