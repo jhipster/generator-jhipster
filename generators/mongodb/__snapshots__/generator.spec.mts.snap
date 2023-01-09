@@ -2471,10 +2471,10 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": Object {
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
@@ -2483,7 +2483,7 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -2654,7 +2654,7 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
@@ -3252,10 +3252,10 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/web/filter/OAuth2RefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": Object {
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
@@ -3264,7 +3264,7 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/web/rest/AuthInfoResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/LogoutResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/LogoutResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -3393,7 +3393,7 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/LogoutResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -4054,13 +4054,13 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": Object {
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AccountResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": Object {
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
@@ -4219,7 +4219,7 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": Object {
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
