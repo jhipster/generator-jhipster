@@ -164,7 +164,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {string} entityFolderName - Entity Folder Name
    * @param {string} entityFileName - Entity File Name
    * @param {string} entityUrl - Entity router URL
-   * @param {string} clientFramework - The name of the client framework
    * @param {string} microserviceName - Microservice Name
    * @param {boolean} readOnly - If the entity is read-only or not
    * @param {string} pageTitle - The translation key or the text for the page title in the browser

@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 import path from 'path';
+import { rmSync, statSync } from 'fs';
 import _ from 'lodash';
 import Generator from 'yeoman-generator';
+import shelljs from 'shelljs';
 
 import { stringify } from '../../utils/index.mjs';
-import { deleteFile, deleteFolder } from './support/index.mjs';
 
 /**
  * @typedef {import('./api.mjs').JHipsterGeneratorFeatures} JHipsterGeneratorFeatures
@@ -106,8 +107,12 @@ export default class PrivateBase extends Generator {
    * @param file
    */
   removeFile(file) {
-    // TODO Should not update variable
-    file = deleteFile(this, file);
+    const destination = this.destinationPath(file);
+    if (destination && shelljs.test('-f', destination)) {
+      this.log(`Removing the file - ${destination}`);
+      rmSync(destination, { force: true });
+    }
+    return destination;
   }
 
   /**
@@ -116,7 +121,14 @@ export default class PrivateBase extends Generator {
    * @param folder
    */
   removeFolder(folder) {
-    deleteFolder(this, folder);
+    folder = this.destinationPath(folder);
+    try {
+      if (statSync(folder).isDirectory()) {
+        rmSync(folder, { recursive: true });
+      }
+    } catch (error) {
+      this.log(`Could not remove folder ${folder}`);
+    }
   }
 
   /**

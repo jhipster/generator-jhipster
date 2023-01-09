@@ -17,27 +17,6 @@
  * limitations under the License.
  */
 import shelljs from 'shelljs';
-import { rmSync, statSync } from 'fs';
-
-const deleteFile = (context, file) => {
-  const destination = context.destinationPath(file);
-  if (destination && shelljs.test('-f', destination)) {
-    context.log(`Removing the file - ${destination}`);
-    shelljs.rm(destination);
-  }
-  return destination;
-};
-
-const deleteFolder = (context, folder) => {
-  folder = context.destinationPath(folder);
-  try {
-    if (statSync(folder).isDirectory()) {
-      rmSync(folder, { recursive: true });
-    }
-  } catch (error) {
-    context.log(`Could not remove folder ${folder}`);
-  }
-};
 
 const moveWithGit = (context, from, to) => {
   const source = context.destinationPath(from);
@@ -49,4 +28,4 @@ const moveWithGit = (context, from, to) => {
   return { source, dest };
 };
 
-export { deleteFile, deleteFolder, moveWithGit };
+export { moveWithGit };
