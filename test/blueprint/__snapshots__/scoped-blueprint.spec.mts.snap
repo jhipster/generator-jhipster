@@ -257,16 +257,16 @@ exports[`generator - app - with scoped blueprint generate monolith application w
   "src/main/java/com/mycompany/myapp/service/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/filter/SpaWebFilter.java": Object {
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": Object {
+  "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/UserResource.java": {
@@ -1283,13 +1283,13 @@ exports[`generator - app - with scoped blueprint generate monolith application w
   "src/test/java/com/mycompany/myapp/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/PublicUserResourceIT.java": Object {
+  "src/test/java/com/mycompany/myapp/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/ClientForwardControllerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/PublicUserResourceIT.java": {
