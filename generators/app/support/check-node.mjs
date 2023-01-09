@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,23 +24,43 @@ import { packageJson } from '../../../lib/index.mjs';
 
 /**
  * @private
- * Check if Node is installed
+ * Check if Node is installed, up to date, and in LTS version
  */
 const checkNode = yeomanContext => {
-  if (yeomanContext.skipChecks) return;
-  const nodeFromPackageJson = packageJson.engines.node;
-  if (!semver.satisfies(process.version, nodeFromPackageJson)) {
+  const requiredNodeVersionFromPackageJson = requiredEngineFromPackageJson();
+  const currentNodeVersion = getNodeVersionFromCurrentProcess();
+  if (isNodeVersionCompliantWithRequirement(currentNodeVersion, requiredNodeVersionFromPackageJson)) {
     warning(
       yeomanContext,
-      `Your NodeJS version is too old (${process.version}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`
+      `Your NodeJS version is too old (${currentNodeVersion}). You should use at least NodeJS ${chalk.bold(
+        requiredNodeVersionFromPackageJson
+      )}`
     );
   }
-  if (!(process.release || {}).lts) {
+  if (!isNodeLTS(getNodeReleaseFromCurrentProcess())) {
     warning(
       yeomanContext,
       'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
     );
   }
+};
+
+const isNodeVersionCompliantWithRequirement = (gatheredFromEnvironment, requiredVersion) => {
+  return !semver.satisfies(gatheredFromEnvironment, requiredVersion);
+};
+
+const getNodeReleaseFromCurrentProcess = () => {
+  return process.release || {};
+};
+
+const isNodeLTS = release => {
+  return release.lts;
+};
+const getNodeVersionFromCurrentProcess = () => {
+  return process.version;
+};
+const requiredEngineFromPackageJson = () => {
+  return packageJson.engines.node;
 };
 
 export default checkNode;

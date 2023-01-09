@@ -334,6 +334,9 @@ export default class JHipsterAppGenerator extends BaseGenerator {
       },
 
       validateNode() {
+        if (this.skipChecks) {
+          return;
+        }
         checkNode(this);
       },
 

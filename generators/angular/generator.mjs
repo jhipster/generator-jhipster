@@ -259,7 +259,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   /**
    * generates a value for a primary key type
-   * @param primaryKey the primary key attribute of the entity
+   * @param primaryKey the primary key attribute (or its type) of the entity
    * @param index an index to add salt to the value
    * @param wrapped if the value should be within quotes
    * @returns {string|number|string}
