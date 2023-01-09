@@ -22,6 +22,24 @@ import chalk from 'chalk';
 import { warning } from '../../base/support/index.mjs';
 import { packageJson } from '../../../lib/index.mjs';
 
+const isNodeVersionCompliantWithRequirement = (gatheredFromEnvironment, requiredVersion) => {
+  return !semver.satisfies(gatheredFromEnvironment, requiredVersion);
+};
+
+const getNodeReleaseFromCurrentProcess = () => {
+  return process.release || {};
+};
+
+const isNodeLTS = release => {
+  return release.lts;
+};
+const getNodeVersionFromCurrentProcess = () => {
+  return process.version;
+};
+const requiredEngineFromPackageJson = () => {
+  return packageJson.engines.node;
+};
+
 /**
  * @private
  * Check if Node is installed, up to date, and in LTS version
@@ -43,24 +61,6 @@ const checkNode = yeomanContext => {
       'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
     );
   }
-};
-
-const isNodeVersionCompliantWithRequirement = (gatheredFromEnvironment, requiredVersion) => {
-  return !semver.satisfies(gatheredFromEnvironment, requiredVersion);
-};
-
-const getNodeReleaseFromCurrentProcess = () => {
-  return process.release || {};
-};
-
-const isNodeLTS = release => {
-  return release.lts;
-};
-const getNodeVersionFromCurrentProcess = () => {
-  return process.version;
-};
-const requiredEngineFromPackageJson = () => {
-  return packageJson.engines.node;
 };
 
 export default checkNode;
